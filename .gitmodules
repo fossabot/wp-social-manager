@@ -1,0 +1,4 @@
+[submodule "admin/partials/butterbean-extend"]
+	path = admin/partials/butterbean-extend
+[submodule "admin/partials/pepperplane"]
+	path = admin/partials/pepperplane
