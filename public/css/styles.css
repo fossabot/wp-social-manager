@@ -1,0 +1,18 @@
+.wp-social-manager-follow__list {
+	padding: 0;
+	list-style: none;
+}
+.wp-social-manager-follow__url,
+.wp-social-manager-follow__url svg {
+	display: block;
+}
+.wp-social-manager-follow__item {
+	margin-right: 6px;
+}
+.rtl .wp-social-manager-follow__item {
+	margin-right: 0;
+	margin-left: 6px;
+}
+.widget .wp-social-manager-follow__list--icon li {
+	display: inline-block;
+}
