@@ -54,15 +54,6 @@ if ( false === $require->pass() ) {
 }
 
 /**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-activator.php
- */
-register_activation_hook( __FILE__, function() {
-	require_once( $plugin_dir . 'includes/class-activator.php' );
-	Activation::activate();
-} );
-
-/**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
