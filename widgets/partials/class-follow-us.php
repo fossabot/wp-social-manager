@@ -81,7 +81,7 @@ class WidgetFollowUs extends \WP_Widget {
 			<?php else : ?>
 
 			<p>
-				<label><?php esc_html_e( 'Show these sites:', 'wp-social-manager' ); ?></label>
+				<label><?php esc_html_e( 'Include these:', 'wp-social-manager' ); ?></label>
 				<br>
 				<?php
 					foreach ( $this->profiles as $key => $value ) :

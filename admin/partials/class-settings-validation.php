@@ -54,7 +54,7 @@ final class SettingsValidation extends SettingUtilities {
 	public function setting_buttons_image( $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'imageSharing' => false,
+			'imageButtons' => false,
 			'buttonView' => '',
 			'postTypes' => array(),
 			'buttonSites' => array()

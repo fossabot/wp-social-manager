@@ -190,7 +190,7 @@ final class Settings extends SettingUtilities {
 				array(
 					'id' => 'buttons_content',
 					'title' => esc_html__( 'Content', 'wp-social-manager' ),
-					'description' => esc_html__( 'Options to configure the social media buttons that enable sharing, saving, or liking the content.', 'wp-sharing-manager' ),
+					'description' => esc_html__( 'Options to configure the social media buttons that allows people to share, like, or save content of this site.', 'wp-sharing-manager' ),
 					'validate_callback' => array( $this->validate, 'setting_buttons_content' )
 				),
 				array(
@@ -265,14 +265,14 @@ final class Settings extends SettingUtilities {
 					'id' => 'postTypes',
 					'type' => 'multicheckbox',
 					'label' => esc_html__( 'Show the buttons in', 'wp-sharing-manager' ),
-					'description' => wp_kses( sprintf( __( 'List of %s that are allowed to show the sharing buttons.', 'wp-sharing-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">'. esc_html__( 'Post Types', 'wp-sharing-manager' ) .'</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
+					'description' => wp_kses( sprintf( __( 'Select the %s that are allowed to show the social media buttons.', 'wp-sharing-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">'. esc_html__( 'Post Types', 'wp-sharing-manager' ) .'</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 					'options' => self::get_post_types(),
 					'default' => 'post',
 				),
 				array(
 					'id' => 'buttonView',
 					'label' => esc_html__( 'Buttons View', 'wp-sharing-manager' ),
-					'description' => esc_html__( 'The social media button appearance in the content.', 'wp-sharing-manager' ),
+					'description' => esc_html__( 'Select the social media buttons visual appearance displayed in the content.', 'wp-sharing-manager' ),
 					'type' => 'radio',
 					'options' => self::get_button_views(),
 					'default' => 'icon'
@@ -281,13 +281,13 @@ final class Settings extends SettingUtilities {
 					'id' => 'buttonPlacement',
 					'type' => 'radio',
 					'label' => esc_html__( 'Buttons Placement', 'wp-sharing-manager' ),
-					'description' => esc_html__( 'Location in the content to show the sharing buttons.', 'wp-sharing-manager' ),
+					'description' => esc_html__( 'Select the location to show the social media buttons in the content.', 'wp-sharing-manager' ),
 					'options' => self::get_button_locations(),
 					'default' => 'after',
 				),
 				array(
 					'id' => 'buttonSites',
-					'label' => esc_html__( 'Include these sites', 'wp-sharing-manager' ),
+					'label' => esc_html__( 'Include these', 'wp-sharing-manager' ),
 					'type' => 'multicheckbox',
 					'options' => self::get_button_sites(),
 					'default' => array_keys( self::get_button_sites() )
@@ -300,9 +300,9 @@ final class Settings extends SettingUtilities {
 		 */
 		$this->pages = $this->settings->add_fields( 'buttons', 'buttons_image', array(
 			array(
-				'id' => 'imageSharing',
-				'label' => esc_html__( 'Image Sharing Display', 'wp-sharing-manager' ),
-				'description' => esc_html__( 'Show the social sharing buttons on images in the content', 'wp-sharing-manager' ),
+				'id' => 'imageButtons',
+				'label' => esc_html__( 'Image Buttons Display', 'wp-sharing-manager' ),
+				'description' => esc_html__( 'Show the social media buttons on images in the content', 'wp-sharing-manager' ),
 				'type' => 'checkbox',
 				'attr' => array(
 					'class' => 'toggle-control',
@@ -313,7 +313,7 @@ final class Settings extends SettingUtilities {
 			array(
 				'id' => 'postTypes',
 				'label' => esc_html__( 'Show the buttons in', 'wp-sharing-manager' ),
-				'description' => wp_kses( sprintf( __( 'List of %s that are allowed to show the sharing buttons on the images of the content.', 'wp-sharing-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">'. esc_html__( 'Post Types', 'wp-sharing-manager' ) .'</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
+				'description' => wp_kses( sprintf( __( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'wp-sharing-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">'. esc_html__( 'Post Types', 'wp-sharing-manager' ) .'</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 				'type' => 'multicheckbox',
 				'options' => self::get_post_types(),
 				'default' => array( 'post' ),
@@ -322,7 +322,7 @@ final class Settings extends SettingUtilities {
 			array(
 				'id' => 'buttonView',
 				'label' => esc_html__( 'Buttons View', 'wp-sharing-manager' ),
-				'description' => esc_html__( 'The social media button appearance in the content.', 'wp-sharing-manager' ),
+				'description' => esc_html__( 'The social media button visual appearance in the content.', 'wp-sharing-manager' ),
 				'type' => 'radio',
 				'options' => self::get_button_views(),
 				'default' => 'icon',
@@ -330,7 +330,7 @@ final class Settings extends SettingUtilities {
 			),
 			array(
 				'id' => 'buttonSites',
-				'label' => esc_html__( 'Include these sites', 'wp-sharing-manager' ),
+				'label' => esc_html__( 'Include these', 'wp-sharing-manager' ),
 				'type' => 'multicheckbox',
 				'options' => self::get_button_sites( 'image' ),
 				'default' => array_keys( self::get_button_sites( 'image' ) ),
@@ -347,7 +347,7 @@ final class Settings extends SettingUtilities {
 				'id' => 'metaEnable',
 				'type' => 'checkbox',
 				'label' => esc_html__( 'Enable Meta Tags', 'wp-social-manager' ),
-				'description' => esc_html__( 'Generate social meta tags on this website', 'wp-social-manager' ),
+				'description' => esc_html__( 'Generate social media meta tags on this website', 'wp-social-manager' ),
 				'default' => 'on',
 				'attr' => array(
 					'class' => 'toggle-control',
@@ -360,7 +360,7 @@ final class Settings extends SettingUtilities {
 				'type' => 'text',
 				'label' => esc_html__( 'Site Name', 'wp-social-manager' ),
 				'legend' => esc_html__( 'Site Name', 'wp-social-manager' ),
-				'description' => esc_html__( 'The name of this website as it should appear within the Open Graph meta tag', 'wp-social-manager' ),
+				'description' => esc_html__( 'The name of this website as it should appear within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
 					'placeholder' => get_bloginfo( 'name' )
@@ -370,7 +370,7 @@ final class Settings extends SettingUtilities {
 				'id' => 'description',
 				'type' => 'textarea',
 				'label' => esc_html__( 'Site Description', 'wp-social-manager' ),
-				'description' => esc_html__( 'A one to two sentence description of this website that should appear within the Open Graph meta tag', 'wp-social-manager' ),
+				'description' => esc_html__( 'A one to two sentence description of this website that should appear within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
 					'rows' => '5',
@@ -383,7 +383,7 @@ final class Settings extends SettingUtilities {
 				'type' => 'image',
 				'class' => 'meta-site-setting',
 				'label' => esc_html__( 'Site Image', 'wp-social-manager' ),
-				'description' => esc_html__( 'An image URL which should represent this website within the Open Graph meta tag', 'wp-social-manager' ),
+				'description' => esc_html__( 'An image URL which should represent this website within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' ),
 				'default' => ''
 			)
 		) );

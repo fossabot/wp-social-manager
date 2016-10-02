@@ -128,16 +128,16 @@ final class SocialMetaBox {
 
 		// Register a section.
 		$manager->register_section(
-			'sharing',
+			'buttons',
 			array(
-				'label' => 'Sharing',
-				'icon'  => 'dashicons-share'
+				'label' => 'Buttons',
+				'icon'  => 'dashicons-thumbs-up'
 			)
 		);
 
 		// Register a setting.
 		$manager->register_setting(
-			'sharing_content',
+			'buttons_content',
 			array(
 				'type' => 'serialize',
 				'default' => 1,
@@ -145,18 +145,18 @@ final class SocialMetaBox {
 			)
 		);
 		$manager->register_control(
-			'sharing_content',
+			'buttons_content',
 			array(
 				'type' => 'checkbox',
-				'section' => 'sharing',
-				'label' => 'Content Sharing',
-				'description' => "Allow the social sharing buttons to show in this {$this->post_type}"
+				'section' => 'buttons',
+				'label' => 'Content Social Media Buttons',
+				'description' => "Display the buttons that allow people to share, like, or save this {$this->post_type} in social media"
 			)
 		);
 
 		// Register a setting.
 		$manager->register_setting(
-			'sharing_image',
+			'buttons_image',
 			array(
 				'type' => 'serialize',
 				'default' => 1,
@@ -164,12 +164,12 @@ final class SocialMetaBox {
 			)
 		);
 		$manager->register_control(
-			'sharing_image',
+			'buttons_image',
 			array(
 				'type' => 'checkbox',
-				'section' => 'sharing',
-				'label' => 'Image Sharing',
-				'description' => "Allow the social sharing buttons to show on the images in this {$this->post_type}"
+				'section' => 'buttons',
+				'label' => 'Image Social Media Buttons',
+				'description' => "Display the social media buttons that allow people to share, like, or save images of this {$this->post_type} in social media"
 			)
 		);
 	}
