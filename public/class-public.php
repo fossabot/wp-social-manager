@@ -51,10 +51,8 @@ class ViewPublic {
 	 */
 	public function __construct( $args ) {
 
-		$this->arguments   = $args;
 		$this->plugin_name = $args[ 'plugin_name' ];
-		$this->option_name = $args[ 'option_name' ];
-		$this->version     = $args[ 'version' ];
+		$this->version = $args[ 'version' ];
 
 		$this->requires();
 
@@ -84,7 +82,6 @@ class ViewPublic {
 			return;
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/styles.css', array(), $this->version, 'all' );
-		wp_enqueue_style( "{$this->plugin_name}-twentysixteen", plugin_dir_url( __FILE__ ) . 'css/styles-twentysixteen.css', array( $this->plugin_name, 'twentysixteen' ), $this->version, 'all' );
 	}
 
 	/**

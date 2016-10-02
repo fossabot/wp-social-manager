@@ -46,7 +46,7 @@ final class SettingsExtend extends \PepperPlaneFields {
 	 * @return [type]       [description]
 	 */
 	public function register_field_files( array $args ) {
-		$args[ 'image' ] = 'imageUpload';
+		$args[ 'image' ] = 'image-upload';
 		return $args;
 	}
 

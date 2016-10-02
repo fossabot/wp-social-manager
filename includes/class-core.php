@@ -73,6 +73,7 @@ class Core {
 		$this->locales();
 		$this->define_admin();
 		$this->define_public();
+		$this->define_widgets();
 	}
 
 	private function setups() {
@@ -98,13 +99,12 @@ class Core {
 	 */
 	private function requires() {
 
-		require_once( $this->plugin_dir . 'includes/class-utilities.php' );
 		require_once( $this->plugin_dir . 'includes/class-i18n.php' );
-		// require_once( $this->plugin_dir . 'includes/class-options.php' );
+		require_once( $this->plugin_dir . 'includes/class-utilities.php' );
 
 		require_once( $this->plugin_dir . 'admin/class-admin.php' );
 		require_once( $this->plugin_dir . 'public/class-public.php' );
-		// require_once( $this->plugin_dir . 'widgets/class-social-links.php' );
+		require_once( $this->plugin_dir . 'widgets/class-widgets.php' );
 	}
 
 	/**
@@ -151,5 +151,13 @@ class Core {
 			return;
 
 		$public = new ViewPublic( $this->args );
+	}
+
+	/**
+	 * [define_widgets description]
+	 * @return [type] [description]
+	 */
+	private function define_widgets() {
+		$widgets = new Widgets();
 	}
 }

@@ -59,10 +59,10 @@ final class SocialMetaBox {
 	 * @access private
 	 * @return void
 	 */
-	private function setup_actions() {
+	private function actions() {
 
 		// Load `ButterBean` library.
-		// add_action( 'plugins_loaded', array( $this, 'includes' ) );
+		add_action( 'plugins_loaded', array( $this, 'requires' ) );
 
 		// Register managers.
 		add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
@@ -76,10 +76,13 @@ final class SocialMetaBox {
 	 * [includes description]
 	 * @return [type] [description]
 	 */
-	// public function includes() {
+	public function requires() {
 
-		
-	// }
+		$this->plugin_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
+
+		require_once( $this->plugin_dir . 'butterbean/butterbean.php' );
+		require_once( $this->plugin_dir . 'butterbean-extend/butterbean-extend.php' );
+	}
 
 	/**
 	 * [register_manager description]
@@ -317,7 +320,7 @@ final class SocialMetaBox {
 
 		if ( is_null( $instance ) ) {
 			$instance = new self;
-			$instance->setup_actions();
+			$instance->actions();
 		}
 
 		return $instance;

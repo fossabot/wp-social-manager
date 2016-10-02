@@ -247,7 +247,7 @@ final class Settings extends SettingUtilities {
 				'after' => '<p class="account-profile-preview hide-if-js"><code></code></p>',
 				'attr' => array(
 					'class' => "account-profile-control code",
-					'data-load-script' => 'previewProfile',
+					'data-load-script' => 'preview-profile',
 					'data-url' => $props[ 'url' ]
 				)
 			);
@@ -306,7 +306,7 @@ final class Settings extends SettingUtilities {
 				'type' => 'checkbox',
 				'attr' => array(
 					'class' => 'toggle-control',
-					'data-load-script' => 'toggleControls',
+					'data-load-script' => 'toggle-control',
 					'data-toggle' => '.sharing-image-setting',
 				)
 			),
@@ -351,7 +351,7 @@ final class Settings extends SettingUtilities {
 				'default' => 'on',
 				'attr' => array(
 					'class' => 'toggle-control',
-					'data-load-script' => 'toggleControls',
+					'data-load-script' => 'toggle-control',
 					'data-toggle' => '.meta-site-setting',
 				)
 			),
