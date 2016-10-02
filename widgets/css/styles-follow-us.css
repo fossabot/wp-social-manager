@@ -1,0 +1,55 @@
+.widget .wp-social-manager-follow-us__list {
+	margin-left: 0;
+	list-style: none;
+}
+.widget .wp-social-manager-follow-us__item {
+	display: inline-block;
+	width: 26px;
+	height: 26px;
+	margin-right: 0.86em;
+	margin-bottom: 1em;
+}
+.widget .wp-social-manager-follow-us__item {
+	display: inline-block;
+	width: 26px;
+	height: 26px;
+	margin-right: 0.86em;
+	margin-bottom: 1em;
+}
+.widget .wp-social-manager-follow-us__item--facebook a:hover svg {
+	fill: #3b5998;
+}
+.widget .wp-social-manager-follow-us__item--twitter a:hover svg {
+	fill: #1da1f2;
+}
+.widget .wp-social-manager-follow-us__item--instagram a:hover svg {
+	fill: #833ab4;
+}
+.widget .wp-social-manager-follow-us__item--pinterest a:hover svg {
+	fill: #bd081c;
+}
+.widget .wp-social-manager-follow-us__item--linkedin a:hover svg {
+	fill: #0077b5;
+}
+.widget .wp-social-manager-follow-us__item--googleplus a:hover svg {
+	fill: #dd4b39;
+}
+.widget .wp-social-manager-follow-us__item--youtube a:hover svg {
+	fill: #cd201f;
+}
+.widget .wp-social-manager-follow-us__item--dribbble a:hover svg {
+	fill: #ea4c89;
+}
+.widget .wp-social-manager-follow-us__item--behance a:hover svg {
+	fill: #1769ff;
+}
+.widget .wp-social-manager-follow-us__item--github a:hover svg {
+	fill: #333;
+}
+.widget .wp-social-manager-follow-us__item--github a:hover svg {
+	fill: #000;
+}
+.rtl .widget .wp-social-manager-follow-us__item {
+	margin-right: 0;
+	margin-left: 0.86em;
+}
