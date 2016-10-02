@@ -98,14 +98,13 @@ class Core {
 	 */
 	private function requires() {
 
-		require_once( $this->plugin_dir . 'includes/functions-core.php' );
-
+		require_once( $this->plugin_dir . 'includes/class-utilities.php' );
 		require_once( $this->plugin_dir . 'includes/class-i18n.php' );
-		require_once( $this->plugin_dir . 'includes/class-options.php' );
+		// require_once( $this->plugin_dir . 'includes/class-options.php' );
 
 		require_once( $this->plugin_dir . 'admin/class-admin.php' );
 		require_once( $this->plugin_dir . 'public/class-public.php' );
-		require_once( $this->plugin_dir . 'widgets/class-social-links.php' );
+		// require_once( $this->plugin_dir . 'widgets/class-social-links.php' );
 	}
 
 	/**

@@ -405,6 +405,8 @@ class Options {
 				'type' => 'textarea',
 				'attr' => array(
 					'class' => 'regular-text',
+					'rows' => '10',
+					'cols' => 50,
 					'placeholder' => get_bloginfo( 'description' )
 				)
 			),
