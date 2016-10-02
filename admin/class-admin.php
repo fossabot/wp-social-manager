@@ -30,24 +30,6 @@ class ViewAdmin {
 	private $args;
 
 	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
-	private $version;
-
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
-	 */
-	private $plugin_name;
-
-	/**
 	 * The plugin URL.
 	 *
 	 * @since    1.0.0
@@ -55,21 +37,6 @@ class ViewAdmin {
 	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
 	private $plugin_dir;
-
-	/**
-	 * The plugin URL.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
-	 */
-	private $plugin_url;
-
-	/**
-	 * [$settings description]
-	 * @var [type]
-	 */
-	protected $settings;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -81,11 +48,7 @@ class ViewAdmin {
 	public function __construct( array $args ) {
 
 		$this->args = $args;
-		$this->version = $args[ 'version' ];
-		$this->plugin_name = $args[ 'plugin_name' ];
-
 		$this->plugin_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
-		$this->plugin_url = trailingslashit( plugin_dir_url( __FILE__ ) );
 
 		$this->requires();
 		$this->setups();
@@ -98,9 +61,10 @@ class ViewAdmin {
 	public function requires() {
 
 		require_once( $this->plugin_dir . 'partials/class-settings.php' );
-		require_once( $this->plugin_dir . 'partials/class-settings-validation.php' );
-		require_once( $this->plugin_dir . 'partials/class-settings-metabox.php' );
 		require_once( $this->plugin_dir . 'partials/class-settings-user.php' );
+		require_once( $this->plugin_dir . 'partials/class-settings-validation.php' );
+
+		require_once( $this->plugin_dir . 'partials/class-metabox.php' );
 	}
 
 	/**

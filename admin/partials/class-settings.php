@@ -76,6 +76,8 @@ final class Settings extends SettingUtilities {
 
 		require_once( $this->plugin_dir . 'partials/pepperplane/pepperplane.php' );
 		require_once( $this->plugin_dir . 'partials/pepperplane/pepperplane-fields.php' );
+
+		require_once( $this->plugin_dir . 'partials/class-extends.php' );
 	}
 
 		/**
@@ -92,7 +94,8 @@ final class Settings extends SettingUtilities {
 		add_action( 'admin_init', array( $this, 'setting_fields' ), 11 );
 		add_action( 'admin_init', array( $this, 'setting_init' ), 12 );
 
-		add_action( "{$this->plugin_opts}_admin_enqueue_scripts", array( $this, 'setting_scripts' ), 10, 1 );
+		add_action( "{$this->plugin_opts}_admin_enqueue_scripts", array( $this, 'enqueue_scripts' ), 10, 1 );
+		add_action( "{$this->plugin_opts}_admin_enqueue_styles", array( $this, 'enqueue_styles' ), 10, 1 );
 	}
 
 	/**
@@ -101,13 +104,13 @@ final class Settings extends SettingUtilities {
 	 */
 	public function setting_setup() {
 
-		$errors = get_settings_errors();
-		$fields = new \PepperPlaneFields( $errors );
+		$fields = new \PepperPlaneFields( get_settings_errors() );
+		$settings = new \PepperPlane( $this->plugin_opts, $fields );
 
-		$settings = new \PepperPlane( $fields, $this->plugin_name, $this->plugin_opts );
+		$extends = new SettingsExtend( $this->plugin_opts );
+		$validate = new SettingsValidation();
+
 		$this->settings = $settings;
-
-		$validate = new SettingValidation();
 		$this->validate = $validate;
 	}
 
@@ -123,12 +126,11 @@ final class Settings extends SettingUtilities {
 		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $this->plugin_name, function() {
 			echo "<div class='wrap' id='{$this->plugin_name}-wrap'>";
 				$this->settings->render_header( array( 'title' => false ) );
-				// echo $this->settings->debug;
 				$this->settings->render_form();
 			echo "</div>";
 		} );
 
-		add_action( "admin_print_styles-{$this->screen}", array( $this, 'setting_styles' ), 20, 1 );
+		add_action( "admin_print_styles-{$this->screen}", array( $this, 'print_setting_styles' ), 20, 1 );
 	}
 
 	/**
@@ -206,7 +208,7 @@ final class Settings extends SettingUtilities {
 		 */
 		$this->pages = $this->settings->add_section( 'metas', array(
 			'id' => 'metas_site',
-			'validate_callback' => array( $this->validate, 'setting_metas' )
+			'validate_callback' => array( $this->validate, 'setting_site_metas' )
 			)
 		);
 
@@ -245,7 +247,7 @@ final class Settings extends SettingUtilities {
 				'after' => '<p class="account-profile-preview hide-if-js"><code></code></p>',
 				'attr' => array(
 					'class' => "account-profile-control code",
-					'data-js-enabled' => true,
+					'data-load-script' => 'previewProfile',
 					'data-url' => $props[ 'url' ]
 				)
 			);
@@ -268,24 +270,24 @@ final class Settings extends SettingUtilities {
 					'default' => 'post',
 				),
 				array(
-					'id' => 'buttonType',
-					'label' => esc_html__( 'Show the buttons as', 'wp-sharing-manager' ),
+					'id' => 'buttonView',
+					'label' => esc_html__( 'Buttons View', 'wp-sharing-manager' ),
 					'description' => esc_html__( 'The social media button appearance in the content.', 'wp-sharing-manager' ),
 					'type' => 'radio',
-					'options' => self::get_button_types(),
+					'options' => self::get_button_views(),
 					'default' => 'icon'
 				),
 				array(
-					'id' => 'buttonLocation',
+					'id' => 'buttonPlacement',
 					'type' => 'radio',
-					'label' => esc_html__( 'Place the buttons', 'wp-sharing-manager' ),
+					'label' => esc_html__( 'Buttons Placement', 'wp-sharing-manager' ),
 					'description' => esc_html__( 'Location in the content to show the sharing buttons.', 'wp-sharing-manager' ),
 					'options' => self::get_button_locations(),
 					'default' => 'after',
 				),
 				array(
 					'id' => 'buttonSites',
-					'label' => esc_html__( 'Include these buttons', 'wp-sharing-manager' ),
+					'label' => esc_html__( 'Include these sites', 'wp-sharing-manager' ),
 					'type' => 'multicheckbox',
 					'options' => self::get_button_sites(),
 					'default' => array_keys( self::get_button_sites() )
@@ -304,8 +306,8 @@ final class Settings extends SettingUtilities {
 				'type' => 'checkbox',
 				'attr' => array(
 					'class' => 'toggle-control',
-					'data-js-enabled' => true,
-					'data-toggle-target' => '.sharing-image-setting',
+					'data-load-script' => 'toggleControls',
+					'data-toggle' => '.sharing-image-setting',
 				)
 			),
 			array(
@@ -318,17 +320,17 @@ final class Settings extends SettingUtilities {
 				'class' => 'sharing-image-setting hide-if-js'
 			),
 			array(
-				'id' => 'buttonType',
-				'label' => esc_html__( 'Show the buttons as', 'wp-sharing-manager' ),
+				'id' => 'buttonView',
+				'label' => esc_html__( 'Buttons View', 'wp-sharing-manager' ),
 				'description' => esc_html__( 'The social media button appearance in the content.', 'wp-sharing-manager' ),
 				'type' => 'radio',
-				'options' => self::get_button_types(),
+				'options' => self::get_button_views(),
 				'default' => 'icon',
 				'class' => 'sharing-image-setting hide-if-js',
 			),
 			array(
 				'id' => 'buttonSites',
-				'label' => esc_html__( 'Include these buttons', 'wp-sharing-manager' ),
+				'label' => esc_html__( 'Include these sites', 'wp-sharing-manager' ),
 				'type' => 'multicheckbox',
 				'options' => self::get_button_sites( 'image' ),
 				'default' => array_keys( self::get_button_sites( 'image' ) ),
@@ -349,12 +351,12 @@ final class Settings extends SettingUtilities {
 				'default' => 'on',
 				'attr' => array(
 					'class' => 'toggle-control',
-					'data-js-enabled' => true,
-					'data-toggle-target' => '.meta-site-setting',
+					'data-load-script' => 'toggleControls',
+					'data-toggle' => '.meta-site-setting',
 				)
 			),
 			array(
-				'id' => 'siteName',
+				'id' => 'name',
 				'type' => 'text',
 				'label' => esc_html__( 'Site Name', 'wp-social-manager' ),
 				'legend' => esc_html__( 'Site Name', 'wp-social-manager' ),
@@ -365,7 +367,7 @@ final class Settings extends SettingUtilities {
 				)
 			),
 			array(
-				'id' => 'siteDescription',
+				'id' => 'description',
 				'type' => 'textarea',
 				'label' => esc_html__( 'Site Description', 'wp-social-manager' ),
 				'description' => esc_html__( 'A one to two sentence description of this website that should appear within the Open Graph meta tag', 'wp-social-manager' ),
@@ -375,6 +377,14 @@ final class Settings extends SettingUtilities {
 					'cols' => '80',
 					'placeholder' => get_bloginfo( 'description' )
 				)
+			),
+			array(
+				'id' => 'image',
+				'type' => 'image',
+				'class' => 'meta-site-setting',
+				'label' => esc_html__( 'Site Image', 'wp-social-manager' ),
+				'description' => esc_html__( 'An image URL which should represent this website within the Open Graph meta tag', 'wp-social-manager' ),
+				'default' => ''
 			)
 		) );
 
@@ -406,7 +416,7 @@ final class Settings extends SettingUtilities {
 	 * @param  [type] $where [description]
 	 * @return [type]        [description]
 	 */
-	public function setting_styles() { ?>
+	public function print_setting_styles() { ?>
 		<style id="<?php echo esc_attr( "{$this->plugin_name}-internal-styles" ); ?>">
 			.wrap > form > h2 {
 				margin-bottom: 0.72em;
@@ -419,8 +429,18 @@ final class Settings extends SettingUtilities {
 				margin: 1.5em 0 1em;
     			border-bottom: 1px solid #ccc;
 			}
-			.wrap .form-table .account-profile-preview {
-				margin-top: 0.5em;
+			.wrap .field-image-control {
+				margin-top: 0.867em;
+			}
+			.wrap .field-image-placeholder {
+				width: 100%;
+				max-width: 590px;
+				position: relative;
+				text-align: center;
+				padding: 2em 0;
+				line-height: 1.3;
+				border: 1px dashed #b4b9be;
+				box-sizing: border-box;
 			}
 		</style>
 	<?php }
@@ -429,9 +449,26 @@ final class Settings extends SettingUtilities {
 	 * [field_scripts description]
 	 * @return [type] [description]
 	 */
-	public function setting_scripts() {
+	public function enqueue_scripts( array $args ) {
 
-		wp_enqueue_script( "{$this->plugin_name}-setting", "{$this->plugin_url}js/scripts.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		foreach ( $args as $name => $suffix ) {
+			$file = is_string( $suffix ) && ! empty( $suffix ) ? "scripts-{$suffix}" : "scripts";
+			wp_enqueue_script( "{$this->plugin_name}-{$suffix}", "{$this->plugin_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		}
+
 		wp_enqueue_media();
+	}
+
+	/**
+	 * [setting_styles description]
+	 * @param  array  $args [description]
+	 * @return [type]       [description]
+	 */
+	public function enqueue_styles( array $args ) {
+
+		foreach ( $args as $name => $suffix ) {
+			$file = is_string( $suffix ) && ! empty( $suffix ) ? "styles-{$suffix}" : "styles";
+			wp_enqueue_style( "{$this->plugin_name}-{$suffix}", "{$this->plugin_url}css/{$file}.css", array(), $this->version );
+		}
 	}
 }

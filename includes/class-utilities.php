@@ -180,7 +180,7 @@ abstract class SettingUtilities extends Utilities {
 	 * [get_button_locations description]
 	 * @return [type] [description]
 	 */
-	final protected static function get_button_types() {
+	final protected static function get_button_views() {
 
 		$types = array(
 			'icon' => esc_html__( 'Icon Only', 'wp-sharing-manager' ),
