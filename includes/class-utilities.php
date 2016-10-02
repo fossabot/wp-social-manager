@@ -16,57 +16,57 @@ abstract class Utilities {
 			'facebook' => array(
 				'label' => 'Facebook',
 				'url'   => 'https://www.facebook.com/',
-				'icon'  => self::get_social_icon( 'facebook' )
+				'icon'  => self::get_social_icons( 'facebook' )
 			),
 			'twitter' => array(
 				'label' => 'Twitter',
 				'url'   => 'https://twitter.com/',
-				'icon'  => self::get_social_icon( 'twitter' )
+				'icon'  => self::get_social_icons( 'twitter' )
 			),
 			'instagram' => array(
 				'label' => esc_html( 'Instagram' ),
 				'url'   => esc_url( 'https://instagram.com/' ),
-				'icon'  => self::get_social_icon( 'instagram' )
+				'icon'  => self::get_social_icons( 'instagram' )
 			),
 			'pinterest' => array(
 				'label' => 'Pinterest',
 				'url' => esc_url( 'https://pinterest.com/' ),
-				'icon' => self::get_social_icon( 'pinterest' )
+				'icon' => self::get_social_icons( 'pinterest' )
 			),
 			'linkedin' => array(
 				'label' => 'LinkedIn',
 				'url' => esc_url( 'https://pinterest.com/' ),
-				'icon' => self::get_social_icon( 'linkedin' )
+				'icon' => self::get_social_icons( 'linkedin' )
 			),
 			'googleplus' => array(
 				'label' => 'Google+',
 				'url' => 'https://plus.google.com/',
-				'icon' => self::get_social_icon( 'googleplus' )
+				'icon' => self::get_social_icons( 'googleplus' )
 			),
 			'youtube' => array(
 				'label' => 'Youtube',
 				'url' => 'https://www.youtube.com/user/',
-				'icon' => self::get_social_icon( 'youtube' )
+				'icon' => self::get_social_icons( 'youtube' )
 			),
 			'dribbble' => array(
 				'label' => 'Dribbble',
 				'url' => 'https://dribbble.com/',
-				'icon' => self::get_social_icon( 'dribbble' )
+				'icon' => self::get_social_icons( 'dribbble' )
 			),
 			'behance' => array(
 				'label' => 'Behance',
 				'url' => 'https://www.behance.net/',
-				'icon' => self::get_social_icon( 'behance' )
+				'icon' => self::get_social_icons( 'behance' )
 			),
 			'github' => array(
 				'label' => 'Github',
 				'url' => 'https://github.com/',
-				'icon' => self::get_social_icon( 'github' )
+				'icon' => self::get_social_icons( 'github' )
 			),
 			'codepen' => array(
 				'label' => 'CodePen',
 				'url' => 'https://codepen.io/',
-				'icon' => self::get_social_icon( 'codepen' )
+				'icon' => self::get_social_icons( 'codepen' )
 			),
 		);
 
@@ -82,7 +82,7 @@ abstract class Utilities {
 	 * @param  [type] $name [description]
 	 * @return [type]       [description]
 	 */
-	final public static function get_social_icon( $name ) {
+	final public static function get_social_icons( $name ) {
 
 		$facebook = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3.998v3h-2a1 1 0 0 0-1 1v2h3v3h-3v7h-3v-7h-2v-3h2v-2.5a3.5 3.5 0 0 1 3.5-3.5H19zm1-2H4c-1.105 0-1.99.895-1.99 2l-.01 16c0 1.104.895 2 2 2h16c1.103 0 2-.896 2-2v-16a2 2 0 0 0-2-2z"/></svg>';
 

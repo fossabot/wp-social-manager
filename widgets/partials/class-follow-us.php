@@ -38,12 +38,10 @@ class WidgetFollowUs extends \WP_Widget {
 
 		$options = get_option( 'wp_social_manager_profiles' );
 
-		$this->plugin_url = trailingslashit( plugin_dir_url( dirname( __FILE__ ) ) );
-
 		$this->widget_id = 'wp-social-manager-follow-us';
 		$this->widget_title = esc_html__( 'Follow Us', 'wp-social-manager' );
 
-		$this->profiles  = isset( $options ) ? $options : array();
+		$this->profiles = isset( $options ) ? $options : array();
 		$this->accounts = SettingUtilities::get_social_properties();
 
 		parent::__construct( $this->widget_id, esc_html__( 'Follow Us', 'wp-social-manager' ), array(
@@ -76,7 +74,7 @@ class WidgetFollowUs extends \WP_Widget {
 			<?php if( ! array_filter( $this->profiles ) ) : ?>
 			<p>
 			<?php
-				$message = esc_html__( 'Please set at least one social profile of this website in the %s.', 'wp-social-manager' );
+				$message = esc_html__( 'Please add at least one social profile of this website in the %s.', 'wp-social-manager' );
 				$setting = '<a href="'.admin_url( 'options-general.php?page=wp-social-manager' ).'">'.esc_html__( 'setting page', 'wp-social-manager' ).'</a>';
 
 				printf( $message, $setting ); ?></p>
@@ -247,7 +245,9 @@ class WidgetFollowUs extends \WP_Widget {
 	 * @return [type] [description]
 	 */
 	protected function enqueue_styles() {
-		wp_enqueue_style( $this->widget_id, $this->plugin_url . 'css/styles-follow-us.css', array(), '', 'all' );
+
+		$url = trailingslashit( plugin_dir_url( realpath( __DIR__ . '/..' ) ) );
+		wp_enqueue_style( $this->widget_id, $url . 'public/css/styles-follow-us.css', array(), '0.1.0', 'all' );
 	}
 }
 
