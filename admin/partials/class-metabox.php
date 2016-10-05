@@ -53,13 +53,25 @@ final class SocialMetaBox {
 	protected $post_type;
 
 	/**
+	 * [includes description]
+	 * @return [type] [description]
+	 */
+	public function requires() {
+
+		$this->plugin_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
+
+		require_once( $this->plugin_dir . 'butterbean/butterbean.php' );
+		require_once( $this->plugin_dir . 'butterbean-extend/butterbean-extend.php' );
+	}
+
+	/**
 	 * Sets up initial actions.
 	 *
 	 * @since  1.0.0
 	 * @access private
 	 * @return void
 	 */
-	private function actions() {
+	private function hooks() {
 
 		// Load `ButterBean` library.
 		add_action( 'plugins_loaded', array( $this, 'requires' ) );
@@ -70,18 +82,6 @@ final class SocialMetaBox {
 		// Register sections, settings, and controls.
 		add_action( 'butterbean_register', array( $this, 'register_section_sharing' ), -90, 2 );
 		add_action( 'butterbean_register', array( $this, 'register_section_meta' ), -90, 2 );
-	}
-
-	/**
-	 * [includes description]
-	 * @return [type] [description]
-	 */
-	public function requires() {
-
-		$this->plugin_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
-
-		require_once( $this->plugin_dir . 'butterbean/butterbean.php' );
-		require_once( $this->plugin_dir . 'butterbean-extend/butterbean-extend.php' );
 	}
 
 	/**
@@ -194,7 +194,7 @@ final class SocialMetaBox {
 		);
 
 		$manager->register_control(
-			'meta_title',
+			'post_title',
 			array(
 				'type' => 'text',
 				'section' => 'meta_tags',
@@ -208,7 +208,7 @@ final class SocialMetaBox {
 		);
 
 		$manager->register_setting(
-			'meta_title',
+			'post_title',
 			array(
 				'type' => 'serialize',
 				'sanitize_callback' => 'sanitize_text_field'
@@ -216,7 +216,7 @@ final class SocialMetaBox {
 		);
 
 		$manager->register_control(
-			'meta_description',
+			'post_excerpt',
 			array(
 				'type' => 'textarea',
 				'section' => 'meta_tags',
@@ -230,7 +230,7 @@ final class SocialMetaBox {
 		);
 
 		$manager->register_setting(
-			'meta_description',
+			'post_excerpt',
 			array(
 				'type' => 'serialize',
 				'sanitize_callback' => 'wp_kses'
@@ -239,7 +239,7 @@ final class SocialMetaBox {
 
 		// Image upload control.
 		$manager->register_control(
-			'meta_image',
+			'post_thumbnail',
 			array(
 				'type'        => 'image',
 				'section'     => 'meta_tags',
@@ -249,7 +249,7 @@ final class SocialMetaBox {
 			)
 		);
 		$manager->register_setting(
-			'meta_image',
+			'post_thumbnail',
 			array(
 				'type' => 'serialize',
 				'sanitize_callback' => array( $this, 'sanitize_absint' )
@@ -320,7 +320,7 @@ final class SocialMetaBox {
 
 		if ( is_null( $instance ) ) {
 			$instance = new self;
-			$instance->actions();
+			$instance->hooks();
 		}
 
 		return $instance;

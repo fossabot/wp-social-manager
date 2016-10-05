@@ -17,25 +17,19 @@ final class SettingsExtend extends \PepperPlaneFields {
 
 		$this->page_hook = $page_hook;
 
-		$this->actions();
-		$this->filters();
+		$this->hooks();
 	}
 
 	/**
 	 * [actions description]
 	 * @return [type] [description]
 	 */
-	protected function actions() {
+	protected function hooks() {
 
+		// Actions
 		add_action( "{$this->page_hook}_add_extra_field", array( $this, 'callback_image' ) );
-	}
 
-	/**
-	 * [filters description]
-	 * @return [type] [description]
-	 */
-	protected function filters() {
-
+		// Filters
 		add_filter( "{$this->page_hook}_field_scripts", array( $this, 'register_field_files' ) );
 		add_filter( "{$this->page_hook}_field_styles", array( $this, 'register_field_files' ) );
 	}

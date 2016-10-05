@@ -42,7 +42,7 @@ class WidgetFollowUs extends \WP_Widget {
 		$this->widget_title = esc_html__( 'Follow Us', 'wp-social-manager' );
 
 		$this->profiles = isset( $options ) ? $options : array();
-		$this->accounts = SettingUtilities::get_social_properties();
+		$this->accounts = OptionUtilities::get_social_properties();
 
 		parent::__construct( $this->widget_id, esc_html__( 'Follow Us', 'wp-social-manager' ), array(
 			'classname' => $this->widget_id,
@@ -57,18 +57,14 @@ class WidgetFollowUs extends \WP_Widget {
 	 */
 	public function form( $instance ) {
 
-		$instance = wp_parse_args( $instance, array(
-				'title' => $this->widget_title
-			) );
-
-		$id = esc_attr( $this->get_field_id( 'title' ) );
-		$name = esc_attr( $this->get_field_name( 'title' ) );
-		$value = esc_html( $instance[ 'title' ] ); ?>
+		$id    = esc_attr( $this->get_field_id( 'title' ) );
+		$name  = esc_attr( $this->get_field_name( 'title' ) );
+		$title = esc_html( isset( $instance[ 'title' ] ) ? $instance[ 'title' ] : $this->widget_title ); ?>
 
 		<div class="<?php echo esc_attr( $this->widget_id ); ?>">
 			<p>
 				<label for="<?php echo $id; ?>"><?php esc_html_e( 'Title:', 'wp-social-manager' ); ?></label>
-				<input class="widefat" id="<?php echo $id; ?>" name="<?php echo $name; ?>" type="text" value="<?php echo $value; ?>">
+				<input class="widefat" id="<?php echo $id; ?>" name="<?php echo $name; ?>" type="text" value="<?php echo $title; ?>">
 			</p>
 
 			<?php if( ! array_filter( $this->profiles ) ) : ?>
@@ -113,8 +109,9 @@ class WidgetFollowUs extends \WP_Widget {
 					$id = esc_attr( $this->get_field_id( 'view' ) );
 					$name = esc_attr( $this->get_field_name( 'view' ) );
 
-					$views = SettingUtilities::get_button_views();
-					$state = isset( $instance[ 'view' ] ) ? sanitize_key( $instance[ 'view' ] ) : 'icon';
+					$views = OptionUtilities::get_button_views();
+					$state = isset( $instance[ 'view' ] ) && ! empty( $instance[ 'view' ] ) ? $instance[ 'view' ] : 'icon';
+					$state = sanitize_key( $state );
 
 					foreach ( $views as $key => $label ) : $key = sanitize_key( $key ); ?>
 						<input id="<?php echo "{$id}-{$key}";?>" type="radio" name="<?php echo $name;?>" value="<?php echo $key;?>" <?php checked( $state, $key, true );?>>
@@ -136,7 +133,7 @@ class WidgetFollowUs extends \WP_Widget {
 	public function update( $input, $instance ) {
 
 		$instance[ 'title' ] = sanitize_text_field( $input[ 'title' ] );
-		$instance[ 'view' ] = sanitize_key( $input[ 'view' ] );
+		$instance[ 'view' ]  = sanitize_key( $input[ 'view' ] ? $input[ 'view' ] : 'icon' );
 
 		foreach ( $this->profiles as $key => $value ) {
 
@@ -158,8 +155,6 @@ class WidgetFollowUs extends \WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		$this->enqueue_styles();
-
 		echo $args[ 'before_widget' ]; // WPCS: XSS ok.
 
 			if ( ! empty( $instance[ 'title' ] ) ) {
@@ -167,7 +162,7 @@ class WidgetFollowUs extends \WP_Widget {
 				echo $args[ 'before_title' ] . $widget_title . $args[ 'after_title' ]; // WPCS: XSS ok.
 			}
 
-			$view = $instance[ 'view' ];
+			$view = isset( $instance[ 'view' ] ) ? $instance[ 'view' ] : 'icon';
 
 			echo "<ul class='{$this->widget_id}__list {$this->widget_id}__list--{$view}'>";
 
@@ -187,7 +182,7 @@ class WidgetFollowUs extends \WP_Widget {
 					continue;
 				}
 
-				$socials = SettingUtilities::get_social_properties( $key );
+				$socials = OptionUtilities::get_social_properties( $key );
 				$socials = wp_parse_args( $socials, array(
 					'label' => '',
 					'url' => '',
@@ -209,7 +204,10 @@ class WidgetFollowUs extends \WP_Widget {
 			}
 
 			echo "</ul>";
+
 		echo $args[ 'after_widget' ]; // WPCS: XSS ok.
+
+		$this->enqueue_styles();
 	}
 
 	/**
@@ -237,7 +235,7 @@ class WidgetFollowUs extends \WP_Widget {
 				</li>"
 		);
 
-		return $templates[ $view ];
+		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';
 	}
 
 	/**

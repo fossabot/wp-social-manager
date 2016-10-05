@@ -2,7 +2,7 @@
 
 namespace XCo\WPSocialManager;
 
-final class SettingsValidation extends SettingUtilities {
+final class SettingsValidation extends OptionUtilities {
 
 	/**
 	 * [sanitize_profiles description]
@@ -38,8 +38,10 @@ final class SettingsValidation extends SettingUtilities {
 			'buttonSites' => array()
 		) );
 
+		var_dump( $inputs );
+
 		$inputs[ 'postTypes' ]  = $this->validate_multi_selection( $inputs[ 'postTypes' ], 'postTypes' );
-		$inputs[ 'buttonSites' ] = $this->validate_multi_selection( $inputs[ 'buttonSites' ], 'buttonSites' );
+		$inputs[ 'buttonSites' ] = $this->validate_multi_selection( $inputs[ 'buttonSites' ], 'buttonSites', 'content' );
 		$inputs[ 'buttonView' ] = $this->validate_selection( $inputs[ 'buttonView' ], 'buttonView' );
 		$inputs[ 'buttonPlacement' ] = $this->validate_selection( $inputs[ 'buttonLocation' ], 'buttonLocation' );
 

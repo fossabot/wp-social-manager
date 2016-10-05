@@ -2,7 +2,7 @@
 
 namespace XCo\WPSocialManager;
 
-abstract class Utilities {
+class Utilities {
 
 	/**
 	 * [get_social_attributes description]
@@ -11,7 +11,7 @@ abstract class Utilities {
 	 */
 	final public static function get_social_properties( $name = '' ) {
 
-		$name = sanitize_key( $name );
+		$name  = sanitize_key( $name );
 		$props = array(
 			'facebook' => array(
 				'label' => 'Facebook',
@@ -125,13 +125,13 @@ abstract class Utilities {
 }
 
 
-class SettingUtilities extends Utilities {
+class OptionUtilities extends Utilities {
 
 	/**
 	 * [get_social_profiles description]
 	 * @return [type] [description]
 	 */
-	final static function get_social_profiles() {
+	public static function get_social_profiles() {
 
 		$properties  = self::get_social_properties();
 		$description = array(
@@ -159,7 +159,7 @@ class SettingUtilities extends Utilities {
 	 * [get_post_types description]
 	 * @return [type] [description]
 	 */
-	final static function get_post_types() {
+	public static function get_post_types() {
 
 		$post_types = array();
 
@@ -190,7 +190,7 @@ class SettingUtilities extends Utilities {
 	 * [get_button_locations description]
 	 * @return [type] [description]
 	 */
-	final static function get_button_views() {
+	public static function get_button_views() {
 
 		$types = array(
 			'icon' => esc_html__( 'Icon Only', 'wp-sharing-manager' ),
@@ -205,7 +205,7 @@ class SettingUtilities extends Utilities {
 	 * [get_buttons_location description]
 	 * @return [type] [description]
 	 */
-	final static function get_button_locations() {
+	public static function get_button_locations() {
 
 		$locations = array(
 			'before' => esc_html__( 'Before the content', 'wp-sharing-manager' ),
@@ -219,25 +219,76 @@ class SettingUtilities extends Utilities {
 	 * [get_buttons_location description]
 	 * @return [type] [description]
 	 */
-	final static function get_button_sites( $for = 'content' ) {
+	public static function get_button_sites( $for = '' ) {
 
-		$sites = array(
-			'content' => array(
+		$sites[ 'content' ] = array(
 				'facebook' => 'Facebook',
 				'twitter' => 'Twitter',
 				'googleplus' => 'Google+',
 				'pinterest' => 'Pinterest',
 				'linkedin' => 'LinkedIn',
 				'reddit' => 'Reddit',
-				'whatsapp' => 'WhatsApp',
 				'email' => 'Email'
-			),
-			'image' => array(
+			);
+
+		$sites[ 'image' ] = array(
 				'facebook' => 'Facebook',
 				'pinterest' => 'Pinterest'
-			)
+			);
+
+		return isset( $sites[ $for ] ) ? $sites[ $for ] : $sites;
+	}
+}
+
+
+class OutputUtilities extends OptionUtilities {
+
+	/**
+	 * [get_button_endpoints description]
+	 * @return [type] [description]
+	 */
+	public static function get_button_endpoints( $for = '' ) {
+
+		$endpoints[ 'content' ] = array(
+			'facebook' => 'https://www.facebook.com/sharer/sharer.php',
+			'twitter' => 'https://twitter.com/intent/tweet',
+			'googleplus' => 'https://plus.google.com/share',
+			'pinterest' => 'https://pinterest.com/pin/create/bookmarklet/',
+			'linkedin' => false,
+			'reddit' => 'https://www.reddit.com/submit',
+			'email' => 'mailto:'
 		);
 
-		return isset( $sites[ $for ] ) ? $sites[ $for ] : $sites[ 'content' ];
+		$endpoints[ 'image' ] = array(
+			'facebook' => 'https://www.facebook.com/sharer/sharer.php',
+			'pinterest' => 'https://pinterest.com/pin/create/bookmarklet/'
+		);
+
+		return isset( $endpoints[ $for ] ) ? $endpoints[ $for ] : $endpoints;
+	}
+
+	/**
+	 * [get_button_sites description]
+	 * @return [type] [description]
+	 */
+	public static function get_button_sites( $for = '' ) {
+
+		if ( empty( $for ) ) {
+			return;
+		}
+
+		$sites = parent::get_button_sites( $for );
+		$endpoints = self::get_button_endpoints( $for );
+
+		foreach ( $sites as $key => $value ) {
+			if ( isset( $endpoints[ $key ] ) ) {
+				$sites[ $key ] = array(
+					'label' => $value,
+					'endpoint' => $endpoints[ $key ]
+				);
+			}
+		}
+
+		return $sites;
 	}
 }

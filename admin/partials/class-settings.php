@@ -17,7 +17,7 @@ namespace XCo\WPSocialManager;
 if ( ! defined( 'WPINC' ) )
 	die;
 
-final class Settings extends SettingUtilities {
+final class Settings extends OptionUtilities {
 
 	/**
 	 * [$args description]
@@ -55,17 +55,15 @@ final class Settings extends SettingUtilities {
 	 */
 	public function __construct( array $args ) {
 
-		$this->args = $args;
-
 		$this->version = $args[ 'version' ];
 		$this->plugin_name = $args[ 'plugin_name' ];
 		$this->plugin_opts = $args[ 'plugin_opts' ];
 
-		$this->plugin_dir = trailingslashit( plugin_dir_path( dirname( __FILE__ ) ) );
-		$this->plugin_url = trailingslashit( plugin_dir_url( dirname( __FILE__ ) ) );
+		$this->path_dir = trailingslashit( plugin_dir_path( dirname( __FILE__ ) ) );
+		$this->path_url = trailingslashit( plugin_dir_url( dirname( __FILE__ ) ) );
 
 		$this->requires();
-		$this->actions();
+		$this->hooks();
 	}
 
 	/**
@@ -74,17 +72,17 @@ final class Settings extends SettingUtilities {
 	 */
 	protected function requires() {
 
-		require_once( $this->plugin_dir . 'partials/pepperplane/pepperplane.php' );
-		require_once( $this->plugin_dir . 'partials/pepperplane/pepperplane-fields.php' );
+		require_once( $this->path_dir . 'partials/pepperplane/pepperplane.php' );
+		require_once( $this->path_dir . 'partials/pepperplane/pepperplane-fields.php' );
 
-		require_once( $this->plugin_dir . 'partials/class-extends.php' );
+		require_once( $this->path_dir . 'partials/class-extends.php' );
 	}
 
-		/**
+	/**
 	 * [setups description]
 	 * @return [type] [description]
 	 */
-	protected function actions() {
+	protected function hooks() {
 
 		add_action( 'admin_menu', array( $this, 'setting_menu' ) );
 
@@ -289,8 +287,8 @@ final class Settings extends SettingUtilities {
 					'id' => 'buttonSites',
 					'label' => esc_html__( 'Include these', 'wp-sharing-manager' ),
 					'type' => 'multicheckbox',
-					'options' => self::get_button_sites(),
-					'default' => array_keys( self::get_button_sites() )
+					'options' => self::get_button_sites( 'content' ),
+					'default' => array_keys( self::get_button_sites( 'content' ) )
 				)
 		) );
 
@@ -358,8 +356,8 @@ final class Settings extends SettingUtilities {
 			array(
 				'id' => 'name',
 				'type' => 'text',
-				'label' => esc_html__( 'Site Name', 'wp-social-manager' ),
-				'legend' => esc_html__( 'Site Name', 'wp-social-manager' ),
+				'label' => esc_html__( 'Site Title', 'wp-social-manager' ),
+				'legend' => esc_html__( 'Site Title', 'wp-social-manager' ),
 				'description' => esc_html__( 'The name of this website as it should appear within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
@@ -453,7 +451,7 @@ final class Settings extends SettingUtilities {
 
 		foreach ( $args as $name => $suffix ) {
 			$file = is_string( $suffix ) && ! empty( $suffix ) ? "scripts-{$suffix}" : "scripts";
-			wp_enqueue_script( "{$this->plugin_name}-{$suffix}", "{$this->plugin_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+			wp_enqueue_script( "{$this->plugin_name}-{$suffix}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 		}
 
 		wp_enqueue_media();
@@ -468,7 +466,7 @@ final class Settings extends SettingUtilities {
 
 		foreach ( $args as $name => $suffix ) {
 			$file = is_string( $suffix ) && ! empty( $suffix ) ? "styles-{$suffix}" : "styles";
-			wp_enqueue_style( "{$this->plugin_name}-{$suffix}", "{$this->plugin_url}css/{$file}.css", array(), $this->version );
+			wp_enqueue_style( "{$this->plugin_name}-{$suffix}", "{$this->path_url}css/{$file}.css", array(), $this->version );
 		}
 	}
 }

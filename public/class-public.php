@@ -43,6 +43,12 @@ class ViewPublic {
 	private $version;
 
 	/**
+	 * [$routes description]
+	 * @var [type]
+	 */
+	private $routes;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -52,12 +58,16 @@ class ViewPublic {
 	public function __construct( $args ) {
 
 		$this->plugin_name = $args[ 'plugin_name' ];
+		$this->plugin_opts = $args[ 'plugin_opts' ];
+
 		$this->version = $args[ 'version' ];
 
-		$this->requires();
+		$this->path_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
+		$this->path_url = trailingslashit( plugin_dir_url( __FILE__ ) );
 
-		add_action( 'init', array( $this, 'enqueue_styles' ) );
-		add_action( 'init', array( $this, 'enqueue_scripts' ) );
+		$this->requires();
+		$this->hooks();
+		$this->setups();
 	}
 
 	/**
@@ -66,9 +76,29 @@ class ViewPublic {
 	 */
 	public function requires() {
 
-		require_once plugin_dir_path( __FILE__ ) . 'partials/class-buttons-content.php';
-		require_once plugin_dir_path( __FILE__ ) . 'partials/class-buttons-image.php';
-		require_once plugin_dir_path( __FILE__ ) . 'partials/class-metas.php';
+		require_once( $this->path_dir . 'partials/class-metas.php' );
+		require_once( $this->path_dir . 'partials/class-routes.php' );
+		require_once( $this->path_dir . 'partials/class-buttons.php' );
+	}
+
+	/**
+	 * [hooks description]
+	 * @return [type] [description]
+	 */
+	public function hooks() {
+
+		add_action( 'init', array( $this, 'enqueue_styles' ) );
+		add_action( 'init', array( $this, 'enqueue_scripts' ) );
+		add_action( 'init', array( $this, 'register_api_routes' ) );
+	}
+
+	public function setups() {
+
+		/**
+		 * [$this->routes description]
+		 * @var APIRoutes
+		 */
+		$this->routes = new APIRoutes( $this->plugin_name, new Metas( $this->plugin_opts ) );
 	}
 
 	/**
@@ -81,7 +111,7 @@ class ViewPublic {
 		if ( is_admin() )
 			return;
 
-		//wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/styles.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, $this->path_url . 'css/styles.css', array(), $this->version, 'all' );
 	}
 
 	/**
@@ -94,6 +124,15 @@ class ViewPublic {
 		if ( is_admin() )
 			return;
 
-		//wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/public.js', array( 'jquery' ), $this->version, false );
+	}
+
+	/**
+	 * [register_api_routes description]
+	 * @return [type] [description]
+	 */
+	public function register_api_routes() {
+		add_filter( 'rest_api_init', array( $this->routes, 'register_routes' ) );
+		add_action( 'wp_enqueue_scripts', array( $this->routes, 'localize_scripts' ) );
 	}
 }

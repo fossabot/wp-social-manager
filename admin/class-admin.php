@@ -48,7 +48,8 @@ class ViewAdmin {
 	public function __construct( array $args ) {
 
 		$this->args = $args;
-		$this->plugin_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
+
+		$this->path_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
 
 		$this->requires();
 		$this->setups();
@@ -60,11 +61,11 @@ class ViewAdmin {
 	 */
 	public function requires() {
 
-		require_once( $this->plugin_dir . 'partials/class-settings.php' );
-		require_once( $this->plugin_dir . 'partials/class-settings-user.php' );
-		require_once( $this->plugin_dir . 'partials/class-settings-validation.php' );
+		require_once( $this->path_dir . 'partials/class-settings.php' );
+		require_once( $this->path_dir . 'partials/class-settings-user.php' );
+		require_once( $this->path_dir . 'partials/class-settings-validation.php' );
 
-		require_once( $this->plugin_dir . 'partials/class-metabox.php' );
+		require_once( $this->path_dir . 'partials/class-metabox.php' );
 	}
 
 	/**

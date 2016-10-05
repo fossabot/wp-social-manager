@@ -28,6 +28,27 @@ namespace XCo\WPSocialManager;
  */
 class Languages {
 
+	/**
+	 * [$plugin_name description]
+	 * @var [type]
+	 */
+	protected $plugin_name;
+
+	/**
+	 * [$plugin_dir description]
+	 * @var [type]
+	 */
+	protected $plugin_dir;
+
+	/**
+	 * [__construct description]
+	 * @param [type] $args [description]
+	 */
+	public function __construct( $domain ) {
+
+		$this->domain = $domain;
+		$this->plugin_dir = trailingslashit( dirname( dirname( plugin_basename( __FILE__ ) ) ) );
+	}
 
 	/**
 	 * Load the plugin text domain for translation.
@@ -35,6 +56,6 @@ class Languages {
 	 * @since    1.0.0
 	 */
 	public function load_plugin_textdomain() {
-		load_plugin_textdomain( 'wp-social-manager', false, dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/' );
+		load_plugin_textdomain( $this->domain, false, $this->plugin_dir . 'languages/' );
 	}
 }

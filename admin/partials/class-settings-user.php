@@ -2,7 +2,7 @@
 
 namespace XCo\WPSocialManager;
 
-class SettingsUser extends SettingUtilities {
+class SettingsUser extends OptionUtilities {
 
 	protected $plugin_name;
 
@@ -13,10 +13,10 @@ class SettingsUser extends SettingUtilities {
 		$this->plugin_name = $args[ 'plugin_name' ];
 		$this->plugin_opts = $args[ 'plugin_opts' ];
 
-		$this->actions();
+		$this->hooks();
 	}
 
-	protected function actions() {
+	protected function hooks() {
 
 		add_action( 'show_user_profile', array( $this, 'add_social_profiles' ), -30 );
 		add_action( 'edit_user_profile', array( $this, 'add_social_profiles' ), -30 );
