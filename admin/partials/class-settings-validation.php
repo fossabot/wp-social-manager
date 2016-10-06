@@ -85,7 +85,7 @@ final class SettingsValidation extends OptionUtilities {
 
 		$inputs[ 'name' ] = wp_kses( $inputs[ 'name' ] );
 		$inputs[ 'description' ] = wp_kses( $inputs[ 'description' ] );
-		$inputs[ 'image' ] = esc_url( $inputs[ 'image' ] );
+		$inputs[ 'image' ] = absint( $inputs[ 'image' ] );
 
 		return $inputs;
 	}
