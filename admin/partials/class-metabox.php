@@ -17,6 +17,12 @@ final class SocialMetaBox {
 	protected $screen;
 
 	/**
+	 * [$screen description]
+	 * @var [type]
+	 */
+	protected $options;
+
+	/**
 	 * [$post_id description]
 	 * @var [type]
 	 */
@@ -64,6 +70,10 @@ final class SocialMetaBox {
 		require_once( $this->plugin_dir . 'butterbean-extend/butterbean-extend.php' );
 	}
 
+	public function setups() {
+		$this->options = get_option( 'wp_social_manager_metas_site' );
+	}
+
 	/**
 	 * Sets up initial actions.
 	 *
@@ -75,6 +85,7 @@ final class SocialMetaBox {
 
 		// Load `ButterBean` library.
 		add_action( 'plugins_loaded', array( $this, 'requires' ) );
+		add_action( 'plugins_loaded', array( $this, 'setups' ) );
 
 		// Register managers.
 		add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
@@ -181,6 +192,11 @@ final class SocialMetaBox {
 	 * @return [type]             [description]
 	 */
 	public function register_section_meta( $butterbean, $post_type ) {
+
+		if ( ! isset( $this->options[ 'metaEnable' ] ) ||
+			 ! (bool) $this->options[ 'metaEnable' ] ) {
+				return;
+			}
 
 		// Get our custom manager object.
 		$manager = $butterbean->get_manager( 'wp_social_manager' );
