@@ -52,14 +52,15 @@ final class SettingsExtend extends \PepperPlaneFields {
 
 		$args  = $this->get_arguments( $args );
 
-		$id    = esc_attr( "{$args['section']}_{$args['id']}" );
-		$name  = esc_attr( "{$args['section']}[{$args['id']}]" );
-		$value = esc_url( $this->get_option( $args ) );
+		$id = esc_attr( "{$args['section']}_{$args['id']}" );
+		$name = esc_attr( "{$args['section']}[{$args['id']}]" );
+		$value = $this->get_option( $args );
+		$source = $value ? wp_get_attachment_image_src( $value, 'full', true ) : '';
 
-		$img  = ! empty( $value ) ? "<img src='{$value}'>" : '';
-		$set  = ! empty( $value ) ? ' is-set' : '';
-		$show = ! empty( $value ) ? ' hide-if-js' : '';
-		$hide = ! empty( $value ) ? '' : ' hide-if-js';
+		$img = ! empty( $source ) ? "<img src='{$source[0]}'>" : '';
+		$set = ! empty( $source ) ? ' is-set' : '';
+		$show = ! empty( $source ) ? ' hide-if-js' : '';
+		$hide = ! empty( $source ) ? '' : ' hide-if-js';
 
 		$html = "<input type='hidden' id='{$id}' name='{$name}'' value='{$value}'/>
 			<div id='{$id}-wrap' class='field-image-wrap{$set}'>
