@@ -78,9 +78,9 @@
 		 * @param  {[type]} imgUrl [description]
 		 * @return {[type]}        [description]
 		 */
-		controlState : function( imgUrl ) {
+		controlState : function( imgId, imgUrl ) {
 
-			var state = ( imgUrl === this.$input.val() && '' !== imgUrl );
+			var state = ( imgId === parseInt( this.$input.val(), 10 ) && '' !== imgUrl );
 
 			this.$inputWrap.toggleClass( 'is-set', state );
 
@@ -134,10 +134,11 @@
 		wpMediaSelect : function() {
 
 			var attach = this.wpMediaUploader.state().get('selection').first().toJSON();
+			var attachId = attach[ 'id' ];
 			var attachURL = attach[ 'url' ];
 
-			this.$input.val( attachURL );
-			this.controlState( attachURL );
+			this.$input.val( attachId );
+			this.controlState( attachId, attachURL );
 		}
 	});
 
