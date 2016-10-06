@@ -124,7 +124,9 @@ final class Metas extends OutputUtilities {
 
 		$tag_args = array(
 			'site_name' => $this->site_name(),
+			'site_title' => $this->site_title(),
 			'site_description' => $this->site_description(),
+			'site_url' => $this->site_url(),
 			'site_image' => $this->site_image()
 		);
 
@@ -150,14 +152,13 @@ final class Metas extends OutputUtilities {
 
 		$tag_args = array(
 			'site_name' => $this->site_name(),
-			'post_title' => $this->post_title( $this->post_id ),
-			'post_description' => $this->post_description( $this->post_id ),
-			'post_url' => $this->post_url( $this->post_id ),
-			'post_image' => $this->post_image( $this->post_id )
+			'post_title' => $this->post_title( $post_id ),
+			'post_description' => $this->post_description( $post_id ),
+			'post_url' => $this->post_url( $post_id ),
+			'post_image' => $this->post_image( $post_id )
 		);
 
-		$fb = $this->post_facebook_graph( $this->post_id );
-
+		$fb = $this->post_facebook_graph( $post_id );
 		$og = $this->post_open_graph( $tag_args );
 		$tc = $this->post_twitter_card( $tag_args );
 
@@ -175,12 +176,16 @@ final class Metas extends OutputUtilities {
 		$meta = '';
 		$args = wp_parse_args( $args, array(
 			'site_name' => false,
+			'site_title' => false,
 			'site_description' => false,
+			'site_url' => false,
 			'site_image' => array()
 		) );
 
 		$meta .= $args[ 'site_name' ] ? sprintf( "<meta property='og:site_name' content='%s' />\n", $args[ 'site_name' ] ) : '';
+		$meta .= $args[ 'site_title' ] ? sprintf( "<meta property='og:title' content='%s' />\n", $args[ 'site_title' ] ) : '';
 		$meta .= $args[ 'site_description' ] ? sprintf( "<meta property='og:description' content='%s' />\n", $args[ 'site_description' ] ) : '';
+		$meta .= $args[ 'site_url' ] ? sprintf( "<meta property='og:url' content='%s' />\n", esc_url( $args[ 'site_url' ] ) ) : '';
 
 		if ( ! empty( $args[ 'site_image' ] ) ) {
 
@@ -313,10 +318,12 @@ final class Metas extends OutputUtilities {
 			$height = $args[ 'post_image' ][ 'height' ];
 
 			if ( $source && $width && $height ) {
+
 				$meta .= sprintf( "<meta name='twitter:image:src' content='%s' />\n", esc_attr( $source ) );
 				$meta .= sprintf( "<meta name='twitter:image:width' content='%s' />\n", esc_attr( $width ) );
 				$meta .= sprintf( "<meta name='twitter:image:height' content='%s' />\n", esc_attr( $height ) );
 			} else if ( $source ) {
+
 				$meta .= sprintf( "<meta name='twitter:image' content='%s' />\n", esc_attr( $source ) );
 			}
 		}
@@ -338,10 +345,18 @@ final class Metas extends OutputUtilities {
 	 */
 	public function site_name() {
 
-		$title = $this->get_site_meta( 'name' );
-		$title = $title ? $title : get_bloginfo( 'name' );
+		$name = $this->get_site_meta( 'name' );
+		$name = $name ? $name : get_bloginfo( 'name' );
 
-		return wp_kses( $title, array() );
+		return wp_kses( $name, array() );
+	}
+
+	/**
+	 * [site_title description]
+	 * @return [type] [description]
+	 */
+	public function site_title() {
+		return wp_kses( wp_get_document_title(), array() );
 	}
 
 	/**
@@ -354,6 +369,16 @@ final class Metas extends OutputUtilities {
 		$description = $description ? $description : get_bloginfo( 'description' );
 
 		return wp_kses( $description, array() );
+	}
+
+	/**
+	 * [site_title description]
+	 * @return [type] [description]
+	 */
+	public function site_url() {
+
+		$url = get_site_url();
+		return esc_url( $url );
 	}
 
 	/**
@@ -387,7 +412,7 @@ final class Metas extends OutputUtilities {
 		if ( $this->is_meta_enabled() ) {
 			$title = $this->get_post_meta( $id, 'post_title' );
 		} else {
-			$post  = get_post( $id );
+			$post = get_post( $id );
 			$title = $post->post_title;
 		}
 

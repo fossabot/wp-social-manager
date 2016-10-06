@@ -93,7 +93,7 @@ final class Settings extends OptionUtilities {
 		add_action( 'admin_init', array( $this, 'setting_init' ), 12 );
 
 		add_action( "{$this->plugin_opts}_admin_enqueue_scripts", array( $this, 'enqueue_scripts' ), 10, 1 );
-		add_action( "{$this->plugin_opts}_admin_enqueue_styles", array( $this, 'enqueue_styles' ), 10, 1 );
+		add_action( "{$this->plugin_opts}_admin_enqueue_styles", array( $this, 'enqueue_styles' ), 10, 1 );	
 	}
 
 	/**
@@ -101,6 +101,7 @@ final class Settings extends OptionUtilities {
 	 * @return [type] [description]
 	 */
 	public function setting_setup() {
+
 
 		$fields = new \PepperPlaneFields( get_settings_errors() );
 		$settings = new \PepperPlane( $this->plugin_opts, $fields );
@@ -356,22 +357,33 @@ final class Settings extends OptionUtilities {
 			array(
 				'id' => 'name',
 				'type' => 'text',
-				'label' => esc_html__( 'Site Title', 'wp-social-manager' ),
-				'legend' => esc_html__( 'Site Title', 'wp-social-manager' ),
-				'description' => esc_html__( 'The name of this website as it should appear within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' ),
+				'label' => esc_html__( 'Site Name', 'wp-social-manager' ),
+				'legend' => esc_html__( 'Site Name', 'wp-social-manager' ),
+				'description' => sprintf( esc_html__( 'The website name or brand as it should appear within the social media meta tags (e.g. %s)', 'wp-social-manager' ), '<code>iMDB</code>' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
 					'placeholder' => get_bloginfo( 'name' )
 				)
 			),
 			array(
+				'id' => 'title',
+				'type' => 'text',
+				'label' => esc_html__( 'Site Title', 'wp-social-manager' ),
+				'legend' => esc_html__( 'Site Title', 'wp-social-manager' ),
+				'description' => esc_html__( 'The title of this website as it should appear within the social media meta tags.', 'wp-social-manager' ),
+				'class' => 'meta-site-setting',
+				'attr' => array(
+					'placeholder' => ''
+				)
+			),
+			array(
 				'id' => 'description',
 				'type' => 'textarea',
 				'label' => esc_html__( 'Site Description', 'wp-social-manager' ),
-				'description' => esc_html__( 'A one to two sentence description of this website that should appear within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' ),
+				'description' => esc_html__( 'A one to two sentence describing this website that should appear within the social media meta tags.', 'wp-social-manager' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
-					'rows' => '5',
+					'rows' => '4',
 					'cols' => '80',
 					'placeholder' => get_bloginfo( 'description' )
 				)
