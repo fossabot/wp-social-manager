@@ -61,6 +61,7 @@ final class APIRoutes extends OutputUtilities {
 	public function localize_scripts() {
 
 		wp_localize_script( $this->namespace, 'WPSocialManagerData', array(
+
 			'root'  => esc_url_raw( get_rest_url() ),
 			'nonce' => wp_create_nonce( 'wp_rest' )
 		) );
@@ -122,7 +123,7 @@ final class APIRoutes extends OutputUtilities {
 		$sites = self::get_button_sites( 'content' );
 
 		$content = $this->get_option( 'wp_social_manager_buttons_content' );
-		$metas = $this->get_metas( $request[ 'id' ] );
+		$metas = $this->get_post_metas( $request[ 'id' ] );
 
 		$buttons = array();
 
@@ -142,7 +143,7 @@ final class APIRoutes extends OutputUtilities {
 				case 'facebook' :
 
 					$buttons[ $key ][ 'endpoint' ] = add_query_arg(
-							array( 'u' => $metas[ 'url' ]
+							array( 'u' => $metas[ 'post_url' ]
 						), $value[ 'endpoint' ] );
 
 					break;
@@ -151,8 +152,8 @@ final class APIRoutes extends OutputUtilities {
 
 					$profiles = $this->get_option( 'wp_social_manager_profiles' );
 					$args = array(
-							'text' => $metas[ 'title' ],
-							'url'  => $metas[ 'url' ]
+							'text' => $metas[ 'post_title' ],
+							'url'  => $metas[ 'post_url' ]
 						);
 
 					if ( isset( $profiles[ 'twitter' ] ) && ! empty( $profiles[ 'twitter' ] ) ) {
@@ -166,14 +167,14 @@ final class APIRoutes extends OutputUtilities {
 				case 'googleplus' :
 
 					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'url' => $metas[ 'url' ]
+							'url' => $metas[ 'post_url' ]
 						), $value[ 'endpoint' ] );
 					break;
 
 				case 'googleplus' :
 
 					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'url' => $metas[ 'url' ]
+							'url' => $metas[ 'post_url' ]
 						), $value[ 'endpoint' ] );
 
 					break;
@@ -181,9 +182,9 @@ final class APIRoutes extends OutputUtilities {
 				case 'pinterest':
 
 					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'url' => $metas[ 'url' ],
-							'description' => $metas[ 'title' ],
-							'media' => $metas[ 'media' ],
+							'url' => $metas[ 'post_url' ],
+							'description' => $metas[ 'post_title' ],
+							'image' => $metas[ 'image' ],
 							'is_video' => false
 						), $value[ 'endpoint' ]  );
 					break;
@@ -191,16 +192,16 @@ final class APIRoutes extends OutputUtilities {
 				case 'reddit':
 
 					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'url' => $metas[ 'url' ],
-							'title' => $metas[ 'title' ]
+							'url' => $metas[ 'post_url' ],
+							'post_title' => $metas[ 'post_title' ]
 						), $value[ 'endpoint' ]  );
 					break;
 
 				case 'email':
 
 					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'subject' => $metas[ 'title' ],
-							'body' => $metas[ 'description' ]
+							'subject' => $metas[ 'post_title' ],
+							'body' => $metas[ 'post_description' ]
 						), $value[ 'endpoint' ]  );
 					break;
 			}
@@ -218,7 +219,7 @@ final class APIRoutes extends OutputUtilities {
 		$sites = self::get_button_sites( 'image' );
 
 		$image = $this->get_option( 'wp_social_manager_buttons_image' );
-		$metas = $this->get_metas( $request[ 'id' ] );
+		$metas = $this->get_post_metas( $request[ 'id' ] );
 
 		$buttons = array();
 
@@ -231,15 +232,15 @@ final class APIRoutes extends OutputUtilities {
 				case 'facebook' :
 
 					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'u' => $metas[ 'url' ]
+							'u' => $metas[ 'post_url' ]
 						), $value[ 'endpoint' ] );
 					break;
 
 				case 'pinterest':
 
 					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'url' => $metas[ 'url' ],
-							'description' => $metas[ 'title' ],
+							'url' => $metas[ 'post_url' ],
+							'description' => $metas[ 'post_title' ],
 							'is_video' => false
 						), $value[ 'endpoint' ]  );
 					break;
@@ -254,18 +255,18 @@ final class APIRoutes extends OutputUtilities {
 	 * @param  [type] $id [description]
 	 * @return [type]     [description]
 	 */
-	protected function get_metas( $id ) {
+	protected function get_post_metas( $id ) {
 
-		$title = $this->metas->post_title( $id );
-		$description = $this->metas->post_description( $id );
-		$media = $this->metas->post_media( $id );
-		$url = $this->metas->post_url( $id );
+		$post_title = $this->metas->post_title( $id );
+		$post_description = $this->metas->post_description( $id );
+		$post_image = $this->metas->post_image( $id );
+		$post_url = $this->metas->post_url( $id );
 
 		return array(
-			'title' => rawurlencode( $title ),
-			'description' => rawurlencode( $description ),
-			'media' => $media,
-			'url' => rawurlencode( $url )
+			'post_title' => rawurlencode( $post_title ),
+			'post_description' => rawurlencode( $post_description ),
+			'post_image' => $post_image,
+			'post_url' => rawurlencode( $post_url )
 		);
 	}
 

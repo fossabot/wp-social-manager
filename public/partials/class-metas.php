@@ -2,296 +2,82 @@
 
 namespace XCo\WPSocialManager;
 
-final class Metas {
+/**
+ *
+ */
+final class Metas extends OutputUtilities {
 
 	/**
 	 * [$meta description]
 	 * @var [type]
 	 */
-	protected $meta_key;
+	protected $key;
+
+	/**
+	 * [$locale description]
+	 * @var [type]
+	 */
+	protected $locale;
+
+	/**
+	 * [$options description]
+	 * @var [type]
+	 */
+	protected $options;
 
 	/**
 	 * [__construct description]
 	 */
-	public function __construct( $meta_key ) {
+	public function __construct( $key ) {
 
-		$this->meta_key = $meta_key;
-		$this->locale  = get_locale();
+		/**
+		 * [$this->key description]
+		 * @var [type]
+		 */
+		$this->key = $key;
 
 		$this->actions();
+	}
+
+	/**
+	 * [setups description]
+	 * @return [type] [description]
+	 */
+	public function setups() {
+
+		/**
+		 * [$this->options description]
+		 * @var [type]
+		 */
+		$this->options = (object) array(
+			'profiles'   => get_option( "{$this->key}_profiles" ),
+			'metas_site' => get_option( "{$this->key}_metas_site" )
+		);
+
+		/**
+		 * [$this->locale description]
+		 * @var [type]
+		 */
+		$this->locale  = get_locale();
 	}
 
 	/**
 	 * [action description]
 	 * @return [type] [description]
 	 */
-	final protected function actions() {
+	protected function actions() {
 
-		add_action( 'wp_head', array( $this, 'site_meta_tags' ), 5 );
-		add_action( 'wp_head', array( $this, 'post_meta_tags' ), 5 );
+		add_action( 'init', array( $this, 'setups' ) );
+		add_action( 'wp_head', array( $this, 'site_meta_tags' ), 2 );
+		add_action( 'wp_head', array( $this, 'post_meta_tags' ), 2 );
 	}
 
 	/**
 	 * [is_meta_enabled description]
 	 * @return boolean [description]
 	 */
-	final public function is_meta_enabled() {
-
+	public function is_meta_enabled() {
 		return (bool) $this->get_site_meta( 'metaEnable' );
-	}
-
-	/**
-	 * [site_meta_tags description]
-	 * @return [type] [description]
-	 */
-	public function site_meta_tags() {
-
-		if ( is_single() || ! $this->is_meta_enabled() ) {
-			return;
-		}
-
-		$site_title = $this->site_title();
-		$site_description = $this->site_description();
-	}
-
-	/**
-	 * [meta_tags description]
-	 * @return [type] [description]
-	 */
-	public function post_meta_tags() {
-
-		if ( ! is_single() || ! $this->is_meta_enabled() ) {
-			return;
-		}
-
-		$post_id = get_the_id();
-
-		$post_title = $this->post_title( $post_id );
-		$post_description = $this->post_description( $post_id );
-		$post_url = $this->post_url( $post_id );
-		$post_media = $this->post_media( $post_id );
-
-		$tag_args = array(
-			'title' => $post_title,
-			'description' => $post_description,
-			'url' => $post_url,
-			'media' => $post_media
-		);
-
-		$og = $this->post_open_graph( $tag_args );
-		$tc = $this->post_twitter_card( $tag_args );
-
-		echo "\n<!-- START: WP-Social-Manager [ https://wordpress.org/plugins/wp-social-manager ] -->\n";
-			echo "{$og}{$tc}";
-		echo "<!-- END: WP-Social-Manager -->\n\n";
-	}
-
-	/**
-	 * [site_open_graph description]
-	 * @return [type] [description]
-	 */
-	public function site_open_graph() {
-
-	}
-
-	/**
-	 * [site_twitter_card description]
-	 * @return [type] [description]
-	 */
-	public function site_twitter_card() {
-
-	}
-
-	/**
-	 * [open_graph description]
-	 * @param  [type] $title [description]
-	 * @return [type]        [description]
-	 */
-	public function post_open_graph( $args ) {
-
-		$meta = '';
-		$args = wp_parse_args( $args, array(
-			'title' => false,
-			'description' => false,
-			'url' => false,
-			'media' => array()
-		) );
-
-		$meta .= $args[ 'title' ] ? sprintf( "<meta property='og:title' content='%s' />\n", $args[ 'title' ] ) : '';
-		$meta .= $args[ 'description' ] ? sprintf( "<meta property='og:description' content='%s' />\n", $args[ 'description' ] ) : '';
-		$meta .= $args[ 'url' ] ? sprintf( "<meta property='og:url' content='%s' />\n", $args[ 'url' ] ) : '';
-
-		if ( ! empty( $args[ 'media' ] ) ) {
-
-			$source = $args[ 'media' ][ 'src' ];
-			$width  = $args[ 'media' ][ 'width' ];
-			$height = $args[ 'media' ][ 'height' ];
-
-			if ( $source && $width && $height ) {
-				$meta .= sprintf( "<meta property='og:image:src' content='%s' />\n", $source );
-				$meta .= sprintf( "<meta property='og:image:width' content='%s' />\n", $width );
-				$meta .= sprintf( "<meta property='og:image:height' content='%s' />\n", $height );
-			} else if ( $source ) {
-				$meta .= sprintf( "<meta name='og:image' content='%s' />\n", $source );
-			}
-		}
-
-		if ( ! empty( $meta ) ) {
-
-			$type = "<meta property='og:type' content='article' />\n";
-			$locale = sprintf( "<meta property='og:locale' content='%s' />\n", $this->locale );
-
-			$meta = $type . $locale . $meta;
-		}
-
-		return $meta;
-	}
-
-	/**
-	 * [twitter_card description]
-	 * @param  [type] $args [description]
-	 * @return [type]       [description]
-	 */
-	public function post_twitter_card( $args ) {
-
-		$meta = '';
-		$args = wp_parse_args( $args, array(
-			'title' => false,
-			'description' => false,
-			'url' => false,
-			'media' => array()
-		) );
-
-		$meta .= $args[ 'title' ] ? sprintf( "<meta name='twitter:title' content='%s' />\n", $args[ 'title' ] ) : '';
-		$meta .= $args[ 'description' ] ? sprintf( "<meta name='twitter:description' content='%s' />\n", $args[ 'description' ] ) : '';
-		$meta .= $args[ 'url' ] ? sprintf( "<meta name='twitter:url' content='%s' />\n", $args[ 'url' ] ) : '';
-
-		if ( ! empty( $args[ 'media' ] ) ) {
-
-			$source = $args[ 'media' ][ 'src' ];
-			$width  = $args[ 'media' ][ 'width' ];
-			$height = $args[ 'media' ][ 'height' ];
-
-			if ( $source && $width && $height ) {
-				$meta .= sprintf( "<meta name='twitter:image:src' content='%s' />\n", $source );
-				$meta .= sprintf( "<meta name='twitter:image:width' content='%s' />\n", $width );
-				$meta .= sprintf( "<meta name='twitter:image:height' content='%s' />\n", $height );
-			} else if ( $source ) {
-				$meta .= sprintf( "<meta name='twitter:image' content='%s' />\n", $source );
-			}
-		}
-
-		if ( ! empty( $meta ) ) {
-
-			$type = "<meta name='twitter:card' content='summary' />\n";
-			$meta = $type . $meta;
-		}
-
-		return $meta;
-	}
-
-	/**
-	 * [site_title description]
-	 * @return [type] [description]
-	 */
-	public function site_title() {
-
-		$title = $this->get_site_meta( 'name' );
-		$title = $title ? $title : get_bloginfo( 'name' );
-
-		return wp_kses( $title, array() );
-	}
-
-	public function site_description() {
-
-		$description = $this->get_site_meta( 'description' );
-		$description = $description ? $description : get_bloginfo( 'description' );
-
-		return wp_kses( $description, array() );
-	}
-
-	public function site_media() {
-
-	}
-
-	/**
-	 * [get_post description]
-	 * @return [type] [description]
-	 */
-	public function post_title( $id ) {
-
-		$title = $this->get_post_meta( $id, 'post_title' );
-		return wp_kses( $title, array() );
-	}
-
-	/**
-	 * [get_description description]
-	 * @param  [type] $id [description]
-	 * @return [type]     [description]
-	 */
-	public function post_description( $id ) {
-
-		$description = $this->get_post_meta( $id, 'post_excerpt' );
-		return wp_kses( $description, array() );
-	}
-
-	/**
-	 * [get_thumbnail description]
-	 * @param  [type] $id [description]
-	 * @return [type]     [description]
-	 */
-	public function post_media( $id ) {
-
-		// 1. Post Meta Image
-		// 2. Post Featured Image
-		// 3. Site Meta Image
-		// 4. Site Custom Logo (Customizer)
-		// 5. Post Content First Image
-
-		$media_id = $this->get_post_meta( $id, 'post_thumbnail' ); // Post Meta.
-
-		if ( ! $media_id ) {
-			$media_id = get_post_thumbnail_id( $id );
-		} else {
-			$media_id = get_theme_mod( 'custom_logo', false );
-		}
-
-		if ( $media_id ) {
-
-			list( $src, $width, $height ) = wp_get_attachment_image_src( $media_id, 'full', true );
-
-			return array(
-				'src' => $src,
-				'width' => $width,
-				'height' => $height
-			);
-		} else {
-
-			$post = get_post( $id );
-			$post_content = $post->post_content;
-			$post_image = preg_match_all( '/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post->post_content, $matches );
-
-			if ( $post_image === 0 ) {
-				return array();
-			}
-
-			list( $width, $height ) = getimagesize( $matches[1][0] );
-
-			return array(
-				'src' => $matches[1][0],
-				'width' => $width,
-				'height' => $height
-			);
-		}
-	}
-
-	/**
-	 * [get_url description]
-	 * @param  [type] $id [description]
-	 * @return [type]     [description]
-	 */
-	public function post_url( $id ) {
-		return esc_url( get_permalink( $id ) );
 	}
 
 	/**
@@ -304,8 +90,9 @@ final class Metas {
 			return;
 		}
 
-		$meta = get_option( 'wp_social_manager_metas_site' );
-		return isset( $meta[ $which ] ) ? $meta[ $which ] : '';
+		if ( isset( $this->options->metas_site[ $which ] ) ) {
+			return $this->options->metas_site[ $which ];
+		}
 	}
 
 	/**
@@ -320,17 +107,392 @@ final class Metas {
 			return;
 		}
 
-		$post = get_post( $id );
-		$meta = get_post_meta( $id, $this->meta_key, true );
-
-		if ( ! isset( $meta[ $which ] ) || empty( $meta[ $which ] ) ) {
-			$meta[ $which ] = $post->$which;
-		}
-
-		if ( ! $meta[ $which ] && 'post_excerpt' === $which ) {
-			$meta[ $which ] = wp_trim_words( $post->post_content, 30, '...' );
-		}
+		$meta = get_post_meta( $id, $this->key, true );
 
 		return $meta[ $which ];
+	}
+
+	/**
+	 * [site_meta_tags description]
+	 * @return [type] [description]
+	 */
+	public function site_meta_tags() {
+
+		if ( is_single() || ! $this->is_meta_enabled() ) {
+			return;
+		}
+
+		$tag_args = array(
+			'site_name' => $this->site_name(),
+			'site_description' => $this->site_description(),
+			'site_image' => $this->site_image()
+		);
+
+		$og = $this->site_open_graph( $tag_args );
+		$tc = $this->site_twitter_card( $tag_args );
+
+		echo "\n<!-- START: WP-Social-Manager [ https://wordpress.org/plugins/wp-social-manager ] -->\n";
+			echo "{$og}{$tc}";
+		echo "<!-- END: WP-Social-Manager -->\n\n";
+	}
+
+	/**
+	 * [meta_tags description]
+	 * @return [type] [description]
+	 */
+	public function post_meta_tags() {
+
+		if ( ! is_single() || ! $this->is_meta_enabled() ) {
+			return;
+		}
+
+		$post_id = get_the_id();
+
+		$tag_args = array(
+			'site_name' => $this->site_name(),
+			'post_title' => $this->post_title( $this->post_id ),
+			'post_description' => $this->post_description( $this->post_id ),
+			'post_url' => $this->post_url( $this->post_id ),
+			'post_image' => $this->post_image( $this->post_id )
+		);
+
+		$fb = $this->post_facebook_graph( $this->post_id );
+
+		$og = $this->post_open_graph( $tag_args );
+		$tc = $this->post_twitter_card( $tag_args );
+
+		echo "\n<!-- START: WP-Social-Manager [ https://wordpress.org/plugins/wp-social-manager ] -->\n";
+			echo "{$og}{$fb}{$tc}";
+		echo "<!-- END: WP-Social-Manager -->\n\n";
+	}
+
+	/**
+	 * [site_open_graph description]
+	 * @return [type] [description]
+	 */
+	public function site_open_graph( $args ) {
+
+		$meta = '';
+		$args = wp_parse_args( $args, array(
+			'site_name' => false,
+			'site_description' => false,
+			'site_image' => array()
+		) );
+
+		$meta .= $args[ 'site_name' ] ? sprintf( "<meta property='og:site_name' content='%s' />\n", $args[ 'site_name' ] ) : '';
+		$meta .= $args[ 'site_description' ] ? sprintf( "<meta property='og:description' content='%s' />\n", $args[ 'site_description' ] ) : '';
+
+		if ( ! empty( $args[ 'site_image' ] ) ) {
+
+			$source = $args[ 'site_image' ][ 'src' ];
+			$width  = $args[ 'site_image' ][ 'width' ];
+			$height = $args[ 'site_image' ][ 'height' ];
+
+			if ( $source && $width && $height ) {
+				$meta .= sprintf( "<meta property='og:image:src' content='%s' />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta property='og:image:width' content='%s' />\n", esc_attr( $width ) );
+				$meta .= sprintf( "<meta property='og:image:height' content='%s' />\n", esc_attr( $height ) );
+			} else if ( $source ) {
+				$meta .= sprintf( "<meta name='og:image' content='%s' />\n", esc_attr( $source ) );
+			}
+		}
+
+		if ( ! empty( $meta ) ) {
+
+			$type = "<meta property='og:type' content='website' />\n";
+			$locale = sprintf( "<meta property='og:locale' content='%s' />\n", esc_attr( $this->locale ) );
+
+			$meta = $type . $locale . $meta;
+		}
+
+		return $meta;
+	}
+
+	/**
+	 * [site_twitter_card description]
+	 * @return [type] [description]
+	 */
+	public function site_twitter_card( $args ) { return ''; }
+
+	/**
+	 * [open_graph description]
+	 * @param  [type] $title [description]
+	 * @return [type]        [description]
+	 */
+	protected function post_open_graph( $args ) {
+
+		$meta = '';
+		$args = wp_parse_args( $args, array(
+			'site_name' => false,
+			'post_title' => false,
+			'post_description' => false,
+			'post_url' => false,
+			'post_image' => array()
+		) );
+
+		$meta .= $args[ 'post_title' ] ? sprintf( "<meta property='og:title' content='%s' />\n", $args[ 'post_title' ] ) : '';
+		$meta .= $args[ 'post_description' ] ? sprintf( "<meta property='og:description' content='%s' />\n", $args[ 'post_description' ] ) : '';
+		$meta .= $args[ 'post_url' ] ? sprintf( "<meta property='og:url' content='%s' />\n", esc_url( $args[ 'post_url' ] ) ) : '';
+
+		if ( ! empty( $args[ 'post_image' ] ) ) {
+
+			$source = $args[ 'post_image' ][ 'src' ];
+			$width  = $args[ 'post_image' ][ 'width' ];
+			$height = $args[ 'post_image' ][ 'height' ];
+
+			if ( $source && $width && $height ) {
+				$meta .= sprintf( "<meta property='og:image:src' content='%s' />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta property='og:image:width' content='%s' />\n", esc_attr( $width ) );
+				$meta .= sprintf( "<meta property='og:image:height' content='%s' />\n", esc_attr( $height ) );
+			} else if ( $source ) {
+				$meta .= sprintf( "<meta name='og:image' content='%s' />\n", esc_attr( $source ) );
+			}
+		}
+
+		if ( ! empty( $meta ) ) {
+
+			$type = "<meta property='og:type' content='article' />\n";
+			$locale = sprintf( "<meta property='og:locale' content='%s' />\n", esc_attr( $this->locale ) );
+
+			$meta = $type . $locale . $meta;
+		}
+
+		$site = $args[ 'site_name' ] ? sprintf( "<meta property='og:site_name' content='%s' />\n", $args[ 'site_name' ] ) : '';
+
+		return $site . $meta;
+	}
+
+	/**
+	 * [post_facebook_graph description]
+	 * @return [type] [description]
+	 */
+	protected function post_facebook_graph( $id ) {
+
+		$meta = '';
+
+		if ( ! $id ) {
+			return $meta;
+		}
+
+		$post = get_post( $id );
+
+		$property = self::get_social_properties( 'facebook' );
+		$profile = $this->options->profiles[ 'facebook' ];
+		$publisher = isset( $property[ 'url' ] ) && $profile ? "{$property['url']}{$profile}" : '';
+		$category = get_the_category( $id );
+
+		$meta .= $publisher ? sprintf( "<meta property='article:publisher' content='%s' />\n", $publisher ) : '';
+		$meta .= $category[0]->name ? sprintf( "<meta property='article:section' content='%s' />\n", $category[0]->name ) : '';
+
+		return $meta;
+	}
+
+	/**
+	 * [twitter_card description]
+	 * @param  [type] $args [description]
+	 * @return [type]       [description]
+	 */
+	protected function post_twitter_card( $args ) {
+
+		$meta = '';
+		$args = wp_parse_args( $args, array(
+			'post_title' => false,
+			'post_description' => false,
+			'post_url' => false,
+			'post_image' => array()
+		) );
+
+		$meta .= $args[ 'post_title' ] ? sprintf( "<meta name='twitter:title' content='%s' />\n", $args[ 'post_title' ] ) : '';
+		$meta .= $args[ 'post_description' ] ? sprintf( "<meta name='twitter:description' content='%s' />\n", $args[ 'post_description' ] ) : '';
+		$meta .= $args[ 'post_url' ] ? sprintf( "<meta name='twitter:url' content='%s' />\n", esc_url( $args[ 'post_url' ] ) ) : '';
+
+		if ( ! empty( $args[ 'post_image' ] ) ) {
+
+			$source = $args[ 'post_image' ][ 'src' ];
+			$width  = $args[ 'post_image' ][ 'width' ];
+			$height = $args[ 'post_image' ][ 'height' ];
+
+			if ( $source && $width && $height ) {
+				$meta .= sprintf( "<meta name='twitter:image:src' content='%s' />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta name='twitter:image:width' content='%s' />\n", esc_attr( $width ) );
+				$meta .= sprintf( "<meta name='twitter:image:height' content='%s' />\n", esc_attr( $height ) );
+			} else if ( $source ) {
+				$meta .= sprintf( "<meta name='twitter:image' content='%s' />\n", esc_attr( $source ) );
+			}
+		}
+
+		if ( ! empty( $meta ) ) {
+
+			$profile = $this->options->profiles[ 'twitter' ];
+			$site = $profile ? sprintf( "<meta name='twitter:site' content='@%s' />\n", esc_attr( $profile ) ) : '';
+			$type = "<meta name='twitter:card' content='summary' />\n";
+			$meta = $site . $type . $meta;
+		}
+
+		return $meta;
+	}
+
+	/**
+	 * [site_title description]
+	 * @return [type] [description]
+	 */
+	public function site_name() {
+
+		$title = $this->get_site_meta( 'name' );
+		$title = $title ? $title : get_bloginfo( 'name' );
+
+		return wp_kses( $title, array() );
+	}
+
+	/**
+	 * [site_description description]
+	 * @return [type] [description]
+	 */
+	public function site_description() {
+
+		$description = $this->get_site_meta( 'description' );
+		$description = $description ? $description : get_bloginfo( 'description' );
+
+		return wp_kses( $description, array() );
+	}
+
+	/**
+	 * [site_image description]
+	 * @return [type] [description]
+	 */
+	public function site_image() {
+
+		$attachment_id = $this->get_site_meta( 'image' );
+		$attachment_id = $attachment_id ? $attachment_id : get_theme_mod( 'custom_logo' );
+
+		if ( ! $attachment_id ) {
+			return false;
+		}
+
+		list( $src, $width, $height ) = wp_get_attachment_image_src( $attachment_id, 'full', true );
+
+		return array(
+			'src' => esc_url( $src ),
+			'width' => (int) $width,
+			'height' => (int) $height
+		);
+	}
+
+	/**
+	 * [get_post description]
+	 * @return [type] [description]
+	 */
+	public function post_title( $id ) {
+
+		if ( $this->is_meta_enabled() ) {
+			$title = $this->get_post_meta( $id, 'post_title' );
+		} else {
+			$post  = get_post( $id );
+			$title = $post->post_title;
+		}
+
+		return wp_kses( $title, array() );
+	}
+
+	/**
+	 * [get_description description]
+	 * @param  [type] $id [description]
+	 * @return [type]     [description]
+	 */
+	public function post_description( $id ) {
+
+		if ( $this->is_meta_enabled() ) {
+			$description = $this->get_post_meta( $id, 'post_excerpt' );
+		} else {
+
+			$post = get_post( $id );
+			$description = $this->post_excerpt;
+
+			if ( empty( $post->post_excerpt ) ) {
+				$description = wp_trim_words( $post->post_content, 30, '...' );
+			}
+		}
+
+		return wp_kses( $description, array() );
+	}
+
+	/**
+	 * [get_thumbnail description]
+	 * @param  [type] $id [description]
+	 * @return [type]     [description]
+	 */
+	public function post_image( $id ) {
+
+		// 1. Post Meta Image
+		// 2. Post Featured Image
+		// 3. Post Content First Image
+		// 4. Site Meta Image
+		// 5. Site Custom Logo (Customizer)
+
+		$attachment_id = null;
+
+		if ( $this->is_meta_enabled() ) {
+			$attachment_id = $this->get_post_meta( $id, 'post_thumbnail' ); // Post Meta Image.
+		}
+
+		if ( ! $attachment_id ) {
+			$attachment_id = get_post_thumbnail_id( $id ); // Post Featured Image.
+		}
+
+		if ( $attachment_id ) {
+
+			list( $src, $width, $height ) = wp_get_attachment_image_src( $attachment_id, 'full', true );
+
+			return array(
+				'src' => esc_url( $src ),
+				'width' => absint( $width ),
+				'height' => absint( $height )
+			);
+		}
+
+		$post = get_post( $id );
+		$post_image = preg_match_all( '/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post->post_content, $matches ); // Post First Image.
+
+		if ( $post_image !== 0 ) {
+
+			list( $width, $height ) = getimagesize( $matches[1][0] );
+
+			return array(
+				'src' => esc_url( $matches[1][0] ),
+				'width' => absint( $width ),
+				'height' => absint( $height )
+			);
+		}
+
+		if ( $this->is_meta_enabled() ) {
+
+			$site_image = $this->site_image(); // Site Meta Image.
+
+			if ( is_array( $site_image ) && ! empty( $site_image ) ) {
+				return $site_image;
+			}
+		}
+
+		$site_logo = (int) get_theme_mod( 'custom_logo' ); // Site Custom Logo.
+
+		if ( $site_logo ) {
+
+			list( $src, $width, $height ) = wp_get_attachment_image_src( $site_logo, 'full', true );
+
+			return array(
+				'src' => esc_url( $src ),
+				'width' => absint( $width ),
+				'height' => absint( $height )
+			);
+		}
+	}
+
+	/**
+	 * [get_url description]
+	 * @param  [type] $id [description]
+	 * @return [type]     [description]
+	 */
+	public function post_url( $id ) {
+		return esc_url( get_permalink( $id ) );
 	}
 }
