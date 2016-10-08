@@ -24,6 +24,8 @@ namespace XCo\WPSocialManager;
  */
 class ViewPublic {
 
+	protected $args;
+
 	/**
 	 * The ID of this plugin.
 	 *
@@ -57,9 +59,9 @@ class ViewPublic {
 	 */
 	public function __construct( $args ) {
 
-		$this->plugin_name = $args[ 'plugin_name' ];
-		$this->plugin_opts = $args[ 'plugin_opts' ];
+		$this->args = $args;
 
+		$this->plugin_name = $args[ 'plugin_name' ];
 		$this->version = $args[ 'version' ];
 
 		$this->path_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
@@ -95,10 +97,16 @@ class ViewPublic {
 	public function setups() {
 
 		/**
+		 * [$this->buttons description]
+		 * @var Buttons
+		 */
+		new Buttons( $this->args );
+
+		/**
 		 * [$this->routes description]
 		 * @var APIRoutes
 		 */
-		$this->routes = new APIRoutes( $this->plugin_name, new Metas( $this->plugin_opts ) );
+		$this->routes = new APIRoutes( $this->args, new Metas( $this->args ) );
 	}
 
 	/**
@@ -124,7 +132,7 @@ class ViewPublic {
 		if ( is_admin() )
 			return;
 
-		wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/scripts.js', array( 'jquery', 'underscore' ), $this->version, true );
 	}
 
 	/**
