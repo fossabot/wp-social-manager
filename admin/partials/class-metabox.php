@@ -71,7 +71,7 @@ final class SocialMetaBox {
 	}
 
 	public function setups() {
-		$this->options = get_option( 'wp_social_manager_metas_site' );
+		$this->metasSite = get_option( 'wp_social_manager_metas_site' );
 	}
 
 	/**
@@ -85,7 +85,6 @@ final class SocialMetaBox {
 
 		// Load `ButterBean` library.
 		add_action( 'plugins_loaded', array( $this, 'requires' ) );
-		add_action( 'plugins_loaded', array( $this, 'setups' ) );
 
 		// Register managers.
 		add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
@@ -193,8 +192,8 @@ final class SocialMetaBox {
 	 */
 	public function register_section_meta( $butterbean, $post_type ) {
 
-		if ( ! isset( $this->options[ 'metaEnable' ] ) ||
-			 ! (bool) $this->options[ 'metaEnable' ] ) {
+		if ( ! isset( $this->metasSite[ 'enabled' ] ) ||
+			 ! (bool) $this->metasSite[ 'enabled' ] ) {
 				return;
 			}
 
@@ -336,6 +335,7 @@ final class SocialMetaBox {
 
 		if ( is_null( $instance ) ) {
 			$instance = new self;
+			$instance->setups();
 			$instance->hooks();
 		}
 

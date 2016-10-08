@@ -32,18 +32,19 @@ final class SettingsValidation extends OptionUtilities {
 	public function setting_buttons_content( $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'buttonView' => '',
-			'buttonPlacement' => '',
 			'postTypes' => array(),
-			'buttonSites' => array()
+			'view' => '',
+			'placement' => '',
+			'includes' => array()
 		) );
 
-		var_dump( $inputs );
+		$inputs[ 'heading' ] = sanitize_text_field( $inputs[ 'heading' ] );
 
 		$inputs[ 'postTypes' ]  = $this->validate_multi_selection( $inputs[ 'postTypes' ], 'postTypes' );
-		$inputs[ 'buttonSites' ] = $this->validate_multi_selection( $inputs[ 'buttonSites' ], 'buttonSites', 'content' );
-		$inputs[ 'buttonView' ] = $this->validate_selection( $inputs[ 'buttonView' ], 'buttonView' );
-		$inputs[ 'buttonPlacement' ] = $this->validate_selection( $inputs[ 'buttonLocation' ], 'buttonLocation' );
+		$inputs[ 'includes' ] = $this->validate_multi_selection( $inputs[ 'includes' ], 'includes', 'content' );
+
+		$inputs[ 'view' ] = $this->validate_selection( $inputs[ 'view' ], 'view' );
+		$inputs[ 'placement' ] = $this->validate_selection( $inputs[ 'placement' ], 'placement' );
 
 		return $inputs;
 	}
@@ -56,15 +57,16 @@ final class SettingsValidation extends OptionUtilities {
 	public function setting_buttons_image( $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'imageButtons' => false,
-			'buttonView' => '',
+			'enabled' => false,
+			'view' => '',
 			'postTypes' => array(),
-			'buttonSites' => array()
+			'includes' => array()
 		) );
 
 		$inputs[ 'postTypes' ] = $this->validate_multi_selection( $inputs[ 'postTypes' ], 'postTypes' );
-		$inputs[ 'buttonSites' ] = $this->validate_multi_selection( $inputs[ 'buttonSites' ], 'buttonSites', 'image' );
-		$inputs[ 'buttonView' ] = $this->validate_selection( $inputs[ 'buttonView' ], 'buttonView' );
+		$inputs[ 'includes' ] = $this->validate_multi_selection( $inputs[ 'includes' ], 'includes', 'image' );
+
+		$inputs[ 'view' ] = $this->validate_selection( $inputs[ 'view' ], 'view' );
 
 		return $inputs;
 	}
@@ -77,7 +79,7 @@ final class SettingsValidation extends OptionUtilities {
 	public function setting_site_metas( $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'metaEnable' => false,
+			'enabled' => false,
 			'name' => '',
 			'description' => '',
 			'image' => ''
@@ -111,8 +113,8 @@ final class SettingsValidation extends OptionUtilities {
 	protected function validate_selection( $input, $ref ) {
 
 		$selection = array(
-			'buttonView' => self::get_button_views(),
-			'buttonLocation' => self::get_button_locations()
+			'view' => self::get_button_views(),
+			'placement' => self::get_button_placements()
 		);
 
 		$input = sanitize_key( (string) $input );
@@ -130,20 +132,22 @@ final class SettingsValidation extends OptionUtilities {
 	 */
 	protected function validate_multi_selection( $inputs, $ref, $for = '' ) {
 
-		$selection = array(
+		$preset = array(
 			'postTypes' => self::get_post_types(),
-			'buttonSites' => self::get_button_sites( $for )
+			'includes' => self::get_button_sites( $for )
 		);
+
+		$selection = array();
 
 		foreach ( $inputs as $key => $value ) {
 
-			$inputs[ $key ] = sanitize_text_field( $value );
+			$selection[] = sanitize_text_field( $value );
 
-			if ( ! key_exists( $key, $selection[ $ref ] ) ) {
+			if ( ! key_exists( $key, $preset[ $ref ] ) ) {
 				unset( $inputs[ $key ] );
 			}
 		}
 
-		return $inputs;
+		return $selection;
 	}
 }
