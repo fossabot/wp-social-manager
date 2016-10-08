@@ -13,7 +13,13 @@ final class APIRoutes extends OutputUtilities {
 	 * @access   protected
 	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
 	 */
-	protected $namespace;
+	protected $plugin_name;
+
+	/**
+	 * [$plugin_opts description]
+	 * @var [type]
+	 */
+	protected $plugin_opts;
 
 	/**
 	 * The version of the API routes.
@@ -32,19 +38,25 @@ final class APIRoutes extends OutputUtilities {
 	/**
 	 * [__construct description]
 	 */
-	public function __construct( $namespace, Metas $metas ) {
+	public function __construct( array $args, Metas $metas ) {
 
 		/**
-		 * API version (not the plugin version).
-		 * @var string
+		 * [$this->plugin_name description]
+		 * @var [type]
 		 */
-		$this->version = '1.0';
+		$this->plugin_name = $args[ 'plugin_name' ];
+
+		/**
+		 * [$this->plugin_name description]
+		 * @var [type]
+		 */
+		$this->plugin_opts = $args[ 'plugin_opts' ];
 
 		/**
 		 * [$this->namespace description]
 		 * @var [type]
 		 */
-		$this->namespace = $namespace;
+		$this->namespace = $this->plugin_name . '/1.0';
 
 		/**
 		 * [$this->metas description]
@@ -60,11 +72,28 @@ final class APIRoutes extends OutputUtilities {
 	 */
 	public function localize_scripts() {
 
-		wp_localize_script( $this->namespace, 'WPSocialManagerData', array(
+		/**
+		 * [$args description]
+		 * @var array
+		 */
+		$args = array(
+			'nonce' => wp_create_nonce( 'wp_rest' ),
+			'root' => esc_url( get_rest_url() ),
+			'namespace' => esc_html( $this->namespace ),
+			'attrPrefix' => esc_attr( self::get_attr_prefix() )
+		);
 
-			'root'  => esc_url_raw( get_rest_url() ),
-			'nonce' => wp_create_nonce( 'wp_rest' )
-		) );
+		/**
+		 * [$post_id description]
+		 * @var [type]
+		 */
+		$post_id = get_the_id();
+
+		if ( $post_id ) {
+			$args[ 'postId' ] = absint( $post_id );
+		}
+
+		wp_localize_script( $this->plugin_name, 'wpSocialManager', $args );
 	}
 
 	/**
@@ -74,14 +103,16 @@ final class APIRoutes extends OutputUtilities {
 	 */
 	public function register_routes() {
 
-		$base = $this->namespace . '/' . $this->version;
-
-		register_rest_route( $base, '/buttons', array( array(
+		/**
+		 * [$base description]
+		 * @var [type]
+		 */
+		register_rest_route( $this->namespace, '/buttons', array( array(
 
 			'methods'  => \WP_REST_Server::READABLE,
 			'callback' => array( $this, 'response_buttons' ),
 			'args' => array(
-				'id' => array(
+				'postId' => array(
 					'required' => true,
 					'sanitize_callback' => 'absint',
 					'validate_callback' => function( $param ) {
@@ -103,11 +134,11 @@ final class APIRoutes extends OutputUtilities {
 			'image' => false
 		);
 
-		if ( (bool) $this->metas->get_post_meta( $request[ 'id' ], 'buttons_content' ) ) {
+		if ( (bool) $this->metas->get_post_meta( $request[ 'postId' ], 'buttons_content' ) ) {
 			$response[ 'content' ] = $this->get_buttons_content( $request );
 		}
 
-		if ( (bool) $this->metas->get_post_meta( $request[ 'id' ], 'buttons_image' ) ) {
+		if ( (bool) $this->metas->get_post_meta( $request[ 'postId' ], 'buttons_image' ) ) {
 			$response[ 'image' ] = $this->get_buttons_image( $request );
 		}
 
@@ -122,14 +153,14 @@ final class APIRoutes extends OutputUtilities {
 
 		$sites = self::get_button_sites( 'content' );
 
-		$content = $this->get_option( 'wp_social_manager_buttons_content' );
-		$metas = $this->get_post_metas( $request[ 'id' ] );
+		$content = $this->get_option( "{$this->plugin_opts}_buttons_content" );
+		$metas = $this->get_post_metas( $request[ 'postId' ] );
 
 		$buttons = array();
 
 		foreach ( $sites as $key => $value ) {
 
-			if ( ! isset( $content[ 'buttonSites' ][ $key ] ) ||
+			if ( ! in_array( $key, $content[ 'includes' ], true ) ||
 				 ! isset( $sites[ $key ][ 'endpoint' ] ) ) {
 
 					unset( $sites[ $key ] );
@@ -150,17 +181,18 @@ final class APIRoutes extends OutputUtilities {
 
 				case 'twitter' :
 
-					$profiles = $this->get_option( 'wp_social_manager_profiles' );
+					$profiles = $this->get_option( "{$this->plugin_opts}_profiles" );
+
 					$args = array(
-							'text' => $metas[ 'post_title' ],
-							'url'  => $metas[ 'post_url' ]
-						);
+						'text' => $metas[ 'post_title' ],
+						'url'  => $metas[ 'post_url' ]
+					);
 
 					if ( isset( $profiles[ 'twitter' ] ) && ! empty( $profiles[ 'twitter' ] ) ) {
 						$args[ 'via' ] = $profiles[ 'twitter' ];
 					}
 
-					$buttons[ $key ][ 'label' ] = add_query_arg( $args, $value[ 'endpoint' ] );
+					$buttons[ $key ][ 'endpoint' ] = add_query_arg( $args, $value[ 'endpoint' ] );
 
 					break;
 
@@ -204,8 +236,14 @@ final class APIRoutes extends OutputUtilities {
 							'body' => $metas[ 'post_description' ]
 						), $value[ 'endpoint' ]  );
 					break;
+
+				default:
+
+					$buttons[ $key ][ 'endpoint' ] = false;
+					break;
 			}
 		}
+
 
 		return $buttons;
 	}
@@ -218,8 +256,8 @@ final class APIRoutes extends OutputUtilities {
 
 		$sites = self::get_button_sites( 'image' );
 
-		$image = $this->get_option( 'wp_social_manager_buttons_image' );
-		$metas = $this->get_post_metas( $request[ 'id' ] );
+		$image = $this->get_option( "{$this->plugin_opts}_buttons_image" );
+		$metas = $this->get_post_metas( $request[ 'postId' ] );
 
 		$buttons = array();
 
@@ -276,6 +314,7 @@ final class APIRoutes extends OutputUtilities {
 	 * @return [type]     [description]
 	 */
 	protected function get_option( $key ) {
+
 		return get_option( $key );
 	}
 }
