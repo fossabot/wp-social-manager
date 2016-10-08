@@ -11,7 +11,7 @@ final class Metas extends OutputUtilities {
 	 * [$meta description]
 	 * @var [type]
 	 */
-	protected $key;
+	protected $plugin_opts;
 
 	/**
 	 * [$locale description]
@@ -27,16 +27,29 @@ final class Metas extends OutputUtilities {
 
 	/**
 	 * [__construct description]
+	 * @param [type] $key [description]
 	 */
-	public function __construct( $key ) {
+	public function __construct( array $args ) {
 
 		/**
-		 * [$this->key description]
+		 * [$this->plugin_opts description]
 		 * @var [type]
 		 */
-		$this->key = $key;
+		$this->plugin_opts = $args[ 'plugin_opts' ];
 
-		$this->actions();
+		$this->hooks();
+	}
+
+	/**
+	 * [action description]
+	 * @return [type] [description]
+	 */
+	protected function hooks() {
+
+		add_action( 'init', array( $this, 'setups' ) );
+
+		add_action( 'wp_head', array( $this, 'site_meta_tags' ), 2 );
+		add_action( 'wp_head', array( $this, 'post_meta_tags' ), 2 );
 	}
 
 	/**
@@ -50,8 +63,8 @@ final class Metas extends OutputUtilities {
 		 * @var [type]
 		 */
 		$this->options = (object) array(
-			'profiles'   => get_option( "{$this->key}_profiles" ),
-			'metas_site' => get_option( "{$this->key}_metas_site" )
+			'profiles'  => get_option( "{$this->plugin_opts}_profiles" ),
+			'metasSite' => get_option( "{$this->plugin_opts}_metas_site" )
 		);
 
 		/**
@@ -62,22 +75,11 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [action description]
-	 * @return [type] [description]
-	 */
-	protected function actions() {
-
-		add_action( 'init', array( $this, 'setups' ) );
-		add_action( 'wp_head', array( $this, 'site_meta_tags' ), 2 );
-		add_action( 'wp_head', array( $this, 'post_meta_tags' ), 2 );
-	}
-
-	/**
 	 * [is_meta_enabled description]
 	 * @return boolean [description]
 	 */
 	public function is_meta_enabled() {
-		return (bool) $this->get_site_meta( 'metaEnable' );
+		return (bool) $this->get_site_meta( 'enabled' );
 	}
 
 	/**
@@ -90,8 +92,8 @@ final class Metas extends OutputUtilities {
 			return;
 		}
 
-		if ( isset( $this->options->metas_site[ $which ] ) ) {
-			return $this->options->metas_site[ $which ];
+		if ( isset( $this->options->metasSite[ $which ] ) ) {
+			return $this->options->metasSite[ $which ];
 		}
 	}
 
@@ -107,9 +109,9 @@ final class Metas extends OutputUtilities {
 			return;
 		}
 
-		$meta = get_post_meta( $id, $this->key, true );
+		$meta = get_post_meta( $id, $this->plugin_opts, true );
 
-		return $meta[ $which ];
+		return isset( $meta[ $which ] ) ? $meta[ $which ] : false;
 	}
 
 	/**
@@ -174,6 +176,11 @@ final class Metas extends OutputUtilities {
 	public function site_open_graph( $args ) {
 
 		$meta = '';
+
+		/**
+		 * [$args description]
+		 * @var [type]
+		 */
 		$args = wp_parse_args( $args, array(
 			'site_name' => false,
 			'site_title' => false,
@@ -217,7 +224,53 @@ final class Metas extends OutputUtilities {
 	 * [site_twitter_card description]
 	 * @return [type] [description]
 	 */
-	public function site_twitter_card( $args ) { return ''; }
+	public function site_twitter_card( $args ) {
+
+		$meta = '';
+
+		/**
+		 * [$args description]
+		 * @var [type]
+		 */
+		$args = wp_parse_args( $args, array(
+			'site_name' => false,
+			'site_title' => false,
+			'site_description' => false,
+			'site_url' => false,
+			'site_image' => array()
+		) );
+
+		$meta .= $args[ 'site_title' ] ? sprintf( "<meta name='twitter:title' content='%s' />\n", $args[ 'site_title' ] ) : '';
+		$meta .= $args[ 'site_description' ] ? sprintf( "<meta name='twitter:description' content='%s' />\n", $args[ 'site_description' ] ) : '';
+		$meta .= $args[ 'site_url' ] ? sprintf( "<meta name='twitter:url' content='%s' />\n", esc_url( $args[ 'site_url' ] ) ) : '';
+
+		if ( ! empty( $meta ) ) {
+
+			$profile = $this->options->profiles[ 'twitter' ];
+			$site = $profile ? sprintf( "<meta name='twitter:site' content='@%s' />\n", esc_attr( $profile ) ) : '';
+			$type = "<meta name='twitter:card' content='summary' />\n";
+			$meta = $site . $type . $meta;
+		}
+
+		if ( ! empty( $args[ 'site_image' ] ) ) {
+
+			$source = $args[ 'site_image' ][ 'src' ];
+			$width  = $args[ 'site_image' ][ 'width' ];
+			$height = $args[ 'site_image' ][ 'height' ];
+
+			if ( $source && $width && $height ) {
+
+				$meta .= sprintf( "<meta name='twitter:image:src' content='%s' />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta name='twitter:image:width' content='%s' />\n", esc_attr( $width ) );
+				$meta .= sprintf( "<meta name='twitter:image:height' content='%s' />\n", esc_attr( $height ) );
+			} else if ( $source ) {
+
+				$meta .= sprintf( "<meta name='twitter:image' content='%s' />\n", esc_attr( $source ) );
+			}
+		}
+
+		return $meta;
+	}
 
 	/**
 	 * [open_graph description]
@@ -227,6 +280,11 @@ final class Metas extends OutputUtilities {
 	protected function post_open_graph( $args ) {
 
 		$meta = '';
+
+		/**
+		 * [$args description]
+		 * @var [type]
+		 */
 		$args = wp_parse_args( $args, array(
 			'site_name' => false,
 			'post_title' => false,
