@@ -50,6 +50,24 @@ final class Settings extends OptionUtilities {
 	protected $fields;
 
 	/**
+	 * [$document_title description]
+	 * @var [type]
+	 */
+	protected $site_title;
+
+	/**
+	 * [$document_title description]
+	 * @var [type]
+	 */
+	protected $site_tagline;
+
+	/**
+	 * [$document_title description]
+	 * @var [type]
+	 */
+	protected $document_title;
+
+	/**
 	 * [__construct description]
 	 * @param array $args [description]
 	 */
@@ -74,7 +92,6 @@ final class Settings extends OptionUtilities {
 
 		require_once( $this->path_dir . 'partials/pepperplane/pepperplane.php' );
 		require_once( $this->path_dir . 'partials/pepperplane/pepperplane-fields.php' );
-
 		require_once( $this->path_dir . 'partials/class-extends.php' );
 	}
 
@@ -84,24 +101,25 @@ final class Settings extends OptionUtilities {
 	 */
 	protected function hooks() {
 
+		add_action( 'init', array( $this, 'frontend_setups' ) );
+
 		add_action( 'admin_menu', array( $this, 'setting_menu' ) );
 
-		add_action( 'admin_init', array( $this, 'setting_setup' ), 10 );
+		add_action( 'admin_init', array( $this, 'setting_setups' ), 10 );
 		add_action( 'admin_init', array( $this, 'setting_pages' ), 11 );
 		add_action( 'admin_init', array( $this, 'setting_sections' ), 11 );
 		add_action( 'admin_init', array( $this, 'setting_fields' ), 11 );
 		add_action( 'admin_init', array( $this, 'setting_init' ), 12 );
 
 		add_action( "{$this->plugin_opts}_admin_enqueue_scripts", array( $this, 'enqueue_scripts' ), 10, 1 );
-		add_action( "{$this->plugin_opts}_admin_enqueue_styles", array( $this, 'enqueue_styles' ), 10, 1 );	
+		add_action( "{$this->plugin_opts}_admin_enqueue_styles", array( $this, 'enqueue_styles' ), 10, 1 );
 	}
 
 	/**
-	 * [setting_setup description]
+	 * [setting_setups description]
 	 * @return [type] [description]
 	 */
-	public function setting_setup() {
-
+	public function setting_setups() {
 
 		$fields = new \PepperPlaneFields( get_settings_errors() );
 		$settings = new \PepperPlane( $this->plugin_opts, $fields );
@@ -266,10 +284,10 @@ final class Settings extends OptionUtilities {
 					'label' => esc_html__( 'Show the buttons in', 'wp-sharing-manager' ),
 					'description' => wp_kses( sprintf( __( 'Select the %s that are allowed to show the social media buttons.', 'wp-sharing-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">'. esc_html__( 'Post Types', 'wp-sharing-manager' ) .'</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 					'options' => self::get_post_types(),
-					'default' => 'post',
+					'default' => array( 'post' ),
 				),
 				array(
-					'id' => 'buttonView',
+					'id' => 'view',
 					'label' => esc_html__( 'Buttons View', 'wp-sharing-manager' ),
 					'description' => esc_html__( 'Select the social media buttons visual appearance displayed in the content.', 'wp-sharing-manager' ),
 					'type' => 'radio',
@@ -277,15 +295,24 @@ final class Settings extends OptionUtilities {
 					'default' => 'icon'
 				),
 				array(
-					'id' => 'buttonPlacement',
+					'id' => 'placement',
 					'type' => 'radio',
 					'label' => esc_html__( 'Buttons Placement', 'wp-sharing-manager' ),
 					'description' => esc_html__( 'Select the location to show the social media buttons in the content.', 'wp-sharing-manager' ),
-					'options' => self::get_button_locations(),
+					'options' => self::get_button_placements(),
 					'default' => 'after',
 				),
 				array(
-					'id' => 'buttonSites',
+					'id' => 'heading',
+					'type' => 'text',
+					'label' => esc_html__( 'Buttons Heading', 'wp-sharing-manager' ),
+					'description' => esc_html__( 'Select the location to show the social media buttons in the content.', 'wp-sharing-manager' ),
+					'attr' => array(
+						'placeholder' => esc_html__( 'Share on:', 'wp-sharing-manager' )
+					)
+				),
+				array(
+					'id' => 'includes',
 					'label' => esc_html__( 'Include these', 'wp-sharing-manager' ),
 					'type' => 'multicheckbox',
 					'options' => self::get_button_sites( 'content' ),
@@ -299,7 +326,7 @@ final class Settings extends OptionUtilities {
 		 */
 		$this->pages = $this->settings->add_fields( 'buttons', 'buttons_image', array(
 			array(
-				'id' => 'imageButtons',
+				'id' => 'enabled',
 				'label' => esc_html__( 'Image Buttons Display', 'wp-sharing-manager' ),
 				'description' => esc_html__( 'Show the social media buttons on images in the content', 'wp-sharing-manager' ),
 				'type' => 'checkbox',
@@ -319,7 +346,7 @@ final class Settings extends OptionUtilities {
 				'class' => 'sharing-image-setting hide-if-js'
 			),
 			array(
-				'id' => 'buttonView',
+				'id' => 'view',
 				'label' => esc_html__( 'Buttons View', 'wp-sharing-manager' ),
 				'description' => esc_html__( 'The social media button visual appearance in the content.', 'wp-sharing-manager' ),
 				'type' => 'radio',
@@ -328,7 +355,7 @@ final class Settings extends OptionUtilities {
 				'class' => 'sharing-image-setting hide-if-js',
 			),
 			array(
-				'id' => 'buttonSites',
+				'id' => 'includes',
 				'label' => esc_html__( 'Include these', 'wp-sharing-manager' ),
 				'type' => 'multicheckbox',
 				'options' => self::get_button_sites( 'image' ),
@@ -343,7 +370,7 @@ final class Settings extends OptionUtilities {
 		 */
 		$this->pages = $this->settings->add_fields( 'metas', 'metas_site', array(
 			array(
-				'id' => 'metaEnable',
+				'id' => 'enabled',
 				'type' => 'checkbox',
 				'label' => esc_html__( 'Enable Meta Tags', 'wp-social-manager' ),
 				'description' => esc_html__( 'Generate social media meta tags on this website', 'wp-social-manager' ),
@@ -359,10 +386,10 @@ final class Settings extends OptionUtilities {
 				'type' => 'text',
 				'label' => esc_html__( 'Site Name', 'wp-social-manager' ),
 				'legend' => esc_html__( 'Site Name', 'wp-social-manager' ),
-				'description' => sprintf( esc_html__( 'The website name or brand as it should appear within the social media meta tags (e.g. %s)', 'wp-social-manager' ), '<code>iMDB</code>' ),
+				'description' => sprintf( esc_html__( 'The website name or brand as it should appear within the social media meta tags (e.g. %s)', 'wp-social-manager' ), '<code>iMDB</code>, <code>TNW</code>, <code>HKDC</code>' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
-					'placeholder' => get_bloginfo( 'name' )
+					'placeholder' => $this->site_title
 				)
 			),
 			array(
@@ -373,7 +400,7 @@ final class Settings extends OptionUtilities {
 				'description' => esc_html__( 'The title of this website as it should appear within the social media meta tags.', 'wp-social-manager' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
-					'placeholder' => ''
+					'placeholder' => $this->document_title
 				)
 			),
 			array(
@@ -385,7 +412,7 @@ final class Settings extends OptionUtilities {
 				'attr' => array(
 					'rows' => '4',
 					'cols' => '80',
-					'placeholder' => get_bloginfo( 'description' )
+					'placeholder' => $this->site_tagline
 				)
 			),
 			array(
@@ -393,8 +420,7 @@ final class Settings extends OptionUtilities {
 				'type' => 'image',
 				'class' => 'meta-site-setting',
 				'label' => esc_html__( 'Site Image', 'wp-social-manager' ),
-				'description' => esc_html__( 'An image URL which should represent this website within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' ),
-				'default' => ''
+				'description' => esc_html__( 'An image URL which should represent this website within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' )
 			)
 		) );
 
@@ -461,9 +487,9 @@ final class Settings extends OptionUtilities {
 	 */
 	public function enqueue_scripts( array $args ) {
 
-		foreach ( $args as $name => $suffix ) {
-			$file = is_string( $suffix ) && ! empty( $suffix ) ? "scripts-{$suffix}" : "scripts";
-			wp_enqueue_script( "{$this->plugin_name}-{$suffix}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		foreach ( $args as $key => $file ) {
+			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : "scripts";
+			wp_enqueue_script( "{$this->plugin_name}-{$file}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 		}
 
 		wp_enqueue_media();
@@ -480,5 +506,37 @@ final class Settings extends OptionUtilities {
 			$file = is_string( $suffix ) && ! empty( $suffix ) ? "styles-{$suffix}" : "styles";
 			wp_enqueue_style( "{$this->plugin_name}-{$suffix}", "{$this->path_url}css/{$file}.css", array(), $this->version );
 		}
+	}
+
+	/**
+	 * [_document_title description]
+	 * @return [type] [description]
+	 */
+	public function frontend_setups() {
+		$this->wp_get_document_title();
+	}
+
+	/**
+	 * [wp_get_document_title description]
+	 * @return [type] [description]
+	 */
+	protected function wp_get_document_title() {
+
+		$title[ 'site' ] = get_bloginfo( 'name', 'display' );
+		$title[ 'tagline' ] = get_bloginfo( 'description', 'display' );
+
+		$this->site_title = $title[ 'site' ];
+		$this->site_tagline = $title[ 'tagline' ];
+
+		$sep   = apply_filters( 'document_title_separator', '-' );
+		$title = apply_filters( 'document_title_parts', $title );
+
+		$title = implode( " $sep ", array_filter( $title ) );
+		$title = wptexturize( $title );
+		$title = convert_chars( $title );
+		$title = esc_html( $title );
+		$title = capital_P_dangit( $title );
+
+		$this->document_title = $title;
 	}
 }
