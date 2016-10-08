@@ -78,6 +78,7 @@ class Core {
 
 		$this->plugin_name = $args[ 'plugin_name' ];
 		$this->plugin_opts = $args[ 'plugin_opts' ];
+		$this->version = $args[ 'version' ];
 
 		$this->path_dir = trailingslashit( plugin_dir_path( dirname( __FILE__ ) ) );
 
@@ -153,6 +154,6 @@ class Core {
 		 * [$widgets description]
 		 * @var Widgets
 		 */
-		$widgets = new Widgets();
+		$widgets = new Widgets( $this->args );
 	}
 }
