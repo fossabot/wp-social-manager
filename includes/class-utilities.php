@@ -205,7 +205,7 @@ class OptionUtilities extends Utilities {
 	 * [get_buttons_location description]
 	 * @return [type] [description]
 	 */
-	public static function get_button_locations() {
+	public static function get_button_placements() {
 
 		$locations = array(
 			'before' => esc_html__( 'Before the content', 'wp-sharing-manager' ),
@@ -290,5 +290,13 @@ class OutputUtilities extends OptionUtilities {
 		}
 
 		return $sites;
+	}
+
+	/**
+	 * [get_attr_prefix description]
+	 * @return [type] [description]
+	 */
+	public static function get_attr_prefix() {
+		return esc_attr( 'wp-social-manager' );
 	}
 }
