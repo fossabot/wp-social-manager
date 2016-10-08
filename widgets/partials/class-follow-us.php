@@ -8,6 +8,18 @@ namespace XCo\WPSocialManager;
 class WidgetFollowUs extends \WP_Widget {
 
 	/**
+	 * [$plugin_name description]
+	 * @var [type]
+	 */
+	protected $plugin_name;
+
+	/**
+	 * [$plugin_opts description]
+	 * @var [type]
+	 */
+	protected $plugin_opts;
+
+	/**
 	 * [$widget_title description]
 	 * @var [type]
 	 */
@@ -34,15 +46,15 @@ class WidgetFollowUs extends \WP_Widget {
 	/**
 	 * [__construct description]
 	 */
-	public function __construct() {
+	public function __construct( array $args ) {
 
-		$options = get_option( 'wp_social_manager_profiles' );
+		$options = get_option( "{$args['plugin_opts']}_profiles" );
 
-		$this->widget_id = 'wp-social-manager-follow-us';
+		$this->widget_id = "{$args['plugin_name']}-follow-us";
 		$this->widget_title = esc_html__( 'Follow Us', 'wp-social-manager' );
 
-		$this->profiles = isset( $options ) ? $options : array();
-		$this->accounts = OptionUtilities::get_social_properties();
+		$this->options = isset( $options ) ? $options : array();
+		$this->properties = OptionUtilities::get_social_properties();
 
 		parent::__construct( $this->widget_id, esc_html__( 'Follow Us', 'wp-social-manager' ), array(
 			'classname' => $this->widget_id,
@@ -67,7 +79,7 @@ class WidgetFollowUs extends \WP_Widget {
 				<input class="widefat" id="<?php echo $id; ?>" name="<?php echo $name; ?>" type="text" value="<?php echo $title; ?>">
 			</p>
 
-			<?php if( ! array_filter( $this->profiles ) ) : ?>
+			<?php if( ! array_filter( $this->options ) ) : ?>
 			<p>
 			<?php
 				$message = esc_html__( 'Please add at least one social profile of this website in the %s.', 'wp-social-manager' );
@@ -80,7 +92,7 @@ class WidgetFollowUs extends \WP_Widget {
 				<label><?php esc_html_e( 'Include these:', 'wp-social-manager' ); ?></label>
 				<br>
 				<?php
-					foreach ( $this->profiles as $key => $value ) :
+					foreach ( $this->options as $key => $value ) :
 
 					if ( empty( $value ) ) {
 						continue;
@@ -96,7 +108,7 @@ class WidgetFollowUs extends \WP_Widget {
 					$state = checked( $state, 1, false ); ?>
 
 				<input id="<?php echo $id; ?>" type="checkbox" class="checkbox" name="<?php echo $name; ?>" value="<?php echo $key; ?>" <?php echo $state; ?>>
-				<label for="<?php echo $id; ?>"><?php echo esc_html( $this->accounts[$key]['label'] ); ?></label>
+				<label for="<?php echo $id; ?>"><?php echo esc_html( $this->properties[$key]['label'] ); ?></label>
 				<br>
 				<?php endforeach; ?>
 			</p>
@@ -135,7 +147,7 @@ class WidgetFollowUs extends \WP_Widget {
 		$instance[ 'title' ] = sanitize_text_field( $input[ 'title' ] );
 		$instance[ 'view' ]  = sanitize_key( $input[ 'view' ] ? $input[ 'view' ] : 'icon' );
 
-		foreach ( $this->profiles as $key => $value ) {
+		foreach ( $this->options as $key => $value ) {
 
 			if ( empty( $value ) ) {
 				continue;
@@ -166,7 +178,7 @@ class WidgetFollowUs extends \WP_Widget {
 
 			echo "<ul class='{$this->widget_id}__list {$this->widget_id}__list--{$view}'>";
 
-			foreach ( $this->profiles as $key => $value ) {
+			foreach ( $this->options as $key => $value ) {
 
 				$site = 0;
 
@@ -182,76 +194,58 @@ class WidgetFollowUs extends \WP_Widget {
 					continue;
 				}
 
-				$socials = OptionUtilities::get_social_properties( $key );
-				$socials = wp_parse_args( $socials, array(
+				$properties = OptionUtilities::get_social_properties( $key );
+				$properties = wp_parse_args( $properties, array(
 					'label' => '',
 					'url' => '',
 					'icon' => ''
 				) );
 
-				if ( ! $socials[ 'url' ] ) {
+				if ( ! $properties[ 'url' ] ) {
 					continue;
 				}
 
 				$key = sanitize_key( $key );
 
-				echo $this->output_template( $view, array(
-					'site' => $key,
-					'label' => esc_html( $socials[ 'label' ] ),
-					'url' => esc_url( trailingslashit( $socials[ 'url' ] ) . $this->profiles[ $key ] ),
-					'icon' => (string) $socials[ 'icon' ]
-				) );
+				echo self::button_views( $view, array(
+						'site' => $key,
+						'label' => esc_html( $properties[ 'label' ] ),
+						'url' => esc_url( trailingslashit( $properties[ 'url' ] ) . $this->options[ $key ] ),
+						'icon' => (string) $properties[ 'icon' ]
+					) );
 			}
 
 			echo "</ul>";
 
 		echo $args[ 'after_widget' ]; // WPCS: XSS ok.
-
-		$this->enqueue_styles();
 	}
 
 	/**
-	 * [output_template description]
+	 * [button_view description]
 	 * @param  [type] $display [description]
 	 * @param  [type] $args    [description]
 	 * @return [type]          [description]
 	 */
-	protected function output_template( $view, $args ) {
+	protected static function button_views( $view = '', array $args ) {
 
-		$pref = $this->widget_id;
+		if ( empty( $view ) ) {
+			return '';
+		}
 
-		$args = wp_parse_args( $args, array(
-			'site' => '',
-			'label' => '',
-			'icon' => '',
-			'url' => ''
+		$prefix = OutputUtilities::get_attr_prefix();
+		$args   = wp_parse_args( $args, array(
+				'site' => '',
+				'label' => '',
+				'icon' => '',
+				'url' => ''
 			) );
 
 		$templates = array(
-			'icon' => "<li class='{$pref}__item {$pref}__item--{$args['site']}'><a class='{$pref}__url' href='{$args['url']}' target='_blank'>{$args['icon']}</a></li>",
-			'text' => "<li class='{$pref}__item {$pref}__item--{$args['site']}'><a class='{$pref}__url' href='{$args['url']}' target='_blank'>{$args['label']}</a></li>",
-			'icon-text' => "<li class='{$pref}__item {$pref}__item--{$args['site']}'><a class='{$pref}__url' href='{$args['url']}' target='_blank'>
-					<span class='{$pref}__item-icon'>{$args['icon']}</span><span class='{$pref}__item-text'>{$args['label']}</span></a>
-				</li>"
+			'icon' => "<li class='{$prefix}-follow-us__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'>{$args['icon']}</a></li>",
+			'text' => "<li class='{$prefix}-follow-us__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'>{$args['label']}</a></li>",
+			'icon-text' => "<li class='{$prefix}-follow-us__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'><span class='{$prefix}-follow-us__item-icon'>{$args['icon']}</span><span class='{$prefix}-follow-us__item-text'>{$args['label']}</span></a></li>"
 		);
 
 		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';
 	}
-
-	/**
-	 * [actions description]
-	 * @return [type] [description]
-	 */
-	protected function enqueue_styles() {
-
-		$url = trailingslashit( plugin_dir_url( realpath( __DIR__ . '/..' ) ) );
-		wp_enqueue_style( $this->widget_id, $url . 'public/css/styles-follow-us.css', array(), '0.1.0', 'all' );
-	}
 }
-
-/**
- * Register the Widget.
- */
-add_action( 'widgets_init', function(){
-	register_widget( __NAMESPACE__ . '\\WidgetFollowUs' );
-} );

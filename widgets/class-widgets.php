@@ -13,10 +13,14 @@ final class Widgets {
 	/**
 	 * [__construct description]
 	 */
-    public function __construct() {
+    public function __construct( array $args ) {
+
+        $this->args = $args;
 
     	$this->plugin_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
+
     	$this->requires();
+        $this->hooks();
     }
 
     /**
@@ -25,5 +29,21 @@ final class Widgets {
      */
     protected function requires() {
     	require_once( $this->plugin_dir . 'partials/class-follow-us.php' );
+    }
+
+    /**
+     * [hooks description]
+     * @return [type] [description]
+     */
+    protected function hooks() {
+        add_action( 'widgets_init', array( $this, 'setups' ) );
+    }
+
+    /**
+     * [setups description]
+     * @return [type] [description]
+     */
+    public function setups() {
+        register_widget( new WidgetFollowUs( $this->args ) );
     }
 }
