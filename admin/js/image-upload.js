@@ -1,4 +1,4 @@
-;(function( $, wp, _, Backbone ) {
+;(function( $, wp, Backbone ) {
 
 	'use strict';
 
@@ -34,6 +34,8 @@
 		 * @return {[type]}        [description]
 		 */
 		selectMedia : function( button ) {
+
+			console.log( button );
 
 			this.controls( button );
 
@@ -142,8 +144,8 @@
 		}
 	});
 
-	new MediaUploader( {
+	new MediaUploader({
 		el: $( '#wp-social-manager-wrap' )
-	} );
+	});
 
-})( jQuery, window.wp, window._, window.Backbone, undefined );
+})( jQuery, window.wp, window.Backbone, undefined );

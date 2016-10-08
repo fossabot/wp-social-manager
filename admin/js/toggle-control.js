@@ -1,4 +1,4 @@
-;(function( $, wp, _, Backbone ) {
+;(function( $, wp, Backbone ) {
 
 	'use strict';
 
@@ -41,4 +41,4 @@
 		el: $( '#wp-social-manager-wrap' )
 	} );
 
-})( jQuery, window.wp, window._, window.Backbone, undefined );
+})( jQuery, window.wp, window.Backbone, undefined );

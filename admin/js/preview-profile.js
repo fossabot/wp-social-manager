@@ -6,6 +6,7 @@
 	 * [initialize description;
 	 */
 	var ProfilesPreview = Backbone.View.extend( {
+
 			events : {
 				'input .account-profile-control' : 'previewUpdate'
 			},
@@ -37,7 +38,7 @@
 			 */
 			previewUpdate : _.throttle( function( event ) {
 				this.getPreview( event.currentTarget );
-			}, 300 ),
+			}, 200 ),
 
 			/**
 			 * [getPreview description]
