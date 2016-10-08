@@ -1,32 +1,50 @@
-(function( $ ) {
+(function( $, _, Backbone ) {
+
 	'use strict';
 
-	/**
-	 * All of the code for your public-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
+	if ( _.isUndefined( wpSocialManager ) ) {
+		return;
+	}
 
-})( jQuery );
+	if ( _.isUndefined( wpSocialManager.postId ) ) {
+		return;
+	}
+
+	_.templateSettings = {
+		interpolate: /\{\{(.+?)\}\}/g
+	};
+
+	var root = wpSocialManager.root; // WP-JSON root.
+	var namespace = wpSocialManager.namespace; // The plugin API route namespace.
+	var postId = wpSocialManager.postId;
+
+	/**
+	 * [request description]
+	 * @type {Object}
+	 */
+	var request = {};
+		request.postId = parseInt( wpSocialManager.postId, 10 );
+
+	$.ajax({
+		url : root + namespace + '/buttons',
+		data : request,
+		dataType : 'json',
+	} )
+	.done( function( response ) {
+
+		if ( _.isUndefined( response ) || ! _.isObject( response ) ) {
+			return;
+		}
+
+		var prefix = wpSocialManager.attrPrefix;
+		var $wrap = $( '#' + prefix + '-buttons-' + postId );
+
+		$wrap.append( function() {
+
+			var	template = _.template( $( '#tmpl-buttons-content' ).html() );
+
+			return template( response );
+		} );
+	} );
+
+})( jQuery, window._, window.Backbone, undefined );
