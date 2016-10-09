@@ -253,7 +253,7 @@ class OutputUtilities extends OptionUtilities {
 			'twitter' => 'https://twitter.com/intent/tweet',
 			'googleplus' => 'https://plus.google.com/share',
 			'pinterest' => 'https://pinterest.com/pin/create/bookmarklet/',
-			'linkedin' => false,
+			'linkedin' => 'https://www.linkedin.com/shareArticle',
 			'reddit' => 'https://www.reddit.com/submit',
 			'email' => 'mailto:'
 		);
