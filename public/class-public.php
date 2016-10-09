@@ -45,6 +45,12 @@ class ViewPublic {
 	private $version;
 
 	/**
+	 * [$options description]
+	 * @var [type]
+	 */
+	private $options;
+
+	/**
 	 * [$routes description]
 	 * @var [type]
 	 */
@@ -62,6 +68,7 @@ class ViewPublic {
 		$this->args = $args;
 
 		$this->plugin_name = $args[ 'plugin_name' ];
+		$this->plugin_opts = $args[ 'plugin_opts' ];
 		$this->version = $args[ 'version' ];
 
 		$this->path_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
@@ -107,6 +114,12 @@ class ViewPublic {
 		 * @var APIRoutes
 		 */
 		$this->routes = new APIRoutes( $this->args, new Metas( $this->args ) );
+
+		/**
+		 * [$this->options description]
+		 * @var [type]
+		 */
+		$this->options = get_option( "{$this->plugin_opts}_advanced" );
 	}
 
 	/**
@@ -119,7 +132,9 @@ class ViewPublic {
 		if ( is_admin() )
 			return;
 
-		wp_enqueue_style( $this->plugin_name, $this->path_url . 'css/styles.css', array(), $this->version, 'all' );
+		if ( (bool) $this->options[ 'enableStylesheet' ] ) {
+			wp_enqueue_style( $this->plugin_name, $this->path_url . 'css/styles.css', array(), $this->version, 'all' );
+		}
 	}
 
 	/**
