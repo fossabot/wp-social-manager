@@ -2,9 +2,6 @@
 
 namespace XCo\WPSocialManager;
 
-/**
- *
- */
 final class Buttons extends OutputUtilities {
 
 	/**
@@ -88,10 +85,14 @@ final class Buttons extends OutputUtilities {
 	 */
 	public function add_buttons_content_wrap( $content ) {
 
-		$post_types = $this->options->buttonsContent[ 'postTypes' ];
-		$post_meta = $this->options->postMeta[ 'buttons_content' ];
+		$post_types = (array) $this->options->buttonsContent[ 'postTypes' ];
 
-		if ( ! is_singular( array_keys( $post_types ) ) || ! $post_meta ) {
+		if ( ! is_singular( array_keys( $post_types ) ) ) {
+			return $content;
+		}
+
+		if ( ! isset( $this->options->postMeta[ 'buttons_content' ] ) ||
+			 ! $this->options->postMeta[ 'buttons_content' ] ) {
 			return $content;
 		}
 
@@ -117,19 +118,19 @@ final class Buttons extends OutputUtilities {
 	 * @return [type] [description]
 	 */
 	public function add_buttons_list_tmpl() {
-		$this->button_list_content();
+		$this->button_list_content( $this->post_id );
 	}
 
 	/**
 	 * [button_list_content description]
 	 * @return [type] [description]
 	 */
-	protected function button_list_content() {
+	protected function button_list_content( $post_id ) {
 
-		$post_types = $this->options->buttonsContent[ 'postTypes' ];
-		$post_meta = $this->options->postMeta[ 'buttons_content' ];
+		$post_types = (array) $this->options->buttonsContent[ 'postTypes' ];
 
-		if ( ! is_singular( array_keys( $post_types ) ) || ! $post_meta ) {
+		if ( ! is_singular( array_keys( $post_types ) ) ||
+			 ! isset( $this->options->postMeta[ 'buttons_content' ] ) ) {
 			return;
 		}
 
@@ -138,8 +139,6 @@ final class Buttons extends OutputUtilities {
 			$heading = $this->options->buttonsContent[ 'heading' ];
 			$includes = $this->options->buttonsContent[ 'includes' ];
 			$view = $this->options->buttonsContent[ 'view' ];
-
-			var_dump( $includes );
 
 			$prefix = self::get_attr_prefix(); ?>
 
@@ -151,8 +150,8 @@ final class Buttons extends OutputUtilities {
 			<ul class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>">
 			<?php foreach ( $includes as $value ) :
 
-				$properties = self::get_social_properties( $value );
-				$properties = wp_parse_args( $properties, array(
+				$props = self::get_social_properties( $value );
+				$props = wp_parse_args( $props, array(
 					'label' => '',
 					'url' => '',
 					'icon' => ''
@@ -160,8 +159,8 @@ final class Buttons extends OutputUtilities {
 
 				echo self::button_views( $view, array(
 						'site' => $value,
-						'icon' => $properties[ 'icon' ],
-						'label' => $properties[ 'label' ]
+						'icon' => $props[ 'icon' ],
+						'label' => $props[ 'label' ]
 					) );
 
 			endforeach; ?>

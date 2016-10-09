@@ -538,13 +538,18 @@ final class Metas extends OutputUtilities {
 
 		if ( $post_image !== 0 ) {
 
-			list( $width, $height ) = getimagesize( $matches[1][0] );
+			$image = getimagesize( $matches[1][0] );
 
-			return array(
-				'src' => esc_url( $matches[1][0] ),
-				'width' => absint( $width ),
-				'height' => absint( $height )
-			);
+			if ( $image ) {
+
+				list( $width, $height ) = $image;
+
+				return array(
+					'src' => esc_url( $matches[1][0] ),
+					'width' => absint( $width ),
+					'height' => absint( $height )
+				);
+			}
 		}
 
 		if ( $this->is_meta_enabled() ) {

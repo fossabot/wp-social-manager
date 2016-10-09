@@ -62,9 +62,9 @@ class ViewAdmin {
 	public function requires() {
 
 		require_once( $this->path_dir . 'partials/class-settings.php' );
-		require_once( $this->path_dir . 'partials/class-settings-user.php' );
 		require_once( $this->path_dir . 'partials/class-settings-validation.php' );
 
+		require_once( $this->path_dir . 'partials/class-user.php' );
 		require_once( $this->path_dir . 'partials/class-metabox.php' );
 	}
 
@@ -74,7 +74,10 @@ class ViewAdmin {
 	 */
 	public function setups() {
 
-		$admin  = new Settings( $this->args );
-		$users  = new SettingsUser( $this->args );
+		$admin = new Settings( $this->args );
+		$users = new SettingsUser( $this->args );
+
+		$meta = SocialMetaBox::get_instance( $this->args );
+		$meta = SocialMetaBox::get_instance( $this->args );
 	}
 }

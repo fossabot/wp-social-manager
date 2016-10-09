@@ -73,6 +73,8 @@ final class Settings extends OptionUtilities {
 	 */
 	public function __construct( array $args ) {
 
+		$this->args = $args;
+
 		$this->version = $args[ 'version' ];
 		$this->plugin_name = $args[ 'plugin_name' ];
 		$this->plugin_opts = $args[ 'plugin_opts' ];
@@ -92,6 +94,8 @@ final class Settings extends OptionUtilities {
 
 		require_once( $this->path_dir . 'partials/pepperplane/pepperplane.php' );
 		require_once( $this->path_dir . 'partials/pepperplane/pepperplane-fields.php' );
+		require_once( $this->path_dir . 'partials/pepperplane/pepperplane-install.php' );
+
 		require_once( $this->path_dir . 'partials/class-extends.php' );
 	}
 
@@ -106,10 +110,10 @@ final class Settings extends OptionUtilities {
 		add_action( 'admin_menu', array( $this, 'setting_menu' ) );
 
 		add_action( 'admin_init', array( $this, 'setting_setups' ), 10 );
-		add_action( 'admin_init', array( $this, 'setting_pages' ), 11 );
-		add_action( 'admin_init', array( $this, 'setting_sections' ), 11 );
-		add_action( 'admin_init', array( $this, 'setting_fields' ), 11 );
-		add_action( 'admin_init', array( $this, 'setting_init' ), 12 );
+		add_action( 'admin_init', array( $this, 'setting_pages' ), 15 );
+		add_action( 'admin_init', array( $this, 'setting_sections' ), 15 );
+		add_action( 'admin_init', array( $this, 'setting_fields' ), 15 );
+		add_action( 'admin_init', array( $this, 'setting_init' ), 20 );
 
 		add_action( "{$this->plugin_opts}_admin_enqueue_scripts", array( $this, 'enqueue_scripts' ), 10, 1 );
 		add_action( "{$this->plugin_opts}_admin_enqueue_styles", array( $this, 'enqueue_styles' ), 10, 1 );
@@ -306,10 +310,7 @@ final class Settings extends OptionUtilities {
 					'id' => 'heading',
 					'type' => 'text',
 					'label' => esc_html__( 'Buttons Heading', 'wp-sharing-manager' ),
-					'description' => esc_html__( 'Select the location to show the social media buttons in the content.', 'wp-sharing-manager' ),
-					'attr' => array(
-						'placeholder' => esc_html__( 'Share on:', 'wp-sharing-manager' )
-					)
+					'description' => sprintf( esc_html__( 'Set the heading title shown before the buttons (e.g. %s).', 'wp-sharing-manager' ), '<code>Share on:</code>' )
 				),
 				array(
 					'id' => 'includes',
@@ -445,6 +446,7 @@ final class Settings extends OptionUtilities {
 	public function setting_init() {
 
 		$this->settings->init( $this->screen, $this->pages );
+		$this->settings->install();
 	}
 
 	/**

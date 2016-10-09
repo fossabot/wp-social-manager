@@ -35,6 +35,7 @@ final class SettingsValidation extends OptionUtilities {
 			'postTypes' => array(),
 			'view' => '',
 			'placement' => '',
+			'heading' => '',
 			'includes' => array()
 		) );
 
@@ -85,8 +86,8 @@ final class SettingsValidation extends OptionUtilities {
 			'image' => ''
 		) );
 
-		$inputs[ 'name' ] = wp_kses( $inputs[ 'name' ] );
-		$inputs[ 'description' ] = wp_kses( $inputs[ 'description' ] );
+		$inputs[ 'name' ] = wp_kses( $inputs[ 'name' ], array() );
+		$inputs[ 'description' ] = wp_kses( $inputs[ 'description' ], array() );
 		$inputs[ 'image' ] = absint( $inputs[ 'image' ] );
 
 		return $inputs;

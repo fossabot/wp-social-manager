@@ -169,8 +169,14 @@ class WidgetFollowUs extends \WP_Widget {
 
 		echo $args[ 'before_widget' ]; // WPCS: XSS ok.
 
-			if ( ! empty( $instance[ 'title' ] ) ) {
-				$widget_title = wp_kses( apply_filters( 'widget_title', $instance[ 'title' ] ), array() );
+			/**
+			 * If somehow the widget title is not saved fallback to the default.
+			 * @var string.
+			 */
+			$widget_title = ! isset( $instance[ 'title' ] ) ? $this->widget_title : $instance[ 'title' ];
+
+			if ( ! empty( $widget_title ) ) {
+				$widget_title = wp_kses( apply_filters( 'widget_title', $widget_title ), array() );
 				echo $args[ 'before_title' ] . $widget_title . $args[ 'after_title' ]; // WPCS: XSS ok.
 			}
 

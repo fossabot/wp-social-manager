@@ -147,7 +147,7 @@
  * Buttons
  */
 .wp-social-manager-buttons--content {
-	height: 34px;
+	min-height: 34px;
 }
 .wp-social-manager-buttons--content-before {
 	margin-bottom: 1.64em;

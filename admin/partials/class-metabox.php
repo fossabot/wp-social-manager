@@ -70,8 +70,8 @@ final class SocialMetaBox {
 		require_once( $this->plugin_dir . 'butterbean-extend/butterbean-extend.php' );
 	}
 
-	public function setups() {
-		$this->metasSite = get_option( 'wp_social_manager_metas_site' );
+	public function setups( array $args ) {
+		$this->metasSite = get_option( $args[ 'plugin_opts' ] . '_metas_site' );
 	}
 
 	/**
@@ -329,13 +329,13 @@ final class SocialMetaBox {
 	 * @access public
 	 * @return object
 	 */
-	public static function get_instance() {
+	public static function get_instance( array $args ) {
 
 		static $instance = null;
 
 		if ( is_null( $instance ) ) {
 			$instance = new self;
-			$instance->setups();
+			$instance->setups( $args );
 			$instance->hooks();
 		}
 
@@ -351,5 +351,3 @@ final class SocialMetaBox {
 	 */
 	private function __construct() {}
 }
-
-SocialMetaBox::get_instance();
