@@ -5,7 +5,7 @@ namespace XCo\WPSocialManager;
 /**
  * Social Links Widget Class
  */
-class WidgetFollowUs extends \WP_Widget {
+class WidgetSocialProfiles extends \WP_Widget {
 
 	/**
 	 * [$plugin_name description]
@@ -50,7 +50,7 @@ class WidgetFollowUs extends \WP_Widget {
 
 		$options = get_option( "{$args['plugin_opts']}_profiles" );
 
-		$this->widget_id = "{$args['plugin_name']}-follow-us";
+		$this->widget_id = "{$args['plugin_name']}-profiles";
 		$this->widget_title = esc_html__( 'Follow Us', 'wp-social-manager' );
 
 		$this->options = isset( $options ) ? $options : array();
@@ -58,7 +58,7 @@ class WidgetFollowUs extends \WP_Widget {
 
 		parent::__construct( $this->widget_id, esc_html__( 'Follow Us', 'wp-social-manager' ), array(
 			'classname' => $this->widget_id,
-			'description' => esc_html__( 'A list of social site URLs connected to this website.', 'wp-social-manager' )
+			'description' => esc_html__( 'List of social profile and page URLs connected to this website.', 'wp-social-manager' )
 		) );
 	}
 
@@ -247,9 +247,9 @@ class WidgetFollowUs extends \WP_Widget {
 			) );
 
 		$templates = array(
-			'icon' => "<li class='{$prefix}-follow-us__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'>{$args['icon']}</a></li>",
-			'text' => "<li class='{$prefix}-follow-us__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'>{$args['label']}</a></li>",
-			'icon-text' => "<li class='{$prefix}-follow-us__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'><span class='{$prefix}-follow-us__item-icon'>{$args['icon']}</span><span class='{$prefix}-follow-us__item-text'>{$args['label']}</span></a></li>"
+			'icon' => "<li class='{$prefix}-profiles__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'>{$args['icon']}</a></li>",
+			'text' => "<li class='{$prefix}-profiles__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'>{$args['label']}</a></li>",
+			'icon-text' => "<li class='{$prefix}-profiles__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'><span class='{$prefix}-profiles__item-icon'>{$args['icon']}</span><span class='{$prefix}-profiles__item-text'>{$args['label']}</span></a></li>"
 		);
 
 		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';

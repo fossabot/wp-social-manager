@@ -10,6 +10,7 @@
 [class^="wp-social-manager"] a {
 	display: block;
 	text-decoration: none;
+	box-shadow: none !important; /** override TwentySixteen default styles **/
 	border: 0 !important;
 }
 [class^="wp-social-manager"] .item-facebook a:hover {
@@ -80,15 +81,16 @@
 	fill: #000;
 }
 
-.wp-social-manager-follow-us__list {
+.wp-social-manager-profiles__list {
 	margin: 0;
 	list-style: none;
 }
-.wp-social-manager-follow-us__item,
-.wp-social-manager-follow-us__item a {
+.wp-social-manager-profiles__item,
+.wp-social-manager-profiles__item a {
 	display: block;
+	color: #000;
 }
-.rtl .wp-social-manager-follow-us__item {
+.rtl .wp-social-manager-profiles__item {
 	margin-right: 0;
 	margin-left: 0.86em;
 }
@@ -96,7 +98,7 @@
 /**
  * View Icons
  */
- .wp-social-manager-follow-us__list--icon .wp-social-manager-follow-us__item,
+ .wp-social-manager-profiles__list--icon .wp-social-manager-profiles__item,
  .wp-social-manager-buttons__list--icon .wp-social-manager-buttons__item {
  	width: 26px;
  	height: 26px;
@@ -108,7 +110,7 @@
 /**
  * View Text
  */
- .wp-social-manager-follow-us__list--text a,
+ .wp-social-manager-profiles__list--text a,
  .wp-social-manager-buttons__list--icon a {
  	padding-top: .46em;
  	padding-bottom: .46em;
@@ -117,7 +119,7 @@
 /**
  * View Icon Text
  */
- .wp-social-manager-follow-us__list--icon-text a,
+ .wp-social-manager-profiles__list--icon-text a,
  .wp-social-manager-buttons__list--icon-text a {
  	display: -webkit-box;
  	display: -ms-flexbox;
@@ -128,17 +130,17 @@
  	-ms-flex-align: center;
  	align-items: center;
  }
- .wp-social-manager-follow-us__item-icon,
- .wp-social-manager-follow-us__item-text {
+ .wp-social-manager-profiles__item-icon,
+ .wp-social-manager-profiles__item-text {
  	display: inline-block;
  }
- .wp-social-manager-follow-us__item-icon,
+ .wp-social-manager-profiles__item-icon,
  .wp-social-manager-buttons__item-icon {
  	width: 26px;
  	height: 26px;
  	margin-right: 10px;
  }
- .rtl .wp-social-manager-follow-us__item-icon {
+ .rtl .wp-social-manager-profiles__item-icon {
  	margin-right: 0;
  	margin-left: 10px;
  }

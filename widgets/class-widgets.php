@@ -28,7 +28,7 @@ final class Widgets {
      * @return [type] [description]
      */
     protected function requires() {
-    	require_once( $this->plugin_dir . 'partials/class-follow-us.php' );
+    	require_once( $this->plugin_dir . 'partials/class-social-profiles.php' );
     }
 
     /**
@@ -44,6 +44,6 @@ final class Widgets {
      * @return [type] [description]
      */
     public function setups() {
-        register_widget( new WidgetFollowUs( $this->args ) );
+        register_widget( new WidgetSocialProfiles( $this->args ) );
     }
 }
