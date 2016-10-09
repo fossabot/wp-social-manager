@@ -87,7 +87,7 @@ final class Buttons extends OutputUtilities {
 
 		$post_types = (array) $this->options->buttonsContent[ 'postTypes' ];
 
-		if ( empty( $post_types ) || ! is_singular( array_keys( $post_types ) ) ) {
+		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
 			return $content;
 		}
 
@@ -97,16 +97,20 @@ final class Buttons extends OutputUtilities {
 			return $content;
 		}
 
+
 		$place = $this->options->buttonsContent[ 'placement' ];
 
 		if ( ! in_array( $place, array_keys( self::get_button_placements() ), true ) ) {
 			return $content;
 		}
 
+
 		if ( ! isset( $this->options->postMeta[ 'buttons_content' ] ) ||
 			 ! $this->options->postMeta[ 'buttons_content' ] ) {
 			return $content;
 		}
+
+
 
 		$prefix = self::get_attr_prefix();
 		$place = $this->options->buttonsContent[ 'placement' ];
@@ -136,7 +140,7 @@ final class Buttons extends OutputUtilities {
 
 		$post_types = (array) $this->options->buttonsImage[ 'postTypes' ];
 
-		if ( empty( $post_types ) || ! is_singular( array_keys( $post_types ) ) ) {
+		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
 			return $content;
 		}
 
