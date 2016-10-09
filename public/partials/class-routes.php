@@ -204,10 +204,14 @@ final class APIRoutes extends OutputUtilities {
 						), $value[ 'endpoint' ] );
 					break;
 
-				case 'googleplus' :
+				case 'linkedin' :
 
 					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'url' => $metas[ 'post_url' ]
+							'mini' => true,
+							'title' => $metas[ 'post_title' ],
+							'summary' => $metas[ 'post_description' ],
+							'url' => $metas[ 'post_url' ],
+							'source' => $metas[ 'post_url' ]
 						), $value[ 'endpoint' ] );
 
 					break;
