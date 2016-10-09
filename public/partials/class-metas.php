@@ -439,15 +439,20 @@ final class Metas extends OutputUtilities {
 	 */
 	public function site_description() {
 
-		if ( ! is_author() ) {
-			$description = $this->get_site_meta( 'description' );
-			$description = $description ? $description : get_bloginfo( 'description' );
-		} else {
+		$description = $this->get_site_meta( 'description' );
+		$description = $description ? $description : get_bloginfo( 'description' );
+
+		if ( is_archive() ) {
+			$term_description = term_description();
+			$description = $term_description ? $term_description : $description;
+		}
+
+		if ( is_author() ) {
 			$author = get_queried_object();
 			$description = get_the_author_meta( 'description', (int) $author->ID );
 		}
 
-		return wp_kses( $description, array() );
+		return wp_kses( trim( $description ), array() );
 	}
 
 	/**

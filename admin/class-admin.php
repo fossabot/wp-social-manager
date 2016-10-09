@@ -78,6 +78,5 @@ class ViewAdmin {
 		$users = new SettingsUser( $this->args );
 
 		$meta = SocialMetaBox::get_instance( $this->args );
-		$meta = SocialMetaBox::get_instance( $this->args );
 	}
 }

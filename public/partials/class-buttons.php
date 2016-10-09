@@ -91,7 +91,7 @@ final class Buttons extends OutputUtilities {
 			return $content;
 		}
 
-		$includes = (array) $this->options->buttonsImage[ 'includes' ];
+		$includes = (array) $this->options->buttonsContent[ 'includes' ];
 
 		if ( empty( $includes ) ) {
 			return $content;
@@ -110,10 +110,8 @@ final class Buttons extends OutputUtilities {
 			return $content;
 		}
 
-
-
-		$prefix = self::get_attr_prefix();
 		$place = $this->options->buttonsContent[ 'placement' ];
+		$prefix = self::get_attr_prefix();
 
 		$wrapper = "<div class='{$prefix}-buttons {$prefix}-buttons--content {$prefix}-buttons--content-{$place}' id='{$prefix}-buttons-{$this->post_id}'></div>";
 
@@ -237,15 +235,11 @@ final class Buttons extends OutputUtilities {
 			<?php foreach ( $includes as $value ) :
 
 				$props = self::get_social_properties( $value );
-				$props = wp_parse_args( $props, array(
-						'label' => '',
-						'url'   => '',
-						'icon'  => ''
-					) );
+				$icon = self::get_social_icons( $value );
 
 				echo self::button_views( $view, array(
 							'site' => $value,
-							'icon' => $props[ 'icon' ],
+							'icon' => $icon,
 							'label' => $props[ 'label' ]
 						) );
 
@@ -278,15 +272,11 @@ final class Buttons extends OutputUtilities {
 			<?php foreach ( $includes as $value ) :
 
 				$props = self::get_social_properties( $value );
-				$props = wp_parse_args( $props, array(
-					'label' => '',
-					'url' => '',
-					'icon' => ''
-				) );
+				$icon = self::get_social_icons( $value );
 
 				echo self::button_views( $view, array(
 						'site' => $value,
-						'icon' => $props[ 'icon' ],
+						'icon' => $icon,
 						'label' => $props[ 'label' ]
 					) );
 

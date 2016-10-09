@@ -34,6 +34,9 @@
 [class^="wp-social-manager"] .item-youtube a:hover {
 	color: #cd201f;
 }
+[class^="wp-social-manager"] .item-reddit a:hover {
+	color: #ff4500;
+}
 [class^="wp-social-manager"] .item-dribbble a:hover {
 	color: #ea4c89;
 }
@@ -45,6 +48,9 @@
 }
 [class^="wp-social-manager"] .item-codepen a:hover {
 	color: #000;
+}
+[class^="wp-social-manager"] .item-email a:hover {
+	color: #999;
 }
 
 [class^="wp-social-manager"] .item-facebook a:hover svg {
@@ -68,6 +74,9 @@
 [class^="wp-social-manager"] .item-youtube a:hover svg {
 	fill: #cd201f;
 }
+[class^="wp-social-manager"] .item-reddit a:hover svg {
+	fill: #ff4500;
+}
 [class^="wp-social-manager"] .item-dribbble a:hover svg {
 	fill: #ea4c89;
 }
@@ -79,6 +88,9 @@
 }
 [class^="wp-social-manager"] .item-codepen a:hover svg {
 	fill: #000;
+}
+[class^="wp-social-manager"] .item-email a:hover svg {
+	fill: #999;
 }
 
 .wp-social-manager-profiles__list {

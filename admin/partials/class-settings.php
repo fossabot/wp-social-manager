@@ -257,23 +257,28 @@ final class Settings extends OptionUtilities {
 		foreach ( self::get_social_profiles() as $key => $value ) {
 
 			$props = self::get_social_properties( $key );
+
 			$label = isset( $value[ 'label' ] ) ? $value[ 'label' ] : '';
 			$description = isset( $value[ 'description' ] ) ? $value[ 'description' ] : '';
+			$url = isset( $props[ 'url' ] ) ? $props[ 'url' ] : '';
 
-			$profiles = array(
-				'id' => sanitize_key( $key ),
-				'type' => 'text',
-				'label' => $label,
-				'description' => $description,
-				'after' => '<p class="account-profile-preview hide-if-js"><code></code></p>',
-				'attr' => array(
-					'class' => "account-profile-control code",
-					'data-load-script' => 'preview-profile',
-					'data-url' => $props[ 'url' ]
-				)
-			);
+			if ( ! empty( $url ) && ! empty( $description ) ) {
 
-			$this->pages = $this->settings->add_fields( 'accounts', 'profiles', array( $profiles ) );
+				$profiles = array(
+					'id' => sanitize_key( $key ),
+					'type' => 'text',
+					'label' => $label,
+					'description' => $description,
+					'after' => '<p class="account-profile-preview hide-if-js"><code></code></p>',
+					'attr' => array(
+						'class' => "account-profile-control code",
+						'data-load-script' => 'preview-profile',
+						'data-url' => $props[ 'url' ]
+					)
+				);
+
+				$this->pages = $this->settings->add_fields( 'accounts', 'profiles', array( $profiles ) );
+			}
 		}
 
 		/**
