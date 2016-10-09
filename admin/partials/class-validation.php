@@ -100,7 +100,7 @@ final class SettingsValidation extends OptionUtilities {
 	public function setting_advanced( $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'disableStylesheet' => false
+			'enableStylesheet' => false
 		) );
 
 		return $inputs;

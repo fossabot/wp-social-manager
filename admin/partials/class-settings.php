@@ -430,7 +430,7 @@ final class Settings extends OptionUtilities {
 		 * @var [type]
 		 */
 		$this->pages = $this->settings->add_field( 'advanced', 'advanced', array(
-			'id' => 'disableStylesheet',
+			'id' => 'enableStylesheet',
 			'label' => esc_html__( 'Enable Stylesheet', 'wp-sharing-manager' ),
 			'description' => esc_html__( 'Load the plugin stylesheet to apply essential styles.', 'wp-sharelog' ),
 			'default' => 'on',
