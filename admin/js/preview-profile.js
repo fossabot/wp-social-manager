@@ -84,8 +84,16 @@
 			}
 	} );
 
-	new ProfilesPreview( {
+	var args =  {
 			el: $( '#wp-social-manager-wrap' )
-		} );
+		};
+
+		if ( 'profile-php' === adminpage ) {
+			args = {
+				el: $( '#your-profile' )
+			}
+		}
+
+	new ProfilesPreview( args );
 
 })( jQuery, window.wp, window._, window.Backbone, undefined );
