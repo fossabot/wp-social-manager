@@ -90,7 +90,7 @@ final class APIRoutes extends OutputUtilities {
 		$post_id = get_the_id();
 
 		if ( $post_id ) {
-			$args[ 'postId' ] = absint( $post_id );
+			$args[ 'id' ] = absint( $post_id );
 		}
 
 		wp_localize_script( $this->plugin_name, 'wpSocialManager', $args );
@@ -112,7 +112,7 @@ final class APIRoutes extends OutputUtilities {
 			'methods'  => \WP_REST_Server::READABLE,
 			'callback' => array( $this, 'response_buttons' ),
 			'args' => array(
-				'postId' => array(
+				'id' => array(
 					'required' => true,
 					'sanitize_callback' => 'absint',
 					'validate_callback' => function( $param ) {
@@ -130,15 +130,16 @@ final class APIRoutes extends OutputUtilities {
 	public function response_buttons( $request ) {
 
 		$response = array(
+			'id' => $request[ 'id' ],
 			'content' => false,
 			'image' => false
 		);
 
-		if ( (bool) $this->metas->get_post_meta( $request[ 'postId' ], 'buttons_content' ) ) {
+		if ( (bool) $this->metas->get_post_meta( $request[ 'id' ], 'buttons_content' ) ) {
 			$response[ 'content' ] = $this->get_buttons_content( $request );
 		}
 
-		if ( (bool) $this->metas->get_post_meta( $request[ 'postId' ], 'buttons_image' ) ) {
+		if ( (bool) $this->metas->get_post_meta( $request[ 'id' ], 'buttons_image' ) ) {
 			$response[ 'image' ] = $this->get_buttons_image( $request );
 		}
 
@@ -154,7 +155,7 @@ final class APIRoutes extends OutputUtilities {
 		$sites = self::get_button_sites( 'content' );
 
 		$content = $this->get_option( "{$this->plugin_opts}_buttons_content" );
-		$metas = $this->get_post_metas( $request[ 'postId' ] );
+		$metas = $this->get_post_metas( $request[ 'id' ] );
 
 		$buttons = array();
 
@@ -257,7 +258,7 @@ final class APIRoutes extends OutputUtilities {
 		$sites = self::get_button_sites( 'image' );
 
 		$image = $this->get_option( "{$this->plugin_opts}_buttons_image" );
-		$metas = $this->get_post_metas( $request[ 'postId' ] );
+		$metas = $this->get_post_metas( $request[ 'id' ] );
 
 		$buttons = array();
 

@@ -50,9 +50,9 @@ final class Buttons extends OutputUtilities {
 	protected function hooks() {
 
 		add_action( 'wp_head', array( $this, 'setups' ), -30 );
-		add_action( 'wp_footer', array( $this, 'add_buttons_list_tmpl' ), -30 );
-
-		add_filter( 'the_content', array( $this, 'add_buttons_content_wrap' ), 30, 1 );
+		add_action( 'wp_footer', array( $this, 'add_template_script' ), -30 );
+		add_filter( 'the_content', array( $this, 'add_buttons_content' ), 30, 1 );
+		add_filter( 'the_content', array( $this, 'add_buttons_image' ), 30, 1 );
 	}
 
 	/**
@@ -83,16 +83,17 @@ final class Buttons extends OutputUtilities {
 	 * @param  [type] $content [description]
 	 * @return string
 	 */
-	public function add_buttons_content_wrap( $content ) {
+	public function add_buttons_content( $content ) {
 
 		$post_types = (array) $this->options->buttonsContent[ 'postTypes' ];
 
-		if ( ! is_singular( array_keys( $post_types ) ) ) {
+		if ( empty( $post_types ) || ! is_singular( array_keys( $post_types ) ) ) {
 			return $content;
 		}
 
-		if ( ! isset( $this->options->postMeta[ 'buttons_content' ] ) ||
-			 ! $this->options->postMeta[ 'buttons_content' ] ) {
+		$includes = (array) $this->options->buttonsImage[ 'includes' ];
+
+		if ( empty( $includes ) ) {
 			return $content;
 		}
 
@@ -102,30 +103,111 @@ final class Buttons extends OutputUtilities {
 			return $content;
 		}
 
+		if ( ! isset( $this->options->postMeta[ 'buttons_content' ] ) ||
+			 ! $this->options->postMeta[ 'buttons_content' ] ) {
+			return $content;
+		}
+
+		$prefix = self::get_attr_prefix();
+		$place = $this->options->buttonsContent[ 'placement' ];
+
+		$wrapper = "<div class='{$prefix}-buttons {$prefix}-buttons--content {$prefix}-buttons--content-{$place}' id='{$prefix}-buttons-{$this->post_id}'></div>";
+
 		if ( 'before' === $place ) {
-			$content = $this->button_wrap_content( $this->post_id ) . $content;
+			$content = $wrapper . $content;
 		}
 
 		if ( 'after' === $place ) {
-			$content = $content . $this->button_wrap_content( $this->post_id );
+			$content = $content . $wrapper;
 		}
 
 		return $content;
 	}
 
 	/**
+	 * [add_buttons_image description]
+	 * @param [type] $content [description]
+	 */
+	public function add_buttons_image( $content ) {
+
+		if ( ! $this->options->buttonsImage[ 'enabled' ] ) {
+			return $content;
+		}
+
+		$post_types = (array) $this->options->buttonsImage[ 'postTypes' ];
+
+		if ( empty( $post_types ) || ! is_singular( array_keys( $post_types ) ) ) {
+			return $content;
+		}
+
+		$includes = (array) $this->options->buttonsImage[ 'includes' ];
+
+		if ( empty( $includes ) ) {
+			return $content;
+		}
+
+		if ( ! isset( $this->options->postMeta[ 'buttons_image' ] ) ||
+			 ! $this->options->postMeta[ 'buttons_image' ] ) {
+			return $content;
+		}
+
+		libxml_use_internal_errors( true );
+
+		$dom = new \DOMDocument();
+    	$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+
+    	$prefix = self::get_attr_prefix();
+
+    	$images = $dom->getElementsByTagName( 'img' );
+    	$wrap = $dom->createElement( 'span' );
+
+    	$wrap->setAttribute( 'class', "{$prefix}-buttons {$prefix}-buttons--img {$prefix}-buttons--post-{$this->post_id}" );
+
+    	// If we have, at least, 1 image.
+    	if ( $images->length >= 1 ) {
+			foreach ( $images as $id => $img ) {
+
+				$wrapClone = $wrap->cloneNode();
+
+				$wrapId = absint( $id + 1 );
+				$wrapId = sanitize_key( $wrapId );
+
+				$wrapClone->setAttribute( 'id', "{$prefix}-buttons-{$this->post_id}-img-{$wrapId}" );
+
+				if ( 'a' === $img->parentNode->nodeName ) {
+
+					$linkParent = $img->parentNode;
+
+					$linkParent->parentNode->replaceChild( $wrapClone, $linkParent );
+					$wrapClone->appendChild( $linkParent );
+
+				} else {
+
+					$img->parentNode->replaceChild( $wrapClone, $img );
+					$wrapClone->appendChild( $img );
+				}
+			}
+    	}
+
+    	$content = preg_replace( '/^<!DOCTYPE.+?>/', '', str_replace( array( '<html>', '</html>', '<body>', '</body>' ), array( '', '', '', '' ), $dom->saveHTML() ) );
+
+    	return $content;
+	}
+
+	/**
 	 * [buttons_wrapper description]
 	 * @return [type] [description]
 	 */
-	public function add_buttons_list_tmpl() {
-		$this->button_list_content( $this->post_id );
+	public function add_template_script() {
+		$this->button_list_content();
+		$this->button_list_image();
 	}
 
 	/**
 	 * [button_list_content description]
 	 * @return [type] [description]
 	 */
-	protected function button_list_content( $post_id ) {
+	protected function button_list_content() {
 
 		$post_types = (array) $this->options->buttonsContent[ 'postTypes' ];
 
@@ -137,16 +219,57 @@ final class Buttons extends OutputUtilities {
 		if ( wp_script_is( $this->plugin_name, 'enqueued' ) ) :
 
 			$heading = $this->options->buttonsContent[ 'heading' ];
-			$includes = $this->options->buttonsContent[ 'includes' ];
 			$view = $this->options->buttonsContent[ 'view' ];
+			$includes = (array) $this->options->buttonsContent[ 'includes' ];
 
 			$prefix = self::get_attr_prefix(); ?>
 
-		<?php if ( is_array( $includes ) && ! empty( $includes ) ) : ?>
+		<?php if ( ! empty( $includes ) ) : ?>
 		<script type="text/html" id="tmpl-buttons-content">
 			<?php if ( ! empty( $heading ) ) : ?>
 			<h4 class="<?php echo esc_attr( $prefix ); ?>-buttons__heading"><?php echo esc_html( $heading ); ?></h4>
 			<?php endif; ?>
+			<ul class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>">
+			<?php foreach ( $includes as $value ) :
+
+				$props = self::get_social_properties( $value );
+				$props = wp_parse_args( $props, array(
+						'label' => '',
+						'url'   => '',
+						'icon'  => ''
+					) );
+
+				echo self::button_views( $view, array(
+							'site' => $value,
+							'icon' => $props[ 'icon' ],
+							'label' => $props[ 'label' ]
+						) );
+
+			endforeach; ?>
+			</ul>
+		</script>
+		<?php endif; // is_array( $includes )
+		endif; // wp_script_is
+	}
+
+	protected function button_list_image() {
+
+		$post_types = (array) $this->options->buttonsImage[ 'postTypes' ];
+
+		if ( ! is_singular( array_keys( $post_types ) ) ||
+			 ! isset( $this->options->postMeta[ 'buttons_content' ] ) ) {
+			return;
+		}
+
+		if ( wp_script_is( $this->plugin_name, 'enqueued' ) ) :
+
+			$view = $this->options->buttonsImage[ 'view' ];
+			$includes = (array) $this->options->buttonsImage[ 'includes' ];
+
+			$prefix = self::get_attr_prefix(); ?>
+
+		<?php if ( ! empty( $includes ) ) : ?>
+		<script type="text/html" id="tmpl-buttons-image">
 			<ul class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>">
 			<?php foreach ( $includes as $value ) :
 
@@ -171,21 +294,6 @@ final class Buttons extends OutputUtilities {
 	}
 
 	/**
-	 * [button_wrap_content description]
-	 * @param  [type] $post_id [description]
-	 * @return [type]          [description]
-	 */
-	protected function button_wrap_content( $id ) {
-
-		$prefix = self::get_attr_prefix();
-
-		$view = $this->options->buttonsContent[ 'view' ];
-		$placement = $this->options->buttonsContent[ 'placement' ];
-
-		return "<div class='{$prefix}-buttons {$prefix}-buttons--content {$prefix}-buttons--content-{$placement}' id='{$prefix}-buttons-{$id}'></div>";
-	}
-
-	/**
 	 * [button_views description]
 	 * @param  string $view [description]
 	 * @param  array  $args [description]
@@ -197,16 +305,30 @@ final class Buttons extends OutputUtilities {
 			return '';
 		}
 
-		$site = $args[ 'site' ];
-		$icon = $args[ 'icon' ];
+		/**
+		 * [$args description]
+		 * @var [type]
+		 */
+		$args = wp_parse_args( $args, array(
+			'site'  => '',
+			'icon'  => '',
+			'label' => ''
+		) );
+
+		if ( in_array( '', $args, true ) ) {
+			return;
+		}
+
+		$site  = $args[ 'site' ];
+		$icon  = $args[ 'icon' ];
 		$label = $args[ 'label' ];
 
 		$prefix = self::get_attr_prefix();
 
 		$templates = array(
-			'icon' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{content.{$site}.endpoint}}' target='_blank'>{$icon}</a></li>",
-			'text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{content.{$site}.endpoint}}' target='_blank'>{$label}</a></li>",
-			'icon-text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{content.{$site}.endpoint}}' target='_blank'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a></li>"
+			'icon' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' rel='nofollow'>{$icon}</a></li>",
+			'text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' rel='nofollow'>{$label}</a></li>",
+			'icon-text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' rel='nofollow'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a></li>"
 		);
 
 		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';

@@ -132,7 +132,7 @@ class ViewPublic {
 		if ( is_admin() )
 			return;
 
-		wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/scripts.js', array( 'jquery', 'underscore' ), $this->version, true );
+		wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/scripts.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 	}
 
 	/**

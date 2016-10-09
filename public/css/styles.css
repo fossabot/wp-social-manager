@@ -168,3 +168,46 @@
 	margin-right: 0;
 	margin-left: 0.86em;
 }
+.wp-social-manager-buttons--img {
+	display: inline-block;
+	position: relative;
+}
+.wp-social-manager-buttons--img .wp-social-manager-buttons__list {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 10;
+	visibility: hidden;
+}
+.wp-social-manager-buttons--img .wp-social-manager-buttons__item {
+	margin: 0;
+	width: 36px;
+	height: 36px;
+}
+.wp-social-manager-buttons--img .wp-social-manager-buttons__item a {
+	padding: 5px;
+	border-radius: 50%;
+}
+
+/**
+ * On Hover Styling
+ */
+.wp-social-manager-buttons--img:hover img {
+	opacity: 0.5;
+}
+.wp-social-manager-buttons--img:hover .wp-social-manager-buttons__list {
+	visibility: visible;
+}
+.wp-social-manager-buttons--img .wp-social-manager-buttons__item a:hover svg {
+	fill: #fff;
+}
+
+/**
+ * Each Button Styling
+ */
+.wp-social-manager-buttons--img .item-pinterest svg {
+	fill: #fff;
+}
+.wp-social-manager-buttons--img .item-pinterest a {
+	background-color: #bd081c;
+}

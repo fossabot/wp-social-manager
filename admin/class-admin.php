@@ -62,7 +62,7 @@ class ViewAdmin {
 	public function requires() {
 
 		require_once( $this->path_dir . 'partials/class-settings.php' );
-		require_once( $this->path_dir . 'partials/class-settings-validation.php' );
+		require_once( $this->path_dir . 'partials/class-validation.php' );
 
 		require_once( $this->path_dir . 'partials/class-user.php' );
 		require_once( $this->path_dir . 'partials/class-metabox.php' );

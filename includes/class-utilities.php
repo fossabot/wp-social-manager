@@ -232,7 +232,6 @@ class OptionUtilities extends Utilities {
 			);
 
 		$sites[ 'image' ] = array(
-				'facebook' => 'Facebook',
 				'pinterest' => 'Pinterest'
 			);
 
@@ -260,7 +259,6 @@ class OutputUtilities extends OptionUtilities {
 		);
 
 		$endpoints[ 'image' ] = array(
-			'facebook' => 'https://www.facebook.com/sharer/sharer.php',
 			'pinterest' => 'https://pinterest.com/pin/create/bookmarklet/'
 		);
 

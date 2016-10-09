@@ -534,11 +534,14 @@ final class Metas extends OutputUtilities {
 		}
 
 		$post = get_post( $id );
-		$post_image = preg_match_all( '/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post->post_content, $matches ); // Post First Image.
+		$dom = new \DOMDocument();
 
-		if ( $post_image !== 0 ) {
+    	$dom->loadHTML( $post->post_content );
+    	$images = $dom->getElementsByTagName( 'img' );
 
-			$image = getimagesize( $matches[1][0] );
+    	if ( 0 !== $images->length ) {
+
+			$image = getimagesize( $images->item(0)->getAttribute( 'src' ) );
 
 			if ( $image ) {
 

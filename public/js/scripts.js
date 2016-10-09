@@ -6,7 +6,9 @@
 		return;
 	}
 
-	if ( _.isUndefined( wpSocialManager.postId ) ) {
+	var api = wpSocialManager;
+
+	if ( _.isUndefined( api.id ) ) {
 		return;
 	}
 
@@ -14,37 +16,89 @@
 		interpolate: /\{\{(.+?)\}\}/g
 	};
 
-	var root = wpSocialManager.root; // WP-JSON root.
-	var namespace = wpSocialManager.namespace; // The plugin API route namespace.
-	var postId = wpSocialManager.postId;
+	var $tmplContent = $( '#tmpl-buttons-content' );
+	var $tmplImage = $( '#tmpl-buttons-image' );
 
 	/**
-	 * [request description]
-	 * @type {Object}
+	 * [Buttons description]
+	 * @type {[type]}
 	 */
-	var request = {};
-		request.postId = parseInt( wpSocialManager.postId, 10 );
+	var	Buttons = Backbone.Model.extend( {
+				urlRoot : ( api.root + api.namespace ) + '/buttons'
+			} );
 
-	$.ajax({
-		url : root + namespace + '/buttons',
-		data : request,
-		dataType : 'json',
-	} )
-	.done( function( response ) {
+	if ( 0 !== $tmplContent.length ) {
 
-		if ( _.isUndefined( response ) || ! _.isObject( response ) ) {
-			return;
-		}
+		var	ButtonsContent = Backbone.View.extend( {
+				model: new Buttons,
+				template: _.template( $tmplContent.html() ),
+				initialize: function() {
 
-		var prefix = wpSocialManager.attrPrefix;
-		var $wrap = $( '#' + prefix + '-buttons-' + postId );
+					this.model.bind( 'change', this.render, this );
+					this.model.fetch( {
+						data : {
+							id : api.id
+						}
+					} );
+				},
+				render: function() {
 
-		$wrap.append( function() {
+					var resp = this.model.toJSON();
 
-			var	template = _.template( $( '#tmpl-buttons-content' ).html() );
+					$( '#' + api.attrPrefix + '-buttons-' + resp.id )
+						.append( this.template( resp.content ) );
 
-			return template( response );
+					return this;
+				}
 		} );
-	} );
+
+		new ButtonsContent();
+	}
+
+	if ( 0 !== $tmplImage.length ) {
+
+		var	ButtonsImage = Backbone.View.extend( {
+			model: new Buttons,
+			template: _.template( $tmplImage.html() ),
+			initialize: function() {
+
+				if ( 0 === this.$el.length ) {
+					return;
+				}
+
+				this.model.bind( 'change', this.render, this );
+				this.model.fetch( {
+					data : {
+						id : api.id
+					}
+				} );
+			},
+			render: function() {
+
+				var self = this;
+				var resp = this.model.toJSON();
+				var $images = $( '.' + api.attrPrefix + '-buttons--post-' + resp.id  );
+
+				$images.each( function() {
+
+					var $elem = $( this );
+					var $elemSrc = $elem.find( 'img' ).attr( 'src' );
+
+					if ( $elemSrc ) {
+
+						// Add image cover to Pinterest image sharing.
+						// @todo improve this function.
+						resp.image.pinterest.endpoint = resp.image.pinterest.endpoint + '&media=' + $elemSrc;
+
+						$elem.append( self.template( resp.image ) );
+					}
+				} );
+
+				return this;
+			}
+		} );
+
+		new ButtonsImage();
+	}
 
 })( jQuery, window._, window.Backbone, undefined );
