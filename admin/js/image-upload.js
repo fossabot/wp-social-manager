@@ -1,52 +1,20 @@
-(function( $, wp ) {
+;(function( $, wp, Backbone ) {
 
 	'use strict';
-
-
-	/**
-	 * [initialize description]
-	 */
-	var ControlView = Backbone.View.extend({
-
-		events : {
-			'click .toggle-switch-control' : 'toggleControls',
-		},
-
-		/**
-		 * [initialize description]
-		 * @return {[type]} [description]
-		 */
-		initialize : function() {
-
-			this.$control = this.$el.find( '.toggle-switch-control' );
-			this.$target = this.$el.find( this.$control.data( 'toggle-target' ) );
-
-			this.toggleControls();
-		},
-
-		/**
-		 * [toggleControls description]
-		 * @return {[type]} [description]
-		 */
-		toggleControls : function() {
-
-			var $control = this.$control;
-			var $target = this.$target;
-
-			$target.toggleClass( 'hide-if-js', ! $control.is( ':checked' ) );
-		}
-	});
-
 
 	/**
 	 * [initialize description]
 	 */
 	var MediaUploader = Backbone.View.extend({
 
+		/**
+		 * [events description]
+		 * @type {Object}
+		 */
 		events : {
-			'click .button-add-media' : 'selectMedia',
-			'click .button-change-media' : 'selectMedia',
-			'click .button-remove-media' : 'removeMedia'
+			'click .add-media' : 'selectMedia',
+			'click .change-media' : 'selectMedia',
+			'click .remove-media' : 'removeMedia'
 		},
 
 		/**
@@ -66,6 +34,8 @@
 		 * @return {[type]}        [description]
 		 */
 		selectMedia : function( button ) {
+
+			console.log( button );
 
 			this.controls( button );
 
@@ -110,9 +80,9 @@
 		 * @param  {[type]} imgUrl [description]
 		 * @return {[type]}        [description]
 		 */
-		controlState : function( imgUrl ) {
+		controlState : function( imgId, imgUrl ) {
 
-			var state = ( imgUrl === this.$input.val() && '' !== imgUrl );
+			var state = ( imgId === parseInt( this.$input.val(), 10 ) && '' !== imgUrl );
 
 			this.$inputWrap.toggleClass( 'is-set', state );
 
@@ -166,20 +136,16 @@
 		wpMediaSelect : function() {
 
 			var attach = this.wpMediaUploader.state().get('selection').first().toJSON();
+			var attachId = attach[ 'id' ];
 			var attachURL = attach[ 'url' ];
 
-			this.$input.val( attachURL );
-			this.controlState( attachURL );
+			this.$input.val( attachId );
+			this.controlState( attachId, attachURL );
 		}
 	});
 
+	new MediaUploader({
+		el: $( '#wp-social-manager-wrap' )
+	});
 
-	// Instantiation;
-	var args = {
-		el: $( '#wp-social-manager-screen' )
-	};
-
-	new MediaUploader( args );
-	new ControlView( args );
-
-})( jQuery, window.wp );
+})( jQuery, window.wp, window.Backbone, undefined );

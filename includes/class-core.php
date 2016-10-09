@@ -40,17 +40,26 @@ class Core {
 	protected $plugin_name;
 
 	/**
-	 * [$plugin_dir description]
+	 * [$plugin_opts description]
 	 * @var [type]
 	 */
-	protected $plugin_dir;
+	protected $plugin_opts;
+
+	/**
+	 * [$plugin_dir description]
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @var    string
+	 */
+	protected $path_dir;
 
 	/**
 	 * The current version of the plugin.
 	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
+	 * @since  1.0.0
+	 * @access protected
+	 * @var    string    $version    The current version of the plugin.
 	 */
 	protected $version;
 
@@ -61,96 +70,90 @@ class Core {
 	 * Load the dependencies, define the locale, and set the hooks for the admin area and
 	 * the public-facing side of the site.
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 */
 	public function __construct( array $args ) {
 
 		$this->args = $args;
 
-		$this->setups();
+		$this->plugin_name = $args[ 'plugin_name' ];
+		$this->plugin_opts = $args[ 'plugin_opts' ];
+		$this->version = $args[ 'version' ];
+
+		$this->path_dir = trailingslashit( plugin_dir_path( dirname( __FILE__ ) ) );
+
 		$this->requires();
-
-		$this->locales();
-		$this->define_admin();
-		$this->define_public();
-	}
-
-	private function setups() {
-
-		$this->plugin_dir = trailingslashit( plugin_dir_path( dirname( __FILE__ ) ) );
+		$this->setups();
+		$this->hooks();
 	}
 
 	/**
 	 * Load the required dependencies for this plugin.
 	 *
 	 * Include the following files that make up the plugin:
-	 *
-	 * - WP_Social_Manager_Loader. Orchestrates the hooks of the plugin.
-	 * - WP_Social_Manager_i18n. Defines internationalization functionality.
-	 * - WP_Social_Manager_Admin. Defines all hooks for the admin area.
-	 * - WP_Social_Manager_Public. Defines all hooks for the public side of the site.
-	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
 	 *
-	 * @since    1.0.0
-	 * @access   private
+	 * @since  1.0.0
+	 * @access private
 	 */
-	private function requires() {
+	protected function requires() {
 
-		require_once( $this->plugin_dir . 'includes/functions-core.php' );
+		require_once( $this->path_dir . 'includes/class-i18n.php' );
+		require_once( $this->path_dir . 'includes/class-utilities.php' );
 
-		require_once( $this->plugin_dir . 'includes/class-i18n.php' );
-		require_once( $this->plugin_dir . 'includes/class-options.php' );
-
-		require_once( $this->plugin_dir . 'admin/class-admin.php' );
-		require_once( $this->plugin_dir . 'public/class-public.php' );
-		require_once( $this->plugin_dir . 'widgets/class-social-links.php' );
+		require_once( $this->path_dir . 'admin/class-admin.php' );
+		require_once( $this->path_dir . 'public/class-public.php' );
+		require_once( $this->path_dir . 'widgets/class-widgets.php' );
 	}
 
 	/**
-	 * Define the locale for this plugin for internationalization.
-	 *
-	 * Uses the WP_Social_Manager_i18n class in order to set the domain and to register the hook
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
+	 * [hooks description]
+	 * @access private
+	 * @return [type] [description]
 	 */
-	private function locales() {
+	protected function hooks() {
 
-		$plugin_i18n = new Languages();
-
-		add_action( 'plugins_loaded', array( $plugin_i18n, 'load_plugin_textdomain' ));
+		add_action( 'plugins_loaded', array( $this->languages, 'load_plugin_textdomain' ) );
 	}
 
 	/**
-	 * Register all of the hooks related to the admin area functionality
-	 * of the plugin.
+	 * [setups description]
 	 *
-	 * @since    1.0.0
-	 * @access   private
+	 * @since  1.0.0
+	 * @access private
+	 * @return void
 	 */
-	private function define_admin() {
+	protected function setups() {
 
-		if ( !is_admin() )
-			return;
+		/**
+		 * [$this->languages description]
+		 * @var Languages
+		 */
+		$this->languages = new Languages( $this->plugin_name );
 
-		$admins = new ViewAdmin( $this->args );
-	}
+		if ( is_admin() ) {
 
-	/**
-	 * Register all of the hooks related to the public-facing functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function define_public() {
+			/**
+			 * [$admin description]
+			 * @var ViewAdmin
+			 */
+			$admin = new ViewAdmin( $this->args );
+		}
 
-		if ( is_admin() )
-			return;
+		if ( ! is_admin() ) {
 
-		$public = new ViewPublic( $this->args );
+			/**
+			 * [$public description]
+			 * @var ViewPublic
+			 */
+			$public = new ViewPublic( $this->args );
+		}
+
+		/**
+		 * [$widgets description]
+		 * @var Widgets
+		 */
+		$widgets = new Widgets( $this->args );
 	}
 }
