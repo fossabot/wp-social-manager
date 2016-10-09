@@ -17,6 +17,12 @@ final class SocialMetaBox {
 	protected $screen;
 
 	/**
+	 * [$screen description]
+	 * @var [type]
+	 */
+	protected $options;
+
+	/**
 	 * [$post_id description]
 	 * @var [type]
 	 */
@@ -53,16 +59,32 @@ final class SocialMetaBox {
 	protected $post_type;
 
 	/**
+	 * [includes description]
+	 * @return [type] [description]
+	 */
+	public function requires() {
+
+		$this->plugin_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
+
+		require_once( $this->plugin_dir . 'butterbean/butterbean.php' );
+		require_once( $this->plugin_dir . 'butterbean-extend/butterbean-extend.php' );
+	}
+
+	public function setups( array $args ) {
+		$this->metasSite = get_option( $args[ 'plugin_opts' ] . '_metas_site' );
+	}
+
+	/**
 	 * Sets up initial actions.
 	 *
 	 * @since  1.0.0
 	 * @access private
 	 * @return void
 	 */
-	private function setup_actions() {
+	private function hooks() {
 
 		// Load `ButterBean` library.
-		add_action( 'plugins_loaded', array( $this, 'includes' ) );
+		add_action( 'plugins_loaded', array( $this, 'requires' ) );
 
 		// Register managers.
 		add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
@@ -70,16 +92,6 @@ final class SocialMetaBox {
 		// Register sections, settings, and controls.
 		add_action( 'butterbean_register', array( $this, 'register_section_sharing' ), -90, 2 );
 		add_action( 'butterbean_register', array( $this, 'register_section_meta' ), -90, 2 );
-	}
-
-	/**
-	 * [includes description]
-	 * @return [type] [description]
-	 */
-	public function includes() {
-
-		require_once plugin_dir_path( __FILE__ ) . 'butterbean/butterbean.php';
-		require_once plugin_dir_path( __FILE__ ) . 'butterbean-extend/butterbean-extend.php';
 	}
 
 	/**
@@ -126,16 +138,16 @@ final class SocialMetaBox {
 
 		// Register a section.
 		$manager->register_section(
-			'sharing',
+			'buttons',
 			array(
-				'label' => 'Sharing',
-				'icon'  => 'dashicons-share'
+				'label' => 'Buttons',
+				'icon'  => 'dashicons-thumbs-up'
 			)
 		);
 
 		// Register a setting.
 		$manager->register_setting(
-			'sharing_content',
+			'buttons_content',
 			array(
 				'type' => 'serialize',
 				'default' => 1,
@@ -143,18 +155,18 @@ final class SocialMetaBox {
 			)
 		);
 		$manager->register_control(
-			'sharing_content',
+			'buttons_content',
 			array(
 				'type' => 'checkbox',
-				'section' => 'sharing',
-				'label' => 'Content Sharing',
-				'description' => "Allow the social sharing buttons to show in this {$this->post_type}"
+				'section' => 'buttons',
+				'label' => 'Content Social Media Buttons',
+				'description' => "Display the buttons that allow people to share, like, or save this {$this->post_type} in social media"
 			)
 		);
 
 		// Register a setting.
 		$manager->register_setting(
-			'sharing_image',
+			'buttons_image',
 			array(
 				'type' => 'serialize',
 				'default' => 1,
@@ -162,12 +174,12 @@ final class SocialMetaBox {
 			)
 		);
 		$manager->register_control(
-			'sharing_image',
+			'buttons_image',
 			array(
 				'type' => 'checkbox',
-				'section' => 'sharing',
-				'label' => 'Image Sharing',
-				'description' => "Allow the social sharing buttons to show on the images in this {$this->post_type}"
+				'section' => 'buttons',
+				'label' => 'Image Social Media Buttons',
+				'description' => "Display the social media buttons that allow people to share, like, or save images of this {$this->post_type} in social media"
 			)
 		);
 	}
@@ -179,6 +191,11 @@ final class SocialMetaBox {
 	 * @return [type]             [description]
 	 */
 	public function register_section_meta( $butterbean, $post_type ) {
+
+		if ( ! isset( $this->metasSite[ 'enabled' ] ) ||
+			 ! (bool) $this->metasSite[ 'enabled' ] ) {
+				return;
+			}
 
 		// Get our custom manager object.
 		$manager = $butterbean->get_manager( 'wp_social_manager' );
@@ -192,7 +209,7 @@ final class SocialMetaBox {
 		);
 
 		$manager->register_control(
-			'meta_title',
+			'post_title',
 			array(
 				'type' => 'text',
 				'section' => 'meta_tags',
@@ -206,7 +223,7 @@ final class SocialMetaBox {
 		);
 
 		$manager->register_setting(
-			'meta_title',
+			'post_title',
 			array(
 				'type' => 'serialize',
 				'sanitize_callback' => 'sanitize_text_field'
@@ -214,7 +231,7 @@ final class SocialMetaBox {
 		);
 
 		$manager->register_control(
-			'meta_description',
+			'post_excerpt',
 			array(
 				'type' => 'textarea',
 				'section' => 'meta_tags',
@@ -228,7 +245,7 @@ final class SocialMetaBox {
 		);
 
 		$manager->register_setting(
-			'meta_description',
+			'post_excerpt',
 			array(
 				'type' => 'serialize',
 				'sanitize_callback' => 'wp_kses'
@@ -237,7 +254,7 @@ final class SocialMetaBox {
 
 		// Image upload control.
 		$manager->register_control(
-			'meta_image',
+			'post_thumbnail',
 			array(
 				'type'        => 'image',
 				'section'     => 'meta_tags',
@@ -247,7 +264,7 @@ final class SocialMetaBox {
 			)
 		);
 		$manager->register_setting(
-			'meta_image',
+			'post_thumbnail',
 			array(
 				'type' => 'serialize',
 				'sanitize_callback' => array( $this, 'sanitize_absint' )
@@ -312,13 +329,14 @@ final class SocialMetaBox {
 	 * @access public
 	 * @return object
 	 */
-	public static function get_instance() {
+	public static function get_instance( array $args ) {
 
 		static $instance = null;
 
 		if ( is_null( $instance ) ) {
 			$instance = new self;
-			$instance->setup_actions();
+			$instance->setups( $args );
+			$instance->hooks();
 		}
 
 		return $instance;
@@ -333,5 +351,3 @@ final class SocialMetaBox {
 	 */
 	private function __construct() {}
 }
-
-SocialMetaBox::get_instance();

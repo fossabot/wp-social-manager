@@ -54,15 +54,6 @@ if ( false === $require->pass() ) {
 }
 
 /**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-activator.php
- */
-register_activation_hook( __FILE__, function() {
-	require_once( $plugin_dir . 'includes/class-activator.php' );
-	Activation::activate();
-} );
-
-/**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
@@ -75,7 +66,7 @@ require_once( $plugin_dir . 'includes/class-core.php' );
  */
 function run() {
 	new Core( array(
-		'version' => '0.1.0',
+		'version' => '1.0.0',
 		'plugin_name' => 'wp-social-manager',
 		'plugin_opts' => 'wp_social_manager'
 	) );

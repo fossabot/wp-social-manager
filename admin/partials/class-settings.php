@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Provide a admin area view for the plugin
  *
@@ -18,81 +17,73 @@ namespace XCo\WPSocialManager;
 if ( ! defined( 'WPINC' ) )
 	die;
 
-class SettingScreenAdmin {
+final class Settings extends OptionUtilities {
 
 	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
-	 */
-	private $plugin_name;
-
-	/**
-	 * [$plugin_name description]
+	 * [$args description]
 	 * @var [type]
 	 */
-	private $option_name;
+	protected $args;
 
 	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
+	 * [$plugin_dir description]
+	 * @var [type]
 	 */
-	private $version;
+	protected $plugin_dir;
 
 	/**
 	 * [$screen description]
 	 * @var [type]
 	 */
-	private $screen;
+	protected $screen;
 
 	/**
-	 * [$screen_tab description]
+	 * [$settings description]
 	 * @var [type]
 	 */
-	private $screen_tab;
-
-	/**
-	 * [$options description]
-	 * @var [type]
-	 */
-	private $options;
+	protected $settings;
 
 	/**
 	 * [$fields description]
 	 * @var [type]
 	 */
-	private $fields;
+	protected $fields;
 
 	/**
-	 * [$validation description]
+	 * [$document_title description]
 	 * @var [type]
 	 */
-	private $validation;
+	protected $site_title;
+
+	/**
+	 * [$document_title description]
+	 * @var [type]
+	 */
+	protected $site_tagline;
+
+	/**
+	 * [$document_title description]
+	 * @var [type]
+	 */
+	protected $document_title;
 
 	/**
 	 * [__construct description]
-	 * @param [type] $args [description]
+	 * @param array $args [description]
 	 */
-	public function __construct( $args ) {
+	public function __construct( array $args ) {
 
-		$this->arguments = $args;
+		$this->args = $args;
 
-		$this->plugin_name = $args[ 'plugin_name' ];
-		$this->option_name = $args[ 'option_name' ];
 		$this->version = $args[ 'version' ];
+		$this->plugin_name = $args[ 'plugin_name' ];
+		$this->plugin_opts = $args[ 'plugin_opts' ];
+
+		$this->path_dir = trailingslashit( plugin_dir_path( dirname( __FILE__ ) ) );
+		$this->path_url = trailingslashit( plugin_dir_url( dirname( __FILE__ ) ) );
 
 		$this->requires();
-
-		$this->load_options();
-		$this->load_fields();
-		$this->load_settings();
-
-		add_action( 'admin_notices', array( $this, 'setting_notifications' ), 10 );
+		$this->hooks();
 	}
 
 	/**
@@ -101,246 +92,458 @@ class SettingScreenAdmin {
 	 */
 	protected function requires() {
 
-		require_once plugin_dir_path( __FILE__ ) . 'class-fields.php';
-		require_once plugin_dir_path( __FILE__ ) . 'class-validations.php';
+		require_once( $this->path_dir . 'partials/pepperplane/pepperplane.php' );
+		require_once( $this->path_dir . 'partials/pepperplane/pepperplane-fields.php' );
+		require_once( $this->path_dir . 'partials/pepperplane/pepperplane-install.php' );
+
+		require_once( $this->path_dir . 'partials/class-extends.php' );
 	}
 
 	/**
-	 * [load_options description]
+	 * [setups description]
 	 * @return [type] [description]
 	 */
-	protected function load_options() {
+	protected function hooks() {
 
-		$options = new Options();
-		$this->options = $options->get_options();
+		add_action( 'init', array( $this, 'frontend_setups' ) );
+
+		add_action( 'admin_menu', array( $this, 'setting_menu' ) );
+
+		add_action( 'admin_init', array( $this, 'setting_setups' ), 10 );
+		add_action( 'admin_init', array( $this, 'setting_pages' ), 15 );
+		add_action( 'admin_init', array( $this, 'setting_sections' ), 15 );
+		add_action( 'admin_init', array( $this, 'setting_fields' ), 15 );
+		add_action( 'admin_init', array( $this, 'setting_init' ), 20 );
+
+		add_action( "{$this->plugin_opts}_admin_enqueue_scripts", array( $this, 'enqueue_scripts' ), 10, 1 );
+		add_action( "{$this->plugin_opts}_admin_enqueue_styles", array( $this, 'enqueue_styles' ), 10, 1 );
 	}
 
 	/**
-	 * [load_fields description]
+	 * [setting_setups description]
 	 * @return [type] [description]
 	 */
-	protected function load_fields() {
-		$this->fields = new SettingFields();
+	public function setting_setups() {
+
+		$fields = new \PepperPlaneFields( get_settings_errors() );
+		$settings = new \PepperPlane( $this->plugin_opts, $fields );
+
+		$extends = new SettingsExtend( $this->plugin_opts );
+		$validate = new SettingsValidation();
+
+		$this->settings = $settings;
+		$this->validate = $validate;
 	}
 
 	/**
-	 * [load_screen_tab description]
+	 * [setting_menu description]
 	 * @return [type] [description]
 	 */
-	protected function load_screen_tab() {
+	public function setting_menu() {
 
-		$screen_tab = '';
+		$menu_title = esc_html__( 'Social', 'wp-social-manager' );
+		$page_title = esc_html__( 'Social Settings', 'wp-social-manager' );
 
-		if ( isset( $_POST['tab'] ) && sanitize_key( $_POST['tab'] ) ) { // WPCS: CSRF ok. input var okay.
-			$screen_tab = sanitize_key( $_POST['tab'] ); // WPCS: input var okay.
-		} else {
-			if ( isset( $_GET['tab'] ) && sanitize_key( $_GET['tab'] ) ) { // WPCS: input var okay.
-				$screen_tab = sanitize_key( $_GET['tab'] ); // WPCS: input var okay.
+		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $this->plugin_name, function() {
+			echo "<div class='wrap' id='{$this->plugin_name}-wrap'>";
+				$this->settings->render_header( array( 'title' => false ) );
+				$this->settings->render_form();
+			echo "</div>";
+		} );
+
+		add_action( "admin_print_styles-{$this->screen}", array( $this, 'print_setting_styles' ), 20, 1 );
+	}
+
+	/**
+	 * [setting_init description]
+	 * @return [type] [description]
+	 */
+	public function setting_pages() {
+
+		$this->pages = $this->settings->add_pages( array(
+				array(
+					'id' => 'accounts',
+					'slug' => 'accounts',
+					'title' => esc_html__( 'Accounts', 'wp-social-manager' )
+				),
+				array(
+					'id' => 'buttons',
+					'slug' => 'buttons',
+					'title' => esc_html__( 'Buttons', 'wp-social-manager' )
+					),
+				array(
+					'id' => 'metas',
+					'slug' => 'metas',
+					'title' => esc_html__( 'Metas', 'wp-social-manager' )
+				),
+				array(
+					'id' => 'advanced',
+					'slug' => 'advanced',
+					'title' => esc_html__( 'Advanced', 'wp-social-manager' )
+				),
+			)
+		);
+	}
+
+	/**
+	 * [setting_sections description]
+	 * @return [type] [description]
+	 */
+	public function setting_sections() {
+
+		/**
+		 * [$this->pages description]
+		 * @var [type]
+		 */
+		$this->pages = $this->settings->add_section( 'accounts', array(
+				'id' => 'profiles',
+				'title' => esc_html__( 'Profiles & Pages', 'wp-social-manager' ),
+				'description' => esc_html__( 'Add the social media profiles and pages related to this website.', 'wp-social-manager' ),
+				'validate_callback' => array( $this->validate, 'setting_usernames' )
+			)
+		);
+
+		/**
+		 * [$this->pages description]
+		 * @var [type]
+		 */
+		$this->pages = $this->settings->add_sections( 'buttons', array(
+				array(
+					'id' => 'buttons_content',
+					'title' => esc_html__( 'Content', 'wp-social-manager' ),
+					'description' => esc_html__( 'Options to configure the social media buttons that allows people to share, like, or save content of this site.', 'wp-sharing-manager' ),
+					'validate_callback' => array( $this->validate, 'setting_buttons_content' )
+				),
+				array(
+					'id' => 'buttons_image',
+					'title' => esc_html__( 'Image', 'wp-social-manager' ),
+					'description' => esc_html__( 'Options to configure the social media buttons shown on the content images.', 'wp-sharing-manager' ),
+					'validate_callback' => array( $this->validate, 'setting_buttons_image' )
+				)
+			)
+		);
+
+		/**
+		 * [$this->pages description]
+		 * @var [type]
+		 */
+		$this->pages = $this->settings->add_section( 'metas', array(
+			'id' => 'metas_site',
+			'validate_callback' => array( $this->validate, 'setting_site_metas' )
+			)
+		);
+
+		/**
+		 * [$this->pages description]
+		 * @var [type]
+		 */
+		$this->pages = $this->settings->add_section( 'advanced', array(
+			'id' => 'advanced',
+			'validate_callback' => array( $this->validate, 'setting_advanced' )
+			)
+		);
+	}
+
+	/**
+	 * [setting_fields description]
+	 * @return void [description]
+	 */
+	public function setting_fields() {
+
+		/**
+		 * [$key description]
+		 * @var [type]
+		 */
+		foreach ( self::get_social_profiles() as $key => $value ) {
+
+			$props = self::get_social_properties( $key );
+
+			$label = isset( $value[ 'label' ] ) ? $value[ 'label' ] : '';
+			$description = isset( $value[ 'description' ] ) ? $value[ 'description' ] : '';
+			$url = isset( $props[ 'url' ] ) ? $props[ 'url' ] : '';
+
+			if ( ! empty( $url ) && ! empty( $description ) ) {
+
+				$profiles = array(
+					'id' => sanitize_key( $key ),
+					'type' => 'text',
+					'label' => $label,
+					'description' => $description,
+					'after' => '<p class="account-profile-preview hide-if-js"><code></code></p>',
+					'attr' => array(
+						'class' => "account-profile-control code",
+						'data-load-script' => 'preview-profile',
+						'data-url' => $props[ 'url' ]
+					)
+				);
+
+				$this->pages = $this->settings->add_fields( 'accounts', 'profiles', array( $profiles ) );
 			}
 		}
 
-		if ( '' === $screen_tab ) {
-			reset( $this->options->tabs );
-			$screen_tab = key( $this->options->tabs );
-		}
+		/**
+		 * [setting_init description]
+		 * @param  [type] $this->screen [description]
+		 * @return [type]               [description]
+		 */
+		$this->pages = $this->settings->add_fields( 'buttons', 'buttons_content', array(
+				array(
+					'id' => 'postTypes',
+					'type' => 'multicheckbox',
+					'label' => esc_html__( 'Show the buttons in', 'wp-sharing-manager' ),
+					'description' => wp_kses( sprintf( __( 'Select the %s that are allowed to show the social media buttons.', 'wp-sharing-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">'. esc_html__( 'Post Types', 'wp-sharing-manager' ) .'</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
+					'options' => self::get_post_types(),
+					'default' => array( 'post' ),
+				),
+				array(
+					'id' => 'view',
+					'label' => esc_html__( 'Buttons View', 'wp-sharing-manager' ),
+					'description' => esc_html__( 'Select the social media buttons visual appearance displayed in the content.', 'wp-sharing-manager' ),
+					'type' => 'radio',
+					'options' => self::get_button_views(),
+					'default' => 'icon'
+				),
+				array(
+					'id' => 'placement',
+					'type' => 'radio',
+					'label' => esc_html__( 'Buttons Placement', 'wp-sharing-manager' ),
+					'description' => esc_html__( 'Select the location to show the social media buttons in the content.', 'wp-sharing-manager' ),
+					'options' => self::get_button_placements(),
+					'default' => 'after',
+				),
+				array(
+					'id' => 'heading',
+					'type' => 'text',
+					'label' => esc_html__( 'Buttons Heading', 'wp-sharing-manager' ),
+					'description' => sprintf( esc_html__( 'Set the heading title shown before the buttons (e.g. %s).', 'wp-sharing-manager' ), '<code>Share on:</code>' )
+				),
+				array(
+					'id' => 'includes',
+					'label' => esc_html__( 'Include these', 'wp-sharing-manager' ),
+					'type' => 'multicheckbox',
+					'options' => self::get_button_sites( 'content' ),
+					'default' => array_keys( self::get_button_sites( 'content' ) )
+				)
+		) );
 
-		return (string) $screen_tab;
+		/**
+		 * [$this->pages description]
+		 * @var [type]
+		 */
+		$this->pages = $this->settings->add_fields( 'buttons', 'buttons_image', array(
+			array(
+				'id' => 'enabled',
+				'label' => esc_html__( 'Image Buttons Display', 'wp-sharing-manager' ),
+				'description' => esc_html__( 'Show the social media buttons on images in the content', 'wp-sharing-manager' ),
+				'type' => 'checkbox',
+				'attr' => array(
+					'class' => 'toggle-control',
+					'data-load-script' => 'toggle-control',
+					'data-toggle' => '.sharing-image-setting',
+				)
+			),
+			array(
+				'id' => 'postTypes',
+				'label' => esc_html__( 'Show the buttons in', 'wp-sharing-manager' ),
+				'description' => wp_kses( sprintf( __( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'wp-sharing-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">'. esc_html__( 'Post Types', 'wp-sharing-manager' ) .'</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
+				'type' => 'multicheckbox',
+				'options' => self::get_post_types(),
+				'default' => array( 'post' ),
+				'class' => 'sharing-image-setting hide-if-js'
+			),
+			array(
+				'id' => 'view',
+				'label' => esc_html__( 'Buttons View', 'wp-sharing-manager' ),
+				'description' => esc_html__( 'The social media button visual appearance in the content.', 'wp-sharing-manager' ),
+				'type' => 'radio',
+				'options' => self::get_button_views(),
+				'default' => 'icon',
+				'class' => 'sharing-image-setting hide-if-js',
+			),
+			array(
+				'id' => 'includes',
+				'label' => esc_html__( 'Include these', 'wp-sharing-manager' ),
+				'type' => 'multicheckbox',
+				'options' => self::get_button_sites( 'image' ),
+				'default' => array_keys( self::get_button_sites( 'image' ) ),
+				'class' => 'sharing-image-setting hide-if-js',
+			)
+		) );
+
+		/**
+		 * [$this->pages description]
+		 * @var [type]
+		 */
+		$this->pages = $this->settings->add_fields( 'metas', 'metas_site', array(
+			array(
+				'id' => 'enabled',
+				'type' => 'checkbox',
+				'label' => esc_html__( 'Enable Meta Tags', 'wp-social-manager' ),
+				'description' => esc_html__( 'Generate social media meta tags on this website', 'wp-social-manager' ),
+				'default' => 'on',
+				'attr' => array(
+					'class' => 'toggle-control',
+					'data-load-script' => 'toggle-control',
+					'data-toggle' => '.meta-site-setting',
+				)
+			),
+			array(
+				'id' => 'name',
+				'type' => 'text',
+				'label' => esc_html__( 'Site Name', 'wp-social-manager' ),
+				'legend' => esc_html__( 'Site Name', 'wp-social-manager' ),
+				'description' => sprintf( esc_html__( 'The website name or brand as it should appear within the social media meta tags (e.g. %s)', 'wp-social-manager' ), '<code>iMDB</code>, <code>TNW</code>, <code>HKDC</code>' ),
+				'class' => 'meta-site-setting',
+				'attr' => array(
+					'placeholder' => $this->site_title
+				)
+			),
+			array(
+				'id' => 'title',
+				'type' => 'text',
+				'label' => esc_html__( 'Site Title', 'wp-social-manager' ),
+				'legend' => esc_html__( 'Site Title', 'wp-social-manager' ),
+				'description' => esc_html__( 'The title of this website as it should appear within the social media meta tags.', 'wp-social-manager' ),
+				'class' => 'meta-site-setting',
+				'attr' => array(
+					'placeholder' => $this->document_title
+				)
+			),
+			array(
+				'id' => 'description',
+				'type' => 'textarea',
+				'label' => esc_html__( 'Site Description', 'wp-social-manager' ),
+				'description' => esc_html__( 'A one to two sentence describing this website that should appear within the social media meta tags.', 'wp-social-manager' ),
+				'class' => 'meta-site-setting',
+				'attr' => array(
+					'rows' => '4',
+					'cols' => '80',
+					'placeholder' => $this->site_tagline
+				)
+			),
+			array(
+				'id' => 'image',
+				'type' => 'image',
+				'class' => 'meta-site-setting',
+				'label' => esc_html__( 'Site Image', 'wp-social-manager' ),
+				'description' => esc_html__( 'An image URL which should represent this website within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' )
+			)
+		) );
+
+		/**
+		 * [$this->pages description]
+		 * @var [type]
+		 */
+		$this->pages = $this->settings->add_field( 'advanced', 'advanced', array(
+			'id' => 'enableStylesheet',
+			'label' => esc_html__( 'Enable Stylesheet', 'wp-sharing-manager' ),
+			'description' => esc_html__( 'Load the plugin stylesheet to apply essential styles.', 'wp-sharelog' ),
+			'default' => 'on',
+			'type' => 'checkbox'
+		) );
 	}
 
 	/**
-	 * Register the Setting page and its sections.
-	 *
-	 * @since 1.0.0
+	 * [setting_init description]
 	 * @access public
-	 *
-	 * @return void
-	 */
-	public function load_settings() {
-
-		if ( ! is_array( $this->options->tabs ) || empty( $this->options->tabs ) ) {
-			return;
-		}
-
-		$screen_tab = $this->load_screen_tab();
-
-		$tabs = $this->options->tabs;
-		$page = $this->plugin_name;
-
-		foreach ( $tabs as $tab => $data ) {
-
-			if ( $screen_tab && $screen_tab !== $tab ) {
-				continue;
-			}
-
-			$sanitize = 'sanitize';
-
-			if ( isset( $data[ 'sanitize_callback' ] ) ) {
-
-				$options = $this->options->tabs[ $tab ][ 'sections' ];
-				$validation = new Settings_Validation( $this->arguments, $options );
-				$sanitize   = array( $validation, $data[ 'sanitize_callback' ] );
-			}
-
-			foreach ( $data[ 'sections' ] as $section => $data ) {
-
-				$title = '';
-				if ( isset( $data[ 'title' ] ) ) {
-					$title = esc_html( $data[ 'title' ] );
-				}
-
-				add_settings_section( $section, $title, array( $this, 'render_section' ), $page );
-
-				register_setting( $page, "{$this->option_name}_{$tab}", $sanitize );
-
-				foreach ( $data[ 'options' ] as $option_id => $option ) {
-
-					$option_class = isset( $option[ 'class' ] ) ? $option[ 'class' ] : '';
-					$option_label = isset( $option[ 'label' ] ) ? $option[ 'label' ] : '';
-
-					$args = array(
-						'tab' => $tab,
-						'section' => $section,
-						'name' => "{$this->option_name}_{$tab}",
-						'id' => $option_id,
-						'class' => $option_class,
-						'field' => $option
-					);
-
-					add_settings_field( $option_id, $option_label, array( $this->fields, 'render_field' ), $page, $section, $args );
-				}
-			}
-
-			if ( ! $screen_tab ) {
-				break;
-			}
-		}
-	}
-
-	/**
-	 * Add Setting Section Content.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param  array $tab Registered section.
-	 * @return void
-	 */
-	public function render_section( $args ) {
-
-		$screen_tab = $this->load_screen_tab();
-		$sections = wp_parse_args( $this->options->tabs[ $screen_tab ][ 'sections' ], array() );
-
-		if ( ! $sections ) {
-			return;
-		}
-
-		$description = '';
-		if ( isset( $sections[ $args[ 'id' ] ][ 'description' ] ) ) {
-			$description = $sections[ $args[ 'id' ] ][ 'description' ];
-			$description = $description ? "<p>{$description}</p>" : '';
-		}
-
-		echo wp_kses_post( $description );
-	}
-
-	/**
-	 * Add the Setting page and its input fields.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function render_screen() {
-
-		$html  = "<div class='wrap {$this->plugin_name}' id='{$this->plugin_name}-screen'>";
-		$html .= "<h1>". esc_html( get_admin_page_title() ) ."</h1>";
-
-		if ( is_array( $this->options->tabs ) && count( $this->options->tabs ) >= 1 ) { // Show page tabs.
-
-			$html .= '<nav class="nav-tab-wrapper">';
-			$count = 0;
-
-			foreach ( $this->options->tabs as $tab => $data ) {
-
-				$tab = esc_attr( $tab );
-
-				$class = 'nav-tab'; // Set tab class.
-				if ( ! isset( $_GET['tab'] ) ) {  // WPCS: input var okay.
-					if ( 0 === $count ) {
-						$class .= ' nav-tab-active';
-					}
-				} else {
-					if ( sanitize_key( $_GET['tab'] ) === $tab ) {  // WPCS: input var okay.
-						$class .= ' nav-tab-active';
-					}
-				}
-
-				$tab_link = add_query_arg( array( 'tab' => $tab ) ); // Set tab link.
-				if ( isset( $_GET[ 'settings-updated' ] ) ) {  // WPCS: input var okay.
-					$tab_link = remove_query_arg( 'settings-updated', $tab_link );
-				}
-
-				$html .= "<a href='{$tab_link}' class='{$class}'>". esc_html( $data[ 'title' ] ) . "</a>"; 				// Output tab.
-
-				++$count;
-			}
-
-			$html .= '</nav>';
-		}
-
-
-		$html .= '<form method="post" action="options.php" enctype="multipart/form-data">';
-
-			$screen_tab = $this->load_screen_tab();
-
-			$html .= '<header class="setting-tab-header">';
-
-			if ( isset( $this->options->tabs[ $screen_tab ][ 'title' ] ) ) {
-
-				$title = esc_html( $this->options->tabs[ $screen_tab ][ 'title' ] );
-				$title = $title ? "<h1 class='screen-reader-text'>{$title}</h1>" : '';
-
-				$html .= wp_kses( $title, array( 'h1' => array( 'class' => true ) ) );
-			}
-
-			if ( isset( $this->options->tabs[ $screen_tab ][ 'description' ] ) ) {
-
-				$description = esc_html( $this->options->tabs[ $screen_tab ][ 'description' ] );
-				$description = $description ? "<p class='setting-tab-description'>{$description}</p>" : '';
-
-				$html .= wp_kses( $description, array( 'p' => array( 'class' => true, 'style' => true ) ) );
-			}
-
-			$html .= '</header>';
-
-			if ( isset( $this->options->tabs[ $screen_tab ][ 'sections' ] ) &&
-				 is_array( $this->options->tabs[ $screen_tab ][ 'sections' ] ) ) {
-
-				$page = $this->plugin_name;
-
-				ob_start();
-					settings_fields( $page );
-					do_settings_sections( $page );
-				$html .= ob_get_clean();
-
-				$html .= '<p class="submit">';
-				$html .= "<input type='hidden' name='tab' value={$screen_tab}>";
-				$html .= '<input name="submit" type="submit" class="button button-primary" value="'. esc_attr__( 'Save Changes' , 'wp-social-manager' ). '">';
-				$html .= '</p>';
-			}
-
-		$html .= '</form>';
-		$html .= '</div>';
-
-		echo $html; // WPCS: XSS ok.
-	}
-
-	/**
-	 * [setting_notifications description]
 	 * @return [type] [description]
 	 */
-	public function setting_notifications() {
-		settings_errors( $this->plugin_name );
+	public function setting_init() {
+
+		$this->settings->init( $this->screen, $this->pages );
+		$this->settings->install();
+	}
+
+	/**
+	 * [setting_styles description]
+	 * @param  [type] $where [description]
+	 * @return [type]        [description]
+	 */
+	public function print_setting_styles() { ?>
+		<style id="<?php echo esc_attr( "{$this->plugin_name}-internal-styles" ); ?>">
+			.wrap > form > h2 {
+				margin-bottom: 0.72em;
+				margin-top: 1.68em;
+			}
+			.wrap > form > div.notice {
+				margin-top: 1.68em;
+			}
+			.wrap > .nav-tab-wrapper {
+				margin: 1.5em 0 1em;
+    			border-bottom: 1px solid #ccc;
+			}
+			.wrap .field-image-control {
+				margin-top: 0.867em;
+			}
+			.wrap .field-image-placeholder {
+				width: 100%;
+				max-width: 590px;
+				position: relative;
+				text-align: center;
+				padding: 2em 0;
+				line-height: 1.3;
+				border: 1px dashed #b4b9be;
+				box-sizing: border-box;
+			}
+		</style>
+	<?php }
+
+	/**
+	 * [field_scripts description]
+	 * @return [type] [description]
+	 */
+	public function enqueue_scripts( array $args ) {
+
+		foreach ( $args as $key => $file ) {
+			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : "scripts";
+			wp_enqueue_script( "{$this->plugin_name}-{$file}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		}
+
+		wp_enqueue_media();
+	}
+
+	/**
+	 * [setting_styles description]
+	 * @param  array  $args [description]
+	 * @return [type]       [description]
+	 */
+	public function enqueue_styles( array $args ) {
+
+		foreach ( $args as $name => $suffix ) {
+			$file = is_string( $suffix ) && ! empty( $suffix ) ? "styles-{$suffix}" : "styles";
+			wp_enqueue_style( "{$this->plugin_name}-{$suffix}", "{$this->path_url}css/{$file}.css", array(), $this->version );
+		}
+	}
+
+	/**
+	 * [_document_title description]
+	 * @return [type] [description]
+	 */
+	public function frontend_setups() {
+		$this->wp_get_document_title();
+	}
+
+	/**
+	 * [wp_get_document_title description]
+	 * @return [type] [description]
+	 */
+	protected function wp_get_document_title() {
+
+		$title[ 'site' ] = get_bloginfo( 'name', 'display' );
+		$title[ 'tagline' ] = get_bloginfo( 'description', 'display' );
+
+		$this->site_title = $title[ 'site' ];
+		$this->site_tagline = $title[ 'tagline' ];
+
+		$sep   = apply_filters( 'document_title_separator', '-' );
+		$title = apply_filters( 'document_title_parts', $title );
+
+		$title = implode( " $sep ", array_filter( $title ) );
+		$title = wptexturize( $title );
+		$title = convert_chars( $title );
+		$title = esc_html( $title );
+		$title = capital_P_dangit( $title );
+
+		$this->document_title = $title;
 	}
 }
