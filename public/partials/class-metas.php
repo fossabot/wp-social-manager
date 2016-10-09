@@ -469,7 +469,9 @@ final class Metas extends OutputUtilities {
 
 		if ( $this->is_meta_enabled() ) {
 			$title = $this->get_post_meta( $id, 'post_title' );
-		} else {
+		}
+
+		if ( ! $title || empty( $title ) ) {
 			$post = get_post( $id );
 			$title = $post->post_title;
 		}
@@ -486,7 +488,9 @@ final class Metas extends OutputUtilities {
 
 		if ( $this->is_meta_enabled() ) {
 			$description = $this->get_post_meta( $id, 'post_excerpt' );
-		} else {
+		}
+
+		if ( ! $description || empty( $description ) ) {
 
 			$post = get_post( $id );
 			$description = $this->post_excerpt;
