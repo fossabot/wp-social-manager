@@ -4,26 +4,51 @@ namespace XCo\WPSocialManager;
 
 class SettingsUser extends OptionUtilities {
 
+	/**
+	 * [$plugin_name description]
+	 * @var [type]
+	 */
 	protected $plugin_name;
 
+	/**
+	 * [$plugin_opts description]
+	 * @var [type]
+	 */
 	protected $plugin_opts;
 
+	/**
+	 * [__construct description]
+	 * @param array $args [description]
+	 */
 	public function __construct( array $args ) {
 
 		$this->plugin_name = $args[ 'plugin_name' ];
 		$this->plugin_opts = $args[ 'plugin_opts' ];
+		$this->version = $args[ 'version' ];
+
+		$this->path_url = trailingslashit( plugin_dir_url( dirname( __FILE__ ) ) );
 
 		$this->hooks();
 	}
 
+	/**
+	 * [hooks description]
+	 * @return [type] [description]
+	 */
 	protected function hooks() {
 
+		add_action( 'load-profile.php', array( $this, 'load_page' ), -30 );
 		add_action( 'show_user_profile', array( $this, 'add_social_profiles' ), -30 );
 		add_action( 'edit_user_profile', array( $this, 'add_social_profiles' ), -30 );
 		add_action( 'personal_options_update', array( $this, 'save_social_profiles' ), -30 );
 		add_action( 'edit_user_profile_update', array( $this, 'save_social_profiles' ), -30 );
+		add_action( 'edit_user_profile_update', array( $this, 'save_social_profiles' ), -30 );
 	}
 
+	/**
+	 * [add_social_profiles description]
+	 * @param [type] $user [description]
+	 */
 	public function add_social_profiles( $user ) {
 
 		$meta = get_the_author_meta( $this->plugin_opts, $user->ID );
@@ -38,20 +63,23 @@ class SettingsUser extends OptionUtilities {
 			$key   = sanitize_key( $key );
 			$value = isset( $meta[ $key ] ) ? $meta[ $key ] : '';
 			$label = isset( $data[ 'label' ] ) ? $data[ 'label' ] : '';
-			$descr = isset( $data[ 'description' ] ) ? $data[ 'description' ] : ''; ?>
+			$props = self::get_social_properties( $key ); ?>
 			<tr>
 				<th><label for="<?php echo "field-user-{$key}" ?>"><?php echo $label ?></label></th>
 				<td>
-					<input type="text" name="<?php echo esc_attr( "{$this->plugin_opts}[{$key}]" ); ?>" id="<?php echo "field-user-{$key}" ?>" value="<?php echo sanitize_text_field( $value ); ?>" class="regular-text code">
-					<?php if ( $descr ) : ?>
-					<p class="description"><?php echo wp_kses_post( $descr ); ?></p>
+					<input type="text" name="<?php echo esc_attr( "{$this->plugin_opts}[{$key}]" ); ?>" id="<?php echo "field-user-{$key}" ?>" value="<?php echo sanitize_text_field( $value ); ?>" class="regular-text account-profile-control code" data-url="<?php echo esc_attr( $props[ 'url' ] ); ?>">
+					<?php if ( isset( $data[ 'description' ] ) && ! empty( $data[ 'description' ] ) ) : ?>
+					<p class="account-profile-preview hide-if-js"><code></code></p>
+					<p class="description"><?php echo wp_kses_post( $data[ 'description' ] ); ?></p>
 					<?php endif; ?>
 				</td>
 			</tr>
 		<?php endforeach; ?>
 
 		</table>
-	<?php }
+	<?php
+
+	}
 
 	/**
 	 * Save and update custom input in the "Profile" edit screen.
@@ -70,5 +98,22 @@ class SettingsUser extends OptionUtilities {
 		if( current_user_can( 'edit_user' ) ) {
 			update_user_meta( $user_id, $this->plugin_opts, $profiles );
 		}
+	}
+
+	/**
+	 * [admin_scripts description]
+	 * @return [type] [description]
+	 */
+	public function load_page() {
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), -30 );
+	}
+
+	/**
+	 * [enqueue_scripts description]
+	 * @return [type] [description]
+	 */
+	public function enqueue_scripts() {
+		$file = 'preview-profile';
+		wp_enqueue_script( "{$this->plugin_name}-{$file}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 	}
 }
