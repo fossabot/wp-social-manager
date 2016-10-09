@@ -199,15 +199,15 @@ final class Buttons extends OutputUtilities {
 	 * @return [type] [description]
 	 */
 	public function add_template_script() {
-		$this->button_list_content();
-		$this->button_list_image();
+		$this->buttons_content();
+		$this->buttons_image();
 	}
 
 	/**
-	 * [button_list_content description]
+	 * [buttons_content description]
 	 * @return [type] [description]
 	 */
-	protected function button_list_content() {
+	protected function buttons_content() {
 
 		$post_types = (array) $this->options->buttonsContent[ 'postTypes' ];
 
@@ -252,7 +252,7 @@ final class Buttons extends OutputUtilities {
 		endif; // wp_script_is
 	}
 
-	protected function button_list_image() {
+	protected function buttons_image() {
 
 		$post_types = (array) $this->options->buttonsImage[ 'postTypes' ];
 

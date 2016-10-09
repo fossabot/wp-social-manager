@@ -37,7 +37,9 @@ class SettingsUser extends OptionUtilities {
 	 */
 	protected function hooks() {
 
+		add_action( 'load-user-edit.php', array( $this, 'load_page' ), -30 );
 		add_action( 'load-profile.php', array( $this, 'load_page' ), -30 );
+
 		add_action( 'show_user_profile', array( $this, 'add_social_profiles' ), -30 );
 		add_action( 'edit_user_profile', array( $this, 'add_social_profiles' ), -30 );
 		add_action( 'personal_options_update', array( $this, 'save_social_profiles' ), -30 );

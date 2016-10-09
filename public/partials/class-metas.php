@@ -136,7 +136,7 @@ final class Metas extends OutputUtilities {
 		$tc = $this->site_twitter_card( $tag_args );
 
 		echo "\n<!-- START: WP-Social-Manager [ https://wordpress.org/plugins/wp-social-manager ] -->\n";
-			echo "{$og}{$tc}";
+		echo "{$og}{$tc}";
 		echo "<!-- END: WP-Social-Manager -->\n\n";
 	}
 
@@ -157,15 +157,15 @@ final class Metas extends OutputUtilities {
 			'post_title' => $this->post_title( $post_id ),
 			'post_description' => $this->post_description( $post_id ),
 			'post_url' => $this->post_url( $post_id ),
-			'post_image' => $this->post_image( $post_id )
+			'post_image' => $this->post_image( $post_id ),
+			'post_author' => $this->post_author( $post_id )
 		);
 
-		$fb = $this->post_facebook_graph( $post_id );
 		$og = $this->post_open_graph( $tag_args );
 		$tc = $this->post_twitter_card( $tag_args );
 
 		echo "\n<!-- START: WP-Social-Manager [ https://wordpress.org/plugins/wp-social-manager ] -->\n";
-			echo "{$og}{$fb}{$tc}";
+		echo "{$og}{$tc}";
 		echo "<!-- END: WP-Social-Manager -->\n\n";
 	}
 
@@ -290,7 +290,8 @@ final class Metas extends OutputUtilities {
 			'post_title' => false,
 			'post_description' => false,
 			'post_url' => false,
-			'post_image' => array()
+			'post_image' => array(),
+			'post_author' => array()
 		) );
 
 		$meta .= $args[ 'post_title' ] ? sprintf( "<meta property='og:title' content='%s' />\n", $args[ 'post_title' ] ) : '';
@@ -322,30 +323,36 @@ final class Metas extends OutputUtilities {
 
 		$site = $args[ 'site_name' ] ? sprintf( "<meta property='og:site_name' content='%s' />\n", $args[ 'site_name' ] ) : '';
 
-		return $site . $meta;
+		$graph = $this->post_facebook_graph( $args );
+
+		return $site . $meta . $graph;
 	}
 
 	/**
 	 * [post_facebook_graph description]
 	 * @return [type] [description]
 	 */
-	protected function post_facebook_graph( $id ) {
+	protected function post_facebook_graph( array $args ) {
 
 		$meta = '';
 
-		if ( ! $id ) {
-			return $meta;
-		}
-
-		$post = get_post( $id );
-
-		$property = self::get_social_properties( 'facebook' );
+		$props = self::get_social_properties( 'facebook' );
 		$profile = $this->options->profiles[ 'facebook' ];
-		$publisher = isset( $property[ 'url' ] ) && $profile ? "{$property['url']}{$profile}" : '';
-		$category = get_the_category( $id );
 
+		$url = isset( $props[ 'url' ] ) ? trailingslashit( $props[ 'url' ] ) : '';
+
+		$publisher = ! empty( $url ) && $profile ? "{$url}{$profile}" : '';
 		$meta .= $publisher ? sprintf( "<meta property='article:publisher' content='%s' />\n", $publisher ) : '';
-		$meta .= $category[0]->name ? sprintf( "<meta property='article:section' content='%s' />\n", $category[0]->name ) : '';
+
+		$author = (array) $args[ 'post_author' ];
+
+		if ( ! empty( $author ) ) {
+			if ( isset( $author[ 'profiles' ][ 'facebook' ] ) && ! empty( $author[ 'profiles' ][ 'facebook' ] ) ) {
+				$meta .= sprintf( "<meta property='article:author' content='%s' />\n", "{$url}{$author['profiles']['facebook']}" );
+			} else {
+				$meta .= sprintf( "<meta name='author' content='%s' />\n", "{$author['display_name']}" );
+			}
+		}
 
 		return $meta;
 	}
@@ -362,7 +369,8 @@ final class Metas extends OutputUtilities {
 			'post_title' => false,
 			'post_description' => false,
 			'post_url' => false,
-			'post_image' => array()
+			'post_image' => array(),
+			'post_author' => array()
 		) );
 
 		$meta .= $args[ 'post_title' ] ? sprintf( "<meta name='twitter:title' content='%s' />\n", $args[ 'post_title' ] ) : '';
@@ -390,8 +398,16 @@ final class Metas extends OutputUtilities {
 
 			$profile = $this->options->profiles[ 'twitter' ];
 			$site = $profile ? sprintf( "<meta name='twitter:site' content='@%s' />\n", esc_attr( $profile ) ) : '';
-			$type = "<meta name='twitter:card' content='summary' />\n";
+			$type = "<meta name='twitter:card' content='summary_large_image' />\n";
 			$meta = $site . $type . $meta;
+		}
+
+		$author = (array) $args[ 'post_author' ];
+
+		if ( isset( $author[ 'profiles' ][ 'twitter' ] ) ) {
+			if ( ! empty( $author[ 'profiles' ][ 'twitter' ] ) ) {
+				$meta .= sprintf( "<meta name='twitter:creator' content='@%s' />\n", "{$author['profiles']['twitter']}" );
+			}
 		}
 
 		return $meta;
@@ -423,8 +439,13 @@ final class Metas extends OutputUtilities {
 	 */
 	public function site_description() {
 
-		$description = $this->get_site_meta( 'description' );
-		$description = $description ? $description : get_bloginfo( 'description' );
+		if ( ! is_author() ) {
+			$description = $this->get_site_meta( 'description' );
+			$description = $description ? $description : get_bloginfo( 'description' );
+		} else {
+			$author = get_queried_object();
+			$description = get_the_author_meta( 'description', (int) $author->ID );
+		}
 
 		return wp_kses( $description, array() );
 	}
@@ -448,17 +469,27 @@ final class Metas extends OutputUtilities {
 		$attachment_id = $this->get_site_meta( 'image' );
 		$attachment_id = $attachment_id ? $attachment_id : get_theme_mod( 'custom_logo' );
 
-		if ( ! $attachment_id ) {
-			return false;
+		if ( is_author() ) {
+
+			$author = get_queried_object();
+			$avatar = get_avatar_url( $author->ID, array( 'size' => 180 ) );
+			return array(
+					'src' => $avatar,
+					'width' => 180,
+					'height' => 180
+				);
 		}
 
-		list( $src, $width, $height ) = wp_get_attachment_image_src( $attachment_id, 'full', true );
+		if ( $attachment_id ) {
 
-		return array(
-			'src' => esc_url( $src ),
-			'width' => (int) $width,
-			'height' => (int) $height
-		);
+			list( $src, $width, $height ) = wp_get_attachment_image_src( $attachment_id, 'full', true );
+
+			return array(
+				'src' => esc_url( $src ),
+				'width' => (int) $width,
+				'height' => (int) $height
+			);
+		}
 	}
 
 	/**
@@ -473,7 +504,7 @@ final class Metas extends OutputUtilities {
 
 		if ( ! $title || empty( $title ) ) {
 			$post = get_post( $id );
-			$title = $post->post_title;
+			$title = apply_filters( 'the_title', $post->post_title );
 		}
 
 		return wp_kses( $title, array() );
@@ -493,7 +524,7 @@ final class Metas extends OutputUtilities {
 		if ( ! $description || empty( $description ) ) {
 
 			$post = get_post( $id );
-			$description = $this->post_excerpt;
+			$description = $post->post_excerpt;
 
 			if ( empty( $post->post_excerpt ) ) {
 				$description = wp_trim_words( $post->post_content, 30, '...' );
@@ -589,5 +620,22 @@ final class Metas extends OutputUtilities {
 	 */
 	public function post_url( $id ) {
 		return esc_url( get_permalink( $id ) );
+	}
+
+	/**
+	 * [post_author description]
+	 * @param  [type] $id [description]
+	 * @return [type]     [description]
+	 */
+	public function post_author( $id ) {
+
+		$post = get_post( $id );
+		$name = get_the_author_meta( 'display_name', $post->post_author );
+		$profiles = get_the_author_meta( $this->plugin_opts, $post->post_author );
+
+		return array(
+			'display_name' => $name,
+			'profiles' => $profiles
+		);
 	}
 }

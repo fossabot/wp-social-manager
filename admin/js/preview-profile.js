@@ -88,7 +88,7 @@
 			el: $( '#wp-social-manager-wrap' )
 		};
 
-		if ( 'profile-php' === adminpage ) {
+		if ( 'profile-php' === adminpage || 'user-edit-php' === adminpage ) {
 			args = {
 				el: $( '#your-profile' )
 			}
