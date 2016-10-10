@@ -508,9 +508,9 @@ final class Settings extends OptionUtilities {
 	 */
 	public function enqueue_styles( array $args ) {
 
-		foreach ( $args as $name => $suffix ) {
-			$file = is_string( $suffix ) && ! empty( $suffix ) ? "styles-{$suffix}" : "styles";
-			wp_enqueue_style( "{$this->plugin_name}-{$suffix}", "{$this->path_url}css/{$file}.css", array(), $this->version );
+		foreach ( $args as $name => $file ) {
+			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : "styles";
+			wp_enqueue_style( "{$this->plugin_name}-{$file}", "{$this->path_url}css/{$file}.css", array(), $this->version );
 		}
 	}
 
