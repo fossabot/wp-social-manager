@@ -581,6 +581,7 @@ final class Metas extends OutputUtilities {
 
     	if ( 0 !== $images->length ) {
 
+    		$src = $images->item(0)->getAttribute( 'src' );
 			$image = getimagesize( $images->item(0)->getAttribute( 'src' ) );
 
 			if ( $image ) {
@@ -588,7 +589,7 @@ final class Metas extends OutputUtilities {
 				list( $width, $height ) = $image;
 
 				return array(
-					'src' => esc_url( $matches[1][0] ),
+					'src' => esc_url( $src ),
 					'width' => absint( $width ),
 					'height' => absint( $height )
 				);

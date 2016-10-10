@@ -85,28 +85,7 @@ final class Buttons extends OutputUtilities {
 	 */
 	public function add_buttons_content( $content ) {
 
-		$post_types = (array) $this->options->buttonsContent[ 'postTypes' ];
-
-		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
-			return $content;
-		}
-
-		$includes = (array) $this->options->buttonsContent[ 'includes' ];
-
-		if ( empty( $includes ) ) {
-			return $content;
-		}
-
-
-		$place = $this->options->buttonsContent[ 'placement' ];
-
-		if ( ! in_array( $place, array_keys( self::get_button_placements() ), true ) ) {
-			return $content;
-		}
-
-
-		if ( ! isset( $this->options->postMeta[ 'buttons_content' ] ) ||
-			 ! $this->options->postMeta[ 'buttons_content' ] ) {
+		if ( false === $this->is_buttons_content() ) {
 			return $content;
 		}
 
@@ -132,24 +111,7 @@ final class Buttons extends OutputUtilities {
 	 */
 	public function add_buttons_image( $content ) {
 
-		if ( ! $this->options->buttonsImage[ 'enabled' ] ) {
-			return $content;
-		}
-
-		$post_types = (array) $this->options->buttonsImage[ 'postTypes' ];
-
-		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
-			return $content;
-		}
-
-		$includes = (array) $this->options->buttonsImage[ 'includes' ];
-
-		if ( empty( $includes ) ) {
-			return $content;
-		}
-
-		if ( ! isset( $this->options->postMeta[ 'buttons_image' ] ) ||
-			 ! $this->options->postMeta[ 'buttons_image' ] ) {
+		if ( false === $this->is_buttons_image() ) {
 			return $content;
 		}
 
@@ -211,10 +173,7 @@ final class Buttons extends OutputUtilities {
 	 */
 	protected function buttons_content() {
 
-		$post_types = (array) $this->options->buttonsContent[ 'postTypes' ];
-
-		if ( ! is_singular( array_keys( $post_types ) ) ||
-			 ! isset( $this->options->postMeta[ 'buttons_content' ] ) ) {
+		if ( false === $this->is_buttons_content() ) {
 			return;
 		}
 
@@ -252,10 +211,7 @@ final class Buttons extends OutputUtilities {
 
 	protected function buttons_image() {
 
-		$post_types = (array) $this->options->buttonsImage[ 'postTypes' ];
-
-		if ( ! is_singular( array_keys( $post_types ) ) ||
-			 ! isset( $this->options->postMeta[ 'buttons_content' ] ) ) {
+		if ( false === $this->is_buttons_image() ) {
 			return;
 		}
 
@@ -326,5 +282,71 @@ final class Buttons extends OutputUtilities {
 		);
 
 		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';
+	}
+
+	/**
+	 * [is_buttons_content description]
+	 * @return boolean [description]
+	 */
+	public function is_buttons_content() {
+
+		$post_types = (array) $this->options->buttonsContent[ 'postTypes' ];
+
+		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
+			return false;
+		}
+
+		$includes = (array) $this->options->buttonsContent[ 'includes' ];
+
+		if ( empty( $includes ) ) {
+			return false;
+		}
+
+		$place = $this->options->buttonsContent[ 'placement' ];
+
+		if ( ! in_array( $place, array_keys( self::get_button_placements() ), true ) ) {
+			return false;
+		}
+
+		/**
+		 * [$meta description]
+		 * @var [type]
+		 */
+		$meta = (array) $this->options->postMeta;
+
+		return isset( $meta[ 'buttons_content' ] ) ? $meta[ 'buttons_content' ] : true;
+	}
+
+	/**
+	 * [is_buttons_image description]
+	 * @return boolean [description]
+	 */
+	public function is_buttons_image() {
+
+		$enable = (bool) $this->options->buttonsImage[ 'enabled' ];
+
+		if ( ! $enable ) {
+			return false;
+		}
+
+		$post_types = (array) $this->options->buttonsImage[ 'postTypes' ];
+
+		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
+			return false;
+		}
+
+		$includes = (array) $this->options->buttonsImage[ 'includes' ];
+
+		if ( empty( $includes ) ) {
+			return false;
+		}
+
+		/**
+		 * [$meta description]
+		 * @var [type]
+		 */
+		$meta = (array) $this->options->postMeta;
+
+		return isset( $meta[ 'buttons_image' ] ) ? $meta[ 'buttons_image' ] : true;
 	}
 }

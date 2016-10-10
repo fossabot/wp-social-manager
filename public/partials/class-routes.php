@@ -135,13 +135,8 @@ final class APIRoutes extends OutputUtilities {
 			'image' => false
 		);
 
-		if ( (bool) $this->metas->get_post_meta( $request[ 'id' ], 'buttons_content' ) ) {
-			$response[ 'content' ] = $this->get_buttons_content( $request );
-		}
-
-		if ( (bool) $this->metas->get_post_meta( $request[ 'id' ], 'buttons_image' ) ) {
-			$response[ 'image' ] = $this->get_buttons_image( $request );
-		}
+		$response[ 'content' ] = $this->get_buttons_content( $request );
+		$response[ 'image' ] = $this->get_buttons_image( $request );
 
 		return new \WP_REST_Response( $response, 200 );
 	}

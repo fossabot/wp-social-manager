@@ -71,7 +71,12 @@ final class SocialMetaBox {
 	}
 
 	public function setups( array $args ) {
-		$this->metasSite = get_option( $args[ 'plugin_opts' ] . '_metas_site' );
+
+		$this->options = (object) array(
+			'metasSite' => get_option( $args[ 'plugin_opts' ] . '_metas_site' ),
+			'buttonsContent' => get_option( $args[ 'plugin_opts' ] . '_buttons_content' ),
+			'buttonsImage' => get_option( $args[ 'plugin_opts' ] . '_buttons_image' )
+		);
 	}
 
 	/**
@@ -145,43 +150,50 @@ final class SocialMetaBox {
 			)
 		);
 
-		// Register a setting.
-		$manager->register_setting(
-			'buttons_content',
-			array(
-				'type' => 'serialize',
-				'default' => 1,
-				'sanitize_callback' => 'butterbean_validate_boolean'
-			)
-		);
-		$manager->register_control(
-			'buttons_content',
-			array(
-				'type' => 'checkbox',
-				'section' => 'buttons',
-				'label' => 'Content Social Media Buttons',
-				'description' => "Display the buttons that allow people to share, like, or save this {$this->post_type} in social media"
-			)
-		);
+		if ( in_array( $post_type, $this->options->buttonsContent[ 'postTypes' ], true ) ) {
 
-		// Register a setting.
-		$manager->register_setting(
-			'buttons_image',
-			array(
-				'type' => 'serialize',
-				'default' => 1,
-				'sanitize_callback' => 'butterbean_validate_boolean'
-			)
-		);
-		$manager->register_control(
-			'buttons_image',
-			array(
-				'type' => 'checkbox',
-				'section' => 'buttons',
-				'label' => 'Image Social Media Buttons',
-				'description' => "Display the social media buttons that allow people to share, like, or save images of this {$this->post_type} in social media"
-			)
-		);
+			// Register a setting.
+			$manager->register_setting(
+				'buttons_content',
+				array(
+					'type' => 'serialize',
+					'default' => 1,
+					'sanitize_callback' => 'butterbean_validate_boolean'
+				)
+			);
+			$manager->register_control(
+				'buttons_content',
+				array(
+					'type' => 'checkbox',
+					'section' => 'buttons',
+					'label' => 'Content Social Media Buttons',
+					'description' => "Display the buttons that allow people to share, like, or save this {$this->post_type} in social media"
+				)
+			);
+		}
+
+		if ( (bool) $this->options->buttonsImage[ 'enabled' ] &&
+			 in_array( $post_type, $this->options->buttonsImage[ 'postTypes' ], true ) ) {
+
+			// Register a setting.
+			$manager->register_setting(
+				'buttons_image',
+				array(
+					'type' => 'serialize',
+					'default' => 1,
+					'sanitize_callback' => 'butterbean_validate_boolean'
+				)
+			);
+			$manager->register_control(
+				'buttons_image',
+				array(
+					'type' => 'checkbox',
+					'section' => 'buttons',
+					'label' => 'Image Social Media Buttons',
+					'description' => "Display the social media buttons that allow people to share, like, or save images of this {$this->post_type} in social media"
+				)
+			);
+		}
 	}
 
 	/**
@@ -192,8 +204,8 @@ final class SocialMetaBox {
 	 */
 	public function register_section_meta( $butterbean, $post_type ) {
 
-		if ( ! isset( $this->metasSite[ 'enabled' ] ) ||
-			 ! (bool) $this->metasSite[ 'enabled' ] ) {
+		if ( ! isset( $this->options->metasSite[ 'enabled' ] ) &&
+			 ! (bool) $this->options->metasSite[ 'enabled' ] ) {
 				return;
 			}
 
