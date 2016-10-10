@@ -2,98 +2,103 @@
 
 	'use strict';
 
+	var SocialProfiles = {
+			View: {}
+		};
+
 	/**
 	 * [initialize description;
 	 */
-	var ProfilesPreview = Backbone.View.extend( {
+	SocialProfiles.View = Backbone.View.extend( {
 
-			events : {
-				'input .account-profile-control' : 'previewUpdate'
-			},
+		events : {
+			'input' : 'previewUpdate'
+		},
 
-			/**
-			 * [initialize description]
-			 * @return {[type]} [description]
-			 */
-			initialize : function() {
+		/**
+		 * [initialize description]
+		 * @return {[type]} [description]
+		 */
+		initialize : function() {
+			this.previewInit();
+		},
 
-				this.$controls = this.$el.find( '.account-profile-control' );
-				this.previewInit();
-			},
+		/**
+		 * [loadPreview description]
+		 * @return {[type]} [description]
+		 */
+		previewInit : function() {
 
-			/**
-			 * [loadPreview description]
-			 * @return {[type]} [description]
-			 */
-			previewInit : function() {
+			var self = this;
 
-				this.$controls.each( function( index, elem ) {
-					this.getPreview( elem );
-				}.bind( this ) );
-			},
+			this.$el.each( function() {
+				self.createPlaceholder( this );
+				self.render( this );
+			} );
+		},
 
-			/**
-			 * [loadPreview description]
-			 * @return {[type]} [description]
-			 */
-			previewUpdate : _.throttle( function( event ) {
-				this.getPreview( event.currentTarget );
-			}, 200 ),
+		/**
+		 * [loadPreview description]
+		 * @return {[type]} [description]
+		 */
+		previewUpdate : _.throttle( function( event ) {
+			this.render( event.currentTarget );
+		}, 150 ),
 
-			/**
-			 * [getPreview description]
-			 * @param  {[type]} elem [description]
-			 * @return {[type]}      [description]
-			 */
-			getPreview : function( elem ) {
+		/**
+		 * [getPreview description]
+		 * @param  {[type]} elem [description]
+		 * @return {[type]}      [description]
+		 */
+		render : function( target ) {
 
-				var target = this.getTarget( $( elem ) );
+			var url  = target.getAttribute( 'data-url' );
 
-					target.sibling.toggleClass( 'hide-if-js', '' !== target.val );
-					target.preview.toggleClass( function() {
+			if ( url && '' !== url ) {
 
-						var $this = $( this );
-						var $code = $this.find( 'code' );
+				var id = target.getAttribute( 'id' );
+				var value = this.getValue( target );
 
-						$code.text( '' !== target.val ? target.url + target.val : '' );
+				$( '#' + id + '-preview' ).html( function() {
 
-						return 'hide-if-js';
+					var $this = $( this );
+					var $siblings = $this.siblings().not( 'input' );
+						$siblings.toggleClass( 'hide-if-js', '' !== value );
 
-					}, '' === target.val );
-			},
-
-			/**
-			 * [getTarget description]
-			 * @param  {[type]} $elem [description]
-			 * @return {[type]}       [description]
-			 */
-			getTarget : function( $elem ) {
-
-				var url = $.trim( $elem.data( 'url' ) );
-				var val = $.trim( $elem.val() );
-
-				var $preview = $elem.siblings( '.account-profile-preview' );
-				var $sibling = $preview.nextAll();
-
-				return {
-					'url' : url,
-					'val' : val,
-					'preview' : $preview,
-					'sibling' : $sibling
-				}
+						return ( '' !== value ) ? '<code>' + url + value + '</code>' : '';
+				} );
 			}
+		},
+
+		/**
+		 * [createPlaceholder description]
+		 * @param  {[type]} target [description]
+		 * @return {[type]}        [description]
+		 */
+		createPlaceholder: function( target ) {
+
+			var attrID = target.getAttribute( 'id' );
+
+			return $( target ).after( '<p id='+ attrID +'-preview></p>' );
+		},
+
+		/**
+		 * [getValue description]
+		 * @param  {[type]} target [description]
+		 * @return {[type]}        [description]
+		 */
+		getValue: function( target ) {
+
+			var value = target.value.replace( /\s+/g, '-' );
+
+			target.value = value;
+
+			return value;
+		}
 	} );
 
-	var args =  {
-			el: $( '#wp-social-manager-wrap' )
-		};
-
-		if ( 'profile-php' === adminpage || 'user-edit-php' === adminpage ) {
-			args = {
-				el: $( '#your-profile' )
-			}
-		}
-
-	new ProfilesPreview( args );
+	new SocialProfiles.View( {
+			el: '.account-profile-control'
+		} );
 
 })( jQuery, window.wp, window._, window.Backbone, undefined );

@@ -269,7 +269,6 @@ final class Settings extends OptionUtilities {
 					'type' => 'text',
 					'label' => $label,
 					'description' => $description,
-					'after' => '<p class="account-profile-preview hide-if-js"><code></code></p>',
 					'attr' => array(
 						'class' => "account-profile-control code",
 						'data-load-script' => 'preview-profile',

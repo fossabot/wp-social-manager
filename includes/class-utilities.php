@@ -35,7 +35,7 @@ class Utilities {
 			),
 			'linkedin' => array(
 				'label' => 'LinkedIn',
-				'url' => esc_url( 'https://pinterest.com/' ),
+				'url' => esc_url( 'https://www.linkedin.com/in/' ),
 				'icon' => self::get_social_icons( 'linkedin' )
 			),
 			'googleplus' => array(

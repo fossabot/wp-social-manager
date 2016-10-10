@@ -71,7 +71,6 @@ class SettingsUser extends OptionUtilities {
 				<td>
 					<input type="text" name="<?php echo esc_attr( "{$this->plugin_opts}[{$key}]" ); ?>" id="<?php echo "field-user-{$key}" ?>" value="<?php echo sanitize_text_field( $value ); ?>" class="regular-text account-profile-control code" data-url="<?php echo esc_attr( $props[ 'url' ] ); ?>">
 					<?php if ( isset( $data[ 'description' ] ) && ! empty( $data[ 'description' ] ) ) : ?>
-					<p class="account-profile-preview hide-if-js"><code></code></p>
 					<p class="description"><?php echo wp_kses_post( $data[ 'description' ] ); ?></p>
 					<?php endif; ?>
 				</td>
