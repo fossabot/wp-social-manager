@@ -163,7 +163,7 @@ final class Buttons extends OutputUtilities {
     	$images = $dom->getElementsByTagName( 'img' );
     	$wrap = $dom->createElement( 'span' );
 
-    	$wrap->setAttribute( 'class', "{$prefix}-buttons {$prefix}-buttons--img {$prefix}-buttons--post-{$this->post_id}" );
+    	$wrap->setAttribute( 'class', "{$prefix}-buttons {$prefix}-buttons--img {$prefix}-buttons--{$this->post_id}" );
 
     	// If we have, at least, 1 image.
     	if ( $images->length >= 1 ) {
@@ -320,9 +320,9 @@ final class Buttons extends OutputUtilities {
 		$prefix = self::get_attr_prefix();
 
 		$templates = array(
-			'icon' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' rel='nofollow'>{$icon}</a></li>",
-			'text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' rel='nofollow'>{$label}</a></li>",
-			'icon-text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' rel='nofollow'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a></li>"
+			'icon' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' role='button' data-social='1'>{$icon}</a></li>",
+			'text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' role='button' data-social='1'>{$label}</a></li>",
+			'icon-text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' role='button' data-social='1'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a></li>"
 		);
 
 		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';

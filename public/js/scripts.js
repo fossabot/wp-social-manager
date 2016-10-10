@@ -12,93 +12,205 @@
 		return;
 	}
 
+	var SocialButton = {
+			Collection: {},
+			Model: {},
+			View: {}
+		};
+
+	/**
+	 * [templateSettings description]
+	 * @type {Object}
+	 */
 	_.templateSettings = {
 		interpolate: /\{\{(.+?)\}\}/g
 	};
-
-	var $tmplContent = $( '#tmpl-buttons-content' );
-	var $tmplImage = $( '#tmpl-buttons-image' );
 
 	/**
 	 * [Buttons description]
 	 * @type {[type]}
 	 */
-	var	Buttons = Backbone.Model.extend( {
-				urlRoot : ( api.root + api.namespace ) + '/buttons'
-			} );
-
-	if ( 0 !== $tmplContent.length ) {
-
-		var	ButtonsContent = Backbone.View.extend( {
-				model: new Buttons,
-				template: _.template( $tmplContent.html() ),
-				initialize: function() {
-
-					this.model.bind( 'change', this.render, this );
-					this.model.fetch( {
-						data : {
-							id : api.id
-						}
-					} );
-				},
-				render: function() {
-
-					var resp = this.model.toJSON();
-
-					$( '#' + api.attrPrefix + '-buttons-' + resp.id )
-						.append( this.template( resp.content ) );
-
-					return this;
-				}
+	SocialButton.Model = Backbone.Model.extend( {
+			urlRoot: ( api.root + api.namespace ) + '/buttons',
 		} );
 
-		new ButtonsContent();
-	}
+	/**
+	 * [Buttons description]
+	 * @type {[type]}
+	 */
+	SocialButton.View = Backbone.View.extend( {
 
-	if ( 0 !== $tmplImage.length ) {
+		el: $( 'body' ),
 
-		var	ButtonsImage = Backbone.View.extend( {
-			model: new Buttons,
-			template: _.template( $tmplImage.html() ),
-			initialize: function() {
+		/**
+		 * [events description]
+		 * @type {Object}
+		 */
+		events : {
+			'click a[role=button]' : 'buttonDialog'
+		},
 
-				if ( 0 === this.$el.length ) {
-					return;
+		/**
+		 * [initialize description]
+		 * @return {[type]} [description]
+		 */
+		initialize: function() {
+
+			var $template = $( this.template );
+
+			if ( 0 === $template.length ) {
+				console.info( 'Template ' + this.template + ' is not available.' );
+				return;
+			}
+
+			var $templateHTML = $template.html().trim();
+
+			if ( '' === $templateHTML ) {
+				console.info( 'Template HTML of ' + this.template + ' is empty.' );
+				return;
+			}
+
+			_.bindAll( this, 'render' );
+
+			this.template = _.template( $templateHTML );
+			this.listenTo( this.model, 'change:id', this.render );
+		},
+
+		/**
+		 * [buttonDialog description]
+		 * @param  {[type]} event [description]
+		 * @return {[type]}       [description]
+		 */
+		buttonDialog: function( event ) {
+
+			var target = event.currentTarget;
+			var social = target.getAttribute( 'data-social' );
+
+			if ( social === "1"  ) {
+
+				event.preventDefault();
+
+				var source = target.getAttribute( 'href' );
+
+				if ( ! source || '' !== source ) {
+					this.windowPopup( source );
 				}
+			}
+		},
 
-				this.model.bind( 'change', this.render, this );
-				this.model.fetch( {
-					data : {
-						id : api.id
-					}
-				} );
-			},
-			render: function() {
+		/**
+		 * [windowPopup description]
+		 * @param  {[type]} url [description]
+		 * @return {[type]}     [description]
+		 */
+		windowPopup: function( url ) {
 
-				var self = this;
-				var resp = this.model.toJSON();
-				var $images = $( '.' + api.attrPrefix + '-buttons--post-' + resp.id  );
+			var wind = window;
+			var docu = document;
+
+			var screenLeft = wind.screenLeft !== undefined ? wind.screenLeft : screen.left;
+			var screenTop = wind.screenTop !== undefined ? wind.screenTop : screen.top;
+			var screenWidth = wind.innerWidth ? wind.innerWidth : docu.documentElement.clientWidth ? docu.documentElement.clientWidth : screen.width;
+			var screenHeight = wind.innerHeight ? wind.innerHeight : docu.documentElement.clientHeight ? docu.documentElement.clientHeight : screen.height;
+
+			var width = 600;
+			var height = 430;
+
+			var left = ( ( screenWidth / 2 ) - ( width / 2 ) ) + screenLeft;
+			var top = ( ( screenHeight / 2 ) - ( height / 2 ) ) + screenTop;
+
+			var newWindow = wind.open( url, "", "scrollbars=no,width=" + width + ",height=" + height + ",top=" + top + ",left=" + left );
+
+			if ( newWindow ) {
+				newWindow.focus();
+			}
+		}
+	} );
+
+	/**
+	 * [Content description]
+	 * @type {[type]}
+	 */
+	SocialButton.View.Content = SocialButton.View.extend( {
+
+		template: '#tmpl-buttons-content',
+
+		/**
+		 * [render description]
+		 * @return {[type]} [description]
+		 */
+		render: function() {
+
+			var response = this.model.toJSON();
+
+			$( '#' + api.attrPrefix + '-buttons-' + response.id )
+				.append( this.template( response.content ) );
+
+			return this;
+		}
+	} );
+
+	SocialButton.View.Images = SocialButton.View.extend( {
+
+		template: '#tmpl-buttons-image',
+
+		render: function() {
+
+			var self = this;
+			var response = this.model.toJSON();
+			var responseImage = response.image;
+
+			/**
+			 * Select Images in the respective content.
+			 * @type {Object}
+			 */
+			var $images = $( '.' + api.attrPrefix + '-buttons--' + response.id );
 
 				$images.each( function() {
 
-					var $elem = $( this );
-					var $elemSrc = $elem.find( 'img' ).attr( 'src' );
+					var $target = $( this );
+					var imgSource = $target.find( 'img' ).attr( 'src' );
 
-					if ( $elemSrc ) {
+					if ( imgSource ) {
 
 						// Add image cover to Pinterest image sharing.
-						// @todo improve this function.
-						resp.image.pinterest.endpoint = resp.image.pinterest.endpoint + '&media=' + $elemSrc;
+						// @todo rewrite this function.
+						responseImage.pinterest.endpoint = responseImage.pinterest.endpoint + '&media=' + imgSource;
 
-						$elem.append( self.template( resp.image ) );
+						$target.append( self.template( responseImage ) );
 					}
 				} );
 
-				return this;
+			return this;
+		}
+	} );
+
+	/**
+	 * [button description]
+	 * @type {SocialButton}
+	 */
+	var socialButton = new SocialButton.Model();
+
+		socialButton.fetch( {
+			data : {
+				id : api.id
 			}
 		} );
 
-		new ButtonsImage();
-	}
+	/**
+	 * [buttonContent description]
+	 * @type {SocialButton}
+	 */
+	var buttonContent = new SocialButton.View.Content( {
+				model: socialButton
+			} );
+
+	/**
+	 * [buttonImage description]
+	 * @type {SocialButton}
+	 */
+	var buttonImage = new SocialButton.View.Images( {
+				model: socialButton
+			} );
 
 })( jQuery, window._, window.Backbone, undefined );

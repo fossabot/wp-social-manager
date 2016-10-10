@@ -35,8 +35,6 @@
 		 */
 		selectMedia : function( button ) {
 
-			console.log( button );
-
 			this.controls( button );
 
 			this.wpMediaWindow();

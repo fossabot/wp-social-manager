@@ -123,7 +123,7 @@
  * View Text
  */
  .wp-social-manager-profiles__list--text a,
- .wp-social-manager-buttons__list--icon a {
+ .wp-social-manager-buttons__list--text a {
  	padding-top: .46em;
  	padding-bottom: .46em;
  }
@@ -171,7 +171,7 @@
 }
 .wp-social-manager-buttons .wp-social-manager-buttons__heading {
 	font-size: 0.86em;
-	margin: 0 0 10px 0;
+	margin: 0 0 20px 0;
 }
 .wp-social-manager-buttons .wp-social-manager-buttons__item {
 	display: inline-block;
