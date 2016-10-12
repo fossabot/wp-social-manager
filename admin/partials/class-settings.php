@@ -97,6 +97,7 @@ final class Settings extends OptionUtilities {
 		require_once( $this->path_dir . 'partials/pepperplane/pepperplane-install.php' );
 
 		require_once( $this->path_dir . 'partials/class-extends.php' );
+		require_once( $this->path_dir . 'partials/class-helps.php' );
 	}
 
 	/**
@@ -130,6 +131,8 @@ final class Settings extends OptionUtilities {
 
 		$extends = new SettingsExtend( $this->plugin_opts );
 		$validate = new SettingsValidation();
+
+		$helps = new Helps( $this->screen );
 
 		$this->settings = $settings;
 		$this->validate = $validate;
