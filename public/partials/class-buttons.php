@@ -190,7 +190,8 @@ final class Buttons extends OutputUtilities {
 			<?php if ( ! empty( $heading ) ) : ?>
 			<h4 class="<?php echo esc_attr( $prefix ); ?>-buttons__heading"><?php echo esc_html( $heading ); ?></h4>
 			<?php endif; ?>
-			<ul class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>">
+			<ul class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>"
+				data-social-buttons="content">
 			<?php foreach ( $includes as $value ) :
 
 				$props = self::get_social_properties( $value );
@@ -224,7 +225,8 @@ final class Buttons extends OutputUtilities {
 
 		<?php if ( ! empty( $includes ) ) : ?>
 		<script type="text/html" id="tmpl-buttons-image">
-			<ul class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>">
+			<ul class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>"
+				data-social-buttons="image">
 			<?php foreach ( $includes as $value ) :
 
 				$props = self::get_social_properties( $value );
@@ -276,9 +278,9 @@ final class Buttons extends OutputUtilities {
 		$prefix = self::get_attr_prefix();
 
 		$templates = array(
-			'icon' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' role='button' data-social='1'>{$icon}</a></li>",
-			'text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' role='button' data-social='1'>{$label}</a></li>",
-			'icon-text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' role='button' data-social='1'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a></li>"
+			'icon' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' role='button'>{$icon}</a></li>",
+			'text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' role='button'>{$label}</a></li>",
+			'icon-text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' role='button'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a></li>"
 		);
 
 		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';
