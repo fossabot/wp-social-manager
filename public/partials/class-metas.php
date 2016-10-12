@@ -540,17 +540,20 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [get_thumbnail description]
-	 * @param  [type] $id [description]
-	 * @return [type]     [description]
+	 * Get the post image
+	 *
+	 * This method will try to retrieve image from a number of sources,
+	 * and return the image data based on the following priority order:
+	 * 1. Post Meta Image
+	 * 2. Post Featured Image
+	 * 3. Post Content First Image
+	 * 4. Site Meta Image
+	 * 5. Site Custom Logo (Customizer)
+	 *
+	 * @param  int    $id The post ID.
+	 * @return array      The image data consisting of the image source, width, and height
 	 */
 	public function post_image( $id ) {
-
-		// 1. Post Meta Image
-		// 2. Post Featured Image
-		// 3. Post Content First Image
-		// 4. Site Meta Image
-		// 5. Site Custom Logo (Customizer)
 
 		$attachment_id = null;
 
@@ -574,9 +577,11 @@ final class Metas extends OutputUtilities {
 		}
 
 		$post = get_post( $id );
-		$dom = new \DOMDocument();
 
-    	$dom->loadHTML( $post->post_content );
+		libxml_use_internal_errors( true );
+
+		$dom = new \DOMDocument();
+    	$dom->loadHTML( mb_convert_encoding( $post->post_content, 'HTML-ENTITIES', 'UTF-8' ) );
     	$images = $dom->getElementsByTagName( 'img' );
 
     	if ( 0 !== $images->length ) {
