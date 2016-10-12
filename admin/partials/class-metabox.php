@@ -150,7 +150,9 @@ final class SocialMetaBox {
 			)
 		);
 
-		if ( in_array( $post_type, $this->options->buttonsContent[ 'postTypes' ], true ) ) {
+		$post_types = (array) $this->options->buttonsContent[ 'postTypes' ];
+
+		if ( in_array( $post_type, $post_types, true ) ) {
 
 			// Register a setting.
 			$manager->register_setting(
@@ -172,8 +174,10 @@ final class SocialMetaBox {
 			);
 		}
 
-		if ( (bool) $this->options->buttonsImage[ 'enabled' ] &&
-			 in_array( $post_type, $this->options->buttonsImage[ 'postTypes' ], true ) ) {
+		$enabled = (bool) $this->options->buttonsImage[ 'enabled' ];
+		$post_types = (array) $this->options->buttonsImage[ 'postTypes' ];
+
+		if ( in_array( $post_type, $post_types, true ) && $enabled ) {
 
 			// Register a setting.
 			$manager->register_setting(
