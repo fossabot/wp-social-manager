@@ -43,14 +43,6 @@
 		el: $( 'body' ),
 
 		/**
-		 * [events description]
-		 * @type {Object}
-		 */
-		events : {
-			'click a[role=button]' : 'buttonDialog'
-		},
-
-		/**
 		 * [initialize description]
 		 * @return {[type]} [description]
 		 */
@@ -70,8 +62,6 @@
 				return;
 			}
 
-			_.bindAll( this, 'render' );
-
 			this.template = _.template( $templateHTML );
 			this.listenTo( this.model, 'change:id', this.render );
 		},
@@ -83,19 +73,17 @@
 		 */
 		buttonDialog: function( event ) {
 
+			event.preventDefault();
+
 			var target = event.currentTarget;
-			var social = target.getAttribute( 'data-social' );
+			var source = target.getAttribute( 'href' );
 
-			if ( social === "1"  ) {
-
-				event.preventDefault();
-
-				var source = target.getAttribute( 'href' );
-
-				if ( ! source || '' !== source ) {
-					this.windowPopup( source );
-				}
+			if ( ! source || '' !== source ) {
+				this.windowPopup( source );
+				return;
 			}
+
+			return;
 		},
 
 		/**
@@ -135,6 +123,10 @@
 
 		template: '#tmpl-buttons-content',
 
+		events : {
+			'click [data-social-buttons="image"] a' : 'buttonDialog'
+		},
+
 		/**
 		 * [render description]
 		 * @return {[type]} [description]
@@ -146,13 +138,19 @@
 			$( '#' + api.attrPrefix + '-buttons-' + response.id )
 				.append( this.template( response.content ) );
 
+				this.stopListening( this.model );
+
 			return this;
-		}
+		},
 	} );
 
 	SocialButton.View.Images = SocialButton.View.extend( {
 
 		template: '#tmpl-buttons-image',
+
+		events : {
+			'click [data-social-buttons="content"] a' : 'buttonDialog'
+		},
 
 		render: function() {
 
@@ -180,6 +178,8 @@
 						$target.append( self.template( responseImage ) );
 					}
 				} );
+
+				this.stopListening( this.model );
 
 			return this;
 		}
