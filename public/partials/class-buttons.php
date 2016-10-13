@@ -197,7 +197,7 @@ final class Buttons extends OutputUtilities {
 				$props = self::get_social_properties( $value );
 				$icon = self::get_social_icons( $value );
 
-				echo self::button_views( $view, array(
+				echo self::list_views( $view, array(
 							'site' => $value,
 							'icon' => $icon,
 							'label' => $props[ 'label' ]
@@ -232,7 +232,7 @@ final class Buttons extends OutputUtilities {
 				$props = self::get_social_properties( $value );
 				$icon = self::get_social_icons( $value );
 
-				echo self::button_views( $view, array(
+				echo self::list_views( $view, array(
 						'site' => $value,
 						'icon' => $icon,
 						'label' => $props[ 'label' ]
@@ -246,12 +246,12 @@ final class Buttons extends OutputUtilities {
 	}
 
 	/**
-	 * [button_views description]
+	 * [list_views description]
 	 * @param  string $view [description]
 	 * @param  array  $args [description]
 	 * @return [type]       [description]
 	 */
-	protected static function button_views( $view = '', array $args ) {
+	protected static function list_views( $view = '', array $args ) {
 
 		if ( empty( $view ) ) {
 			return '';
