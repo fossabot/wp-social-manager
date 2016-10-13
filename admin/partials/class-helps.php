@@ -96,19 +96,19 @@ class Helps {
 
     	if ( 'overview' === $tab['id'] ) {
 
-            $content .= '<p>'. esc_html__( 'Social network sites is one of the staple outlets for websites of any scale to distribute their content as well as to attract incoming visitors to the website.', 'wp-sharelog' ) .'</p>';
-            $content .= '<p>'. esc_html__( 'In this screen, you can find a number of options that allow you configure the utilities to optimize this website presence and presentation on popular social network sites such as Facebook, Twitter, Pinterest, LinkedIn, and Google+.', 'wp-social-manager' ) .'</p>';
+            $content .= '<p>'. esc_html__( 'Social media sites is one of the staple outlets for websites of any scale to distribute their content as well as to attract incoming visitors to the website.', 'wp-sharelog' ) .'</p>';
+            $content .= '<p>'. esc_html__( 'In this screen, you can find a number of options that allow you configure the utilities to optimize this website presence and presentation on popular social media sites such as Facebook, Twitter, Pinterest, LinkedIn, and Google+.', 'wp-social-manager' ) .'</p>';
             $content .= '<p>'. esc_html__( 'You must click the Save Changes button at the bottom of the screen for the new settings to take effect.', 'wp-social-manager' ) .'</p>';
     	}
 
         if ( 'accounts' === $tab['id'] ) {
-            $content .= '<p>'. esc_html__( 'You might have registered one or more accounts (e.g. Facebook page, a Twitter profile, a Google+ page, etc.) to represent this website presence in the some social network sites.', 'wp-social-manager' ) .'</p>';
+            $content .= '<p>'. esc_html__( 'You might have registered one or more accounts (e.g. Facebook page, a Twitter profile, a Google+ page, etc.) to represent this website presence in the some social media sites.', 'wp-social-manager' ) .'</p>';
             $content .= '<p>'. sprintf( esc_html__( 'You can add username of these profiles and pages in the Account tab input fields. The added profiles and pages can be displayed through the "Social Profiles" widget which you can find in the %s admin page.', 'wp-social-manager' ), '<a href="'. esc_url( get_admin_url() ) .'widgets.php">Widgets</a>' ).'</p>';
             $content .= '<p>'. esc_html__( 'You must click the Save Changes button at the bottom of the screen for the new settings to take effect.', 'wp-social-manager' ) .'</p>';
         }
 
         if ( 'buttons' === $tab['id'] ) {
-            $content .= '<p>'. esc_html__( 'Social buttons, generally, allow the readers to share or save this website content to social network sites.', 'wp-social-manager' ) .'</p>';
+            $content .= '<p>'. esc_html__( 'Social buttons, generally, allow the readers to share or save this website content to social media sites.', 'wp-social-manager' ) .'</p>';
             $content .= '<p>'. esc_html__( 'In the Buttons setting tab, you can configure several aspects of these buttons including the buttons appearance, the social network sites to include, and the position where these buttons should be displayed within the content.', 'wp-social-manager' ) .'</p>';
             $content .= '<p>'. esc_html__( 'You must click the Save Changes button at the bottom of the screen for the new settings to take effect.', 'wp-social-manager' ) .'</p>';
         }

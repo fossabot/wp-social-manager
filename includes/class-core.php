@@ -1,15 +1,12 @@
 <?php
 /**
- * The file that defines the core plugin class
+ * The file that defines the Core plugin class
  *
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       github.com/tfirdaus
- * @since      1.0.0
- *
- * @package    WP_Social_Manager
- * @subpackage WP_Social_Manager/includes
+ * @package WPSocialManager
+ * @author  Thoriq Firdaus <tfirdau@outlook.com>
  */
 
 namespace XCo\WPSocialManager;
@@ -20,67 +17,88 @@ namespace XCo\WPSocialManager;
  * This is used to define internationalization, admin-specific hooks, and
  * public-facing site hooks.
  *
- * Also maintains the unique identifier of this plugin as well as the current
- * version of the plugin.
- *
- * @since      1.0.0
- * @package    WP_Social_Manager
- * @subpackage WP_Social_Manager/includes
- * @author     Thoriq Firdaus <tfirdaus@outlook.com>
+ * @since 1.0.0
  */
-class Core {
+final class Core {
+
+	/**
+	 * Common arguments passed in a Class or a function.
+	 *
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	array
+	 */
+	protected $args;
 
 	/**
 	 * The unique identifier of this plugin.
 	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $plugin_name;
 
 	/**
-	 * [$plugin_opts description]
-	 * @var [type]
+	 * The unique identifier or prefix for database names.
+	 *
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $plugin_opts;
 
 	/**
-	 * [$plugin_dir description]
+	 * The plugin path directory.
 	 *
-	 * @since  1.0.0
-	 * @access protected
-	 * @var    string
+	 * @since  	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $path_dir;
 
 	/**
 	 * The current version of the plugin.
 	 *
-	 * @since  1.0.0
-	 * @access protected
-	 * @var    string    $version    The current version of the plugin.
+	 * @since  	1.0.0
+	 * @access 	protected
+	 * @var    	string
 	 */
 	protected $version;
 
 	/**
+	 * The Language class instance.
+	 *
+	 * @since 	1.0.0
+	 * @var 	Languages
+	 */
+	public $languages;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
-	 * Set the plugin name and the plugin version that can be used throughout the plugin.
 	 * Load the dependencies, define the locale, and set the hooks for the admin area and
 	 * the public-facing side of the site.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @param array $args {
+	 *     An array of common arguments of the plugin.
+	 *
+	 *     @type string $plugin_name 	The unique identifier of this plugin.
+	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
+	 *     @type string $version 		The plugin version number.
+	 * }
 	 */
 	public function __construct( array $args ) {
 
 		$this->args = $args;
 
-		$this->plugin_name = $args[ 'plugin_name' ];
-		$this->plugin_opts = $args[ 'plugin_opts' ];
-		$this->version = $args[ 'version' ];
+		$this->plugin_name = $args['plugin_name'];
+		$this->plugin_opts = $args['plugin_opts'];
+		$this->version = $args['version'];
 
-		$this->path_dir = trailingslashit( plugin_dir_path( dirname( __FILE__ ) ) );
+		$this->path_dir = plugin_dir_path( dirname( __FILE__ ) );
 
 		$this->requires();
 		$this->setups();
@@ -90,12 +108,10 @@ class Core {
 	/**
 	 * Load the required dependencies for this plugin.
 	 *
-	 * Include the following files that make up the plugin:
-	 * Create an instance of the loader which will be used to register the hooks
-	 * with WordPress.
-	 *
 	 * @since  1.0.0
-	 * @access private
+	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function requires() {
 
@@ -108,9 +124,12 @@ class Core {
 	}
 
 	/**
-	 * [hooks description]
-	 * @access private
-	 * @return [type] [description]
+	 * Run Filters and Actions required.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function hooks() {
 
@@ -118,42 +137,26 @@ class Core {
 	}
 
 	/**
-	 * [setups description]
+	 * Run the setups.
+	 *
+	 * The setups may involve running some Classes, Functions, or WordPress Hooks
+	 * that are required to run or add functionalities in the plugin.
 	 *
 	 * @since  1.0.0
-	 * @access private
+	 * @access protected
+	 *
 	 * @return void
 	 */
 	protected function setups() {
 
-		/**
-		 * [$this->languages description]
-		 * @var Languages
-		 */
 		$this->languages = new Languages( $this->plugin_name );
 
 		if ( is_admin() ) {
-
-			/**
-			 * [$admin description]
-			 * @var ViewAdmin
-			 */
 			$admin = new ViewAdmin( $this->args );
-		}
-
-		if ( ! is_admin() ) {
-
-			/**
-			 * [$public description]
-			 * @var ViewPublic
-			 */
+		} else {
 			$public = new ViewPublic( $this->args );
 		}
 
-		/**
-		 * [$widgets description]
-		 * @var Widgets
-		 */
 		$widgets = new Widgets( $this->args );
 	}
 }

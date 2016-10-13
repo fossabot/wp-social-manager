@@ -15,8 +15,16 @@ final class Widgets {
 	 */
     public function __construct( array $args ) {
 
+        /**
+         * [$this->args description]
+         * @var [type]
+         */
         $this->args = $args;
 
+        /**
+         * [$this->plugin_dir description]
+         * @var [type]
+         */
     	$this->plugin_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
 
     	$this->requires();

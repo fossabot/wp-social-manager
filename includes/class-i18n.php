@@ -5,13 +5,10 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @link       github.com/tfirdaus
- * @since      1.0.0
- *
- * @package    WP_Social_Manager
- * @subpackage WP_Social_Manager/includes
+ * @package 	WPSocialManager
+ * @subpackage 	Languages
+ * @author  	Thoriq Firdaus <tfirdau@outlook.com>
  */
-
 
 namespace XCo\WPSocialManager;
 
@@ -21,41 +18,54 @@ namespace XCo\WPSocialManager;
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @since      1.0.0
- * @package    WP_Social_Manager
- * @subpackage WP_Social_Manager/includes
- * @author     Thoriq Firdaus <tfirdaus@outlook.com>
+ * @since 1.0.0
  */
 class Languages {
 
 	/**
-	 * [$plugin_name description]
-	 * @var [type]
+	 * Unique identifier for retrieving translated strings.
+	 *
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
-	protected $plugin_name;
+	protected $domain;
 
 	/**
-	 * [$plugin_dir description]
-	 * @var [type]
+	 * Relative path to the plugin path directory.
+	 *
+	 * @since 	1.0.0
+	 * @access  protected
+	 * @var 	string
 	 */
-	protected $plugin_dir;
+	protected $path_dir;
 
 	/**
-	 * [__construct description]
-	 * @param [type] $args [description]
+	 * Contructor function.
+	 *
+	 * Load the translated string domain name, and the directory path  where `.mo` and `.po`
+	 * files are accessible.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $domain The unique name of the translated strings.
+	 *
+	 * @return void
 	 */
 	public function __construct( $domain ) {
 
 		$this->domain = $domain;
-		$this->plugin_dir = trailingslashit( dirname( dirname( plugin_basename( __FILE__ ) ) ) );
+		$this->path_dir = trailingslashit( dirname( dirname( plugin_basename( __FILE__ ) ) ) );
 	}
 
 	/**
 	 * Load the plugin text domain for translation.
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
+	 *
+	 * @return void
 	 */
 	public function load_plugin_textdomain() {
-		load_plugin_textdomain( $this->domain, false, $this->plugin_dir . 'languages/' );
+		load_plugin_textdomain( $this->domain, false, $this->path_dir . 'languages/' );
 	}
 }

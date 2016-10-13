@@ -1,13 +1,15 @@
 <?php
 /**
- * Utility to check current PHP version, WordPress version and PHP extensions.
+ * Utility to check current PHP version, WordPress version, and PHP extensions.
  *
- * @package    WP_Social_Manager
- * @subpackage WP_Social_Manager\Requirement
- * @author     Fulvio Notarstefano <fulvio.notarstefano@gmail.com>
- * @copyright  Copyright (c) 2015-2016, Fulvio Notarstefano
- * @link       https://github.com/nekojira/wp-requirements
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @version  	1.4.1
+ * @author     	Fulvio Notarstefano <fulvio.notarstefano@gmail.com>
+ * @copyright  	Copyright (c) 2015-2016, Fulvio Notarstefano
+ * @link       	https://github.com/nekojira/wp-requirements
+ * @license   	http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ *
+ * @package    	WPSocialManager
+ * @subpackage 	WPSocialManager\Requirements
  */
 
 namespace XCo\WPSocialManager;
@@ -16,57 +18,59 @@ namespace XCo\WPSocialManager;
  * Requirement class.
  *
  * @since 1.0.0
- * @access public
  */
 class Requirements {
 
 	/**
 	 * Plugin name.
 	 *
-	 * @access private
-	 * @var string
+	 * @access 	private
+	 * @var 	string
 	 */
 	private $name = '';
 
 	/**
 	 * Plugin main file.
 	 *
-	 * plugin_basename( __FILE__ )
-	 *
-	 * @access private
-	 * @var string
+	 * @since 	1.3.0
+	 * @access 	private
+	 * @var 	string
 	 */
 	private $plugin = '';
 
 	/**
 	 * WordPress.
 	 *
-	 * @access private
-	 * @var bool
+	 * @since 	1.0.0
+	 * @access 	private
+	 * @var 	bool
 	 */
 	private $wp = true;
 
 	/**
 	 * PHP.
 	 *
-	 * @access private
-	 * @var bool
+	 * @since 	1.0.0
+	 * @access 	private
+	 * @var 	bool
 	 */
 	private $php = true;
 
 	/**
 	 * PHP Extensions.
 	 *
-	 * @access private
-	 * @var bool
+	 * @since 	1.0.0
+	 * @access 	private
+	 * @var 	bool
 	 */
 	private $extensions = true;
 
 	/**
 	 * Requirements to check.
 	 *
-	 * @access private
-	 * @var array
+	 * @since 	1.2.0
+	 * @access 	private
+	 * @var 	array
 	 */
 	private $requirements = array();
 
@@ -75,21 +79,24 @@ class Requirements {
 	 *
 	 * Associative array with requirements results.
 	 *
-	 * @access private
-	 * @var array
+	 * @since 	1.0.0
+	 * @access 	private
+	 * @var 	array
 	 */
 	private $failures = array();
 
 	/**
 	 * Admin notice.
 	 *
-	 * @access private
-	 * @var string
+	 * @access 	private
+	 * @var 	string
 	 */
 	private $notice = '';
 
 	/**
 	 * Run checks.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @param string $name         The plugin name.
 	 * @param string $plugin       Output of `plugin_basename( __FILE__ )`.
@@ -139,9 +146,9 @@ class Requirements {
 						$extensions[ $extension ] = extension_loaded( $extension );
 					}
 				}
-				if ( in_array( false, $extensions ) ) {
+				if ( in_array( false, $extensions, true ) ) {
 					foreach ( $extensions as $extension_name => $found  ) {
-						if ( $found === false ) {
+						if ( false === $found ) {
 							$failures['Extensions'][ $extension_name ] = $extension_name;
 						}
 					}
@@ -161,6 +168,8 @@ class Requirements {
 	/**
 	 * Get requirements results.
 	 *
+	 * @since  1.0.0
+	 *
 	 * @return array
 	 */
 	public function failures() {
@@ -170,6 +179,8 @@ class Requirements {
 	/**
 	 * Check if versions check pass.
 	 *
+	 * @since  1.0.0
+	 *
 	 * @return bool
 	 */
 	public function pass() {
@@ -177,7 +188,7 @@ class Requirements {
 			$this->wp,
 			$this->php,
 			$this->extensions,
-		) ) ) {
+		) ), true ) {
 			return false;
 		}
 		return true;
@@ -186,9 +197,11 @@ class Requirements {
 	/**
 	 * Notice message.
 	 *
-	 * @param  string $message An additional message.
+	 * @since  1.2.0
 	 *
-	 * @return string
+	 * @param  string $message 	An additional message.
+	 *
+	 * @return string 			The notice HTML markup
 	 */
 	public function get_notice( $message = '' ) {
 
@@ -206,17 +219,13 @@ class Requirements {
 
 				$required = $this->requirements[ $requirement ];
 
-				if ( 'Extensions' == $requirement ) {
+				if ( 'Extensions' === $requirement ) {
 					if ( is_array( $found ) ) {
-						$notice .= sprintf( 'Required PHP Extension(s) not found: %s.', 
-								join( ', ', $found ) 
-							) . '<br>';
+						$notice .= sprintf( 'Required PHP Extension(s) not found: %s.', join( ', ', $found ) ) . '<br>';
 					}
 				} else {
-					$notice .= sprintf( 'Required %1$s version: %2$s - Version found: %3$s', $requirement,  $required, $found
-						) . '<br>';
+					$notice .= sprintf( 'Required %1$s version: %2$s - Version found: %3$s', $requirement, $required, $found ) . '<br>';
 				}
-
 			}
 
 			$notice .= '<em>' . sprintf( 'Please update to meet %s requirements.', '<strong>'. $name .'</strong>' ) . '</em>' . "\n";
@@ -232,13 +241,19 @@ class Requirements {
 
 	/**
 	 * Print notice.
+	 *
+	 * @since  1.3.0
+	 * @return void
 	 */
 	public function print_notice() {
-		echo $this->notice;
+		echo wp_kses_post( $this->notice );
 	}
 
 	/**
 	 * Deactivate plugin.
+	 *
+	 * @since  1.3.0
+	 * @return void
 	 */
 	public function deactivate_plugin() {
 		if ( function_exists( 'deactivate_plugins' ) && function_exists( 'plugin_basename' ) ) {
@@ -249,7 +264,11 @@ class Requirements {
 	/**
 	 * Deactivate plugin and display admin notice.
 	 *
-	 * @param string $message An additional message in notice.
+	 * @since  1.3.0
+	 *
+	 * @param  string $message An additional message in notice.
+	 *
+	 * @return void
 	 */
 	public function halt( $message = '' ) {
 
@@ -265,5 +284,4 @@ class Requirements {
 			}
 		}
 	}
-
 }

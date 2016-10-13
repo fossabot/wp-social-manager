@@ -1,13 +1,33 @@
 <?php
+/**
+ * Define the internationalization functionality
+ *
+ * Loads and defines the internationalization files for this plugin
+ * so that it is ready for translation.
+ *
+ * @package 	WPSocialManager
+ * @subpackage 	Utilities
+ * @author  	Thoriq Firdaus <tfirdau@outlook.com>
+ */
 
 namespace XCo\WPSocialManager;
 
+/**
+ * Main utility Class defining general functions
+ * that may be used across across both the public-facing
+ * side of the site and the admin area.
+ *
+ * @since 1.0.0
+ */
 class Utilities {
 
 	/**
-	 * [get_social_attributes description]
-	 * @param  [type] $name [description]
-	 * @return [type]       [description]
+	 * Get list of social media common properties such as the name or label, the home URL, and the icon.
+	 *
+	 * @since  1.0.0
+	 *
+	 * @param  string $name The social media name in lowercase (e.g. 'facebook', 'twitter', 'googleplus', etc.).
+	 * @return array        Properties of the selected social media name.
 	 */
 	final public static function get_social_properties( $name = '' ) {
 
@@ -16,66 +36,66 @@ class Utilities {
 			'facebook' => array(
 				'label' => 'Facebook',
 				'url'   => 'https://www.facebook.com/',
-				'icon'  => self::get_social_icons( 'facebook' )
+				'icon'  => self::get_social_icons( 'facebook' ),
 			),
 			'twitter' => array(
 				'label' => 'Twitter',
 				'url'   => 'https://twitter.com/',
-				'icon'  => self::get_social_icons( 'twitter' )
+				'icon'  => self::get_social_icons( 'twitter' ),
 			),
 			'instagram' => array(
 				'label' => esc_html( 'Instagram' ),
 				'url'   => esc_url( 'https://instagram.com/' ),
-				'icon'  => self::get_social_icons( 'instagram' )
+				'icon'  => self::get_social_icons( 'instagram' ),
 			),
 			'pinterest' => array(
 				'label' => 'Pinterest',
-				'url' => esc_url( 'https://pinterest.com/' ),
-				'icon' => self::get_social_icons( 'pinterest' )
+				'url'   => esc_url( 'https://pinterest.com/' ),
+				'icon'  => self::get_social_icons( 'pinterest' ),
 			),
 			'linkedin' => array(
 				'label' => 'LinkedIn',
-				'url' => esc_url( 'https://www.linkedin.com/in/' ),
-				'icon' => self::get_social_icons( 'linkedin' )
+				'url'   => esc_url( 'https://www.linkedin.com/in/' ),
+				'icon'  => self::get_social_icons( 'linkedin' ),
 			),
 			'googleplus' => array(
 				'label' => 'Google+',
-				'url' => 'https://plus.google.com/',
-				'icon' => self::get_social_icons( 'googleplus' )
+				'url'   => 'https://plus.google.com/',
+				'icon'  => self::get_social_icons( 'googleplus' ),
 			),
 			'youtube' => array(
 				'label' => 'Youtube',
-				'url' => 'https://www.youtube.com/user/',
-				'icon' => self::get_social_icons( 'youtube' )
+				'url'   => 'https://www.youtube.com/user/',
+				'icon'  => self::get_social_icons( 'youtube' ),
 			),
 			'reddit' => array(
 				'label' => 'Reddit',
-				'url' => 'https://www.reddit.com/user/',
-				'icon' => self::get_social_icons( 'reddit' )
+				'url'   => 'https://www.reddit.com/user/',
+				'icon'  => self::get_social_icons( 'reddit' ),
 			),
 			'dribbble' => array(
 				'label' => 'Dribbble',
-				'url' => 'https://dribbble.com/',
-				'icon' => self::get_social_icons( 'dribbble' )
+				'url'   => 'https://dribbble.com/',
+				'icon'  => self::get_social_icons( 'dribbble' ),
 			),
 			'behance' => array(
 				'label' => 'Behance',
-				'url' => 'https://www.behance.net/',
-				'icon' => self::get_social_icons( 'behance' )
+				'url'   => 'https://www.behance.net/',
+				'icon'  => self::get_social_icons( 'behance' ),
 			),
 			'github' => array(
 				'label' => 'Github',
-				'url' => 'https://github.com/',
-				'icon' => self::get_social_icons( 'github' )
+				'url'   => 'https://github.com/',
+				'icon'  => self::get_social_icons( 'github' ),
 			),
 			'codepen' => array(
 				'label' => 'CodePen',
-				'url' => 'https://codepen.io/',
-				'icon' => self::get_social_icons( 'codepen' )
+				'url'   => 'https://codepen.io/',
+				'icon'  => self::get_social_icons( 'codepen' ),
 			),
 			'email' => array(
 				'label' => 'Email',
-				'icon' => self::get_social_icons( 'email' )
+				'icon'  => self::get_social_icons( 'email' ),
 			),
 		);
 
@@ -87,9 +107,12 @@ class Utilities {
 	}
 
 	/**
-	 * [get_social_icon description]
-	 * @param  [type] $name [description]
-	 * @return [type]       [description]
+	 * Get the social media icons in SVG.
+	 *
+	 * @since  1.0.0
+	 *
+	 * @param  string $name The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
+	 * @return string       The icon of selected social media in SVG.
 	 */
 	final public static function get_social_icons( $name ) {
 
@@ -132,19 +155,30 @@ class Utilities {
 			'behance'    => apply_filters( 'wp_social_manager_icon', $behance, 'behance' ),
 			'github'     => apply_filters( 'wp_social_manager_icon', $github, 'github' ),
 			'codepen'    => apply_filters( 'wp_social_manager_icon', $codepen, 'codepen' ),
-			'email'      => apply_filters( 'wp_social_manager_icon', $email, 'email' )
+			'email'      => apply_filters( 'wp_social_manager_icon', $email, 'email' ),
 		);
 
 		return isset( $icons[ $name ] ) ? $icons[ $name ] : '';
 	}
 }
 
-
+/**
+ * Utility Class to be used, primarily, in the setting page.
+ *
+ * @since 1.0.0
+ */
 class OptionUtilities extends Utilities {
 
 	/**
-	 * [get_social_profiles description]
-	 * @return [type] [description]
+	 * Get social media profiles input descriptions.
+	 *
+	 * The description is required for a social profile to be displayed in
+	 * the setting page. The description will be displayed below the respective
+	 * input field.
+	 *
+	 * @since 	1.0.0
+	 *
+	 * @return 	string
 	 */
 	public static function get_social_profiles() {
 
@@ -157,19 +191,19 @@ class OptionUtilities extends Utilities {
 			'linkedin'   => sprintf( esc_html__( 'LinkedIn profile (e.g. %s)', 'wp-social-manager' ), '<code>williamhgates</code>' ),
 			'googleplus' => sprintf( esc_html__( 'Google+ profile or page. Include the %1$s sign if necessary (e.g. %2$s)', 'wp-social-manager' ), '<code>+</code>', '<code>+hishekids</code>' ),
 			'youtube'    => sprintf( esc_html__( 'Youtube channel (e.g. %s)', 'wp-social-manager' ), '<code>BuzzFeedVideo</code>' ),
-			'reddit'     => sprintf( esc_html__( 'Reddit profile (e.g. %s)', 'wp-social-manager' ), '<code>Unidan</code>' ) ,
+			'reddit'     => sprintf( esc_html__( 'Reddit profile (e.g. %s)', 'wp-social-manager' ), '<code>Unidan</code>' ),
 			'dribbble'   => sprintf( esc_html__( 'Dribbble portfolio (e.g. %s)', 'wp-social-manager' ), '<code>simplebits</code>' ),
 			'behance'    => sprintf( esc_html__( 'Behance portfolio (e.g. %s)', 'wp-social-manager' ), '<code>amocci</code>' ),
-			'github'     => sprintf( esc_html__( 'Github repository (e.g. %s)', 'wp-social-manager' ), '<code>tfirdaus</code>' ) ,
-			'codepen'    => sprintf( esc_html__( 'CodePen pens (e.g. %s)', 'wp-social-manager' ), '<code>stacy</code>' )
+			'github'     => sprintf( esc_html__( 'Github repository (e.g. %s)', 'wp-social-manager' ), '<code>tfirdaus</code>' ),
+			'codepen'    => sprintf( esc_html__( 'CodePen pens (e.g. %s)', 'wp-social-manager' ), '<code>stacy</code>' ),
 		);
 
 		foreach ( $properties as $key => $value ) {
 
-			if ( ! isset( $description[ $key ] ) ) {
-				unset( $properties[ $key ] );
+			if ( ! isset( $description[ $key ] ) ) { // If description is not available.
+				unset( $properties[ $key ] ); // Remove the social profile from the list.
 			} else {
-				$properties[ $key ][ 'description' ] = $description[ $key ];
+				$properties[ $key ]['description'] = $description[ $key ];
 			}
 		}
 
@@ -177,14 +211,19 @@ class OptionUtilities extends Utilities {
 	}
 
 	/**
-	 * [get_post_types description]
-	 * @return [type] [description]
+	 * Get the registered Post Types.
+	 *
+	 * This function excludes a couple of irrelevant Post Types
+	 * for this plugin such as the 'revision', 'nav_menu_log', etc.
+	 *
+	 * @since  1.0.0
+	 *
+	 * @return array  List of filtered Post Types.
 	 */
 	public static function get_post_types() {
 
 		$post_types = array();
 
-		$types = get_post_types();
 		$types = get_post_types( array(
 			'public' => true,
 		) );
@@ -208,87 +247,112 @@ class OptionUtilities extends Utilities {
 	}
 
 	/**
-	 * [get_button_locations description]
-	 * @return [type] [description]
+	 * Get names and keys of the social button view / appearance.
+	 *
+	 * @since  1.0.0
+	 *
+	 * @return array
 	 */
 	public static function get_button_views() {
 
 		$types = array(
-			'icon' => esc_html__( 'Icon Only', 'wp-sharing-manager' ),
-			'text' => esc_html__( 'Text Only', 'wp-sharing-manager' ),
-			'icon-text' => esc_html__( 'Icon and Text', 'wp-sharing-manager' )
+			'icon'      => esc_html__( 'Icon Only', 'wp-sharing-manager' ),
+			'text'      => esc_html__( 'Text Only', 'wp-sharing-manager' ),
+			'icon-text' => esc_html__( 'Icon and Text', 'wp-sharing-manager' ),
 		);
 
 		return $types;
 	}
 
 	/**
-	 * [get_buttons_location description]
-	 * @return [type] [description]
+	 * Get names and keys of the social buttons placements in the content.
+	 *
+	 * @since  1.0.0
+	 *
+	 * @return array
 	 */
 	public static function get_button_placements() {
 
 		$locations = array(
 			'before' => esc_html__( 'Before the content', 'wp-sharing-manager' ),
-			'after' => esc_html__( 'After the content', 'wp-sharing-manager' )
+			'after'  => esc_html__( 'After the content', 'wp-sharing-manager' ),
 		);
 
 		return $locations;
 	}
 
 	/**
-	 * [get_buttons_location description]
-	 * @return [type] [description]
+	 * Get names and keys of the social media to include in the social buttons lineup.
+	 *
+	 * @since  1.0.0
+	 *
+	 * @param  string $for The buttons group to retrieve.
+	 * @return array       Selected list of buttons or all if not specified.
 	 */
 	public static function get_button_sites( $for = '' ) {
 
-		$sites[ 'content' ] = array(
-				'facebook' => 'Facebook',
-				'twitter' => 'Twitter',
-				'googleplus' => 'Google+',
-				'pinterest' => 'Pinterest',
-				'linkedin' => 'LinkedIn',
-				'reddit' => 'Reddit',
-				'email' => 'Email'
-			);
+		$sites['content'] = array(
+			'facebook'   => 'Facebook',
+			'twitter'    => 'Twitter',
+			'googleplus' => 'Google+',
+			'pinterest'  => 'Pinterest',
+			'linkedin'   => 'LinkedIn',
+			'reddit'     => 'Reddit',
+			'email'      => 'Email',
+		);
 
-		$sites[ 'image' ] = array(
-				'pinterest' => 'Pinterest'
-			);
+		$sites['image'] = array(
+			'pinterest' => 'Pinterest',
+		);
 
 		return isset( $sites[ $for ] ) ? $sites[ $for ] : $sites;
 	}
 }
 
-
+/**
+ * Utilities related to the outputs generated in the public-facing side.
+ *
+ * @since 1.0.0
+ */
 class OutputUtilities extends OptionUtilities {
 
 	/**
-	 * [get_button_endpoints description]
-	 * @return [type] [description]
+	 * Get the buttons endpoint base URLs.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param  string $for The buttons group to retrieve.
+	 * @return array       Selected list of button the buttons endpoints or all if `$for` is not specified.
 	 */
 	public static function get_button_endpoints( $for = '' ) {
 
-		$endpoints[ 'content' ] = array(
-			'facebook' => 'https://www.facebook.com/sharer/sharer.php',
-			'twitter' => 'https://twitter.com/intent/tweet',
+		$endpoints['content'] = array(
+			'facebook'   => 'https://www.facebook.com/sharer/sharer.php',
+			'twitter'    => 'https://twitter.com/intent/tweet',
 			'googleplus' => 'https://plus.google.com/share',
-			'pinterest' => 'https://pinterest.com/pin/create/bookmarklet/',
-			'linkedin' => 'https://www.linkedin.com/shareArticle',
-			'reddit' => 'https://www.reddit.com/submit',
-			'email' => 'mailto:'
+			'pinterest'  => 'https://pinterest.com/pin/create/bookmarklet/',
+			'linkedin'   => 'https://www.linkedin.com/shareArticle',
+			'reddit'     => 'https://www.reddit.com/submit',
+			'email'      => 'mailto:',
 		);
 
-		$endpoints[ 'image' ] = array(
-			'pinterest' => 'https://pinterest.com/pin/create/bookmarklet/'
+		$endpoints['image'] = array(
+			'pinterest' => 'https://pinterest.com/pin/create/bookmarklet/',
 		);
 
 		return isset( $endpoints[ $for ] ) ? $endpoints[ $for ] : $endpoints;
 	}
 
 	/**
-	 * [get_button_sites description]
-	 * @return [type] [description]
+	 * Get the button sites.
+	 *
+	 * This function merges list of sites included in the social buttons lineup with
+	 * their respective endpoint URL added in the `get_button_endpoints` method.
+	 *
+	 * @since  1.0.0
+	 *
+	 * @param  string $for The buttons group to retrieve.
+	 * @return array
 	 */
 	public static function get_button_sites( $for = '' ) {
 
@@ -303,7 +367,7 @@ class OutputUtilities extends OptionUtilities {
 			if ( isset( $endpoints[ $key ] ) ) {
 				$sites[ $key ] = array(
 					'label' => $value,
-					'endpoint' => $endpoints[ $key ]
+					'endpoint' => $endpoints[ $key ],
 				);
 			}
 		}
@@ -312,8 +376,12 @@ class OutputUtilities extends OptionUtilities {
 	}
 
 	/**
-	 * [get_attr_prefix description]
-	 * @return [type] [description]
+	 * The unique prefix for attributes (`class`, `id`, etc.)
+	 * in the HTML elements generated by this plugin.
+	 *
+	 * @since  1.0.0
+	 *
+	 * @return string
 	 */
 	public static function get_attr_prefix() {
 		return esc_attr( 'wp-social-manager' );
