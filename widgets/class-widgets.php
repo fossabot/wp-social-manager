@@ -35,9 +35,10 @@ final class Widgets {
 	protected $path_dir;
 
 	/**
-     * Constructor function.
+     * Constructor.
      *
-     * Load the dependencies, and run the hooks to register the custom widgets.
+     * Initialize the class, set its properties, load the dependencies,
+     * and run the WordPress Hooks to register the custom widgets.
      *
      * @since 1.0.0
      *
@@ -64,8 +65,6 @@ final class Widgets {
      *
      * @since  1.0.0
      * @access protected
-     *
-     * @return void
      */
     protected function requires() {
     	require_once( $this->plugin_dir . 'partials/class-social-profiles.php' );
