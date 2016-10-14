@@ -188,7 +188,7 @@ class Requirements {
 			$this->wp,
 			$this->php,
 			$this->extensions,
-		) ), true ) {
+		), true ) ) {
 			return false;
 		}
 		return true;
