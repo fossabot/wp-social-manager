@@ -51,7 +51,7 @@ final class ViewPublic {
 	 *
 	 * @since  	1.0.0
 	 * @access 	protected
-	 * @var 	mixed
+	 * @var 	object
 	 */
 	protected $options;
 
