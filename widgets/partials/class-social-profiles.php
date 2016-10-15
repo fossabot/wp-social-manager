@@ -2,11 +2,11 @@
 /**
  * Widget: WidgetSocialProfiles class
  *
+ * @author      Thoriq Firdaus <tfirdau@outlook.com>
  * @link  		https://developer.wordpress.org/reference/classes/wp_widget/
  *
  * @package     WPSocialManager
  * @subpackage  Widgets
- * @author      Thoriq Firdaus <tfirdau@outlook.com>
  */
 
 namespace XCo\WPSocialManager;

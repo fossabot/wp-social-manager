@@ -5,8 +5,9 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @package WPSocialManager
  * @author  Thoriq Firdaus <tfirdau@outlook.com>
+ *
+ * @package WPSocialManager
  */
 
 namespace XCo\WPSocialManager;
@@ -128,8 +129,6 @@ final class Core {
 	 *
 	 * @since  1.0.0
 	 * @access protected
-	 *
-	 * @return void
 	 */
 	protected function hooks() {
 

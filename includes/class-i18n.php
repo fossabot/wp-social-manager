@@ -5,9 +5,10 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
+ * @author  	Thoriq Firdaus <tfirdau@outlook.com>
+ *
  * @package 	WPSocialManager
  * @subpackage 	Languages
- * @author  	Thoriq Firdaus <tfirdau@outlook.com>
  */
 
 namespace XCo\WPSocialManager;

@@ -2,14 +2,14 @@
 /**
  * Utility to check current PHP version, WordPress version, and PHP extensions.
  *
- * @package    	WPSocialManager
- * @subpackage 	Requirements
- *
  * @version  	1.4.1
  * @author     	Fulvio Notarstefano <fulvio.notarstefano@gmail.com>
  * @copyright  	Copyright (c) 2015-2016, Fulvio Notarstefano
  * @link       	https://github.com/nekojira/wp-requirements
  * @license   	http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ *
+ * @package    	WPSocialManager
+ * @subpackage 	Requirements
  */
 
 namespace XCo\WPSocialManager;
