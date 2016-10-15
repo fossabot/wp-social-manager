@@ -22,11 +22,41 @@ namespace XCo\WPSocialManager;
 class Utilities {
 
 	/**
+	 * Utilitiy to find out if current theme support this plugin.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @link https://developer.wordpress.org/reference/functions/current_theme_supports/
+	 * @todo Refactor this function so it does not need the $feature parameter.
+	 *
+	 * @param  string $feature This plugin unique identifier name.
+	 * @return mixed           It returns an array of the support .
+	 */
+	final public static function theme_support( $feature ) {
+
+		if ( current_theme_supports( $feature ) ) {
+
+			$supports = get_theme_support( $feature );
+
+			if ( is_array( $supports ) ) {
+
+				return $supports[0];
+			}
+
+			return $supports;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Get list of social media common properties such as the name or label, the home URL, and the icon.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  string $name The social media name in lowercase (e.g. 'facebook', 'twitter', 'googleplus', etc.).
+	 * @param string $name The social media name in lowercase (e.g. 'facebook', 'twitter', 'googleplus', etc.).
 	 * @return array        Properties of the selected social media name.
 	 */
 	final public static function get_social_properties( $name = '' ) {
@@ -109,7 +139,8 @@ class Utilities {
 	/**
 	 * Get the social media icons in SVG.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @param  string $name The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
 	 * @return string       The icon of selected social media in SVG.
@@ -143,19 +174,19 @@ class Utilities {
 		$email = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.954 6.864c.526.278 7.84 4.264 8.113 4.408.273.144.55.21.98.21s.71-.066.982-.21 7.585-4.13 8.112-4.408c.196-.1.526-.282.598-.488.124-.364-.01-.503-.54-.503H2.897c-.532 0-.666.144-.542.503.07.21.402.388.598.488zm18.604.216c-.392.2-3.915 2.71-6.246 4.217l3.934 4.427c.096.096.14.21.086.268-.057.053-.182.024-.282-.067l-4.72-3.982c-.712.46-1.215.775-1.3.823-.37.187-.628.21-.982.21s-.613-.023-.98-.21c-.092-.048-.59-.364-1.303-.823l-4.72 3.982c-.095.096-.224.124-.28.067-.058-.053-.015-.172.08-.268l3.93-4.427C6.442 9.79 2.88 7.28 2.49 7.08c-.42-.216-.445.038-.445.234v9.812c0 .445.656 1 1.125 1h17.756c.47 0 1.03-.56 1.03-1V7.314c0-.2.028-.45-.398-.234z"/></svg>';
 
 		$icons = array(
-			'facebook'   => apply_filters( 'wp_social_manager_icon', $facebook, 'facebook' ),
-			'twitter'    => apply_filters( 'wp_social_manager_icon', $twitter, 'twitter' ),
-			'instagram'  => apply_filters( 'wp_social_manager_icon', $instagram, 'instagram' ),
-			'pinterest'  => apply_filters( 'wp_social_manager_icon', $pinterest, 'pinterest' ),
-			'linkedin'   => apply_filters( 'wp_social_manager_icon', $linkedin, 'linkedin' ),
-			'googleplus' => apply_filters( 'wp_social_manager_icon', $googleplus, 'googleplus' ),
-			'youtube'    => apply_filters( 'wp_social_manager_icon', $youtube, 'youtube' ),
-			'reddit'     => apply_filters( 'wp_social_manager_icon', $reddit, 'reddit' ),
-			'dribbble'   => apply_filters( 'wp_social_manager_icon', $dribbble, 'dribbble' ),
-			'behance'    => apply_filters( 'wp_social_manager_icon', $behance, 'behance' ),
-			'github'     => apply_filters( 'wp_social_manager_icon', $github, 'github' ),
-			'codepen'    => apply_filters( 'wp_social_manager_icon', $codepen, 'codepen' ),
-			'email'      => apply_filters( 'wp_social_manager_icon', $email, 'email' ),
+			'facebook'   => apply_filters( 'wp_social_manager_icon', $facebook, 'facebook', '' ),
+			'twitter'    => apply_filters( 'wp_social_manager_icon', $twitter, 'twitter', '' ),
+			'instagram'  => apply_filters( 'wp_social_manager_icon', $instagram, 'instagram', '' ),
+			'pinterest'  => apply_filters( 'wp_social_manager_icon', $pinterest, 'pinterest', '' ),
+			'linkedin'   => apply_filters( 'wp_social_manager_icon', $linkedin, 'linkedin', '' ),
+			'googleplus' => apply_filters( 'wp_social_manager_icon', $googleplus, 'googleplus', '' ),
+			'youtube'    => apply_filters( 'wp_social_manager_icon', $youtube, 'youtube', '' ),
+			'reddit'     => apply_filters( 'wp_social_manager_icon', $reddit, 'reddit', '' ),
+			'dribbble'   => apply_filters( 'wp_social_manager_icon', $dribbble, 'dribbble', '' ),
+			'behance'    => apply_filters( 'wp_social_manager_icon', $behance, 'behance', '' ),
+			'github'     => apply_filters( 'wp_social_manager_icon', $github, 'github', '' ),
+			'codepen'    => apply_filters( 'wp_social_manager_icon', $codepen, 'codepen', '' ),
+			'email'      => apply_filters( 'wp_social_manager_icon', $email, 'email', '' ),
 		);
 
 		return isset( $icons[ $name ] ) ? $icons[ $name ] : '';
@@ -176,7 +207,8 @@ class OptionUtilities extends Utilities {
 	 * the setting page. The description will be displayed below the respective
 	 * input field.
 	 *
-	 * @since 	1.0.0
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @return 	string
 	 */
@@ -216,7 +248,8 @@ class OptionUtilities extends Utilities {
 	 * This function excludes a couple of irrelevant Post Types
 	 * for this plugin such as the 'revision', 'nav_menu_log', etc.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @return array  List of filtered Post Types.
 	 */
@@ -249,7 +282,8 @@ class OptionUtilities extends Utilities {
 	/**
 	 * Get names and keys of the social button view / appearance.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @return array
 	 */
@@ -267,7 +301,8 @@ class OptionUtilities extends Utilities {
 	/**
 	 * Get names and keys of the social buttons placements in the content.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @return array
 	 */
@@ -284,7 +319,8 @@ class OptionUtilities extends Utilities {
 	/**
 	 * Get names and keys of the social media to include in the social buttons lineup.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @param  string $for The buttons group to retrieve.
 	 * @return array       Selected list of buttons or all if not specified.
@@ -320,6 +356,7 @@ class OutputUtilities extends OptionUtilities {
 	 * Get the buttons endpoint base URLs.
 	 *
 	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @param  string $for The buttons group to retrieve.
 	 * @return array       Selected list of button the buttons endpoints or all if `$for` is not specified.
@@ -349,7 +386,8 @@ class OutputUtilities extends OptionUtilities {
 	 * This function merges list of sites included in the social buttons lineup with
 	 * their respective endpoint URL added in the `get_button_endpoints` method.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @param  string $for The buttons group to retrieve.
 	 * @return array
@@ -379,11 +417,20 @@ class OutputUtilities extends OptionUtilities {
 	 * The unique prefix for attributes (`class`, `id`, etc.)
 	 * in the HTML elements generated by this plugin.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @return string
 	 */
 	public static function get_attr_prefix() {
-		return esc_attr( 'wp-social-manager' );
+
+		$support = parent::theme_support( 'wp-social-manager' );
+
+		$default = 'wp-social-manager';
+		$custom  = isset( $support['attrPrefix'] ) ? $support['attrPrefix'] : $default;
+
+		$prefix  = $custom !== $default ? $custom : $default;
+
+		return esc_attr( $prefix );
 	}
 }
