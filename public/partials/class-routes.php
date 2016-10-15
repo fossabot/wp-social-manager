@@ -1,286 +1,360 @@
 <?php
+/**
+ * Public: APIRoutes class
+ *
+ * @package WPSocialManager
+ * @subpackage Public
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
+ */
 
 namespace XCo\WPSocialManager;
 
 /**
+ * Class to Register custom API Routes with WP-API
  *
+ * @since 1.0.0
  */
 final class APIRoutes extends OutputUtilities {
 
 	/**
 	 * The unique identifier of the route.
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
+	 *
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $plugin_name;
 
 	/**
-	 * [$plugin_opts description]
-	 * @var [type]
+	 * The unique identifier or prefix for database names.
+	 *
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $plugin_opts;
 
 	/**
 	 * The version of the API routes.
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
+	 *
+	 * @since   1.0.0
+	 * @access 	protected
+	 * @var    	string
 	 */
 	protected $version;
 
 	/**
-	 * [$metas description]
-	 * @var [type]
+	 * Options required to define the routes.
+	 *
+	 * @since  	1.0.0
+	 * @access 	protected
+	 * @var 	object
+	 */
+	protected $options;
+
+	/**
+	 * Meta class instance.
+	 *
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	Meta
 	 */
 	protected $metas;
 
 	/**
-	 * [__construct description]
+	 * Constructor.
+	 *
+	 * @since 	1.0.0
+	 * @access 	public
+	 *
+	 * @param array $args {
+	 *     An array of common arguments of the plugin.
+	 *
+	 *     @type string $plugin_name    The unique identifier of this plugin.
+	 *     @type string $plugin_opts    The unique identifier or prefix for database names.
+	 *     @type string $version        The plugin version number.
+	 * }
+	 * @param Metas $metas The class Meta instance.
 	 */
 	public function __construct( array $args, Metas $metas ) {
 
-		/**
-		 * [$this->plugin_name description]
-		 * @var [type]
-		 */
-		$this->plugin_name = $args[ 'plugin_name' ];
+		$this->plugin_name = $args['plugin_name'];
 
-		/**
-		 * [$this->plugin_name description]
-		 * @var [type]
-		 */
-		$this->plugin_opts = $args[ 'plugin_opts' ];
+		$this->plugin_opts = $args['plugin_opts'];
 
-		/**
-		 * [$this->namespace description]
-		 * @var [type]
-		 */
 		$this->namespace = $this->plugin_name . '/1.0';
 
-		/**
-		 * [$this->metas description]
-		 * @var [type]
-		 */
+		$this->options = (object) array(
+			'profiles'       => $this->get_option( "{$this->plugin_opts}_profiles" ),
+			'buttonsContent' => $this->get_option( "{$this->plugin_opts}_buttons_content" ),
+			'buttonsImage'   => $this->get_option( "{$this->plugin_opts}_buttons_image" ),
+		);
+
 		$this->metas = $metas;
 	}
 
 	/**
-	 * [localize_scripts description]
-	 * @since  1.0.0 [<description>]
-	 * @return void
+	 * Localize a script.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 * @todo Print the localize script in the homagepage and archives (Category, Tag, etc.).
+	 *
+	 * @return mixed Return false if viewed outside the specified singular posts.
 	 */
 	public function localize_scripts() {
 
-		/**
-		 * [$args description]
-		 * @var array
-		 */
+		$content = $this->options->buttonsContent;
+		$image   = $this->options->buttonsImage;
+
+		if ( ! isset( $image['enabled'] ) && false === (bool) $image['enabled'] ) {
+			$image['postTypes'] = array();
+		}
+
+		$post_types = array_unique( array_merge( (array) $image['postTypes'], (array) $content['postTypes'] ), SORT_REGULAR );
+
+		if ( ! is_singular( $post_types ) ) {
+			return;
+		}
+
 		$args = array(
-			'nonce' => wp_create_nonce( 'wp_rest' ),
-			'root' => esc_url( get_rest_url() ),
-			'namespace' => esc_html( $this->namespace ),
+			'root'       => esc_url( get_rest_url() ),
+			'namespace'  => esc_html( $this->namespace ),
 			'attrPrefix' => esc_attr( self::get_attr_prefix() )
 		);
 
-		/**
-		 * [$post_id description]
-		 * @var [type]
-		 */
 		$post_id = get_the_id();
 
 		if ( $post_id ) {
-			$args[ 'id' ] = absint( $post_id );
+			$args['id'] = absint( $post_id );
 		}
 
 		wp_localize_script( $this->plugin_name, 'wpSocialManager', $args );
 	}
 
 	/**
-	 * [register_routes description]
-	 * @since  1.0.0 [<description>]
-	 * @return [type] [description]
+	 * Registers a REST API route.
+	 *
+	 * @see https://developer.wordpress.org/reference/functions/register_rest_route/
+	 *
+	 * @since  1.0.0
+	 * @access public
 	 */
 	public function register_routes() {
 
 		/**
-		 * [$base description]
-		 * @var [type]
+		 * Register the '/buttons' route.
+		 *
+		 * This route requires the 'id' parameter that passes
+		 * the post ID.
+		 *
+		 * @example http://local.wordpress.dev/wp-json/wp-social-manager/1.0/buttons?id=79
 		 */
 		register_rest_route( $this->namespace, '/buttons', array( array(
-
-			'methods'  => \WP_REST_Server::READABLE,
-			'callback' => array( $this, 'response_buttons' ),
-			'args' => array(
-				'id' => array(
-					'required' => true,
-					'sanitize_callback' => 'absint',
-					'validate_callback' => function( $param ) {
-						return ( $param );
-					} )
-				) ),
-			)
-		);
+				'methods' => \WP_REST_Server::READABLE,
+				'callback' => array( $this, 'response_buttons' ),
+				'args' => array(
+					'id' => array(
+						'required' => true,
+						'sanitize_callback' => 'absint',
+						'validate_callback' => function( $param ) {
+							return ( $param );
+						},
+					),
+				),
+			),
+		) );
 	}
 
 	/**
-	 * [get_buttons description]
-	 * @return [type] [description]
+	 * Return the '/buttons' route response.
+	 *
+	 * @since 	1.0.0
+	 * @access 	public
+	 *
+	 * @param array $request The passed parameters in the route.
+	 * @return WP_REST_Response A REST response object.
 	 */
 	public function response_buttons( $request ) {
 
 		$response = array(
-			'id' => $request[ 'id' ],
-			'content' => false,
-			'image' => false
+			'id' => $request['id'],
 		);
 
-		$response[ 'content' ] = $this->get_buttons_content( $request );
-		$response[ 'image' ] = $this->get_buttons_image( $request );
+		$response['content'] = $this->buttons_content_response( $request );
+		$response['image'] = $this->buttons_image_response( $request );
 
 		return new \WP_REST_Response( $response, 200 );
 	}
 
 	/**
-	 * [get_button_sites description]
-	 * @return [type] [description]
+	 * Get the Buttons Content Response.
+	 *
+	 * @since 	1.0.0
+	 * @access 	protected
+	 *
+	 * @todo add inline docs referring to each site endpoint documentation page.
+	 *
+	 * @param array $request The passed parameters in the route.
+	 * @return array         An array of sites with their label / name and button endpoint url.
 	 */
-	protected function get_buttons_content( $request ) {
+	protected function buttons_content_response( $request ) {
 
-		$sites = self::get_button_sites( 'content' );
+		$sites   = self::get_button_sites( 'content' );
 
-		$content = $this->get_option( "{$this->plugin_opts}_buttons_content" );
-		$metas = $this->get_post_metas( $request[ 'id' ] );
+		$content = $this->options->buttonsContent;
+		$metas   = $this->get_post_metas( $request['id'] );
 
 		$buttons = array();
 
 		foreach ( $sites as $key => $value ) {
 
-			if ( ! in_array( $key, $content[ 'includes' ], true ) ||
-				 ! isset( $sites[ $key ][ 'endpoint' ] ) ) {
+			if ( ! in_array( $key, $content['includes'], true ) ||
+				 ! isset( $sites[ $key ]['endpoint'] ) ) {
 
 					unset( $sites[ $key ] );
 					continue;
 			}
 
-			$buttons[ $key ][ 'label' ] = $value[ 'label' ];
+			$buttons[ $key ]['label'] = $value['label'];
 
 			switch ( $key ) {
 
 				case 'facebook' :
 
-					$buttons[ $key ][ 'endpoint' ] = add_query_arg(
-							array( 'u' => $metas[ 'post_url' ]
-						), $value[ 'endpoint' ] );
+					$buttons[ $key ]['endpoint'] = add_query_arg(
+						array( 'u' => $metas['post_url'] ),
+						$value['endpoint']
+					);
 
 					break;
 
 				case 'twitter' :
 
-					$profiles = $this->get_option( "{$this->plugin_opts}_profiles" );
+					$profiles = $this->options->profiles;
 
 					$args = array(
-						'text' => $metas[ 'post_title' ],
-						'url'  => $metas[ 'post_url' ]
+						'text' => $metas['post_title'],
+						'url'  => $metas['post_url'],
 					);
 
-					if ( isset( $profiles[ 'twitter' ] ) && ! empty( $profiles[ 'twitter' ] ) ) {
-						$args[ 'via' ] = $profiles[ 'twitter' ];
+					if ( isset( $profiles['twitter'] ) && ! empty( $profiles['twitter'] ) ) {
+						$args['via'] = $profiles['twitter'];
 					}
 
-					$buttons[ $key ][ 'endpoint' ] = add_query_arg( $args, $value[ 'endpoint' ] );
+					$buttons[ $key ]['endpoint'] = add_query_arg( $args, $value['endpoint'] );
 
 					break;
 
 				case 'googleplus' :
 
-					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'url' => $metas[ 'post_url' ]
-						), $value[ 'endpoint' ] );
+					$buttons[ $key ]['endpoint'] = add_query_arg(
+						array( 'url' => $metas['post_url'] ),
+						$value['endpoint']
+					);
+
 					break;
 
 				case 'linkedin' :
 
-					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
+					$buttons[ $key ]['endpoint'] = add_query_arg(
+						array(
 							'mini' => true,
-							'title' => $metas[ 'post_title' ],
-							'summary' => $metas[ 'post_description' ],
-							'url' => $metas[ 'post_url' ],
-							'source' => $metas[ 'post_url' ]
-						), $value[ 'endpoint' ] );
+							'title' => $metas['post_title'],
+							'summary' => $metas['post_description'],
+							'url' => $metas['post_url'],
+							'source' => $metas['post_url'],
+						),
+						$value['endpoint']
+					);
 
 					break;
 
 				case 'pinterest':
 
-					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'url' => $metas[ 'post_url' ],
-							'description' => $metas[ 'post_title' ],
-							'image' => $metas[ 'image' ],
-							'is_video' => false
-						), $value[ 'endpoint' ]  );
+					$buttons[ $key ]['endpoint'] = add_query_arg(
+						array(
+							'url' => $metas['post_url'],
+							'description' => $metas['post_title'],
+							'is_video' => false,
+						),
+						$value['endpoint']
+					);
+
 					break;
 
 				case 'reddit':
 
-					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'url' => $metas[ 'post_url' ],
-							'post_title' => $metas[ 'post_title' ]
-						), $value[ 'endpoint' ]  );
+					$buttons[ $key ]['endpoint'] = add_query_arg(
+						array(
+							'url' => $metas['post_url'],
+							'post_title' => $metas['post_title'],
+						),
+						$value['endpoint']
+					);
+
 					break;
 
 				case 'email':
 
-					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'subject' => $metas[ 'post_title' ],
-							'body' => $metas[ 'post_description' ]
-						), $value[ 'endpoint' ]  );
+					$buttons[ $key ]['endpoint'] = add_query_arg(
+						array(
+							'subject' => $metas['post_title'],
+							'body' => $metas['post_description'],
+						),
+						$value['endpoint']
+					);
+
 					break;
 
 				default:
 
-					$buttons[ $key ][ 'endpoint' ] = false;
+					$buttons[ $key ]['endpoint'] = false;
 					break;
 			}
 		}
-
 
 		return $buttons;
 	}
 
 	/**
-	 * [get_buttons_content description]
-	 * @return [type] [description]
+	 * Get the Buttons Image Response.
+	 *
+	 * @since 	1.0.0
+	 * @access 	protected
+	 *
+	 * @todo add inline docs referring to each site endpoint documentation page.
+	 *
+	 * @param array $request The passed parameters in the route.
+	 * @return array         An array of sites with their label / name and button endpoint url.
 	 */
-	protected function get_buttons_image( $request ) {
+	protected function buttons_image_response( $request ) {
 
 		$sites = self::get_button_sites( 'image' );
 
-		$image = $this->get_option( "{$this->plugin_opts}_buttons_image" );
-		$metas = $this->get_post_metas( $request[ 'id' ] );
+		$image = $this->options->buttonsImage;
+		$metas = $this->get_post_metas( $request['id'] );
 
 		$buttons = array();
 
 		foreach ( $sites as $key => $value ) {
 
-			$buttons[ $key ][ 'label' ] = $value[ 'label' ];
+			$buttons[ $key ]['label'] = $value['label'];
 
 			switch ( $key ) {
 
-				case 'facebook' :
-
-					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'u' => $metas[ 'post_url' ]
-						), $value[ 'endpoint' ] );
-					break;
-
 				case 'pinterest':
 
-					$buttons[ $key ][ 'endpoint' ] = add_query_arg( array(
-							'url' => $metas[ 'post_url' ],
-							'description' => $metas[ 'post_title' ],
-							'is_video' => false
-						), $value[ 'endpoint' ]  );
+					$buttons[ $key ]['endpoint'] = add_query_arg(
+						array(
+							'url' => $metas['post_url'],
+							'description' => $metas['post_title'],
+							'is_video' => false,
+						),
+						$value['endpoint']
+					);
+
 					break;
 			}
 		}
@@ -289,32 +363,37 @@ final class APIRoutes extends OutputUtilities {
 	}
 
 	/**
-	 * [get_meta description]
-	 * @param  [type] $id [description]
-	 * @return [type]     [description]
+	 * Get a collection of post metas to add in the site endpoint parameter.
+	 *
+	 * @since 	1.0.0
+	 * @access 	protected
+	 *
+	 * @param  integer $id The WordPress post ID.
+	 * @return array       An array of post meta.
 	 */
 	protected function get_post_metas( $id ) {
 
 		$post_title = $this->metas->post_title( $id );
 		$post_description = $this->metas->post_description( $id );
-		$post_image = $this->metas->post_image( $id );
 		$post_url = $this->metas->post_url( $id );
 
 		return array(
 			'post_title' => rawurlencode( $post_title ),
 			'post_description' => rawurlencode( $post_description ),
-			'post_image' => $post_image,
-			'post_url' => rawurlencode( $post_url )
+			'post_url' => rawurlencode( $post_url ),
 		);
 	}
 
 	/**
-	 * [get_meta description]
-	 * @param  [type] $id [description]
-	 * @return [type]     [description]
+	 * Method to retrieve an option inside the class.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @param  string $key The option name.
+	 * @return mixed       The option data.
 	 */
 	protected function get_option( $key ) {
-
 		return get_option( $key );
 	}
 }
