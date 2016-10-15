@@ -47,10 +47,9 @@ class Languages {
 	 * files are accessible.
 	 *
 	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @param string $domain The unique name of the translated strings.
-	 *
-	 * @return void
 	 */
 	public function __construct( $domain ) {
 
@@ -62,8 +61,7 @@ class Languages {
 	 * Load the plugin text domain for translation.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return void
+	 * @access public
 	 */
 	public function load_plugin_textdomain() {
 		load_plugin_textdomain( $this->domain, false, $this->path_dir . 'languages/' );
