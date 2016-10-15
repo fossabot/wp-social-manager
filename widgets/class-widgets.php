@@ -67,7 +67,7 @@ final class Widgets {
      * @access protected
      */
     protected function requires() {
-    	require_once( $this->plugin_dir . 'partials/class-social-profiles.php' );
+    	require_once( $this->path_dir . 'partials/class-social-profiles.php' );
     }
 
     /**
