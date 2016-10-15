@@ -136,6 +136,8 @@ final class Settings extends OptionUtilities {
 
 		$this->settings = $settings;
 		$this->validate = $validate;
+
+		$this->supports = $this->theme_support( $this->plugin_name );
 	}
 
 	/**
@@ -436,13 +438,25 @@ final class Settings extends OptionUtilities {
 		 * [$this->pages description]
 		 * @var [type]
 		 */
-		$this->pages = $this->settings->add_field( 'advanced', 'advanced', array(
+		$args = array(
 			'id' => 'enableStylesheet',
 			'label' => esc_html__( 'Enable Stylesheet', 'wp-sharing-manager' ),
 			'description' => esc_html__( 'Load the plugin stylesheet to apply essential styles.', 'wp-sharelog' ),
 			'default' => 'on',
-			'type' => 'checkbox'
-		) );
+			'type' => 'checkbox',
+		);
+
+		$stylesheet = true;
+
+		if ( isset( $this->supports['stylesheet'] ) ) {
+			$stylesheet = $this->supports['stylesheet'];
+		}
+
+		if ( true === (bool) $stylesheet ) {
+			$args['attr']['disabled'] = true;
+		}
+
+		$this->pages = $this->settings->add_field( 'advanced', 'advanced', $args );
 	}
 
 	/**
