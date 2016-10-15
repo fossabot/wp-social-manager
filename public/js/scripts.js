@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	if ( _.isUndefined( wpSocialManager ) ) {
+	if ( 'undefined' === typeof wpSocialManager ) {
 		return;
 	}
 
@@ -138,8 +138,6 @@
 			$( '#' + api.attrPrefix + '-buttons-' + response.id )
 				.append( this.template( response.content ) );
 
-				this.stopListening( this.model );
-
 			return this;
 		},
 	} );
@@ -178,8 +176,6 @@
 						$target.append( self.template( responseImage ) );
 					}
 				} );
-
-				this.stopListening( this.model );
 
 			return this;
 		}
