@@ -119,10 +119,11 @@ final class SocialMetaBox {
 		$butterbean->register_manager(
 			'wp_social_manager',
 			array(
-				'label' => esc_html__( 'Social', 'wp-social-manager' ),
-				'post_type' => array( 'post', 'page', 'product' ),
-				'context'   => 'normal',
-				'priority'  => 'high'
+				'label'      => esc_html__( 'Social', 'wp-social-manager' ),
+				'post_type'  => array( 'post', 'page', 'product' ),
+				'context'    => 'normal',
+				'priority'   => 'high',
+				'capability' => 'publish_posts'
 			)
 		);
 	}
