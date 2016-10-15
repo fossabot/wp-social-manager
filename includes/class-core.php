@@ -133,7 +133,7 @@ final class Core {
 	 */
 	protected function hooks() {
 
-		add_action( 'plugins_loaded', array( $this->languages, 'load_plugin_textdomain' ) );
+		add_action( 'init', array( $this->languages, 'load_plugin_textdomain' ) );
 	}
 
 	/**
