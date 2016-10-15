@@ -10,7 +10,7 @@
 namespace XCo\WPSocialManager;
 
 /**
- * Class to Register custom API Routes with WP-API
+ * The class use for registering custom API Routes using WP-API.
  *
  * @since 1.0.0
  */
@@ -19,53 +19,53 @@ final class APIRoutes extends OutputUtilities {
 	/**
 	 * The unique identifier of the route.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $plugin_name;
 
 	/**
 	 * The unique identifier or prefix for database names.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $plugin_opts;
 
 	/**
 	 * The version of the API routes.
 	 *
-	 * @since   1.0.0
-	 * @access 	protected
-	 * @var    	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $version;
 
 	/**
 	 * Options required to define the routes.
 	 *
-	 * @since  	1.0.0
-	 * @access 	protected
-	 * @var 	object
+	 * @since 1.0.0
+	 * @access protected
+	 * @var object
 	 */
 	protected $options;
 
 	/**
 	 * Meta class instance.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	Meta
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Meta
 	 */
 	protected $metas;
 
 	/**
 	 * Constructor.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @param array $args {
 	 *     An array of common arguments of the plugin.
@@ -96,7 +96,7 @@ final class APIRoutes extends OutputUtilities {
 	/**
 	 * Localize a script.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @todo Print the localize script in the homagepage and archives (Category, Tag, etc.).
@@ -138,7 +138,7 @@ final class APIRoutes extends OutputUtilities {
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/register_rest_route/
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
 	 * @access public
 	 */
 	public function register_routes() {
@@ -170,8 +170,8 @@ final class APIRoutes extends OutputUtilities {
 	/**
 	 * Return the '/buttons' route response.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @param array $request The passed parameters in the route.
 	 * @return WP_REST_Response A REST response object.
@@ -191,8 +191,8 @@ final class APIRoutes extends OutputUtilities {
 	/**
 	 * Get the Buttons Content Response.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
 	 *
 	 * @todo add inline docs referring to each site endpoint documentation page.
 	 *
@@ -321,8 +321,8 @@ final class APIRoutes extends OutputUtilities {
 	/**
 	 * Get the Buttons Image Response.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
 	 *
 	 * @todo add inline docs referring to each site endpoint documentation page.
 	 *
@@ -365,8 +365,8 @@ final class APIRoutes extends OutputUtilities {
 	/**
 	 * Get a collection of post metas to add in the site endpoint parameter.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
 	 *
 	 * @param  integer $id The WordPress post ID.
 	 * @return array       An array of post meta.
