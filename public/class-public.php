@@ -115,7 +115,7 @@ final class ViewPublic extends OutputUtilities {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
+	 * @param array 		$args {
 	 *     An array of common arguments of the plugin.
 	 *
 	 *     @type string $plugin_name    The unique identifier of this plugin.
@@ -150,7 +150,7 @@ final class ViewPublic extends OutputUtilities {
 	protected function requires() {
 
 		require_once( $this->path_dir . 'partials/class-metas.php' );
-		require_once( $this->path_dir . 'partials/class-routes.php' );
+		require_once( $this->path_dir . 'partials/class-api-routes.php' );
 		require_once( $this->path_dir . 'partials/class-buttons.php' );
 	}
 
