@@ -10,6 +10,10 @@
 
 namespace XCo\WPSocialManager;
 
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
+
 /**
  * The class to register custom setting field using PepperPlane framework.
  *
