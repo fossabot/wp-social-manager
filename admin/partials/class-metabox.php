@@ -1,4 +1,12 @@
 <?php
+/**
+ * Admin: SocialMetaBox class
+ *
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
+ *
+ * @package WPSocialManager
+ * @subpackage Admin\Metabox
+ */
 
 namespace XCo\WPSocialManager;
 
@@ -7,82 +15,117 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 }
 
 /**
- * Main ButterBean class.  Runs the show.
+ * This class is used for registering new metabox via ButterBean API.
  *
  * @since  1.0.0
- * @access public
+ *
+ * @link https://github.com/justintadlock/butterbean
  */
 final class SocialMetaBox {
 
 	/**
-	 * [$screen description]
+	 * The plugin directory.
 	 *
-	 * @var [type]
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $screen;
+	protected $path_dir = '';
 
 	/**
-	 * [$screen description]
+	 * The options required to define and render the metabox.
 	 *
-	 * @var [type]
+	 * @since 1.0.0
+	 * @access protected
+	 * @var null
 	 */
-	protected $options;
+	protected $options = null;
 
 	/**
-	 * [$post_id description]
+	 * The post ID.
 	 *
-	 * @var [type]
+	 * @since 1.0.0
+	 * @access protected
+	 * @var integer
 	 */
-	protected $post_id;
+	protected $post_id = 0;
 
 	/**
-	 * [$post_title description]
+	 * The post title.
 	 *
-	 * @var [type]
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $post_title;
+	protected $post_title = '';
 
 	/**
-	 * [$post_content description]
+	 * The post content.
 	 *
-	 * @var [type]
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $post_content;
+	protected $post_content = '';
 
 	/**
-	 * [$post_excerpt description]
+	 * The post description / excerpt.
 	 *
-	 * @var [type]
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $post_excerpt;
 
 	/**
-	 * [$post_thumbnail description]
+	 * The post thumbnail id.
 	 *
-	 * @var [type]
+	 * @since 1.0.0
+	 * @access protected
+	 * @var integer
 	 */
-	protected $post_thumbnail;
+	protected $post_thumbnail = 0;
 
 	/**
-	 * [$post_type description]
+	 * The post type singular name.
 	 *
-	 * @var [type]
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $post_type;
+	protected $post_type = '';
 
 	/**
-	 * [includes description]
+	 * Load dependencies.
 	 *
-	 * @return [type] [description]
+	 * @since 1.0.0
+	 * @access protected
 	 */
 	public function requires() {
 
-		$this->plugin_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
+		$this->path_dir = plugin_dir_path( __FILE__ );
 
-		require_once( $this->plugin_dir . 'butterbean/butterbean.php' );
-		require_once( $this->plugin_dir . 'butterbean-extend/butterbean-extend.php' );
+		require_once( $this->path_dir . 'butterbean/butterbean.php' );
+		require_once( $this->path_dir . 'butterbean-extend/butterbean-extend.php' );
 	}
 
+	/**
+	 * Run the setups.
+	 *
+	 * The setups may involve running some Classes, Functions, and sometimes WordPress Hooks
+	 * that are required to run or add functionalities in the plugin.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param array $args {
+	 *     An array of common arguments of the plugin.
+	 *
+	 *     @type string $plugin_name 	The unique identifier of this plugin.
+	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
+	 *     @type string $version 		The plugin version number.
+	 * }
+	 */
 	public function setups( array $args ) {
 
 		$this->options = (object) array(
@@ -93,11 +136,10 @@ final class SocialMetaBox {
 	}
 
 	/**
-	 * Sets up initial actions.
+	 * Run WordPress and ButterBean Hooks.
 	 *
 	 * @since  1.0.0
 	 * @access private
-	 * @return void
 	 */
 	private function hooks() {
 
@@ -108,16 +150,18 @@ final class SocialMetaBox {
 		add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
 
 		// Register sections, settings, and controls.
-		add_action( 'butterbean_register', array( $this, 'register_section_sharing' ), -90, 2 );
+		add_action( 'butterbean_register', array( $this, 'register_section_buttons' ), -90, 2 );
 		add_action( 'butterbean_register', array( $this, 'register_section_meta' ), -90, 2 );
 	}
 
 	/**
-	 * [register_manager description]
+	 * Registers manager.
 	 *
-	 * @param  [type] $butterbean [description]
-	 * @param  [type] $post_type  [description]
-	 * @return [type]             [description]
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param object $butterbean  Instance of the 'ButterBean' object.
+	 * @param string $post_type   The current Post Type slug.
 	 */
 	public function register_manager( $butterbean, $post_type ) {
 
@@ -143,15 +187,15 @@ final class SocialMetaBox {
 	}
 
 	/**
-	 * Registers managers, sections, controls, and settings.
+	 * Registers sections.
 	 *
 	 * @since  1.0.0
 	 * @access public
-	 * @param  object $butterbean  Instance of the `ButterBean` object.
-	 * @param  string $post_type
-	 * @return void
+	 *
+	 * @param object $butterbean  Instance of the `ButterBean` object.
+	 * @param string $post_type   The current Post Type slug.
 	 */
-	public function register_section_sharing( $butterbean, $post_type ) {
+	public function register_section_buttons( $butterbean, $post_type ) {
 
 		// Get our custom manager object.
 		$manager = $butterbean->get_manager( 'wp_social_manager' );
@@ -216,11 +260,13 @@ final class SocialMetaBox {
 	}
 
 	/**
-	 * [register_section_meta description]
+	 * Register the "Meta" section tab.
 	 *
-	 * @param  [type] $butterbean [description]
-	 * @param  [type] $post_type  [description]
-	 * @return [type]             [description]
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param object $butterbean  Instance of the `ButterBean` object.
+	 * @param string $post_type   The current Post Type slug.
 	 */
 	public function register_section_meta( $butterbean, $post_type ) {
 
@@ -305,19 +351,25 @@ final class SocialMetaBox {
 	}
 
 	/**
-	 * [sanitize_absint description]
+	 * Sanitize function for integers.
 	 *
-	 * @param  [type] $value [description]
-	 * @return [type]        [description]
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 * @param  integer $value The value to sanitize.
+	 * @return integer|string The sanitized value or empty string.
 	 */
 	public function sanitize_absint( $value ) {
 		return $value && is_numeric( $value ) ? absint( $value ) : '';
 	}
 
 	/**
-	 * [load_post description]
+	 * The function method to retrive the post title, content, excerpt, and thumbnail id.
 	 *
-	 * @return [type] [description]
+	 * @link https://developer.wordpress.org/reference/functions/get_post_field/
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 */
 	protected function load_post() {
 
@@ -331,10 +383,12 @@ final class SocialMetaBox {
 	}
 
 	/**
-	 * [load_post_type description]
+	 * The function method to retrieve the post type singular name.
 	 *
-	 * @param  [type] $post_type [description]
-	 * @return [type]            [description]
+	 * This function exist because the post type slug or name can have special
+	 * character like underscore or dash.
+	 *
+	 * @param  string $post_type The post type slug / name.
 	 */
 	protected function load_post_type( $post_type ) {
 
@@ -344,10 +398,13 @@ final class SocialMetaBox {
 	}
 
 	/**
-	 * [admin_head_enqueues description]
+	 * Print internal styles.
 	 *
-	 * @param  [type] $screen [description]
-	 * @return [type]         [description]
+	 * The styles will make the metabox appearance (e.g. icon size, font size, and color)
+	 * consistent following with the WooCommerce metabox styling where ButterBean derived
+	 * the inspiration for the metabox UI.
+	 *
+	 * @param  string $screen The current screen base or id.
 	 */
 	public function admin_head_enqueues( $screen ) {
 	?>
@@ -364,6 +421,14 @@ final class SocialMetaBox {
 	 *
 	 * @since  1.0.0
 	 * @access public
+	 *
+	 * @param array $args {
+	 *     An array of common arguments of the plugin.
+	 *
+	 *     @type string $plugin_name 	The unique identifier of this plugin.
+	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
+	 *     @type string $version 		The plugin version number.
+	 * }
 	 * @return object
 	 */
 	public static function get_instance( array $args ) {

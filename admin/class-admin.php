@@ -67,7 +67,7 @@ final class ViewAdmin {
 	}
 
 	/**
-	 * Run Filters and Actions required.
+	 * Load dependencies.
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -84,7 +84,7 @@ final class ViewAdmin {
 	/**
 	 * Run the setups.
 	 *
-	 * The setups may involve running some Classes, Functions, or WordPress Hooks
+	 * The setups may involve running some Classes, Functions, andn sometimes WordPress Hooks
 	 * that are required to run or add functionalities in the plugin.
 	 *
 	 * @since 1.0.0
