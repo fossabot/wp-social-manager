@@ -1,44 +1,41 @@
-;(function( $, wp, Backbone ) {
-
+;(function( $, Backbone ) {
 	'use strict';
 
 	/**
-	 * [initialize description]
+	 * The Backbone View to toggle controls visibiity.
 	 */
 	var ControlsView = Backbone.View.extend({
 
-		events : {
-			'click .toggle-control' : 'toggleControls',
+		// The events the toggle trigger should listen to.
+		events: {
+			'click': 'toggleControls'
 		},
 
 		/**
-		 * [initialize description]
-		 * @return {[type]} [description]
+		 * Initialize the View.
+		 * Get the target elements attached to the trigger ($el),
+		 * and set the elements visibiity on page load.
 		 */
-		initialize : function() {
+		initialize: function() {
 
-			this.$control = this.$el.find( '.toggle-control' );
-			this.$target = this.$el.find( this.$control.data( 'toggle' ) );
+			this.$target = $( this.$el.data( 'toggle' ) );
 
 			this.toggleControls();
 		},
 
 		/**
-		 * [toggleControls description]
-		 * @return {[type]} [description]
+		 * The function that toggles the target elements
+		 * following the trigger value.
 		 */
-		toggleControls : function() {
+		toggleControls: function() {
 
-			var $control = this.$control;
-			var $target = this.$target;
-
-			$target.toggleClass( 'hide-if-js', ! $control.is( ':checked' ) );
+			this.$target.toggleClass( 'hide-if-js', ! this.$el.is( ':checked' ) );
 		}
 	});
 
 	// Instantiation;
 	new ControlsView( {
-		el: $( '#wp-social-manager-wrap' )
+		el: $( '#wp-social-manager-wrap' ).find( '.toggle-control' ) // The trigger element.
 	} );
 
-})( jQuery, window.wp, window.Backbone, undefined );
+})( jQuery, window.Backbone, undefined );

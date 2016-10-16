@@ -2,14 +2,17 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       http://example.com
- * @since      1.0.0
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
  *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/admin
+ * @package WPSocialManager
+ * @subpackage Admin
  */
 
 namespace XCo\WPSocialManager;
+
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
 
 /**
  * The admin-specific functionality of the plugin.
@@ -17,33 +20,41 @@ namespace XCo\WPSocialManager;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/admin
- * @author     Your Name <email@example.com>
+ * @since 1.0.0
  */
-class ViewAdmin {
+final class ViewAdmin {
 
 	/**
-	 * [$arguments description]
-	 * @var [type]
+	 * Common arguments passed in a Class or a function.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var array
 	 */
-	private $args;
+	protected $args;
 
 	/**
 	 * The plugin URL.
 	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
+	 * @since 1.0.0
+	 * @access private
+	 * @var string
 	 */
 	private $plugin_dir;
 
 	/**
 	 * Initialize the class and set its properties.
 	 *
-	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of this plugin.
-	 * @param      string    $version    The version of this plugin.
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param array $args {
+	 *     An array of common arguments of the plugin.
+	 *
+	 *     @type string $plugin_name 	The unique identifier of this plugin.
+	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
+	 *     @type string $version 		The plugin version number.
+	 * }
 	 */
 	public function __construct( array $args ) {
 
@@ -56,8 +67,10 @@ class ViewAdmin {
 	}
 
 	/**
-	 * [requires description]
-	 * @return [type] [description]
+	 * Load dependencies.
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 */
 	public function requires() {
 
@@ -69,14 +82,19 @@ class ViewAdmin {
 	}
 
 	/**
-	 * [setups description]
-	 * @return [type] [description]
+	 * Run the setups.
+	 *
+	 * The setups may involve running some Classes, Functions, andn sometimes WordPress Hooks
+	 * that are required to run or add functionalities in the plugin.
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 */
 	public function setups() {
 
 		$admin = new Settings( $this->args );
 		$users = new SettingsUser( $this->args );
 
-		$meta = SocialMetaBox::get_instance( $this->args );
+		SocialMetaBox::get_instance( $this->args );
 	}
 }

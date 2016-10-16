@@ -1,85 +1,145 @@
 <?php
+/**
+ * Admin: SocialMetaBox class
+ *
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
+ *
+ * @package WPSocialManager
+ * @subpackage Admin\Metabox
+ */
 
 namespace XCo\WPSocialManager;
 
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
+
 /**
- * Main ButterBean class.  Runs the show.
+ * This class is used for registering new metabox via ButterBean API.
  *
  * @since  1.0.0
- * @access public
+ *
+ * @link https://github.com/justintadlock/butterbean
  */
 final class SocialMetaBox {
 
 	/**
-	 * [$screen description]
-	 * @var [type]
+	 * The plugin directory.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $screen;
+	protected $path_dir = '';
 
 	/**
-	 * [$screen description]
-	 * @var [type]
+	 * The options required to define and render the metabox.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var null
 	 */
-	protected $options;
+	protected $options = null;
 
 	/**
-	 * [$post_id description]
-	 * @var [type]
+	 * The post ID.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var integer
 	 */
-	protected $post_id;
+	protected $post_id = 0;
 
 	/**
-	 * [$post_title description]
-	 * @var [type]
+	 * The post title.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $post_title;
+	protected $post_title = '';
 
 	/**
-	 * [$post_content description]
-	 * @var [type]
+	 * The post content.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $post_content;
+	protected $post_content = '';
 
 	/**
-	 * [$post_excerpt description]
-	 * @var [type]
+	 * The post description / excerpt.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $post_excerpt;
 
 	/**
-	 * [$post_thumbnail description]
-	 * @var [type]
+	 * The post thumbnail id.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var integer
 	 */
-	protected $post_thumbnail;
+	protected $post_thumbnail = 0;
 
 	/**
-	 * [$post_type description]
-	 * @var [type]
+	 * The post type singular name.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $post_type;
+	protected $post_type = '';
 
 	/**
-	 * [includes description]
-	 * @return [type] [description]
+	 * Load dependencies.
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 */
 	public function requires() {
 
-		$this->plugin_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
+		$this->path_dir = plugin_dir_path( __FILE__ );
 
-		require_once( $this->plugin_dir . 'butterbean/butterbean.php' );
-		require_once( $this->plugin_dir . 'butterbean-extend/butterbean-extend.php' );
-	}
-
-	public function setups( array $args ) {
-		$this->metasSite = get_option( $args[ 'plugin_opts' ] . '_metas_site' );
+		require_once( $this->path_dir . 'butterbean/butterbean.php' );
+		require_once( $this->path_dir . 'butterbean-extend/butterbean-extend.php' );
 	}
 
 	/**
-	 * Sets up initial actions.
+	 * Run the setups.
+	 *
+	 * The setups may involve running some Classes, Functions, and sometimes WordPress Hooks
+	 * that are required to run or add functionalities in the plugin.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param array $args {
+	 *     An array of common arguments of the plugin.
+	 *
+	 *     @type string $plugin_name 	The unique identifier of this plugin.
+	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
+	 *     @type string $version 		The plugin version number.
+	 * }
+	 */
+	public function setups( array $args ) {
+
+		$this->options = (object) array(
+			'metasSite' => get_option( $args['plugin_opts'] . '_metas_site' ),
+			'buttonsContent' => get_option( $args['plugin_opts'] . '_buttons_content' ),
+			'buttonsImage' => get_option( $args['plugin_opts'] . '_buttons_image' ),
+		);
+	}
+
+	/**
+	 * Run WordPress and ButterBean Hooks.
 	 *
 	 * @since  1.0.0
 	 * @access private
-	 * @return void
 	 */
 	private function hooks() {
 
@@ -90,15 +150,18 @@ final class SocialMetaBox {
 		add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
 
 		// Register sections, settings, and controls.
-		add_action( 'butterbean_register', array( $this, 'register_section_sharing' ), -90, 2 );
+		add_action( 'butterbean_register', array( $this, 'register_section_buttons' ), -90, 2 );
 		add_action( 'butterbean_register', array( $this, 'register_section_meta' ), -90, 2 );
 	}
 
 	/**
-	 * [register_manager description]
-	 * @param  [type] $butterbean [description]
-	 * @param  [type] $post_type  [description]
-	 * @return [type]             [description]
+	 * Registers manager.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param object $butterbean  Instance of the 'ButterBean' object.
+	 * @param string $post_type   The current Post Type slug.
 	 */
 	public function register_manager( $butterbean, $post_type ) {
 
@@ -114,24 +177,25 @@ final class SocialMetaBox {
 		$butterbean->register_manager(
 			'wp_social_manager',
 			array(
-				'label' => esc_html__( 'Social', 'wp-social-manager' ),
-				'post_type' => array( 'post', 'page', 'product' ),
-				'context'   => 'normal',
-				'priority'  => 'high'
+				'label'      => esc_html__( 'Social', 'wp-social-manager' ),
+				'post_type'  => array( 'post', 'page', 'product' ),
+				'context'    => 'normal',
+				'priority'   => 'high',
+				'capability' => 'publish_posts',
 			)
 		);
 	}
 
 	/**
-	 * Registers managers, sections, controls, and settings.
+	 * Registers sections.
 	 *
 	 * @since  1.0.0
 	 * @access public
-	 * @param  object  $butterbean  Instance of the `ButterBean` object.
-	 * @param  string  $post_type
-	 * @return void
+	 *
+	 * @param object $butterbean  Instance of the `ButterBean` object.
+	 * @param string $post_type   The current Post Type slug.
 	 */
-	public function register_section_sharing( $butterbean, $post_type ) {
+	public function register_section_buttons( $butterbean, $post_type ) {
 
 		// Get our custom manager object.
 		$manager = $butterbean->get_manager( 'wp_social_manager' );
@@ -141,61 +205,75 @@ final class SocialMetaBox {
 			'buttons',
 			array(
 				'label' => 'Buttons',
-				'icon'  => 'dashicons-thumbs-up'
+				'icon'  => 'dashicons-thumbs-up',
 			)
 		);
 
-		// Register a setting.
-		$manager->register_setting(
-			'buttons_content',
-			array(
-				'type' => 'serialize',
-				'default' => 1,
-				'sanitize_callback' => 'butterbean_validate_boolean'
-			)
-		);
-		$manager->register_control(
-			'buttons_content',
-			array(
-				'type' => 'checkbox',
-				'section' => 'buttons',
-				'label' => 'Content Social Media Buttons',
-				'description' => "Display the buttons that allow people to share, like, or save this {$this->post_type} in social media"
-			)
-		);
+		$post_types = (array) $this->options->buttonsContent['postTypes'];
 
-		// Register a setting.
-		$manager->register_setting(
-			'buttons_image',
-			array(
-				'type' => 'serialize',
-				'default' => 1,
-				'sanitize_callback' => 'butterbean_validate_boolean'
-			)
-		);
-		$manager->register_control(
-			'buttons_image',
-			array(
-				'type' => 'checkbox',
-				'section' => 'buttons',
-				'label' => 'Image Social Media Buttons',
-				'description' => "Display the social media buttons that allow people to share, like, or save images of this {$this->post_type} in social media"
-			)
-		);
+		if ( in_array( $post_type, $post_types, true ) ) {
+
+			// Register a setting.
+			$manager->register_setting(
+				'buttons_content',
+				array(
+					'type' => 'serialize',
+					'default' => 1,
+					'sanitize_callback' => 'butterbean_validate_boolean',
+				)
+			);
+			$manager->register_control(
+				'buttons_content',
+				array(
+					'type' => 'checkbox',
+					'section' => 'buttons',
+					'label' => 'Content Social Media Buttons',
+					'description' => "Display the buttons that allow people to share, like, or save this {$this->post_type} in social media",
+				)
+			);
+		}
+
+		$enabled = (bool) $this->options->buttonsImage['enabled'];
+		$post_types = (array) $this->options->buttonsImage['postTypes'];
+
+		if ( in_array( $post_type, $post_types, true ) && $enabled ) {
+
+			// Register a setting.
+			$manager->register_setting(
+				'buttons_image',
+				array(
+					'type' => 'serialize',
+					'default' => 1,
+					'sanitize_callback' => 'butterbean_validate_boolean',
+				)
+			);
+			$manager->register_control(
+				'buttons_image',
+				array(
+					'type' => 'checkbox',
+					'section' => 'buttons',
+					'label' => 'Image Social Media Buttons',
+					'description' => "Display the social media buttons that allow people to share, like, or save images of this {$this->post_type} in social media",
+				)
+			);
+		}
 	}
 
 	/**
-	 * [register_section_meta description]
-	 * @param  [type] $butterbean [description]
-	 * @param  [type] $post_type  [description]
-	 * @return [type]             [description]
+	 * Register the "Meta" section tab.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param object $butterbean  Instance of the `ButterBean` object.
+	 * @param string $post_type   The current Post Type slug.
 	 */
 	public function register_section_meta( $butterbean, $post_type ) {
 
-		if ( ! isset( $this->metasSite[ 'enabled' ] ) ||
-			 ! (bool) $this->metasSite[ 'enabled' ] ) {
+		if ( ! isset( $this->options->metasSite['enabled'] ) &&
+			 ! (bool) $this->options->metasSite['enabled'] ) {
 				return;
-			}
+		}
 
 		// Get our custom manager object.
 		$manager = $butterbean->get_manager( 'wp_social_manager' );
@@ -204,7 +282,7 @@ final class SocialMetaBox {
 			'meta_tags',
 			array(
 				'label' => 'Metas',
-				'icon'  => 'dashicons-editor-code'
+				'icon'  => 'dashicons-editor-code',
 			)
 		);
 
@@ -217,7 +295,7 @@ final class SocialMetaBox {
 				'description' => "Set a customized title of this {$this->post_type} as it should appear within the social meta tag",
 				'attr' => array(
 					'class' => 'widefat',
-					'placeholder' => $this->post_title
+					'placeholder' => $this->post_title,
 				),
 			)
 		);
@@ -226,7 +304,7 @@ final class SocialMetaBox {
 			'post_title',
 			array(
 				'type' => 'serialize',
-				'sanitize_callback' => 'sanitize_text_field'
+				'sanitize_callback' => 'sanitize_text_field',
 			)
 		);
 
@@ -239,8 +317,8 @@ final class SocialMetaBox {
 				'description' => "Set a one to two customized description of this {$this->post_type} that should appear within the social meta tag",
 				'attr' => array(
 					'placeholder' => $this->post_excerpt,
-					'class' => 'widefat'
-				)
+					'class' => 'widefat',
+				),
 			)
 		);
 
@@ -248,7 +326,7 @@ final class SocialMetaBox {
 			'post_excerpt',
 			array(
 				'type' => 'serialize',
-				'sanitize_callback' => 'wp_kses'
+				'sanitize_callback' => 'wp_kses',
 			)
 		);
 
@@ -260,34 +338,42 @@ final class SocialMetaBox {
 				'section'     => 'meta_tags',
 				'label'       => 'Image',
 				'description' => "Set a custom image URL which should represent this {$this->post_type} within the social meta tag",
-				'size'        => 'large'
+				'size'        => 'large',
 			)
 		);
 		$manager->register_setting(
 			'post_thumbnail',
 			array(
 				'type' => 'serialize',
-				'sanitize_callback' => array( $this, 'sanitize_absint' )
+				'sanitize_callback' => array( $this, 'sanitize_absint' ),
 			)
 		);
 	}
 
 	/**
-	 * [sanitize_absint description]
-	 * @param  [type] $value [description]
-	 * @return [type]        [description]
+	 * Sanitize function for integers.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 * @param  integer $value The value to sanitize.
+	 * @return integer|string The sanitized value or empty string.
 	 */
 	public function sanitize_absint( $value ) {
 		return $value && is_numeric( $value ) ? absint( $value ) : '';
 	}
 
 	/**
-	 * [load_post description]
-	 * @return [type] [description]
+	 * The function method to retrive the post title, content, excerpt, and thumbnail id.
+	 *
+	 * @link https://developer.wordpress.org/reference/functions/get_post_field/
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 */
 	protected function load_post() {
 
-		$this->post_id = isset( $_GET[ 'post' ] ) ? absint( $_GET[ 'post' ] ) : 0;
+		$this->post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
 
 		$this->post_title = get_post_field( 'post_title', $this->post_id );
 		$this->post_content = get_post_field( 'post_content', $this->post_id );
@@ -297,9 +383,12 @@ final class SocialMetaBox {
 	}
 
 	/**
-	 * [load_post_type description]
-	 * @param  [type] $post_type [description]
-	 * @return [type]            [description]
+	 * The function method to retrieve the post type singular name.
+	 *
+	 * This function exist because the post type slug or name can have special
+	 * character like underscore or dash.
+	 *
+	 * @param  string $post_type The post type slug / name.
 	 */
 	protected function load_post_type( $post_type ) {
 
@@ -309,11 +398,16 @@ final class SocialMetaBox {
 	}
 
 	/**
-	 * [admin_head_enqueues description]
-	 * @param  [type] $screen [description]
-	 * @return [type]         [description]
+	 * Print internal styles.
+	 *
+	 * The styles will make the metabox appearance (e.g. icon size, font size, and color)
+	 * consistent following with the WooCommerce metabox styling where ButterBean derived
+	 * the inspiration for the metabox UI.
+	 *
+	 * @param  string $screen The current screen base or id.
 	 */
-	public function admin_head_enqueues( $screen ) { ?>
+	public function admin_head_enqueues( $screen ) {
+	?>
 		<style id="butterbean-styles">
 			.butterbean-manager .butterbean-label { font-weight: 600 }
 			.butterbean-manager .butterbean-description { color: #555; }
@@ -327,6 +421,14 @@ final class SocialMetaBox {
 	 *
 	 * @since  1.0.0
 	 * @access public
+	 *
+	 * @param array $args {
+	 *     An array of common arguments of the plugin.
+	 *
+	 *     @type string $plugin_name 	The unique identifier of this plugin.
+	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
+	 *     @type string $version 		The plugin version number.
+	 * }
 	 * @return object
 	 */
 	public static function get_instance( array $args ) {

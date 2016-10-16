@@ -1,90 +1,138 @@
 <?php
+/**
+ * Public: Meta class
+ *
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
+ *
+ * @package WPSocialManager
+ * @subpackage Public\Metas
+ */
 
 namespace XCo\WPSocialManager;
 
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
+
 /**
+ * Meta data class.
  *
+ * This class to retrieve the content meta data and generate
+ * social meta tags, such as Open Graph and Twitter Cards,
+ * in the head tag.
+ *
+ * @since 1.0.0
  */
 final class Metas extends OutputUtilities {
 
 	/**
-	 * [$meta description]
-	 * @var [type]
+	 * The unique identifier or prefix for database names.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $plugin_opts;
 
 	/**
-	 * [$locale description]
-	 * @var [type]
+	 * The current website language.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $locale;
 
 	/**
-	 * [$options description]
-	 * @var [type]
+	 * The options required to render the meta data.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $options;
 
 	/**
-	 * [__construct description]
-	 * @param [type] $key [description]
+	 * Constructor.
+	 *
+	 * Run the WordPress Hooks, add meta tags in the 'head' tag.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param array $args {
+	 *     An array of common arguments of the plugin.
+	 *
+	 *     @type string $plugin_name 	The unique identifier of this plugin.
+	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
+	 *     @type string $version 		The plugin version number.
+	 * }
 	 */
 	public function __construct( array $args ) {
 
-		/**
-		 * [$this->plugin_opts description]
-		 * @var [type]
-		 */
-		$this->plugin_opts = $args[ 'plugin_opts' ];
+		$this->plugin_opts = $args['plugin_opts'];
 
 		$this->hooks();
 	}
 
 	/**
-	 * [action description]
-	 * @return [type] [description]
+	 * Run Filters and Actions required.
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 */
 	protected function hooks() {
 
 		add_action( 'init', array( $this, 'setups' ) );
 
-		add_action( 'wp_head', array( $this, 'site_meta_tags' ), 2 );
-		add_action( 'wp_head', array( $this, 'post_meta_tags' ), 2 );
+		add_action( 'wp_head', array( $this, 'site_meta_tags' ), -10 );
+		add_action( 'wp_head', array( $this, 'post_meta_tags' ), -10 );
 	}
 
 	/**
-	 * [setups description]
-	 * @return [type] [description]
+	 * Setup the meta data.
+	 *
+	 * The setups may involve running some Classes, Functions,
+	 * and sometimes WordPress Hooks that are required to render
+	 * the social buttons.
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 */
 	public function setups() {
 
-		/**
-		 * [$this->options description]
-		 * @var [type]
-		 */
 		$this->options = (object) array(
 			'profiles'  => get_option( "{$this->plugin_opts}_profiles" ),
-			'metasSite' => get_option( "{$this->plugin_opts}_metas_site" )
+			'metasSite' => get_option( "{$this->plugin_opts}_metas_site" ),
 		);
 
-		/**
-		 * [$this->locale description]
-		 * @var [type]
-		 */
 		$this->locale  = get_locale();
 	}
 
 	/**
-	 * [is_meta_enabled description]
-	 * @return boolean [description]
+	 * Utility method to check if the meta option is enabled.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return boolean True if meta is enabled, false if not.
 	 */
 	public function is_meta_enabled() {
 		return (bool) $this->get_site_meta( 'enabled' );
 	}
 
 	/**
-	 * [get_site_meta description]
-	 * @return [type] [description]
+	 * Utility method to get the site meta data.
+	 *
+	 * This data is used for the homepage and sometimes
+	 * acts as the default value of if specific meta data
+	 * is not available for particular page.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param  string $which Meta array key.
+	 * @return mixed
 	 */
 	public function get_site_meta( $which ) {
 
@@ -98,10 +146,14 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [get_meta description]
-	 * @param  [type] $id    [description]
-	 * @param  [type] $which [description]
-	 * @return [type]        [description]
+	 * Utility method to get the post meta data.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param  integer $id    The post ID number.
+	 * @param  string  $which The the meta array key.
+	 * @return string|array
 	 */
 	public function get_post_meta( $id, $which ) {
 
@@ -115,8 +167,13 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [site_meta_tags description]
-	 * @return [type] [description]
+	 * Print the site meta tag elements in the 'head' tag.
+	 *
+	 * The "site" meta tags is generted in the homepage and
+	 * archive pages (e.g. Categories, Tags, and Custom Taxonomy Terms).
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function site_meta_tags() {
 
@@ -129,20 +186,25 @@ final class Metas extends OutputUtilities {
 			'site_title' => $this->site_title(),
 			'site_description' => $this->site_description(),
 			'site_url' => $this->site_url(),
-			'site_image' => $this->site_image()
+			'site_image' => $this->site_image(),
 		);
 
 		$og = $this->site_open_graph( $tag_args );
 		$tc = $this->site_twitter_card( $tag_args );
 
-		echo "\n<!-- START: WP-Social-Manager [ https://wordpress.org/plugins/wp-social-manager ] -->\n";
+		echo "<!-- START: WP-Social-Manager -->\n";
 		echo "{$og}{$tc}";
-		echo "<!-- END: WP-Social-Manager -->\n\n";
+		echo "<!-- END: WP-Social-Manager -->\n";
 	}
 
 	/**
-	 * [meta_tags description]
-	 * @return [type] [description]
+	 * Print the post meta tag elements in the 'head' tag.
+	 *
+	 * The "post" meta tag is generated in any a single post or page
+	 * of any Post Types.
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function post_meta_tags() {
 
@@ -158,53 +220,64 @@ final class Metas extends OutputUtilities {
 			'post_description' => $this->post_description( $post_id ),
 			'post_url' => $this->post_url( $post_id ),
 			'post_image' => $this->post_image( $post_id ),
-			'post_author' => $this->post_author( $post_id )
+			'post_author' => $this->post_author( $post_id ),
 		);
 
 		$og = $this->post_open_graph( $tag_args );
 		$tc = $this->post_twitter_card( $tag_args );
 
-		echo "\n<!-- START: WP-Social-Manager [ https://wordpress.org/plugins/wp-social-manager ] -->\n";
+		echo "<!-- START: WP-Social-Manager -->\n";
 		echo "{$og}{$tc}";
-		echo "<!-- END: WP-Social-Manager -->\n\n";
+		echo "<!-- END: WP-Social-Manager -->\n";
 	}
 
 	/**
-	 * [site_open_graph description]
-	 * @return [type] [description]
+	 * Create the Open Graph meta tags for the "site".
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @link http://ogp.me/
+	 *
+	 * @param array $args {
+	 *     An array of website meta data to add in the social meta tags.
+	 *
+	 *     @type string $site_name 			The website name or brand.
+	 *     @type string $site_title 		The website title.
+	 *     @type string $site_description 	The website description.
+	 *     @type string $site_url 			The website url.
+	 *     @type string $site_image 		The website image / icon / logo.
+	 * }
+	 * @return string The Open Graph meta tags.
 	 */
 	public function site_open_graph( $args ) {
 
 		$meta = '';
 
-		/**
-		 * [$args description]
-		 * @var [type]
-		 */
 		$args = wp_parse_args( $args, array(
 			'site_name' => false,
 			'site_title' => false,
 			'site_description' => false,
 			'site_url' => false,
-			'site_image' => array()
+			'site_image' => array(),
 		) );
 
-		$meta .= $args[ 'site_name' ] ? sprintf( "<meta property='og:site_name' content='%s' />\n", $args[ 'site_name' ] ) : '';
-		$meta .= $args[ 'site_title' ] ? sprintf( "<meta property='og:title' content='%s' />\n", $args[ 'site_title' ] ) : '';
-		$meta .= $args[ 'site_description' ] ? sprintf( "<meta property='og:description' content='%s' />\n", $args[ 'site_description' ] ) : '';
-		$meta .= $args[ 'site_url' ] ? sprintf( "<meta property='og:url' content='%s' />\n", esc_url( $args[ 'site_url' ] ) ) : '';
+		$meta .= $args['site_name'] ? sprintf( "<meta property='og:site_name' content='%s' />\n", $args['site_name'] ) : '';
+		$meta .= $args['site_title'] ? sprintf( "<meta property='og:title' content='%s' />\n", $args['site_title'] ) : '';
+		$meta .= $args['site_description'] ? sprintf( "<meta property='og:description' content='%s' />\n", $args['site_description'] ) : '';
+		$meta .= $args['site_url'] ? sprintf( "<meta property='og:url' content='%s' />\n", esc_url( $args['site_url'] ) ) : '';
 
-		if ( ! empty( $args[ 'site_image' ] ) ) {
+		if ( ! empty( $args['site_image'] ) ) {
 
-			$source = $args[ 'site_image' ][ 'src' ];
-			$width  = $args[ 'site_image' ][ 'width' ];
-			$height = $args[ 'site_image' ][ 'height' ];
+			$source = $args['site_image']['src'];
+			$width  = $args['site_image']['width'];
+			$height = $args['site_image']['height'];
 
 			if ( $source && $width && $height ) {
 				$meta .= sprintf( "<meta property='og:image:src' content='%s' />\n", esc_attr( $source ) );
 				$meta .= sprintf( "<meta property='og:image:width' content='%s' />\n", esc_attr( $width ) );
 				$meta .= sprintf( "<meta property='og:image:height' content='%s' />\n", esc_attr( $height ) );
-			} else if ( $source ) {
+			} elseif ( $source ) {
 				$meta .= sprintf( "<meta name='og:image' content='%s' />\n", esc_attr( $source ) );
 			}
 		}
@@ -221,49 +294,60 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [site_twitter_card description]
-	 * @return [type] [description]
+	 * Create Twitter Cards meta tags for the "site".
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @link https://dev.twitter.com/cards/overview
+	 *
+	 * @param array $args {
+	 *     An array of website meta data to add in the social meta tags.
+	 *
+	 *     @type string $site_name 			The website name or brand.
+	 *     @type string $site_title 		The website title.
+	 *     @type string $site_description 	The website description.
+	 *     @type string $site_url 			The website url.
+	 *     @type string $site_image 		The website image / icon / logo.
+	 * }
+	 * @return string The Twitter Cards meta tags.
 	 */
 	public function site_twitter_card( $args ) {
 
 		$meta = '';
 
-		/**
-		 * [$args description]
-		 * @var [type]
-		 */
 		$args = wp_parse_args( $args, array(
 			'site_name' => false,
 			'site_title' => false,
 			'site_description' => false,
 			'site_url' => false,
-			'site_image' => array()
+			'site_image' => array(),
 		) );
 
-		$meta .= $args[ 'site_title' ] ? sprintf( "<meta name='twitter:title' content='%s' />\n", $args[ 'site_title' ] ) : '';
-		$meta .= $args[ 'site_description' ] ? sprintf( "<meta name='twitter:description' content='%s' />\n", $args[ 'site_description' ] ) : '';
-		$meta .= $args[ 'site_url' ] ? sprintf( "<meta name='twitter:url' content='%s' />\n", esc_url( $args[ 'site_url' ] ) ) : '';
+		$meta .= $args['site_title'] ? sprintf( "<meta name='twitter:title' content='%s' />\n", $args['site_title'] ) : '';
+		$meta .= $args['site_description'] ? sprintf( "<meta name='twitter:description' content='%s' />\n", $args['site_description'] ) : '';
+		$meta .= $args['site_url'] ? sprintf( "<meta name='twitter:url' content='%s' />\n", esc_url( $args['site_url'] ) ) : '';
 
 		if ( ! empty( $meta ) ) {
 
-			$profile = $this->options->profiles[ 'twitter' ];
+			$profile = $this->options->profiles['twitter'];
 			$site = $profile ? sprintf( "<meta name='twitter:site' content='@%s' />\n", esc_attr( $profile ) ) : '';
 			$type = "<meta name='twitter:card' content='summary' />\n";
 			$meta = $site . $type . $meta;
 		}
 
-		if ( ! empty( $args[ 'site_image' ] ) ) {
+		if ( ! empty( $args['site_image'] ) ) {
 
-			$source = $args[ 'site_image' ][ 'src' ];
-			$width  = $args[ 'site_image' ][ 'width' ];
-			$height = $args[ 'site_image' ][ 'height' ];
+			$source = $args['site_image']['src'];
+			$width  = $args['site_image']['width'];
+			$height = $args['site_image']['height'];
 
 			if ( $source && $width && $height ) {
 
 				$meta .= sprintf( "<meta name='twitter:image:src' content='%s' />\n", esc_attr( $source ) );
 				$meta .= sprintf( "<meta name='twitter:image:width' content='%s' />\n", esc_attr( $width ) );
 				$meta .= sprintf( "<meta name='twitter:image:height' content='%s' />\n", esc_attr( $height ) );
-			} else if ( $source ) {
+			} elseif ( $source ) {
 
 				$meta .= sprintf( "<meta name='twitter:image' content='%s' />\n", esc_attr( $source ) );
 			}
@@ -273,42 +357,52 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [open_graph description]
-	 * @param  [type] $title [description]
-	 * @return [type]        [description]
+	 * Create the Open Graph meta tags for the "post".
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @link http://ogp.me/
+	 *
+	 * @param array $args {
+	 *     An array of website meta data to add in the social meta tags.
+	 *
+	 *     @type string $site_name 			The website name or brand.
+	 *     @type string $site_title 		The website title.
+	 *     @type string $site_description 	The website description.
+	 *     @type string $site_url 			The website url.
+	 *     @type string $site_image 		The website image / icon / logo.
+	 * }
+	 * @return string The Open Graph meta tags.
 	 */
 	protected function post_open_graph( $args ) {
 
 		$meta = '';
 
-		/**
-		 * [$args description]
-		 * @var [type]
-		 */
 		$args = wp_parse_args( $args, array(
 			'site_name' => false,
 			'post_title' => false,
 			'post_description' => false,
 			'post_url' => false,
 			'post_image' => array(),
-			'post_author' => array()
+			'post_author' => array(),
 		) );
 
-		$meta .= $args[ 'post_title' ] ? sprintf( "<meta property='og:title' content='%s' />\n", $args[ 'post_title' ] ) : '';
-		$meta .= $args[ 'post_description' ] ? sprintf( "<meta property='og:description' content='%s' />\n", $args[ 'post_description' ] ) : '';
-		$meta .= $args[ 'post_url' ] ? sprintf( "<meta property='og:url' content='%s' />\n", esc_url( $args[ 'post_url' ] ) ) : '';
+		$meta .= $args['post_title'] ? sprintf( "<meta property='og:title' content='%s' />\n", $args['post_title'] ) : '';
+		$meta .= $args['post_description'] ? sprintf( "<meta property='og:description' content='%s' />\n", $args['post_description'] ) : '';
+		$meta .= $args['post_url'] ? sprintf( "<meta property='og:url' content='%s' />\n", esc_url( $args['post_url'] ) ) : '';
 
-		if ( ! empty( $args[ 'post_image' ] ) ) {
+		if ( ! empty( $args['post_image'] ) ) {
 
-			$source = $args[ 'post_image' ][ 'src' ];
-			$width  = $args[ 'post_image' ][ 'width' ];
-			$height = $args[ 'post_image' ][ 'height' ];
+			$source = $args['post_image']['src'];
+			$width  = $args['post_image']['width'];
+			$height = $args['post_image']['height'];
 
 			if ( $source && $width && $height ) {
 				$meta .= sprintf( "<meta property='og:image:src' content='%s' />\n", esc_attr( $source ) );
 				$meta .= sprintf( "<meta property='og:image:width' content='%s' />\n", esc_attr( $width ) );
 				$meta .= sprintf( "<meta property='og:image:height' content='%s' />\n", esc_attr( $height ) );
-			} else if ( $source ) {
+			} elseif ( $source ) {
 				$meta .= sprintf( "<meta name='og:image' content='%s' />\n", esc_attr( $source ) );
 			}
 		}
@@ -321,7 +415,7 @@ final class Metas extends OutputUtilities {
 			$meta = $type . $locale . $meta;
 		}
 
-		$site = $args[ 'site_name' ] ? sprintf( "<meta property='og:site_name' content='%s' />\n", $args[ 'site_name' ] ) : '';
+		$site = $args['site_name'] ? sprintf( "<meta property='og:site_name' content='%s' />\n", $args['site_name'] ) : '';
 
 		$graph = $this->post_facebook_graph( $args );
 
@@ -329,25 +423,41 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [post_facebook_graph description]
-	 * @return [type] [description]
+	 * Create Facebook Graph meta tags for the "post".
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @link http://ogp.me/
+	 * @todo Shall merge these to 'post_open_graph'?
+	 *
+	 * @param array $args {
+	 *     An array of website meta data to add in the social meta tags.
+	 *
+	 *     @type string $site_name 			The website name or brand.
+	 *     @type string $site_title 		The website title.
+	 *     @type string $site_description 	The website description.
+	 *     @type string $site_url 			The website url.
+	 *     @type string $site_image 		The website image / icon / logo.
+	 * }
+	 * @return string The Twitter Cards meta tags.
 	 */
 	protected function post_facebook_graph( array $args ) {
 
 		$meta = '';
 
 		$props = self::get_social_properties( 'facebook' );
-		$profile = $this->options->profiles[ 'facebook' ];
+		$profile = $this->options->profiles['facebook'];
 
-		$url = isset( $props[ 'url' ] ) ? trailingslashit( $props[ 'url' ] ) : '';
+		$url = isset( $props['url'] ) ? trailingslashit( $props['url'] ) : '';
 
 		$publisher = ! empty( $url ) && $profile ? "{$url}{$profile}" : '';
 		$meta .= $publisher ? sprintf( "<meta property='article:publisher' content='%s' />\n", $publisher ) : '';
 
-		$author = (array) $args[ 'post_author' ];
+		$author = (array) $args['post_author'];
 
 		if ( ! empty( $author ) ) {
-			if ( isset( $author[ 'profiles' ][ 'facebook' ] ) && ! empty( $author[ 'profiles' ][ 'facebook' ] ) ) {
+			if ( isset( $author['profiles']['facebook'] ) && ! empty( $author['profiles']['facebook'] ) ) {
 				$meta .= sprintf( "<meta property='article:author' content='%s' />\n", "{$url}{$author['profiles']['facebook']}" );
 			} else {
 				$meta .= sprintf( "<meta name='author' content='%s' />\n", "{$author['display_name']}" );
@@ -358,9 +468,23 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [twitter_card description]
-	 * @param  [type] $args [description]
-	 * @return [type]       [description]
+	 * Create Twitter Cards meta tags for the "post".
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @link https://dev.twitter.com/cards/overview
+	 *
+	 * @param array $args {
+	 *     An array of website meta data to add in the social meta tags.
+	 *
+	 *     @type string $site_name 			The website name or brand.
+	 *     @type string $site_title 		The website title.
+	 *     @type string $site_description 	The website description.
+	 *     @type string $site_url 			The website url.
+	 *     @type string $site_image 		The website image / icon / logo.
+	 * }
+	 * @return string The Twitter Cards meta tags.
 	 */
 	protected function post_twitter_card( $args ) {
 
@@ -370,25 +494,25 @@ final class Metas extends OutputUtilities {
 			'post_description' => false,
 			'post_url' => false,
 			'post_image' => array(),
-			'post_author' => array()
+			'post_author' => array(),
 		) );
 
-		$meta .= $args[ 'post_title' ] ? sprintf( "<meta name='twitter:title' content='%s' />\n", $args[ 'post_title' ] ) : '';
-		$meta .= $args[ 'post_description' ] ? sprintf( "<meta name='twitter:description' content='%s' />\n", $args[ 'post_description' ] ) : '';
-		$meta .= $args[ 'post_url' ] ? sprintf( "<meta name='twitter:url' content='%s' />\n", esc_url( $args[ 'post_url' ] ) ) : '';
+		$meta .= $args['post_title'] ? sprintf( "<meta name='twitter:title' content='%s' />\n", $args['post_title'] ) : '';
+		$meta .= $args['post_description'] ? sprintf( "<meta name='twitter:description' content='%s' />\n", $args['post_description'] ) : '';
+		$meta .= $args['post_url'] ? sprintf( "<meta name='twitter:url' content='%s' />\n", esc_url( $args['post_url'] ) ) : '';
 
-		if ( ! empty( $args[ 'post_image' ] ) ) {
+		if ( ! empty( $args['post_image'] ) ) {
 
-			$source = $args[ 'post_image' ][ 'src' ];
-			$width  = $args[ 'post_image' ][ 'width' ];
-			$height = $args[ 'post_image' ][ 'height' ];
+			$source = $args['post_image']['src'];
+			$width  = $args['post_image']['width'];
+			$height = $args['post_image']['height'];
 
 			if ( $source && $width && $height ) {
 
 				$meta .= sprintf( "<meta name='twitter:image:src' content='%s' />\n", esc_attr( $source ) );
 				$meta .= sprintf( "<meta name='twitter:image:width' content='%s' />\n", esc_attr( $width ) );
 				$meta .= sprintf( "<meta name='twitter:image:height' content='%s' />\n", esc_attr( $height ) );
-			} else if ( $source ) {
+			} elseif ( $source ) {
 
 				$meta .= sprintf( "<meta name='twitter:image' content='%s' />\n", esc_attr( $source ) );
 			}
@@ -396,16 +520,16 @@ final class Metas extends OutputUtilities {
 
 		if ( ! empty( $meta ) ) {
 
-			$profile = $this->options->profiles[ 'twitter' ];
+			$profile = $this->options->profiles['twitter'];
 			$site = $profile ? sprintf( "<meta name='twitter:site' content='@%s' />\n", esc_attr( $profile ) ) : '';
 			$type = "<meta name='twitter:card' content='summary_large_image' />\n";
 			$meta = $site . $type . $meta;
 		}
 
-		$author = (array) $args[ 'post_author' ];
+		$author = (array) $args['post_author'];
 
-		if ( isset( $author[ 'profiles' ][ 'twitter' ] ) ) {
-			if ( ! empty( $author[ 'profiles' ][ 'twitter' ] ) ) {
+		if ( isset( $author['profiles']['twitter'] ) ) {
+			if ( ! empty( $author['profiles']['twitter'] ) ) {
 				$meta .= sprintf( "<meta name='twitter:creator' content='@%s' />\n", "{$author['profiles']['twitter']}" );
 			}
 		}
@@ -414,8 +538,12 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [site_title description]
-	 * @return [type] [description]
+	 * The method to get the website name / brand.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string The website name / brand
 	 */
 	public function site_name() {
 
@@ -426,16 +554,24 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [site_title description]
-	 * @return [type] [description]
+	 * The method to get the website title.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string The website title
 	 */
 	public function site_title() {
 		return wp_kses( wp_get_document_title(), array() );
 	}
 
 	/**
-	 * [site_description description]
-	 * @return [type] [description]
+	 * The method to get the website description.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string The website description
 	 */
 	public function site_description() {
 
@@ -456,8 +592,12 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [site_title description]
-	 * @return [type] [description]
+	 * The method to get the website url.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string The website url
 	 */
 	public function site_url() {
 
@@ -466,8 +606,18 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [site_image description]
-	 * @return [type] [description]
+	 * The method to get the website image.
+	 *
+	 * This image should represent the website.
+	 * It generally could be a favicon, or a logo.
+	 *
+	 * In the author archive, the image retrieved will be the author
+	 * Gravatar image profile.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return array An array of image data (src, width, and height)
 	 */
 	public function site_image() {
 
@@ -481,7 +631,7 @@ final class Metas extends OutputUtilities {
 			return array(
 					'src' => $avatar,
 					'width' => 180,
-					'height' => 180
+					'height' => 180,
 				);
 		}
 
@@ -492,14 +642,19 @@ final class Metas extends OutputUtilities {
 			return array(
 				'src' => esc_url( $src ),
 				'width' => (int) $width,
-				'height' => (int) $height
+				'height' => (int) $height,
 			);
 		}
 	}
 
 	/**
-	 * [get_post description]
-	 * @return [type] [description]
+	 * The method to get the "post" title.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param  integer $id The post ID.
+	 * @return string The "post" title
 	 */
 	public function post_title( $id ) {
 
@@ -516,9 +671,13 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [get_description description]
-	 * @param  [type] $id [description]
-	 * @return [type]     [description]
+	 * The method to get the "post" description.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param  integer $id The post ID.
+	 * @return string The "post" description
 	 */
 	public function post_description( $id ) {
 
@@ -540,17 +699,23 @@ final class Metas extends OutputUtilities {
 	}
 
 	/**
-	 * [get_thumbnail description]
-	 * @param  [type] $id [description]
-	 * @return [type]     [description]
+	 * The method to get the "post" image.
+	 *
+	 * This method will try to retrieve image from a number of sources,
+	 * and return the image data based on the following priority order:
+	 * 1. Post Meta Image
+	 * 2. Post Featured Image
+	 * 3. Post Content First Image
+	 * 4. Site Meta Image
+	 * 5. Site Custom Logo (Customizer)
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param  integer $id The post ID.
+	 * @return array      The image data consisting of the image source, width, and height
 	 */
 	public function post_image( $id ) {
-
-		// 1. Post Meta Image
-		// 2. Post Featured Image
-		// 3. Post Content First Image
-		// 4. Site Meta Image
-		// 5. Site Custom Logo (Customizer)
 
 		$attachment_id = null;
 
@@ -569,28 +734,31 @@ final class Metas extends OutputUtilities {
 			return array(
 				'src' => esc_url( $src ),
 				'width' => absint( $width ),
-				'height' => absint( $height )
+				'height' => absint( $height ),
 			);
 		}
 
 		$post = get_post( $id );
+
+		libxml_use_internal_errors( true );
+
 		$dom = new \DOMDocument();
+		$dom->loadHTML( mb_convert_encoding( $post->post_content, 'HTML-ENTITIES', 'UTF-8' ) );
+		$images = $dom->getElementsByTagName( 'img' );
 
-    	$dom->loadHTML( $post->post_content );
-    	$images = $dom->getElementsByTagName( 'img' );
+		if ( 0 !== $images->length ) {
 
-    	if ( 0 !== $images->length ) {
-
-			$image = getimagesize( $images->item(0)->getAttribute( 'src' ) );
+			$src = $images->item( 0 )->getAttribute( 'src' );
+			$image = getimagesize( $images->item( 0 )->getAttribute( 'src' ) );
 
 			if ( $image ) {
 
 				list( $width, $height ) = $image;
 
 				return array(
-					'src' => esc_url( $matches[1][0] ),
+					'src' => esc_url( $src ),
 					'width' => absint( $width ),
-					'height' => absint( $height )
+					'height' => absint( $height ),
 				);
 			}
 		}
@@ -613,24 +781,36 @@ final class Metas extends OutputUtilities {
 			return array(
 				'src' => esc_url( $src ),
 				'width' => absint( $width ),
-				'height' => absint( $height )
+				'height' => absint( $height ),
 			);
 		}
 	}
 
 	/**
-	 * [get_url description]
-	 * @param  [type] $id [description]
-	 * @return [type]     [description]
+	 * The method to get the "post" url / permalink.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param integer $id The post ID.
+	 * @return string The "post" url / permalink
 	 */
 	public function post_url( $id ) {
 		return esc_url( get_permalink( $id ) );
 	}
 
 	/**
-	 * [post_author description]
-	 * @param  [type] $id [description]
-	 * @return [type]     [description]
+	 * The method to get the "post" author.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param  integer $id The post ID.
+	 * @return array {
+	 *     @type string $display_name 	The author name.
+	 *     @type string $profiles 		An array of social media profiles associated
+	 *           						with the author.
+	 * }
 	 */
 	public function post_author( $id ) {
 
@@ -640,7 +820,7 @@ final class Metas extends OutputUtilities {
 
 		return array(
 			'display_name' => $name,
-			'profiles' => $profiles
+			'profiles' => $profiles,
 		);
 	}
 }

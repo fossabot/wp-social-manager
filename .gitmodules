@@ -1,4 +1,6 @@
 [submodule "admin/partials/butterbean-extend"]
 	path = admin/partials/butterbean-extend
+	url = https://tfirdaus@github.com/tfirdaus/butterbean-extend.git
 [submodule "admin/partials/pepperplane"]
 	path = admin/partials/pepperplane
+	url = https://tfirdaus@github.com/tfirdaus/pepperplane.git
