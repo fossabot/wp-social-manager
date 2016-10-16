@@ -81,7 +81,7 @@ final class APIRoutes extends OutputUtilities {
 	 * }
 	 * @param Metas $metas The class Meta instance.
 	 */
-	public function __construct( array $args, Metas $metas ) {
+	function __construct( array $args, Metas $metas ) {
 
 		$this->plugin_name = $args['plugin_name'];
 
@@ -187,8 +187,8 @@ final class APIRoutes extends OutputUtilities {
 			'id' => $request['id'],
 		);
 
-		$response['content'] = $this->buttons_content_response( $request );
-		$response['image'] = $this->buttons_image_response( $request );
+		$response['content'] = $this->buttons_content_response( $request['id'] );
+		$response['image'] = $this->buttons_image_response( $request['id'] );
 
 		return new \WP_REST_Response( $response, 200 );
 	}
@@ -204,12 +204,12 @@ final class APIRoutes extends OutputUtilities {
 	 * @param array $request The passed parameters in the route.
 	 * @return array         An array of sites with their label / name and button endpoint url.
 	 */
-	protected function buttons_content_response( $request ) {
+	protected function buttons_content_response( $post_id ) {
 
 		$sites   = self::get_button_sites( 'content' );
 
 		$content = $this->options->buttonsContent;
-		$metas   = $this->get_post_metas( $request['id'] );
+		$metas   = $this->get_post_metas( $post_id );
 
 		$buttons = array();
 
@@ -334,12 +334,12 @@ final class APIRoutes extends OutputUtilities {
 	 * @param array $request The passed parameters in the route.
 	 * @return array         An array of sites with their label / name and button endpoint url.
 	 */
-	protected function buttons_image_response( $request ) {
+	protected function buttons_image_response( $post_id ) {
 
 		$sites = self::get_button_sites( 'image' );
 
 		$image = $this->options->buttonsImage;
-		$metas = $this->get_post_metas( $request['id'] );
+		$metas = $this->get_post_metas( $post_id );
 
 		$buttons = array();
 
