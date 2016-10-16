@@ -1,99 +1,81 @@
-;(function( $, wp, _, Backbone ) {
+;(function( $, _, Backbone ) {
 
 	'use strict';
 
 	/**
-	 * [initialize description;
+	 * The Backbone View to preview the "Social Profile" URL.
 	 */
-	var ProfilesPreview = Backbone.View.extend( {
+	var SocialProfiles = Backbone.View.extend( {
 
-			events : {
-				'input .account-profile-control' : 'previewUpdate'
-			},
+		// Events the input should listen to.
+		events: {
+			'input': 'previewUpdate'
+		},
 
-			/**
-			 * [initialize description]
-			 * @return {[type]} [description]
-			 */
-			initialize : function() {
+		/**
+		 * Initialize the View
+		 * On page load, render the preview if the value is set in the input.
+		 */
+		initialize: function() {
+			this.previewInit();
+		},
 
-				this.$controls = this.$el.find( '.account-profile-control' );
-				this.previewInit();
-			},
+		previewInit: function() {
 
-			/**
-			 * [loadPreview description]
-			 * @return {[type]} [description]
-			 */
-			previewInit : function() {
+			var self = this;
 
-				this.$controls.each( function( index, elem ) {
-					this.getPreview( elem );
-				}.bind( this ) );
-			},
+			this.$el.each( function() {
+				self.createPlaceholder( this );
+				self.render( this );
+			} );
+		},
 
-			/**
-			 * [loadPreview description]
-			 * @return {[type]} [description]
-			 */
-			previewUpdate : _.throttle( function( event ) {
-				this.getPreview( event.currentTarget );
-			}, 200 ),
+		previewUpdate: _.throttle( function( event ) {
+			this.render( event.currentTarget );
+		}, 150 ),
 
-			/**
-			 * [getPreview description]
-			 * @param  {[type]} elem [description]
-			 * @return {[type]}      [description]
-			 */
-			getPreview : function( elem ) {
+		render: function( target ) {
 
-				var target = this.getTarget( $( elem ) );
+			var id, value, url = target.getAttribute( 'data-url' );
 
-					target.sibling.toggleClass( 'hide-if-js', '' !== target.val );
-					target.preview.toggleClass( function() {
+			if ( url && '' !== url ) {
 
-						var $this = $( this );
-						var $code = $this.find( 'code' );
+				id = target.getAttribute( 'id' );
+				value = this.getValue( target );
 
-						$code.text( '' !== target.val ? target.url + target.val : '' );
+				$( '#' + id + '-preview' ).html( function() {
 
-						return 'hide-if-js';
+					var $this = $( this );
 
-					}, '' === target.val );
-			},
+					var $siblings = $this.siblings().not( 'input' );
+						$siblings.toggleClass( 'hide-if-js', '' !== value );
 
-			/**
-			 * [getTarget description]
-			 * @param  {[type]} $elem [description]
-			 * @return {[type]}       [description]
-			 */
-			getTarget : function( $elem ) {
-
-				var url = $.trim( $elem.data( 'url' ) );
-				var val = $.trim( $elem.val() );
-
-				var $preview = $elem.siblings( '.account-profile-preview' );
-				var $sibling = $preview.nextAll();
-
-				return {
-					'url' : url,
-					'val' : val,
-					'preview' : $preview,
-					'sibling' : $sibling
-				}
+						return ( '' !== value ) ? '<code>' + url + value + '</code>' : '';
+				} );
 			}
+
+			return this;
+		},
+
+		createPlaceholder: function( target ) {
+
+			var attrID = target.getAttribute( 'id' );
+
+			return $( target ).after( '<p id=' + attrID + '-preview></p>' );
+		},
+
+		getValue: function( target ) {
+
+			var value = target.value.replace( /\s+/g, '-' );
+
+			target.value = value;
+
+			return value;
+		}
 	} );
 
-	var args =  {
-			el: $( '#wp-social-manager-wrap' )
-		};
+	new SocialProfiles( {
+			el: '.account-profile-control'
+		} );
 
-		if ( 'profile-php' === adminpage || 'user-edit-php' === adminpage ) {
-			args = {
-				el: $( '#your-profile' )
-			}
-		}
-
-	new ProfilesPreview( args );
-
-})( jQuery, window.wp, window._, window.Backbone, undefined );
+})( jQuery, window._, window.Backbone, undefined );

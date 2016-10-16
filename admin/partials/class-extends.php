@@ -1,52 +1,91 @@
 <?php
+/**
+ * Admin: SettingsExtend class
+ *
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
+ *
+ * @package WPSocialManager
+ * @subpackage Admin\User
+ */
 
 namespace XCo\WPSocialManager;
 
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
+
+/**
+ * The class to register custom setting field using PepperPlane framework.
+ *
+ * @since 1.0.0
+ */
 final class SettingsExtend extends \PepperPlaneFields {
 
 	/**
-	 * [$page_hook description]
-	 * @var [type]
+	 * The admin screen base / ID
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $page_hook;
+	protected $screen;
 
 	/**
-	 * [__construct description]
+	 * Constructor.
+	 *
+	 * Initialize the screen ID property, and run the hooks.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param string $screen The admin screen base / ID.
 	 */
-	public function __construct( $page_hook ) {
+	public function __construct( $screen ) {
 
-		$this->page_hook = $page_hook;
-
-		$this->hooks();
+		if ( is_string( $screen ) && ! empty( $screen ) ) {
+			$this->screen = $screen;
+			$this->hooks();
+		}
 	}
 
 	/**
-	 * [actions description]
-	 * @return [type] [description]
+	 * Run Filters and Actions required.
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 */
 	protected function hooks() {
 
-		// Actions
-		add_action( "{$this->page_hook}_add_extra_field", array( $this, 'callback_image' ) );
+		// Actions.
+		add_action( "{$this->screen}_add_extra_field", array( $this, 'callback_image' ) );
 
-		// Filters
-		add_filter( "{$this->page_hook}_field_scripts", array( $this, 'register_field_files' ) );
-		add_filter( "{$this->page_hook}_field_styles", array( $this, 'register_field_files' ) );
+		// Filters.
+		add_filter( "{$this->screen}_field_scripts", array( $this, 'register_field_files' ) );
+		add_filter( "{$this->screen}_field_styles", array( $this, 'register_field_files' ) );
 	}
 
 	/**
-	 * [load_script description]
-	 * @param  array  $args [description]
-	 * @return [type]       [description]
+	 * Register files (stylesheets or JavaScripts) to load when using the input.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param 	array $args An array of input type.
+	 * @return 	array       The input types with the image file name.
 	 */
 	public function register_field_files( array $args ) {
-		$args[ 'image' ] = 'image-upload';
+
+		$args['image'] = 'image-upload';
 		return $args;
 	}
 
 	/**
-	 * [callback_image description]
-	 * @return [type] [description]
+	 * The function callback to render the Image input interface.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param array $args Arguments (e.g. id, section, type, etc.) to render the new interface.
 	 */
 	public function callback_image( $args ) {
 
@@ -65,15 +104,14 @@ final class SettingsExtend extends \PepperPlaneFields {
 		$html = "<input type='hidden' id='{$id}' name='{$name}'' value='{$value}'/>
 			<div id='{$id}-wrap' class='field-image-wrap{$set}'>
 				<div id='{$id}-img'>{$img}</div>
-				<div id='{$id}-placeholder' class='field-image-placeholder'>". esc_html__( 'No Image Selected', 'wp-social-manager' ) ."</div>
+				<div id='{$id}-placeholder' class='field-image-placeholder'>" . esc_html__( 'No Image Selected', 'wp-social-manager' ) . "</div>
 			</div>
 			<div id='{$id}-control' class='field-image-control'>
-				<button type='button' id='{$id}-add' class='button add-media{$show}' data-input='#{$id}'>". esc_html__( 'Add image', 'wp-social-manager' ) ."</button>
-				<button type='button' id='{$id}-change' class='button change-media{$hide}' data-input='#{$id}'>". esc_html__( 'Change image', 'wp-social-manager' ) ."</button>
-				<button type='button' id='{$id}-remove' class='button remove-media{$hide}' data-input='#{$id}'>". esc_html__( 'Remove image', 'wp-social-manager' ) ."</button>
-			</div>";
+				<button type='button' id='{$id}-add' class='button add-media{$show}' data-input='#{$id}'>" . esc_html__( 'Add image', 'wp-social-manager' ) . "</button>
+				<button type='button' id='{$id}-change' class='button change-media{$hide}' data-input='#{$id}'>" . esc_html__( 'Change image', 'wp-social-manager' ) . "</button>
+				<button type='button' id='{$id}-remove' class='button remove-media{$hide}' data-input='#{$id}'>" . esc_html__( 'Remove image', 'wp-social-manager' ) . '</button>
+            </div>';
 
-		echo $html; ?>
-
+		echo $html; // // WPCS: XSS ok. ?>
 	<?php }
 }

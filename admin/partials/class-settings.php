@@ -1,94 +1,136 @@
 <?php
 /**
- * Provide a admin area view for the plugin
+ * Admin: Settings class
  *
- * This file is used to markup the admin-facing aspects of the plugin.
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
  *
- * @link       github.com/tfirdaus
- * @since      1.0.0
- *
- * @package    WP_Social_Manager
- * @subpackage WP_Social_Manager/admin/partials
+ * @package WPSocialManager
+ * @subpackage Admin\Settings
  */
 
 namespace XCo\WPSocialManager;
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) )
-	die;
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
 
+/**
+ * The class used for adding option page for the plugin.
+ *
+ * @since 1.0.0
+ */
 final class Settings extends OptionUtilities {
 
 	/**
-	 * [$args description]
-	 * @var [type]
+	 * Common arguments passed in a Class or a function.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var array
 	 */
-	protected $args;
+	protected $args = array();
 
 	/**
-	 * [$plugin_dir description]
-	 * @var [type]
+	 * The plugin directory.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $plugin_dir;
+	protected $path_dir = '';
 
 	/**
-	 * [$screen description]
-	 * @var [type]
+	 * The admin screen base name.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $screen;
+	protected $screen = '';
 
 	/**
-	 * [$settings description]
-	 * @var [type]
+	 * PepperPlane instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var PepperPlane
 	 */
-	protected $settings;
+	protected $settings = null;
 
 	/**
-	 * [$fields description]
-	 * @var [type]
+	 * The setting pages or tabs.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var array
 	 */
-	protected $fields;
+	public $pages = array();
 
 	/**
-	 * [$document_title description]
-	 * @var [type]
+	 * The site title.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $site_title;
+	protected $site_title = '';
 
 	/**
-	 * [$document_title description]
-	 * @var [type]
+	 * The site tagline.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $site_tagline;
+	protected $site_tagline = '';
 
 	/**
-	 * [$document_title description]
-	 * @var [type]
+	 * The document title printed.
+	 *
+	 * Typically document title consists of the $site_title
+	 * and $site_tagline seperated with a notation like dash,
+	 * mdash, or bullet.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
-	protected $document_title;
+	protected $document_title = '';
 
 	/**
-	 * [__construct description]
-	 * @param array $args [description]
+	 * Initialize the class and set its properties.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param array $args {
+	 *     An array of common arguments of the plugin.
+	 *
+	 *     @type string $plugin_name 	The unique identifier of this plugin.
+	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
+	 *     @type string $version 		The plugin version number.
+	 * }
 	 */
 	public function __construct( array $args ) {
 
 		$this->args = $args;
 
-		$this->version = $args[ 'version' ];
-		$this->plugin_name = $args[ 'plugin_name' ];
-		$this->plugin_opts = $args[ 'plugin_opts' ];
+		$this->version = $args['version'];
+		$this->plugin_name = $args['plugin_name'];
+		$this->plugin_opts = $args['plugin_opts'];
 
-		$this->path_dir = trailingslashit( plugin_dir_path( dirname( __FILE__ ) ) );
-		$this->path_url = trailingslashit( plugin_dir_url( dirname( __FILE__ ) ) );
+		$this->path_dir = plugin_dir_path( dirname( __FILE__ ) );
+		$this->path_url = plugin_dir_url( dirname( __FILE__ ) );
 
 		$this->requires();
 		$this->hooks();
 	}
 
 	/**
-	 * [requires description]
-	 * @return [type] [description]
+	 * Load dependencies.
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 */
 	protected function requires() {
 
@@ -97,11 +139,14 @@ final class Settings extends OptionUtilities {
 		require_once( $this->path_dir . 'partials/pepperplane/pepperplane-install.php' );
 
 		require_once( $this->path_dir . 'partials/class-extends.php' );
+		require_once( $this->path_dir . 'partials/class-helps.php' );
 	}
 
 	/**
-	 * [setups description]
-	 * @return [type] [description]
+	 * Run Filters and Actions required.
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 */
 	protected function hooks() {
 
@@ -120,8 +165,13 @@ final class Settings extends OptionUtilities {
 	}
 
 	/**
-	 * [setting_setups description]
-	 * @return [type] [description]
+	 * Run the setups for the setting page.
+	 *
+	 * The setups may involve running some Classes, Functions and sometimes WordPress Hooks,
+	 * and defining the Class properties value.
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function setting_setups() {
 
@@ -131,13 +181,19 @@ final class Settings extends OptionUtilities {
 		$extends = new SettingsExtend( $this->plugin_opts );
 		$validate = new SettingsValidation();
 
+		$helps = new Helps( $this->screen );
+
 		$this->settings = $settings;
 		$this->validate = $validate;
+
+		$this->supports = $this->theme_support( $this->plugin_name );
 	}
 
 	/**
-	 * [setting_menu description]
-	 * @return [type] [description]
+	 * The function method to add a new option page.
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function setting_menu() {
 
@@ -145,122 +201,120 @@ final class Settings extends OptionUtilities {
 		$page_title = esc_html__( 'Social Settings', 'wp-social-manager' );
 
 		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $this->plugin_name, function() {
-			echo "<div class='wrap' id='{$this->plugin_name}-wrap'>";
+			echo wp_kses( "<div class='wrap' id='{$this->plugin_name}-wrap'>", array(
+					'div' => array(
+						'class' => array(),
+						'id' => array(),
+					),
+			) );
 				$this->settings->render_header( array( 'title' => false ) );
 				$this->settings->render_form();
-			echo "</div>";
+			echo '</div>';
 		} );
 
 		add_action( "admin_print_styles-{$this->screen}", array( $this, 'print_setting_styles' ), 20, 1 );
 	}
 
 	/**
-	 * [setting_init description]
-	 * @return [type] [description]
+	 * The function method to register the setting page pages or tabs.
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function setting_pages() {
 
 		$this->pages = $this->settings->add_pages( array(
-				array(
+			array(
 					'id' => 'accounts',
 					'slug' => 'accounts',
-					'title' => esc_html__( 'Accounts', 'wp-social-manager' )
+					'title' => esc_html__( 'Accounts', 'wp-social-manager' ),
 				),
-				array(
+			array(
 					'id' => 'buttons',
 					'slug' => 'buttons',
-					'title' => esc_html__( 'Buttons', 'wp-social-manager' )
+					'title' => esc_html__( 'Buttons', 'wp-social-manager' ),
 					),
-				array(
+			array(
 					'id' => 'metas',
 					'slug' => 'metas',
-					'title' => esc_html__( 'Metas', 'wp-social-manager' )
+					'title' => esc_html__( 'Metas', 'wp-social-manager' ),
 				),
-				array(
+			array(
 					'id' => 'advanced',
 					'slug' => 'advanced',
-					'title' => esc_html__( 'Advanced', 'wp-social-manager' )
+					'title' => esc_html__( 'Advanced', 'wp-social-manager' ),
 				),
 			)
 		);
 	}
 
 	/**
-	 * [setting_sections description]
-	 * @return [type] [description]
+	 * The function method to register setting sections within the settting pages or tabs.
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function setting_sections() {
 
-		/**
-		 * [$this->pages description]
-		 * @var [type]
-		 */
 		$this->pages = $this->settings->add_section( 'accounts', array(
 				'id' => 'profiles',
 				'title' => esc_html__( 'Profiles & Pages', 'wp-social-manager' ),
 				'description' => esc_html__( 'Add the social media profiles and pages related to this website.', 'wp-social-manager' ),
-				'validate_callback' => array( $this->validate, 'setting_usernames' )
+				'validate_callback' => array( $this->validate, 'setting_usernames' ),
 			)
 		);
 
-		/**
-		 * [$this->pages description]
-		 * @var [type]
-		 */
 		$this->pages = $this->settings->add_sections( 'buttons', array(
 				array(
 					'id' => 'buttons_content',
 					'title' => esc_html__( 'Content', 'wp-social-manager' ),
-					'description' => esc_html__( 'Options to configure the social media buttons that allows people to share, like, or save content of this site.', 'wp-sharing-manager' ),
-					'validate_callback' => array( $this->validate, 'setting_buttons_content' )
+					'description' => esc_html__( 'Options to configure the social media buttons that allows people to share, like, or save content of this site.', 'wp-social-manager' ),
+					'validate_callback' => array( $this->validate, 'setting_buttons_content' ),
 				),
 				array(
 					'id' => 'buttons_image',
 					'title' => esc_html__( 'Image', 'wp-social-manager' ),
-					'description' => esc_html__( 'Options to configure the social media buttons shown on the content images.', 'wp-sharing-manager' ),
-					'validate_callback' => array( $this->validate, 'setting_buttons_image' )
-				)
+					'description' => esc_html__( 'Options to configure the social media buttons shown on the content images.', 'wp-social-manager' ),
+					'validate_callback' => array( $this->validate, 'setting_buttons_image' ),
+				),
 			)
 		);
 
-		/**
-		 * [$this->pages description]
-		 * @var [type]
-		 */
 		$this->pages = $this->settings->add_section( 'metas', array(
 			'id' => 'metas_site',
-			'validate_callback' => array( $this->validate, 'setting_site_metas' )
+			'validate_callback' => array( $this->validate, 'setting_site_metas' ),
 			)
 		);
 
-		/**
-		 * [$this->pages description]
-		 * @var [type]
-		 */
-		$this->pages = $this->settings->add_section( 'advanced', array(
-			'id' => 'advanced',
-			'validate_callback' => array( $this->validate, 'setting_advanced' )
-			)
-		);
+		$this->pages = $this->settings->add_sections( 'advanced', array(
+			array(
+				'id' => 'advanced',
+				'validate_callback' => array( $this->validate, 'setting_advanced' ),
+			),
+			array(
+				'id' => 'modes',
+				'title' => 'Modes',
+				'description' => 'Configure the modes that work best for your website.',
+				'validate_callback' => array( $this->validate, 'setting_advanced' ),
+			),
+		) );
 	}
 
 	/**
-	 * [setting_fields description]
-	 * @return void [description]
+	 * The function method to register option input fields in the sections.
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function setting_fields() {
 
-		/**
-		 * [$key description]
-		 * @var [type]
-		 */
 		foreach ( self::get_social_profiles() as $key => $value ) {
 
 			$props = self::get_social_properties( $key );
 
-			$label = isset( $value[ 'label' ] ) ? $value[ 'label' ] : '';
-			$description = isset( $value[ 'description' ] ) ? $value[ 'description' ] : '';
-			$url = isset( $props[ 'url' ] ) ? $props[ 'url' ] : '';
+			$label = isset( $value['label'] ) ? $value['label'] : '';
+			$description = isset( $value['description'] ) ? $value['description'] : '';
+			$url = isset( $props['url'] ) ? $props['url'] : '';
 
 			if ( ! empty( $url ) && ! empty( $description ) ) {
 
@@ -269,92 +323,82 @@ final class Settings extends OptionUtilities {
 					'type' => 'text',
 					'label' => $label,
 					'description' => $description,
-					'after' => '<p class="account-profile-preview hide-if-js"><code></code></p>',
 					'attr' => array(
-						'class' => "account-profile-control code",
+						'class' => 'account-profile-control code',
 						'data-load-script' => 'preview-profile',
-						'data-url' => $props[ 'url' ]
-					)
+						'data-url' => $props['url'],
+					),
 				);
 
 				$this->pages = $this->settings->add_fields( 'accounts', 'profiles', array( $profiles ) );
 			}
 		}
 
-		/**
-		 * [setting_init description]
-		 * @param  [type] $this->screen [description]
-		 * @return [type]               [description]
-		 */
 		$this->pages = $this->settings->add_fields( 'buttons', 'buttons_content', array(
 				array(
 					'id' => 'postTypes',
 					'type' => 'multicheckbox',
-					'label' => esc_html__( 'Show the buttons in', 'wp-sharing-manager' ),
-					'description' => wp_kses( sprintf( __( 'Select the %s that are allowed to show the social media buttons.', 'wp-sharing-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">'. esc_html__( 'Post Types', 'wp-sharing-manager' ) .'</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
+					'label' => esc_html__( 'Show the buttons in', 'wp-social-manager' ),
+					'description' => wp_kses( sprintf( __( 'Select the %s that are allowed to show the social media buttons.', 'wp-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'wp-social-manager' ) . '</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 					'options' => self::get_post_types(),
 					'default' => array( 'post' ),
 				),
 				array(
 					'id' => 'view',
-					'label' => esc_html__( 'Buttons View', 'wp-sharing-manager' ),
-					'description' => esc_html__( 'Select the social media buttons visual appearance displayed in the content.', 'wp-sharing-manager' ),
+					'label' => esc_html__( 'Buttons View', 'wp-social-manager' ),
+					'description' => esc_html__( 'Select the social media buttons visual appearance displayed in the content.', 'wp-social-manager' ),
 					'type' => 'radio',
 					'options' => self::get_button_views(),
-					'default' => 'icon'
+					'default' => 'icon',
 				),
 				array(
 					'id' => 'placement',
 					'type' => 'radio',
-					'label' => esc_html__( 'Buttons Placement', 'wp-sharing-manager' ),
-					'description' => esc_html__( 'Select the location to show the social media buttons in the content.', 'wp-sharing-manager' ),
+					'label' => esc_html__( 'Buttons Placement', 'wp-social-manager' ),
+					'description' => esc_html__( 'Select the location to show the social media buttons in the content.', 'wp-social-manager' ),
 					'options' => self::get_button_placements(),
 					'default' => 'after',
 				),
 				array(
 					'id' => 'heading',
 					'type' => 'text',
-					'label' => esc_html__( 'Buttons Heading', 'wp-sharing-manager' ),
-					'description' => sprintf( esc_html__( 'Set the heading title shown before the buttons (e.g. %s).', 'wp-sharing-manager' ), '<code>Share on:</code>' )
+					'label' => esc_html__( 'Buttons Heading', 'wp-social-manager' ),
+					'description' => sprintf( esc_html__( 'Set the heading title shown before the buttons (e.g. %s).', 'wp-social-manager' ), '<code>Share on:</code>' ),
 				),
 				array(
 					'id' => 'includes',
-					'label' => esc_html__( 'Include these', 'wp-sharing-manager' ),
+					'label' => esc_html__( 'Include these', 'wp-social-manager' ),
 					'type' => 'multicheckbox',
 					'options' => self::get_button_sites( 'content' ),
-					'default' => array_keys( self::get_button_sites( 'content' ) )
-				)
+					'default' => array_keys( self::get_button_sites( 'content' ) ),
+				),
 		) );
 
-		/**
-		 * [$this->pages description]
-		 * @var [type]
-		 */
 		$this->pages = $this->settings->add_fields( 'buttons', 'buttons_image', array(
 			array(
 				'id' => 'enabled',
-				'label' => esc_html__( 'Image Buttons Display', 'wp-sharing-manager' ),
-				'description' => esc_html__( 'Show the social media buttons on images in the content', 'wp-sharing-manager' ),
+				'label' => esc_html__( 'Image Buttons Display', 'wp-social-manager' ),
+				'description' => esc_html__( 'Show the social media buttons on images in the content', 'wp-social-manager' ),
 				'type' => 'checkbox',
 				'attr' => array(
 					'class' => 'toggle-control',
 					'data-load-script' => 'toggle-control',
 					'data-toggle' => '.sharing-image-setting',
-				)
+				),
 			),
 			array(
 				'id' => 'postTypes',
-				'label' => esc_html__( 'Show the buttons in', 'wp-sharing-manager' ),
-				'description' => wp_kses( sprintf( __( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'wp-sharing-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">'. esc_html__( 'Post Types', 'wp-sharing-manager' ) .'</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
+				'label' => esc_html__( 'Show the buttons in', 'wp-social-manager' ),
+				'description' => wp_kses( sprintf( __( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'wp-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'wp-social-manager' ) . '</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 				'type' => 'multicheckbox',
 				'options' => self::get_post_types(),
 				'default' => array( 'post' ),
-				'class' => 'sharing-image-setting hide-if-js'
+				'class' => 'sharing-image-setting hide-if-js',
 			),
 			array(
 				'id' => 'view',
-				'label' => esc_html__( 'Buttons View', 'wp-sharing-manager' ),
-				'description' => esc_html__( 'The social media button visual appearance in the content.', 'wp-sharing-manager' ),
+				'label' => esc_html__( 'Buttons View', 'wp-social-manager' ),
+				'description' => esc_html__( 'The social media button visual appearance in the content.', 'wp-social-manager' ),
 				'type' => 'radio',
 				'options' => self::get_button_views(),
 				'default' => 'icon',
@@ -362,18 +406,14 @@ final class Settings extends OptionUtilities {
 			),
 			array(
 				'id' => 'includes',
-				'label' => esc_html__( 'Include these', 'wp-sharing-manager' ),
+				'label' => esc_html__( 'Include these', 'wp-social-manager' ),
 				'type' => 'multicheckbox',
 				'options' => self::get_button_sites( 'image' ),
 				'default' => array_keys( self::get_button_sites( 'image' ) ),
 				'class' => 'sharing-image-setting hide-if-js',
-			)
+			),
 		) );
 
-		/**
-		 * [$this->pages description]
-		 * @var [type]
-		 */
 		$this->pages = $this->settings->add_fields( 'metas', 'metas_site', array(
 			array(
 				'id' => 'enabled',
@@ -385,7 +425,7 @@ final class Settings extends OptionUtilities {
 					'class' => 'toggle-control',
 					'data-load-script' => 'toggle-control',
 					'data-toggle' => '.meta-site-setting',
-				)
+				),
 			),
 			array(
 				'id' => 'name',
@@ -395,8 +435,8 @@ final class Settings extends OptionUtilities {
 				'description' => sprintf( esc_html__( 'The website name or brand as it should appear within the social media meta tags (e.g. %s)', 'wp-social-manager' ), '<code>iMDB</code>, <code>TNW</code>, <code>HKDC</code>' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
-					'placeholder' => $this->site_title
-				)
+					'placeholder' => $this->site_title,
+				),
 			),
 			array(
 				'id' => 'title',
@@ -406,8 +446,8 @@ final class Settings extends OptionUtilities {
 				'description' => esc_html__( 'The title of this website as it should appear within the social media meta tags.', 'wp-social-manager' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
-					'placeholder' => $this->document_title
-				)
+					'placeholder' => $this->document_title,
+				),
 			),
 			array(
 				'id' => 'description',
@@ -418,35 +458,57 @@ final class Settings extends OptionUtilities {
 				'attr' => array(
 					'rows' => '4',
 					'cols' => '80',
-					'placeholder' => $this->site_tagline
-				)
+					'placeholder' => $this->site_tagline,
+				),
 			),
 			array(
 				'id' => 'image',
 				'type' => 'image',
 				'class' => 'meta-site-setting',
 				'label' => esc_html__( 'Site Image', 'wp-social-manager' ),
-				'description' => esc_html__( 'An image URL which should represent this website within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' )
-			)
+				'description' => esc_html__( 'An image URL which should represent this website within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' ),
+			),
 		) );
 
-		/**
-		 * [$this->pages description]
-		 * @var [type]
-		 */
-		$this->pages = $this->settings->add_field( 'advanced', 'advanced', array(
+		$args = array(
 			'id' => 'enableStylesheet',
-			'label' => esc_html__( 'Enable Stylesheet', 'wp-sharing-manager' ),
-			'description' => esc_html__( 'Load the plugin stylesheet to apply essential styles.', 'wp-sharelog' ),
+			'label' => esc_html__( 'Enable Stylesheet', 'wp-social-manager' ),
+			'description' => esc_html__( 'Load the plugin stylesheet to apply essential styles.', 'wp-social-manager' ),
 			'default' => 'on',
-			'type' => 'checkbox'
+			'type' => 'checkbox',
+		);
+
+		$stylesheet = true;
+
+		if ( isset( $this->supports['stylesheet'] ) ) {
+			$stylesheet = $this->supports['stylesheet'];
+		}
+
+		if ( true === (bool) $stylesheet ) {
+			$args['attr']['disabled'] = true;
+		}
+
+		$this->pages = $this->settings->add_field( 'advanced', 'advanced', $args );
+
+		$this->pages = $this->settings->add_field( 'advanced', 'modes', array(
+			'id' => 'buttons_mode',
+			'label' => esc_html__( 'Buttons Mode', 'wp-social-manager' ),
+			'description' => 'Select the mode to render the social media buttons.',
+			'type' => 'radio',
+			'options' => array(
+				'json' => 'JSON (JavaScript Object Notation)',
+				'html' => 'HTML (HyperText Markup Language)',
+			),
+			'default' => array( 'html' ),
 		) );
 	}
 
 	/**
-	 * [setting_init description]
+	 * Initialize and render the setting screen with the registered
+	 * tabs, sections, and fields.
+	 *
+	 * @since 1.0.0
 	 * @access public
-	 * @return [type] [description]
 	 */
 	public function setting_init() {
 
@@ -455,11 +517,13 @@ final class Settings extends OptionUtilities {
 	}
 
 	/**
-	 * [setting_styles description]
-	 * @param  [type] $where [description]
-	 * @return [type]        [description]
+	 * Print internal styles in the setting page.
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
-	public function print_setting_styles() { ?>
+	public function print_setting_styles() {
+		?>
 		<style id="<?php echo esc_attr( "{$this->plugin_name}-internal-styles" ); ?>">
 			.wrap > form > h2 {
 				margin-bottom: 0.72em;
@@ -470,7 +534,7 @@ final class Settings extends OptionUtilities {
 			}
 			.wrap > .nav-tab-wrapper {
 				margin: 1.5em 0 1em;
-    			border-bottom: 1px solid #ccc;
+				border-bottom: 1px solid #ccc;
 			}
 			.wrap .field-image-control {
 				margin-top: 0.867em;
@@ -489,13 +553,17 @@ final class Settings extends OptionUtilities {
 	<?php }
 
 	/**
-	 * [field_scripts description]
-	 * @return [type] [description]
+	 * Enqueue JavaScripts in the setting page.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param array $args An array of the JavaScripts file name.
 	 */
 	public function enqueue_scripts( array $args ) {
 
 		foreach ( $args as $key => $file ) {
-			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : "scripts";
+			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'scripts';
 			wp_enqueue_script( "{$this->plugin_name}-{$file}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 		}
 
@@ -503,37 +571,50 @@ final class Settings extends OptionUtilities {
 	}
 
 	/**
-	 * [setting_styles description]
-	 * @param  array  $args [description]
-	 * @return [type]       [description]
+	 * Enqueue stylesheets in the setting page.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param array $args An array of the stylesheets file name.
 	 */
 	public function enqueue_styles( array $args ) {
 
-		foreach ( $args as $name => $suffix ) {
-			$file = is_string( $suffix ) && ! empty( $suffix ) ? "styles-{$suffix}" : "styles";
-			wp_enqueue_style( "{$this->plugin_name}-{$suffix}", "{$this->path_url}css/{$file}.css", array(), $this->version );
+		foreach ( $args as $name => $file ) {
+			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'styles';
+			wp_enqueue_style( "{$this->plugin_name}-{$file}", "{$this->path_url}css/{$file}.css", array(), $this->version );
 		}
 	}
 
 	/**
-	 * [_document_title description]
-	 * @return [type] [description]
+	 * Setups the front ends.
+	 *
+	 * This function method run functions that will otherwise won't be
+	 * accessible if they are run via the 'admin_init' Action Hook.
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function frontend_setups() {
-		$this->wp_get_document_title();
+		$this->_wp_get_document_title();
 	}
 
 	/**
-	 * [wp_get_document_title description]
-	 * @return [type] [description]
+	 * The function method to construct the document title.
+	 *
+	 * The 'wp_get_document_title' function does not return a proper value
+	 * when run inside the setting pages hence this function.
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
-	protected function wp_get_document_title() {
+	protected function _wp_get_document_title() {
 
-		$title[ 'site' ] = get_bloginfo( 'name', 'display' );
-		$title[ 'tagline' ] = get_bloginfo( 'description', 'display' );
+		$title['site'] = get_bloginfo( 'name', 'display' );
+		$title['tagline'] = get_bloginfo( 'description', 'display' );
 
-		$this->site_title = $title[ 'site' ];
-		$this->site_tagline = $title[ 'tagline' ];
+		$this->site_title = $title['site'];
+		$this->site_tagline = $title['tagline'];
 
 		$sep   = apply_filters( 'document_title_separator', '-' );
 		$title = apply_filters( 'document_title_parts', $title );
