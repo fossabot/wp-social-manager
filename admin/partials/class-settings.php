@@ -187,9 +187,7 @@ final class Settings extends OptionUtilities {
 	 */
 	public function setting_setups() {
 
-		$fields = new \PepperPlaneFields( get_settings_errors() );
-		$settings = new \PepperPlane( $this->plugin_opts, $fields );
-
+		$settings = new \PepperPlane( $this->plugin_opts);
 		$extends = new SettingsExtend( $this->plugin_opts );
 		$validate = new SettingsValidation();
 
