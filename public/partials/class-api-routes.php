@@ -201,7 +201,7 @@ final class APIRoutes extends OutputUtilities {
 	 *
 	 * @todo add inline docs referring to each site endpoint documentation page.
 	 *
-	 * @param array $request The passed parameters in the route.
+	 * @param array $post_id The WordPress post ID.
 	 * @return array         An array of sites with their label / name and button endpoint url.
 	 */
 	protected function buttons_content_response( $post_id ) {
@@ -331,7 +331,7 @@ final class APIRoutes extends OutputUtilities {
 	 *
 	 * @todo add inline docs referring to each site endpoint documentation page.
 	 *
-	 * @param array $request The passed parameters in the route.
+	 * @param array $post_id The WordPress post ID.
 	 * @return array         An array of sites with their label / name and button endpoint url.
 	 */
 	protected function buttons_image_response( $post_id ) {
