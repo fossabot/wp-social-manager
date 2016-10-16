@@ -4,3 +4,6 @@
 [submodule "admin/partials/pepperplane"]
 	path = admin/partials/pepperplane
 	url = https://tfirdaus@github.com/tfirdaus/pepperplane.git
+[submodule "admin/partials/butterbean"]
+	path = admin/partials/butterbean
+	url = https://tfirdaus@github.com/justintadlock/butterbean
