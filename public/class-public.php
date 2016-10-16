@@ -200,7 +200,8 @@ final class ViewPublic extends OutputUtilities {
 			return;
 		}
 
-		wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/scripts.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/app.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/scripts.js', array( 'jquery' ), $this->version, true );
 	}
 
 	/**
@@ -224,21 +225,29 @@ final class ViewPublic extends OutputUtilities {
 	 * @return boolean
 	 */
 	protected function is_stylesheet() {
-
-		$stylesheet = true;
-
-		if ( isset( $this->options->advanced['enableStylesheet'] ) ) {
-			$stylesheet = (bool) $this->options->advanced['enableStylesheet'];
-		}
-
+		/*
+		 * If set to 'true' it means the theme load its own stylesheet,
+		 * to style the plugin output.
+		 */
 		if ( isset( $this->support['stylesheet'] ) ) {
 			$stylesheet = (bool) $this->support['stylesheet'];
+			return ! $stylesheet;
 		}
 
-		if ( isset( $this->support['attrPrefix'] ) ) {
-			$stylesheet = $this->support['attrPrefix'] === self::get_attr_prefix() ? true : false;
+		/*
+		 * If the prefix is the same as the attribute prefix,
+		 * we can assume that the theme will add custom stylesheet.
+		 */
+		if ( isset( $this->support['attr-prefix'] ) ) {
+			$prefix = $this->support['attr-prefix'] === self::get_attr_prefix() ? true : false;
+			return $prefix;
 		}
 
-		return $stylesheet;
+		if ( isset( $this->options->advanced['enableStylesheet'] ) ) {
+			$option = $this->options->advanced['enableStylesheet'];
+			return $option;
+		}
+
+		return true;
 	}
 }
