@@ -58,6 +58,15 @@ final class Settings extends OptionUtilities {
 	protected $settings = null;
 
 	/**
+	 * ThemeSupports instance
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var ThemeSupports
+	 */
+	protected $supports = null;
+
+	/**
 	 * The setting pages or tabs.
 	 *
 	 * @since 1.0.0
@@ -103,15 +112,16 @@ final class Settings extends OptionUtilities {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
+	 * @param array 		$args {
 	 *     An array of common arguments of the plugin.
 	 *
 	 *     @type string $plugin_name 	The unique identifier of this plugin.
 	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
 	 *     @type string $version 		The plugin version number.
 	 * }
+	 * @param ThemeSupports $supports 	The ThemeSupports instance.
 	 */
-	public function __construct( array $args ) {
+	public function __construct( array $args, ThemeSupports $supports ) {
 
 		$this->args = $args;
 
@@ -121,6 +131,8 @@ final class Settings extends OptionUtilities {
 
 		$this->path_dir = plugin_dir_path( dirname( __FILE__ ) );
 		$this->path_url = plugin_dir_url( dirname( __FILE__ ) );
+
+		$this->supports = $supports;
 
 		$this->requires();
 		$this->hooks();
@@ -185,8 +197,6 @@ final class Settings extends OptionUtilities {
 
 		$this->settings = $settings;
 		$this->validate = $validate;
-
-		$this->supports = $this->theme_support( $this->plugin_name );
 	}
 
 	/**
@@ -471,7 +481,7 @@ final class Settings extends OptionUtilities {
 			),
 		) );
 
-		if ( $this->is_stylesheet_disabled() ) {
+		if ( $this->supports->is_theme_support( 'stylesheet' ) ) {
 			$args = array(
 				'id' => 'enableStylesheet',
 				'label' => esc_html__( 'Enable Stylesheet', 'wp-social-manager' ),
@@ -490,23 +500,14 @@ final class Settings extends OptionUtilities {
 
 		$this->pages = $this->settings->add_field( 'advanced', 'advanced', $args );
 
-		if ( $this->is_button_modes_disabled() ) {
-			$args = array(
-				'id' => 'buttonsMode',
-				'label' => esc_html__( 'Buttons Mode', 'wp-social-manager' ),
-				'type' => 'content',
-				'content' => esc_html__( 'This option is disable since the Theme being used in this website has already defined which buttons mode to support.', 'wp-social-manager' ),
-			);
-		} else {
-			$args = array(
-				'id' => 'buttonsMode',
-				'label' => esc_html__( 'Buttons Mode', 'wp-social-manager' ),
-				'description' => 'Select the mode to render the social media buttons.',
-				'type' => 'radio',
-				'options' => self::get_button_modes(),
-				'default' => 'html',
-			);
-		}
+		$args = array(
+			'id' => 'buttonsMode',
+			'label' => esc_html__( 'Buttons Mode', 'wp-social-manager' ),
+			'description' => 'Select the mode to render the social media buttons.',
+			'type' => 'radio',
+			'options' => self::get_button_modes(),
+			'default' => 'html',
+		);
 
 		$this->pages = $this->settings->add_field( 'advanced', 'modes', $args );
 	}
@@ -634,47 +635,5 @@ final class Settings extends OptionUtilities {
 		$title = capital_P_dangit( $title );
 
 		$this->document_title = $title;
-	}
-
-	/**
-	 * Utility function to check if we should disable the stylesheet option.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return boolean
-	 */
-	protected function is_stylesheet_disabled() {
-
-		if ( isset( $this->supports['stylesheet'] ) ) {
-			// If set to 'true' it measn the theme load its own stylesheet for the plugin.
-			return (bool) $this->supports['stylesheet'];
-		}
-
-		if ( isset( $this->supports['attr-prefix'] ) ) {
-			/*
-			 * If the prefix is the same as the attribute prefix,
-			 * we can assume that the theme will add custom stylesheet.
-			 */
-			$prefix = $this->supports['attr-prefix'] !== self::get_attr_prefix() ? true : false;
-
-			return $prefix;
-		}
-
-		return false;
-	}
-
-	/**
-	 * [is_modes_disabled description]
-	 */
-	protected function is_button_modes_disabled() {
-
-		if ( isset( $this->supports['buttons-mode'] ) ) {
-
-			$mode = $this->supports['buttons-mode'];
-			if ( key_exists( $mode, self::get_button_modes() ) ) {
-				return true;
-			}
-		}
 	}
 }
