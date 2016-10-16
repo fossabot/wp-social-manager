@@ -28,7 +28,7 @@ final class Buttons extends OutputUtilities {
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_name;
+	protected $plugin_name = '';
 
 	/**
 	 * The unique identifier or prefix for database names.
@@ -37,7 +37,7 @@ final class Buttons extends OutputUtilities {
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_opts;
+	protected $plugin_opts = '';
 
 	/**
 	 * The current post ID in the loop.
@@ -46,16 +46,25 @@ final class Buttons extends OutputUtilities {
 	 * @access protected
 	 * @var integer
 	 */
-	protected $post_id;
+	protected $post_id = 0;
 
 	/**
-	 * Related options to render the social buttons.
+	 * Associated options to render the social buttons.
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var string
+	 * @var object
 	 */
-	protected $options;
+	protected $options = null;
+
+	/**
+	 * The Metas class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Metas
+	 */
+	protected $metas = null;
 
 	/**
 	 * Constructor: Initialize the Buttons Class
@@ -70,11 +79,14 @@ final class Buttons extends OutputUtilities {
 	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
 	 *     @type string $version 		The plugin version number.
 	 * }
+	 * @param Metas $metas 				The Metas class instance.
 	 */
-	function __construct( array $args ) {
+	function __construct( array $args, Metas $metas ) {
 
 		$this->plugin_name = $args['plugin_name'];
 		$this->plugin_opts = $args['plugin_opts'];
+
+		$this->metas = $metas;
 
 		$this->hooks();
 	}
