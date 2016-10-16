@@ -19,6 +19,7 @@
 		"jQuery": false,
 		"JSON"  : false,
 		"wp": false,
-		"console": true
+		"console": true,
+		"wpSocialManager": false
 	}
 }
