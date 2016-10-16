@@ -1,33 +1,26 @@
-;(function( $, wp, _, Backbone ) {
+;(function( $, _, Backbone ) {
 
 	'use strict';
 
-	var SocialProfiles = {
-			View: {}
-		};
-
 	/**
-	 * [initialize description;
+	 * The Backbone View to preview the "Social Profile" URL.
 	 */
-	SocialProfiles.View = Backbone.View.extend( {
+	var SocialProfiles = Backbone.View.extend( {
 
-		events : {
-			'input' : 'previewUpdate'
+		// Events the input should listen to.
+		events: {
+			'input': 'previewUpdate'
 		},
 
 		/**
-		 * [initialize description]
-		 * @return {[type]} [description]
+		 * Initialize the View
+		 * On page load, render the preview if the value is set in the input.
 		 */
-		initialize : function() {
+		initialize: function() {
 			this.previewInit();
 		},
 
-		/**
-		 * [loadPreview description]
-		 * @return {[type]} [description]
-		 */
-		previewInit : function() {
+		previewInit: function() {
 
 			var self = this;
 
@@ -37,56 +30,40 @@
 			} );
 		},
 
-		/**
-		 * [loadPreview description]
-		 * @return {[type]} [description]
-		 */
-		previewUpdate : _.throttle( function( event ) {
+		previewUpdate: _.throttle( function( event ) {
 			this.render( event.currentTarget );
 		}, 150 ),
 
-		/**
-		 * [getPreview description]
-		 * @param  {[type]} elem [description]
-		 * @return {[type]}      [description]
-		 */
-		render : function( target ) {
+		render: function( target ) {
 
-			var url  = target.getAttribute( 'data-url' );
+			var id, value, url = target.getAttribute( 'data-url' );
 
 			if ( url && '' !== url ) {
 
-				var id = target.getAttribute( 'id' );
-				var value = this.getValue( target );
+				id = target.getAttribute( 'id' );
+				value = this.getValue( target );
 
 				$( '#' + id + '-preview' ).html( function() {
 
 					var $this = $( this );
+
 					var $siblings = $this.siblings().not( 'input' );
 						$siblings.toggleClass( 'hide-if-js', '' !== value );
 
 						return ( '' !== value ) ? '<code>' + url + value + '</code>' : '';
 				} );
 			}
+
+			return this;
 		},
 
-		/**
-		 * [createPlaceholder description]
-		 * @param  {[type]} target [description]
-		 * @return {[type]}        [description]
-		 */
 		createPlaceholder: function( target ) {
 
 			var attrID = target.getAttribute( 'id' );
 
-			return $( target ).after( '<p id='+ attrID +'-preview></p>' );
+			return $( target ).after( '<p id=' + attrID + '-preview></p>' );
 		},
 
-		/**
-		 * [getValue description]
-		 * @param  {[type]} target [description]
-		 * @return {[type]}        [description]
-		 */
 		getValue: function( target ) {
 
 			var value = target.value.replace( /\s+/g, '-' );
@@ -97,8 +74,8 @@
 		}
 	} );
 
-	new SocialProfiles.View( {
+	new SocialProfiles( {
 			el: '.account-profile-control'
 		} );
 
-})( jQuery, window.wp, window._, window.Backbone, undefined );
+})( jQuery, window._, window.Backbone, undefined );

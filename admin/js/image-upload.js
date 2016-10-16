@@ -1,51 +1,34 @@
-;(function( $, wp, Backbone ) {
+;(function( $, Backbone ) {
 
 	'use strict';
 
 	/**
-	 * [initialize description]
+	 * Backbone View to hanle Media Uploader UI
+	 * in the setting page.
 	 */
 	var MediaUploader = Backbone.View.extend({
 
-		/**
-		 * [events description]
-		 * @type {Object}
-		 */
-		events : {
-			'click .add-media' : 'selectMedia',
-			'click .change-media' : 'selectMedia',
-			'click .remove-media' : 'removeMedia'
+		events: {
+			'click .add-media': 'selectMedia',
+			'click .change-media': 'selectMedia',
+			'click .remove-media': 'removeMedia'
 		},
 
-		/**
-		 * [initialize description]
-		 * @return {[type]} [description]
-		 */
-		initialize : function() {
+		initialize: function() {
 
 			this.wpMediaUploader;
 
 			this.wpMedia();
 		},
 
-		/**
-		 * [selectMedia description]
-		 * @param  {[type]} button [description]
-		 * @return {[type]}        [description]
-		 */
-		selectMedia : function( button ) {
+		selectMedia: function( button ) {
 
 			this.controls( button );
 
 			this.wpMediaWindow();
 		},
 
-		/**
-		 * [removeMedia description]
-		 * @param  {[type]} button [description]
-		 * @return {[type]}        [description]
-		 */
-		removeMedia : function( button ) {
+		removeMedia: function( button ) {
 
 			this.controls( button );
 
@@ -54,12 +37,7 @@
 			this.controlState( '' );
 		},
 
-		/**
-		 * [controls description]
-		 * @param  {[type]} button [description]
-		 * @return {[type]}        [description]
-		 */
-		controls : function( button ) {
+		controls: function( button ) {
 
 			var inputId = $( button.target ).data( 'input' );
 
@@ -73,20 +51,15 @@
 			this.$controlRemove = $( inputId + '-remove' );
 		},
 
-		/**
-		 * [controlState description]
-		 * @param  {[type]} imgUrl [description]
-		 * @return {[type]}        [description]
-		 */
-		controlState : function( imgId, imgUrl ) {
+		controlState: function( imgId, imgUrl ) {
 
 			var state = ( imgId === parseInt( this.$input.val(), 10 ) && '' !== imgUrl );
 
 			this.$inputWrap.toggleClass( 'is-set', state );
 
 			this.$controlAdd.toggleClass( 'hide-if-js', state );
-			this.$controlChange.toggleClass( 'hide-if-js', !state );
-			this.$controlRemove.toggleClass( 'hide-if-js', !state );
+			this.$controlChange.toggleClass( 'hide-if-js', ! state );
+			this.$controlRemove.toggleClass( 'hide-if-js', ! state );
 
 			this.$inputImg.html( function() {
 
@@ -100,25 +73,17 @@
 			} );
 		},
 
-		/**
-		 * [wpMedia description]
-		 * @return {[type]} [description]
-		 */
-		wpMedia : function() {
+		wpMedia: function() {
 			this.wpMediaUploader = wp.media.frames.file_frame = wp.media({
-				title: 'Set as image',
+				title: 'Site Meta Image',
 				button: {
-					text: 'Set as image'
+					text: 'Set as Site Image'
 				},
 				multiple: false
 			} );
 		},
 
-		/**
-		 * [wpMediaWindow description]
-		 * @return {[type]} [description]
-		 */
-		wpMediaWindow : function() {
+		wpMediaWindow: function() {
 
 			this.wpMediaUploader.open();
 
@@ -127,15 +92,11 @@
 			}.bind( this ) );
 		},
 
-		/**
-		 * [wpMediaSelect description]
-		 * @return {[type]} [description]
-		 */
-		wpMediaSelect : function() {
+		wpMediaSelect: function() {
 
-			var attach = this.wpMediaUploader.state().get('selection').first().toJSON();
-			var attachId = attach[ 'id' ];
-			var attachURL = attach[ 'url' ];
+			var attach = this.wpMediaUploader.state().get( 'selection' ).first().toJSON();
+			var attachId = attach.id;
+			var attachURL = attach.url;
 
 			this.$input.val( attachId );
 			this.controlState( attachId, attachURL );
@@ -143,7 +104,7 @@
 	});
 
 	new MediaUploader({
-		el: $( '#wp-social-manager-wrap' )
+		el: '#wp-social-manager-wrap'
 	});
 
-})( jQuery, window.wp, window.Backbone, undefined );
+})( jQuery, window.Backbone, undefined );
