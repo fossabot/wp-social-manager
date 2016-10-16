@@ -14,6 +14,10 @@
 
 namespace XCo\WPSocialManager;
 
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
+
 /**
  * Requirement class.
  *
@@ -162,8 +166,8 @@ class Requirements {
 
 			trigger_error( 'WP Requirements: the requirements are invalid.', E_USER_ERROR );
 
-		}
-	}
+		} // End if().
+	} // End if().
 
 	/**
 	 * Get requirements results.
@@ -228,7 +232,7 @@ class Requirements {
 				}
 			}
 
-			$notice .= '<em>' . sprintf( 'Please update to meet %s requirements.', '<strong>'. $name .'</strong>' ) . '</em>' . "\n";
+			$notice .= '<em>' . sprintf( 'Please update to meet %s requirements.', '<strong>' . $name . '</strong>' ) . '</em>' . "\n";
 			$notice .= "\t" . '</p>' . "\n";
 			if ( $message ) {
 				$notice .= $message;

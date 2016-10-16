@@ -2,12 +2,17 @@
 /**
  * Public: APIRoutes class
  *
- * @package WPSocialManager
- * @subpackage Public
  * @author Thoriq Firdaus <tfirdau@outlook.com>
+ *
+ * @package WPSocialManager
+ * @subpackage Public\Routes
  */
 
 namespace XCo\WPSocialManager;
+
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
 
 /**
  * The class use for registering custom API Routes using WP-API.
@@ -121,7 +126,7 @@ final class APIRoutes extends OutputUtilities {
 		$args = array(
 			'root'       => esc_url( get_rest_url() ),
 			'namespace'  => esc_html( $this->namespace ),
-			'attrPrefix' => esc_attr( self::get_attr_prefix() )
+			'attrPrefix' => esc_attr( self::get_attr_prefix() ),
 		);
 
 		$post_id = get_the_id();
@@ -312,8 +317,8 @@ final class APIRoutes extends OutputUtilities {
 
 					$buttons[ $key ]['endpoint'] = false;
 					break;
-			}
-		}
+			} // End switch().
+		} // End foreach().
 
 		return $buttons;
 	}

@@ -1,14 +1,18 @@
 <?php
 /**
- * Widgets API: Widgets class.
+ * Widgets: Widgets class.
  *
- * @package     WPSocialManager
- * @subpackage  Widgets
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
  *
- * @author      Thoriq Firdaus <tfirdau@outlook.com>
+ * @package WPSocialManager
+ * @subpackage Widgets
  */
 
 namespace XCo\WPSocialManager;
+
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
 
 /**
  * Widget Class to register custom widgets of the plugin.
@@ -20,18 +24,18 @@ final class Widgets {
 	/**
 	 * Common arguments passed in a Class or a function.
 	 *
-	 * @since   1.0.0
-	 * @access  protected
-	 * @var     array
+	 * @since 1.0.0
+	 * @access protected
+	 * @var array
 	 */
 	protected $args;
 
 	/**
 	 * The plugin path directory.
 	 *
-	 * @since   1.0.0
-	 * @access  protected
-	 * @var     string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $path_dir;
 
@@ -64,7 +68,7 @@ final class Widgets {
 	/**
 	 * Load the required dependencies for the widgets.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function requires() {
@@ -74,10 +78,8 @@ final class Widgets {
 	/**
 	 * Run Filters and Actions required.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
 	 * @access protected
-	 *
-	 * @return void
 	 */
 	protected function hooks() {
 		add_action( 'widgets_init', array( $this, 'setups' ) );
@@ -89,10 +91,8 @@ final class Widgets {
 	 * The setups may involve running some Classes, Functions, or WordPress Hooks
 	 * that are required to render the widget properly.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
 	 * @access protected
-	 *
-	 * @return void
 	 */
 	public function setups() {
 		register_widget( new WidgetSocialProfiles( $this->args ) );

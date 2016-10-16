@@ -2,12 +2,17 @@
 /**
  * Public: Buttons Class
  *
- * @package 	WPSocialManager
- * @subpackage 	Public
- * @author  	Thoriq Firdaus <tfirdau@outlook.com>
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
+ *
+ * @package WPSocialManager
+ * @subpackage Public\Buttons
  */
 
 namespace XCo\WPSocialManager;
+
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
 
 /**
  * The Class that define the social buttons output.
@@ -112,8 +117,8 @@ final class Buttons extends OutputUtilities {
 	/**
 	 * Append or prepend the social media buttons wrapper element into the content.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @param  	string $content The post content.
 	 * @return 	string 			The post content added with the social buttons wrapper
@@ -145,8 +150,8 @@ final class Buttons extends OutputUtilities {
 	/**
 	 * Add social wrapper element into the images in the content.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @param  	string $content The post content.
 	 * @return  string 			The content with each image wrapped in an element
@@ -253,7 +258,6 @@ final class Buttons extends OutputUtilities {
 
 				$props = self::get_social_properties( $site );
 				$icon  = self::get_social_icons( $site );
-
 				$list  = self::list_views( $view, array(
 							'site'  => $site,
 							'icon'  => $icon,

@@ -2,13 +2,17 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @author      Thoriq Firdaus <tfirdau@outlook.com>
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
  *
- * @package     WPSocialManager
- * @subpackage  Admin
+ * @package WPSocialManager
+ * @subpackage Admin
  */
 
 namespace XCo\WPSocialManager;
+
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
 
 /**
  * The admin-specific functionality of the plugin.
@@ -16,9 +20,7 @@ namespace XCo\WPSocialManager;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/admin
- * @author     Your Name <email@example.com>
+ * @since 1.0.0
  */
 final class ViewAdmin {
 
@@ -67,7 +69,7 @@ final class ViewAdmin {
 	/**
 	 * Run Filters and Actions required.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	public function requires() {
@@ -85,16 +87,14 @@ final class ViewAdmin {
 	 * The setups may involve running some Classes, Functions, or WordPress Hooks
 	 * that are required to run or add functionalities in the plugin.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
 	 * @access protected
-	 *
-	 * @return void
 	 */
 	public function setups() {
 
 		$admin = new Settings( $this->args );
 		$users = new SettingsUser( $this->args );
 
-		$meta = SocialMetaBox::get_instance( $this->args );
+		SocialMetaBox::get_instance( $this->args );
 	}
 }

@@ -27,12 +27,12 @@
  *
  * @since 1.0.0
  *
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
+ *
  * @package WPSocialManager
- * @author  Thoriq Firdaus <tfirdau@outlook.com>
  */
 
 namespace XCo\WPSocialManager;
-
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

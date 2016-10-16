@@ -2,12 +2,17 @@
 /**
  * Public: ViewPublic class
  *
- * @package 	WPSocialManager
- * @subpackage 	Public
- * @author  	Thoriq Firdaus <tfirdau@outlook.com>
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
+ *
+ * @package WPSocialManager
+ * @subpackage Public
  */
 
 namespace XCo\WPSocialManager;
+
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
 
 /**
  * The public-facing functionality of the plugin.
@@ -36,6 +41,15 @@ final class ViewPublic extends OutputUtilities {
 	 * @var string
 	 */
 	protected $plugin_name;
+
+	/**
+	 * The absolut URL path to the plugin directory.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $path_url;
 
 	/**
 	 * The version of this plugin.

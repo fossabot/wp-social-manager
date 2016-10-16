@@ -2,17 +2,22 @@
 /**
  * Widget: WidgetSocialProfiles class
  *
- * @author      Thoriq Firdaus <tfirdau@outlook.com>
- * @link  		https://developer.wordpress.org/reference/classes/wp_widget/
+ * @author Thoriq Firdaus <tfirdau@outlook.com>
  *
- * @package     WPSocialManager
- * @subpackage  Widgets
+ * @package WPSocialManager
+ * @subpackage Widgets\SocialProfiles
  */
 
 namespace XCo\WPSocialManager;
 
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
+
 /**
  * "Social Profiles" widget registration class.
+ *
+ * @link https://developer.wordpress.org/reference/classes/wp_widget/
  *
  * @since 1.0.0
  */
@@ -21,41 +26,41 @@ final class WidgetSocialProfiles extends \WP_Widget {
 	/**
 	 * Base ID for the widget, lowercase and unique.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $widget_id;
 
 	/**
 	 * Name for the widget displayed on the configuration page.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $widget_title;
 
 	/**
 	 * Profile and Page usernames saved in the option.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var array
 	 */
 	protected $options = array();
 
 	/**
 	 * Social properties, such as the URLs and labels.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var array
 	 */
 	protected $properties = array();
 
 	/**
-	 * Constructor
+	 * Initialize the class.
 	 *
 	 * Retrieve the required option, define the widget id, title and description,
 	 * and register the widget to WordPress.
@@ -90,7 +95,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 	/**
 	 * Outputs the settings update form.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @param  array $instance Current settings.
@@ -111,7 +116,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 			<p>
 			<?php
 				$message = esc_html__( 'Please add at least one social profile of this website in the %s.', 'wp-social-manager' );
-				$setting = '<a href="'. admin_url( 'options-general.php?page=wp-social-manager' ) .'">'. esc_html__( 'setting page', 'wp-social-manager' ) .'</a>';
+				$setting = '<a href="' . admin_url( 'options-general.php?page=wp-social-manager' ) . '">' . esc_html__( 'setting page', 'wp-social-manager' ) . '</a>';
 
 				printf( $message, $setting ); // WPCS: XSS ok, sanitization ok. ?></p>
 			<?php else : ?>
@@ -155,7 +160,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 
 				foreach ( $views as $key => $label ) : $key = sanitize_key( $key );
 					echo "<input id='{$id}-{$key}' type='radio' name='{$name}' value='{$key}' {$state}>"; // WPCS: XSS ok, sanitization ok.
-					echo "<label for='{$id}-{$key}'>". esc_html( $label ) .'</label><br>'; // WPCS: XSS ok, sanitization ok.
+					echo "<label for='{$id}-{$key}'>" . esc_html( $label ) . '</label><br>'; // WPCS: XSS ok, sanitization ok.
 				endforeach; ?>
 			</p>
 			<?php endif; ?>
@@ -166,7 +171,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 	/**
 	 * Updates a particular instance of a widget.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @param  array $input 	New settings for this instance as input by the user via
@@ -256,7 +261,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 			) );
 
 			echo $view; // WPCS: XSS ok, sanitization ok.
-		}
+		} // End foreach().
 
 		echo '</ul>';
 

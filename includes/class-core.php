@@ -12,6 +12,10 @@
 
 namespace XCo\WPSocialManager;
 
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
+
 /**
  * The core plugin class.
  *
@@ -25,27 +29,27 @@ final class Core {
 	/**
 	 * Common arguments passed in a Class or a function.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	array
+	 * @since 1.0.0
+	 * @access protected
+	 * @var array
 	 */
 	protected $args;
 
 	/**
 	 * The unique identifier of this plugin.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $plugin_name;
 
 	/**
 	 * The unique identifier or prefix for database names.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $plugin_opts;
 

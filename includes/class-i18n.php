@@ -13,6 +13,10 @@
 
 namespace XCo\WPSocialManager;
 
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
+
 /**
  * Define the internationalization functionality.
  *

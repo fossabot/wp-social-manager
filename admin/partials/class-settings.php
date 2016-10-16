@@ -1,83 +1,81 @@
 <?php
-/**
- * Provide a admin area view for the plugin
- *
- * This file is used to markup the admin-facing aspects of the plugin.
- *
- * @link       github.com/tfirdaus
- * @since      1.0.0
- *
- * @package    WP_Social_Manager
- * @subpackage WP_Social_Manager/admin/partials
- */
 
 namespace XCo\WPSocialManager;
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) )
-	die;
+if ( ! defined( 'WPINC' ) ) {
+	die; }
 
 final class Settings extends OptionUtilities {
 
 	/**
 	 * [$args description]
+	 *
 	 * @var [type]
 	 */
 	protected $args;
 
 	/**
 	 * [$plugin_dir description]
+	 *
 	 * @var [type]
 	 */
 	protected $plugin_dir;
 
 	/**
 	 * [$screen description]
+	 *
 	 * @var [type]
 	 */
 	protected $screen;
 
 	/**
 	 * [$settings description]
+	 *
 	 * @var [type]
 	 */
 	protected $settings;
 
 	/**
 	 * [$fields description]
+	 *
 	 * @var [type]
 	 */
 	protected $fields;
 
 	/**
 	 * [$document_title description]
+	 *
 	 * @var [type]
 	 */
 	protected $site_title;
 
 	/**
 	 * [$document_title description]
+	 *
 	 * @var [type]
 	 */
 	protected $site_tagline;
 
 	/**
 	 * [$document_title description]
+	 *
 	 * @var [type]
 	 */
 	protected $document_title;
 
 	/**
 	 * [__construct description]
+	 *
 	 * @param array $args [description]
 	 */
 	public function __construct( array $args ) {
 
 		$this->args = $args;
 
-		$this->version = $args[ 'version' ];
-		$this->plugin_name = $args[ 'plugin_name' ];
-		$this->plugin_opts = $args[ 'plugin_opts' ];
+		$this->version = $args['version'];
+		$this->plugin_name = $args['plugin_name'];
+		$this->plugin_opts = $args['plugin_opts'];
 
 		$this->path_dir = trailingslashit( plugin_dir_path( dirname( __FILE__ ) ) );
 		$this->path_url = trailingslashit( plugin_dir_url( dirname( __FILE__ ) ) );
@@ -88,6 +86,7 @@ final class Settings extends OptionUtilities {
 
 	/**
 	 * [requires description]
+	 *
 	 * @return [type] [description]
 	 */
 	protected function requires() {
@@ -102,6 +101,7 @@ final class Settings extends OptionUtilities {
 
 	/**
 	 * [setups description]
+	 *
 	 * @return [type] [description]
 	 */
 	protected function hooks() {
@@ -122,6 +122,7 @@ final class Settings extends OptionUtilities {
 
 	/**
 	 * [setting_setups description]
+	 *
 	 * @return [type] [description]
 	 */
 	public function setting_setups() {
@@ -142,6 +143,7 @@ final class Settings extends OptionUtilities {
 
 	/**
 	 * [setting_menu description]
+	 *
 	 * @return [type] [description]
 	 */
 	public function setting_menu() {
@@ -153,7 +155,7 @@ final class Settings extends OptionUtilities {
 			echo "<div class='wrap' id='{$this->plugin_name}-wrap'>";
 				$this->settings->render_header( array( 'title' => false ) );
 				$this->settings->render_form();
-			echo "</div>";
+			echo '</div>';
 		} );
 
 		add_action( "admin_print_styles-{$this->screen}", array( $this, 'print_setting_styles' ), 20, 1 );
@@ -161,30 +163,31 @@ final class Settings extends OptionUtilities {
 
 	/**
 	 * [setting_init description]
+	 *
 	 * @return [type] [description]
 	 */
 	public function setting_pages() {
 
 		$this->pages = $this->settings->add_pages( array(
-				array(
+			array(
 					'id' => 'accounts',
 					'slug' => 'accounts',
-					'title' => esc_html__( 'Accounts', 'wp-social-manager' )
+					'title' => esc_html__( 'Accounts', 'wp-social-manager' ),
 				),
-				array(
+			array(
 					'id' => 'buttons',
 					'slug' => 'buttons',
-					'title' => esc_html__( 'Buttons', 'wp-social-manager' )
+					'title' => esc_html__( 'Buttons', 'wp-social-manager' ),
 					),
-				array(
+			array(
 					'id' => 'metas',
 					'slug' => 'metas',
-					'title' => esc_html__( 'Metas', 'wp-social-manager' )
+					'title' => esc_html__( 'Metas', 'wp-social-manager' ),
 				),
-				array(
+			array(
 					'id' => 'advanced',
 					'slug' => 'advanced',
-					'title' => esc_html__( 'Advanced', 'wp-social-manager' )
+					'title' => esc_html__( 'Advanced', 'wp-social-manager' ),
 				),
 			)
 		);
@@ -192,24 +195,27 @@ final class Settings extends OptionUtilities {
 
 	/**
 	 * [setting_sections description]
+	 *
 	 * @return [type] [description]
 	 */
 	public function setting_sections() {
 
 		/**
 		 * [$this->pages description]
+		 *
 		 * @var [type]
 		 */
 		$this->pages = $this->settings->add_section( 'accounts', array(
 				'id' => 'profiles',
 				'title' => esc_html__( 'Profiles & Pages', 'wp-social-manager' ),
 				'description' => esc_html__( 'Add the social media profiles and pages related to this website.', 'wp-social-manager' ),
-				'validate_callback' => array( $this->validate, 'setting_usernames' )
+				'validate_callback' => array( $this->validate, 'setting_usernames' ),
 			)
 		);
 
 		/**
 		 * [$this->pages description]
+		 *
 		 * @var [type]
 		 */
 		$this->pages = $this->settings->add_sections( 'buttons', array(
@@ -217,55 +223,67 @@ final class Settings extends OptionUtilities {
 					'id' => 'buttons_content',
 					'title' => esc_html__( 'Content', 'wp-social-manager' ),
 					'description' => esc_html__( 'Options to configure the social media buttons that allows people to share, like, or save content of this site.', 'wp-sharing-manager' ),
-					'validate_callback' => array( $this->validate, 'setting_buttons_content' )
+					'validate_callback' => array( $this->validate, 'setting_buttons_content' ),
 				),
 				array(
 					'id' => 'buttons_image',
 					'title' => esc_html__( 'Image', 'wp-social-manager' ),
 					'description' => esc_html__( 'Options to configure the social media buttons shown on the content images.', 'wp-sharing-manager' ),
-					'validate_callback' => array( $this->validate, 'setting_buttons_image' )
-				)
+					'validate_callback' => array( $this->validate, 'setting_buttons_image' ),
+				),
 			)
 		);
 
 		/**
 		 * [$this->pages description]
+		 *
 		 * @var [type]
 		 */
 		$this->pages = $this->settings->add_section( 'metas', array(
 			'id' => 'metas_site',
-			'validate_callback' => array( $this->validate, 'setting_site_metas' )
+			'validate_callback' => array( $this->validate, 'setting_site_metas' ),
 			)
 		);
 
 		/**
 		 * [$this->pages description]
+		 *
 		 * @var [type]
 		 */
 		$this->pages = $this->settings->add_section( 'advanced', array(
 			'id' => 'advanced',
-			'validate_callback' => array( $this->validate, 'setting_advanced' )
+			'validate_callback' => array( $this->validate, 'setting_advanced' ),
+			)
+		);
+
+		$this->pages = $this->settings->add_section( 'advanced', array(
+			'id' => 'modes',
+			'title' => 'Modes',
+			'description' => 'Configure the modes that work best for your website.',
+			'validate_callback' => array( $this->validate, 'setting_advanced' ),
 			)
 		);
 	}
 
 	/**
 	 * [setting_fields description]
+	 *
 	 * @return void [description]
 	 */
 	public function setting_fields() {
 
 		/**
 		 * [$key description]
+		 *
 		 * @var [type]
 		 */
 		foreach ( self::get_social_profiles() as $key => $value ) {
 
 			$props = self::get_social_properties( $key );
 
-			$label = isset( $value[ 'label' ] ) ? $value[ 'label' ] : '';
-			$description = isset( $value[ 'description' ] ) ? $value[ 'description' ] : '';
-			$url = isset( $props[ 'url' ] ) ? $props[ 'url' ] : '';
+			$label = isset( $value['label'] ) ? $value['label'] : '';
+			$description = isset( $value['description'] ) ? $value['description'] : '';
+			$url = isset( $props['url'] ) ? $props['url'] : '';
 
 			if ( ! empty( $url ) && ! empty( $description ) ) {
 
@@ -275,10 +293,10 @@ final class Settings extends OptionUtilities {
 					'label' => $label,
 					'description' => $description,
 					'attr' => array(
-						'class' => "account-profile-control code",
+						'class' => 'account-profile-control code',
 						'data-load-script' => 'preview-profile',
-						'data-url' => $props[ 'url' ]
-					)
+						'data-url' => $props['url'],
+					),
 				);
 
 				$this->pages = $this->settings->add_fields( 'accounts', 'profiles', array( $profiles ) );
@@ -287,6 +305,7 @@ final class Settings extends OptionUtilities {
 
 		/**
 		 * [setting_init description]
+		 *
 		 * @param  [type] $this->screen [description]
 		 * @return [type]               [description]
 		 */
@@ -305,7 +324,7 @@ final class Settings extends OptionUtilities {
 					'description' => esc_html__( 'Select the social media buttons visual appearance displayed in the content.', 'wp-sharing-manager' ),
 					'type' => 'radio',
 					'options' => self::get_button_views(),
-					'default' => 'icon'
+					'default' => 'icon',
 				),
 				array(
 					'id' => 'placement',
@@ -319,19 +338,20 @@ final class Settings extends OptionUtilities {
 					'id' => 'heading',
 					'type' => 'text',
 					'label' => esc_html__( 'Buttons Heading', 'wp-sharing-manager' ),
-					'description' => sprintf( esc_html__( 'Set the heading title shown before the buttons (e.g. %s).', 'wp-sharing-manager' ), '<code>Share on:</code>' )
+					'description' => sprintf( esc_html__( 'Set the heading title shown before the buttons (e.g. %s).', 'wp-sharing-manager' ), '<code>Share on:</code>' ),
 				),
 				array(
 					'id' => 'includes',
 					'label' => esc_html__( 'Include these', 'wp-sharing-manager' ),
 					'type' => 'multicheckbox',
 					'options' => self::get_button_sites( 'content' ),
-					'default' => array_keys( self::get_button_sites( 'content' ) )
-				)
+					'default' => array_keys( self::get_button_sites( 'content' ) ),
+				),
 		) );
 
 		/**
 		 * [$this->pages description]
+		 *
 		 * @var [type]
 		 */
 		$this->pages = $this->settings->add_fields( 'buttons', 'buttons_image', array(
@@ -344,7 +364,7 @@ final class Settings extends OptionUtilities {
 					'class' => 'toggle-control',
 					'data-load-script' => 'toggle-control',
 					'data-toggle' => '.sharing-image-setting',
-				)
+				),
 			),
 			array(
 				'id' => 'postTypes',
@@ -353,7 +373,7 @@ final class Settings extends OptionUtilities {
 				'type' => 'multicheckbox',
 				'options' => self::get_post_types(),
 				'default' => array( 'post' ),
-				'class' => 'sharing-image-setting hide-if-js'
+				'class' => 'sharing-image-setting hide-if-js',
 			),
 			array(
 				'id' => 'view',
@@ -371,11 +391,12 @@ final class Settings extends OptionUtilities {
 				'options' => self::get_button_sites( 'image' ),
 				'default' => array_keys( self::get_button_sites( 'image' ) ),
 				'class' => 'sharing-image-setting hide-if-js',
-			)
+			),
 		) );
 
 		/**
 		 * [$this->pages description]
+		 *
 		 * @var [type]
 		 */
 		$this->pages = $this->settings->add_fields( 'metas', 'metas_site', array(
@@ -389,7 +410,7 @@ final class Settings extends OptionUtilities {
 					'class' => 'toggle-control',
 					'data-load-script' => 'toggle-control',
 					'data-toggle' => '.meta-site-setting',
-				)
+				),
 			),
 			array(
 				'id' => 'name',
@@ -399,8 +420,8 @@ final class Settings extends OptionUtilities {
 				'description' => sprintf( esc_html__( 'The website name or brand as it should appear within the social media meta tags (e.g. %s)', 'wp-social-manager' ), '<code>iMDB</code>, <code>TNW</code>, <code>HKDC</code>' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
-					'placeholder' => $this->site_title
-				)
+					'placeholder' => $this->site_title,
+				),
 			),
 			array(
 				'id' => 'title',
@@ -410,8 +431,8 @@ final class Settings extends OptionUtilities {
 				'description' => esc_html__( 'The title of this website as it should appear within the social media meta tags.', 'wp-social-manager' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
-					'placeholder' => $this->document_title
-				)
+					'placeholder' => $this->document_title,
+				),
 			),
 			array(
 				'id' => 'description',
@@ -422,20 +443,21 @@ final class Settings extends OptionUtilities {
 				'attr' => array(
 					'rows' => '4',
 					'cols' => '80',
-					'placeholder' => $this->site_tagline
-				)
+					'placeholder' => $this->site_tagline,
+				),
 			),
 			array(
 				'id' => 'image',
 				'type' => 'image',
 				'class' => 'meta-site-setting',
 				'label' => esc_html__( 'Site Image', 'wp-social-manager' ),
-				'description' => esc_html__( 'An image URL which should represent this website within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' )
-			)
+				'description' => esc_html__( 'An image URL which should represent this website within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'wp-social-manager' ),
+			),
 		) );
 
 		/**
 		 * [$this->pages description]
+		 *
 		 * @var [type]
 		 */
 		$args = array(
@@ -457,10 +479,23 @@ final class Settings extends OptionUtilities {
 		}
 
 		$this->pages = $this->settings->add_field( 'advanced', 'advanced', $args );
+
+		$this->pages = $this->settings->add_field( 'advanced', 'modes', array(
+			'id' => 'buttons_mode',
+			'label' => esc_html__( 'Buttons Mode', 'wp-sharing-manager' ),
+			'description' => 'Select the mode to render the social media buttons.',
+			'type' => 'radio',
+			'options' => array(
+				'json' => 'JSON (JavaScript Object Notation)',
+				'html' => 'HTML (HyperText Markup Language)',
+			),
+			'default' => array( 'html' )
+		) );
 	}
 
 	/**
 	 * [setting_init description]
+	 *
 	 * @access public
 	 * @return [type] [description]
 	 */
@@ -472,10 +507,12 @@ final class Settings extends OptionUtilities {
 
 	/**
 	 * [setting_styles description]
+	 *
 	 * @param  [type] $where [description]
 	 * @return [type]        [description]
 	 */
-	public function print_setting_styles() { ?>
+	public function print_setting_styles() {
+	?>
 		<style id="<?php echo esc_attr( "{$this->plugin_name}-internal-styles" ); ?>">
 			.wrap > form > h2 {
 				margin-bottom: 0.72em;
@@ -506,12 +543,13 @@ final class Settings extends OptionUtilities {
 
 	/**
 	 * [field_scripts description]
+	 *
 	 * @return [type] [description]
 	 */
 	public function enqueue_scripts( array $args ) {
 
 		foreach ( $args as $key => $file ) {
-			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : "scripts";
+			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'scripts';
 			wp_enqueue_script( "{$this->plugin_name}-{$file}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 		}
 
@@ -520,19 +558,21 @@ final class Settings extends OptionUtilities {
 
 	/**
 	 * [setting_styles description]
-	 * @param  array  $args [description]
+	 *
+	 * @param  array $args [description]
 	 * @return [type]       [description]
 	 */
 	public function enqueue_styles( array $args ) {
 
 		foreach ( $args as $name => $file ) {
-			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : "styles";
+			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'styles';
 			wp_enqueue_style( "{$this->plugin_name}-{$file}", "{$this->path_url}css/{$file}.css", array(), $this->version );
 		}
 	}
 
 	/**
 	 * [_document_title description]
+	 *
 	 * @return [type] [description]
 	 */
 	public function frontend_setups() {
@@ -541,15 +581,16 @@ final class Settings extends OptionUtilities {
 
 	/**
 	 * [wp_get_document_title description]
+	 *
 	 * @return [type] [description]
 	 */
 	protected function wp_get_document_title() {
 
-		$title[ 'site' ] = get_bloginfo( 'name', 'display' );
-		$title[ 'tagline' ] = get_bloginfo( 'description', 'display' );
+		$title['site'] = get_bloginfo( 'name', 'display' );
+		$title['tagline'] = get_bloginfo( 'description', 'display' );
 
-		$this->site_title = $title[ 'site' ];
-		$this->site_tagline = $title[ 'tagline' ];
+		$this->site_title = $title['site'];
+		$this->site_tagline = $title['tagline'];
 
 		$sep   = apply_filters( 'document_title_separator', '-' );
 		$title = apply_filters( 'document_title_parts', $title );

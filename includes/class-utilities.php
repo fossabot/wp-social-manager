@@ -12,6 +12,10 @@
 
 namespace XCo\WPSocialManager;
 
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
+
 /**
  * Main utility Class defining general functions
  * that may be used across across both the public-facing
@@ -290,9 +294,9 @@ class OptionUtilities extends Utilities {
 	public static function get_button_views() {
 
 		$types = array(
-			'icon'      => esc_html__( 'Icon Only', 'wp-sharing-manager' ),
-			'text'      => esc_html__( 'Text Only', 'wp-sharing-manager' ),
-			'icon-text' => esc_html__( 'Icon and Text', 'wp-sharing-manager' ),
+			'icon'      => esc_html__( 'Icon Only', 'wp-social-manager' ),
+			'text'      => esc_html__( 'Text Only', 'wp-social-manager' ),
+			'icon-text' => esc_html__( 'Icon and Text', 'wp-social-manager' ),
 		);
 
 		return $types;
@@ -309,8 +313,8 @@ class OptionUtilities extends Utilities {
 	public static function get_button_placements() {
 
 		$locations = array(
-			'before' => esc_html__( 'Before the content', 'wp-sharing-manager' ),
-			'after'  => esc_html__( 'After the content', 'wp-sharing-manager' ),
+			'before' => esc_html__( 'Before the content', 'wp-social-manager' ),
+			'after'  => esc_html__( 'After the content', 'wp-social-manager' ),
 		);
 
 		return $locations;

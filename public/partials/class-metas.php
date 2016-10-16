@@ -2,12 +2,17 @@
 /**
  * Public: Meta class
  *
- * @package WPSocialManager
- * @subpackage Public
  * @author Thoriq Firdaus <tfirdau@outlook.com>
+ *
+ * @package WPSocialManager
+ * @subpackage Public\Metas
  */
 
 namespace XCo\WPSocialManager;
+
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
 
 /**
  * Meta data class.
