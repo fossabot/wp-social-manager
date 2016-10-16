@@ -471,39 +471,44 @@ final class Settings extends OptionUtilities {
 			),
 		) );
 
-		$args = array(
-			'id' => 'enableStylesheet',
-			'label' => esc_html__( 'Enable Stylesheet', 'wp-social-manager' ),
-			'description' => esc_html__( 'Load the plugin stylesheet to apply essential styles.', 'wp-social-manager' ),
-			'default' => 'on',
-			'type' => 'checkbox',
-		);
-
-		$stylesheet = false;
-
-		if ( isset( $this->supports['stylesheet'] ) ) {
-			$stylesheet = $this->supports['stylesheet'];
-		}
-
-		if ( (bool) $stylesheet ) {
+		if ( $this->is_stylesheet_disabled() ) {
 			$args = array(
 				'id' => 'enableStylesheet',
 				'label' => esc_html__( 'Enable Stylesheet', 'wp-social-manager' ),
 				'type' => 'content',
-				'content' => esc_html__( 'It seems the stylesheet is loaded through the theme you are currently using. Thus, this option is disabled', 'wp-social-manager' ),
+				'content' => esc_html__( 'This option is disable since the Theme being used in this website has included the styles in its own stylesheet.', 'wp-social-manager' ),
+			);
+		} else {
+			$args = array(
+				'id' => 'enableStylesheet',
+				'label' => esc_html__( 'Enable Stylesheet', 'wp-social-manager' ),
+				'description' => esc_html__( 'Load the plugin stylesheet to apply essential styles.', 'wp-social-manager' ),
+				'default' => 'on',
+				'type' => 'checkbox',
 			);
 		}
 
 		$this->pages = $this->settings->add_field( 'advanced', 'advanced', $args );
 
-		$this->pages = $this->settings->add_field( 'advanced', 'modes', array(
-			'id' => 'buttonsMode',
-			'label' => esc_html__( 'Buttons Mode', 'wp-social-manager' ),
-			'description' => 'Select the mode to render the social media buttons.',
-			'type' => 'radio',
-			'options' => self::get_button_modes(),
-			'default' => 'html',
-		) );
+		if ( $this->is_button_modes_disabled() ) {
+			$args = array(
+				'id' => 'buttonsMode',
+				'label' => esc_html__( 'Buttons Mode', 'wp-social-manager' ),
+				'type' => 'content',
+				'content' => esc_html__( 'This option is disable since the Theme being used in this website has already defined which buttons mode to support.', 'wp-social-manager' ),
+			);
+		} else {
+			$args = array(
+				'id' => 'buttonsMode',
+				'label' => esc_html__( 'Buttons Mode', 'wp-social-manager' ),
+				'description' => 'Select the mode to render the social media buttons.',
+				'type' => 'radio',
+				'options' => self::get_button_modes(),
+				'default' => 'html',
+			);
+		}
+
+		$this->pages = $this->settings->add_field( 'advanced', 'modes', $args );
 	}
 
 	/**
@@ -629,5 +634,47 @@ final class Settings extends OptionUtilities {
 		$title = capital_P_dangit( $title );
 
 		$this->document_title = $title;
+	}
+
+	/**
+	 * Utility function to check if we should disable the stylesheet option.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return boolean
+	 */
+	protected function is_stylesheet_disabled() {
+
+		if ( isset( $this->supports['stylesheet'] ) ) {
+			// If set to 'true' it measn the theme load its own stylesheet for the plugin.
+			return (bool) $this->supports['stylesheet'];
+		}
+
+		if ( isset( $this->supports['attr-prefix'] ) ) {
+			/*
+			 * If the prefix is the same as the attribute prefix,
+			 * we can assume that the theme will add custom stylesheet.
+			 */
+			$prefix = $this->supports['attr-prefix'] !== self::get_attr_prefix() ? true : false;
+
+			return $prefix;
+		}
+
+		return false;
+	}
+
+	/**
+	 * [is_modes_disabled description]
+	 */
+	protected function is_button_modes_disabled() {
+
+		if ( isset( $this->supports['buttons-mode'] ) ) {
+
+			$mode = $this->supports['buttons-mode'];
+			if ( key_exists( $mode, self::get_button_modes() ) ) {
+				return true;
+			}
+		}
 	}
 }
