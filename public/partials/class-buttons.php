@@ -71,7 +71,7 @@ final class Buttons extends OutputUtilities {
 	 *     @type string $version 		The plugin version number.
 	 * }
 	 */
-	public function __construct( array $args ) {
+	function __construct( array $args ) {
 
 		$this->plugin_name = $args['plugin_name'];
 		$this->plugin_opts = $args['plugin_opts'];
@@ -220,8 +220,8 @@ final class Buttons extends OutputUtilities {
 	 * @return void
 	 */
 	public function add_template_script() {
-		$this->buttons_content_template();
-		$this->buttons_image_template();
+		$this->buttons_content_tmpl();
+		$this->buttons_image_tmpl();
 	}
 
 	/**
@@ -234,7 +234,7 @@ final class Buttons extends OutputUtilities {
 	 *
 	 * @return void
 	 */
-	protected function buttons_content_template() {
+	protected function buttons_content_tmpl() {
 
 		if ( false === $this->is_buttons_content() ) {
 			return;
@@ -282,7 +282,7 @@ final class Buttons extends OutputUtilities {
 	 *
 	 * @return void
 	 */
-	protected function buttons_image_template() {
+	protected function buttons_image_tmpl() {
 
 		if ( false === $this->is_buttons_image() ) {
 			return;
@@ -335,11 +335,6 @@ final class Buttons extends OutputUtilities {
 			return '';
 		}
 
-		/**
-		 * [$args description]
-		 *
-		 * @var [type]
-		 */
 		$args = wp_parse_args( $args, array(
 			'site'  => '',
 			'icon'  => '',
@@ -393,11 +388,6 @@ final class Buttons extends OutputUtilities {
 			return false;
 		}
 
-		/**
-		 * [$meta description]
-		 *
-		 * @var [type]
-		 */
 		$meta = (array) $this->options->postMeta;
 
 		return isset( $meta['buttons_content'] ) ? $meta['buttons_content'] : true;
@@ -431,11 +421,6 @@ final class Buttons extends OutputUtilities {
 			return false;
 		}
 
-		/**
-		 * [$meta description]
-		 *
-		 * @var [type]
-		 */
 		$meta = (array) $this->options->postMeta;
 
 		return isset( $meta['buttons_image'] ) ? $meta['buttons_image'] : true;
