@@ -22,7 +22,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-final class ViewPublic extends OutputUtilities {
+final class ViewPublic extends OutputHelpers {
 
 	/**
 	 * Common arguments passed in a Class or a function.
@@ -65,9 +65,9 @@ final class ViewPublic extends OutputUtilities {
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var array
+	 * @var ThemeSupports
 	 */
-	protected $supports = array();
+	protected $supports = null;
 
 	/**
 	 * Options required to define the public-facing fuctionalities.
@@ -181,11 +181,12 @@ final class ViewPublic extends OutputUtilities {
 
 		$this->metas = new Metas( $this->args );
 
-		$this->buttons = new Buttons( $this->args, $this->metas );
-		$this->routes = new APIRoutes( $this->args, $this->metas );
+		$this->buttons = new Buttons( $this->args, $this->metas, $this->supports );
+		$this->routes = new APIRoutes( $this->args, $this->metas, $this->supports );
 
 		$this->options = (object) array(
 			'advanced' => get_option( "{$this->plugin_opts}_advanced" ),
+			'modes' => get_option( "{$this->plugin_opts}_modes" ),
 		);
 	}
 
@@ -198,10 +199,6 @@ final class ViewPublic extends OutputUtilities {
 	 * @return  mixed
 	 */
 	public function enqueue_styles() {
-
-		if ( is_admin() ) { // Prevent the the stylesheets to be loaded in the admin area.
-			return;
-		}
 
 		if ( $this->is_load_stylesheet() ) {
 			wp_enqueue_style( $this->plugin_name, $this->path_url . 'css/styles.css', array(), $this->version, 'all' );
@@ -216,12 +213,11 @@ final class ViewPublic extends OutputUtilities {
 	 */
 	public function enqueue_scripts() {
 
-		if ( is_admin() ) { // Prevent the the stylesheets to be loaded in the admin area.
-			return;
+		if ( $this->is_load_routes() ) {
+			wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/app.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		} else {
+			wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/scripts.js', array( 'jquery' ), $this->version, true );
 		}
-
-		wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/app.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
-		wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/scripts.js', array( 'jquery' ), $this->version, true );
 	}
 
 	/**
@@ -232,8 +228,10 @@ final class ViewPublic extends OutputUtilities {
 	 */
 	public function register_api_routes() {
 
-		add_filter( 'rest_api_init', array( $this->routes, 'register_routes' ) );
-		add_action( 'wp_enqueue_scripts', array( $this->routes, 'localize_scripts' ) );
+		if ( $this->is_load_routes() ) {
+			add_filter( 'rest_api_init', array( $this->routes, 'register_routes' ) );
+			add_action( 'wp_enqueue_scripts', array( $this->routes, 'localize_scripts' ) );
+		}
 	}
 
 	/**
@@ -253,6 +251,19 @@ final class ViewPublic extends OutputUtilities {
 		if ( isset( $this->options->advanced['enableStylesheet'] ) ) {
 			$option = (bool) $this->options->advanced['enableStylesheet'];
 			return $option;
+		}
+
+		return true;
+	}
+
+	protected function is_load_routes() {
+
+		if ( 'html' === $this->supports->is_theme_support( 'buttons-mode' ) ) {
+			return false;
+		}
+
+		if ( 'html' === $this->options->modes['buttonsMode'] ) {
+			return false;
 		}
 
 		return true;

@@ -23,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-class Utilities {
+class Helpers {
 
 	/**
 	 * Get list of social media common properties such as the name or label, the home URL, and the icon.
@@ -173,7 +173,7 @@ class Utilities {
  *
  * @since 1.0.0
  */
-class OptionUtilities extends Utilities {
+class OptionHelpers extends Helpers {
 
 	/**
 	 * Get social media profiles input descriptions.
@@ -340,7 +340,7 @@ class OptionUtilities extends Utilities {
  *
  * @since 1.0.0
  */
-class OutputUtilities extends OptionUtilities {
+class OutputHelpers extends OptionHelpers {
 
 	/**
 	 * Default attribute prefix.

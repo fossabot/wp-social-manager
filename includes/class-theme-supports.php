@@ -2,7 +2,7 @@
 
 namespace XCo\WPSocialManager;
 
-final class ThemeSupports extends OutputUtilities {
+final class ThemeSupports extends OutputHelpers {
 
 	public $supports;
 
@@ -77,5 +77,20 @@ final class ThemeSupports extends OutputUtilities {
 		}
 	}
 
-	protected function buttons_mode() { return false; }
+	protected function buttons_mode() {
+
+		$mode = false;
+
+		if ( isset( $this->supports['buttons-mode'] ) ) {
+
+			$yep = (string) $this->supports['buttons-mode'];
+			$haystack = (array) self::get_button_modes();
+
+			if ( key_exists( $yep, $haystack ) ) {
+				$mode = $yep;
+			}
+		}
+
+		return $mode;
+	}
 }

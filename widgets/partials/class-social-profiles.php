@@ -81,7 +81,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 		$options = get_option( "{$args['plugin_opts']}_profiles" );
 		$this->options = ! empty( $options ) ? $options : array();
 
-		$this->properties = Utilities::get_social_properties();
+		$this->properties = Helpers::get_social_properties();
 
 		$this->widget_id = "{$args['plugin_name']}-profiles";
 		$this->widget_title = esc_html__( 'Social Profiles', 'wp-social-manager' );
@@ -154,7 +154,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 					$id = esc_attr( $this->get_field_id( 'view' ) );
 					$name = esc_attr( $this->get_field_name( 'view' ) );
 
-					$views = OptionUtilities::get_button_views();
+					$views = OptionHelpers::get_button_views();
 					$state = isset( $instance['view'] ) && ! empty( $instance['view'] ) ? $instance['view'] : 'icon';
 					$state = checked( sanitize_key( $state ), $key, true );
 
@@ -241,7 +241,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 				continue;
 			}
 
-			$properties = OptionUtilities::get_social_properties( $key );
+			$properties = OptionHelpers::get_social_properties( $key );
 			$properties = wp_parse_args( $properties, array(
 				'label' => '',
 				'url' => '',
@@ -285,7 +285,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 			return '';
 		}
 
-		$prefix = OutputUtilities::get_attr_prefix();
+		$prefix = OutputHelpers::get_attr_prefix();
 		$args   = wp_parse_args( $args, array(
 				'site' => '',
 				'label' => '',

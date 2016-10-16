@@ -19,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-final class SettingsValidation extends OptionUtilities {
+final class SettingsValidation extends OptionHelpers {
 
 	/**
 	 * The function method to sanitize username inputs.

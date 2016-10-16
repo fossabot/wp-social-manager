@@ -128,7 +128,7 @@ final class Core {
 	protected function requires() {
 
 		require_once( $this->path_dir . 'includes/class-i18n.php' );
-		require_once( $this->path_dir . 'includes/class-utilities.php' );
+		require_once( $this->path_dir . 'includes/class-helpers.php' );
 		require_once( $this->path_dir . 'includes/class-theme-supports.php' );
 
 		require_once( $this->path_dir . 'admin/class-admin.php' );

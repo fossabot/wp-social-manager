@@ -23,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-final class Metas extends OutputUtilities {
+final class Metas extends OutputHelpers {
 
 	/**
 	 * The unique identifier or prefix for database names.

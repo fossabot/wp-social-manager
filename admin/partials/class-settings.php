@@ -19,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-final class Settings extends OptionUtilities {
+final class Settings extends OptionHelpers {
 
 	/**
 	 * Common arguments passed in a Class or a function.
@@ -187,7 +187,7 @@ final class Settings extends OptionUtilities {
 	 */
 	public function setting_setups() {
 
-		$settings = new \PepperPlane( $this->plugin_opts);
+		$settings = new \PepperPlane( $this->plugin_opts );
 		$extends = new SettingsExtend( $this->plugin_opts );
 		$validate = new SettingsValidation();
 
@@ -294,18 +294,20 @@ final class Settings extends OptionUtilities {
 			)
 		);
 
-		$this->pages = $this->settings->add_sections( 'advanced', array(
-			array(
-				'id' => 'advanced',
-				'validate_callback' => array( $this->validate, 'setting_advanced' ),
-			),
-			array(
+		$this->pages = $this->settings->add_section( 'advanced', array(
+			'id' => 'advanced',
+			'validate_callback' => array( $this->validate, 'setting_advanced' ),
+		) );
+
+		if ( ! (bool) $this->supports->is_theme_support( 'buttons-mode' ) ) {
+
+			$this->pages = $this->settings->add_section( 'advanced', array(
 				'id' => 'modes',
 				'title' => esc_html__( 'Modes', 'wp-social-manager' ),
 				'description' => esc_html__( 'Configure the modes that work best for your website.', 'wp-social-manager' ),
 				'validate_callback' => array( $this->validate, 'setting_advanced_modes' ),
-			),
-		) );
+			) );
+		}
 	}
 
 	/**
@@ -484,7 +486,7 @@ final class Settings extends OptionUtilities {
 				'id' => 'enableStylesheet',
 				'label' => esc_html__( 'Enable Stylesheet', 'wp-social-manager' ),
 				'type' => 'content',
-				'content' => esc_html__( 'This option is disable since the Theme being used in this website has included the styles in its own stylesheet.', 'wp-social-manager' ),
+				'content' => esc_html__( 'The Theme being used in this website has included the styles in its own stylesheet.', 'wp-social-manager' ),
 			);
 		} else {
 			$args = array(
@@ -498,16 +500,19 @@ final class Settings extends OptionUtilities {
 
 		$this->pages = $this->settings->add_field( 'advanced', 'advanced', $args );
 
-		$args = array(
-			'id' => 'buttonsMode',
-			'label' => esc_html__( 'Buttons Mode', 'wp-social-manager' ),
-			'description' => 'Select the mode to render the social media buttons.',
-			'type' => 'radio',
-			'options' => self::get_button_modes(),
-			'default' => 'html',
-		);
+		if ( ! (bool) $this->supports->is_theme_support( 'buttons-mode' ) ) {
 
-		$this->pages = $this->settings->add_field( 'advanced', 'modes', $args );
+			$args = array(
+				'id' => 'buttonsMode',
+				'label' => esc_html__( 'Buttons Mode', 'wp-social-manager' ),
+				'description' => 'Select the mode to render the social media buttons.',
+				'type' => 'radio',
+				'options' => self::get_button_modes(),
+				'default' => 'html',
+			);
+
+			$this->pages = $this->settings->add_field( 'advanced', 'modes', $args );
+		}
 	}
 
 	/**

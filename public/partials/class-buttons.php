@@ -19,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-final class Buttons extends OutputUtilities {
+final class Buttons extends OutputHelpers {
 
 	/**
 	 * The unique identifier of this plugin.
@@ -67,21 +67,31 @@ final class Buttons extends OutputUtilities {
 	protected $metas = null;
 
 	/**
+	 * Theme support features.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var ThemeSupports
+	 */
+	protected $supports = null;
+
+	/**
 	 * Constructor: Initialize the Buttons Class
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
+	 * @param array 		$args {
 	 *     An array of common arguments of the plugin.
 	 *
 	 *     @type string $plugin_name 	The unique identifier of this plugin.
 	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
 	 *     @type string $version 		The plugin version number.
 	 * }
-	 * @param Metas $metas 				The Metas class instance.
+	 * @param Metas 		$metas 		The Metas class instance.
+	 * @param ThemeSupports $supports 	The ThemeSupports instance.
 	 */
-	function __construct( array $args, Metas $metas ) {
+	function __construct( array $args, Metas $metas, ThemeSupports $supports ) {
 
 		$this->plugin_name = $args['plugin_name'];
 		$this->plugin_opts = $args['plugin_opts'];
