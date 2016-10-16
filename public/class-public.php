@@ -122,6 +122,7 @@ final class ViewPublic extends OutputUtilities {
 	 *     @type string $plugin_opts    The unique identifier or prefix for database names.
 	 *     @type string $version        The plugin version number.
 	 * }
+	 * @param ThemeSupports $supports 	The ThemeSupports instance.
 	 */
 	public function __construct( array $args, ThemeSupports $supports ) {
 
@@ -179,7 +180,8 @@ final class ViewPublic extends OutputUtilities {
 	public function setups() {
 
 		$this->metas = new Metas( $this->args );
-		$this->buttons = new Buttons( $this->args );
+
+		$this->buttons = new Buttons( $this->args, $this->metas );
 		$this->routes = new APIRoutes( $this->args, $this->metas );
 
 		$this->options = (object) array(
