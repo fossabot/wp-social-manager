@@ -66,9 +66,8 @@ final class SettingsValidation extends OptionUtilities {
 
 		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
 
-		$inputs['postTypes']  = $this->validate_multi_selection( $inputs['postTypes'], 'postTypes' );
+		$inputs['postTypes'] = $this->validate_multi_selection( $inputs['postTypes'], 'postTypes' );
 		$inputs['includes'] = $this->validate_multi_selection( $inputs['includes'], 'includes', 'content' );
-
 		$inputs['view'] = $this->validate_selection( $inputs['view'], 'view' );
 		$inputs['placement'] = $this->validate_selection( $inputs['placement'], 'placement' );
 
@@ -132,14 +131,30 @@ final class SettingsValidation extends OptionUtilities {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  array $inputs Unsanitized inputs being saved.
-	 * @return array         Inputs sanitized
+	 * @param array|null $inputs Unsanitized inputs being saved. 
+	 * @return array        	 Inputs sanitized
 	 */
-	public function setting_advanced( array $inputs ) {
+	public function setting_advanced( $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
 			'enableStylesheet' => false,
 		) );
+
+		return $inputs;
+	}
+
+	/**
+	 * The function method to sanitize the Mode section in the "Advanced" tabs.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param array $inputs Unsanitized inputs being saved.
+	 * @return array        Inputs sanitized
+	 */
+	public function setting_advanced_modes( $inputs ) {
+
+		$inputs['buttonsMode'] = $this->validate_selection( $inputs['buttonsMode'], 'modes' );
 
 		return $inputs;
 	}
@@ -153,12 +168,12 @@ final class SettingsValidation extends OptionUtilities {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  array $input Unsanitized inputs being saved.
-	 * @param  array $ref   Key reference of the preset / acceptable selection to validate
-	 * 						against the incoming input.
-	 * @return array        Inputs sanitized
+	 * @param  string $input Unsanitized inputs being saved.
+	 * @param  array  $ref   Key reference of the preset / acceptable selection to validate
+	 * 						 against the incoming input.
+	 * @return string        Inputs sanitized
 	 */
-	protected function validate_selection( array $input, $ref ) {
+	protected function validate_selection( $input, $ref ) {
 
 		/**
 		 * Preset selection.
@@ -168,6 +183,7 @@ final class SettingsValidation extends OptionUtilities {
 		$preset = array(
 			'view' => self::get_button_views(),
 			'placement' => self::get_button_placements(),
+			'modes' => self::get_button_modes(),
 		);
 
 		$input = sanitize_key( (string) $input );

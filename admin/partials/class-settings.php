@@ -293,9 +293,9 @@ final class Settings extends OptionUtilities {
 			),
 			array(
 				'id' => 'modes',
-				'title' => 'Modes',
-				'description' => 'Configure the modes that work best for your website.',
-				'validate_callback' => array( $this->validate, 'setting_advanced' ),
+				'title' => esc_html__( 'Modes', 'wp-social-manager' ),
+				'description' => esc_html__( 'Configure the modes that work best for your website.', 'wp-social-manager' ),
+				'validate_callback' => array( $this->validate, 'setting_advanced_modes' ),
 			),
 		) );
 	}
@@ -364,6 +364,7 @@ final class Settings extends OptionUtilities {
 					'type' => 'text',
 					'label' => esc_html__( 'Buttons Heading', 'wp-social-manager' ),
 					'description' => sprintf( esc_html__( 'Set the heading title shown before the buttons (e.g. %s).', 'wp-social-manager' ), '<code>Share on:</code>' ),
+					'default' => esc_html__( 'Share on:', 'wp-social-manager' ),
 				),
 				array(
 					'id' => 'includes',
@@ -478,28 +479,30 @@ final class Settings extends OptionUtilities {
 			'type' => 'checkbox',
 		);
 
-		$stylesheet = true;
+		$stylesheet = false;
 
 		if ( isset( $this->supports['stylesheet'] ) ) {
 			$stylesheet = $this->supports['stylesheet'];
 		}
 
-		if ( true === (bool) $stylesheet ) {
-			$args['attr']['disabled'] = true;
+		if ( (bool) $stylesheet ) {
+			$args = array(
+				'id' => 'enableStylesheet',
+				'label' => esc_html__( 'Enable Stylesheet', 'wp-social-manager' ),
+				'type' => 'content',
+				'content' => esc_html__( 'It seems the stylesheet is loaded through the theme you are currently using. Thus, this option is disabled', 'wp-social-manager' ),
+			);
 		}
 
 		$this->pages = $this->settings->add_field( 'advanced', 'advanced', $args );
 
 		$this->pages = $this->settings->add_field( 'advanced', 'modes', array(
-			'id' => 'buttons_mode',
+			'id' => 'buttonsMode',
 			'label' => esc_html__( 'Buttons Mode', 'wp-social-manager' ),
 			'description' => 'Select the mode to render the social media buttons.',
 			'type' => 'radio',
-			'options' => array(
-				'json' => 'JSON (JavaScript Object Notation)',
-				'html' => 'HTML (HyperText Markup Language)',
-			),
-			'default' => array( 'html' ),
+			'options' => self::get_button_modes(),
+			'default' => 'html',
 		) );
 	}
 

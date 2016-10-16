@@ -178,22 +178,22 @@ class Utilities {
 		$email = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.954 6.864c.526.278 7.84 4.264 8.113 4.408.273.144.55.21.98.21s.71-.066.982-.21 7.585-4.13 8.112-4.408c.196-.1.526-.282.598-.488.124-.364-.01-.503-.54-.503H2.897c-.532 0-.666.144-.542.503.07.21.402.388.598.488zm18.604.216c-.392.2-3.915 2.71-6.246 4.217l3.934 4.427c.096.096.14.21.086.268-.057.053-.182.024-.282-.067l-4.72-3.982c-.712.46-1.215.775-1.3.823-.37.187-.628.21-.982.21s-.613-.023-.98-.21c-.092-.048-.59-.364-1.303-.823l-4.72 3.982c-.095.096-.224.124-.28.067-.058-.053-.015-.172.08-.268l3.93-4.427C6.442 9.79 2.88 7.28 2.49 7.08c-.42-.216-.445.038-.445.234v9.812c0 .445.656 1 1.125 1h17.756c.47 0 1.03-.56 1.03-1V7.314c0-.2.028-.45-.398-.234z"/></svg>';
 
 		$icons = array(
-			'facebook'   => apply_filters( 'wp_social_manager_icon', $facebook, 'facebook', '' ),
-			'twitter'    => apply_filters( 'wp_social_manager_icon', $twitter, 'twitter', '' ),
-			'instagram'  => apply_filters( 'wp_social_manager_icon', $instagram, 'instagram', '' ),
-			'pinterest'  => apply_filters( 'wp_social_manager_icon', $pinterest, 'pinterest', '' ),
-			'linkedin'   => apply_filters( 'wp_social_manager_icon', $linkedin, 'linkedin', '' ),
-			'googleplus' => apply_filters( 'wp_social_manager_icon', $googleplus, 'googleplus', '' ),
-			'youtube'    => apply_filters( 'wp_social_manager_icon', $youtube, 'youtube', '' ),
-			'reddit'     => apply_filters( 'wp_social_manager_icon', $reddit, 'reddit', '' ),
-			'dribbble'   => apply_filters( 'wp_social_manager_icon', $dribbble, 'dribbble', '' ),
-			'behance'    => apply_filters( 'wp_social_manager_icon', $behance, 'behance', '' ),
-			'github'     => apply_filters( 'wp_social_manager_icon', $github, 'github', '' ),
-			'codepen'    => apply_filters( 'wp_social_manager_icon', $codepen, 'codepen', '' ),
-			'email'      => apply_filters( 'wp_social_manager_icon', $email, 'email', '' ),
+			'facebook'   => apply_filters( 'wp_social_manager_icon', $facebook, 'facebook', false ),
+			'twitter'    => apply_filters( 'wp_social_manager_icon', $twitter, 'twitter', false ),
+			'instagram'  => apply_filters( 'wp_social_manager_icon', $instagram, 'instagram', false ),
+			'pinterest'  => apply_filters( 'wp_social_manager_icon', $pinterest, 'pinterest', false ),
+			'linkedin'   => apply_filters( 'wp_social_manager_icon', $linkedin, 'linkedin', false ),
+			'googleplus' => apply_filters( 'wp_social_manager_icon', $googleplus, 'googleplus', false ),
+			'youtube'    => apply_filters( 'wp_social_manager_icon', $youtube, 'youtube', false ),
+			'reddit'     => apply_filters( 'wp_social_manager_icon', $reddit, 'reddit', false ),
+			'dribbble'   => apply_filters( 'wp_social_manager_icon', $dribbble, 'dribbble', false ),
+			'behance'    => apply_filters( 'wp_social_manager_icon', $behance, 'behance', false ),
+			'github'     => apply_filters( 'wp_social_manager_icon', $github, 'github', false ),
+			'codepen'    => apply_filters( 'wp_social_manager_icon', $codepen, 'codepen', false ),
+			'email'      => apply_filters( 'wp_social_manager_icon', $email, 'email', false ),
 		);
 
-		return isset( $icons[ $name ] ) ? $icons[ $name ] : '';
+		return isset( $icons[ $name ] ) && ! empty( $icons[ $name ] ) ? $icons[ $name ] : '';
 	}
 }
 
@@ -346,6 +346,21 @@ class OptionUtilities extends Utilities {
 		);
 
 		return isset( $sites[ $for ] ) ? $sites[ $for ] : $sites;
+	}
+
+	/**
+	 * Get list of button modes.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return array An array of button modes; the labels and the keys
+	 */
+	public static function get_button_modes() {
+		return array(
+			'html' => 'HTML (HyperText Markup Language)',
+			'json' => 'JSON (JavaScript Object Notation)',
+		);
 	}
 }
 
