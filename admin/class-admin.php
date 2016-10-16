@@ -31,7 +31,7 @@ final class ViewAdmin {
 	 * @access protected
 	 * @var array
 	 */
-	protected $args;
+	protected $args = array();
 
 	/**
 	 * The plugin URL.
@@ -40,7 +40,7 @@ final class ViewAdmin {
 	 * @access private
 	 * @var string
 	 */
-	private $path_dir;
+	private $path_dir = '';
 
 	/**
 	 * The ThemeSupports instance.
@@ -49,7 +49,7 @@ final class ViewAdmin {
 	 * @access private
 	 * @var ThemeSupports
 	 */
-	protected $supports;
+	protected $supports = null;
 
 	/**
 	 * Initialize the class and set its properties.
