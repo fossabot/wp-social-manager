@@ -131,7 +131,7 @@ final class SettingsValidation extends OptionUtilities {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array|null $inputs Unsanitized inputs being saved. 
+	 * @param array|null $inputs Unsanitized inputs being saved.
 	 * @return array        	 Inputs sanitized
 	 */
 	public function setting_advanced( $inputs ) {
