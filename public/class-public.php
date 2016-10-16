@@ -31,7 +31,7 @@ final class ViewPublic extends OutputUtilities {
 	 * @access protected
 	 * @var array
 	 */
-	protected $args;
+	protected $args = array();
 
 	/**
 	 * The ID of this plugin.
@@ -40,7 +40,7 @@ final class ViewPublic extends OutputUtilities {
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_name;
+	protected $plugin_name = '';
 
 	/**
 	 * The absolut URL path to the plugin directory.
@@ -49,7 +49,7 @@ final class ViewPublic extends OutputUtilities {
 	 * @access protected
 	 * @var string
 	 */
-	protected $path_url;
+	protected $path_url = '';
 
 	/**
 	 * The version of this plugin.
@@ -58,7 +58,7 @@ final class ViewPublic extends OutputUtilities {
 	 * @access protected
 	 * @var string
 	 */
-	protected $version;
+	protected $version = '';
 
 	/**
 	 * Theme support features.
@@ -67,7 +67,7 @@ final class ViewPublic extends OutputUtilities {
 	 * @access protected
 	 * @var array
 	 */
-	protected $support;
+	protected $supports = array();
 
 	/**
 	 * Options required to define the public-facing fuctionalities.
@@ -76,7 +76,25 @@ final class ViewPublic extends OutputUtilities {
 	 * @access protected
 	 * @var object
 	 */
-	protected $options;
+	protected $options = null;
+
+	/**
+	 * The Metas class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Metas
+	 */
+	protected $metas = null;
+
+	/**
+	 * The Buttons class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Buttons
+	 */
+	protected $buttons = null;
 
 	/**
 	 * APIRoutes instance.
@@ -85,7 +103,7 @@ final class ViewPublic extends OutputUtilities {
 	 * @access protected
 	 * @var APIRoutes
 	 */
-	private $routes;
+	private $routes = null;
 
 	/**
 	 * Constructor.
@@ -105,7 +123,7 @@ final class ViewPublic extends OutputUtilities {
 	 *     @type string $version        The plugin version number.
 	 * }
 	 */
-	public function __construct( array $args ) {
+	public function __construct( array $args, ThemeSupports $supports ) {
 
 		$this->args = $args;
 
@@ -115,6 +133,8 @@ final class ViewPublic extends OutputUtilities {
 
 		$this->path_dir = plugin_dir_path( __FILE__ );
 		$this->path_url = plugin_dir_url( __FILE__ );
+
+		$this->supports = $supports;
 
 		$this->requires();
 		$this->hooks();
@@ -158,11 +178,9 @@ final class ViewPublic extends OutputUtilities {
 	 */
 	public function setups() {
 
-		new Buttons( $this->args );
-
-		$this->routes  = new APIRoutes( $this->args, new Metas( $this->args ) );
-
-		$this->support = $this->theme_support( $this->plugin_name );
+		$this->metas = new Metas( $this->args );
+		$this->buttons = new Buttons( $this->args );
+		$this->routes = new APIRoutes( $this->args, $this->metas );
 
 		$this->options = (object) array(
 			'advanced' => get_option( "{$this->plugin_opts}_advanced" ),
@@ -183,7 +201,7 @@ final class ViewPublic extends OutputUtilities {
 			return;
 		}
 
-		if ( $this->is_stylesheet() ) {
+		if ( $this->is_load_stylesheet() ) {
 			wp_enqueue_style( $this->plugin_name, $this->path_url . 'css/styles.css', array(), $this->version, 'all' );
 		}
 	}
@@ -224,27 +242,14 @@ final class ViewPublic extends OutputUtilities {
 	 *
 	 * @return boolean
 	 */
-	protected function is_stylesheet() {
-		/*
-		 * If set to 'true' it means the theme load its own stylesheet,
-		 * to style the plugin output.
-		 */
-		if ( isset( $this->support['stylesheet'] ) ) {
-			$stylesheet = (bool) $this->support['stylesheet'];
-			return ! $stylesheet;
-		}
+	protected function is_load_stylesheet() {
 
-		/*
-		 * If the prefix is the same as the attribute prefix,
-		 * we can assume that the theme will add custom stylesheet.
-		 */
-		if ( isset( $this->support['attr-prefix'] ) ) {
-			$prefix = $this->support['attr-prefix'] === self::get_attr_prefix() ? true : false;
-			return $prefix;
+		if ( $this->supports->is_theme_support( 'stylesheet' ) ) {
+			return false;
 		}
 
 		if ( isset( $this->options->advanced['enableStylesheet'] ) ) {
-			$option = $this->options->advanced['enableStylesheet'];
+			$option = (bool) $this->options->advanced['enableStylesheet'];
 			return $option;
 		}
 
