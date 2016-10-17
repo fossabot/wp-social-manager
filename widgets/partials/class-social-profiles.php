@@ -154,11 +154,15 @@ final class WidgetSocialProfiles extends \WP_Widget {
 					$id = esc_attr( $this->get_field_id( 'view' ) );
 					$name = esc_attr( $this->get_field_name( 'view' ) );
 
-					$views = OptionHelpers::get_button_views();
-					$state = isset( $instance['view'] ) && ! empty( $instance['view'] ) ? $instance['view'] : 'icon';
-					$state = checked( sanitize_key( $state ), $key, true );
+					$views = OutputHelpers::get_button_views();
 
-				foreach ( $views as $key => $label ) : $key = sanitize_key( $key );
+				foreach ( $views as $key => $label ) :
+
+					$key = sanitize_key( $key );
+
+					$state = isset( $instance['view'] ) && ! empty( $instance['view'] ) ? $instance['view'] : 'icon';
+					$state = checked( sanitize_key( $state ), $key, false );
+
 					echo "<input id='{$id}-{$key}' type='radio' name='{$name}' value='{$key}' {$state}>"; // WPCS: XSS ok, sanitization ok.
 					echo "<label for='{$id}-{$key}'>" . esc_html( $label ) . '</label><br>'; // WPCS: XSS ok, sanitization ok.
 				endforeach; ?>
@@ -253,14 +257,14 @@ final class WidgetSocialProfiles extends \WP_Widget {
 			}
 
 			$key  = sanitize_key( $key );
-			$view = self::list_views( $view, array(
+			$list = self::list_views( $view, array(
 					'site'  => $key,
 					'label' => esc_html( $properties['label'] ),
 					'url'   => esc_url( trailingslashit( $properties['url'] ) . $this->options[ $key ] ),
 					'icon'  => (string) $properties['icon'],
 			) );
 
-			echo $view; // WPCS: XSS ok, sanitization ok.
+			echo $list; // WPCS: XSS ok, sanitization ok.
 		} // End foreach().
 
 		echo '</ul>';
