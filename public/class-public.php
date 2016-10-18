@@ -2,8 +2,6 @@
 /**
  * Public: ViewPublic class
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
  * @package WPSocialManager
  * @subpackage Public
  */
@@ -79,13 +77,13 @@ final class ViewPublic extends OutputHelpers {
 	protected $options = null;
 
 	/**
-	 * The Metas class instance.
+	 * The Head class instance.
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var Metas
+	 * @var Head
 	 */
-	protected $metas = null;
+	protected $wphead = null;
 
 	/**
 	 * The Buttons class instance.
@@ -124,7 +122,7 @@ final class ViewPublic extends OutputHelpers {
 	 * }
 	 * @param ThemeSupports $supports 	The ThemeSupports instance.
 	 */
-	public function __construct( array $args, ThemeSupports $supports ) {
+	function __construct( array $args, ThemeSupports $supports ) {
 
 		$this->args = $args;
 
@@ -150,8 +148,10 @@ final class ViewPublic extends OutputHelpers {
 	protected function requires() {
 
 		require_once( $this->path_dir . 'partials/class-metas.php' );
-		require_once( $this->path_dir . 'partials/class-api-routes.php' );
+		require_once( $this->path_dir . 'partials/class-wp-head.php' );
+		require_once( $this->path_dir . 'partials/class-endpoints.php' );
 		require_once( $this->path_dir . 'partials/class-buttons.php' );
+		require_once( $this->path_dir . 'partials/class-api-routes.php' );
 	}
 
 	/**
@@ -165,7 +165,7 @@ final class ViewPublic extends OutputHelpers {
 		add_action( 'init', array( $this, 'setups' ) );
 		add_action( 'init', array( $this, 'enqueue_styles' ) );
 		add_action( 'init', array( $this, 'enqueue_scripts' ) );
-		add_action( 'init', array( $this, 'register_api_routes' ) );
+		add_action( 'init', array( $this, 'api_routes_setups' ) );
 	}
 
 	/**
@@ -175,14 +175,13 @@ final class ViewPublic extends OutputHelpers {
 	 * that are required to render the public-facing side.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 */
 	public function setups() {
 
 		$this->metas = new Metas( $this->args );
-
+		$this->wphead = new WPHead( $this->args, $this->metas );
 		$this->buttons = new Buttons( $this->args, $this->metas, $this->supports );
-		$this->routes = new APIRoutes( $this->args, $this->metas, $this->supports );
 
 		$this->options = (object) array(
 			'advanced' => get_option( "{$this->plugin_opts}_advanced" ),
@@ -195,8 +194,6 @@ final class ViewPublic extends OutputHelpers {
 	 *
 	 * @since 1.0.0
 	 * @access public
-	 *
-	 * @return  mixed
 	 */
 	public function enqueue_styles() {
 
@@ -226,21 +223,26 @@ final class ViewPublic extends OutputHelpers {
 	 * @since 1.0.0
 	 * @access public
 	 */
-	public function register_api_routes() {
+	public function api_routes_setups() {
 
 		if ( $this->is_load_routes() ) {
-			add_filter( 'rest_api_init', array( $this->routes, 'register_routes' ) );
-			add_action( 'wp_enqueue_scripts', array( $this->routes, 'localize_scripts' ) );
+
+			$routes = new APIRoutes( $this->args, $this->metas );
+
+			add_filter( 'rest_api_init', array( $routes, 'register_routes' ) );
+			add_action( 'wp_enqueue_scripts', array( $routes, 'localize_scripts' ) );
 		}
 	}
 
 	/**
-	 * Utility function to check if we have to enqueue the stylesheet.
+	 * Is the stylesheet should be loaded?
 	 *
 	 * @since 1.0.0
 	 * @access protected
 	 *
-	 * @return boolean
+	 * @return boolean 	Return 'false' if the Theme being set the 'stylesheet' to 'true',
+	 * 					via the 'add_theme_support' function. It also return 'false' if the
+	 * 					'Enable Stylesheet' is unchecked.
 	 */
 	protected function is_load_stylesheet() {
 
@@ -256,16 +258,22 @@ final class ViewPublic extends OutputHelpers {
 		return true;
 	}
 
+	/**
+	 * Is the API Routes should be loaded?
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return boolean 	Return 'true' if the Buttons Mode is 'json',
+	 * 					and 'false' if the Buttons Mode is 'html'.
+	 */
 	protected function is_load_routes() {
 
-		if ( 'html' === $this->supports->is_theme_support( 'buttons-mode' ) ) {
-			return false;
+		if ( 'json' === $this->supports->is_theme_support( 'buttons-mode' ) ||
+			 'json' === $this->options->modes['buttonsMode'] ) {
+			return true;
 		}
 
-		if ( 'html' === $this->options->modes['buttonsMode'] ) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 }
