@@ -14,6 +14,8 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
+use \DOMDocument;
+
 /**
  * The class to generate meta data.
  *
@@ -353,7 +355,7 @@ final class Metas extends OutputHelpers {
 
 		libxml_use_internal_errors( true );
 
-		$dom = new \DOMDocument();
+		$dom = new DOMDocument();
 		$dom->loadHTML( mb_convert_encoding( $post->post_content, 'HTML-ENTITIES', 'UTF-8' ) );
 		$images = $dom->getElementsByTagName( 'img' );
 
@@ -376,7 +378,7 @@ final class Metas extends OutputHelpers {
 
 		if ( $this->is_meta_enabled() ) {
 
-			$site_image = $this->site_image(); // Site Meta Image.
+			$site_image = $this->get_site_image(); // Site Meta Image.
 
 			if ( is_array( $site_image ) && ! empty( $site_image ) ) {
 				return $site_image;
