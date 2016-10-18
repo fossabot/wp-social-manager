@@ -88,7 +88,7 @@ final class Buttons extends Endpoints {
 	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
 	 *     @type string $version 		The plugin version number.
 	 * }
-	 * @param EndPoints 	$endpoints 	The EndPoints class instance.
+	 * @param Metas 		$metas 		The Metas class instance.
 	 * @param ThemeSupports $supports 	The ThemeSupports class instance.
 	 */
 	function __construct( array $args, Metas $metas, ThemeSupports $supports ) {
@@ -192,7 +192,6 @@ final class Buttons extends Endpoints {
 	 * @param  	string $content The post content.
 	 * @return  string 			The content with each image wrapped in an element
 	 *                        	to display the social buttons on the images.
-	 *
 	 */
 	public function add_buttons_image( $content ) {
 
@@ -206,7 +205,7 @@ final class Buttons extends Endpoints {
 
 		libxml_use_internal_errors( true );
 
-		$dom = new \DOMDocument();
+		$dom = new DOMDocument();
 		$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
 
 		$prefix = parent::get_attr_prefix();
@@ -257,9 +256,14 @@ final class Buttons extends Endpoints {
 	}
 
 	/**
-	 * [buttons_content_html description]
+	 * Generate the buttons HTML for content.
 	 *
-	 * @return [type] [description]
+	 * Used when the "Buttons Mode" is set to 'HTML'.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return string The formatted HTML of the buttons.
 	 */
 	protected function buttons_content_html() {
 
@@ -299,12 +303,14 @@ final class Buttons extends Endpoints {
 	}
 
 	/**
-	 * [buttons_image_html description]
+	 * Generate the buttons HTML for image.
+	 *
+	 * Used when the "Buttons Mode" is set to 'HTML'.
 	 *
 	 * @since 1.0.0
 	 * @access protected
 	 *
-	 * @return [type] [description]
+	 * @return string The formatted HTML of the buttons.
 	 */
 	protected function buttons_image_html() {
 
@@ -339,7 +345,7 @@ final class Buttons extends Endpoints {
 			 * Format the output to be a proper HTML markup,
 			 * so it can be safely append into the DOM.
 			 */
-			$dom = new \DOMDocument();
+			$dom = new DOMDocument();
 			$dom->loadHTML( mb_convert_encoding( $list, 'HTML-ENTITIES', 'UTF-8' ) );
 
 			return preg_replace( '/^<!DOCTYPE.+?>/', '', str_replace( array( '<html>', '</html>', '<body>', '</body>' ), array( '', '', '', '' ), $dom->saveHTML() ) );
@@ -404,7 +410,7 @@ final class Buttons extends Endpoints {
 							'label' => $props['label'],
 				), 'content' );
 
-				echo $list;
+				echo $list; // WPCS: XSS ok.
 			endforeach; ?>
 			</span>
 		</script>
@@ -449,7 +455,7 @@ final class Buttons extends Endpoints {
 							'label' => $props['label'],
 				), 'image' );
 
-				echo $list;
+				echo $list; // WPCS: XSS ok.
 			endforeach; ?>
 			</span>
 		</script>
@@ -463,11 +469,17 @@ final class Buttons extends Endpoints {
 	 * @since 	1.0.0
 	 * @access 	protected
 	 *
-	 * @param  string $view One of the buttons view key name,
-	 *                      as defined in the OptionsUtility Class.
-	 * @param  array  $args The button attributes such as the 'site' name, button label,
-	 *                      and the button icon.
-	 * @return string       The formatted HTML list element to display the button.
+	 * @param  string $view 	The button view key (`icon`, `icon-text`, `text`).
+	 * @param  array  $args 	{
+	 *     The button attributes.
+	 *
+	 *     @type string $site 	The site unique key (e.g. `facebook`, `twitter`, etc.).
+	 *     @type string $icon 	The respective site icon.
+	 *     @type string $label 	The site label / text.
+	 * }
+	 * @param  array  $context 	The button attributes such as the 'site' name, button label,
+	 *                      	and the button icon.
+	 * @return string       	The formatted HTML list element to display the button.
 	 */
 	protected function button_view( $view = '', array $args, $context = '' ) {
 
@@ -504,13 +516,33 @@ final class Buttons extends Endpoints {
 			'icon-text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a>",
 		);
 
-		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';
+		$allowed_html = wp_kses_allowed_html( 'post' );
+
+		/**
+		 * Add permision to SVG.
+		 * <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3.998v3h-2a1 1 0 0 0-1 1v2h3v3h-3v7h-3v-7h-2v-3h2v-2.5a3.5 3.5 0 0 1 3.5-3.5H19zm1-2H4c-1.105 0-1.99.895-1.99 2l-.01 16c0 1.104.895 2 2 2h16c1.103 0 2-.896 2-2v-16a2 2 0 0 0-2-2z"/></svg>'
+		 */
+		$allowed_html['svg'] = array(
+			'xmlns' => true,
+			'viewBox' => true,
+		);
+		$allowed_html['path'] = array(
+			'd' => true,
+			'viewBox' => true,
+		);
+
+		return isset( $templates[ $view ] ) ? wp_kses( $templates[ $view ], $allowed_html ) : '';
 	}
 
 	/**
-	 * [get_endpoint_url description]
+	 * The function method to generate the buttons endpoint URLs
 	 *
-	 * @return [type] [description]
+	 * @since 	1.0.0
+	 * @access 	protected
+	 *
+	 * @param  string $site    	The site key or slug (e.g. `facebook`, `twitter`, etc.).
+	 * @param  string $context 	The button context; `content` or `image`.
+	 * @return string 			The endpoint of the site specified in `$site`.
 	 */
 	protected function get_endpoint_url( $site, $context ) {
 
