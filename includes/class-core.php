@@ -80,6 +80,13 @@ final class Core {
 	public $languages;
 
 	/**
+	 * [$supports description]
+	 *
+	 * @var [type]
+	 */
+	protected $supports;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Load the dependencies, define the locale, and set the hooks for the admin area and
@@ -121,7 +128,8 @@ final class Core {
 	protected function requires() {
 
 		require_once( $this->path_dir . 'includes/class-i18n.php' );
-		require_once( $this->path_dir . 'includes/class-utilities.php' );
+		require_once( $this->path_dir . 'includes/class-helpers.php' );
+		require_once( $this->path_dir . 'includes/class-theme-supports.php' );
 
 		require_once( $this->path_dir . 'admin/class-admin.php' );
 		require_once( $this->path_dir . 'public/class-public.php' );
@@ -153,11 +161,12 @@ final class Core {
 	protected function setups() {
 
 		$this->languages = new Languages( $this->plugin_name );
+		$this->supports = new ThemeSupports();
 
 		if ( is_admin() ) {
-			$admin = new ViewAdmin( $this->args );
+			$admin = new ViewAdmin( $this->args, $this->supports );
 		} else {
-			$public = new ViewPublic( $this->args );
+			$public = new ViewPublic( $this->args, $this->supports );
 		}
 
 		$widgets = new Widgets( $this->args );

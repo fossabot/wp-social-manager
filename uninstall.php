@@ -1,10 +1,10 @@
 <?php
-
 /**
  * Fired when the plugin is uninstalled.
  *
- * @since      1.0.0
- * @package    WPSocialManager
+ * @since 1.0.0
+ *
+ * @package WPSocialManager
  * @subpackage Uninstaller
  */
 

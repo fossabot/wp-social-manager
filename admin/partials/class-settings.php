@@ -19,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-final class Settings extends OptionUtilities {
+final class Settings extends OptionHelpers {
 
 	/**
 	 * Common arguments passed in a Class or a function.
@@ -56,6 +56,15 @@ final class Settings extends OptionUtilities {
 	 * @var PepperPlane
 	 */
 	protected $settings = null;
+
+	/**
+	 * ThemeSupports instance
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var ThemeSupports
+	 */
+	protected $supports = null;
 
 	/**
 	 * The setting pages or tabs.
@@ -103,15 +112,16 @@ final class Settings extends OptionUtilities {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
+	 * @param array 		$args {
 	 *     An array of common arguments of the plugin.
 	 *
 	 *     @type string $plugin_name 	The unique identifier of this plugin.
 	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
 	 *     @type string $version 		The plugin version number.
 	 * }
+	 * @param ThemeSupports $supports 	The ThemeSupports instance.
 	 */
-	public function __construct( array $args ) {
+	function __construct( array $args, ThemeSupports $supports ) {
 
 		$this->args = $args;
 
@@ -121,6 +131,8 @@ final class Settings extends OptionUtilities {
 
 		$this->path_dir = plugin_dir_path( dirname( __FILE__ ) );
 		$this->path_url = plugin_dir_url( dirname( __FILE__ ) );
+
+		$this->supports = $supports;
 
 		$this->requires();
 		$this->hooks();
@@ -175,9 +187,7 @@ final class Settings extends OptionUtilities {
 	 */
 	public function setting_setups() {
 
-		$fields = new \PepperPlaneFields( get_settings_errors() );
-		$settings = new \PepperPlane( $this->plugin_opts, $fields );
-
+		$settings = new \PepperPlane( $this->plugin_opts );
 		$extends = new SettingsExtend( $this->plugin_opts );
 		$validate = new SettingsValidation();
 
@@ -185,8 +195,6 @@ final class Settings extends OptionUtilities {
 
 		$this->settings = $settings;
 		$this->validate = $validate;
-
-		$this->supports = $this->theme_support( $this->plugin_name );
 	}
 
 	/**
@@ -286,18 +294,20 @@ final class Settings extends OptionUtilities {
 			)
 		);
 
-		$this->pages = $this->settings->add_sections( 'advanced', array(
-			array(
-				'id' => 'advanced',
-				'validate_callback' => array( $this->validate, 'setting_advanced' ),
-			),
-			array(
-				'id' => 'modes',
-				'title' => 'Modes',
-				'description' => 'Configure the modes that work best for your website.',
-				'validate_callback' => array( $this->validate, 'setting_advanced' ),
-			),
+		$this->pages = $this->settings->add_section( 'advanced', array(
+			'id' => 'advanced',
+			'validate_callback' => array( $this->validate, 'setting_advanced' ),
 		) );
+
+		if ( ! (bool) $this->supports->is_theme_support( 'buttons-mode' ) ) {
+
+			$this->pages = $this->settings->add_section( 'advanced', array(
+				'id' => 'modes',
+				'title' => esc_html__( 'Modes', 'wp-social-manager' ),
+				'description' => esc_html__( 'Configure the modes that work best for your website.', 'wp-social-manager' ),
+				'validate_callback' => array( $this->validate, 'setting_advanced_modes' ),
+			) );
+		}
 	}
 
 	/**
@@ -364,6 +374,7 @@ final class Settings extends OptionUtilities {
 					'type' => 'text',
 					'label' => esc_html__( 'Buttons Heading', 'wp-social-manager' ),
 					'description' => sprintf( esc_html__( 'Set the heading title shown before the buttons (e.g. %s).', 'wp-social-manager' ), '<code>Share on:</code>' ),
+					'default' => esc_html__( 'Share on:', 'wp-social-manager' ),
 				),
 				array(
 					'id' => 'includes',
@@ -470,37 +481,38 @@ final class Settings extends OptionUtilities {
 			),
 		) );
 
-		$args = array(
-			'id' => 'enableStylesheet',
-			'label' => esc_html__( 'Enable Stylesheet', 'wp-social-manager' ),
-			'description' => esc_html__( 'Load the plugin stylesheet to apply essential styles.', 'wp-social-manager' ),
-			'default' => 'on',
-			'type' => 'checkbox',
-		);
-
-		$stylesheet = true;
-
-		if ( isset( $this->supports['stylesheet'] ) ) {
-			$stylesheet = $this->supports['stylesheet'];
-		}
-
-		if ( true === (bool) $stylesheet ) {
-			$args['attr']['disabled'] = true;
+		if ( $this->supports->is_theme_support( 'stylesheet' ) ) {
+			$args = array(
+				'id' => 'enableStylesheet',
+				'label' => esc_html__( 'Enable Stylesheet', 'wp-social-manager' ),
+				'type' => 'content',
+				'content' => esc_html__( 'The Theme being used in this website has included the styles in its own stylesheet.', 'wp-social-manager' ),
+			);
+		} else {
+			$args = array(
+				'id' => 'enableStylesheet',
+				'label' => esc_html__( 'Enable Stylesheet', 'wp-social-manager' ),
+				'description' => esc_html__( 'Load the plugin stylesheet to apply essential styles.', 'wp-social-manager' ),
+				'default' => 'on',
+				'type' => 'checkbox',
+			);
 		}
 
 		$this->pages = $this->settings->add_field( 'advanced', 'advanced', $args );
 
-		$this->pages = $this->settings->add_field( 'advanced', 'modes', array(
-			'id' => 'buttons_mode',
-			'label' => esc_html__( 'Buttons Mode', 'wp-social-manager' ),
-			'description' => 'Select the mode to render the social media buttons.',
-			'type' => 'radio',
-			'options' => array(
-				'json' => 'JSON (JavaScript Object Notation)',
-				'html' => 'HTML (HyperText Markup Language)',
-			),
-			'default' => array( 'html' ),
-		) );
+		if ( ! (bool) $this->supports->is_theme_support( 'buttons-mode' ) ) {
+
+			$args = array(
+				'id' => 'buttonsMode',
+				'label' => esc_html__( 'Buttons Mode', 'wp-social-manager' ),
+				'description' => 'Select the mode to render the social media buttons.',
+				'type' => 'radio',
+				'options' => self::get_button_modes(),
+				'default' => 'html',
+			);
+
+			$this->pages = $this->settings->add_field( 'advanced', 'modes', $args );
+		}
 	}
 
 	/**

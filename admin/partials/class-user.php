@@ -19,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-class SettingsUser extends OptionUtilities {
+class SettingsUser extends OptionHelpers {
 
 	/**
 	 * The unique identifier of this plugin.

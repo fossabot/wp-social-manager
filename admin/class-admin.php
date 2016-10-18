@@ -31,7 +31,7 @@ final class ViewAdmin {
 	 * @access protected
 	 * @var array
 	 */
-	protected $args;
+	protected $args = array();
 
 	/**
 	 * The plugin URL.
@@ -40,7 +40,16 @@ final class ViewAdmin {
 	 * @access private
 	 * @var string
 	 */
-	private $plugin_dir;
+	private $path_dir = '';
+
+	/**
+	 * The ThemeSupports instance.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @var ThemeSupports
+	 */
+	protected $supports = null;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -48,19 +57,22 @@ final class ViewAdmin {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param array $args {
+	 * @param array 		$args {
 	 *     An array of common arguments of the plugin.
 	 *
 	 *     @type string $plugin_name 	The unique identifier of this plugin.
 	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
 	 *     @type string $version 		The plugin version number.
 	 * }
+	 * @param ThemeSupports $supports 	The ThemeSupports instance.
 	 */
-	public function __construct( array $args ) {
+	public function __construct( array $args, ThemeSupports $supports ) {
 
 		$this->args = $args;
 
 		$this->path_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
+
+		$this->supports = $supports;
 
 		$this->requires();
 		$this->setups();
@@ -92,7 +104,7 @@ final class ViewAdmin {
 	 */
 	public function setups() {
 
-		$admin = new Settings( $this->args );
+		$admin = new Settings( $this->args, $this->supports );
 		$users = new SettingsUser( $this->args );
 
 		SocialMetaBox::get_instance( $this->args );

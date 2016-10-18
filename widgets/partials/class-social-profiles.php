@@ -81,7 +81,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 		$options = get_option( "{$args['plugin_opts']}_profiles" );
 		$this->options = ! empty( $options ) ? $options : array();
 
-		$this->properties = Utilities::get_social_properties();
+		$this->properties = Helpers::get_social_properties();
 
 		$this->widget_id = "{$args['plugin_name']}-profiles";
 		$this->widget_title = esc_html__( 'Social Profiles', 'wp-social-manager' );
@@ -102,8 +102,8 @@ final class WidgetSocialProfiles extends \WP_Widget {
 	 */
 	public function form( $instance ) {
 
-		$id    = esc_attr( $this->get_field_id( 'title' ) );
-		$name  = esc_attr( $this->get_field_name( 'title' ) );
+		$id = esc_attr( $this->get_field_id( 'title' ) );
+		$name = esc_attr( $this->get_field_name( 'title' ) );
 		$title = esc_html( isset( $instance['title'] ) ? $instance['title'] : $this->widget_title ); ?>
 
 		<div class="<?php echo esc_attr( $this->widget_id ); ?>">
@@ -153,12 +153,15 @@ final class WidgetSocialProfiles extends \WP_Widget {
 
 					$id = esc_attr( $this->get_field_id( 'view' ) );
 					$name = esc_attr( $this->get_field_name( 'view' ) );
+					$views = OutputHelpers::get_button_views();
 
-					$views = OptionUtilities::get_button_views();
+				foreach ( $views as $key => $label ) :
+
+					$key = sanitize_key( $key );
+
 					$state = isset( $instance['view'] ) && ! empty( $instance['view'] ) ? $instance['view'] : 'icon';
-					$state = checked( sanitize_key( $state ), $key, true );
+					$state = checked( sanitize_key( $state ), $key, false );
 
-				foreach ( $views as $key => $label ) : $key = sanitize_key( $key );
 					echo "<input id='{$id}-{$key}' type='radio' name='{$name}' value='{$key}' {$state}>"; // WPCS: XSS ok, sanitization ok.
 					echo "<label for='{$id}-{$key}'>" . esc_html( $label ) . '</label><br>'; // WPCS: XSS ok, sanitization ok.
 				endforeach; ?>
@@ -182,7 +185,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 	public function update( $input, $instance ) {
 
 		$instance['title'] = sanitize_text_field( $input['title'] );
-		$instance['view']  = sanitize_key( $input['view'] ? $input['view'] : 'icon' );
+		$instance['view'] = sanitize_key( $input['view'] ? $input['view'] : 'icon' );
 
 		foreach ( $this->options as $key => $value ) {
 
@@ -223,7 +226,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 
 		$view = isset( $instance['view'] ) ? $instance['view'] : 'icon';
 
-		echo "<ul class='{$this->widget_id}__list {$this->widget_id}__list--{$view}'>"; // WPCS: XSS ok.
+		echo "<div class='{$this->widget_id}__list {$this->widget_id}__list--{$view}'>"; // WPCS: XSS ok.
 
 		foreach ( $this->options as $key => $value ) {
 
@@ -241,7 +244,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 				continue;
 			}
 
-			$properties = OptionUtilities::get_social_properties( $key );
+			$properties = OptionHelpers::get_social_properties( $key );
 			$properties = wp_parse_args( $properties, array(
 				'label' => '',
 				'url' => '',
@@ -253,17 +256,17 @@ final class WidgetSocialProfiles extends \WP_Widget {
 			}
 
 			$key  = sanitize_key( $key );
-			$view = self::list_views( $view, array(
+			$list = self::list_views( $view, array(
 					'site'  => $key,
 					'label' => esc_html( $properties['label'] ),
 					'url'   => esc_url( trailingslashit( $properties['url'] ) . $this->options[ $key ] ),
 					'icon'  => (string) $properties['icon'],
 			) );
 
-			echo $view; // WPCS: XSS ok, sanitization ok.
+			echo $list; // WPCS: XSS ok, sanitization ok.
 		} // End foreach().
 
-		echo '</ul>';
+		echo '</div>';
 
 		echo $args['after_widget']; // WPCS: XSS ok.
 	}
@@ -285,8 +288,8 @@ final class WidgetSocialProfiles extends \WP_Widget {
 			return '';
 		}
 
-		$prefix = OutputUtilities::get_attr_prefix();
-		$args   = wp_parse_args( $args, array(
+		$prefix = OutputHelpers::get_attr_prefix();
+		$args = wp_parse_args( $args, array(
 				'site' => '',
 				'label' => '',
 				'icon' => '',
@@ -294,9 +297,9 @@ final class WidgetSocialProfiles extends \WP_Widget {
 		) );
 
 		$templates = array(
-			'icon' => "<li class='{$prefix}-profiles__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'>{$args['icon']}</a></li>",
-			'text' => "<li class='{$prefix}-profiles__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'>{$args['label']}</a></li>",
-			'icon-text' => "<li class='{$prefix}-profiles__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'><span class='{$prefix}-profiles__item-icon'>{$args['icon']}</span><span class='{$prefix}-profiles__item-text'>{$args['label']}</span></a></li>",
+			'icon' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'>{$args['icon']}</a>",
+			'text' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'>{$args['label']}</a>",
+			'icon-text' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'><span class='{$prefix}-profiles__item-icon'>{$args['icon']}</span><span class='{$prefix}-profiles__item-text'>{$args['label']}</span></a>",
 		);
 
 		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';
