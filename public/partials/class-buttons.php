@@ -524,11 +524,10 @@ final class Buttons extends Endpoints {
 		 */
 		$allowed_html['svg'] = array(
 			'xmlns' => true,
-			'viewBox' => true,
+			'viewbox' => true,
 		);
 		$allowed_html['path'] = array(
 			'd' => true,
-			'viewBox' => true,
 		);
 
 		return isset( $templates[ $view ] ) ? wp_kses( $templates[ $view ], $allowed_html ) : '';
