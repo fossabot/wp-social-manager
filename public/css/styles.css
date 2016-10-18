@@ -132,14 +132,14 @@
 }
 
 .rtl .wp-social-manager-buttons__item {
-    margin-right: 0;
-    margin-left: .86em;
+    margin-right: .86em;
+    margin-left: 0;
 }
 
 .wp-social-manager-buttons .wp-social-manager-buttons__heading {
     margin-top: 0;
-    margin-bottom: .5em;
-    font-size: 1em;
+    margin-bottom: 1em;
+    font-size: 0.864em;
 }
 
 
@@ -147,10 +147,10 @@
  * View Icons
  */
 
-.wp-social-manager-buttons__list--icon .wp-social-manager-buttons__item, .wp-social-manager-profiles__list--icon .wp-social-manager-profiles__item {
+.wp-social-manager-buttons__list--icon .wp-social-manager-buttons__item,
+.wp-social-manager-profiles__list--icon .wp-social-manager-profiles__item {
     width: 26px;
     height: 26px;
-    margin-bottom: 1em;
     display: inline-block;
 }
 
@@ -161,7 +161,6 @@
 
 .wp-social-manager-buttons__list--text a {
     margin-right: 1em;
-    padding: .5em 0;
 }
 
 .wp-social-manager-profiles__list--text a {
@@ -178,14 +177,17 @@
     font-size: 0.86em;
 }
 
-.wp-social-manager-buttons__list--icon-text, .wp-social-manager-buttons__list--icon-text a, .wp-social-manager-profiles__list--icon-text a {
+.wp-social-manager-buttons__list--icon-text,
+.wp-social-manager-buttons__list--icon-text a,
+.wp-social-manager-profiles__list--icon-text a {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     flex-wrap: wrap;
 }
 
-.wp-social-manager-buttons__list--icon-text a, .wp-social-manager-profiles__list--icon-text a {
+.wp-social-manager-buttons__list--icon-text a,
+.wp-social-manager-profiles__list--icon-text a {
     padding-top: .46em;
     padding-bottom: .46em;
     -webkit-box-align: center;
@@ -193,15 +195,17 @@
     align-items: center;
 }
 
-.wp-social-manager-profiles__item-icon, .wp-social-manager-buttons__item-icon {
+.wp-social-manager-profiles__item-icon,
+.wp-social-manager-buttons__item-icon {
     width: 26px;
     height: 26px;
     margin: 0 6px 0 0;
 }
 
+.rtl .wp-social-manager-buttons__item-icon,
 .rtl .wp-social-manager-profiles__item-icon {
     margin-right: 0;
-    margin-left: 12px;
+    margin-left: 6px;
 }
 
 
@@ -209,7 +213,11 @@
  * Buttons Content
  */
 
-.wp-social-manager-buttons--content {
+.wp-social-manager-buttons--content-before {
+    margin-bottom: 2em;
+}
+
+.wp-social-manager-buttons--content-after {
     margin-top: 2em;
 }
 
@@ -222,6 +230,7 @@
     position: relative;
     display: inline-block;
     display: inline-flex;
+    vertical-align: top;
     font-size: 0.86em;
 }
 
@@ -245,7 +254,8 @@
     color: #fff;
 }
 
-.wp-social-manager-buttons--img .wp-social-manager-buttons__item svg, .wp-social-manager-buttons--img .wp-social-manager-buttons__item:hover svg {
+.wp-social-manager-buttons--img .wp-social-manager-buttons__item svg,
+.wp-social-manager-buttons--img .wp-social-manager-buttons__item:hover svg {
     fill: #fff;
 }
 
