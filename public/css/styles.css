@@ -286,7 +286,8 @@
  * "Social Profiles" Widget
  */
 
-.wp-social-manager-profiles__item, .wp-social-manager-profiles__item a {
+.wp-social-manager-profiles__item,
+.wp-social-manager-profiles__item a {
     display: block;
     color: #000;
 }
