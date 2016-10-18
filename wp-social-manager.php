@@ -5,15 +5,15 @@
  * Description: Optimize your website social presence in social media.
  * Version: 1.0.0
  * Author: Thoriq Firdaus
- * Author URI: github.com/tfirdaus
+ * Author URI: https://github.com/tfirdaus
  * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  *
- * Requires at least: 4.4
+ * Requires at least: 4.5
  * Tested up to: 4.6
  *
- * Text Domain:       wp-social-manager
- * Domain Path:       /languages
+ * Text Domain: wp-social-manager
+ * Domain Path: /languages
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,12 +24,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * @since 1.0.0
- *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
- * @package WPSocialManager
  */
 
 namespace XCo\WPSocialManager;
