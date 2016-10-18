@@ -121,7 +121,7 @@ final class Settings extends OptionHelpers {
 	 * }
 	 * @param ThemeSupports $supports 	The ThemeSupports instance.
 	 */
-	public function __construct( array $args, ThemeSupports $supports ) {
+	function __construct( array $args, ThemeSupports $supports ) {
 
 		$this->args = $args;
 
