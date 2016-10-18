@@ -102,8 +102,8 @@ final class WidgetSocialProfiles extends \WP_Widget {
 	 */
 	public function form( $instance ) {
 
-		$id    = esc_attr( $this->get_field_id( 'title' ) );
-		$name  = esc_attr( $this->get_field_name( 'title' ) );
+		$id = esc_attr( $this->get_field_id( 'title' ) );
+		$name = esc_attr( $this->get_field_name( 'title' ) );
 		$title = esc_html( isset( $instance['title'] ) ? $instance['title'] : $this->widget_title ); ?>
 
 		<div class="<?php echo esc_attr( $this->widget_id ); ?>">
@@ -153,7 +153,6 @@ final class WidgetSocialProfiles extends \WP_Widget {
 
 					$id = esc_attr( $this->get_field_id( 'view' ) );
 					$name = esc_attr( $this->get_field_name( 'view' ) );
-
 					$views = OutputHelpers::get_button_views();
 
 				foreach ( $views as $key => $label ) :
@@ -186,7 +185,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 	public function update( $input, $instance ) {
 
 		$instance['title'] = sanitize_text_field( $input['title'] );
-		$instance['view']  = sanitize_key( $input['view'] ? $input['view'] : 'icon' );
+		$instance['view'] = sanitize_key( $input['view'] ? $input['view'] : 'icon' );
 
 		foreach ( $this->options as $key => $value ) {
 
@@ -227,7 +226,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 
 		$view = isset( $instance['view'] ) ? $instance['view'] : 'icon';
 
-		echo "<ul class='{$this->widget_id}__list {$this->widget_id}__list--{$view}'>"; // WPCS: XSS ok.
+		echo "<div class='{$this->widget_id}__list {$this->widget_id}__list--{$view}'>"; // WPCS: XSS ok.
 
 		foreach ( $this->options as $key => $value ) {
 
@@ -267,7 +266,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 			echo $list; // WPCS: XSS ok, sanitization ok.
 		} // End foreach().
 
-		echo '</ul>';
+		echo '</div>';
 
 		echo $args['after_widget']; // WPCS: XSS ok.
 	}
@@ -290,7 +289,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 		}
 
 		$prefix = OutputHelpers::get_attr_prefix();
-		$args   = wp_parse_args( $args, array(
+		$args = wp_parse_args( $args, array(
 				'site' => '',
 				'label' => '',
 				'icon' => '',
@@ -298,9 +297,9 @@ final class WidgetSocialProfiles extends \WP_Widget {
 		) );
 
 		$templates = array(
-			'icon' => "<li class='{$prefix}-profiles__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'>{$args['icon']}</a></li>",
-			'text' => "<li class='{$prefix}-profiles__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'>{$args['label']}</a></li>",
-			'icon-text' => "<li class='{$prefix}-profiles__item item-{$args['site']}'><a href='{$args['url']}' target='_blank'><span class='{$prefix}-profiles__item-icon'>{$args['icon']}</span><span class='{$prefix}-profiles__item-text'>{$args['label']}</span></a></li>",
+			'icon' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'>{$args['icon']}</a>",
+			'text' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'>{$args['label']}</a>",
+			'icon-text' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'><span class='{$prefix}-profiles__item-icon'>{$args['icon']}</span><span class='{$prefix}-profiles__item-text'>{$args['label']}</span></a>",
 		);
 
 		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';
