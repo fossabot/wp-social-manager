@@ -3,7 +3,7 @@
  * Plugin Name: WP Social Manager
  * Plugin URI: http://github.com/tfirdaus/wp-social-manager
  * Description: Optimize your website social presence in social media.
- * Version: 1.0.0
+ * Version: 1.0.0-beta.1
  * Author: Thoriq Firdaus
  * Author URI: https://github.com/tfirdaus
  * License: GPL-2.0+
@@ -24,6 +24,8 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
+ * @package WPSocialManager
  */
 
 namespace XCo\WPSocialManager;
