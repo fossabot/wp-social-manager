@@ -15,6 +15,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 }
 
 use \WP_REST_Server;
+use \WP_REST_Response;
 
 /**
  * The class use for registering custom API Routes using WP-API.
@@ -170,6 +171,6 @@ class APIRoutes extends EndPoints {
 		$response['content'] = $this->get_content_endpoints( $request['id'] );
 		$response['image'] = $this->get_image_endpoints( $request['id'] );
 
-		return new \WP_REST_Response( $response, 200 );
+		return new WP_REST_Response( $response, 200 );
 	}
 }
