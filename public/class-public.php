@@ -187,10 +187,27 @@ final class ViewPublic extends OutputHelpers {
 			'advanced' => get_option( "{$this->plugin_opts}_advanced" ),
 			'modes' => get_option( "{$this->plugin_opts}_modes" ),
 		);
+
+		$this->register_scripts();
 	}
 
 	/**
-	 * Register the stylesheets for the public-facing side.
+	 * Register JavaScripts handles.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 */
+	public function register_scripts() {
+
+		if ( $this->is_load_routes() ) {
+			wp_register_script( $this->plugin_name, $this->path_url . 'js/app.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		} else {
+			wp_register_script( $this->plugin_name, $this->path_url . 'js/scripts.js', array( 'jquery' ), $this->version, true );
+		}
+	}
+
+	/**
+	 * Load the stylesheets for the public-facing side.
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -203,18 +220,14 @@ final class ViewPublic extends OutputHelpers {
 	}
 
 	/**
-	 * Register the JavaScript for the public-facing side of the site.
+	 * Load the JavaScript for the public-facing side of the site.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 */
 	public function enqueue_scripts() {
 
-		if ( $this->is_load_routes() ) {
-			wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/app.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
-		} else {
-			wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/scripts.js', array( 'jquery' ), $this->version, true );
-		}
+		wp_enqueue_script( $this->plugin_name );
 	}
 
 	/**
