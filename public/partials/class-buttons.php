@@ -19,7 +19,7 @@ use \DOMDocument;
  *
  * @since 1.0.0
  */
-final class Buttons extends Endpoints {
+class Buttons extends Endpoints {
 
 	/**
 	 * The ID of this plugin.
@@ -481,11 +481,9 @@ final class Buttons extends Endpoints {
 	 *                      	and the button icon.
 	 * @return string       	The formatted HTML list element to display the button.
 	 */
-	protected function button_view( $view = '', array $args, $context = '' ) {
+	protected function button_view( $view, array $args, $context = '' ) {
 
-		if ( empty( $view ) ||
-			 empty( $args ) ||
-			 empty( $context ) ) {
+		if ( empty( $view ) || empty( $args ) || empty( $context ) ) {
 			return '';
 		}
 
@@ -511,9 +509,9 @@ final class Buttons extends Endpoints {
 		}
 
 		$templates = array(
-			'icon' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button'>{$icon}</a>",
-			'text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button'>{$label}</a>",
-			'icon-text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a>",
+			'icon' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button' rel='nofollow'>{$icon}</a>",
+			'text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button' rel='nofollow'>{$label}</a>",
+			'icon-text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button' rel='nofollow'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a>",
 		);
 
 		$allowed_html = wp_kses_allowed_html( 'post' );
