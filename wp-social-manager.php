@@ -28,24 +28,25 @@
  * @package WPSocialManager
  */
 
-namespace XCo\WPSocialManager;
-
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
+
+use XCo\WPSocialManager\Core;
+use XCo\WPSocialManager\Requirements;
 
 /**
  * The plugin directory path.
  *
  * @var string
  */
-$plugin_dir = plugin_dir_path( __FILE__ );
+$path_dir = plugin_dir_path( __FILE__ );
 
 /*
  * Check if the website pass the requirement.
  * If not, deactivate the plugin and print an admin notice.
  */
-require_once( $plugin_dir . 'includes/class-requirements.php' );
+require_once( $path_dir . 'includes/class-requirements.php' );
 
 /**
  * Defines the plugin requirement.
@@ -65,22 +66,37 @@ if ( false === $require->pass() ) { // If the requirement is not meet.
 	return;
 }
 
+// Define the current plugin version.
+if ( ! defined( 'WP_SOCIAL_MANAGER_VERSION' ) ) {
+	define( 'WP_SOCIAL_MANAGER_VERSION', '1.0.0' );
+}
+
+// Define the plugin unique identifier.
+if ( ! defined( 'WP_SOCIAL_MANAGER_SLUG' ) ) {
+	define( 'WP_SOCIAL_MANAGER_SLUG', 'wp-social-manager' );
+}
+
+// Define the plugin option name (sometimes it is also used as the option name prefix).
+if ( ! defined( 'WP_SOCIAL_MANAGER_OPTS' ) ) {
+	define( 'WP_SOCIAL_MANAGER_OPTS', 'wp_social_manager' );
+}
+
 /*
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require_once( $plugin_dir . 'includes/class-core.php' );
+require_once( $path_dir . 'includes/class-core.php' );
 
 /**
  * Begins execution of the plugin.
  *
  * @since 1.0.0
  */
-function run() {
+function wp_social_manager() {
 	new Core( array(
 		'version' => '1.0.0',
 		'plugin_name' => 'wp-social-manager', // Used for slug, and scripts and styles handle.
 		'plugin_opts' => 'wp_social_manager', // Used for database name or meta key prefix.
 	) );
 }
-run();
+wp_social_manager();
