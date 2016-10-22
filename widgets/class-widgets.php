@@ -2,8 +2,6 @@
 /**
  * Widgets: Widgets class.
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
  * @package SocialManager
  * @subpackage Widgets
  */
@@ -11,24 +9,25 @@
 namespace SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die; // Abort.
+	die( 'Shame on you!' ); // Abort.
 }
 
 /**
- * Widget Class to register custom widgets of the plugin.
+ * The Widget class is used for registering custom widgets of the plugin.
  *
  * @since 1.0.0
  */
 final class Widgets {
 
+
 	/**
-	 * Common arguments passed in a Class or a function.
+	 * The Plugin class instance.
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var array
+	 * @var Plugin
 	 */
-	protected $args;
+	protected $plugin;
 
 	/**
 	 * The plugin path directory.
@@ -49,10 +48,9 @@ final class Widgets {
 	 *
 	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	public function __construct( Plugin $plugin ) {
+	function __construct( Plugin $plugin ) {
 
-		$this->plugin = $plugin;
-
+		$this->plugin   = $plugin;
 		$this->path_dir = plugin_dir_path( __FILE__ );
 
 		$this->requires();
@@ -64,6 +62,8 @@ final class Widgets {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function requires() {
 		require_once( $this->path_dir . 'partials/class-social-profiles.php' );
@@ -74,6 +74,8 @@ final class Widgets {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function hooks() {
 		add_action( 'widgets_init', array( $this, 'setups' ) );
@@ -87,6 +89,8 @@ final class Widgets {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	public function setups() {
 		register_widget( new WidgetSocialProfiles( $this->plugin ) );
