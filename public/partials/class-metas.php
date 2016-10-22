@@ -8,7 +8,7 @@
  * @subpackage Public\Metas
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -21,16 +21,7 @@ use \DOMDocument;
  *
  * @since 1.0.0
  */
-final class Metas extends OutputHelpers {
-
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	public $plugin_name = '';
+final class Metas {
 
 	/**
 	 * The unique identifier or prefix for database names.
@@ -39,7 +30,7 @@ final class Metas extends OutputHelpers {
 	 * @access protected
 	 * @var string
 	 */
-	public $plugin_opts = '';
+	protected $plugin_opts;
 
 	/**
 	 * The options required to render the meta data.
@@ -48,7 +39,7 @@ final class Metas extends OutputHelpers {
 	 * @access protected
 	 * @var null
 	 */
-	public $options = null;
+	protected $options;
 
 	/**
 	 * Constructor.
@@ -58,37 +49,12 @@ final class Metas extends OutputHelpers {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
-	 *     An array of common arguments of the plugin.
-	 *
-	 *     @type string $plugin_name 	The unique identifier of this plugin.
-	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
-	 *     @type string $version 		The plugin version number.
-	 * }
+	 * @param ViewPublic $public The ViewPublic class instance.
 	 */
-	function __construct( array $args ) {
+	function __construct( Plugin $plugin ) {
 
-		$this->plugin_name = $args['plugin_name'];
-		$this->plugin_opts = $args['plugin_opts'];
-
-		$this->setups();
-	}
-
-	/**
-	 * Setup the meta data.
-	 *
-	 * The setups may involve running some Classes, Functions,
-	 * and sometimes WordPress Hooks that are required to render
-	 * the social buttons.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 */
-	protected function setups() {
-
-		$this->options = (object) array(
-			'metasSite' => get_option( "{$this->plugin_opts}_metas_site" ),
-		);
+		$this->plugin = $plugin;
+		$this->plugin_opts = $plugin->get_opts();
 	}
 
 	/**
@@ -123,9 +89,7 @@ final class Metas extends OutputHelpers {
 			return;
 		}
 
-		if ( isset( $this->options->metasSite[ $which ] ) ) {
-			return $this->options->metasSite[ $which ];
-		}
+		return $this->plugin->get_option( 'metas_site', $which );
 	}
 
 	/**
@@ -174,7 +138,6 @@ final class Metas extends OutputHelpers {
 	 * @return string The website title
 	 */
 	public function get_site_title() {
-
 		return wp_kses( wp_get_document_title(), array() );
 	}
 
@@ -213,7 +176,6 @@ final class Metas extends OutputHelpers {
 	 * @return string The website url
 	 */
 	public function get_site_url() {
-
 		$url = get_site_url();
 		return esc_url( $url );
 	}

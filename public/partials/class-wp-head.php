@@ -8,7 +8,7 @@
  * @subpackage Public\WPHead
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -22,31 +22,22 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 final class WPHead {
 
 	/**
+	 * The Meta class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Meta
+	 */
+	protected $metas;
+
+	/**
 	 * The unique identifier or prefix for database names.
 	 *
 	 * @since 1.0.0
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_opts = '';
-
-	/**
-	 * The Meta class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var null
-	 */
-	protected $metas = null;
-
-	/**
-	 * The options required to render the meta data.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var null
-	 */
-	protected $options = null;
+	protected $plugin_opts;
 
 	/**
 	 * The current website language.
@@ -55,7 +46,7 @@ final class WPHead {
 	 * @access protected
 	 * @var string
 	 */
-	protected $locale = '';
+	protected $locale;
 
 	/**
 	 * Constructor.
@@ -66,20 +57,13 @@ final class WPHead {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
-	 *     An array of common arguments of the plugin.
-	 *
-	 *     @type string $plugin_name 	The unique identifier of this plugin.
-	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
-	 *     @type string $version 		The plugin version number.
-	 * }
-	 * @param Metas $metas 				The Meta class instance.
+	 * @param Metas $metas The Metas class instance.
 	 */
-	function __construct( array $args, Metas $metas ) {
-
-		$this->plugin_opts = $args['plugin_opts'];
+	function __construct( Metas $metas ) {
 
 		$this->metas = $metas;
+		$this->plugin = $metas->plugin;
+		$this->plugin_opts = $metas->plugin->get_opts();
 
 		$this->hooks();
 		$this->setups();
@@ -96,11 +80,6 @@ final class WPHead {
 	 * @access protected
 	 */
 	protected function setups() {
-
-		$this->options = (object) array(
-			'profiles' => get_option( "{$this->plugin_opts}_profiles" ),
-		);
-
 		$this->locale = get_locale();
 	}
 
@@ -142,7 +121,7 @@ final class WPHead {
 		$og = $this->site_open_graph( $tag_args );
 		$tc = $this->site_twitter_card( $tag_args );
 
-		echo "<!-- START: WP-Social-Manager -->\n";
+		echo "\n<!-- START: WP-Social-Manager -->\n";
 		echo wp_kses( "{$og}{$tc}", array(
 			'meta' => array(
 			'property' => array(),
@@ -182,7 +161,7 @@ final class WPHead {
 		$og = $this->post_open_graph( $tag_args );
 		$tc = $this->post_twitter_card( $tag_args );
 
-		echo "<!-- START: WP-Social-Manager -->\n";
+		echo "\n<!-- START: WP-Social-Manager -->\n";
 		echo wp_kses( "{$og}{$tc}", array(
 			'meta' => array(
 			'property' => array(),
@@ -292,8 +271,9 @@ final class WPHead {
 
 		if ( ! empty( $meta ) ) {
 
-			$profile = $this->options->profiles['twitter'];
-			$site = $profile ? sprintf( "<meta name='twitter:site' content='@%s' />\n", esc_attr( $profile ) ) : '';
+			$twitter = $this->plugin->get_option( 'profiles', 'twitter' );
+
+			$site = $twitter ? sprintf( "<meta name='twitter:site' content='@%s' />\n", esc_attr( $twitter ) ) : '';
 			$type = "<meta name='twitter:card' content='summary' />\n";
 			$meta = $site . $type . $meta;
 		}
@@ -408,13 +388,12 @@ final class WPHead {
 
 		$meta = '';
 
-		$props = $this->metas->get_social_properties( 'facebook' );
-		$profile = $this->options->profiles['facebook'];
+		$props = Options::social_profiles( 'facebook' );
 
-		$url = isset( $props['url'] ) ? trailingslashit( $props['url'] ) : '';
+		$url = isset( $props['url'] ) ? trailingslashit( esc_url( $props['url'] ) ) : '';
+		$username = $this->plugin->get_option( 'profiles', 'facebook' );
 
-		$publisher = ! empty( $url ) && $profile ? "{$url}{$profile}" : '';
-		$meta .= $publisher ? sprintf( "<meta property='article:publisher' content='%s' />\n", $publisher ) : '';
+		$meta .= ($url && $username) ? sprintf( "<meta property='article:publisher' content='%s' />\n", "{$url}{$username}" ) : '';
 
 		$author = (array) $args['post_author'];
 
@@ -482,8 +461,9 @@ final class WPHead {
 
 		if ( ! empty( $meta ) ) {
 
-			$profile = $this->options->profiles['twitter'];
-			$site = $profile ? sprintf( "<meta name='twitter:site' content='@%s' />\n", esc_attr( $profile ) ) : '';
+			$twitter = $this->plugin->get_option( 'profiles', 'twitter' );
+
+			$site = $twitter ? sprintf( "<meta name='twitter:site' content='@%s' />\n", esc_attr( $twitter ) ) : '';
 			$type = "<meta name='twitter:card' content='summary_large_image' />\n";
 			$meta = $site . $type . $meta;
 		}

@@ -1,8 +1,8 @@
 <?php
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
-final class ThemeSupports extends OutputHelpers {
+final class ThemeSupports {
 
 	public $supports;
 
@@ -11,10 +11,10 @@ final class ThemeSupports extends OutputHelpers {
 	}
 
 	protected function hooks() {
-		add_action( 'init', array( $this, 'get_theme_supports' ) );
+		add_action( 'init', array( $this, 'theme_supports' ) );
 	}
 
-	public function get_theme_supports() {
+	public function theme_supports() {
 
 		if ( current_theme_supports( 'wp-social-manager' ) ) {
 
@@ -33,12 +33,12 @@ final class ThemeSupports extends OutputHelpers {
 	}
 
 	/**
-	 * [is_theme_support description]
+	 * [is description]
 	 *
 	 * @param  [type] $feature [description]
 	 * @return boolean          [description]
 	 */
-	function is_theme_support( $feature = '' ) {
+	function is( $feature = '' ) {
 
 		if ( empty( $feature ) ) {
 			return false;
@@ -72,7 +72,7 @@ final class ThemeSupports extends OutputHelpers {
 		 * we can assume that the theme will add custom stylesheet.
 		 */
 		if ( isset( $this->supports['attr-prefix'] ) ) {
-			$prefix = $this->supports['attr-prefix'] !== self::$prefix ? true : false;
+			$prefix = $this->supports['attr-prefix'] !== Helpers::$prefix ? true : false;
 			return $prefix;
 		}
 	}
@@ -84,7 +84,7 @@ final class ThemeSupports extends OutputHelpers {
 		if ( isset( $this->supports['buttons-mode'] ) ) {
 
 			$yep = (string) $this->supports['buttons-mode'];
-			$haystack = (array) self::get_button_modes();
+			$haystack = (array) Options::buttons_modes();
 
 			if ( key_exists( $yep, $haystack ) ) {
 				$mode = $yep;

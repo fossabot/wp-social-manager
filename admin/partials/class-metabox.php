@@ -8,7 +8,7 @@
  * @subpackage Admin\Metabox
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -30,16 +30,16 @@ final class SocialMetaBox {
 	 * @access protected
 	 * @var string
 	 */
-	protected $path_dir = '';
+	protected $path_dir;
 
 	/**
 	 * The options required to define and render the metabox.
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var null
+	 * @var object
 	 */
-	protected $options = null;
+	protected $options;
 
 	/**
 	 * The post ID.
@@ -48,7 +48,7 @@ final class SocialMetaBox {
 	 * @access protected
 	 * @var integer
 	 */
-	protected $post_id = 0;
+	protected $post_id;
 
 	/**
 	 * The post title.
@@ -57,7 +57,7 @@ final class SocialMetaBox {
 	 * @access protected
 	 * @var string
 	 */
-	protected $post_title = '';
+	protected $post_title;
 
 	/**
 	 * The post content.
@@ -66,7 +66,7 @@ final class SocialMetaBox {
 	 * @access protected
 	 * @var string
 	 */
-	protected $post_content = '';
+	protected $post_content;
 
 	/**
 	 * The post description / excerpt.
@@ -84,7 +84,7 @@ final class SocialMetaBox {
 	 * @access protected
 	 * @var integer
 	 */
-	protected $post_thumbnail = 0;
+	protected $post_thumbnail;
 
 	/**
 	 * The post type singular name.
@@ -93,7 +93,7 @@ final class SocialMetaBox {
 	 * @access protected
 	 * @var string
 	 */
-	protected $post_type = '';
+	protected $post_type;
 
 	/**
 	 * Load dependencies.
@@ -118,21 +118,12 @@ final class SocialMetaBox {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
-	 *     An array of common arguments of the plugin.
-	 *
-	 *     @type string $plugin_name 	The unique identifier of this plugin.
-	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
-	 *     @type string $version 		The plugin version number.
-	 * }
+	 * @param  ViewAdmin $admin The ViewAdmin instance.
+	 * @return void
 	 */
-	public function setups( array $args ) {
+	public function setups( Plugin $plugin ) {
 
-		$this->options = (object) array(
-			'metasSite' => get_option( $args['plugin_opts'] . '_metas_site' ),
-			'buttonsContent' => get_option( $args['plugin_opts'] . '_buttons_content' ),
-			'buttonsImage' => get_option( $args['plugin_opts'] . '_buttons_image' ),
-		);
+		$this->plugin = $plugin;
 	}
 
 	/**
@@ -140,6 +131,8 @@ final class SocialMetaBox {
 	 *
 	 * @since  1.0.0
 	 * @access private
+	 *
+	 * @return void
 	 */
 	private function hooks() {
 
@@ -162,6 +155,7 @@ final class SocialMetaBox {
 	 *
 	 * @param object $butterbean  Instance of the 'ButterBean' object.
 	 * @param string $post_type   The current Post Type slug.
+	 * @return void
 	 */
 	public function register_manager( $butterbean, $post_type ) {
 
@@ -194,6 +188,7 @@ final class SocialMetaBox {
 	 *
 	 * @param object $butterbean  Instance of the `ButterBean` object.
 	 * @param string $post_type   The current Post Type slug.
+	 * @return void
 	 */
 	public function register_section_buttons( $butterbean, $post_type ) {
 
@@ -209,7 +204,7 @@ final class SocialMetaBox {
 			)
 		);
 
-		$post_types = (array) $this->options->buttonsContent['postTypes'];
+		$post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
 
 		if ( in_array( $post_type, $post_types, true ) ) {
 
@@ -233,8 +228,8 @@ final class SocialMetaBox {
 			);
 		}
 
-		$enabled = (bool) $this->options->buttonsImage['enabled'];
-		$post_types = (array) $this->options->buttonsImage['postTypes'];
+		$enabled = (bool) $this->plugin->get_option( 'buttons_image', 'enabled' );
+		$post_types = (array) $this->plugin->get_option( 'buttons_image', 'post_types' );
 
 		if ( in_array( $post_type, $post_types, true ) && $enabled ) {
 
@@ -267,12 +262,14 @@ final class SocialMetaBox {
 	 *
 	 * @param object $butterbean  Instance of the `ButterBean` object.
 	 * @param string $post_type   The current Post Type slug.
+	 * @return void
 	 */
 	public function register_section_meta( $butterbean, $post_type ) {
 
-		if ( ! isset( $this->options->metasSite['enabled'] ) &&
-			 ! (bool) $this->options->metasSite['enabled'] ) {
-				return;
+		$meta_enabled = (bool) $this->plugin->get_option( 'metas_site', 'enabled' );
+
+		if ( ! $meta_enabled ) {
+			return;
 		}
 
 		// Get our custom manager object.
@@ -373,7 +370,7 @@ final class SocialMetaBox {
 	 */
 	protected function load_post() {
 
-		$this->post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
+		$this->post_id = isset( $_GET['post'] ) ? $this->sanitize_absint( $_GET['post'] ) : 0;
 
 		$this->post_title = get_post_field( 'post_title', $this->post_id );
 		$this->post_content = get_post_field( 'post_content', $this->post_id );
@@ -422,22 +419,16 @@ final class SocialMetaBox {
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
-	 *     An array of common arguments of the plugin.
-	 *
-	 *     @type string $plugin_name 	The unique identifier of this plugin.
-	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
-	 *     @type string $version 		The plugin version number.
-	 * }
+	 * @param  ViewAdmin $admin The ViewAdmin instance.
 	 * @return object
 	 */
-	public static function get_instance( array $args ) {
+	public static function get_instance( Plugin $plugin ) {
 
 		static $instance = null;
 
 		if ( is_null( $instance ) ) {
 			$instance = new self;
-			$instance->setups( $args );
+			$instance->setups( $plugin );
 			$instance->hooks();
 		}
 

@@ -8,11 +8,13 @@
  * @subpackage Widgets\SocialProfiles
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
+
+use \WP_Widget;
 
 /**
  * "Social Profiles" widget registration class.
@@ -21,10 +23,10 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-final class WidgetSocialProfiles extends \WP_Widget {
+final class WidgetSocialProfiles extends WP_Widget {
 
 	/**
-	 * Base ID for the widget, lowercase and unique.
+	 * Base ID of the widget; it has to be lowercase and unique.
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -68,22 +70,19 @@ final class WidgetSocialProfiles extends \WP_Widget {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
-	 *     An array of common arguments of the plugin.
-	 *
-	 *     @type string $plugin_name 	The unique identifier of this plugin.
-	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
-	 *     @type string $version 		The plugin version number.
-	 * }
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	public function __construct( array $args ) {
+	public function __construct( Plugin $plugin ) {
 
-		$options = get_option( "{$args['plugin_opts']}_profiles" );
+		$plugin_slug = $plugin->get_slug();
+		$plugin_opts = $plugin->get_opts();
+
+		$options = get_option( "{$plugin_opts}_profiles" );
 		$this->options = ! empty( $options ) ? $options : array();
 
-		$this->properties = Helpers::get_social_properties();
+		$this->profiles = Options::social_profiles();
 
-		$this->widget_id = "{$args['plugin_name']}-profiles";
+		$this->widget_id = "{$plugin_slug}-profiles";
 		$this->widget_title = esc_html__( 'Social Profiles', 'wp-social-manager' );
 
 		parent::__construct( $this->widget_id, esc_html__( 'Social Profiles', 'wp-social-manager' ), array(
@@ -140,8 +139,21 @@ final class WidgetSocialProfiles extends \WP_Widget {
 				$state = isset( $instance['site'][ $key ] ) ? $instance['site'][ $key ] : 1;
 				$state = checked( $state, 1, false );
 
-				echo "<input id='{$id}' type='checkbox' class='checkbox' name='{$name}'' value='{$key}' {$state}>"; // WPCS: XSS ok, sanitization ok.
-				echo "<label for='{$id}'>{$this->properties[$key]['label']}</label><br>"; // WPCS: XSS ok, sanitization ok.
+				echo wp_kses( "<input id='{$id}' type='checkbox' class='checkbox' name='{$name}'' value='{$key}' {$state}>", array(
+					'input' => array(
+						'id' => true,
+						'class' => true,
+						'name' => true,
+						'value' => true,
+						'checked' => true,
+					),
+				) );
+				echo wp_kses( "<label for='{$id}'>{$this->profiles[$key]['label']}</label><br>", array(
+					'label' => array(
+						'for' => true,
+					),
+					'br' => array(),
+				) );
 
 			endforeach; ?>
 			</p>
@@ -153,7 +165,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 
 					$id = esc_attr( $this->get_field_id( 'view' ) );
 					$name = esc_attr( $this->get_field_name( 'view' ) );
-					$views = OutputHelpers::get_button_views();
+					$views = Options::button_views();
 
 				foreach ( $views as $key => $label ) :
 
@@ -244,23 +256,21 @@ final class WidgetSocialProfiles extends \WP_Widget {
 				continue;
 			}
 
-			$properties = OptionHelpers::get_social_properties( $key );
-			$properties = wp_parse_args( $properties, array(
+			$profiles = wp_parse_args( $this->profiles[ $key ], array(
 				'label' => '',
 				'url' => '',
-				'icon' => '',
 			) );
 
-			if ( ! $properties['url'] ) {
+			if ( ! $profiles['url'] ) {
 				continue;
 			}
 
-			$key  = sanitize_key( $key );
+			$key = sanitize_key( $key );
 			$list = self::list_views( $view, array(
 					'site'  => $key,
-					'label' => esc_html( $properties['label'] ),
-					'url'   => esc_url( trailingslashit( $properties['url'] ) . $this->options[ $key ] ),
-					'icon'  => (string) $properties['icon'],
+					'label' => esc_html( $profiles['label'] ),
+					'url'   => esc_url( trailingslashit( $profiles['url'] ) . $this->options[ $key ] ),
+					'icon'  => Helpers::get_social_icons( $key ),
 			) );
 
 			echo $list; // WPCS: XSS ok, sanitization ok.
@@ -288,7 +298,7 @@ final class WidgetSocialProfiles extends \WP_Widget {
 			return '';
 		}
 
-		$prefix = OutputHelpers::get_attr_prefix();
+		$prefix = Helpers::get_attr_prefix();
 		$args = wp_parse_args( $args, array(
 				'site' => '',
 				'label' => '',

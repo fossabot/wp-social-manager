@@ -8,7 +8,7 @@
  * @subpackage Admin
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -25,31 +25,22 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 final class ViewAdmin {
 
 	/**
-	 * Common arguments passed in a Class or a function.
+	 * The Plugin class instance.
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var array
+	 * @var Plugin
 	 */
-	protected $args = array();
+	public $plugin;
 
 	/**
-	 * The plugin URL.
+	 * The plugin Admin directory path.
 	 *
 	 * @since 1.0.0
 	 * @access private
 	 * @var string
 	 */
-	private $path_dir = '';
-
-	/**
-	 * The ThemeSupports instance.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 * @var ThemeSupports
-	 */
-	protected $supports = null;
+	protected $path_dir;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -57,22 +48,12 @@ final class ViewAdmin {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param array 		$args {
-	 *     An array of common arguments of the plugin.
-	 *
-	 *     @type string $plugin_name 	The unique identifier of this plugin.
-	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
-	 *     @type string $version 		The plugin version number.
-	 * }
-	 * @param ThemeSupports $supports 	The ThemeSupports instance.
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	public function __construct( array $args, ThemeSupports $supports ) {
+	public function __construct( Plugin $plugin ) {
 
-		$this->args = $args;
-
-		$this->path_dir = trailingslashit( plugin_dir_path( __FILE__ ) );
-
-		$this->supports = $supports;
+		$this->plugin = $plugin;
+		$this->path_dir = plugin_dir_path( __FILE__ );
 
 		$this->requires();
 		$this->setups();
@@ -88,7 +69,6 @@ final class ViewAdmin {
 
 		require_once( $this->path_dir . 'partials/class-settings.php' );
 		require_once( $this->path_dir . 'partials/class-validation.php' );
-
 		require_once( $this->path_dir . 'partials/class-user.php' );
 		require_once( $this->path_dir . 'partials/class-metabox.php' );
 	}
@@ -104,9 +84,8 @@ final class ViewAdmin {
 	 */
 	public function setups() {
 
-		$admin = new Settings( $this->args, $this->supports );
-		$users = new SettingsUser( $this->args );
-
-		SocialMetaBox::get_instance( $this->args );
+		new Settings( $this->plugin );
+		new User( $this->plugin );
+		SocialMetaBox::get_instance( $this->plugin );
 	}
 }

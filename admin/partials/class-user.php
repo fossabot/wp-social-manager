@@ -8,7 +8,7 @@
  * @subpackage Admin\User
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -19,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-class SettingsUser extends OptionHelpers {
+final class User {
 
 	/**
 	 * The unique identifier of this plugin.
@@ -28,7 +28,7 @@ class SettingsUser extends OptionHelpers {
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_name;
+	protected $plugin_slug;
 
 	/**
 	 * The unique identifier or prefix for database names.
@@ -38,6 +38,15 @@ class SettingsUser extends OptionHelpers {
 	 * @var string
 	 */
 	protected $plugin_opts;
+
+	/**
+	 * The current plugin version.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $version;
 
 	/**
 	 * The absolut URL path to the plugin directory.
@@ -51,26 +60,20 @@ class SettingsUser extends OptionHelpers {
 	/**
 	 * Constructor.
 	 *
-	 * Run Hooks, and iInitialize properties value.
+	 * Run Hooks, and Initialize properties value.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
-	 *     An array of common arguments of the plugin.
-	 *
-	 *     @type string $plugin_name 	The unique identifier of this plugin.
-	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
-	 *     @type string $version 		The plugin version number.
-	 * }
+	 * @param ViewAdmin $admin The ViewAdmin class instance.
 	 */
-	public function __construct( array $args ) {
+	public function __construct( Plugin $plugin ) {
 
-		$this->plugin_name = $args['plugin_name'];
-		$this->plugin_opts = $args['plugin_opts'];
-		$this->version = $args['version'];
+		$this->plugin_slug = $plugin->get_slug();
+		$this->plugin_opts = $plugin->get_opts();
+		$this->version = $plugin->get_version();
 
-		$this->path_url = trailingslashit( plugin_dir_url( dirname( __FILE__ ) ) );
+		$this->path_url = plugin_dir_url( dirname( __FILE__ ) );
 
 		$this->hooks();
 	}
@@ -107,7 +110,8 @@ class SettingsUser extends OptionHelpers {
 	public function add_social_profiles( $user ) {
 
 		$meta = get_the_author_meta( $this->plugin_opts, $user->ID );
-		$profiles = self::get_social_profiles(); ?>
+		$profiles = Options::social_profiles();
+		?>
 
 		<h2><?php echo esc_html__( 'Social Profiles', 'wp-social-manager' ); ?></h2>
 		<p><?php echo esc_html__( 'Social profile or page connected to this user.', 'wp-social-manager' ); ?></p>
@@ -117,10 +121,11 @@ class SettingsUser extends OptionHelpers {
 
 		<?php foreach ( $profiles as $key => $data ) :
 
-			$key   = sanitize_key( $key );
+			$key = sanitize_key( $key );
 			$value = isset( $meta[ $key ] ) ? $meta[ $key ] : '';
 			$label = isset( $data['label'] ) ? $data['label'] : '';
-			$props = self::get_social_properties( $key ); ?>
+			$props = $profiles[ $key ];
+			?>
 			<tr>
 				<th><label for="<?php echo esc_attr( "field-user-{$key}" ); ?>"><?php echo esc_html( $label ); ?></label></th>
 				<td>
@@ -158,6 +163,7 @@ class SettingsUser extends OptionHelpers {
 			$key = sanitize_key( $key );
 			$profiles[ $key ] = sanitize_text_field( $value );
 		}
+
 		if ( current_user_can( 'edit_user' ) ) {
 			update_user_meta( $user_id, $this->plugin_opts, $profiles );
 		}
@@ -173,6 +179,7 @@ class SettingsUser extends OptionHelpers {
 	 * @access public
 	 */
 	public function load_page() {
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), -30 );
 	}
 
@@ -184,6 +191,6 @@ class SettingsUser extends OptionHelpers {
 	 */
 	public function enqueue_scripts() {
 		$file = 'preview-profile';
-		wp_enqueue_script( "{$this->plugin_name}-{$file}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		wp_enqueue_script( "{$this->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 	}
 }

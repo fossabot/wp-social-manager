@@ -25,18 +25,19 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * @package WPSocialManager
+ * @package NineCodes
  */
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use XCo\WPSocialManager\Core;
-use XCo\WPSocialManager\Requirements;
+use NineCodes\SocialManager\Plugin;
+use NineCodes\SocialManager\Requirements;
 
 /**
- * The plugin directory path.
+ * Get the filesystem directory path (with trailing slash) for
+ * the plugin __FILE__ passed in.
  *
  * @var string
  */
@@ -51,7 +52,6 @@ require_once( $path_dir . 'includes/class-requirements.php' );
 /**
  * Defines the plugin requirement.
  *
- * @since 1.0.0
  * @var Requirements
  */
 $require = new Requirements( 'WP Social Manager',
@@ -61,42 +61,28 @@ $require = new Requirements( 'WP Social Manager',
 	)
 );
 
-if ( false === $require->pass() ) { // If the requirement is not meet.
+if ( false === $require->pass() ) { // If the requirements are not meet.
 	$require->halt(); // Do not activate the plugin.
 	return;
-}
-
-// Define the current plugin version.
-if ( ! defined( 'WP_SOCIAL_MANAGER_VERSION' ) ) {
-	define( 'WP_SOCIAL_MANAGER_VERSION', '1.0.0' );
-}
-
-// Define the plugin unique identifier.
-if ( ! defined( 'WP_SOCIAL_MANAGER_SLUG' ) ) {
-	define( 'WP_SOCIAL_MANAGER_SLUG', 'wp-social-manager' );
-}
-
-// Define the plugin option name (sometimes it is also used as the option name prefix).
-if ( ! defined( 'WP_SOCIAL_MANAGER_OPTS' ) ) {
-	define( 'WP_SOCIAL_MANAGER_OPTS', 'wp_social_manager' );
 }
 
 /*
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require_once( $path_dir . 'includes/class-core.php' );
+require_once( $path_dir . 'includes/class-plugin.php' );
 
 /**
  * Begins execution of the plugin.
  *
- * @since 1.0.0
+ * This function is also useful to check if the plugin is activated
+ * through the `function_exists` function.
  */
 function wp_social_manager() {
-	new Core( array(
+	new Plugin( array(
 		'version' => '1.0.0',
-		'plugin_name' => 'wp-social-manager', // Used for slug, and scripts and styles handle.
-		'plugin_opts' => 'wp_social_manager', // Used for database name or meta key prefix.
+		'plugin_slug' => 'wp-social-manager',
+		'plugin_opts' => 'wp_social_manager',
 	) );
 }
 wp_social_manager();

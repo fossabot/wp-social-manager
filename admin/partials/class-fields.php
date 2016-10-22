@@ -8,18 +8,20 @@
  * @subpackage Admin\User
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
+
+use \PepperPlaneFields;
 
 /**
  * The class to register custom setting field using PepperPlane framework.
  *
  * @since 1.0.0
  */
-final class SettingsExtend extends \PepperPlaneFields {
+final class Fields extends PepperPlaneFields {
 
 	/**
 	 * The admin screen base / ID

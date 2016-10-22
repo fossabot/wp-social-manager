@@ -8,7 +8,7 @@
  * @subpackage Widgets
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -47,17 +47,11 @@ final class Widgets {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args {
-	 *     An array of common arguments of the plugin.
-	 *
-	 *     @type string $plugin_name    The unique identifier of this plugin.
-	 *     @type string $plugin_opts    The unique identifier or prefix for database names.
-	 *     @type string $version        The plugin version number.
-	 * }
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	public function __construct( array $args ) {
+	public function __construct( Plugin $plugin ) {
 
-		$this->args = $args;
+		$this->plugin = $plugin;
 
 		$this->path_dir = plugin_dir_path( __FILE__ );
 
@@ -95,6 +89,6 @@ final class Widgets {
 	 * @access protected
 	 */
 	public function setups() {
-		register_widget( new WidgetSocialProfiles( $this->args ) );
+		register_widget( new WidgetSocialProfiles( $this->plugin ) );
 	}
 }
