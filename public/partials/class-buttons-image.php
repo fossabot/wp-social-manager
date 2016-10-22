@@ -38,7 +38,7 @@ class ButtonsImage extends Buttons {
 	 * @return [type] [description]
 	 */
 	public function render() {
-		add_filter( 'the_content', array( $this, 'render_buttons' ), -30 );
+		add_filter( 'the_content', array( $this, 'render_buttons' ), 100 );
 	}
 
 	/**
@@ -74,9 +74,9 @@ class ButtonsImage extends Buttons {
 
 		$wrap->setAttribute( 'class', "{$prefix}-buttons {$prefix}-buttons--img {$prefix}-buttons--{$this->post_id}" );
 
-		// If we have, at least, 1 image.
-		if ( $images->length >= 1 ) {
-			foreach ( $images as $id => $img ) {
+		if ( $images->length >= 1 ) { // If we have, at least, 1 image.
+
+			foreach ( $images as $id => $img ) :
 
 				$wrap_clone = $wrap->cloneNode();
 
@@ -91,6 +91,7 @@ class ButtonsImage extends Buttons {
 
 					$link_parent->parentNode->replaceChild( $wrap_clone, $link_parent );
 					$wrap_clone->appendChild( $link_parent );
+
 				} else {
 
 					$img->parentNode->replaceChild( $wrap_clone, $img );
@@ -105,10 +106,11 @@ class ButtonsImage extends Buttons {
 
 					$wrap_clone->appendChild( $fragment );
 				}
-			}
-		}
 
-		$content = preg_replace( '/^<!DOCTYPE.+?>/', '', str_replace( array( '<html>', '</html>', '<body>', '</body>' ), array( '', '', '', '' ), $dom->saveHTML() ) );
+			endforeach;
+
+			$content = preg_replace( '/^<!DOCTYPE.+?>/', '', str_replace( array( '<html>', '</html>', '<body>', '</body>' ), array( '', '', '', '' ), $dom->saveHTML() ) );
+		}
 
 		return $content;
 	}

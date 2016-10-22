@@ -15,12 +15,13 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 use \DOMDocument;
 
 /**
+ * Buttons Interface.
  *
  * @since 1.0.0
  */
 interface ButtonsInterface {
 	public function buttons_tmpl(); // The buttons have to have template script.
-	public function buttons_html(); // The buttons have to have template script.
+	public function buttons_html(); // The buttons have to have an HTML version.
 }
 
 /**
@@ -94,6 +95,7 @@ abstract class Buttons implements ButtonsInterface {
 	}
 
 	public function buttons_tmpl() {}
+
 	public function buttons_html() {}
 
 	/**
@@ -162,8 +164,8 @@ abstract class Buttons implements ButtonsInterface {
 	/**
 	 * The function method to generate the buttons endpoint URLs
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
 	 *
 	 * @param  string $site    	The site key or slug (e.g. `facebook`, `twitter`, etc.).
 	 * @param  string $context 	The button context; `content` or `image`.

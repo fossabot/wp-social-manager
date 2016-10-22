@@ -31,7 +31,7 @@ class ButtonsContent extends Buttons {
 	}
 
 	public function render() {
-		add_filter( 'the_content', array( $this, 'render_buttons' ), -30 );
+		add_filter( 'the_content', array( $this, 'render_buttons' ), 100 );
 	}
 
 	/**
