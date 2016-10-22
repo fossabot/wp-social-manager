@@ -11,7 +11,7 @@
  * @package    	Requirements
  */
 
-namespace NineCodes\SocialManager;
+namespace SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die( 'Shame on you!' ); // Abort.

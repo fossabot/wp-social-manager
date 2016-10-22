@@ -2,11 +2,11 @@
 /**
  * This file defines the ThemeSupports class.
  *
- * @package 	NineCodes\SocialManager
+ * @package 	SocialManager
  * @subpackage 	ThemeSupports
  */
 
-namespace NineCodes\SocialManager;
+namespace SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die( 'Shame on you!' ); // Abort.
@@ -81,9 +81,9 @@ final class ThemeSupports {
 	 */
 	public function theme_supports() {
 
-		if ( current_theme_supports( $feature ) ) {
+		if ( current_theme_supports( $this->feature ) ) {
 
-			$supports = get_theme_support( $feature );
+			$supports = get_theme_support( $this->feature );
 
 			if ( is_array( $supports ) ) {
 				$this->supports = $supports[0];

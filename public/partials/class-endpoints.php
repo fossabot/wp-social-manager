@@ -4,11 +4,11 @@
  *
  * @author Thoriq Firdaus <tfirdau@outlook.com>
  *
- * @package NineCodes\SocialManager
+ * @package SocialManager
  * @subpackage Public
  */
 
-namespace NineCodes\SocialManager;
+namespace SocialManager;
 
 /**
  * The class used for creating the social media endpoint URLs.

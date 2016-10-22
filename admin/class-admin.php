@@ -1,21 +1,19 @@
 <?php
 /**
- * The admin-specific functionality of the plugin.
+ * This file defines the ViewAdmin class.
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
- * @package NineCodes\SocialManager
- * @subpackage Admin
+ * @package 	SocialManager
+ * @subpackage 	Admin
  */
 
-namespace NineCodes\SocialManager;
+namespace SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die; // Abort.
+	die( 'Shame on you!' ); // Abort.
 }
 
 /**
- * The admin-specific functionality of the plugin.
+ * The ViewAdmin class delivers admin-specific functionality of the plugin.
  *
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
@@ -27,28 +25,28 @@ final class ViewAdmin {
 	/**
 	 * The Plugin class instance.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Plugin
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	Plugin
 	 */
 	public $plugin;
 
 	/**
 	 * The plugin Admin directory path.
 	 *
-	 * @since 1.0.0
-	 * @access private
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	private
+	 * @var 	string
 	 */
 	protected $path_dir;
 
 	/**
 	 * Initialize the class and set its properties.
 	 *
-	 * @since 1.0.0
-	 * @access private
+	 * @since 	1.0.0
+	 * @access 	private
 	 *
-	 * @param Plugin $plugin The Plugin class instance.
+	 * @param 	Plugin $plugin The Plugin class instance.
 	 */
 	public function __construct( Plugin $plugin ) {
 
@@ -62,10 +60,12 @@ final class ViewAdmin {
 	/**
 	 * Load dependencies.
 	 *
-	 * @since 1.0.0
-	 * @access protected
+	 * @since 	1.0.0
+	 * @access 	protected
+	 *
+	 * @return 	void
 	 */
-	public function requires() {
+	protected function requires() {
 
 		require_once( $this->path_dir . 'partials/class-settings.php' );
 		require_once( $this->path_dir . 'partials/class-validation.php' );
@@ -79,13 +79,14 @@ final class ViewAdmin {
 	 * The setups may involve running some Classes, Functions, andn sometimes WordPress Hooks
 	 * that are required to run or add functionalities in the plugin.
 	 *
-	 * @since 1.0.0
-	 * @access protected
+	 * @since 	1.0.0
+	 * @access 	protected
 	 */
-	public function setups() {
+	protected function setups() {
 
 		new Settings( $this->plugin );
 		new User( $this->plugin );
+
 		SocialMetaBox::get_instance( $this->plugin );
 	}
 }

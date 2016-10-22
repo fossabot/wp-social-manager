@@ -1,59 +1,58 @@
 <?php
 /**
- * Admin: SettingsUser class
+ * Admin: User class
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
- * @package NineCodes\SocialManager
- * @subpackage Admin\User
+ * @package 	SocialManager
+ * @subpackage 	Admin\User
  */
 
-namespace NineCodes\SocialManager;
+namespace SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die; // Abort.
+	die( 'Shame on you!' ); // Abort.
 }
 
 /**
- * The class used for adding or customizing the "Your Profile" screen.
+ * The User class is used for adding extra fields to "Your Profile" or
+ * or "Profile" screen.
  *
  * @since 1.0.0
  */
 final class User {
 
 	/**
-	 * The unique identifier of this plugin.
+	 * The plugin slug (unique identifier).
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $plugin_slug;
 
 	/**
-	 * The unique identifier or prefix for database names.
+	 * The plugin option name or meta key prefix.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $plugin_opts;
 
 	/**
-	 * The current plugin version.
+	 * The plugin version.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $version;
 
 	/**
-	 * The absolut URL path to the plugin directory.
+	 * The plugin url path relative to the current file.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $path_url;
 
@@ -62,10 +61,10 @@ final class User {
 	 *
 	 * Run Hooks, and Initialize properties value.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @param ViewAdmin $admin The ViewAdmin class instance.
+	 * @param 	Plugin $plugin The Plugin class instance.
 	 */
 	public function __construct( Plugin $plugin ) {
 
@@ -81,8 +80,10 @@ final class User {
 	/**
 	 * Run Filters and Actions required.
 	 *
-	 * @since 1.0.0
-	 * @access protected
+	 * @since 	1.0.0
+	 * @access 	protected
+	 *
+	 * @return 	void
 	 */
 	protected function hooks() {
 
@@ -97,15 +98,16 @@ final class User {
 	}
 
 	/**
-	 * Print social inputs.
+	 * Function to add the extra input fields
 	 *
-	 * A collection of additional text input types to allow user
+	 * A collection of additional text input fields to allow user
 	 * add their social profile usernames.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @param WP_User $user The WordPress user object.
+	 * @param 	WP_User $user The WordPress user object.
+	 * @return 	void
 	 */
 	public function add_social_profiles( $user ) {
 
@@ -143,12 +145,13 @@ final class User {
 	}
 
 	/**
-	 * Save and update custom input in the "Profile" edit screen.
+	 * Function to save and update custom input in the "Profile" edit screen.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @param integer $user_id  The user ID who being edited in the Profile edit screen.
+	 * @param 	integer $user_id  The user ID who being edited in the Profile edit screen.
+	 * @return 	void
 	 */
 	public function save_social_profiles( $user_id ) {
 
@@ -170,13 +173,15 @@ final class User {
 	}
 
 	/**
-	 * Load something on the screen.
+	 * Function to load "something" on the screen.
 	 *
 	 * This is a method if we want to load typically like a stylesheet, scripts, and inline code
 	 * when the "Your Profile" screen is viewed.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
+	 *
+	 * @return 	void
 	 */
 	public function load_page() {
 
@@ -184,10 +189,12 @@ final class User {
 	}
 
 	/**
-	 * Enqueue scripts and stylesheet.
+	 * Function to enqueue scripts and stylesheet.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
+	 *
+	 * @return 	void
 	 */
 	public function enqueue_scripts() {
 		$file = 'preview-profile';

@@ -5,10 +5,10 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @package NineCodes\SocialManager
+ * @package SocialManager
  */
 
-namespace NineCodes\SocialManager;
+namespace SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die( 'Shame on you!' ); // Abort.

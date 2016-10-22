@@ -2,22 +2,21 @@
 /**
  * Admin: Settings class
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
- * @package NineCodes\SocialManager
- * @subpackage Admin\Settings
+ * @package 	SocialManager
+ * @subpackage 	Admin\Settings
  */
 
-namespace NineCodes\SocialManager;
+namespace SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die; // Abort.
+	die( 'Shame on you!' ); // Abort.
 }
 
 use \PepperPlane;
 
 /**
- * The class used for adding option page for the plugin.
+ * The Settings class is used to register the option menu, the option page,
+ * and the input fields that will allow users to configure the plugin.
  *
  * @since 1.0.0
  */
@@ -26,122 +25,131 @@ final class Settings {
 	/**
 	 * The Plugin class instance.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Plugin
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	Plugin
 	 */
 	protected $plugin;
 
 	/**
-	 * The Plugin unique identifier.
+	 * The plugin slug (unique identifier).
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $plugin_slug;
 
 	/**
-	 * The Plugin option name or meta key prefix.
+	 * The plugin option name or meta key prefix.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $plugin_opts;
 
 	/**
+	 * The plugin version.
+	 *
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
+	 */
+	protected $version;
+
+	/**
 	 * The ThemeSupports class instance.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var ThemeSupports
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	ThemeSupports
 	 */
 	protected $theme_supports;
 
 	/**
-	 * The plugin url path relative to the current file.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $path_url;
-
-	/**
 	 * The plugin directory path relative to the current file.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $path_dir;
 
 	/**
-	 * The admin screen base name.
+	 * The plugin url path relative to the current file.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
-	protected $screen;
+	protected $path_url;
 
 	/**
-	 * PepperPlane instance.
+	 * PepperPlane class instance.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var PepperPlane
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	PepperPlane
 	 */
 	protected $settings;
 
 	/**
-	 * The setting pages or tabs.
+	 * The admin screen base name.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var array
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
+	 */
+	protected $screen;
+
+	/**
+	 * The setting pages (tabs).
+	 *
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	array
 	 */
 	public $pages;
 
 	/**
 	 * The site title.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $site_title;
 
 	/**
 	 * The site tagline.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $site_tagline;
 
 	/**
-	 * The document title printed.
+	 * The document title printed in the 'title' tag.
 	 *
 	 * Typically document title consists of the $site_title
 	 * and $site_tagline seperated with a notation like dash,
 	 * mdash, or bullet.
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $document_title;
 
 	/**
 	 * Initialize the class and set its properties.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @param ViewAdmin $admin The ViewAdmin instance.
+	 * @param 	Plugin $plugin The Plugin class instance.
 	 */
 	function __construct( Plugin $plugin ) {
 
@@ -162,8 +170,10 @@ final class Settings {
 	/**
 	 * Load dependencies.
 	 *
-	 * @since 1.0.0
-	 * @access protected
+	 * @since 	1.0.0
+	 * @access 	protected
+	 *
+	 * @return 	void
 	 */
 	protected function requires() {
 
@@ -178,8 +188,10 @@ final class Settings {
 	/**
 	 * Run Filters and Actions required.
 	 *
-	 * @since 1.0.0
-	 * @access protected
+	 * @since 	1.0.0
+	 * @access 	protected
+	 *
+	 * @return 	void
 	 */
 	protected function hooks() {
 
@@ -203,11 +215,13 @@ final class Settings {
 	 * The setups may involve running some Classes, Functions and sometimes WordPress Hooks,
 	 * and defining the Class properties value.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @see PepperPlane
-	 * @see SettingsExtend
+	 * @see 	PepperPlane
+	 * @see 	SettingsExtend
+	 *
+	 * @return 	void
 	 */
 	public function setting_setups() {
 
@@ -219,12 +233,12 @@ final class Settings {
 	}
 
 	/**
-	 * The function method to add a new option page.
+	 * Function method that adds a new option page for the plugin.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @return void
+	 * @return 	void
 	 */
 	public function setting_menu() {
 
@@ -247,12 +261,12 @@ final class Settings {
 	}
 
 	/**
-	 * The function method to register the setting page pages or tabs.
+	 * Function method to register the setting page pages or tabs.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @return void
+	 * @return 	void
 	 */
 	public function setting_pages() {
 
@@ -281,10 +295,12 @@ final class Settings {
 	}
 
 	/**
-	 * The function method to register setting sections within the settting pages or tabs.
+	 * Function method to register sections within the setting pages (tabs).
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
+	 *
+	 * @return 	void
 	 */
 	public function setting_sections() {
 
@@ -331,12 +347,14 @@ final class Settings {
 	}
 
 	/**
-	 * The function method to register option input fields in the sections.
+	 * Function method to register option input fields in the sections.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @see Options
+	 * @see 	Options
+	 *
+	 * @return 	void
 	 */
 	public function setting_fields() {
 
@@ -589,8 +607,10 @@ final class Settings {
 	 * Initialize and render the setting screen with the registered
 	 * tabs, sections, and fields.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
+	 *
+	 * @return 	void
 	 */
 	public function setting_init() {
 
@@ -599,10 +619,12 @@ final class Settings {
 	}
 
 	/**
-	 * Print internal styles in the setting page.
+	 * Function to internal styles in the setting page.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
+	 *
+	 * @return 	void
 	 */
 	public function print_setting_styles() {
 		?>
@@ -635,12 +657,13 @@ final class Settings {
 	<?php }
 
 	/**
-	 * Enqueue JavaScripts in the setting page.
+	 * Function to enqueue JavaScripts in the setting page.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @param array $args An array of the JavaScripts file name.
+	 * @param 	array $args An array of the JavaScripts file name.
+	 * @return 	void
 	 */
 	public function enqueue_scripts( array $args ) {
 
@@ -653,12 +676,13 @@ final class Settings {
 	}
 
 	/**
-	 * Enqueue stylesheets in the setting page.
+	 * Function to enqueue stylesheets in the setting page.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @param array $args An array of the stylesheets file name.
+	 * @param 	array $args An array of the stylesheets file name.
+	 * @return 	void
 	 */
 	public function enqueue_styles( array $args ) {
 
@@ -674,8 +698,10 @@ final class Settings {
 	 * This function method run functions that will otherwise won't be
 	 * accessible if they are run via the 'admin_init' Action Hook.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
+	 *
+	 * @return 	void
 	 */
 	public function frontend_setups() {
 		$this->_wp_get_document_title();
@@ -687,8 +713,10 @@ final class Settings {
 	 * The 'wp_get_document_title' function does not return a proper value
 	 * when run inside the setting pages hence this function.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	protected
+	 *
+	 * @return 	void
 	 */
 	protected function _wp_get_document_title() {
 

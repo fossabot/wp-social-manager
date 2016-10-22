@@ -4,11 +4,11 @@
  *
  * @author Thoriq Firdaus <tfirdau@outlook.com>
  *
- * @package NineCodes\SocialManager
+ * @package SocialManager
  * @subpackage Public\WPHead
  */
 
-namespace NineCodes\SocialManager;
+namespace SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

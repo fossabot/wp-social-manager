@@ -25,15 +25,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * @package NineCodes\SocialManager
+ * @package SocialManager
  */
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die( 'Shame on you!' ); // Abort.
 }
 
-use NineCodes\SocialManager\Plugin;
-use NineCodes\SocialManager\Requirements;
+use SocialManager\Plugin;
+use SocialManager\Requirements;
 
 /**
  * Get the filesystem directory path (with trailing slash) for

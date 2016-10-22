@@ -2,11 +2,11 @@
 /**
  * Public: ViewPublic class
  *
- * @package NineCodes\SocialManager
+ * @package SocialManager
  * @subpackage Public
  */
 
-namespace NineCodes\SocialManager;
+namespace SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die( 'Shame on you!' ); // Abort.

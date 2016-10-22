@@ -2,11 +2,11 @@
 /**
  * This file defines the Helpers class of the plugin.
  *
- * @package 	NineCodes\SocialManager
+ * @package 	SocialManager
  * @subpackage 	Helpers
  */
 
-namespace NineCodes\SocialManager;
+namespace SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die( 'Shame on you!' ); // Abort.

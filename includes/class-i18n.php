@@ -2,11 +2,11 @@
 /**
  * This file defines the Languages class.
  *
- * @package 	NineCodes\SocialManager
+ * @package 	SocialManager
  * @subpackage 	Languages
  */
 
-namespace NineCodes\SocialManager;
+namespace SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die( 'Shame on you!' ); // Abort.
