@@ -13,7 +13,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 }
 
 /**
- * This class is used for registering new metabox via ButterBean API.
+ * The SocialMetaBox class is used for registering new metabox via ButterBean API.
  *
  * @since 1.0.0
  *

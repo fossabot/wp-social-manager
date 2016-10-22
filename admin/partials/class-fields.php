@@ -11,13 +11,13 @@
 namespace SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die; // Abort.
+	die( 'Shame on you!' ); // Abort.
 }
 
 use \PepperPlaneFields;
 
 /**
- * The class to register custom setting field using PepperPlane framework.
+ * The Fields class is used for registering the new setting field using PepperPlane.
  *
  * @since 1.0.0
  */
@@ -26,9 +26,9 @@ final class Fields extends PepperPlaneFields {
 	/**
 	 * The admin screen base / ID
 	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
+	 * @since 	1.0.0
+	 * @access 	protected
+	 * @var 	string
 	 */
 	protected $screen;
 
@@ -37,10 +37,10 @@ final class Fields extends PepperPlaneFields {
 	 *
 	 * Initialize the screen ID property, and run the hooks.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @param string $screen The admin screen base / ID.
+	 * @param 	string $screen The admin screen base / ID.
 	 */
 	public function __construct( $screen ) {
 
@@ -53,8 +53,8 @@ final class Fields extends PepperPlaneFields {
 	/**
 	 * Run Filters and Actions required.
 	 *
-	 * @since 1.0.0
-	 * @access protected
+	 * @since 	1.0.0
+	 * @access 	protected
 	 */
 	protected function hooks() {
 
@@ -69,8 +69,8 @@ final class Fields extends PepperPlaneFields {
 	/**
 	 * Register files (stylesheets or JavaScripts) to load when using the input.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
 	 * @param 	array $args An array of input type.
 	 * @return 	array       The input types with the image file name.
@@ -84,10 +84,10 @@ final class Fields extends PepperPlaneFields {
 	/**
 	 * The function callback to render the Image input interface.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @param array $args Arguments (e.g. id, section, type, etc.) to render the new interface.
+	 * @param 	array $args Arguments (e.g. id, section, type, etc.) to render the new interface.
 	 */
 	public function callback_image( $args ) {
 
