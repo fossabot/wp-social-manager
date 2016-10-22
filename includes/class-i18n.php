@@ -2,14 +2,14 @@
 /**
  * This file defines the Languages class.
  *
- * @package 	SocialManager
- * @subpackage 	Languages
+ * @package SocialManager
+ * @subpackage Languages
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die( 'Shame on you!' ); // Abort.
+	die; // Abort.
 }
 
 /**
@@ -25,18 +25,18 @@ class Languages {
 	/**
 	 * Unique identifier for retrieving translated strings.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $domain;
 
 	/**
 	 * Relative path to the plugin path directory.
 	 *
-	 * @since 	1.0.0
-	 * @access  protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $path_dir;
 
@@ -46,8 +46,8 @@ class Languages {
 	 * Load the translated string domain name, and the directory path  where `.mo` and `.po`
 	 * files are accessible.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @param string $domain The unique name of the translated strings.
 	 */
@@ -60,8 +60,8 @@ class Languages {
 	/**
 	 * Load the plugin text domain for translation.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function load_plugin_textdomain() {
 		load_plugin_textdomain( $this->domain, false, $this->path_dir . 'languages/' );

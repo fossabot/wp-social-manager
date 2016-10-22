@@ -2,14 +2,14 @@
 /**
  * Admin: SettingsValidation class
  *
- * @package 	SocialManager
- * @subpackage 	Admin\Validation
+ * @package SocialManager
+ * @subpackage Admin\Validation
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die( 'Shame on you!' ); // Abort.
+	die; // Abort.
 }
 
 /**
@@ -23,11 +23,11 @@ class Validation {
 	/**
 	 * Function to sanitize the username inputs in "Profiles" section.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	mixed $inputs Unsanitized inputs being saved.
-	 * @return 	array         Sanitized inputs.
+	 * @param mixed $inputs Unsanitized inputs being saved.
+	 * @return array Sanitized inputs.
 	 */
 	final public function setting_profiles( $inputs ) {
 
@@ -53,11 +53,11 @@ class Validation {
 	/**
 	 * Function to sanitize the inputs in the "Buttons Content" section.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	array $inputs Unsanitized inputs being saved.
-	 * @return 	array         Sanitized inputs.
+	 * @param array $inputs Unsanitized inputs being saved.
+	 * @return array Sanitized inputs.
 	 */
 	final public function setting_buttons_content( array $inputs ) {
 
@@ -83,11 +83,11 @@ class Validation {
 	/**
 	 * Function to sanitize the inputs in the "Buttons Image" section.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	array $inputs Unsanitized inputs being saved.
-	 * @return 	array         Inputs sanitized.
+	 * @param array $inputs Unsanitized inputs being saved.
+	 * @return array Sanitized inputs.
 	 */
 	final public function setting_buttons_image( array $inputs ) {
 
@@ -109,11 +109,11 @@ class Validation {
 	/**
 	 * Function to sanitize the inputs in the "Metas" section.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	array $inputs Unsanitized inputs being saved.
-	 * @return 	array         Inputs sanitized.
+	 * @param array $inputs Unsanitized inputs being saved.
+	 * @return array Sanitized inputs.
 	 */
 	final public function setting_site_metas( array $inputs ) {
 
@@ -135,11 +135,11 @@ class Validation {
 	/**
 	 * Function to sanitize the inputs in the "Advanced" section.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	array $inputs Unsanitized inputs being saved.
-	 * @return 	array         Inputs sanitized.
+	 * @param array $inputs Unsanitized inputs being saved.
+	 * @return array Sanitized inputs.
 	 */
 	final public function setting_advanced( $inputs ) {
 
@@ -155,11 +155,11 @@ class Validation {
 	/**
 	 * Function to sanitize the inputs in the "Modes" section.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	array $inputs Unsanitized inputs being saved.
-	 * @return 	array         Inputs sanitized.
+	 * @param array $inputs Unsanitized inputs being saved.
+	 * @return array Sanitized inputs.
 	 */
 	final public function setting_modes( $inputs ) {
 
@@ -172,12 +172,12 @@ class Validation {
 	/**
 	 * Utility function to sanitize a redio input.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	string $input 	Unsanitized inputs being saved.
-	 * @param  	array  $options The list of options set in the setting.
-	 * @return 	string        	Sanitized input.
+	 * @param string $input Unsanitized inputs being saved.
+	 * @param array  $options The list of options set in the setting.
+	 * @return string Sanitized input.
 	 */
 	final protected function validate_radio( $input, $options ) {
 
@@ -193,13 +193,12 @@ class Validation {
 	 *
 	 * Typically the inputs are coming from a multicheckbox or multiselect input type.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	array  $inputs 	Unsanitized inputs being saved.
-	 * @param  	string $options Key reference of the preset / acceptable selection to validate
-	 * 							against the incoming input.
-	 * @return 	array          	Inputs sanitized.
+	 * @param array  $inputs Unsanitized inputs being saved.
+	 * @param string $options Options reference to check against the incoming input.
+	 * @return array Sanitized inputs.
 	 */
 	final protected function validate_multicheckbox( array $inputs, $options ) {
 

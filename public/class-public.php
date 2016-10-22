@@ -6,10 +6,10 @@
  * @subpackage Public
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die( 'Shame on you!' ); // Abort.
+	die; // Abort.
 }
 
 /**

@@ -2,11 +2,11 @@
 /**
  * Public: Buttons Class
  *
- * @package NineCodes_Social_Manager
+ * @package SocialManager
  * @subpackage Public\Buttons
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -20,8 +20,19 @@ use \DOMDocument;
  * @since 1.0.0
  */
 interface ButtonsInterface {
-	public function buttons_tmpl(); // The buttons have to have template script.
-	public function buttons_html(); // The buttons have to have an HTML version.
+	/**
+	 * The buttons have to have template script.
+	 *
+	 * @return void
+	 */
+	public function buttons_tmpl();
+
+	/**
+	 * The buttons have to have an HTML version.
+	 *
+	 * @return void
+	 */
+	public function buttons_html();
 }
 
 /**

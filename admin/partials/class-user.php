@@ -2,14 +2,14 @@
 /**
  * Admin: User class
  *
- * @package 	SocialManager
- * @subpackage 	Admin\User
+ * @package SocialManager
+ * @subpackage Admin\User
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die( 'Shame on you!' ); // Abort.
+	die; // Abort.
 }
 
 /**
@@ -23,36 +23,36 @@ final class User {
 	/**
 	 * The plugin slug (unique identifier).
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $plugin_slug;
 
 	/**
 	 * The plugin option name or meta key prefix.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $plugin_opts;
 
 	/**
 	 * The plugin version.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $version;
 
 	/**
 	 * The plugin url path relative to the current file.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $path_url;
 
@@ -61,10 +61,10 @@ final class User {
 	 *
 	 * Run Hooks, and Initialize properties value.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param 	Plugin $plugin The Plugin class instance.
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
 	public function __construct( Plugin $plugin ) {
 
@@ -80,10 +80,10 @@ final class User {
 	/**
 	 * Run Filters and Actions required.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
 	 *
-	 * @return 	void
+	 * @return void
 	 */
 	protected function hooks() {
 
@@ -103,11 +103,11 @@ final class User {
 	 * A collection of additional text input fields to allow user
 	 * add their social profile usernames.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param 	WP_User $user The WordPress user object.
-	 * @return 	void
+	 * @param WP_User $user The WordPress user object.
+	 * @return void
 	 */
 	public function add_social_profiles( $user ) {
 
@@ -147,11 +147,11 @@ final class User {
 	/**
 	 * Function to save and update custom input in the "Profile" edit screen.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param 	integer $user_id  The user ID who being edited in the Profile edit screen.
-	 * @return 	void
+	 * @param integer $user_id  The user ID who being edited in the Profile edit screen.
+	 * @return void
 	 */
 	public function save_social_profiles( $user_id ) {
 
@@ -178,10 +178,10 @@ final class User {
 	 * This is a method if we want to load typically like a stylesheet, scripts, and inline code
 	 * when the "Your Profile" screen is viewed.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @return 	void
+	 * @return void
 	 */
 	public function load_page() {
 
@@ -191,10 +191,10 @@ final class User {
 	/**
 	 * Function to enqueue scripts and stylesheet.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @return 	void
+	 * @return void
 	 */
 	public function enqueue_scripts() {
 		$file = 'preview-profile';

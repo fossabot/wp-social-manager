@@ -2,14 +2,14 @@
 /**
  * This file defines the Helpers class of the plugin.
  *
- * @package 	SocialManager
- * @subpackage 	Helpers
+ * @package SocialManager
+ * @subpackage Helpers
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die( 'Shame on you!' ); // Abort.
+	die; // Abort.
 }
 
 /**
@@ -23,22 +23,22 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 class Helpers {
 
 	/**
-	 * The defaul attribute prefix.
+	 * The default attribute prefix.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access public
+	 * @var string
 	 */
 	public static $prefix = 'wp-social-manager';
 
 	/**
 	 * Function method to get the social media icons in SVG.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	string $name The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
-	 * @return 	string       The icon of selected social media in SVG.
+	 * @param string $name The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
+	 * @return string The icon of selected social media in SVG.
 	 */
 	final public static function get_social_icons( $name ) {
 

@@ -2,14 +2,14 @@
 /**
  * This file defines the Options class.
  *
- * @package 	SocialManager
- * @subpackage 	Options
+ * @package SocialManager
+ * @subpackage Options
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die( 'Shame on you!' ); // Abort.
+	die; // Abort.
 }
 
 /**
@@ -26,11 +26,11 @@ final class Options {
 	/**
 	 * Options: Social Profiles and Pages.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	string $slug The social media slug (e.g. `facebook`, `twitter`, etc.).
-	 * @return 	mixed     	 Return an array if the profiles with the specified $slug
+	 * @param string $slug The social media slug (e.g. `facebook`, `twitter`, etc.).
+	 * @return mixed     	 Return an array if the profiles with the specified $slug
 	 * 						 is present, otherwise return an empty string.
 	 */
 	public static function social_profiles( $slug = '' ) {
@@ -112,10 +112,10 @@ final class Options {
 	 * This function excludes a couple of irrelevant Post Types
 	 * for this plugin such as the 'revision', 'nav_menu_log', etc.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @return 	array List of filtered Post Types.
+	 * @return array List of filtered Post Types.
 	 */
 	public static function post_types() {
 
@@ -146,10 +146,10 @@ final class Options {
 	/**
 	 * Options: Button View.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @return 	array
+	 * @return array
 	 */
 	public static function button_views() {
 
@@ -165,10 +165,10 @@ final class Options {
 	/**
 	 * Options: Button Placements.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @return 	array
+	 * @return array
 	 */
 	public static function button_placements() {
 
@@ -184,11 +184,11 @@ final class Options {
 	 * Function method to get names and keys of the social media to include
 	 * in the social buttons line-up.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	string $for The buttons group to retrieve.
-	 * @return 	array       Selected list of buttons or all if not specified.
+	 * @param string $for The buttons group to retrieve.
+	 * @return array       Selected list of buttons or all if not specified.
 	 */
 	public static function button_sites( $for = '' ) {
 
@@ -212,10 +212,10 @@ final class Options {
 	/**
 	 * Get list of button modes.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @return 	array An array of button modes; the labels and the keys
+	 * @return array An array of button modes; the labels and the keys
 	 */
 	public static function buttons_modes() {
 
@@ -228,10 +228,10 @@ final class Options {
 	/**
 	 * Get options of button modes.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @return 	array An array of button modes; the labels and the keys
+	 * @return array An array of button modes; the labels and the keys
 	 */
 	public static function link_modes() {
 

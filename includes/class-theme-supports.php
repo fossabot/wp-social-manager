@@ -2,14 +2,14 @@
 /**
  * This file defines the ThemeSupports class.
  *
- * @package 	SocialManager
- * @subpackage 	ThemeSupports
+ * @package SocialManager
+ * @subpackage ThemeSupports
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die( 'Shame on you!' ); // Abort.
+	die; // Abort.
 }
 
 /**
@@ -23,21 +23,22 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  */
 final class ThemeSupports {
 
+
 	/**
 	 * The name to check the feature provided by the plugin.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $feature = 'wp-social-manager';
 
 	/**
 	 * The theme supports arguments.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
-	 * @var 	array|boolean
+	 * @since 1.0.0
+	 * @access public
+	 * @var array|boolean
 	 */
 	public $supports;
 
@@ -46,10 +47,10 @@ final class ThemeSupports {
 	 *
 	 * Run the hook that initialize the theme_supports function.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @return 	void
+	 * @return void
 	 */
 	function __construct() {
 		$this->hooks();
@@ -60,29 +61,28 @@ final class ThemeSupports {
 	 *
 	 * The Function methods that have to run inside WordPress Hooks.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
 	 *
-	 * @return 	void
+	 * @return void
 	 */
 	protected function hooks() {
 		add_action( 'init', array( $this, 'theme_supports' ) );
 	}
 
 	/**
-	 * Function method to fetch the arguments passed in the
-	 * 'add_theme_support' function.
+	 * Function method to fetch the arguments passed in the `add_theme_support`
+	 * function.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @return 	array|boolean 	Return an array if the arguments are passed in
-	 * 							the function, otherwise a boolean.
+	 * @return array|boolean Return an array if the arguments are passed in
+	 *                       the `add_theme_support` function, otherwise a boolean.
 	 */
 	public function theme_supports() {
 
 		if ( current_theme_supports( $this->feature ) ) {
-
 			$supports = get_theme_support( $this->feature );
 
 			if ( is_array( $supports ) ) {
@@ -101,12 +101,12 @@ final class ThemeSupports {
 	 * Utility function to check if the theme supports a defined
 	 * feature.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	string $feature 	The feature name.
-	 * @return 	boolean         	Return `true` if the theme supports the feature,
-	 * 								Otherwise 'false'
+	 * @param string $feature The feature name.
+	 * @return boolean        Return `true` if the theme supports the feature,
+	 *                        Otherwise `false`
 	 */
 	public function is( $feature = '' ) {
 
@@ -164,7 +164,6 @@ final class ThemeSupports {
 		$mode = false;
 
 		if ( isset( $this->supports['buttons-mode'] ) ) {
-
 			$yep = (string) $this->supports['buttons-mode'];
 			$haystack = (array) Options::buttons_modes();
 

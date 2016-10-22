@@ -6,10 +6,10 @@
  * @subpackage 	Admin
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die( 'Shame on you!' ); // Abort.
+	die; // Abort.
 }
 
 /**
@@ -25,28 +25,28 @@ final class ViewAdmin {
 	/**
 	 * The Plugin class instance.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	Plugin
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Plugin
 	 */
 	public $plugin;
 
 	/**
 	 * The plugin Admin directory path.
 	 *
-	 * @since 	1.0.0
-	 * @access 	private
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access private
+	 * @var string
 	 */
 	protected $path_dir;
 
 	/**
 	 * Initialize the class and set its properties.
 	 *
-	 * @since 	1.0.0
-	 * @access 	private
+	 * @since 1.0.0
+	 * @access private
 	 *
-	 * @param 	Plugin $plugin The Plugin class instance.
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
 	public function __construct( Plugin $plugin ) {
 
@@ -60,10 +60,10 @@ final class ViewAdmin {
 	/**
 	 * Load dependencies.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
 	 *
-	 * @return 	void
+	 * @return void
 	 */
 	protected function requires() {
 
@@ -79,8 +79,10 @@ final class ViewAdmin {
 	 * The setups may involve running some Classes, Functions, andn sometimes WordPress Hooks
 	 * that are required to run or add functionalities in the plugin.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function setups() {
 

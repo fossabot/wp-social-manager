@@ -1,12 +1,12 @@
 <?php
 /**
- * Public: Buttons Class
+ * Public: ButtonsImage Class
  *
- * @package NineCodes_Social_Manager
+ * @package SocialManager
  * @subpackage Public\Buttons
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

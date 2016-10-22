@@ -2,14 +2,14 @@
 /**
  * Admin: SocialMetaBox class
  *
- * @package 	SocialManager
- * @subpackage 	Admin\Metabox
+ * @package SocialManager
+ * @subpackage Admin\Metabox
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die( 'Shame on you!' ); // Abort.
+	die; // Abort.
 }
 
 /**
@@ -24,82 +24,82 @@ final class SocialMetaBox {
 	/**
 	 * The Plugin class instance.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $plugin;
 
 	/**
 	 * The plugin directory path relative to the current file.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $path_dir;
 
 	/**
 	 * The WordPress post ID.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	integer
+	 * @since 1.0.0
+	 * @access protected
+	 * @var integer
 	 */
 	protected $post_id;
 
 	/**
 	 * The post title.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $post_title;
 
 	/**
 	 * The post content.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $post_content;
 
 	/**
 	 * The post description / excerpt.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $post_excerpt;
 
 	/**
 	 * The post thumbnail id.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	integer
+	 * @since 1.0.0
+	 * @access protected
+	 * @var integer
 	 */
 	protected $post_thumbnail;
 
 	/**
 	 * The post type singular name.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $post_type;
 
 	/**
 	 * Run WordPress and ButterBean Hooks.
 	 *
-	 * @since 	1.0.0
-	 * @access 	private
+	 * @since 1.0.0
+	 * @access private
 	 *
-	 * @return 	void
+	 * @return void
 	 */
 	private function hooks() {
 
@@ -117,10 +117,10 @@ final class SocialMetaBox {
 	/**
 	 * Load dependencies.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
 	 *
-	 * @return 	void
+	 * @return void
 	 */
 	public function requires() {
 
@@ -136,11 +136,11 @@ final class SocialMetaBox {
 	 * The setups may involve running some Classes, Functions, and sometimes WordPress Hooks
 	 * that are required to run or add functionalities in the plugin.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	Plugin $plugin The Plugin class instance.
-	 * @return 	void
+	 * @param Plugin $plugin The Plugin class instance.
+	 * @return void
 	 */
 	public function setups( Plugin $plugin ) {
 		$this->plugin = $plugin;
@@ -149,12 +149,12 @@ final class SocialMetaBox {
 	/**
 	 * Registers manager.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param 	object $butterbean  Instance of the 'ButterBean' object.
-	 * @param 	string $post_type   The current Post Type slug.
-	 * @return 	void
+	 * @param object $butterbean Instance of the 'ButterBean' object.
+	 * @param string $post_type  The current Post Type slug.
+	 * @return void
 	 */
 	public function register_manager( $butterbean, $post_type ) {
 
@@ -182,12 +182,12 @@ final class SocialMetaBox {
 	/**
 	 * Registers sections.
 	 *
-	 * @since  	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param 	object $butterbean  Instance of the `ButterBean` object.
-	 * @param 	string $post_type   The current Post Type slug.
-	 * @return 	void
+	 * @param object $butterbean Instance of the `ButterBean` object.
+	 * @param string $post_type  The current Post Type slug.
+	 * @return void
 	 */
 	public function register_section_buttons( $butterbean, $post_type ) {
 
@@ -256,12 +256,12 @@ final class SocialMetaBox {
 	/**
 	 * Register the "Meta" section tab.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param 	object $butterbean  Instance of the `ButterBean` object.
-	 * @param 	string $post_type   The current Post Type slug.
-	 * @return 	void
+	 * @param object $butterbean Instance of the `ButterBean` object.
+	 * @param string $post_type  The current Post Type slug.
+	 * @return void
 	 */
 	public function register_section_meta( $butterbean, $post_type ) {
 
@@ -349,11 +349,11 @@ final class SocialMetaBox {
 	/**
 	 * Sanitize function for integers.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	integer $value 	The value to sanitize.
-	 * @return 	integer|null 	The sanitized value or empty string.
+	 * @param integer $value The value to sanitize.
+	 * @return integer|null The sanitized value or empty string.
 	 */
 	public function sanitize_absint( $value ) {
 		return $value && is_numeric( $value ) ? absint( $value ) : null;
@@ -362,12 +362,12 @@ final class SocialMetaBox {
 	/**
 	 * The function method to retrive the post title, content, excerpt, and thumbnail id.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
 	 *
-	 * @link 	https://developer.wordpress.org/reference/functions/get_post_field/
+	 * @link https://developer.wordpress.org/reference/functions/get_post_field/
 	 *
-	 * @return 	void
+	 * @return void
 	 */
 	protected function load_post() {
 
@@ -386,11 +386,11 @@ final class SocialMetaBox {
 	 * This function exist because the post type slug or name can have special
 	 * character like underscore or dash.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
 	 *
-	 * @param 	string $post_type The post type slug / name.
-	 * @return 	void
+	 * @param string $post_type The post type slug / name.
+	 * @return void
 	 */
 	protected function load_post_type( $post_type ) {
 
@@ -406,10 +406,10 @@ final class SocialMetaBox {
 	 * consistent following with the WooCommerce metabox styling where ButterBean derived
 	 * the inspiration for the metabox UI.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @return 	void
+	 * @return void
 	 */
 	public function admin_head_enqueues() {
 	?>
@@ -424,10 +424,10 @@ final class SocialMetaBox {
 	/**
 	 * Returns the instance.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  Plugin $plugin The Plugin class instance.
+	 * @param Plugin $plugin The Plugin class instance.
 	 * @return object
 	 */
 	public static function get_instance( Plugin $plugin ) {
@@ -446,7 +446,7 @@ final class SocialMetaBox {
 	/**
 	 * Constructor method.
 	 *
-	 * @since  1.0.0
+	 * @since 1.0.0
 	 * @access private
 	 * @return void
 	 */

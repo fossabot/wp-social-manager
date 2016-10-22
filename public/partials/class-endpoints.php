@@ -8,7 +8,11 @@
  * @subpackage Public
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
+
+if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+	die; // Abort.
+}
 
 /**
  * The class used for creating the social media endpoint URLs.
@@ -59,7 +63,7 @@ class Endpoints {
 	 * @todo add inline docs referring to each site endpoint documentation page.
 	 *
 	 * @param array $post_id The WordPress post ID.
-	 * @return array         An array of sites with their label / name and button endpoint url.
+	 * @return array An array of sites with their label / name and button endpoint url.
 	 */
 	public function get_content_endpoints( $post_id ) {
 

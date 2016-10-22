@@ -2,14 +2,14 @@
 /**
  * Admin: Helps class
  *
- * @package 	SocialManager
- * @subpackage 	Admin\Helps
+ * @package SocialManager
+ * @subpackage Admin\Helps
  */
 
-namespace SocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die( 'Shame on you!' ); // Abort.
+	die; // Abort.
 }
 
 use \WP_Screen;
@@ -26,9 +26,9 @@ final class Helps {
 	/**
 	 * WordPress Admin screen API.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	WP_Screen
+	 * @since 1.0.0
+	 * @access protected
+	 * @var WP_Screen
 	 */
 	protected $screen;
 
@@ -37,10 +37,10 @@ final class Helps {
 	 *
 	 * Initialize the WP_Screen API, and run the Hooks.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param 	string $screen Required. The screen base / ID.
+	 * @param string $screen Required. The screen base / ID.
 	 */
 	function __construct( $screen ) {
 
@@ -56,10 +56,11 @@ final class Helps {
 	 * The setups may involve running some Classes, Functions, or WordPress Hooks
 	 * that are required to run or add functionalities in the plugin.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param 	string $screen The screen base / ID.
+	 * @param string $screen The screen base / ID.
+	 * @return void
 	 */
 	public function setups( $screen ) {
 		$this->screen = WP_Screen::get( $screen );
@@ -68,8 +69,10 @@ final class Helps {
 	/**
 	 * Run Filters and Actions required to render the Help tab.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function hooks() {
 		add_action( "load-{$this->screen->base}", array( $this, 'register_help_tabs' ) );
@@ -78,8 +81,10 @@ final class Helps {
 	/**
 	 * The function method to register the help tabs to the setting screen.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
 	 */
 	public function register_help_tabs() {
 
@@ -124,12 +129,12 @@ final class Helps {
 	/**
 	 * The function method to render the Help tab content.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
-	 * @param  	WP_Screen $screen The WP_Screen instance.
-	 * @param  	string    $tab    Tab unique ID.
-	 * @return 	void
+	 * @param WP_Screen $screen The WP_Screen instance.
+	 * @param string    $tab Tab unique ID.
+	 * @return void
 	 */
 	public function help_content( $screen, $tab ) {
 
