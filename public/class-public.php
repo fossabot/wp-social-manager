@@ -108,6 +108,8 @@ final class ViewPublic {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function requires() {
 
@@ -125,6 +127,8 @@ final class ViewPublic {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function hooks() {
 
@@ -141,6 +145,8 @@ final class ViewPublic {
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function setups() {
 
@@ -162,6 +168,8 @@ final class ViewPublic {
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function register_scripts() {
 
@@ -177,6 +185,8 @@ final class ViewPublic {
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function enqueue_styles() {
 

@@ -24,13 +24,23 @@ class ButtonsContent extends Buttons {
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
+	 * @param Endpoints $endpoints The Endpoints class instance.
 	 */
 	function __construct( Endpoints $endpoints ) {
 		parent::__construct( $endpoints );
 		$this->render();
 	}
 
-	public function render() {
+	/**
+	 * Function to render the buttons in the content.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return void
+	 */
+	protected function render() {
 		add_filter( 'the_content', array( $this, 'render_buttons' ), 100 );
 	}
 
@@ -40,10 +50,10 @@ class ButtonsContent extends Buttons {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  	string $content The post content.
-	 * @return 	string 			The post content added with the social buttons wrapper
-	 *                       	element. The wrapper may be added before or after the content,
-	 *                       	following the option selected.
+	 * @param string $content The post content.
+	 * @return string The post content added with the social buttons wrapper element.
+	 * 				  The wrapper may be added before or after the content, following
+	 * 				  the option selected.
 	 */
 	public function render_buttons( $content ) {
 
@@ -79,7 +89,7 @@ class ButtonsContent extends Buttons {
 	 * Used when the "Buttons Mode" is set to 'HTML'.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @return string The formatted HTML of the buttons.
 	 */
@@ -126,8 +136,8 @@ class ButtonsContent extends Buttons {
 	/**
 	 * Add the Underscore.js template of the social media buttons.
 	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @return void
 	 */
@@ -184,7 +194,7 @@ class ButtonsContent extends Buttons {
 	 */
 	protected function is_buttons_content() {
 
-		$post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );;
+		$post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
 
 		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
 			return false;
@@ -196,7 +206,7 @@ class ButtonsContent extends Buttons {
 			return false;
 		}
 
-		$place = $this->plugin->get_option( 'buttons_content', 'placement' );;
+		$place = $this->plugin->get_option( 'buttons_content', 'placement' );
 
 		if ( ! in_array( $place, array_keys( Options::button_placements() ), true ) ) {
 			return false;

@@ -2,8 +2,6 @@
 /**
  * Public: Meta class
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
  * @package SocialManager
  * @subpackage Public\Metas
  */
@@ -49,7 +47,7 @@ final class Metas {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param ViewPublic $public The ViewPublic class instance.
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
 	function __construct( Plugin $plugin ) {
 
@@ -228,7 +226,7 @@ final class Metas {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  integer $id The post ID.
+	 * @param integer $id The post ID.
 	 * @return string The "post" title
 	 */
 	public function get_post_title( $id ) {
@@ -251,7 +249,7 @@ final class Metas {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  integer $id The post ID.
+	 * @param integer $id The post ID.
 	 * @return string The "post" description
 	 */
 	public function get_post_description( $id ) {

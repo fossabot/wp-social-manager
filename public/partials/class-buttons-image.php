@@ -22,10 +22,12 @@ use \DOMDocument;
 class ButtonsImage extends Buttons {
 
 	/**
-	 * Constructor.
+	 * Constructor: Initialize the Buttons Class
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
+	 * @param Endpoints $endpoints The Endpoints class instance.
 	 */
 	function __construct( Endpoints $endpoints ) {
 		parent::__construct( $endpoints );
@@ -33,11 +35,14 @@ class ButtonsImage extends Buttons {
 	}
 
 	/**
-	 * [render description]
+	 * Function to render the buttons in the content.
 	 *
-	 * @return [type] [description]
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return void
 	 */
-	public function render() {
+	protected function render() {
 		add_filter( 'the_content', array( $this, 'render_buttons' ), 100 );
 	}
 
@@ -47,9 +52,9 @@ class ButtonsImage extends Buttons {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  	string $content The post content.
-	 * @return  string 			The content with each image wrapped in an element
-	 *                        	to display the social buttons on the images.
+	 * @param string $content The post content.
+	 * @return string The content with each image wrapped in an element to display
+	 * 				  the social buttons on the images.
 	 */
 	public function render_buttons( $content ) {
 
@@ -110,7 +115,7 @@ class ButtonsImage extends Buttons {
 			endforeach;
 
 			$content = preg_replace( '/^<!DOCTYPE.+?>/', '', str_replace( array( '<html>', '</html>', '<body>', '</body>' ), array( '', '', '', '' ), $dom->saveHTML() ) );
-		}
+		} // End if().
 
 		return $content;
 	}
@@ -121,7 +126,7 @@ class ButtonsImage extends Buttons {
 	 * Used when the "Buttons Mode" is set to 'HTML'.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @return string The formatted HTML of the buttons.
 	 */

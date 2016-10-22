@@ -8,4 +8,10 @@
 			<property name="text_domain" value="wp-social-manager" />
 		</properties>
 	</rule>
+	<rule ref="WordPress.NamingConventions.ValidVariableName">
+		<properties>
+            <property name="customPropertiesWhitelist" value="parentNode" type="array"/>
+        </properties>
+	</rule>
+
 </ruleset>

@@ -2,10 +2,8 @@
 /**
  * Public: APIRoutes class
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
  * @package SocialManager
- * @subpackage Public\Routes
+ * @subpackage Public\APIRoutes
  */
 
 namespace NineCodes\SocialManager;
@@ -23,6 +21,15 @@ use \WP_REST_Response;
  * @since 1.0.0
  */
 class APIRoutes {
+
+	/**
+	 * The API version number.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $api_version = '1.0';
 
 	/**
 	 * The unique identifier of the route.
@@ -48,7 +55,7 @@ class APIRoutes {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param Metas $endpoints The class Meta instance.
+	 * @param Endpoints $endpoints The Endpoints class instance.
 	 */
 	function __construct( Endpoints $endpoints ) {
 
@@ -58,11 +65,19 @@ class APIRoutes {
 		$this->plugin_slug = $endpoints->plugin->get_slug();
 		$this->theme_supports = $endpoints->plugin->get_theme_supports();
 
-		$this->namespace = $this->plugin_slug . '/' . '1.0';
+		$this->namespace = $this->plugin_slug . '/' . $api_version;
 
 		$this->hooks();
 	}
 
+	/**
+	 * Run Filters and Actions required.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return void
+	 */
 	protected function hooks() {
 
 		if ( $this->is_load_routes() ) {

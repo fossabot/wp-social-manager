@@ -47,7 +47,8 @@ class Endpoints {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param Metas $metas The Meta class instance.
+	 * @param Plugin $plugin The Plugin class instance.
+	 * @param Metas  $metas The Meta class instance.
 	 */
 	function __construct( Plugin $plugin, Metas $metas ) {
 		$this->metas = $metas;
@@ -195,8 +196,8 @@ class Endpoints {
 	 *
 	 * @todo add inline docs referring to each site endpoint documentation page.
 	 *
-	 * @param  integer $post_id  The WordPress post ID.
-	 * @return array             An array of sites with their label / name and button endpoint url.
+	 * @param integer $post_id  The WordPress post ID.
+	 * @return array An array of sites with their label / name and button endpoint url.
 	 */
 	public function get_image_endpoints( $post_id ) {
 
@@ -247,8 +248,8 @@ class Endpoints {
 	 * @since 1.0.0
 	 * @access protected
 	 *
-	 * @param  integer $post_id The WordPress post ID.
-	 * @return array       An array of post meta.
+	 * @param integer $post_id The WordPress post ID.
+	 * @return array An array of post meta.
 	 */
 	protected function get_post_metas( $post_id ) {
 
@@ -269,8 +270,9 @@ class Endpoints {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  string $for The buttons group to retrieve.
-	 * @return array       Selected list of button the buttons endpoints or all if `$for` is not specified.
+	 * @param string $of The buttons group to retrieve.
+	 * @param string $site The site slug.
+	 * @return array Selected list of button the buttons endpoints or all if $of is not specified.
 	 */
 	protected static function get_endpoint_base( $of, $site ) {
 

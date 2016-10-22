@@ -56,6 +56,7 @@
         buttonDialog: function( event ) {
 
             event.preventDefault();
+            event.stopImmediatePropagation();
 
             target = event.currentTarget;
             source = target.getAttribute( 'href' );

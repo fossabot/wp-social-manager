@@ -2,8 +2,6 @@
 /**
  * Public: WPHead class
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
  * @package SocialManager
  * @subpackage Public\WPHead
  */
@@ -78,6 +76,8 @@ final class WPHead {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function setups() {
 		$this->locale = get_locale();
@@ -88,6 +88,8 @@ final class WPHead {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function hooks() {
 
@@ -103,6 +105,8 @@ final class WPHead {
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function site_meta_tags() {
 
@@ -140,6 +144,8 @@ final class WPHead {
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function post_meta_tags() {
 

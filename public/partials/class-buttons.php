@@ -43,14 +43,20 @@ interface ButtonsInterface {
 abstract class Buttons implements ButtonsInterface {
 
 	/**
-	 * [$plugin description]
-	 * @var [type]
+	 * The Plugin class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Plugin
 	 */
 	protected $plugin;
 
 	/**
-	 * [$post_id description]
-	 * @var [type]
+	 * The WordPress post ID.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var integer
 	 */
 	protected $post_id;
 
@@ -59,6 +65,8 @@ abstract class Buttons implements ButtonsInterface {
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
+	 * @param Endpoints $endpoints The Endpoints class instance.
 	 */
 	function __construct( Endpoints $endpoints ) {
 
@@ -79,6 +87,8 @@ abstract class Buttons implements ButtonsInterface {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function hooks() {
 
@@ -97,6 +107,8 @@ abstract class Buttons implements ButtonsInterface {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	public function setups() {
 
@@ -105,27 +117,37 @@ abstract class Buttons implements ButtonsInterface {
 		}
 	}
 
+	/**
+	 * The buttons template script to use in JSON mode.
+	 *
+	 * @return void
+	 */
 	public function buttons_tmpl() {}
 
+	/**
+	 * The buttons html markup in HTML mode.
+	 *
+	 * @return void
+	 */
 	public function buttons_html() {}
 
 	/**
 	 * Determine and generate the buttons item view.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
 	 *
-	 * @param  string $view 	The button view key (`icon`, `icon-text`, `text`).
-	 * @param  array  $args 	{
+	 * @param string $view The button view key (`icon`, `icon-text`, `text`).
+	 * @param array  $args 	{
 	 *     The button attributes.
 	 *
 	 *     @type string $site 	The site unique key (e.g. `facebook`, `twitter`, etc.).
 	 *     @type string $icon 	The respective site icon.
 	 *     @type string $label 	The site label / text.
 	 * }
-	 * @param  array  $context 	The button attributes such as the 'site' name, button label,
-	 *                      	and the button icon.
-	 * @return string       	The formatted HTML list element to display the button.
+	 * @param array  $context The button attributes such as the 'site' name, button label,
+	 *                        and the button icon.
+	 * @return string The formatted HTML list element to display the button.
 	 */
 	protected function button_view( $view, array $args, $context = '' ) {
 
@@ -178,9 +200,9 @@ abstract class Buttons implements ButtonsInterface {
 	 * @since 1.0.0
 	 * @access protected
 	 *
-	 * @param  string $site    	The site key or slug (e.g. `facebook`, `twitter`, etc.).
-	 * @param  string $context 	The button context; `content` or `image`.
-	 * @return string 			The endpoint of the site specified in `$site`.
+	 * @param string $site The site key or slug (e.g. `facebook`, `twitter`, etc.).
+	 * @param string $context The button context; `content` or `image`.
+	 * @return string The endpoint of the site specified in `$site`.
 	 */
 	public function get_button_url( $site, $context ) {
 
