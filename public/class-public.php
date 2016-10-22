@@ -2,14 +2,14 @@
 /**
  * Public: ViewPublic class
  *
- * @package WPSocialManager
+ * @package NineCodes\SocialManager
  * @subpackage Public
  */
 
 namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die; // Abort.
+	die( 'Shame on you!' ); // Abort.
 }
 
 /**

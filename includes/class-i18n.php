@@ -1,24 +1,19 @@
 <?php
 /**
- * Define the internationalization functionality
+ * This file defines the Languages class.
  *
- * Loads and defines the internationalization files for this plugin
- * so that it is ready for translation.
- *
- * @author  	Thoriq Firdaus <tfirdau@outlook.com>
- *
- * @package 	WPSocialManager
+ * @package 	NineCodes\SocialManager
  * @subpackage 	Languages
  */
 
 namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die; // Abort.
+	die( 'Shame on you!' ); // Abort.
 }
 
 /**
- * Define the internationalization functionality.
+ * The Languages class to define the internationalization functionality.
  *
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
@@ -51,8 +46,8 @@ class Languages {
 	 * Load the translated string domain name, and the directory path  where `.mo` and `.po`
 	 * files are accessible.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
 	 * @param string $domain The unique name of the translated strings.
 	 */
@@ -65,8 +60,8 @@ class Languages {
 	/**
 	 * Load the plugin text domain for translation.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 */
 	public function load_plugin_textdomain() {
 		load_plugin_textdomain( $this->domain, false, $this->path_dir . 'languages/' );

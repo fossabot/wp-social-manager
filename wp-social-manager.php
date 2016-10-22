@@ -25,11 +25,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * @package NineCodes
+ * @package NineCodes\SocialManager
  */
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die; // Abort.
+	die( 'Shame on you!' ); // Abort.
 }
 
 use NineCodes\SocialManager\Plugin;
@@ -79,10 +79,6 @@ require_once( $path_dir . 'includes/class-plugin.php' );
  * through the `function_exists` function.
  */
 function wp_social_manager() {
-	new Plugin( array(
-		'version' => '1.0.0',
-		'plugin_slug' => 'wp-social-manager',
-		'plugin_opts' => 'wp_social_manager',
-	) );
+	new Plugin();
 }
 wp_social_manager();

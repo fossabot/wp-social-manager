@@ -4,7 +4,7 @@
  *
  * @author Thoriq Firdaus <tfirdau@outlook.com>
  *
- * @package WPSocialManager
+ * @package NineCodes\SocialManager
  * @subpackage Admin\Metabox
  */
 

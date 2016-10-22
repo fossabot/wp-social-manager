@@ -1,13 +1,38 @@
 <?php
+/**
+ * This file defines the Options class.
+ *
+ * @package 	NineCodes\SocialManager
+ * @subpackage 	Options
+ */
 
 namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die; // Abort.
+	die( 'Shame on you!' ); // Abort.
 }
 
-class Options {
+/**
+ * The Options class that registers the plugin options.
+ *
+ * The Options class may be used in the admin area such as in the settings to register
+ * options and validate the options before being saved into the database, or in
+ * the public view of the site to validate the output before being rendered.
+ *
+ * @since 1.0.0
+ */
+final class Options {
 
+	/**
+	 * Options: Social Profiles and Pages.
+	 *
+	 * @since 	1.0.0
+	 * @access 	public
+	 *
+	 * @param  	string $slug The social media slug (e.g. `facebook`, `twitter`, etc.).
+	 * @return 	mixed     	 Return an array if the profiles with the specified $slug
+	 * 						 is present, otherwise return an empty string.
+	 */
 	public static function social_profiles( $slug = '' ) {
 
 		$slug = sanitize_key( $slug );
@@ -82,15 +107,15 @@ class Options {
 	}
 
 	/**
-	 * Get the registered Post Types.
+	 * Options: Post Types.
 	 *
 	 * This function excludes a couple of irrelevant Post Types
 	 * for this plugin such as the 'revision', 'nav_menu_log', etc.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @return array  List of filtered Post Types.
+	 * @return 	array List of filtered Post Types.
 	 */
 	public static function post_types() {
 
@@ -119,18 +144,18 @@ class Options {
 	}
 
 	/**
-	 * Get names and keys of the social button view / appearance.
+	 * Options: Button View.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @return array
+	 * @return 	array
 	 */
 	public static function button_views() {
 
 		$types = array(
-			'icon'      => esc_html__( 'Icon Only', 'wp-social-manager' ),
-			'text'      => esc_html__( 'Text Only', 'wp-social-manager' ),
+			'icon' => esc_html__( 'Icon Only', 'wp-social-manager' ),
+			'text' => esc_html__( 'Text Only', 'wp-social-manager' ),
 			'icon-text' => esc_html__( 'Icon and Text', 'wp-social-manager' ),
 		);
 
@@ -138,12 +163,12 @@ class Options {
 	}
 
 	/**
-	 * Get names and keys of the social buttons placements in the content.
+	 * Options: Button Placements.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @return array
+	 * @return 	array
 	 */
 	public static function button_placements() {
 
@@ -156,13 +181,14 @@ class Options {
 	}
 
 	/**
-	 * Get names and keys of the social media to include in the social buttons lineup.
+	 * Function method to get names and keys of the social media to include
+	 * in the social buttons line-up.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @param  string $for The buttons group to retrieve.
-	 * @return array       Selected list of buttons or all if not specified.
+	 * @param  	string $for The buttons group to retrieve.
+	 * @return 	array       Selected list of buttons or all if not specified.
 	 */
 	public static function button_sites( $for = '' ) {
 
@@ -186,10 +212,10 @@ class Options {
 	/**
 	 * Get list of button modes.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @return array An array of button modes; the labels and the keys
+	 * @return 	array An array of button modes; the labels and the keys
 	 */
 	public static function buttons_modes() {
 
@@ -202,10 +228,10 @@ class Options {
 	/**
 	 * Get options of button modes.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @since 	1.0.0
+	 * @access 	public
 	 *
-	 * @return array An array of button modes; the labels and the keys
+	 * @return 	array An array of button modes; the labels and the keys
 	 */
 	public static function link_modes() {
 
