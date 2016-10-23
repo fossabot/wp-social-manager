@@ -95,7 +95,7 @@ final class Options {
 			'codepen' => array(
 				'label' => 'CodePen',
 				'url' => 'https://codepen.io/',
-				'description' => sprintf( esc_html__( 'CodePen pens (e.g. %s)', 'ninecodes-social-manager' ), '<code>stacy</code>' ),
+				'description' => sprintf( esc_html__( 'CodePen profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>stacy</code>' ),
 			),
 		);
 

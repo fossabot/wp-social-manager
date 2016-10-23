@@ -116,7 +116,7 @@ final class User {
 		?>
 
 		<h2><?php echo esc_html__( 'Social Profiles', 'ninecodes-social-manager' ); ?></h2>
-		<p><?php echo esc_html__( 'Social profile or page connected to this user.', 'ninecodes-social-manager' ); ?></p>
+		<p><?php echo esc_html__( 'Your very own social media profiles and pages.', 'ninecodes-social-manager' ); ?></p>
 		<table class="form-table">
 
 		<?php wp_nonce_field( 'ninecodes_social_manager_user', 'ninecodes_social_manager_social_inputs' ); ?>

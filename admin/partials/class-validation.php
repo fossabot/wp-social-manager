@@ -123,7 +123,7 @@ class Validation {
 			'image' => null,
 		) );
 
-		$inputs['enabled'] = $this->validate_checkbox( $inputs['endabled'] );
+		$inputs['enabled'] = $this->validate_checkbox( $inputs['enabled'] );
 		$inputs['name'] = sanitize_text_field( $inputs['name'] );
 		$inputs['description'] = sanitize_text_field( $inputs['description'] );
 		$inputs['image'] = absint( $inputs['image'] );

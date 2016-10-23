@@ -167,7 +167,7 @@ final class Helps {
 		}
 
 		if ( 'advanced' === $tab['id'] ) {
-			$content .= '<p>' . esc_html__( 'This tabs contains advanced stuff which may require technical comprehension. Change the setting options with cautious. Whenever in doubt leave the options in this tab as is.', 'ninecodes-social-manager' ) . '</p>';
+			$content .= '<p>' . esc_html__( 'This tabs contains some advanced stuff which may require technical skills at some level. Change the setting options with cautious. But, it is better to leave the options in this tab as is whenever in doubt.', 'ninecodes-social-manager' ) . '</p>';
 			$content .= '<p>' . esc_html__( 'You must click the Save Changes button at the bottom of the screen for the new settings to take effect.', 'ninecodes-social-manager' ) . '</p>';
 		}
 
