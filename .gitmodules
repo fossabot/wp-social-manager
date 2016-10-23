@@ -7,3 +7,6 @@
 [submodule "admin/partials/butterbean"]
 	path = admin/partials/butterbean
 	url = https://tfirdaus@github.com/justintadlock/butterbean
+[submodule "dev-lib"]
+	path = dev-lib
+	url = https://tfirdaus@github.com/xwp/wp-dev-lib
