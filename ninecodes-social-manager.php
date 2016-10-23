@@ -47,14 +47,15 @@ $path_dir = plugin_dir_path( __FILE__ );
  * Check if the website pass the requirement.
  * If not, deactivate the plugin and print an admin notice.
  */
-require_once( $path_dir . 'includes/class-requirements.php' );
+require_once $path_dir . 'includes/class-requirements.php';
 
 /**
  * Defines the plugin requirement.
  *
  * @var Requirements
  */
-$require = new Requirements( 'Social Manager by NineCodes',
+$require = new Requirements(
+	'Social Manager by NineCodes',
 	plugin_basename( __FILE__ ), array(
 		'PHP' => '5.3.0',
 		'WordPress' => '4.5',
@@ -70,7 +71,7 @@ if ( false === $require->pass() ) { // If the requirements are not meet.
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require_once( $path_dir . 'includes/class-plugin.php' );
+require_once $path_dir . 'includes/class-plugin.php';
 
 /**
  * Begins execution of the plugin.

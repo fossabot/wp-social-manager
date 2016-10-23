@@ -1,0 +1,476 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: Social Manager by NineCodes\n"
+"POT-Creation-Date: 2016-10-23 17:07+0700\n"
+"PO-Revision-Date: 2016-10-23 16:59+0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: ninecodes-social-manager.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Poedit-SearchPathExcluded-1: admin/partials/butterbean\n"
+"X-Poedit-SearchPathExcluded-2: dev-lib\n"
+"X-Poedit-SearchPathExcluded-3: admin/partials/pepperplane\n"
+
+#: admin/partials/class-fields.php:109
+msgid "No Image Selected"
+msgstr ""
+
+#: admin/partials/class-fields.php:112
+msgid "Add image"
+msgstr ""
+
+#: admin/partials/class-fields.php:113
+msgid "Change image"
+msgstr ""
+
+#: admin/partials/class-fields.php:114
+msgid "Remove image"
+msgstr ""
+
+#: admin/partials/class-helps.php:92
+msgid "Overview"
+msgstr ""
+
+#: admin/partials/class-helps.php:99 admin/partials/class-settings.php:278
+msgid "Accounts"
+msgstr ""
+
+#: admin/partials/class-helps.php:106 admin/partials/class-settings.php:283
+msgid "Buttons"
+msgstr ""
+
+#: admin/partials/class-helps.php:113 admin/partials/class-settings.php:288
+msgid "Metas"
+msgstr ""
+
+#: admin/partials/class-helps.php:120 admin/partials/class-settings.php:293
+msgid "Advanced"
+msgstr ""
+
+#: admin/partials/class-helps.php:145
+msgid ""
+"Social media sites is one of the staple outlets for websites of any scale to "
+"distribute their content as well as to attract incoming visitors to the "
+"website."
+msgstr ""
+
+#: admin/partials/class-helps.php:146
+msgid ""
+"In this screen, you can find a number of options that allow you configure "
+"the utilities to optimize this website presence and presentation on popular "
+"social media sites such as Facebook, Twitter, Pinterest, LinkedIn, and Google"
+"+."
+msgstr ""
+
+#: admin/partials/class-helps.php:147 admin/partials/class-helps.php:153
+#: admin/partials/class-helps.php:159 admin/partials/class-helps.php:166
+#: admin/partials/class-helps.php:171
+msgid ""
+"You must click the Save Changes button at the bottom of the screen for the "
+"new settings to take effect."
+msgstr ""
+
+#: admin/partials/class-helps.php:151
+msgid ""
+"You might have registered one or more accounts (e.g. Facebook page, a "
+"Twitter profile, a Google+ page, etc.) to represent this website presence in "
+"the some social media sites."
+msgstr ""
+
+#: admin/partials/class-helps.php:152
+#, php-format
+msgid ""
+"You can add username of these profiles and pages in the Account tab input "
+"fields. The added profiles and pages can be displayed through the \"Social "
+"Profiles\" widget which you can find in the %s admin page."
+msgstr ""
+
+#: admin/partials/class-helps.php:157
+msgid ""
+"Social buttons, generally, allow the readers to share or save this website "
+"content to social media sites."
+msgstr ""
+
+#: admin/partials/class-helps.php:158
+msgid ""
+"In the Buttons setting tab, you can configure several aspects of these "
+"buttons including the buttons appearance, the social network sites to "
+"include, and the position where these buttons should be displayed within the "
+"content."
+msgstr ""
+
+#: admin/partials/class-helps.php:163
+#, php-format
+msgid ""
+"In the Metas setting tab, you can configure the social meta tags such as "
+"Open Graph and Twitter Cards added in this website %s tag."
+msgstr ""
+
+#: admin/partials/class-helps.php:164
+msgid ""
+" These meta tags may be used to serve customized title, description, image "
+"and other things that will represent this website in the social network "
+"sites with a more compelling presentation format."
+msgstr ""
+
+#: admin/partials/class-helps.php:165
+msgid ""
+"If this functionality has been served through a 3rd-party plugin, you may "
+"disable it to avoid conflicts with the plugin by unticking the \"Enable Meta "
+"Tags\" option."
+msgstr ""
+
+#: admin/partials/class-helps.php:170
+msgid ""
+"This tabs contains advanced stuff which may require technical comprehension. "
+"Change the setting options with cautious. Whenever in doubt leave the "
+"options in this tab as is."
+msgstr ""
+
+#: admin/partials/class-helps.php:187
+msgid "Useful references:"
+msgstr ""
+
+#: admin/partials/class-helps.php:188
+msgid "The Open Graph Protocol"
+msgstr ""
+
+#: admin/partials/class-helps.php:189
+msgid "Twitter Cards"
+msgstr ""
+
+#: admin/partials/class-metabox.php:183 admin/partials/class-settings.php:246
+msgid "Social"
+msgstr ""
+
+#: admin/partials/class-settings.php:247
+msgid "Social Settings"
+msgstr ""
+
+#: admin/partials/class-settings.php:310
+msgid "Profiles & Pages"
+msgstr ""
+
+#: admin/partials/class-settings.php:311
+msgid "Add the social media profiles and pages related to this website."
+msgstr ""
+
+#: admin/partials/class-settings.php:319
+msgid "Content"
+msgstr ""
+
+#: admin/partials/class-settings.php:320
+msgid ""
+"Options to configure the social media buttons that allows people to share, "
+"like, or save content of this site."
+msgstr ""
+
+#: admin/partials/class-settings.php:325
+msgid "Image"
+msgstr ""
+
+#: admin/partials/class-settings.php:326
+msgid ""
+"Options to configure the social media buttons shown on the content images."
+msgstr ""
+
+#: admin/partials/class-settings.php:344
+msgid "Modes"
+msgstr ""
+
+#: admin/partials/class-settings.php:345
+msgid "Configure the modes that work best for your website."
+msgstr ""
+
+#: admin/partials/class-settings.php:412 admin/partials/class-settings.php:471
+msgid "Show the buttons in"
+msgstr ""
+
+#: admin/partials/class-settings.php:413
+#, php-format
+msgid "Select the %s that are allowed to show the social media buttons."
+msgstr ""
+
+#: admin/partials/class-settings.php:413 admin/partials/class-settings.php:472
+msgid "Post Types"
+msgstr ""
+
+#: admin/partials/class-settings.php:419 admin/partials/class-settings.php:480
+msgid "Buttons View"
+msgstr ""
+
+#: admin/partials/class-settings.php:420
+msgid ""
+"Select the social media buttons visual appearance displayed in the content."
+msgstr ""
+
+#: admin/partials/class-settings.php:428
+msgid "Buttons Placement"
+msgstr ""
+
+#: admin/partials/class-settings.php:429
+msgid "Select the location to show the social media buttons in the content."
+msgstr ""
+
+#: admin/partials/class-settings.php:436
+msgid "Buttons Heading"
+msgstr ""
+
+#: admin/partials/class-settings.php:437
+#, php-format
+msgid "Set the heading title shown before the buttons (e.g. %s)."
+msgstr ""
+
+#: admin/partials/class-settings.php:438
+msgid "Share on:"
+msgstr ""
+
+#: admin/partials/class-settings.php:442 admin/partials/class-settings.php:489
+msgid "Include these"
+msgstr ""
+
+#: admin/partials/class-settings.php:460
+msgid "Image Buttons Display"
+msgstr ""
+
+#: admin/partials/class-settings.php:461
+msgid "Show the social media buttons on images in the content"
+msgstr ""
+
+#: admin/partials/class-settings.php:472
+#, php-format
+msgid ""
+"List of %s that are allowed to show the social media buttons on the images "
+"of the content."
+msgstr ""
+
+#: admin/partials/class-settings.php:481
+msgid "The social media button visual appearance in the content."
+msgstr ""
+
+#: admin/partials/class-settings.php:508
+msgid "Enable Meta Tags"
+msgstr ""
+
+#: admin/partials/class-settings.php:509
+msgid "Generate social media meta tags on this website"
+msgstr ""
+
+#: admin/partials/class-settings.php:520 admin/partials/class-settings.php:521
+msgid "Site Name"
+msgstr ""
+
+#: admin/partials/class-settings.php:522
+#, php-format
+msgid ""
+"The website name or brand as it should appear within the social media meta "
+"tags (e.g. %s)"
+msgstr ""
+
+#: admin/partials/class-settings.php:531 admin/partials/class-settings.php:532
+msgid "Site Title"
+msgstr ""
+
+#: admin/partials/class-settings.php:533
+msgid ""
+"The title of this website as it should appear within the social media meta "
+"tags."
+msgstr ""
+
+#: admin/partials/class-settings.php:542
+msgid "Site Description"
+msgstr ""
+
+#: admin/partials/class-settings.php:543
+msgid ""
+"A one to two sentence describing this website that should appear within the "
+"social media meta tags."
+msgstr ""
+
+#: admin/partials/class-settings.php:555
+msgid "Site Image"
+msgstr ""
+
+#: admin/partials/class-settings.php:556
+msgid ""
+"An image URL which should represent this website within the social media "
+"meta tags (e.g. Open Graph, Twitter Cards, etc.)"
+msgstr ""
+
+#: admin/partials/class-settings.php:564 admin/partials/class-settings.php:572
+msgid "Enable Stylesheet"
+msgstr ""
+
+#: admin/partials/class-settings.php:566
+msgid ""
+"The Theme being used in this website has included the styles in its own "
+"stylesheet."
+msgstr ""
+
+#: admin/partials/class-settings.php:573
+msgid "Load the plugin stylesheet to apply essential styles."
+msgstr ""
+
+#: admin/partials/class-settings.php:585
+msgid "Buttons Mode"
+msgstr ""
+
+#: admin/partials/class-settings.php:597
+msgid "Link Mode"
+msgstr ""
+
+#: admin/partials/class-user.php:118
+#: widgets/partials/class-social-profiles.php:84
+#: widgets/partials/class-social-profiles.php:86
+msgid "Social Profiles"
+msgstr ""
+
+#: admin/partials/class-user.php:119
+msgid "Social profile or page connected to this user."
+msgstr ""
+
+#: admin/partials/class-user.php:160
+msgid "Bummer! you do not have the authority to save this inputs."
+msgstr ""
+
+#: admin/partials/class-validation.php:44
+msgid "A username generally should contains at least 3 characters (or more)."
+msgstr ""
+
+#: includes/class-options.php:43
+#, php-format
+msgid "Facebook profile or page (e.g. %s)"
+msgstr ""
+
+#: includes/class-options.php:48
+#, php-format
+msgid "Twitter profile without the %1$s (e.g. %2$s)"
+msgstr ""
+
+#: includes/class-options.php:53
+#, php-format
+msgid "Instagram profile (e.g. %s)"
+msgstr ""
+
+#: includes/class-options.php:58
+#, php-format
+msgid "Pinterest profile (e.g. %s)"
+msgstr ""
+
+#: includes/class-options.php:63
+#, php-format
+msgid "LinkedIn profile (e.g. %s)"
+msgstr ""
+
+#: includes/class-options.php:68
+#, php-format
+msgid "Google+ profile or page. Include the %1$s sign if necessary (e.g. %2$s)"
+msgstr ""
+
+#: includes/class-options.php:73
+#, php-format
+msgid "Youtube channel (e.g. %s)"
+msgstr ""
+
+#: includes/class-options.php:78
+#, php-format
+msgid "Reddit profile (e.g. %s)"
+msgstr ""
+
+#: includes/class-options.php:83
+#, php-format
+msgid "Dribbble portfolio (e.g. %s)"
+msgstr ""
+
+#: includes/class-options.php:88
+#, php-format
+msgid "Behance portfolio (e.g. %s)"
+msgstr ""
+
+#: includes/class-options.php:93
+#, php-format
+msgid "Github repository (e.g. %s)"
+msgstr ""
+
+#: includes/class-options.php:98
+#, php-format
+msgid "CodePen pens (e.g. %s)"
+msgstr ""
+
+#: includes/class-options.php:157
+msgid "Icon Only"
+msgstr ""
+
+#: includes/class-options.php:158
+msgid "Text Only"
+msgstr ""
+
+#: includes/class-options.php:159
+msgid "Icon and Text"
+msgstr ""
+
+#: includes/class-options.php:176
+msgid "Before the content"
+msgstr ""
+
+#: includes/class-options.php:177
+msgid "After the content"
+msgstr ""
+
+#: widgets/partials/class-social-profiles.php:88
+msgid ""
+"Display list of social media profile and page URLs connected to this website."
+msgstr ""
+
+#: widgets/partials/class-social-profiles.php:108
+msgid "Title:"
+msgstr ""
+
+#: widgets/partials/class-social-profiles.php:115
+#, php-format
+msgid "Please add at least one social media profile of this website in the %s."
+msgstr ""
+
+#: widgets/partials/class-social-profiles.php:116
+msgid "setting page"
+msgstr ""
+
+#: widgets/partials/class-social-profiles.php:125
+msgid "Include these :"
+msgstr ""
+
+#: widgets/partials/class-social-profiles.php:161
+msgid "View:"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Social Manager by NineCodes"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://wordpress.org/plugins/ninecodes-social-manager"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Optimize your website presence in social media."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Thoriq Firdaus"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://github.com/tfirdaus"
+msgstr ""

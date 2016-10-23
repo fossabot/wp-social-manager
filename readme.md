@@ -1,2 +1,0 @@
-# NineCodes Social Manager
-==========================
