@@ -96,17 +96,17 @@ final class Metas {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  integer $id    The post ID number.
+	 * @param  integer $post_id The post ID number.
 	 * @param  string  $which The the meta array key.
 	 * @return string|array
 	 */
-	public function get_post_meta( $id, $which ) {
+	public function get_post_meta( $post_id, $which ) {
 
-		if ( ! $id || ! $which ) {
+		if ( ! $post_id || ! $which ) {
 			return;
 		}
 
-		$post_meta = get_post_meta( $id, $this->option_slug, true );
+		$post_meta = get_post_meta( $post_id, $this->option_slug, true );
 
 		/**
 		 * If the post_meta is empty it means the meta has not yet
@@ -182,7 +182,9 @@ final class Metas {
 	 * @return string The website url
 	 */
 	public function get_site_url() {
+
 		$url = get_site_url();
+
 		return esc_url( $url );
 	}
 
@@ -383,8 +385,11 @@ final class Metas {
 	 * @param integer $id The post ID.
 	 * @return string The "post" url / permalink
 	 */
-	public function get_post_url( $id ) {
-		return esc_url( get_permalink( $id ) );
+	public function get_post_url( $post_id ) {
+
+		$url = get_permalink( $post_id );
+
+		return esc_url( $url );
 	}
 
 	/**
@@ -393,16 +398,16 @@ final class Metas {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  integer $id The post ID.
+	 * @param  integer $post_id The post ID.
 	 * @return array {
 	 *     @type string $display_name 	The author name.
 	 *     @type string $profiles 		An array of social media profiles associated
 	 *           						with the author.
 	 * }
 	 */
-	public function get_post_author( $id ) {
+	public function get_post_author( $post_id ) {
 
-		$post = get_post( $id );
+		$post = get_post( $post_id );
 		$name = get_the_author_meta( 'display_name', $post->post_author );
 		$profiles = get_the_author_meta( $this->option_slug, $post->post_author );
 

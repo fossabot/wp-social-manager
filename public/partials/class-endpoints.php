@@ -109,8 +109,8 @@ class Endpoints {
 						'url'  => $metas['post_url'],
 					);
 
-					if ( isset( $profiles['twitter'] ) && ! empty( $profiles['twitter'] ) ) {
-						$args['via'] = $profiles['twitter'];
+					if ( isset( $profiles ) && ! empty( $profiles ) ) {
+						$args['via'] = $profiles;
 					}
 
 					$urls[ $slug ]['endpoint'] = add_query_arg( $args, $endpoint );
@@ -255,7 +255,12 @@ class Endpoints {
 
 		$post_title = $this->metas->get_post_title( $post_id );
 		$post_description = $this->metas->get_post_description( $post_id );
-		$post_url = $this->metas->get_post_url( $post_id );
+
+		if ( 'shortlink' === $this->plugin->get_option( 'modes', 'link_mode' ) ) {
+			$post_url = wp_get_shortlink( $post_id );
+		} else {
+			$post_url = $this->metas->get_post_url( $post_id );
+		}
 
 		return array(
 			'post_title' => rawurlencode( $post_title ),
