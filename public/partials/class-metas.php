@@ -110,7 +110,7 @@ final class Metas {
 
 		/**
 		 * If the post_meta is empty it means the meta has not yet
-		 * been created.
+		 * been created. Let's return 'null' early.
 		 */
 		if ( empty( $post_meta ) ) {
 			return null;

@@ -247,8 +247,13 @@ class ButtonsImage extends Buttons {
 			return false;
 		}
 
-		$meta = (array) $this->metas->get_post_meta( $this->post_id, 'buttons_image' );
+		$meta = $this->metas->get_post_meta( $this->post_id, 'buttons_image' );
 
-		return $meta;
+		/**
+		 * If it is 'null' we assume that the meta post either not yet created or
+		 * the associated key, 'buttons_image', in the meta is not set. So, we
+		 * return to the default 'true'.
+		 */
+		return ( null === $meta ) ? true : $meta;
 	}
 }
