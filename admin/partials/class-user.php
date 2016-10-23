@@ -119,7 +119,7 @@ final class User {
 		<p><?php echo esc_html__( 'Social profile or page connected to this user.', 'ninecodes-social-manager' ); ?></p>
 		<table class="form-table">
 
-		<?php wp_nonce_field( 'ninecodes_social_manager_user', 'ninecodes_social_manager_social_profiles' ); ?>
+		<?php wp_nonce_field( 'ninecodes_social_manager_user', 'ninecodes_social_manager_social_inputs' ); ?>
 
 		<?php foreach ( $profiles as $key => $data ) :
 
@@ -155,8 +155,8 @@ final class User {
 	 */
 	public function save_social_profiles( $user_id ) {
 
-		if ( ! isset( $_POST['ninecodes_social_manager_social_profiles'] ) ||
-			 ! wp_verify_nonce( $_POST['ninecodes_social_manager_social_profiles'], 'ninecodes_social_manager_user' ) ) {
+		if ( ! isset( $_POST['ninecodes_social_manager_social_inputs'] ) ||
+			 ! wp_verify_nonce( $_POST['ninecodes_social_manager_social_inputs'], 'ninecodes_social_manager_user' ) ) {
 			wp_die( esc_html__( 'Bummer! you do not have the authority to save this inputs.', 'ninecodes-social-manager' ) );
 		}
 
