@@ -417,7 +417,7 @@ final class Settings {
 			array(
 				'id' => 'view',
 				'label' => esc_html__( 'Buttons View', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Select the social media buttons visual appearance displayed in the content.', 'ninecodes-social-manager' ),
+				'description' => esc_html__( 'Select the social media buttons appearance shown in the content.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
 				'options' => Options::button_views(),
 				'default' => 'icon',
@@ -434,7 +434,7 @@ final class Settings {
 				'id' => 'heading',
 				'type' => 'text',
 				'label' => esc_html__( 'Buttons Heading', 'ninecodes-social-manager' ),
-				'description' => sprintf( esc_html__( 'Set the heading title shown before the buttons (e.g. %s).', 'ninecodes-social-manager' ), '<code>Share on:</code>' ),
+				'description' => sprintf( esc_html__( 'Set the heading shown before the buttons (e.g. %s).', 'ninecodes-social-manager' ), '<code>Share on:</code>' ),
 				'default' => esc_html__( 'Share on:', 'ninecodes-social-manager' ),
 			),
 			array(
@@ -478,7 +478,7 @@ final class Settings {
 			array(
 				'id' => 'view',
 				'label' => esc_html__( 'Buttons View', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'The social media button visual appearance in the content.', 'ninecodes-social-manager' ),
+				'description' => esc_html__( 'Select the social media buttons appearance shown on the images of the content.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
 				'options' => Options::button_views(),
 				'default' => 'icon',
@@ -583,7 +583,7 @@ final class Settings {
 			$buttons_mode_fields = array(
 				'id' => 'buttons_mode',
 				'label' => esc_html__( 'Buttons Mode', 'ninecodes-social-manager' ),
-				'description' => 'Select the mode to render the social media buttons.',
+				'description' => esc_html__( 'Select the mode to render the social media buttons.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
 				'options' => Options::buttons_modes(),
 				'default' => 'html',
@@ -595,7 +595,7 @@ final class Settings {
 		$link_mode_fields = array(
 			'id' => 'link_mode',
 			'label' => esc_html__( 'Link Mode', 'ninecodes-social-manager' ),
-			'description' => 'Select the link mode to append when the content or the image is shared.',
+			'description' => esc_html__( 'Select the link mode to append when the content or the image is shared.', 'ninecodes-social-manager' ),
 			'type' => 'radio',
 			'options' => Options::link_modes(),
 			'default' => 'shortlink',
