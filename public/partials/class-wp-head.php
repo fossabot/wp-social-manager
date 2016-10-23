@@ -125,7 +125,7 @@ final class WPHead {
 		$og = $this->site_open_graph( $tag_args );
 		$tc = $this->site_twitter_card( $tag_args );
 
-		echo "\n<!-- START: WP-Social-Manager -->\n";
+		echo "\n<!-- START: Social Manager by NineCodes -->\n";
 		echo wp_kses( "{$og}{$tc}", array(
 			'meta' => array(
 			'property' => array(),
@@ -133,7 +133,7 @@ final class WPHead {
 			'name' => array(),
 			),
 		) );
-		echo "<!-- END: WP-Social-Manager -->\n";
+		echo "<!-- END: Social Manager by NineCodes -->\n";
 	}
 
 	/**
@@ -167,7 +167,7 @@ final class WPHead {
 		$og = $this->post_open_graph( $tag_args );
 		$tc = $this->post_twitter_card( $tag_args );
 
-		echo "\n<!-- START: WP-Social-Manager -->\n";
+		echo "\n<!-- START: Social Manager by NineCodes -->\n";
 		echo wp_kses( "{$og}{$tc}", array(
 			'meta' => array(
 			'property' => array(),
@@ -175,7 +175,7 @@ final class WPHead {
 			'name' => array(),
 			),
 		) );
-		echo "<!-- END: WP-Social-Manager -->\n";
+		echo "<!-- END: Social Manager by NineCodes -->\n";
 	}
 
 	/**
