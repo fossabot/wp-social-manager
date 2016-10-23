@@ -1,16 +1,21 @@
 <?xml version="1.0"?>
-<ruleset name="WP Social Manager">
+<ruleset name="Social Manager by NineCodes Coding Standards">
 	<rule ref="WordPress-Core"/>
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" value="ninecodes-social-manager" />
+		</properties>
+	</rule>
+	<!-- Allow the use of camelCase variable name since the plugin is employing DOMDocument object. -->
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
 		<properties>
             <property name="customPropertiesWhitelist" value="parentNode" type="array"/>
         </properties>
 	</rule>
-	<rule ref="WordPress.WP.I18n">
-		<properties>
-			<property name="text_domain" value="wp-social-manager" />
-		</properties>
+	<!-- <link:>https://github.com/squizlabs/PHP_CodeSniffer/issues/870</link:> -->
+	<rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing">
+  		<severity>0</severity>
 	</rule>
 </ruleset>

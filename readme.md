@@ -1,2 +1,2 @@
-# WP Social Manager
+# NineCodes Social Manager
 ==========================

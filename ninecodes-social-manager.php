@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: WP Social Manager
- * Plugin URI: http://github.com/tfirdaus/wp-social-manager
- * Description: Optimize your website social presence in social media.
- * Version: 1.0.0
+ * Plugin Name: Social Manager by NineCodes
+ * Plugin URI: http://wordpress.org/plugins/ninecodes-social-manager
+ * Description: Optimize your website presence in social media.
+ * Version: 1.0.0-beta.1
  * Author: Thoriq Firdaus
  * Author URI: https://github.com/tfirdaus
  * License: GPL-2.0+
@@ -12,7 +12,7 @@
  * Requires at least: 4.5
  * Tested up to: 4.6
  *
- * Text Domain: wp-social-manager
+ * Text Domain: ninecodes-social-manager
  * Domain Path: /languages
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,41 +24,44 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
+ * @package SocialManager
  */
-
-namespace XCo\WPSocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
+use NineCodes\SocialManager\Plugin;
+use NineCodes\SocialManager\Requirements;
+
 /**
- * The plugin directory path.
+ * Get the filesystem directory path (with trailing slash) for
+ * the plugin __FILE__ passed in.
  *
  * @var string
  */
-$plugin_dir = plugin_dir_path( __FILE__ );
+$path_dir = plugin_dir_path( __FILE__ );
 
 /*
  * Check if the website pass the requirement.
  * If not, deactivate the plugin and print an admin notice.
  */
-require_once( $plugin_dir . 'includes/class-requirements.php' );
+require_once( $path_dir . 'includes/class-requirements.php' );
 
 /**
  * Defines the plugin requirement.
  *
- * @since 1.0.0
  * @var Requirements
  */
-$require = new Requirements( 'WP Social Manager',
+$require = new Requirements( 'Social Manager by NineCodes',
 	plugin_basename( __FILE__ ), array(
 		'PHP' => '5.3.0',
 		'WordPress' => '4.5',
 	)
 );
 
-if ( false === $require->pass() ) { // If the requirement is not meet.
+if ( false === $require->pass() ) { // If the requirements are not meet.
 	$require->halt(); // Do not activate the plugin.
 	return;
 }
@@ -67,18 +70,15 @@ if ( false === $require->pass() ) { // If the requirement is not meet.
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require_once( $plugin_dir . 'includes/class-core.php' );
+require_once( $path_dir . 'includes/class-plugin.php' );
 
 /**
  * Begins execution of the plugin.
  *
- * @since 1.0.0
+ * This function is also useful to check if the plugin is activated
+ * through the function_exists() function.
  */
-function run() {
-	new Core( array(
-		'version' => '1.0.0',
-		'plugin_name' => 'wp-social-manager', // Used for slug, and scripts and styles handle.
-		'plugin_opts' => 'wp_social_manager', // Used for database name or meta key prefix.
-	) );
+function ninecodes_social_manager() {
+	new Plugin();
 }
-run();
+ninecodes_social_manager();

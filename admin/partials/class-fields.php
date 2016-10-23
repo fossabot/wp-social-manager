@@ -1,25 +1,25 @@
 <?php
 /**
- * Admin: SettingsExtend class
+ * Admin: Fields class
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
- * @package WPSocialManager
- * @subpackage Admin\User
+ * @package SocialManager
+ * @subpackage Admin\Fields
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
+use \PepperPlaneFields;
+
 /**
- * The class to register custom setting field using PepperPlane framework.
+ * The Fields class is used for registering the new setting field using PepperPlane.
  *
  * @since 1.0.0
  */
-final class SettingsExtend extends \PepperPlaneFields {
+final class Fields extends PepperPlaneFields {
 
 	/**
 	 * The admin screen base / ID
@@ -53,6 +53,8 @@ final class SettingsExtend extends \PepperPlaneFields {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function hooks() {
 
@@ -70,8 +72,8 @@ final class SettingsExtend extends \PepperPlaneFields {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param 	array $args An array of input type.
-	 * @return 	array       The input types with the image file name.
+	 * @param array $args An array of input type.
+	 * @return array The input types with the image file name.
 	 */
 	public function register_field_files( array $args ) {
 
@@ -104,12 +106,12 @@ final class SettingsExtend extends \PepperPlaneFields {
 		$html = "<input type='hidden' id='{$id}' name='{$name}'' value='{$value}'/>
 			<div id='{$id}-wrap' class='field-image-wrap{$set}'>
 				<div id='{$id}-img'>{$img}</div>
-				<div id='{$id}-placeholder' class='field-image-placeholder'>" . esc_html__( 'No Image Selected', 'wp-social-manager' ) . "</div>
+				<div id='{$id}-placeholder' class='field-image-placeholder'>" . esc_html__( 'No Image Selected', 'ninecodes-social-manager' ) . "</div>
 			</div>
 			<div id='{$id}-control' class='field-image-control'>
-				<button type='button' id='{$id}-add' class='button add-media{$show}' data-input='#{$id}'>" . esc_html__( 'Add image', 'wp-social-manager' ) . "</button>
-				<button type='button' id='{$id}-change' class='button change-media{$hide}' data-input='#{$id}'>" . esc_html__( 'Change image', 'wp-social-manager' ) . "</button>
-				<button type='button' id='{$id}-remove' class='button remove-media{$hide}' data-input='#{$id}'>" . esc_html__( 'Remove image', 'wp-social-manager' ) . '</button>
+				<button type='button' id='{$id}-add' class='button add-media{$show}' data-input='#{$id}'>" . esc_html__( 'Add image', 'ninecodes-social-manager' ) . "</button>
+				<button type='button' id='{$id}-change' class='button change-media{$hide}' data-input='#{$id}'>" . esc_html__( 'Change image', 'ninecodes-social-manager' ) . "</button>
+				<button type='button' id='{$id}-remove' class='button remove-media{$hide}' data-input='#{$id}'>" . esc_html__( 'Remove image', 'ninecodes-social-manager' ) . '</button>
             </div>';
 
 		echo $html; // // WPCS: XSS ok. ?>

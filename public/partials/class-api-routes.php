@@ -2,13 +2,11 @@
 /**
  * Public: APIRoutes class
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
- * @package WPSocialManager
- * @subpackage Public\Routes
+ * @package SocialManager
+ * @subpackage Public\APIRoutes
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -22,7 +20,16 @@ use \WP_REST_Response;
  *
  * @since 1.0.0
  */
-class APIRoutes extends EndPoints {
+class APIRoutes {
+
+	/**
+	 * The API version number.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $api_version = '1.0';
 
 	/**
 	 * The unique identifier of the route.
@@ -31,7 +38,7 @@ class APIRoutes extends EndPoints {
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_name = '';
+	protected $plugin_slug;
 
 	/**
 	 * The API unique namespace.
@@ -40,16 +47,7 @@ class APIRoutes extends EndPoints {
 	 * @access protected
 	 * @var string
 	 */
-	protected $namespace = '';
-
-	/**
-	 * Meta class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Meta
-	 */
-	protected $metas = null;
+	protected $namespace;
 
 	/**
 	 * Constructor.
@@ -57,24 +55,36 @@ class APIRoutes extends EndPoints {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
-	 *     An array of common arguments of the plugin.
-	 *
-	 *     @type string $plugin_name    The unique identifier of this plugin.
-	 *     @type string $plugin_opts    The unique identifier or prefix for database names.
-	 *     @type string $version        The plugin version number.
-	 * }
-	 * @param Metas $metas 				The class Meta instance.
+	 * @param Endpoints $endpoints The Endpoints class instance.
 	 */
-	function __construct( array $args, Metas $metas ) {
+	function __construct( Endpoints $endpoints ) {
 
-		parent::__construct( $args, $metas );
+		$this->endpoints = $endpoints;
 
-		$this->plugin_name = $args['plugin_name'];
+		$this->plugin = $endpoints->plugin;
+		$this->plugin_slug = $endpoints->plugin->get_slug();
+		$this->theme_supports = $endpoints->plugin->get_theme_supports();
 
-		$this->namespace = $this->plugin_name . '/1.0';
+		$this->namespace = $this->plugin_slug . '/' . $this->api_version;
 
-		$this->metas = $metas;
+		$this->hooks();
+	}
+
+	/**
+	 * Run Filters and Actions required.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return void
+	 */
+	protected function hooks() {
+
+		if ( $this->is_load_routes() ) {
+
+			add_filter( 'rest_api_init', array( $this, 'register_routes' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'localize_scripts' ) );
+		}
 	}
 
 	/**
@@ -89,14 +99,15 @@ class APIRoutes extends EndPoints {
 	 */
 	public function localize_scripts() {
 
-		$content = $this->options->buttonsContent;
-		$image = $this->options->buttonsImage;
+		$content = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
 
-		if ( ! isset( $image['enabled'] ) && false === (bool) $image['enabled'] ) {
-			$image['postTypes'] = array();
+		if ( ! (bool) $this->plugin->get_option( 'buttons_image', 'enabled' ) ) {
+			$image = array();
+		} else {
+			$image = (array) $this->plugin->get_option( 'buttons_image', 'post_types' );
 		}
 
-		$post_types = array_unique( array_merge( (array) $image['postTypes'], (array) $content['postTypes'] ), SORT_REGULAR );
+		$post_types = array_unique( array_merge( $image, $content ), SORT_REGULAR );
 
 		if ( ! is_singular( $post_types ) ) {
 			return;
@@ -105,7 +116,7 @@ class APIRoutes extends EndPoints {
 		$args = array(
 			'root' => esc_url( get_rest_url() ),
 			'namespace' => esc_html( $this->namespace ),
-			'attrPrefix' => esc_attr( self::get_attr_prefix() ),
+			'attrPrefix' => esc_attr( Helpers::get_attr_prefix() ),
 		);
 
 		$post_id = get_the_id();
@@ -114,7 +125,7 @@ class APIRoutes extends EndPoints {
 			$args['id'] = absint( $post_id );
 		}
 
-		wp_localize_script( $this->plugin_name, 'wpSocialManager', $args );
+		wp_localize_script( $this->plugin_slug, 'NineCodesSocialManager', $args );
 	}
 
 	/**
@@ -133,7 +144,7 @@ class APIRoutes extends EndPoints {
 		 * This route requires the 'id' parameter that passes
 		 * the post ID.
 		 *
-		 * @example http://local.wordpress.dev/wp-json/wp-social-manager/1.0/buttons?id=79
+		 * @example http://local.wordpress.dev/wp-json/ninecodes-social-manager/1.0/buttons?id=79
 		 *
 		 * @uses \WP_REST_Server
 		 */
@@ -168,9 +179,30 @@ class APIRoutes extends EndPoints {
 			'id' => $request['id'],
 		);
 
-		$response['content'] = $this->get_content_endpoints( $request['id'] );
-		$response['image'] = $this->get_image_endpoints( $request['id'] );
+		$response['content'] = $this->endpoints->get_content_endpoints( $request['id'] );
+		$response['image'] = $this->endpoints->get_image_endpoints( $request['id'] );
 
 		return new WP_REST_Response( $response, 200 );
+	}
+
+	/**
+	 * Is the API Routes should be loaded?
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return boolean 	Return 'true' if the Buttons Mode is 'json',
+	 * 					and 'false' if the Buttons Mode is 'html'.
+	 */
+	public function is_load_routes() {
+
+		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
+
+		if ( 'json' === $this->theme_supports->is( 'buttons-mode' ) ||
+			 'json' === $buttons_mode ) {
+			return true;
+		}
+
+		return false;
 	}
 }

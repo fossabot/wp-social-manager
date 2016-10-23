@@ -5,11 +5,11 @@
     var api, target, source, SocialButton;
     var $template, $templateHTML;
 
-    if ( 'undefined' === typeof wpSocialManager ) {
+    if ( 'undefined' === typeof NineCodesSocialManager ) {
         return;
     }
 
-    api = wpSocialManager;
+    api = NineCodesSocialManager;
 
     if ( _.isUndefined( api.id ) ) {
         return;
@@ -56,6 +56,7 @@
         buttonDialog: function( event ) {
 
             event.preventDefault();
+            event.stopImmediatePropagation();
 
             target = event.currentTarget;
             source = target.getAttribute( 'href' );

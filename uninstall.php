@@ -4,7 +4,7 @@
  *
  * @since 1.0.0
  *
- * @package WPSocialManager
+ * @package SocialManager
  * @subpackage Uninstaller
  */
 

@@ -2,33 +2,24 @@
 /**
  * Public: Meta class
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
- * @package WPSocialManager
+ * @package SocialManager
  * @subpackage Public\Metas
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
+
+use \DOMDocument;
 
 /**
  * The class to generate meta data.
  *
  * @since 1.0.0
  */
-final class Metas extends OutputHelpers {
-
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	public $plugin_name = '';
+final class Metas {
 
 	/**
 	 * The unique identifier or prefix for database names.
@@ -37,7 +28,7 @@ final class Metas extends OutputHelpers {
 	 * @access protected
 	 * @var string
 	 */
-	public $plugin_opts = '';
+	protected $option_slug;
 
 	/**
 	 * The options required to render the meta data.
@@ -46,7 +37,7 @@ final class Metas extends OutputHelpers {
 	 * @access protected
 	 * @var null
 	 */
-	public $options = null;
+	protected $options;
 
 	/**
 	 * Constructor.
@@ -56,37 +47,12 @@ final class Metas extends OutputHelpers {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
-	 *     An array of common arguments of the plugin.
-	 *
-	 *     @type string $plugin_name 	The unique identifier of this plugin.
-	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
-	 *     @type string $version 		The plugin version number.
-	 * }
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	function __construct( array $args ) {
+	function __construct( Plugin $plugin ) {
 
-		$this->plugin_name = $args['plugin_name'];
-		$this->plugin_opts = $args['plugin_opts'];
-
-		$this->setups();
-	}
-
-	/**
-	 * Setup the meta data.
-	 *
-	 * The setups may involve running some Classes, Functions,
-	 * and sometimes WordPress Hooks that are required to render
-	 * the social buttons.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 */
-	protected function setups() {
-
-		$this->options = (object) array(
-			'metasSite' => get_option( "{$this->plugin_opts}_metas_site" ),
-		);
+		$this->plugin = $plugin;
+		$this->option_slug = $plugin->get_opts();
 	}
 
 	/**
@@ -121,9 +87,7 @@ final class Metas extends OutputHelpers {
 			return;
 		}
 
-		if ( isset( $this->options->metasSite[ $which ] ) ) {
-			return $this->options->metasSite[ $which ];
-		}
+		return $this->plugin->get_option( 'metas_site', $which );
 	}
 
 	/**
@@ -142,9 +106,17 @@ final class Metas extends OutputHelpers {
 			return;
 		}
 
-		$meta = get_post_meta( $id, $this->plugin_opts, true );
+		$post_meta = get_post_meta( $id, $this->option_slug, true );
 
-		return isset( $meta[ $which ] ) ? $meta[ $which ] : false;
+		/**
+		 * If the post_meta is empty it means the meta has not yet
+		 * been created. Let's return 'null' early.
+		 */
+		if ( empty( $post_meta ) ) {
+			return null;
+		}
+
+		return isset( $post_meta[ $which ] ) ? $post_meta[ $which ] : null;
 	}
 
 	/**
@@ -172,7 +144,6 @@ final class Metas extends OutputHelpers {
 	 * @return string The website title
 	 */
 	public function get_site_title() {
-
 		return wp_kses( wp_get_document_title(), array() );
 	}
 
@@ -211,7 +182,6 @@ final class Metas extends OutputHelpers {
 	 * @return string The website url
 	 */
 	public function get_site_url() {
-
 		$url = get_site_url();
 		return esc_url( $url );
 	}
@@ -264,16 +234,14 @@ final class Metas extends OutputHelpers {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  integer $id The post ID.
+	 * @param integer $id The post ID.
 	 * @return string The "post" title
 	 */
 	public function get_post_title( $id ) {
 
 		if ( $this->is_meta_enabled() ) {
 			$title = $this->get_post_meta( $id, 'post_title' );
-		}
-
-		if ( ! $title || empty( $title ) ) {
+		} else {
 			$post = get_post( $id );
 			$title = apply_filters( 'the_title', $post->post_title );
 		}
@@ -287,17 +255,14 @@ final class Metas extends OutputHelpers {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  integer $id The post ID.
+	 * @param integer $id The post ID.
 	 * @return string The "post" description
 	 */
 	public function get_post_description( $id ) {
 
 		if ( $this->is_meta_enabled() ) {
 			$description = $this->get_post_meta( $id, 'post_excerpt' );
-		}
-
-		if ( ! $description || empty( $description ) ) {
-
+		} else {
 			$post = get_post( $id );
 			$description = $post->post_excerpt;
 
@@ -353,7 +318,7 @@ final class Metas extends OutputHelpers {
 
 		libxml_use_internal_errors( true );
 
-		$dom = new \DOMDocument();
+		$dom = new DOMDocument();
 		$dom->loadHTML( mb_convert_encoding( $post->post_content, 'HTML-ENTITIES', 'UTF-8' ) );
 		$images = $dom->getElementsByTagName( 'img' );
 
@@ -376,7 +341,7 @@ final class Metas extends OutputHelpers {
 
 		if ( $this->is_meta_enabled() ) {
 
-			$site_image = $this->site_image(); // Site Meta Image.
+			$site_image = $this->get_site_image(); // Site Meta Image.
 
 			if ( is_array( $site_image ) && ! empty( $site_image ) ) {
 				return $site_image;
@@ -427,7 +392,7 @@ final class Metas extends OutputHelpers {
 
 		$post = get_post( $id );
 		$name = get_the_author_meta( 'display_name', $post->post_author );
-		$profiles = get_the_author_meta( $this->plugin_opts, $post->post_author );
+		$profiles = get_the_author_meta( $this->option_slug, $post->post_author );
 
 		return array(
 			'display_name' => $name,

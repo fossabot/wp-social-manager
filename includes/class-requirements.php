@@ -8,11 +8,10 @@
  * @link       	https://github.com/nekojira/wp-requirements
  * @license   	http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
- * @package    	WPSocialManager
- * @subpackage 	Requirements
+ * @package    	Requirements
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
