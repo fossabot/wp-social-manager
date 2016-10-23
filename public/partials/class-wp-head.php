@@ -35,7 +35,7 @@ final class WPHead {
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_opts;
+	protected $option_slug;
 
 	/**
 	 * The current website language.
@@ -61,7 +61,7 @@ final class WPHead {
 
 		$this->metas = $metas;
 		$this->plugin = $metas->plugin;
-		$this->plugin_opts = $metas->plugin->get_opts();
+		$this->option_slug = $metas->plugin->get_opts();
 
 		$this->hooks();
 		$this->setups();

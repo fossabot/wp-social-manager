@@ -35,7 +35,7 @@
 
     // Instantiation;
     new ControlsView({
-        el: $( '#wp-social-manager-wrap' ).find( '.toggle-control' ) // The trigger element.
+        el: $( '#ninecodes-social-manager-wrap' ).find( '.toggle-control' ) // The trigger element.
     });
 
 })( jQuery, window.Backbone, undefined );

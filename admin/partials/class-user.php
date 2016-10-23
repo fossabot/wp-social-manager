@@ -36,7 +36,7 @@ final class User {
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_opts;
+	protected $option_slug;
 
 	/**
 	 * The plugin version.
@@ -69,7 +69,7 @@ final class User {
 	public function __construct( Plugin $plugin ) {
 
 		$this->plugin_slug = $plugin->get_slug();
-		$this->plugin_opts = $plugin->get_opts();
+		$this->option_slug = $plugin->get_opts();
 		$this->version = $plugin->get_version();
 
 		$this->path_url = plugin_dir_url( dirname( __FILE__ ) );
@@ -111,15 +111,15 @@ final class User {
 	 */
 	public function add_social_profiles( $user ) {
 
-		$meta = get_the_author_meta( $this->plugin_opts, $user->ID );
+		$meta = get_the_author_meta( $this->option_slug, $user->ID );
 		$profiles = Options::social_profiles();
 		?>
 
-		<h2><?php echo esc_html__( 'Social Profiles', 'wp-social-manager' ); ?></h2>
-		<p><?php echo esc_html__( 'Social profile or page connected to this user.', 'wp-social-manager' ); ?></p>
+		<h2><?php echo esc_html__( 'Social Profiles', 'ninecodes-social-manager' ); ?></h2>
+		<p><?php echo esc_html__( 'Social profile or page connected to this user.', 'ninecodes-social-manager' ); ?></p>
 		<table class="form-table">
 
-		<?php wp_nonce_field( 'wp_social_manager_user', 'wp_social_manager_social_profiles' ); ?>
+		<?php wp_nonce_field( 'ninecodes_social_manager_user', 'ninecodes_social_manager_social_profiles' ); ?>
 
 		<?php foreach ( $profiles as $key => $data ) :
 
@@ -131,7 +131,7 @@ final class User {
 			<tr>
 				<th><label for="<?php echo esc_attr( "field-user-{$key}" ); ?>"><?php echo esc_html( $label ); ?></label></th>
 				<td>
-					<input type="text" name="<?php echo esc_attr( "{$this->plugin_opts}[{$key}]" ); ?>" id="<?php echo esc_attr( "field-user-{$key}" ); ?>" value="<?php echo esc_attr( $value ); ?>" class="regular-text account-profile-control code" data-url="<?php echo esc_attr( $props['url'] ); ?>">
+					<input type="text" name="<?php echo esc_attr( "{$this->option_slug}[{$key}]" ); ?>" id="<?php echo esc_attr( "field-user-{$key}" ); ?>" value="<?php echo esc_attr( $value ); ?>" class="regular-text account-profile-control code" data-url="<?php echo esc_attr( $props['url'] ); ?>">
 					<?php if ( isset( $data['description'] ) && ! empty( $data['description'] ) ) : ?>
 					<p class="description"><?php echo wp_kses_post( $data['description'] ); ?></p>
 					<?php endif; ?>
@@ -155,12 +155,12 @@ final class User {
 	 */
 	public function save_social_profiles( $user_id ) {
 
-		if ( ! isset( $_POST['wp_social_manager_social_profiles'] ) ||
-			 ! wp_verify_nonce( $_POST['wp_social_manager_social_profiles'], 'wp_social_manager_user' ) ) {
-			wp_die( esc_html__( 'Bummer! you do not have the authority to save this inputs.', 'wp-social-manager' ) );
+		if ( ! isset( $_POST['ninecodes_social_manager_social_profiles'] ) ||
+			 ! wp_verify_nonce( $_POST['ninecodes_social_manager_social_profiles'], 'ninecodes_social_manager_user' ) ) {
+			wp_die( esc_html__( 'Bummer! you do not have the authority to save this inputs.', 'ninecodes-social-manager' ) );
 		}
 
-		$profiles = (array) $_POST[ $this->plugin_opts ];
+		$profiles = (array) $_POST[ $this->option_slug ];
 
 		foreach ( $profiles as $key => $value ) {
 			$key = sanitize_key( $key );
@@ -168,7 +168,7 @@ final class User {
 		}
 
 		if ( current_user_can( 'edit_user' ) ) {
-			update_user_meta( $user_id, $this->plugin_opts, $profiles );
+			update_user_meta( $user_id, $this->option_slug, $profiles );
 		}
 	}
 

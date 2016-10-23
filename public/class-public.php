@@ -92,7 +92,7 @@ final class ViewPublic {
 
 		$this->plugin = $plugin;
 		$this->plugin_slug = $plugin->get_slug();
-		$this->plugin_opts = $plugin->get_opts();
+		$this->option_slug = $plugin->get_opts();
 		$this->version = $plugin->get_version();
 		$this->theme_supports = $plugin->get_theme_supports();
 

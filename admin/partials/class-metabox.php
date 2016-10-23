@@ -31,6 +31,15 @@ final class SocialMetaBox {
 	protected $plugin;
 
 	/**
+	 * The plugin unique option slug.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $option_slug;
+
+	/**
 	 * The plugin directory path relative to the current file.
 	 *
 	 * @since 1.0.0
@@ -144,6 +153,7 @@ final class SocialMetaBox {
 	 */
 	public function setups( Plugin $plugin ) {
 		$this->plugin = $plugin;
+		$this->option_slug = $plugin->get_opts();
 	}
 
 	/**
@@ -168,9 +178,9 @@ final class SocialMetaBox {
 
 		// Register our custom manager.
 		$butterbean->register_manager(
-			'wp_social_manager',
+			$this->option_slug,
 			array(
-				'label'      => esc_html__( 'Social', 'wp-social-manager' ),
+				'label'      => esc_html__( 'Social', 'ninecodes-social-manager' ),
 				'post_type'  => array( 'post', 'page', 'product' ),
 				'context'    => 'normal',
 				'priority'   => 'high',
@@ -192,7 +202,7 @@ final class SocialMetaBox {
 	public function register_section_buttons( $butterbean, $post_type ) {
 
 		// Get our custom manager object.
-		$manager = $butterbean->get_manager( 'wp_social_manager' );
+		$manager = $butterbean->get_manager( $this->option_slug );
 
 		// Register a section.
 		$manager->register_section(
@@ -272,7 +282,7 @@ final class SocialMetaBox {
 		}
 
 		// Get our custom manager object.
-		$manager = $butterbean->get_manager( 'wp_social_manager' );
+		$manager = $butterbean->get_manager( $this->option_slug );
 
 		$manager->register_section(
 			'meta_tags',

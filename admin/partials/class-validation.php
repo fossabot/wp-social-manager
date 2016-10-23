@@ -41,7 +41,7 @@ class Validation {
 
 				add_settings_error( $slug,
 					'social-username-length',
-					esc_html__( 'A username generally should contains at least 3 characters (or more).', 'wp-social-manager' ),
+					esc_html__( 'A username generally should contains at least 3 characters (or more).', 'ninecodes-social-manager' ),
 					'error'
 				);
 			endif;
@@ -69,8 +69,10 @@ class Validation {
 			'post_types' => array(),
 		) );
 
-		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
+		// var_dump( $inputs );
 
+		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
+		//
 		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
 		$inputs['placement'] = $this->validate_radio( $inputs['placement'], Options::button_placements() );
 
@@ -204,15 +206,36 @@ class Validation {
 
 		$selection = array();
 
+		if ( $this->is_array_associative( $inputs ) ) {
+			$inputs = array_keys( $inputs );
+		}
+
 		foreach ( $inputs as $key => $value ) {
 
-			$selection[] = sanitize_key( $key );
-
-			if ( ! array_key_exists( $key, $options[ $key ] ) ) {
-				unset( $inputs[ $key ] );
+			$value = sanitize_key( $value );
+			if ( array_key_exists( $value, $options ) ) {
+				$selection[] = $value;
 			}
 		}
 
 		return $selection;
+	}
+
+	/**
+	 * Function utility to check if the array is sequential or associative.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param array $arr The array to check.
+	 * @return boolean Return true if it is sequential, otherwise false.
+	 */
+	protected function is_array_associative( array $arr ) {
+
+		if ( ! is_array( $arr ) || empty( $arr ) ) {
+			return false;
+		};
+
+		return array_keys($arr) !== range(0, count($arr) - 1);
 	}
 }

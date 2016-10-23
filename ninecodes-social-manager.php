@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: WP Social Manager
- * Plugin URI: http://github.com/tfirdaus/wp-social-manager
- * Description: Optimize your website social presence in social media.
+ * Plugin Name: Social Manager by NineCodes
+ * Plugin URI: http://wordpress.org/plugins/ninecodes-social-manager
+ * Description: Optimize your website presence in social media.
  * Version: 1.0.0-beta.1
  * Author: Thoriq Firdaus
  * Author URI: https://github.com/tfirdaus
@@ -12,7 +12,7 @@
  * Requires at least: 4.5
  * Tested up to: 4.6
  *
- * Text Domain: wp-social-manager
+ * Text Domain: ninecodes-social-manager
  * Domain Path: /languages
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,8 +32,8 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use SocialManager\Plugin;
-use SocialManager\Requirements;
+use NineCodes\SocialManager\Plugin;
+use NineCodes\SocialManager\Requirements;
 
 /**
  * Get the filesystem directory path (with trailing slash) for
@@ -54,7 +54,7 @@ require_once( $path_dir . 'includes/class-requirements.php' );
  *
  * @var Requirements
  */
-$require = new Requirements( 'WP Social Manager',
+$require = new Requirements( 'Social Manager by NineCodes',
 	plugin_basename( __FILE__ ), array(
 		'PHP' => '5.3.0',
 		'WordPress' => '4.5',
@@ -76,9 +76,9 @@ require_once( $path_dir . 'includes/class-plugin.php' );
  * Begins execution of the plugin.
  *
  * This function is also useful to check if the plugin is activated
- * through the `function_exists` function.
+ * through the function_exists() function.
  */
-function wp_social_manager() {
+function ninecodes_social_manager() {
 	new Plugin();
 }
-wp_social_manager();
+ninecodes_social_manager();

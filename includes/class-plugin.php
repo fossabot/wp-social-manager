@@ -31,7 +31,7 @@ final class Plugin {
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_slug = 'wp-social-manager';
+	protected $plugin_slug = 'ninecodes-social-manager';
 
 	/**
 	 * The unique identifier or prefix for database names.
@@ -40,7 +40,7 @@ final class Plugin {
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_opts = 'wp_social_manager';
+	protected $option_slug = 'ncsocman';
 
 	/**
 	 * The current version of the plugin.
@@ -152,12 +152,12 @@ final class Plugin {
 	protected function setups() {
 
 		$this->options = array(
-			'profiles' => get_option( "{$this->plugin_opts}_profiles" ),
-			'buttons_content' => get_option( "{$this->plugin_opts}_buttons_content" ),
-			'buttons_image' => get_option( "{$this->plugin_opts}_buttons_image" ),
-			'metas_site' => get_option( "{$this->plugin_opts}_metas_site" ),
-			'advanced' => get_option( "{$this->plugin_opts}_advanced" ),
-			'modes' => get_option( "{$this->plugin_opts}_modes" ),
+			'profiles' => get_option( "{$this->option_slug}_profiles" ),
+			'buttons_content' => get_option( "{$this->option_slug}_buttons_content" ),
+			'buttons_image' => get_option( "{$this->option_slug}_buttons_image" ),
+			'metas_site' => get_option( "{$this->option_slug}_metas_site" ),
+			'advanced' => get_option( "{$this->option_slug}_enqueue" ),
+			'modes' => get_option( "{$this->option_slug}_modes" ),
 		);
 
 		$this->theme_supports = new ThemeSupports();
@@ -206,7 +206,7 @@ final class Plugin {
 	 * @return string The plugin opts.
 	 */
 	public function get_opts() {
-		return $this->plugin_opts;
+		return $this->option_slug;
 	}
 
 	/**

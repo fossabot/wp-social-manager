@@ -20,7 +20,10 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 class ButtonsContent extends Buttons {
 
 	/**
-	 * Constructor: Initialize the Buttons Class
+	 * Constructor
+	 *
+	 * Initialize the Buttons abstract class, and render the buttons
+	 * in the content.
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -212,8 +215,8 @@ class ButtonsContent extends Buttons {
 			return false;
 		}
 
-		$meta = (bool) $this->metas->get_post_meta( $this->post_id, 'buttons_content' );
+		$meta = $this->metas->get_post_meta( $this->post_id, 'buttons_content' );
 
-		return $meta;
+		return ( null === $meta ) ? true : $meta;
 	}
 }

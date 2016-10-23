@@ -22,7 +22,10 @@ use \DOMDocument;
 class ButtonsImage extends Buttons {
 
 	/**
-	 * Constructor: Initialize the Buttons Class
+	 * Constructor
+	 *
+	 * Initialize the Buttons abstract class, and render the buttons
+	 * in the content.
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -152,7 +155,7 @@ class ButtonsImage extends Buttons {
 
 					$list .= $this->button_view( $view, array(
 							'site'  => $site,
-							'icon'  => apply_filters( 'wp_social_manager_icon', $icon, $site, 'button-image' ),
+							'icon'  => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-image' ),
 							'label' => $button[ $site ],
 					), 'image' );
 				endforeach;
@@ -203,7 +206,7 @@ class ButtonsImage extends Buttons {
 
 						$list = $this->button_view( $view, array(
 								'site'  => $site,
-								'icon'  => apply_filters( 'wp_social_manager_icon', $icon, $site, 'button-image' ),
+								'icon'  => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-image' ),
 								'label' => $button[ $site ],
 						), 'image' );
 

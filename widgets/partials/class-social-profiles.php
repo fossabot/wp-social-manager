@@ -73,19 +73,19 @@ final class WidgetSocialProfiles extends WP_Widget {
 	public function __construct( Plugin $plugin ) {
 
 		$plugin_slug = $plugin->get_slug();
-		$plugin_opts = $plugin->get_opts();
+		$option_slug = $plugin->get_opts();
 
-		$options = get_option( "{$plugin_opts}_profiles" );
+		$options = get_option( "{$option_slug}_profiles" );
 		$this->options = ! empty( $options ) ? $options : array();
 
 		$this->profiles = Options::social_profiles();
 
 		$this->widget_id = "{$plugin_slug}-profiles";
-		$this->widget_title = esc_html__( 'Social Profiles', 'wp-social-manager' );
+		$this->widget_title = esc_html__( 'Social Profiles', 'ninecodes-social-manager' );
 
-		parent::__construct($this->widget_id, esc_html__( 'Social Profiles', 'wp-social-manager' ), array(
+		parent::__construct($this->widget_id, esc_html__( 'Social Profiles', 'ninecodes-social-manager' ), array(
 			'classname' => $this->widget_id,
-			'description' => esc_html__( 'List of social profile and page URLs connected to this website.', 'wp-social-manager' ),
+			'description' => esc_html__( 'List of social profile and page URLs connected to this website.', 'ninecodes-social-manager' ),
 		));
 	}
 
@@ -105,15 +105,15 @@ final class WidgetSocialProfiles extends WP_Widget {
 
 		<div class="<?php echo esc_attr( $this->widget_id ); ?>">
 			<p>
-				<label for="<?php echo esc_attr( $id ); ?>"><?php esc_html_e( 'Title:', 'wp-social-manager' ); ?></label>
+				<label for="<?php echo esc_attr( $id ); ?>"><?php esc_html_e( 'Title:', 'ninecodes-social-manager' ); ?></label>
 				<input class="widefat" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
 			</p>
 
 			<?php if ( ! array_filter( $this->options ) ) :  ?>
 			<p>
 			<?php
-				$message = esc_html__( 'Please add at least one social profile of this website in the %s.', 'wp-social-manager' );
-				$setting = '<a href="' . admin_url( 'options-general.php?page=wp-social-manager' ) . '">' . esc_html__( 'setting page', 'wp-social-manager' ) . '</a>';
+				$message = esc_html__( 'Please add at least one social profile of this website in the %s.', 'ninecodes-social-manager' );
+				$setting = '<a href="' . admin_url( 'options-general.php?page=ninecodes-social-manager' ) . '">' . esc_html__( 'setting page', 'ninecodes-social-manager' ) . '</a>';
 				echo wp_kses( sprintf( $message, $setting ), array(
 					'a' => array(
 						'href' => true,
@@ -122,7 +122,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 			<?php else : ?>
 
 			<p>
-				<label><?php esc_html_e( 'Include these :', 'wp-social-manager' ); ?></label>
+				<label><?php esc_html_e( 'Include these :', 'ninecodes-social-manager' ); ?></label>
 				<br>
 			<?php
 			foreach ( $this->options as $key => $value ) :
@@ -158,7 +158,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 			</p>
 
 			<p>
-				<label><?php esc_html_e( 'View:', 'wp-social-manager' ); ?></label>
+				<label><?php esc_html_e( 'View:', 'ninecodes-social-manager' ); ?></label>
 				<br>
 				<?php
 

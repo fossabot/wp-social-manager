@@ -65,7 +65,7 @@ class APIRoutes {
 		$this->plugin_slug = $endpoints->plugin->get_slug();
 		$this->theme_supports = $endpoints->plugin->get_theme_supports();
 
-		$this->namespace = $this->plugin_slug . '/' . $api_version;
+		$this->namespace = $this->plugin_slug . '/' . $this->api_version;
 
 		$this->hooks();
 	}
@@ -125,7 +125,7 @@ class APIRoutes {
 			$args['id'] = absint( $post_id );
 		}
 
-		wp_localize_script( $this->plugin_slug, 'wpSocialManager', $args );
+		wp_localize_script( $this->plugin_slug, 'NineCodesSocialManager', $args );
 	}
 
 	/**
@@ -144,7 +144,7 @@ class APIRoutes {
 		 * This route requires the 'id' parameter that passes
 		 * the post ID.
 		 *
-		 * @example http://local.wordpress.dev/wp-json/wp-social-manager/1.0/buttons?id=79
+		 * @example http://local.wordpress.dev/wp-json/ninecodes-social-manager/1.0/buttons?id=79
 		 *
 		 * @uses \WP_REST_Server
 		 */

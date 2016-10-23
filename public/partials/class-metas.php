@@ -28,7 +28,7 @@ final class Metas {
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_opts;
+	protected $option_slug;
 
 	/**
 	 * The options required to render the meta data.
@@ -52,7 +52,7 @@ final class Metas {
 	function __construct( Plugin $plugin ) {
 
 		$this->plugin = $plugin;
-		$this->plugin_opts = $plugin->get_opts();
+		$this->option_slug = $plugin->get_opts();
 	}
 
 	/**
@@ -106,9 +106,17 @@ final class Metas {
 			return;
 		}
 
-		$meta = get_post_meta( $id, $this->plugin_opts, true );
+		$post_meta = get_post_meta( $id, $this->option_slug, true );
 
-		return isset( $meta[ $which ] ) ? $meta[ $which ] : false;
+		/**
+		 * If the post_meta is empty it means the meta has not yet
+		 * been created.
+		 */
+		if ( empty( $post_meta ) ) {
+			return null;
+		}
+
+		return isset( $post_meta[ $which ] ) ? $post_meta[ $which ] : null;
 	}
 
 	/**
@@ -389,7 +397,7 @@ final class Metas {
 
 		$post = get_post( $id );
 		$name = get_the_author_meta( 'display_name', $post->post_author );
-		$profiles = get_the_author_meta( $this->plugin_opts, $post->post_author );
+		$profiles = get_the_author_meta( $this->option_slug, $post->post_author );
 
 		return array(
 			'display_name' => $name,

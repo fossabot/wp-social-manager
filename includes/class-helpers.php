@@ -29,7 +29,7 @@ class Helpers {
 	 * @access public
 	 * @var string
 	 */
-	public static $prefix = 'wp-social-manager';
+	public static $prefix = 'ninecodes-social-manager';
 
 	/**
 	 * Function method to get the social media icons in SVG.
@@ -69,19 +69,19 @@ class Helpers {
 		$email = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.954 6.864c.526.278 7.84 4.264 8.113 4.408.273.144.55.21.98.21s.71-.066.982-.21 7.585-4.13 8.112-4.408c.196-.1.526-.282.598-.488.124-.364-.01-.503-.54-.503H2.897c-.532 0-.666.144-.542.503.07.21.402.388.598.488zm18.604.216c-.392.2-3.915 2.71-6.246 4.217l3.934 4.427c.096.096.14.21.086.268-.057.053-.182.024-.282-.067l-4.72-3.982c-.712.46-1.215.775-1.3.823-.37.187-.628.21-.982.21s-.613-.023-.98-.21c-.092-.048-.59-.364-1.303-.823l-4.72 3.982c-.095.096-.224.124-.28.067-.058-.053-.015-.172.08-.268l3.93-4.427C6.442 9.79 2.88 7.28 2.49 7.08c-.42-.216-.445.038-.445.234v9.812c0 .445.656 1 1.125 1h17.756c.47 0 1.03-.56 1.03-1V7.314c0-.2.028-.45-.398-.234z"/></svg>';
 
 		$icons = array(
-			'facebook' => apply_filters( 'wp_social_manager_icon', $facebook, 'facebook', false ),
-			'twitter' => apply_filters( 'wp_social_manager_icon', $twitter, 'twitter', false ),
-			'instagram' => apply_filters( 'wp_social_manager_icon', $instagram, 'instagram', false ),
-			'pinterest' => apply_filters( 'wp_social_manager_icon', $pinterest, 'pinterest', false ),
-			'linkedin' => apply_filters( 'wp_social_manager_icon', $linkedin, 'linkedin', false ),
-			'googleplus' => apply_filters( 'wp_social_manager_icon', $googleplus, 'googleplus', false ),
-			'youtube' => apply_filters( 'wp_social_manager_icon', $youtube, 'youtube', false ),
-			'reddit' => apply_filters( 'wp_social_manager_icon', $reddit, 'reddit', false ),
-			'dribbble' => apply_filters( 'wp_social_manager_icon', $dribbble, 'dribbble', false ),
-			'behance' => apply_filters( 'wp_social_manager_icon', $behance, 'behance', false ),
-			'github' => apply_filters( 'wp_social_manager_icon', $github, 'github', false ),
-			'codepen' => apply_filters( 'wp_social_manager_icon', $codepen, 'codepen', false ),
-			'email' => apply_filters( 'wp_social_manager_icon', $email, 'email', false ),
+			'facebook' => apply_filters( 'ninecodes_social_manager_icon', $facebook, 'facebook', false ),
+			'twitter' => apply_filters( 'ninecodes_social_manager_icon', $twitter, 'twitter', false ),
+			'instagram' => apply_filters( 'ninecodes_social_manager_icon', $instagram, 'instagram', false ),
+			'pinterest' => apply_filters( 'ninecodes_social_manager_icon', $pinterest, 'pinterest', false ),
+			'linkedin' => apply_filters( 'ninecodes_social_manager_icon', $linkedin, 'linkedin', false ),
+			'googleplus' => apply_filters( 'ninecodes_social_manager_icon', $googleplus, 'googleplus', false ),
+			'youtube' => apply_filters( 'ninecodes_social_manager_icon', $youtube, 'youtube', false ),
+			'reddit' => apply_filters( 'ninecodes_social_manager_icon', $reddit, 'reddit', false ),
+			'dribbble' => apply_filters( 'ninecodes_social_manager_icon', $dribbble, 'dribbble', false ),
+			'behance' => apply_filters( 'ninecodes_social_manager_icon', $behance, 'behance', false ),
+			'github' => apply_filters( 'ninecodes_social_manager_icon', $github, 'github', false ),
+			'codepen' => apply_filters( 'ninecodes_social_manager_icon', $codepen, 'codepen', false ),
+			'email' => apply_filters( 'ninecodes_social_manager_icon', $email, 'email', false ),
 		);
 
 		$icon = isset( $icons[ $name ] ) && ! empty( $icons[ $name ] ) ? $icons[ $name ] : '';

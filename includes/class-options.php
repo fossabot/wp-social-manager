@@ -40,62 +40,62 @@ final class Options {
 			'facebook' => array(
 				'label' => 'Facebook',
 				'url' => 'https://www.facebook.com/',
-				'description' => sprintf( esc_html__( 'Facebook profile or page (e.g. %s)', 'wp-social-manager' ), '<code>zuck</code>' ),
+				'description' => sprintf( esc_html__( 'Facebook profile or page (e.g. %s)', 'ninecodes-social-manager' ), '<code>zuck</code>' ),
 			),
 			'twitter' => array(
 				'label' => 'Twitter',
 				'url' => 'https://twitter.com/',
-				'description' => sprintf( esc_html__( 'Twitter profile without the %1$s (e.g. %2$s)', 'wp-social-manager' ), '<code>@</code>', '<code>jack</code>' ),
+				'description' => sprintf( esc_html__( 'Twitter profile without the %1$s (e.g. %2$s)', 'ninecodes-social-manager' ), '<code>@</code>', '<code>jack</code>' ),
 			),
 			'instagram' => array(
 				'label' => esc_html( 'Instagram' ),
 				'url' => esc_url( 'https://instagram.com/' ),
-				'description'  => sprintf( esc_html__( 'Instagram profile (e.g. %s)', 'wp-social-manager' ), '<code>victoriabeckham</code>' ),
+				'description'  => sprintf( esc_html__( 'Instagram profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>victoriabeckham</code>' ),
 			),
 			'pinterest' => array(
 				'label' => 'Pinterest',
 				'url' => esc_url( 'https://pinterest.com/' ),
-				'description'  => sprintf( esc_html__( 'Pinterest profile (e.g. %s)', 'wp-social-manager' ), '<code>ohjoy</code>' ),
+				'description'  => sprintf( esc_html__( 'Pinterest profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>ohjoy</code>' ),
 			),
 			'linkedin' => array(
 				'label' => 'LinkedIn',
 				'url' => esc_url( 'https://www.linkedin.com/in/' ),
-				'description' => sprintf( esc_html__( 'LinkedIn profile (e.g. %s)', 'wp-social-manager' ), '<code>williamhgates</code>' ),
+				'description' => sprintf( esc_html__( 'LinkedIn profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>williamhgates</code>' ),
 			),
 			'googleplus' => array(
 				'label' => 'Google+',
 				'url' => 'https://plus.google.com/',
-				'description' => sprintf( esc_html__( 'Google+ profile or page. Include the %1$s sign if necessary (e.g. %2$s)', 'wp-social-manager' ), '<code>+</code>', '<code>+hishekids</code>' ),
+				'description' => sprintf( esc_html__( 'Google+ profile or page. Include the %1$s sign if necessary (e.g. %2$s)', 'ninecodes-social-manager' ), '<code>+</code>', '<code>+hishekids</code>' ),
 			),
 			'youtube' => array(
 				'label' => 'Youtube',
 				'url' => 'https://www.youtube.com/user/',
-				'description' => sprintf( esc_html__( 'Youtube channel (e.g. %s)', 'wp-social-manager' ), '<code>BuzzFeedVideo</code>' ),
+				'description' => sprintf( esc_html__( 'Youtube channel (e.g. %s)', 'ninecodes-social-manager' ), '<code>BuzzFeedVideo</code>' ),
 			),
 			'reddit' => array(
 				'label' => 'Reddit',
 				'url' => 'https://www.reddit.com/user/',
-				'description' => sprintf( esc_html__( 'Reddit profile (e.g. %s)', 'wp-social-manager' ), '<code>Unidan</code>' ),
+				'description' => sprintf( esc_html__( 'Reddit profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>Unidan</code>' ),
 			),
 			'dribbble' => array(
 				'label' => 'Dribbble',
 				'url' => 'https://dribbble.com/',
-				'description' => sprintf( esc_html__( 'Dribbble portfolio (e.g. %s)', 'wp-social-manager' ), '<code>simplebits</code>' ),
+				'description' => sprintf( esc_html__( 'Dribbble portfolio (e.g. %s)', 'ninecodes-social-manager' ), '<code>simplebits</code>' ),
 			),
 			'behance' => array(
 				'label' => 'Behance',
 				'url' => 'https://www.behance.net/',
-				'description' => sprintf( esc_html__( 'Behance portfolio (e.g. %s)', 'wp-social-manager' ), '<code>amocci</code>' ),
+				'description' => sprintf( esc_html__( 'Behance portfolio (e.g. %s)', 'ninecodes-social-manager' ), '<code>amocci</code>' ),
 			),
 			'github' => array(
 				'label' => 'Github',
 				'url' => 'https://github.com/',
-				'description' => sprintf( esc_html__( 'Github repository (e.g. %s)', 'wp-social-manager' ), '<code>tfirdaus</code>' ),
+				'description' => sprintf( esc_html__( 'Github repository (e.g. %s)', 'ninecodes-social-manager' ), '<code>tfirdaus</code>' ),
 			),
 			'codepen' => array(
 				'label' => 'CodePen',
 				'url' => 'https://codepen.io/',
-				'description' => sprintf( esc_html__( 'CodePen pens (e.g. %s)', 'wp-social-manager' ), '<code>stacy</code>' ),
+				'description' => sprintf( esc_html__( 'CodePen pens (e.g. %s)', 'ninecodes-social-manager' ), '<code>stacy</code>' ),
 			),
 		);
 
@@ -154,9 +154,9 @@ final class Options {
 	public static function button_views() {
 
 		$types = array(
-			'icon' => esc_html__( 'Icon Only', 'wp-social-manager' ),
-			'text' => esc_html__( 'Text Only', 'wp-social-manager' ),
-			'icon-text' => esc_html__( 'Icon and Text', 'wp-social-manager' ),
+			'icon' => esc_html__( 'Icon Only', 'ninecodes-social-manager' ),
+			'text' => esc_html__( 'Text Only', 'ninecodes-social-manager' ),
+			'icon-text' => esc_html__( 'Icon and Text', 'ninecodes-social-manager' ),
 		);
 
 		return $types;
@@ -173,8 +173,8 @@ final class Options {
 	public static function button_placements() {
 
 		$locations = array(
-			'before' => esc_html__( 'Before the content', 'wp-social-manager' ),
-			'after'  => esc_html__( 'After the content', 'wp-social-manager' ),
+			'before' => esc_html__( 'Before the content', 'ninecodes-social-manager' ),
+			'after'  => esc_html__( 'After the content', 'ninecodes-social-manager' ),
 		);
 
 		return $locations;

@@ -76,7 +76,7 @@ abstract class Buttons implements ButtonsInterface {
 		$this->plugin = $endpoints->plugin;
 
 		$this->plugin_slug = $endpoints->plugin->get_slug();
-		$this->plugin_opts = $endpoints->plugin->get_opts();
+		$this->option_slug = $endpoints->plugin->get_opts();
 		$this->theme_supports = $endpoints->plugin->get_theme_supports();
 
 		$this->hooks();

@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<ruleset name="NineCodes Social Manager">
+<ruleset name="Social Manager by NineCodes">
 	<rule ref="WordPress-Core"/>
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" value="wp-social-manager" />
+			<property name="text_domain" value="ninecodes-social-manager" />
 		</properties>
 	</rule>
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
@@ -13,5 +13,4 @@
             <property name="customPropertiesWhitelist" value="parentNode" type="array"/>
         </properties>
 	</rule>
-
 </ruleset>

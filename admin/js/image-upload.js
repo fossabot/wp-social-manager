@@ -104,7 +104,7 @@
     });
 
     new MediaUploader({
-        el: '#wp-social-manager-wrap'
+        el: '#ninecodes-social-manager-wrap'
     });
 
 })( jQuery, window.Backbone, undefined );

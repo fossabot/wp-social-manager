@@ -31,7 +31,7 @@ final class ThemeSupports {
 	 * @access protected
 	 * @var string
 	 */
-	protected $feature = 'wp-social-manager';
+	protected $feature = 'ninecodes-social-manager';
 
 	/**
 	 * The theme supports arguments.

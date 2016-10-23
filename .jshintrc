@@ -20,6 +20,6 @@
 		"JSON"  : false,
 		"wp": false,
 		"console": true,
-		"wpSocialManager": false
+		"NineCodesSocialManager": false
 	}
 }

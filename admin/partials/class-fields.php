@@ -106,12 +106,12 @@ final class Fields extends PepperPlaneFields {
 		$html = "<input type='hidden' id='{$id}' name='{$name}'' value='{$value}'/>
 			<div id='{$id}-wrap' class='field-image-wrap{$set}'>
 				<div id='{$id}-img'>{$img}</div>
-				<div id='{$id}-placeholder' class='field-image-placeholder'>" . esc_html__( 'No Image Selected', 'wp-social-manager' ) . "</div>
+				<div id='{$id}-placeholder' class='field-image-placeholder'>" . esc_html__( 'No Image Selected', 'ninecodes-social-manager' ) . "</div>
 			</div>
 			<div id='{$id}-control' class='field-image-control'>
-				<button type='button' id='{$id}-add' class='button add-media{$show}' data-input='#{$id}'>" . esc_html__( 'Add image', 'wp-social-manager' ) . "</button>
-				<button type='button' id='{$id}-change' class='button change-media{$hide}' data-input='#{$id}'>" . esc_html__( 'Change image', 'wp-social-manager' ) . "</button>
-				<button type='button' id='{$id}-remove' class='button remove-media{$hide}' data-input='#{$id}'>" . esc_html__( 'Remove image', 'wp-social-manager' ) . '</button>
+				<button type='button' id='{$id}-add' class='button add-media{$show}' data-input='#{$id}'>" . esc_html__( 'Add image', 'ninecodes-social-manager' ) . "</button>
+				<button type='button' id='{$id}-change' class='button change-media{$hide}' data-input='#{$id}'>" . esc_html__( 'Change image', 'ninecodes-social-manager' ) . "</button>
+				<button type='button' id='{$id}-remove' class='button remove-media{$hide}' data-input='#{$id}'>" . esc_html__( 'Remove image', 'ninecodes-social-manager' ) . '</button>
             </div>';
 
 		echo $html; // // WPCS: XSS ok. ?>
