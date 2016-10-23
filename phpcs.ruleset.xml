@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <ruleset name="Social Manager by NineCodes Coding Standards">
+	<description>Customized sniffs for Social Manager plugins</description>
+
 	<rule ref="WordPress-Core"/>
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
@@ -18,4 +20,9 @@
 	<rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing">
   		<severity>0</severity>
 	</rule>
+
+	<exclude-pattern>*/tests/*</exclude-pattern>
+	<exclude-pattern>*/dev-lib/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
 </ruleset>

@@ -3,7 +3,7 @@
     'use strict';
 
     /**
-     * Backbone View to hanle Media Uploader UI
+     * Backbone View to handle Media Uploader UI
      * in the setting page.
      */
     var MediaUploader = Backbone.View.extend({
