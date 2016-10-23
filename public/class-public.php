@@ -2,13 +2,11 @@
 /**
  * Public: ViewPublic class
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
- * @package WPSocialManager
+ * @package SocialManager
  * @subpackage Public
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -22,16 +20,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-final class ViewPublic extends OutputUtilities {
-
-	/**
-	 * Common arguments passed in a Class or a function.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var array
-	 */
-	protected $args;
+final class ViewPublic {
 
 	/**
 	 * The ID of this plugin.
@@ -40,7 +29,16 @@ final class ViewPublic extends OutputUtilities {
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_name;
+	protected $plugin_slug;
+
+	/**
+	 * The aboslute path directory to the .
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $path_dir;
 
 	/**
 	 * The absolut URL path to the plugin directory.
@@ -65,27 +63,18 @@ final class ViewPublic extends OutputUtilities {
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var array
+	 * @var ThemeSupports
 	 */
-	protected $support;
+	protected $theme_supports;
 
 	/**
-	 * Options required to define the public-facing fuctionalities.
+	 * The Metas class instance.
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var object
+	 * @var Metas
 	 */
-	protected $options;
-
-	/**
-	 * APIRoutes instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var APIRoutes
-	 */
-	private $routes;
+	protected $metas;
 
 	/**
 	 * Constructor.
@@ -97,21 +86,15 @@ final class ViewPublic extends OutputUtilities {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
-	 *     An array of common arguments of the plugin.
-	 *
-	 *     @type string $plugin_name    The unique identifier of this plugin.
-	 *     @type string $plugin_opts    The unique identifier or prefix for database names.
-	 *     @type string $version        The plugin version number.
-	 * }
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	public function __construct( array $args ) {
+	function __construct( Plugin $plugin ) {
 
-		$this->args = $args;
-
-		$this->plugin_name = $args['plugin_name'];
-		$this->plugin_opts = $args['plugin_opts'];
-		$this->version = $args['version'];
+		$this->plugin = $plugin;
+		$this->plugin_slug = $plugin->get_slug();
+		$this->option_slug = $plugin->get_opts();
+		$this->version = $plugin->get_version();
+		$this->theme_supports = $plugin->get_theme_supports();
 
 		$this->path_dir = plugin_dir_path( __FILE__ );
 		$this->path_url = plugin_dir_url( __FILE__ );
@@ -125,12 +108,18 @@ final class ViewPublic extends OutputUtilities {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function requires() {
 
 		require_once( $this->path_dir . 'partials/class-metas.php' );
-		require_once( $this->path_dir . 'partials/class-routes.php' );
+		require_once( $this->path_dir . 'partials/class-wp-head.php' );
+		require_once( $this->path_dir . 'partials/class-endpoints.php' );
+		require_once( $this->path_dir . 'partials/class-api-routes.php' );
 		require_once( $this->path_dir . 'partials/class-buttons.php' );
+		require_once( $this->path_dir . 'partials/class-buttons-content.php' );
+		require_once( $this->path_dir . 'partials/class-buttons-image.php' );
 	}
 
 	/**
@@ -138,13 +127,14 @@ final class ViewPublic extends OutputUtilities {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function hooks() {
 
 		add_action( 'init', array( $this, 'setups' ) );
 		add_action( 'init', array( $this, 'enqueue_styles' ) );
 		add_action( 'init', array( $this, 'enqueue_scripts' ) );
-		add_action( 'init', array( $this, 'register_api_routes' ) );
 	}
 
 	/**
@@ -154,91 +144,92 @@ final class ViewPublic extends OutputUtilities {
 	 * that are required to render the public-facing side.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
+	 *
+	 * @return void
 	 */
 	public function setups() {
 
-		new Buttons( $this->args );
+		$metas = new Metas( $this->plugin );
 
-		$this->routes  = new APIRoutes( $this->args, new Metas( $this->args ) );
+		new WPHead( $metas );
 
-		$this->support = $this->theme_support( $this->plugin_name );
+		$endpoints = new Endpoints( $this->plugin, $metas );
 
-		$this->options = (object) array(
-			'advanced' => get_option( "{$this->plugin_opts}_advanced" ),
-		);
+		new ButtonsContent( $endpoints );
+		new ButtonsImage( $endpoints );
+
+		$this->routes = new APIRoutes( $endpoints );
+		$this->register_scripts();
 	}
 
 	/**
-	 * Register the stylesheets for the public-facing side.
+	 * Register JavaScripts handles.
+	 *
+	 * We serve two kind of interfaces, JSON and HTML.
+	 *
+	 * The app.js will be enqueued if the site supports the JSON mode, and it requires
+	 * Underscore.js, and Backbone.js aside of jQuery. The scripts is enqueued for HTML mode
+	 * and it only requires jQuery to work.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @return  mixed
+	 * @return void
+	 */
+	public function register_scripts() {
+
+		if ( $this->routes->is_load_routes() ) {
+			wp_register_script( $this->plugin_slug, $this->path_url . 'js/app.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		} else {
+			wp_register_script( $this->plugin_slug, $this->path_url . 'js/scripts.js', array( 'jquery' ), $this->version, true );
+		}
+	}
+
+	/**
+	 * Load the stylesheets for the public-facing side.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
 	 */
 	public function enqueue_styles() {
 
-		if ( is_admin() ) { // Prevent the the stylesheets to be loaded in the admin area.
-			return;
-		}
-
-		if ( $this->is_stylesheet() ) {
-			wp_enqueue_style( $this->plugin_name, $this->path_url . 'css/styles.css', array(), $this->version, 'all' );
+		if ( $this->is_load_stylesheet() ) {
+			wp_enqueue_style( $this->plugin_slug, $this->path_url . 'css/styles.css', array(), $this->version, 'all' );
 		}
 	}
 
 	/**
-	 * Register the JavaScript for the public-facing side of the site.
+	 * Load the JavaScript for the public-facing side of the site.
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function enqueue_scripts() {
 
-		if ( is_admin() ) { // Prevent the the stylesheets to be loaded in the admin area.
-			return;
-		}
-
-		wp_enqueue_script( $this->plugin_name, $this->path_url . 'js/scripts.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		wp_enqueue_script( $this->plugin_slug );
 	}
 
 	/**
-	 * Register custom WP-API Routes
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 */
-	public function register_api_routes() {
-
-		add_filter( 'rest_api_init', array( $this->routes, 'register_routes' ) );
-		add_action( 'wp_enqueue_scripts', array( $this->routes, 'localize_scripts' ) );
-	}
-
-	/**
-	 * Utility function to check if we have to enqueue the stylesheet.
+	 * Is the stylesheet should be loaded?
 	 *
 	 * @since 1.0.0
 	 * @access protected
 	 *
-	 * @return boolean
+	 * @return boolean 	Return 'false' if the Theme being set the 'stylesheet' to 'true',
+	 * 					via the 'add_theme_support' function.
+	 * 					It will also return 'false' if the 'Enable Stylesheet' is unchecked.
 	 */
-	protected function is_stylesheet() {
+	protected function is_load_stylesheet() {
 
-		$stylesheet = true;
-
-		if ( isset( $this->options->advanced['enableStylesheet'] ) ) {
-			$stylesheet = (bool) $this->options->advanced['enableStylesheet'];
+		if ( true === (bool) $this->theme_supports->is( 'stylesheet' ) ) {
+			return false;
 		}
 
-		if ( isset( $this->support['stylesheet'] ) ) {
-			$stylesheet = (bool) $this->support['stylesheet'];
-		}
-
-		if ( isset( $this->support['attrPrefix'] ) ) {
-			$stylesheet = $this->support['attrPrefix'] === self::get_attr_prefix() ? true : false;
-		}
-
-		return $stylesheet;
+		return (bool) $this->plugin->get_option( 'enqueue', 'enable_stylesheet' );
 	}
 }

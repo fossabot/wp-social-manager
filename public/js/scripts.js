@@ -1,212 +1,49 @@
-(function( $, _, Backbone ) {
+(function( $ ) {
 
-	'use strict';
+    'use strict';
 
-	if ( 'undefined' === typeof wpSocialManager ) {
-		return;
-	}
+    function buttonDialog( event ) {
 
-	var api = wpSocialManager;
+        var target, source;
 
-	if ( _.isUndefined( api.id ) ) {
-		return;
-	}
+        event.preventDefault();
+        event.stopImmediatePropagation();
 
-	var SocialButton = {
-			Collection: {},
-			Model: {},
-			View: {}
-		};
+        target = event.currentTarget;
+        source = target.getAttribute( 'href' );
 
-	/**
-	 * [templateSettings description]
-	 * @type {Object}
-	 */
-	_.templateSettings = {
-		interpolate: /\{\{(.+?)\}\}/g
-	};
+        if ( ! source || '' !== source ) {
+            windowPopup( source );
+            return;
+        }
 
-	/**
-	 * [Buttons description]
-	 * @type {[type]}
-	 */
-	SocialButton.Model = Backbone.Model.extend( {
-			urlRoot: ( api.root + api.namespace ) + '/buttons',
-		} );
+        return;
+    }
 
-	/**
-	 * [Buttons description]
-	 * @type {[type]}
-	 */
-	SocialButton.View = Backbone.View.extend( {
+    function windowPopup( url ) {
 
-		el: $( 'body' ),
+        var wind = window;
+        var docu = document;
 
-		/**
-		 * [initialize description]
-		 * @return {[type]} [description]
-		 */
-		initialize: function() {
+        var screenLeft = undefined !== wind.screenLeft ? wind.screenLeft : screen.left;
+        var screenTop = undefined !== wind.screenTop ? wind.screenTop : screen.top;
+        var screenWidth = wind.innerWidth ? wind.innerWidth : docu.documentElement.clientWidth ? docu.documentElement.clientWidth : screen.width;
+        var screenHeight = wind.innerHeight ? wind.innerHeight : docu.documentElement.clientHeight ? docu.documentElement.clientHeight : screen.height;
 
-			var $template = $( this.template );
+        var width = 600;
+        var height = 430;
 
-			if ( 0 === $template.length ) {
-				console.info( 'Template ' + this.template + ' is not available.' );
-				return;
-			}
+        var left = ( ( screenWidth / 2 ) - ( width / 2 ) ) + screenLeft;
+        var top = ( ( screenHeight / 2 ) - ( height / 2 ) ) + screenTop;
 
-			var $templateHTML = $template.html().trim();
+        var newWindow = wind.open( url, '', 'scrollbars=no,width=' + width + ',height=' + height + ',top=' + top + ',left=' + left );
 
-			if ( '' === $templateHTML ) {
-				console.info( 'Template HTML of ' + this.template + ' is empty.' );
-				return;
-			}
+        if ( newWindow ) {
+            newWindow.focus();
+        }
+    }
 
-			this.template = _.template( $templateHTML );
-			this.listenTo( this.model, 'change:id', this.render );
-		},
+    $( 'body' ).on( 'click', '[data-social-buttons="content"] a', buttonDialog );
+    $( 'body' ).on( 'click', '[data-social-buttons="image"] a', buttonDialog );
 
-		/**
-		 * [buttonDialog description]
-		 * @param  {[type]} event [description]
-		 * @return {[type]}       [description]
-		 */
-		buttonDialog: function( event ) {
-
-			event.preventDefault();
-
-			var target = event.currentTarget;
-			var source = target.getAttribute( 'href' );
-
-			if ( ! source || '' !== source ) {
-				this.windowPopup( source );
-				return;
-			}
-
-			return;
-		},
-
-		/**
-		 * [windowPopup description]
-		 * @param  {[type]} url [description]
-		 * @return {[type]}     [description]
-		 */
-		windowPopup: function( url ) {
-
-			var wind = window;
-			var docu = document;
-
-			var screenLeft = wind.screenLeft !== undefined ? wind.screenLeft : screen.left;
-			var screenTop = wind.screenTop !== undefined ? wind.screenTop : screen.top;
-			var screenWidth = wind.innerWidth ? wind.innerWidth : docu.documentElement.clientWidth ? docu.documentElement.clientWidth : screen.width;
-			var screenHeight = wind.innerHeight ? wind.innerHeight : docu.documentElement.clientHeight ? docu.documentElement.clientHeight : screen.height;
-
-			var width = 600;
-			var height = 430;
-
-			var left = ( ( screenWidth / 2 ) - ( width / 2 ) ) + screenLeft;
-			var top = ( ( screenHeight / 2 ) - ( height / 2 ) ) + screenTop;
-
-			var newWindow = wind.open( url, "", "scrollbars=no,width=" + width + ",height=" + height + ",top=" + top + ",left=" + left );
-
-			if ( newWindow ) {
-				newWindow.focus();
-			}
-		}
-	} );
-
-	/**
-	 * [Content description]
-	 * @type {[type]}
-	 */
-	SocialButton.View.Content = SocialButton.View.extend( {
-
-		template: '#tmpl-buttons-content',
-
-		events : {
-			'click [data-social-buttons="image"] a' : 'buttonDialog'
-		},
-
-		/**
-		 * [render description]
-		 * @return {[type]} [description]
-		 */
-		render: function() {
-
-			var response = this.model.toJSON();
-
-			$( '#' + api.attrPrefix + '-buttons-' + response.id )
-				.append( this.template( response.content ) );
-
-			return this;
-		},
-	} );
-
-	SocialButton.View.Images = SocialButton.View.extend( {
-
-		template: '#tmpl-buttons-image',
-
-		events : {
-			'click [data-social-buttons="content"] a' : 'buttonDialog'
-		},
-
-		render: function() {
-
-			var self = this;
-			var response = this.model.toJSON();
-			var responseImage = response.image;
-
-			/**
-			 * Select Images in the respective content.
-			 * @type {Object}
-			 */
-			var $images = $( '.' + api.attrPrefix + '-buttons--' + response.id );
-
-				$images.each( function() {
-
-					var $target = $( this );
-					var imgSource = $target.find( 'img' ).attr( 'src' );
-
-					if ( imgSource ) {
-
-						// Add image cover to Pinterest image sharing.
-						// @todo rewrite this function.
-						responseImage.pinterest.endpoint = responseImage.pinterest.endpoint + '&media=' + imgSource;
-
-						$target.append( self.template( responseImage ) );
-					}
-				} );
-
-			return this;
-		}
-	} );
-
-	/**
-	 * [button description]
-	 * @type {SocialButton}
-	 */
-	var socialButton = new SocialButton.Model();
-
-		socialButton.fetch( {
-			data : {
-				id : api.id
-			}
-		} );
-
-	/**
-	 * [buttonContent description]
-	 * @type {SocialButton}
-	 */
-	var buttonContent = new SocialButton.View.Content( {
-				model: socialButton
-			} );
-
-	/**
-	 * [buttonImage description]
-	 * @type {SocialButton}
-	 */
-	var buttonImage = new SocialButton.View.Images( {
-				model: socialButton
-			} );
-
-})( jQuery, window._, window.Backbone, undefined );
+})( jQuery, undefined );

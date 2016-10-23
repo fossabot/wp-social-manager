@@ -2,216 +2,250 @@
 /**
  * Admin: SettingsValidation class
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
- * @package WPSocialManager
+ * @package SocialManager
  * @subpackage Admin\Validation
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
 /**
- * The class to validate setting inputs.
+ * The class Validation, as the name said, is used for validating inputs
+ * in the setting page.
  *
  * @since 1.0.0
  */
-final class SettingsValidation extends OptionUtilities {
+class Validation {
 
 	/**
-	 * The function method to sanitize username inputs.
+	 * Function to sanitize the username inputs in "Profiles" section.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  array $inputs Unsanitized inputs being saved.
-	 * @return array         Inputs sanitized
+	 * @param mixed $inputs Unsanitized inputs being saved.
+	 * @return array Sanitized inputs.
 	 */
-	public function setting_usernames( array $inputs ) {
+	final public function setting_profiles( $inputs ) {
 
-		foreach ( $inputs as $key => $username ) {
+		foreach ( $inputs as $slug => $username ) {
 
-			$inputs[ $key ] = sanitize_text_field( $username );
+			$inputs[ $slug ] = sanitize_text_field( $username );
 
-			if ( 2 >= strlen( $inputs[ $key ] ) && 0 !== strlen( $inputs[ $key ] ) ) {
-				$inputs[ $key ] = '';
-				add_settings_error( $key, 'social-username-length', esc_html__( 'A username generally should contains at least 3 characters (or more).', 'wp-social-manager' ), 'error' );
-			}
+			if ( 2 >= strlen( $inputs[ $slug ] ) && 0 !== strlen( $inputs[ $slug ] ) ) :
+
+				$inputs[ $slug ] = '';
+
+				add_settings_error( $slug,
+					'social-username-length',
+					esc_html__( 'A username generally should contains at least 3 characters (or more).', 'ninecodes-social-manager' ),
+					'error'
+				);
+			endif;
 		}
 
 		return $inputs;
 	}
 
 	/**
-	 * The function method to sanitize the "Buttons Content" inputs.
+	 * Function to sanitize the inputs in the "Buttons Content" section.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  array $inputs Unsanitized inputs being saved.
-	 * @return array         Inputs sanitized
+	 * @param array $inputs Unsanitized inputs being saved.
+	 * @return array Sanitized inputs.
 	 */
-	public function setting_buttons_content( array $inputs ) {
+	final public function setting_buttons_content( array $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'postTypes' => array(),
 			'view' => '',
 			'placement' => '',
 			'heading' => '',
 			'includes' => array(),
+			'post_types' => array(),
 		) );
 
 		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
+		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
+		$inputs['placement'] = $this->validate_radio( $inputs['placement'], Options::button_placements() );
 
-		$inputs['postTypes']  = $this->validate_multi_selection( $inputs['postTypes'], 'postTypes' );
-		$inputs['includes'] = $this->validate_multi_selection( $inputs['includes'], 'includes', 'content' );
-
-		$inputs['view'] = $this->validate_selection( $inputs['view'], 'view' );
-		$inputs['placement'] = $this->validate_selection( $inputs['placement'], 'placement' );
+		$inputs['post_types'] = $this->validate_multicheckbox( $inputs['post_types'], Options::post_types() );
+		$inputs['includes'] = $this->validate_multicheckbox( $inputs['includes'], Options::button_sites( 'content' ) );
 
 		return $inputs;
 	}
 
 	/**
-	 * The function method to sanitize the "Buttons Image" inputs.
+	 * Function to sanitize the inputs in the "Buttons Image" section.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  array $inputs Unsanitized inputs being saved.
-	 * @return array         Inputs sanitized
+	 * @param array $inputs Unsanitized inputs being saved.
+	 * @return array Sanitized inputs.
 	 */
-	public function setting_buttons_image( array $inputs ) {
+	final public function setting_buttons_image( array $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'enabled' => false,
+			'enabled' => '',
 			'view' => '',
-			'postTypes' => array(),
+			'post_types' => array(),
 			'includes' => array(),
 		) );
 
-		$inputs['postTypes'] = $this->validate_multi_selection( $inputs['postTypes'], 'postTypes' );
-		$inputs['includes'] = $this->validate_multi_selection( $inputs['includes'], 'includes', 'image' );
-
-		$inputs['view'] = $this->validate_selection( $inputs['view'], 'view' );
+		$inputs['enabled'] = $this->validate_checkbox( $inputs['enabled'] );
+		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
+		$inputs['post_types'] = $this->validate_multicheckbox( $inputs['post_types'], Options::post_types() );
+		$inputs['includes'] = $this->validate_multicheckbox( $inputs['includes'], Options::button_sites( 'image' ) );
 
 		return $inputs;
 	}
 
 	/**
-	 * The function method to sanitize the "Metas" inputs.
+	 * Function to sanitize the inputs in the "Metas" section.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  array $inputs Unsanitized inputs being saved.
-	 * @return array         Inputs sanitized
+	 * @param array $inputs Unsanitized inputs being saved.
+	 * @return array Sanitized inputs.
 	 */
-	public function setting_site_metas( array $inputs ) {
+	final public function setting_site_metas( array $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'enabled' => false,
+			'enabled' => '',
 			'name' => '',
 			'description' => '',
-			'image' => '',
+			'image' => null,
 		) );
 
-		$inputs['name'] = wp_kses( $inputs['name'], array() );
-		$inputs['description'] = wp_kses( $inputs['description'], array() );
+		$inputs['enabled'] = $this->validate_checkbox( $inputs['endabled'] );
+		$inputs['name'] = sanitize_text_field( $inputs['name'] );
+		$inputs['description'] = sanitize_text_field( $inputs['description'] );
 		$inputs['image'] = absint( $inputs['image'] );
 
 		return $inputs;
 	}
 
 	/**
-	 * The function method to sanitize the "Advanced" inputs.
+	 * Function to sanitize the inputs in the "Advanced" section.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  array $inputs Unsanitized inputs being saved.
-	 * @return array         Inputs sanitized
+	 * @param array $inputs Unsanitized inputs being saved.
+	 * @return array Sanitized inputs.
 	 */
-	public function setting_advanced( array $inputs ) {
+	final public function setting_advanced( $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'enableStylesheet' => false,
+			'enable_stylesheet' => '',
 		) );
+
+		$inputs['enable_stylesheet'] = $this->validate_checkbox( $inputs['enable_stylesheet'] );
 
 		return $inputs;
 	}
 
 	/**
-	 * The utility function to sanitize a single selection input.
-	 *
-	 * A single selection input typically is delivered through the checkbox
-	 * or the radio input type.
+	 * Function to sanitize the inputs in the "Modes" section.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  array $input Unsanitized inputs being saved.
-	 * @param  array $ref   Key reference of the preset / acceptable selection to validate
-	 * 						against the incoming input.
-	 * @return array        Inputs sanitized
+	 * @param array $inputs Unsanitized inputs being saved.
+	 * @return array Sanitized inputs.
 	 */
-	protected function validate_selection( array $input, $ref ) {
+	final public function setting_modes( $inputs ) {
 
-		/**
-		 * Preset selection.
-		 *
-		 * @var array
-		 */
-		$preset = array(
-			'view' => self::get_button_views(),
-			'placement' => self::get_button_placements(),
-		);
+		$inputs['buttons_mode'] = $this->validate_radio( $inputs['buttons_mode'], Options::buttons_modes() );
+		$inputs['link_mode'] = $this->validate_radio( $inputs['link_mode'], Options::link_modes() );
 
-		$input = sanitize_key( (string) $input );
-
-		// The input must be matched with presets to pass the validation.
-		if ( ! key_exists( $input, $preset[ $ref ] ) ) {
-			$input = current( array_keys( $preset[ $ref ] ) ); }
-
-		return $input;
+		return $inputs;
 	}
 
 	/**
-	 * The utility function to sanitize multiple selection inputs.
+	 * Utility function to sanitize a redio input.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param string $input Unsanitized inputs being saved.
+	 * @param array  $options The list of options set in the setting.
+	 * @return string Sanitized input.
+	 */
+	final public function validate_radio( $input, $options ) {
+
+		if ( array_key_exists( $input, $options ) ) {
+			return sanitize_key( $input );
+		} else {
+			return sanitize_key( key( $options ) ); // Return the first key in the options.
+		}
+	}
+
+	/**
+	 * Utility function to validate a checkbox input.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param mixed $input Ideally it should an empty string or 'on'.
+	 * @return string Return 'on' if the input is checked, otherwise an empty string.
+	 */
+	final public function validate_checkbox( $input ) {
+		return ( 'on' === $input ) ? 'on' : '';
+	}
+
+	/**
+	 * Utility function to sanitize multiple selection inputs.
 	 *
 	 * Typically the inputs are coming from a multicheckbox or multiselect input type.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  array  $inputs Unsanitized inputs being saved.
-	 * @param  string $ref    Key reference of the preset / acceptable selection to validate
-	 * 						  against the incoming input.
-	 * @param  string $for    Optional. Key reference to get the preset selection in 2-level nested arrays.
-	 * @return array          Inputs sanitized
+	 * @param array  $inputs Unsanitized inputs being saved.
+	 * @param string $options Options reference to check against the incoming input.
+	 * @return array Sanitized inputs.
 	 */
-	protected function validate_multi_selection( array $inputs, $ref, $for = '' ) {
-
-		$preset = array(
-			'postTypes' => self::get_post_types(),
-			'includes' => self::get_button_sites( $for ),
-		);
+	final public function validate_multicheckbox( array $inputs, $options ) {
 
 		$selection = array();
 
+		if ( $this->is_array_associative( $inputs ) ) {
+			$inputs = array_keys( $inputs );
+		}
+
 		foreach ( $inputs as $key => $value ) {
 
-			$selection[] = sanitize_text_field( $value );
-
-			// The input must be matched with presets to pass the validation.
-			if ( ! key_exists( $key, $preset[ $ref ] ) ) {
-				unset( $inputs[ $key ] );
+			$value = sanitize_key( $value );
+			if ( array_key_exists( $value, $options ) ) {
+				$selection[] = $value;
 			}
 		}
 
 		return $selection;
+	}
+
+	/**
+	 * Function utility to check if the array is sequential or associative.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param array $arr The array to check.
+	 * @return boolean Return true if it is sequential, otherwise false.
+	 */
+	final public function is_array_associative( array $arr ) {
+
+		if ( ! is_array( $arr ) || empty( $arr ) ) {
+			return false;
+		};
+
+		return array_keys( $arr ) !== range( 0, count( $arr ) - 1 );
 	}
 }

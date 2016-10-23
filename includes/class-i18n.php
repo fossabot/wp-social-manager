@@ -1,24 +1,19 @@
 <?php
 /**
- * Define the internationalization functionality
+ * This file defines the Languages class.
  *
- * Loads and defines the internationalization files for this plugin
- * so that it is ready for translation.
- *
- * @author  	Thoriq Firdaus <tfirdau@outlook.com>
- *
- * @package 	WPSocialManager
- * @subpackage 	Languages
+ * @package SocialManager
+ * @subpackage Languages
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
 /**
- * Define the internationalization functionality.
+ * The Languages class to define the internationalization functionality.
  *
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
@@ -30,18 +25,18 @@ class Languages {
 	/**
 	 * Unique identifier for retrieving translated strings.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $domain;
 
 	/**
 	 * Relative path to the plugin path directory.
 	 *
-	 * @since 	1.0.0
-	 * @access  protected
-	 * @var 	string
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
 	 */
 	protected $path_dir;
 

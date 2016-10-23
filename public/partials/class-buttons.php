@@ -2,16 +2,37 @@
 /**
  * Public: Buttons Class
  *
- * @author Thoriq Firdaus <tfirdau@outlook.com>
- *
- * @package WPSocialManager
+ * @package SocialManager
  * @subpackage Public\Buttons
  */
 
-namespace XCo\WPSocialManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
+}
+
+use \DOMDocument;
+
+/**
+ * Buttons Interface.
+ *
+ * @since 1.0.0
+ */
+interface ButtonsInterface {
+	/**
+	 * The buttons have to have template script.
+	 *
+	 * @return void
+	 */
+	public function buttons_tmpl();
+
+	/**
+	 * The buttons have to have an HTML version.
+	 *
+	 * @return void
+	 */
+	public function buttons_html();
 }
 
 /**
@@ -19,28 +40,19 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-final class Buttons extends OutputUtilities {
+abstract class Buttons implements ButtonsInterface {
 
 	/**
-	 * The unique identifier of this plugin.
+	 * The Plugin class instance.
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var string
+	 * @var Plugin
 	 */
-	protected $plugin_name;
+	protected $plugin;
 
 	/**
-	 * The unique identifier or prefix for database names.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $plugin_opts;
-
-	/**
-	 * The current post ID in the loop.
+	 * The WordPress post ID.
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -49,32 +61,23 @@ final class Buttons extends OutputUtilities {
 	protected $post_id;
 
 	/**
-	 * Related options to render the social buttons.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $options;
-
-	/**
 	 * Constructor: Initialize the Buttons Class
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args {
-	 *     An array of common arguments of the plugin.
-	 *
-	 *     @type string $plugin_name 	The unique identifier of this plugin.
-	 *     @type string $plugin_opts 	The unique identifier or prefix for database names.
-	 *     @type string $version 		The plugin version number.
-	 * }
+	 * @param Endpoints $endpoints The Endpoints class instance.
 	 */
-	public function __construct( array $args ) {
+	function __construct( Endpoints $endpoints ) {
 
-		$this->plugin_name = $args['plugin_name'];
-		$this->plugin_opts = $args['plugin_opts'];
+		$this->endpoints = $endpoints;
+
+		$this->metas = $endpoints->metas;
+		$this->plugin = $endpoints->plugin;
+
+		$this->plugin_slug = $endpoints->plugin->get_slug();
+		$this->option_slug = $endpoints->plugin->get_opts();
+		$this->theme_supports = $endpoints->plugin->get_theme_supports();
 
 		$this->hooks();
 	}
@@ -84,13 +87,13 @@ final class Buttons extends OutputUtilities {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function hooks() {
 
 		add_action( 'wp_head', array( $this, 'setups' ), -30 );
-		add_action( 'wp_footer', array( $this, 'add_template_script' ), -30 );
-		add_filter( 'the_content', array( $this, 'add_buttons_content' ), 100, 1 );
-		add_filter( 'the_content', array( $this, 'add_buttons_image' ), 100, 1 );
+		add_action( 'wp_footer', array( $this, 'buttons_tmpl' ), -30 );
 	}
 
 	/**
@@ -100,249 +103,61 @@ final class Buttons extends OutputUtilities {
 	 * and sometimes WordPress Hooks that are required to render
 	 * the social buttons.
 	 *
+	 * Get the current WordPress post ID.
+	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	public function setups() {
 
-		$this->post_id = get_the_id();
-
-		$this->options = (object) array(
-			'postMeta'       => get_post_meta( $this->post_id, $this->plugin_opts, true ),
-			'buttonsContent' => get_option( "{$this->plugin_opts}_buttons_content" ),
-			'buttonsImage'   => get_option( "{$this->plugin_opts}_buttons_image" ),
-		);
+		if ( is_singular() ) {
+			$this->post_id = get_the_id();
+		}
 	}
 
 	/**
-	 * Append or prepend the social media buttons wrapper element into the content.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param  	string $content The post content.
-	 * @return 	string 			The post content added with the social buttons wrapper
-	 *                       	element. The wrapper may be added before or after the content,
-	 *                       	following the option selected.
-	 */
-	public function add_buttons_content( $content ) {
-
-		if ( false === $this->is_buttons_content() ) {
-			return $content;
-		}
-
-		$place = $this->options->buttonsContent['placement'];
-		$prefix = self::get_attr_prefix();
-
-		$wrapper = "<div class='{$prefix}-buttons {$prefix}-buttons--content {$prefix}-buttons--content-{$place}' id='{$prefix}-buttons-{$this->post_id}'></div>";
-
-		if ( 'before' === $place ) {
-			$content = $wrapper . $content;
-		}
-
-		if ( 'after' === $place ) {
-			$content = $content . $wrapper;
-		}
-
-		return $content;
-	}
-
-	/**
-	 * Add social wrapper element into the images in the content.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param  	string $content The post content.
-	 * @return  string 			The content with each image wrapped in an element
-	 *                        	to display the social buttons on the images.
-	 */
-	public function add_buttons_image( $content ) {
-
-		if ( empty( $content ) ) {
-			return $content;
-		}
-
-		if ( false === $this->is_buttons_image() ) {
-			return $content;
-		}
-
-		libxml_use_internal_errors( true );
-
-		$dom = new \DOMDocument();
-		$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
-
-		$prefix = self::get_attr_prefix();
-
-		$images = $dom->getElementsByTagName( 'img' );
-
-		$wrap   = $dom->createElement( 'span' );
-
-		$wrap->setAttribute( 'class', "{$prefix}-buttons {$prefix}-buttons--img {$prefix}-buttons--{$this->post_id}" );
-
-		// If we have, at least, 1 image.
-		if ( $images->length >= 1 ) {
-			foreach ( $images as $id => $img ) {
-
-				$wrap_clone = $wrap->cloneNode();
-
-				$wrap_id = absint( $id + 1 );
-				$wrap_id = sanitize_key( $wrap_id );
-
-				$wrap_clone->setAttribute( 'id', "{$prefix}-buttons-{$this->post_id}-img-{$wrap_id}" );
-
-				if ( 'a' === $img->parentNode->nodeName ) {
-
-					$link_parent = $img->parentNode;
-
-					$link_parent->parentNode->replaceChild( $wrap_clone, $link_parent );
-					$wrap_clone->appendChild( $link_parent );
-
-				} else {
-
-					$img->parentNode->replaceChild( $wrap_clone, $img );
-					$wrap_clone->appendChild( $img );
-				}
-			}
-		}
-
-		$content = preg_replace( '/^<!DOCTYPE.+?>/', '', str_replace( array( '<html>', '</html>', '<body>', '</body>' ), array( '', '', '', '' ), $dom->saveHTML() ) );
-
-		return $content;
-	}
-
-	/**
-	 * Add the Underscore.js template of the social media buttons.
-	 *
-	 * @since 	1.0.0
-	 * @access 	public
+	 * The buttons template script to use in JSON mode.
 	 *
 	 * @return void
 	 */
-	public function add_template_script() {
-		$this->buttons_content_template();
-		$this->buttons_image_template();
-	}
+	public function buttons_tmpl() {}
 
 	/**
-	 * Build the template for the social buttons shown in content
-	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 *
-	 * @link http://devdocs.io/underscore/index#template
+	 * The buttons html markup in HTML mode.
 	 *
 	 * @return void
 	 */
-	protected function buttons_content_template() {
-
-		if ( false === $this->is_buttons_content() ) {
-			return;
-		}
-
-		if ( wp_script_is( $this->plugin_name, 'enqueued' ) ) :
-
-			$heading  = $this->options->buttonsContent['heading'];
-			$view     = $this->options->buttonsContent['view'];
-			$includes = (array) $this->options->buttonsContent['includes'];
-
-			$prefix = self::get_attr_prefix(); ?>
-
-		<?php if ( ! empty( $includes ) ) : ?>
-		<script type="text/html" id="tmpl-buttons-content">
-			<?php if ( ! empty( $heading ) ) : ?>
-			<h4 class="<?php echo esc_attr( $prefix ); ?>-buttons__heading"><?php echo esc_html( $heading ); ?></h4>
-			<?php endif; ?>
-			<ul class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="content">
-			<?php foreach ( $includes as $site ) :
-
-				$props = self::get_social_properties( $site );
-				$icon  = self::get_social_icons( $site );
-				$list  = self::list_views( $view, array(
-							'site'  => $site,
-							'icon'  => $icon,
-							'label' => $props['label'],
-				) );
-
-				echo $list;
-			endforeach; ?>
-			</ul>
-		</script>
-		<?php endif;
-		endif;
-	}
-
-	/**
-	 * Build the template for the social buttons shown in images of the content.
-	 *
-	 * @since 	1.0.0
-	 * @access 	protected
-	 *
-	 * @link http://devdocs.io/underscore/index#template
-	 *
-	 * @return void
-	 */
-	protected function buttons_image_template() {
-
-		if ( false === $this->is_buttons_image() ) {
-			return;
-		}
-
-		if ( wp_script_is( $this->plugin_name, 'enqueued' ) ) :
-
-			$view = $this->options->buttonsImage['view'];
-			$includes = (array) $this->options->buttonsImage['includes'];
-
-			$prefix = self::get_attr_prefix(); ?>
-
-		<?php if ( ! empty( $includes ) ) : ?>
-		<script type="text/html" id="tmpl-buttons-image">
-			<ul class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>"
-				data-social-buttons="image">
-			<?php foreach ( $includes as $site ) :
-
-				$props = self::get_social_properties( $site );
-				$icon  = self::get_social_icons( $site );
-				$list  = self::list_views( $view, array(
-						'site'  => $site,
-						'icon'  => apply_filters( 'wp_social_manager_icon', $icon, $site, 'button-image' ),
-						'label' => $props['label'],
-				) );
-
-				echo $list;
-			endforeach; ?>
-			</ul>
-		</script>
-		<?php endif;
-		endif;
-	}
+	public function buttons_html() {}
 
 	/**
 	 * Determine and generate the buttons item view.
 	 *
-	 * @since 	1.0.0
-	 * @access 	protected
+	 * @since 1.0.0
+	 * @access protected
 	 *
-	 * @param  string $view One of the buttons view key name,
-	 *                      as defined in the OptionsUtility Class.
-	 * @param  array  $args The button attributes such as the 'site' name, button label,
-	 *                      and the button icon.
-	 * @return string       The formatted HTML list element to display the button.
+	 * @param string $view The button view key (`icon`, `icon-text`, `text`).
+	 * @param array  $args 	{
+	 *     The button attributes.
+	 *
+	 *     @type string $site 	The site unique key (e.g. `facebook`, `twitter`, etc.).
+	 *     @type string $icon 	The respective site icon.
+	 *     @type string $label 	The site label / text.
+	 * }
+	 * @param array  $context The button attributes such as the 'site' name, button label,
+	 *                        and the button icon.
+	 * @return string The formatted HTML list element to display the button.
 	 */
-	protected static function list_views( $view = '', array $args ) {
+	protected function button_view( $view, array $args, $context = '' ) {
 
-		if ( empty( $view ) ) {
+		if ( empty( $view ) || empty( $args ) || empty( $context ) ) {
 			return '';
 		}
 
-		/**
-		 * [$args description]
-		 *
-		 * @var [type]
-		 */
 		$args = wp_parse_args( $args, array(
-			'site'  => '',
-			'icon'  => '',
+			'site' => '',
+			'icon' => '',
 			'label' => '',
 		) );
 
@@ -350,94 +165,74 @@ final class Buttons extends OutputUtilities {
 			return;
 		}
 
-		$site  = $args['site'];
-		$icon  = $args['icon'];
+		$site = $args['site'];
+		$icon = $args['icon'];
 		$label = $args['label'];
 
-		$prefix = self::get_attr_prefix();
+		$prefix = Helpers::get_attr_prefix();
+		$url = $this->get_button_url( $site, $context );
+
+		if ( empty( $url ) ) {
+			return '';
+		}
 
 		$templates = array(
-			'icon' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' role='button'>{$icon}</a></li>",
-			'text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' role='button'>{$label}</a></li>",
-			'icon-text' => "<li class='{$prefix}-buttons__item item-{$site}'><a href='{{{$site}.endpoint}}' target='_blank' role='button'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a></li>",
+			'icon' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button' rel='nofollow'>{$icon}</a>",
+			'text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button' rel='nofollow'>{$label}</a>",
+			'icon-text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button' rel='nofollow'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a>",
 		);
 
-		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';
+		$allowed_html = wp_kses_allowed_html( 'post' );
+		$allowed_html['svg'] = array(
+			'xmlns' => true,
+			'viewbox' => true,
+		);
+		$allowed_html['path'] = array(
+			'd' => true,
+		);
+
+		return isset( $templates[ $view ] ) ? wp_kses( $templates[ $view ], $allowed_html ) : '';
 	}
 
 	/**
-	 * The Utility method to check if buttons content should be generated.
+	 * The function method to generate the buttons endpoint URLs
 	 *
 	 * @since 1.0.0
 	 * @access protected
 	 *
-	 * @return boolean
+	 * @param string $site The site key or slug (e.g. `facebook`, `twitter`, etc.).
+	 * @param string $context The button context; `content` or `image`.
+	 * @return string The endpoint of the site specified in `$site`.
 	 */
-	protected function is_buttons_content() {
+	public function get_button_url( $site, $context ) {
 
-		$post_types = (array) $this->options->buttonsContent['postTypes'];
-
-		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
-			return false;
+		if ( ! $site || ! $context ) {
+			return '';
 		}
 
-		$includes = (array) $this->options->buttonsContent['includes'];
+		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
 
-		if ( empty( $includes ) ) {
-			return false;
+		if ( 'json' === $this->theme_supports->is( 'buttons-mode' ) ||
+			 'json' === $buttons_mode ) {
+			return "{{{$site}.endpoint}}";
 		}
 
-		$place = $this->options->buttonsContent['placement'];
+		if ( 'html' === $this->theme_supports->is( 'buttons-mode' ) ||
+			 'html' === $buttons_mode ) {
 
-		if ( ! in_array( $place, array_keys( self::get_button_placements() ), true ) ) {
-			return false;
+			$urls = array();
+
+			switch ( $context ) {
+				case 'content':
+					$urls = $this->endpoints->get_content_endpoints( $this->post_id );
+					break;
+
+				case 'image':
+					$urls = $this->endpoints->get_image_endpoints( $this->post_id );
+					break;
+			}
+
+			return $urls[ $site ]['endpoint'];
 		}
-
-		/**
-		 * [$meta description]
-		 *
-		 * @var [type]
-		 */
-		$meta = (array) $this->options->postMeta;
-
-		return isset( $meta['buttons_content'] ) ? $meta['buttons_content'] : true;
-	}
-
-	/**
-	 * The Utility method to check if buttons content should be generated.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return boolean
-	 */
-	protected function is_buttons_image() {
-
-		$enable = (bool) $this->options->buttonsImage['enabled'];
-
-		if ( ! $enable ) {
-			return false;
-		}
-
-		$post_types = (array) $this->options->buttonsImage['postTypes'];
-
-		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
-			return false;
-		}
-
-		$includes = (array) $this->options->buttonsImage['includes'];
-
-		if ( empty( $includes ) ) {
-			return false;
-		}
-
-		/**
-		 * [$meta description]
-		 *
-		 * @var [type]
-		 */
-		$meta = (array) $this->options->postMeta;
-
-		return isset( $meta['buttons_image'] ) ? $meta['buttons_image'] : true;
 	}
 }
