@@ -253,7 +253,7 @@ final class Settings {
 						'id' => array(),
 					),
 			) );
-			$this->settings->render_header( array( 'title' => false ) );
+			$this->settings->render_header( array('title' => true ) );
 			$this->settings->render_form();
 			echo '</div>';
 		} );
