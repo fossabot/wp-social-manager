@@ -69,10 +69,7 @@ class Validation {
 			'post_types' => array(),
 		) );
 
-		// var_dump( $inputs );
-
 		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
-		//
 		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
 		$inputs['placement'] = $this->validate_radio( $inputs['placement'], Options::button_placements() );
 
@@ -94,14 +91,14 @@ class Validation {
 	final public function setting_buttons_image( array $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'enabled' => false,
+			'enabled' => '',
 			'view' => '',
 			'post_types' => array(),
 			'includes' => array(),
 		) );
 
+		$inputs['enabled'] = $this->validate_checkbox( $inputs['enabled'] );
 		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
-
 		$inputs['post_types'] = $this->validate_multicheckbox( $inputs['post_types'], Options::post_types() );
 		$inputs['includes'] = $this->validate_multicheckbox( $inputs['includes'], Options::button_sites( 'image' ) );
 
@@ -120,13 +117,13 @@ class Validation {
 	final public function setting_site_metas( array $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'enabled' => false,
+			'enabled' => '',
 			'name' => '',
 			'description' => '',
 			'image' => null,
 		) );
 
-		$inputs['enabled'] = ( 'on' === $inputs['enabled'] ) ? 'on' : '';
+		$inputs['enabled'] = $this->validate_checkbox( $inputs['endabled'] );
 		$inputs['name'] = sanitize_text_field( $inputs['name'] );
 		$inputs['description'] = sanitize_text_field( $inputs['description'] );
 		$inputs['image'] = absint( $inputs['image'] );
@@ -146,10 +143,10 @@ class Validation {
 	final public function setting_advanced( $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'enable_stylesheet' => false,
+			'enable_stylesheet' => '',
 		) );
 
-		$inputs['enable_stylesheet'] = ( 'on' === $inputs['enable_stylesheet'] ) ? 'on' : '';
+		$inputs['enable_stylesheet'] = $this->validate_checkbox( $inputs['enable_stylesheet'] );
 
 		return $inputs;
 	}
@@ -181,13 +178,26 @@ class Validation {
 	 * @param array  $options The list of options set in the setting.
 	 * @return string Sanitized input.
 	 */
-	final protected function validate_radio( $input, $options ) {
+	final public function validate_radio( $input, $options ) {
 
 		if ( array_key_exists( $input, $options ) ) {
 			return sanitize_key( $input );
 		} else {
 			return sanitize_key( key( $options ) ); // Return the first key in the options.
 		}
+	}
+
+	/**
+	 * Utility function to validate a checkbox input.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param mixed $input Ideally it should an empty string or 'on'.
+	 * @return string Return 'on' if the input is checked, otherwise an empty string.
+	 */
+	final public function validate_checkbox( $input ) {
+		return ( 'on' === $input ) ? 'on' : '';
 	}
 
 	/**
@@ -202,7 +212,7 @@ class Validation {
 	 * @param string $options Options reference to check against the incoming input.
 	 * @return array Sanitized inputs.
 	 */
-	final protected function validate_multicheckbox( array $inputs, $options ) {
+	final public function validate_multicheckbox( array $inputs, $options ) {
 
 		$selection = array();
 
@@ -230,12 +240,12 @@ class Validation {
 	 * @param array $arr The array to check.
 	 * @return boolean Return true if it is sequential, otherwise false.
 	 */
-	protected function is_array_associative( array $arr ) {
+	final public function is_array_associative( array $arr ) {
 
 		if ( ! is_array( $arr ) || empty( $arr ) ) {
 			return false;
 		};
 
-		return array_keys($arr) !== range(0, count($arr) - 1);
+		return array_keys( $arr ) !== range( 0, count( $arr ) - 1 );
 	}
 }

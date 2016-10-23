@@ -241,9 +241,7 @@ final class Metas {
 
 		if ( $this->is_meta_enabled() ) {
 			$title = $this->get_post_meta( $id, 'post_title' );
-		}
-
-		if ( ! $title || empty( $title ) ) {
+		} else {
 			$post = get_post( $id );
 			$title = apply_filters( 'the_title', $post->post_title );
 		}
@@ -264,10 +262,7 @@ final class Metas {
 
 		if ( $this->is_meta_enabled() ) {
 			$description = $this->get_post_meta( $id, 'post_excerpt' );
-		}
-
-		if ( ! $description || empty( $description ) ) {
-
+		} else {
 			$post = get_post( $id );
 			$description = $post->post_excerpt;
 

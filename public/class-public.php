@@ -166,6 +166,12 @@ final class ViewPublic {
 	/**
 	 * Register JavaScripts handles.
 	 *
+	 * We serve two kind of interfaces, JSON and HTML.
+	 *
+	 * The app.js will be enqueued if the site supports the JSON mode, and it requires
+	 * Underscore.js, and Backbone.js aside of jQuery. The scripts is enqueued for HTML mode
+	 * and it only requires jQuery to work.
+	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
@@ -224,12 +230,6 @@ final class ViewPublic {
 			return false;
 		}
 
-		$stylesheet = $this->plugin->get_option( 'advanced', 'enable_stylesheet' );
-
-		if ( $stylesheet ) {
-			return (bool) $stylesheet;
-		}
-
-		return true;
+		return (bool) $this->plugin->get_option( 'enqueue', 'enable_stylesheet' );
 	}
 }

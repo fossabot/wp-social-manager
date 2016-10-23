@@ -156,7 +156,7 @@ final class Plugin {
 			'buttons_content' => get_option( "{$this->option_slug}_buttons_content" ),
 			'buttons_image' => get_option( "{$this->option_slug}_buttons_image" ),
 			'metas_site' => get_option( "{$this->option_slug}_metas_site" ),
-			'advanced' => get_option( "{$this->option_slug}_enqueue" ),
+			'enqueue' => get_option( "{$this->option_slug}_enqueue" ),
 			'modes' => get_option( "{$this->option_slug}_modes" ),
 		);
 
