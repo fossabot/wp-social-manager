@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin: SocialMetaBox class
+ * Admin: Metabox class
  *
  * @package SocialManager
  * @subpackage Admin\Metabox
@@ -19,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @link https://github.com/justintadlock/butterbean
  */
-final class SocialMetaBox {
+final class Metabox {
 
 	/**
 	 * The Plugin class instance.

@@ -89,6 +89,6 @@ final class ViewAdmin {
 		new Settings( $this->plugin );
 		new User( $this->plugin );
 
-		SocialMetaBox::get_instance( $this->plugin );
+		Metabox::get_instance( $this->plugin );
 	}
 }
