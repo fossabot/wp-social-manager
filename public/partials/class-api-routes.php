@@ -63,6 +63,7 @@ class APIRoutes {
 
 		$this->plugin = $endpoints->plugin;
 		$this->plugin_slug = $endpoints->plugin->get_slug();
+		$this->version = $endpoints->plugin->get_version();
 		$this->theme_supports = $endpoints->plugin->get_theme_supports();
 
 		$this->namespace = $this->plugin_slug . '/' . $this->api_version;
@@ -153,7 +154,6 @@ class APIRoutes {
 				'callback' => array( $this, 'response_buttons' ),
 				'args' => array(
 					'id' => array(
-						'required' => true,
 						'sanitize_callback' => 'absint',
 						'validate_callback' => function( $param ) {
 							return ( $param );
@@ -175,12 +175,28 @@ class APIRoutes {
 	 */
 	public function response_buttons( $request ) {
 
-		$response = array(
-			'id' => $request['id'],
-		);
 
-		$response['content'] = $this->endpoints->get_content_endpoints( $request['id'] );
-		$response['image'] = $this->endpoints->get_image_endpoints( $request['id'] );
+		if ( isset( $request['id'] ) ) {
+
+			$response = array(
+				'id' => $request['id'],
+			);
+
+			$response['content'] = $this->endpoints->get_content_endpoints( $request['id'] );
+			$response['image'] = $this->endpoints->get_image_endpoints( $request['id'] );
+
+		} else {
+
+			$response = array(
+				'plugin_name' => 'Social Manager by NineCodes',
+				'plugin_url' => 'http://wordpress.org/plugins/ninecodes-social-manager',
+				'version' => $this->version,
+				'contributors' => array(
+					'Thoriq Firdaus',
+					'Hongkiat Lim',
+				)
+			);
+		}
 
 		return new WP_REST_Response( $response, 200 );
 	}
