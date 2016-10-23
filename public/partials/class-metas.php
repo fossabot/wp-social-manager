@@ -234,15 +234,21 @@ final class Metas {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param integer $id The post ID.
+	 * @param integer $post_id The post ID.
 	 * @return string The "post" title
 	 */
-	public function get_post_title( $id ) {
+	public function get_post_title( $post_id ) {
 
+		$title = '';
+
+		// If Meta Tags is enabled check the Post meta for the title.
 		if ( $this->is_meta_enabled() ) {
-			$title = $this->get_post_meta( $id, 'post_title' );
-		} else {
-			$post = get_post( $id );
+			$title = $this->get_post_meta( $post_id, 'post_title' );
+		}
+
+		// If the title is still empty get the Post title.
+		if ( empty( $title ) ) {
+			$post = get_post( $post_id );
 			$title = apply_filters( 'the_title', $post->post_title );
 		}
 
@@ -255,15 +261,21 @@ final class Metas {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param integer $id The post ID.
+	 * @param integer $post_id The post ID.
 	 * @return string The "post" description
 	 */
-	public function get_post_description( $id ) {
+	public function get_post_description( $post_id ) {
 
+		$description = '';
+
+		// If Meta Tags is enabled check the Post meta for the description.
 		if ( $this->is_meta_enabled() ) {
-			$description = $this->get_post_meta( $id, 'post_excerpt' );
-		} else {
-			$post = get_post( $id );
+			$description = $this->get_post_meta( $post_id, 'post_excerpt' );
+		}
+
+		// If the title is still empty get the Post excerpt.
+		if ( empty( $description ) ) {
+			$post = get_post( $post_id );
 			$description = $post->post_excerpt;
 
 			if ( empty( $post->post_excerpt ) ) {
