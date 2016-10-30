@@ -79,7 +79,7 @@
             var screenWidth = wind.innerWidth ? wind.innerWidth : docu.documentElement.clientWidth ? docu.documentElement.clientWidth : screen.width;
             var screenHeight = wind.innerHeight ? wind.innerHeight : docu.documentElement.clientHeight ? docu.documentElement.clientHeight : screen.height;
 
-            var width = 600;
+            var width = 560;
             var height = 430;
 
             var left = ( ( screenWidth / 2 ) - ( width / 2 ) ) + screenLeft;
@@ -130,10 +130,9 @@
 
             var $images = $( '.' + api.attrPrefix + '-buttons--' + response.id );
 
-            $images.each(function() {
-
+            $images.each(function(index) {
 				$( this ).append( self.template( {
-					data: responseImage
+					data: responseImage[index][0]
 				} ) );
             });
 
