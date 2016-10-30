@@ -67,12 +67,29 @@ class ButtonsContent extends Buttons {
 		$place = $this->plugin->get_option( 'buttons_content', 'placement' );
 		$prefix = $this->get_button_attr_prefix();
 
-		$button = "<div class='{$prefix}-buttons {$prefix}-buttons--content {$prefix}-buttons--content-{$place}' id='{$prefix}-buttons-{$this->post_id}'>";
+		$opening_tag = "<div class='{$prefix}-buttons {$prefix}-buttons--content {$prefix}-buttons--content-{$place}' id='{$prefix}-buttons-{$this->post_id}'>";
+		$button = apply_filters( 'ninecodes_social_manager_buttons_html', $opening_tag, 'wrap-opening',
+			'button-content',
+			array(
+				'post_id' => $this->post_id,
+				'prefix' => $prefix,
+				'placement' => $place,
+			)
+		);
 
 		if ( 'html' === $this->get_button_mode() ) {
 			$button .= $this->buttons_html();
 		}
-		$button .= '</div>';
+
+		$closing_tag = '</div>';
+		$button .= apply_filters( 'ninecodes_social_manager_buttons_html', $closing_tag, 'wrap-closing',
+			'button-content',
+			array(
+				'post_id' => $this->post_id,
+				'prefix' => $prefix,
+				'placement' => $place,
+			)
+		);
 
 		if ( 'before' === $place ) {
 			$content = preg_replace( '/\s*$^\s*/m', "\n", $button ) . $content;
