@@ -229,7 +229,6 @@
 .ninecodes-social-manager-buttons--img {
     position: relative;
     display: inline-block;
-    display: inline-flex;
     vertical-align: top;
     font-size: 0.86em;
 }
