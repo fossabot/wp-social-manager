@@ -122,8 +122,8 @@ final class WPHead {
 			'site_image' => $this->metas->get_site_image(),
 		);
 
-		$og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'open-graph', 'site' ) );
-		$tc = $this->site_twitter_cards( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'twitter-cards', 'site' ) );
+		$og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'site', 'open-graph' ) );
+		$tc = $this->site_twitter_cards( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'site', 'twitter-cards' ) );
 
 		echo "<!-- START: Social Manager by NineCodes -->\n";
 		echo wp_kses( "{$og}{$tc}", array(
@@ -164,8 +164,8 @@ final class WPHead {
 			'post_author' => $this->metas->get_post_author( $post_id ),
 		);
 
-		$og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'open-graph', 'post' ) );
-		$tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'twitter-cards', 'post' ) );
+		$og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'open-graph' ) );
+		$tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'twitter-cards' ) );
 
 		echo "<!-- START: Social Manager by NineCodes -->\n";
 		echo wp_kses( "{$og}{$tc}", array(
