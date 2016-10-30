@@ -46,7 +46,7 @@ class ButtonsImage extends Buttons {
 	 * @return void
 	 */
 	protected function render() {
-		add_filter( 'the_content', array( $this, 'render_buttons' ), 100 );
+		add_filter( 'the_content', array( $this, 'render_buttons' ), 90 );
 	}
 
 	/**
@@ -74,7 +74,7 @@ class ButtonsImage extends Buttons {
 		$dom = new DOMDocument();
 		$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
 
-		$prefix = Helpers::get_attr_prefix();
+		$prefix = $this->get_button_attr_prefix();
 
 		$images = $dom->getElementsByTagName( 'img' );
 
@@ -142,21 +142,20 @@ class ButtonsImage extends Buttons {
 
 			if ( ! empty( $includes ) ) :
 
-				$prefix = Helpers::get_attr_prefix();
+				$prefix = $this->get_button_attr_prefix();
 				$prefix = esc_attr( $prefix );
 				$view = $this->plugin->get_option( 'buttons_image', 'view' );
 
 				$list .= "<span class='{$prefix}-buttons__list {$prefix}-buttons__list--{$view}' data-social-buttons='image'>";
-
 				foreach ( $includes as $site ) :
 
-					$button = Options::button_sites( 'image' );
-					$icon = Helpers::get_social_icons( $site );
+					$label = $this->get_button_label( $site, 'image' );
+					$icon = $this->get_button_icon( $site );
 
 					$list .= $this->button_view( $view, array(
-							'site'  => $site,
-							'icon'  => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-image' ),
-							'label' => $button[ $site ],
+						'site' => $site,
+						'icon'  => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-image' ),
+						'label' => $label,
 					), 'image' );
 				endforeach;
 				$list .= '</span>';
@@ -195,24 +194,23 @@ class ButtonsImage extends Buttons {
 				$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' ); ?>
 
 	 			<?php if ( ! empty( $includes ) ) :
-	 				$prefix = Helpers::get_attr_prefix();
+	 				$prefix = $this->get_button_attr_prefix();
 	 				$view = $this->plugin->get_option( 'buttons_image', 'view' ); ?>
 	 			<script type="text/html" id="tmpl-buttons-image">
-	 				<span class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="image">
-	 				<?php foreach ( $includes as $site ) :
+					<span class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="image">
+					<?php foreach ( $includes as $site ) :
 
-						$button = Options::button_sites( 'image' );
-						$icon = Helpers::get_social_icons( $site );
+						$label = $this->get_button_label( $site, 'image' );
+						$icon = $this->get_button_icon( $site );
 
 						$list = $this->button_view( $view, array(
-								'site'  => $site,
-								'icon'  => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-image' ),
-								'label' => $button[ $site ],
+							'site'  => $site,
+							'icon'  => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-image' ),
+							'label' => $label,
 						), 'image' );
-
-	 					echo $list; // WPCS: XSS ok.
-	 				endforeach; ?>
-	 				</span>
+						echo $list; // WPCS: XSS ok.
+					endforeach; ?>
+					</span>
 	 			</script>
 	 			<?php endif;
 	 			endif;
