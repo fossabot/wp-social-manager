@@ -308,6 +308,12 @@ final class Metas {
 	 */
 	public function get_post_image( $id ) {
 
+		$image = apply_filters( 'ninecodes_social_manager_meta', array(), $id, 'post-image' );
+
+		if ( ! empty( $image ) && isset( $image['src'] ) ) {
+			return $image;
+		}
+
 		$attachment_id = null;
 
 		if ( $this->is_meta_enabled() ) {
