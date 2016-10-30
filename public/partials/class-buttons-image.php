@@ -161,6 +161,7 @@ class ButtonsImage extends Buttons {
 				$list .= '</span>';
 			endif;
 
+			libxml_use_internal_errors( true );
 			/**
 			 * Format the output to be a proper HTML markup,
 			 * so it can be safely append into the DOM.
