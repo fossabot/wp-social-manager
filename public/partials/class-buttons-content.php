@@ -65,12 +65,11 @@ class ButtonsContent extends Buttons {
 		}
 
 		$place = $this->plugin->get_option( 'buttons_content', 'placement' );
-		$prefix = Helpers::get_attr_prefix();
+		$prefix = $this->get_button_attr_prefix();
 
 		$button = "<div class='{$prefix}-buttons {$prefix}-buttons--content {$prefix}-buttons--content-{$place}' id='{$prefix}-buttons-{$this->post_id}'>";
 
-		if ( 'html' === $this->theme_supports->is( 'buttons-mode' ) ||
-			 'html' === $this->plugin->get_option( 'modes', 'buttons_mode' ) ) {
+		if ( 'html' === $this->get_button_mode() ) {
 			$button .= $this->buttons_html();
 		}
 		$button .= '</div>';
@@ -105,7 +104,7 @@ class ButtonsContent extends Buttons {
 			$view = $this->plugin->get_option( 'buttons_content', 'view' );
 			$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
 
-			$prefix = Helpers::get_attr_prefix();
+			$prefix = $this->get_button_attr_prefix();
 
 			if ( ! empty( $includes ) ) :
 
@@ -120,14 +119,14 @@ class ButtonsContent extends Buttons {
 
 				foreach ( $includes as $site ) :
 
-					$button = Options::button_sites( 'content' );
-					$icon = Helpers::get_social_icons( $site );
-
+					$icon = $this->get_button_icon( $site );
+					$label = $this->get_button_label( $site, 'content' );
 					$list .= $this->button_view( $view, array(
-								'site'  => $site,
-								'icon'  => $icon,
-								'label' => $button[ $site ],
-					), 'content' );
+						'site' => $site,
+						'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-content' ),
+						'label' => $label,
+					),'content' );
+
 				endforeach;
 				$list .= '</span>';
 				endif;
@@ -146,20 +145,19 @@ class ButtonsContent extends Buttons {
 	 */
 	public function buttons_tmpl() {
 
-		if ( 'json' === $this->theme_supports->is( 'buttons-mode' ) ||
-			 'json' === $this->plugin->get_option( 'modes', 'buttons_mode' ) ) {
+		if ( 'json' === $this->get_button_mode() ) {
 
 			if ( false === $this->is_buttons_content() ) {
 				return;
 			}
 
-			if ( wp_script_is( $this->plugin_slug, 'enqueued' ) ) :
+			if ( wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
 
 				$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
 				$view = $this->plugin->get_option( 'buttons_content', 'view' );
 				$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
 
-				$prefix = Helpers::get_attr_prefix(); ?>
+				$prefix = $this->get_button_attr_prefix(); ?>
 
 	 			<?php if ( ! empty( $includes ) ) : ?>
 	 			<script type="text/html" id="tmpl-buttons-content">
@@ -169,14 +167,13 @@ class ButtonsContent extends Buttons {
 	 				<span class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="content">
 	 				<?php foreach ( $includes as $site ) :
 
-	 					$button = Options::button_sites( 'content' );
-	 					$icon = Helpers::get_social_icons( $site );
-
+	 					$icon = $this->get_button_icon( $site );
+						$label = $this->get_button_label( $site, 'content' );
 	 					$list = $this->button_view( $view, array(
-	 								'site'  => $site,
-	 								'icon'  => $icon,
-	 								'label' => $button[ $site ],
-	 					), 'content' );
+							'site' => $site,
+							'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-content' ),
+							'label' => $label,
+	 					),'content' );
 
 	 					echo $list; // WPCS: XSS ok.
 	 				endforeach; ?>

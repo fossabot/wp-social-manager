@@ -231,6 +231,7 @@ class Endpoints {
 							'url' => $metas['post_url'],
 							'description' => $metas['post_title'],
 							'is_video' => false,
+							'media' => ''
 						),
 						$endpoint
 					);
@@ -285,7 +286,7 @@ class Endpoints {
 			'facebook' => 'https://www.facebook.com/sharer/sharer.php',
 			'twitter' => 'https://twitter.com/intent/tweet',
 			'googleplus' => 'https://plus.google.com/share',
-			'pinterest' => 'https://pinterest.com/pin/create/bookmarklet/',
+			'pinterest' => 'https://www.pinterest.com/pin/create/bookmarklet/',
 			'linkedin' => 'https://www.linkedin.com/shareArticle',
 			'reddit' => 'https://www.reddit.com/submit',
 			'email' => 'mailto:',

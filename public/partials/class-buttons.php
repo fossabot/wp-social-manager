@@ -52,6 +52,33 @@ abstract class Buttons implements ButtonsInterface {
 	protected $plugin;
 
 	/**
+	 * The Metas class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Metas
+	 */
+	protected $metas;
+
+	/**
+	 * The Endpoints class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Endpoints
+	 */
+	protected $endpoints;
+
+	/**
+	 * The ThemeSupports class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var ThemeSupports
+	 */
+	protected $theme_supports;
+
+	/**
 	 * The WordPress post ID.
 	 *
 	 * @since 1.0.0
@@ -59,6 +86,34 @@ abstract class Buttons implements ButtonsInterface {
 	 * @var integer
 	 */
 	protected $post_id;
+
+	/**
+	 * The plugin unique identifier.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $plugin_slug;
+
+	/**
+	 * The plugin option name.
+	 * Sometimes used for meta key.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $option_slug;
+
+	/**
+	 * The button mode, 'json' or 'html'.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $mode;
 
 	/**
 	 * Constructor: Initialize the Buttons Class
@@ -169,7 +224,7 @@ abstract class Buttons implements ButtonsInterface {
 		$icon = $args['icon'];
 		$label = $args['label'];
 
-		$prefix = Helpers::get_attr_prefix();
+		$prefix = $this->get_button_attr_prefix();
 		$url = $this->get_button_url( $site, $context );
 
 		if ( empty( $url ) ) {
@@ -204,21 +259,17 @@ abstract class Buttons implements ButtonsInterface {
 	 * @param string $context The button context; `content` or `image`.
 	 * @return string The endpoint of the site specified in `$site`.
 	 */
-	public function get_button_url( $site, $context ) {
+	protected function get_button_url( $site, $context ) {
 
 		if ( ! $site || ! $context ) {
 			return '';
 		}
 
-		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
-
-		if ( 'json' === $this->theme_supports->is( 'buttons-mode' ) ||
-			 'json' === $buttons_mode ) {
-			return "{{{$site}.endpoint}}";
+		if ( 'json' === $this->get_button_mode() ) {
+			return "{{data.{$site}.endpoint}}";
 		}
 
-		if ( 'html' === $this->theme_supports->is( 'buttons-mode' ) ||
-			 'html' === $buttons_mode ) {
+		if ( 'html' === $this->get_button_mode() ) {
 
 			$urls = array();
 
@@ -234,5 +285,77 @@ abstract class Buttons implements ButtonsInterface {
 
 			return $urls[ $site ]['endpoint'];
 		}
+	}
+
+	/**
+	 * The function utility to get the button icon.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @param string $site The site key e.g. 'facebook', 'twitter', etc.
+	 * @return string The icon in SVG format.
+	 */
+	protected function get_button_icon( $site ) {
+		return Helpers::get_social_icons( $site );
+	}
+
+	/**
+	 * The function utility to get the button label (text)
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @param string $site The button site key.
+	 * @param string $context The button context, 'content' or 'image'.
+	 * @return null|string Return null, if the context is incorrect or the key is unset.
+	 */
+	protected function get_button_label( $site, $context ) {
+
+		if ( in_array( $context, array( 'content', 'image' ), true ) ) {
+			$buttons = Options::button_sites( $context );
+			return isset( $buttons[ $site ] ) ? $buttons[ $site ] : null;
+		}
+
+		return null;
+	}
+
+	/**
+	 * The function utility to get the button mode.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return string Whether JSON of HTML
+	 */
+	protected function get_button_mode() {
+
+		if ( null !== $this->mode && in_array( $this->mode, array( 'html', 'json' ), true ) ) {
+			return $this->mode;
+		}
+
+		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
+
+		if ( 'json' === $this->theme_supports->is( 'buttons-mode' ) ||
+			 'json' === $buttons_mode ) {
+			return 'json';
+		}
+
+		if ( 'html' === $this->theme_supports->is( 'buttons-mode' ) ||
+			 'html' === $buttons_mode ) {
+			return 'html';
+		}
+	}
+
+	/**
+	 * The function utility to get the attribute prefix
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return string The attribute prefix.
+	 */
+	protected function get_button_attr_prefix() {
+		return Helpers::get_attr_prefix();
 	}
 }

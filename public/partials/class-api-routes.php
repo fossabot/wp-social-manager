@@ -81,11 +81,8 @@ class APIRoutes {
 	 */
 	protected function hooks() {
 
-		if ( $this->is_load_routes() ) {
-
-			add_filter( 'rest_api_init', array( $this, 'register_routes' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'localize_scripts' ) );
-		}
+		add_filter( 'rest_api_init', array( $this, 'register_routes' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'localize_scripts' ) );
 	}
 
 	/**
@@ -126,7 +123,7 @@ class APIRoutes {
 			$args['id'] = absint( $post_id );
 		}
 
-		wp_localize_script( $this->plugin_slug, 'NineCodesSocialManager', $args );
+		wp_localize_script( $this->plugin_slug . '-app', 'NineCodesSocialManager', $args );
 	}
 
 	/**
@@ -175,7 +172,6 @@ class APIRoutes {
 	 */
 	public function response_buttons( $request ) {
 
-
 		if ( isset( $request['id'] ) ) {
 
 			$response = array(
@@ -194,31 +190,10 @@ class APIRoutes {
 				'contributors' => array(
 					'Thoriq Firdaus',
 					'Hongkiat Lim',
-				)
+				),
 			);
 		}
 
 		return new WP_REST_Response( $response, 200 );
-	}
-
-	/**
-	 * Is the API Routes should be loaded?
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return boolean 	Return 'true' if the Buttons Mode is 'json',
-	 * 					and 'false' if the Buttons Mode is 'html'.
-	 */
-	public function is_load_routes() {
-
-		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
-
-		if ( 'json' === $this->theme_supports->is( 'buttons-mode' ) ||
-			 'json' === $buttons_mode ) {
-			return true;
-		}
-
-		return false;
 	}
 }

@@ -170,7 +170,7 @@ final class Metas {
 			$description = get_the_author_meta( 'description', (int) $author->ID );
 		}
 
-		return wp_kses( trim( $description ), array() );
+		return wp_kses( trim( strip_shortcodes( $description ) ), array() );
 	}
 
 	/**
@@ -276,7 +276,8 @@ final class Metas {
 		}
 
 		// If the title is still empty get the Post excerpt.
-		if ( empty( $description ) ) {
+		if ( ! $description ) {
+
 			$post = get_post( $post_id );
 			$description = $post->post_excerpt;
 
@@ -285,7 +286,7 @@ final class Metas {
 			}
 		}
 
-		return wp_kses( $description, array() );
+		return wp_kses( strip_shortcodes( $description ), array() );
 	}
 
 	/**
@@ -339,16 +340,14 @@ final class Metas {
 		if ( 0 !== $images->length ) {
 
 			$src = $images->item( 0 )->getAttribute( 'src' );
-			$image = getimagesize( $images->item( 0 )->getAttribute( 'src' ) );
+			$width = $images->item( 0 )->getAttribute( 'width' );
+			$height = $images->item( 0 )->getAttribute( 'height' );
 
-			if ( $image ) {
-
-				list( $width, $height ) = $image;
-
+			if ( $src ) {
 				return array(
 					'src' => esc_url( $src ),
-					'width' => absint( $width ),
-					'height' => absint( $height ),
+					'width' => $width && substr( $width, -1 ) === '%' ? absint( $width ) : 0,
+					'height' => $height && substr( $height, -1 ) === '%' ? absint( $height ) : 0,
 				);
 			}
 		}
@@ -382,7 +381,7 @@ final class Metas {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param integer $id The post ID.
+	 * @param integer $post_id The post ID.
 	 * @return string The "post" url / permalink
 	 */
 	public function get_post_url( $post_id ) {
