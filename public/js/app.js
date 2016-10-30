@@ -1,4 +1,4 @@
-( function( $, _, Backbone ) {
+( function( $, undefined ) {
 
     'use strict';
 
@@ -106,7 +106,9 @@
             var response = this.model.toJSON();
 
             $( '#' + api.attrPrefix + '-buttons-' + response.id )
-                .append( this.template( response.content ) );
+                .append( this.template( {
+					data: response.content
+				} ) );
 
             return this;
         }
@@ -130,17 +132,9 @@
 
             $images.each(function() {
 
-                var $target = $( this );
-                var imgSource = $target.find( 'img' ).attr( 'src' );
-
-                if ( imgSource ) {
-
-                    // Add image cover to Pinterest image sharing.
-                    // @todo rewrite this function.
-                    responseImage.pinterest.endpoint = responseImage.pinterest.endpoint + '&media=' + imgSource;
-
-                    $target.append( self.template( responseImage ) );
-                }
+				$( this ).append( self.template( {
+					data: responseImage
+				} ) );
             });
 
             return this;
@@ -162,4 +156,4 @@
         model: SocialButton.Model
     });
 
-})( jQuery, window._, window.Backbone, undefined );
+})( jQuery );
