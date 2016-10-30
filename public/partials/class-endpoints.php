@@ -79,10 +79,6 @@ class Endpoints {
 
 		$metas = $this->get_post_metas( $post_id );
 
-		if ( in_array( '', $metas, true ) ) {
-			return;
-		}
-
 		$sites = Options::button_sites( 'content' );
 		$includes = $this->plugin->get_option( 'buttons_content', 'includes' );
 
@@ -157,6 +153,7 @@ class Endpoints {
 							'url' => $metas['post_url'],
 							'description' => $metas['post_title'],
 							'is_video' => false,
+							'media' => $metas['post_image'],
 						),
 						$endpoint
 					);
@@ -320,10 +317,13 @@ class Endpoints {
 			$post_url = $this->metas->get_post_url( $post_id );
 		}
 
+		$post_image = $this->metas->get_post_image( $post_id );
+
 		return array(
 			'post_title' => rawurlencode( $post_title ),
 			'post_description' => rawurlencode( $post_description ),
 			'post_url' => rawurlencode( $post_url ),
+			'post_image' => isset( $post_image['src'] ) ? rawurlencode( $post_image['src'] ) : '',
 		);
 	}
 
