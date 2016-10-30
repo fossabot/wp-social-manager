@@ -182,14 +182,9 @@ class ButtonsImage extends Buttons {
 	 */
 	public function buttons_tmpl() {
 
-		if ( 'json' === $this->theme_supports->is( 'buttons-mode' ) ||
-			 'json' === $this->plugin->get_option( 'modes', 'buttons_mode' ) ) {
+		if ( 'json' === $this->get_button_mode() && $this->is_buttons_image() ) {
 
-			if ( false === $this->is_buttons_image() ) {
-				return;
-			}
-
-			if ( wp_script_is( $this->plugin_slug, 'enqueued' ) ) :
+			if ( wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
 
 				$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' ); ?>
 
