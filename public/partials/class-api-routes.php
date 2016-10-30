@@ -63,6 +63,7 @@ class APIRoutes {
 
 		$this->plugin = $endpoints->plugin;
 		$this->plugin_slug = $endpoints->plugin->get_slug();
+		$this->version = $endpoints->plugin->get_version();
 		$this->theme_supports = $endpoints->plugin->get_theme_supports();
 
 		$this->namespace = $this->plugin_slug . '/' . $this->api_version;
@@ -80,11 +81,8 @@ class APIRoutes {
 	 */
 	protected function hooks() {
 
-		if ( $this->is_load_routes() ) {
-
-			add_filter( 'rest_api_init', array( $this, 'register_routes' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'localize_scripts' ) );
-		}
+		add_filter( 'rest_api_init', array( $this, 'register_routes' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'localize_scripts' ) );
 	}
 
 	/**
@@ -125,7 +123,7 @@ class APIRoutes {
 			$args['id'] = absint( $post_id );
 		}
 
-		wp_localize_script( $this->plugin_slug, 'NineCodesSocialManager', $args );
+		wp_localize_script( $this->plugin_slug . '-app', 'NineCodesSocialManager', $args );
 	}
 
 	/**
@@ -153,7 +151,6 @@ class APIRoutes {
 				'callback' => array( $this, 'response_buttons' ),
 				'args' => array(
 					'id' => array(
-						'required' => true,
 						'sanitize_callback' => 'absint',
 						'validate_callback' => function( $param ) {
 							return ( $param );
@@ -175,34 +172,28 @@ class APIRoutes {
 	 */
 	public function response_buttons( $request ) {
 
-		$response = array(
-			'id' => $request['id'],
-		);
+		if ( isset( $request['id'] ) ) {
 
-		$response['content'] = $this->endpoints->get_content_endpoints( $request['id'] );
-		$response['image'] = $this->endpoints->get_image_endpoints( $request['id'] );
+			$response = array(
+				'id' => $request['id'],
+			);
 
-		return new WP_REST_Response( $response, 200 );
-	}
+			$response['content'] = $this->endpoints->get_content_endpoints( $request['id'] );
+			$response['image'] = $this->endpoints->get_image_endpoints( $request['id'] );
 
-	/**
-	 * Is the API Routes should be loaded?
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return boolean 	Return 'true' if the Buttons Mode is 'json',
-	 * 					and 'false' if the Buttons Mode is 'html'.
-	 */
-	public function is_load_routes() {
+		} else {
 
-		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
-
-		if ( 'json' === $this->theme_supports->is( 'buttons-mode' ) ||
-			 'json' === $buttons_mode ) {
-			return true;
+			$response = array(
+				'plugin_name' => 'Social Manager by NineCodes',
+				'plugin_url' => 'http://wordpress.org/plugins/ninecodes-social-manager',
+				'version' => $this->version,
+				'contributors' => array(
+					'Thoriq Firdaus',
+					'Hongkiat Lim',
+				),
+			);
 		}
 
-		return false;
+		return new WP_REST_Response( $response, 200 );
 	}
 }

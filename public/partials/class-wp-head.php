@@ -125,7 +125,7 @@ final class WPHead {
 		$og = $this->site_open_graph( $tag_args );
 		$tc = $this->site_twitter_card( $tag_args );
 
-		echo "\n<!-- START: Social Manager by NineCodes -->\n";
+		echo "<!-- START: Social Manager by NineCodes -->\n";
 		echo wp_kses( "{$og}{$tc}", array(
 			'meta' => array(
 			'property' => array(),
@@ -167,7 +167,7 @@ final class WPHead {
 		$og = $this->post_open_graph( $tag_args );
 		$tc = $this->post_twitter_card( $tag_args );
 
-		echo "\n<!-- START: Social Manager by NineCodes -->\n";
+		echo "<!-- START: Social Manager by NineCodes -->\n";
 		echo wp_kses( "{$og}{$tc}", array(
 			'meta' => array(
 			'property' => array(),
@@ -209,9 +209,9 @@ final class WPHead {
 			'site_image' => array(),
 		) );
 
-		$meta .= $args['site_name'] ? sprintf( "<meta property='og:site_name' content='%s' />\n", $args['site_name'] ) : '';
-		$meta .= $args['site_title'] ? sprintf( "<meta property='og:title' content='%s' />\n", $args['site_title'] ) : '';
-		$meta .= $args['site_description'] ? sprintf( "<meta property='og:description' content='%s' />\n", $args['site_description'] ) : '';
+		$meta .= $args['site_name'] ? sprintf( "<meta property='og:site_name' content='%s' />\n", esc_attr( $args['site_name'] ) ) : '';
+		$meta .= $args['site_title'] ? sprintf( "<meta property='og:title' content='%s' />\n", esc_attr( $args['site_title'] ) ) : '';
+		$meta .= $args['site_description'] ? sprintf( "<meta property='og:description' content='%s' />\n", esc_attr( $args['site_description'] ) ) : '';
 		$meta .= $args['site_url'] ? sprintf( "<meta property='og:url' content='%s' />\n", esc_url( $args['site_url'] ) ) : '';
 
 		if ( ! empty( $args['site_image'] ) ) {
@@ -221,11 +221,11 @@ final class WPHead {
 			$height = $args['site_image']['height'];
 
 			if ( $source && $width && $height ) {
-				$meta .= sprintf( "<meta property='og:image:src' content='%s' />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta property='og:image:url' content='%s' />\n", esc_attr( $source ) );
 				$meta .= sprintf( "<meta property='og:image:width' content='%s' />\n", esc_attr( $width ) );
 				$meta .= sprintf( "<meta property='og:image:height' content='%s' />\n", esc_attr( $height ) );
 			} elseif ( $source ) {
-				$meta .= sprintf( "<meta name='og:image' content='%s' />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta property='og:image' content='%s' />\n", esc_attr( $source ) );
 			}
 		}
 
@@ -271,8 +271,8 @@ final class WPHead {
 			'site_image' => array(),
 		) );
 
-		$meta .= $args['site_title'] ? sprintf( "<meta name='twitter:title' content='%s' />\n", $args['site_title'] ) : '';
-		$meta .= $args['site_description'] ? sprintf( "<meta name='twitter:description' content='%s' />\n", $args['site_description'] ) : '';
+		$meta .= $args['site_title'] ? sprintf( "<meta name='twitter:title' content='%s' />\n", esc_attr( $args['site_title'] ) ) : '';
+		$meta .= $args['site_description'] ? sprintf( "<meta name='twitter:description' content='%s' />\n", esc_attr( $args['site_description'] ) ) : '';
 		$meta .= $args['site_url'] ? sprintf( "<meta name='twitter:url' content='%s' />\n", esc_url( $args['site_url'] ) ) : '';
 
 		if ( ! empty( $meta ) ) {
@@ -336,8 +336,8 @@ final class WPHead {
 			'post_author' => array(),
 		) );
 
-		$meta .= $args['post_title'] ? sprintf( "<meta property='og:title' content='%s' />\n", $args['post_title'] ) : '';
-		$meta .= $args['post_description'] ? sprintf( "<meta property='og:description' content='%s' />\n", $args['post_description'] ) : '';
+		$meta .= $args['post_title'] ? sprintf( "<meta property='og:title' content='%s' />\n", esc_attr( $args['post_title'] ) ) : '';
+		$meta .= $args['post_description'] ? sprintf( "<meta property='og:description' content='%s' />\n", esc_attr( $args['post_description'] ) ) : '';
 		$meta .= $args['post_url'] ? sprintf( "<meta property='og:url' content='%s' />\n", esc_url( $args['post_url'] ) ) : '';
 
 		if ( ! empty( $args['post_image'] ) ) {
@@ -347,11 +347,11 @@ final class WPHead {
 			$height = $args['post_image']['height'];
 
 			if ( $source && $width && $height ) {
-				$meta .= sprintf( "<meta property='og:image:src' content='%s' />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta property='og:image:url' content='%s' />\n", esc_attr( $source ) );
 				$meta .= sprintf( "<meta property='og:image:width' content='%s' />\n", esc_attr( $width ) );
 				$meta .= sprintf( "<meta property='og:image:height' content='%s' />\n", esc_attr( $height ) );
 			} elseif ( $source ) {
-				$meta .= sprintf( "<meta name='og:image' content='%s' />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta property='og:image' content='%s' />\n", esc_attr( $source ) );
 			}
 		}
 
@@ -363,7 +363,7 @@ final class WPHead {
 			$meta = $type . $locale . $meta;
 		}
 
-		$site = $args['site_name'] ? sprintf( "<meta property='og:site_name' content='%s' />\n", $args['site_name'] ) : '';
+		$site = $args['site_name'] ? sprintf( "<meta property='og:site_name' content='%s' />\n", esc_attr( $args['site_name'] ) ) : '';
 
 		$graph = $this->post_facebook_graph( $args );
 
@@ -399,15 +399,15 @@ final class WPHead {
 		$url = isset( $props['url'] ) ? trailingslashit( esc_url( $props['url'] ) ) : '';
 		$username = $this->plugin->get_option( 'profiles', 'facebook' );
 
-		$meta .= ($url && $username) ? sprintf( "<meta property='article:publisher' content='%s' />\n", "{$url}{$username}" ) : '';
+		$meta .= ($url && $username) ? sprintf( "<meta property='article:publisher' content='%s' />\n", esc_attr( "{$url}{$username}" )) : '';
 
 		$author = (array) $args['post_author'];
 
 		if ( ! empty( $author ) ) {
 			if ( isset( $author['profiles']['facebook'] ) && ! empty( $author['profiles']['facebook'] ) ) {
-				$meta .= sprintf( "<meta property='article:author' content='%s' />\n", "{$url}{$author['profiles']['facebook']}" );
+				$meta .= sprintf( "<meta property='article:author' content='%s' />\n", esc_attr( "{$url}{$author['profiles']['facebook']}" ) );
 			} else {
-				$meta .= sprintf( "<meta name='author' content='%s' />\n", "{$author['display_name']}" );
+				$meta .= sprintf( "<meta name='author' content='%s' />\n", esc_attr( "{$author['display_name']}" ) );
 			}
 		}
 
@@ -444,8 +444,8 @@ final class WPHead {
 			'post_author' => array(),
 		) );
 
-		$meta .= $args['post_title'] ? sprintf( "<meta name='twitter:title' content='%s' />\n", $args['post_title'] ) : '';
-		$meta .= $args['post_description'] ? sprintf( "<meta name='twitter:description' content='%s' />\n", $args['post_description'] ) : '';
+		$meta .= $args['post_title'] ? sprintf( "<meta name='twitter:title' content='%s' />\n", esc_attr( $args['post_title'] ) ) : '';
+		$meta .= $args['post_description'] ? sprintf( "<meta name='twitter:description' content='%s' />\n", esc_attr( $args['post_description'] ) ) : '';
 		$meta .= $args['post_url'] ? sprintf( "<meta name='twitter:url' content='%s' />\n", esc_url( $args['post_url'] ) ) : '';
 
 		if ( ! empty( $args['post_image'] ) ) {
@@ -454,7 +454,7 @@ final class WPHead {
 			$width  = $args['post_image']['width'];
 			$height = $args['post_image']['height'];
 
-			if ( $source && $width && $height ) {
+			if ( $source && 0 !== $width && 0 !== $height ) {
 
 				$meta .= sprintf( "<meta name='twitter:image:src' content='%s' />\n", esc_attr( $source ) );
 				$meta .= sprintf( "<meta name='twitter:image:width' content='%s' />\n", esc_attr( $width ) );
@@ -476,10 +476,8 @@ final class WPHead {
 
 		$author = (array) $args['post_author'];
 
-		if ( isset( $author['profiles']['twitter'] ) ) {
-			if ( ! empty( $author['profiles']['twitter'] ) ) {
-				$meta .= sprintf( "<meta name='twitter:creator' content='@%s' />\n", "{$author['profiles']['twitter']}" );
-			}
+		if ( isset( $author['profiles']['twitter'] ) && ! empty( $author['profiles']['twitter'] ) ) {
+			$meta .= sprintf( "<meta name='twitter:creator' content='@%s' />\n", esc_attr( "{$author['profiles']['twitter']}" ) );
 		}
 
 		return $meta;

@@ -133,8 +133,8 @@ final class ViewPublic {
 	protected function hooks() {
 
 		add_action( 'init', array( $this, 'setups' ) );
-		add_action( 'init', array( $this, 'enqueue_styles' ) );
-		add_action( 'init', array( $this, 'enqueue_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 30 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 30 );
 	}
 
 	/**
@@ -151,20 +151,37 @@ final class ViewPublic {
 	public function setups() {
 
 		$metas = new Metas( $this->plugin );
+		$endpoints = new Endpoints( $this->plugin, $metas );
+
+		do_action( 'ninecodes_social_manager_instance', 'metas', $metas );
+		do_action( 'ninecodes_social_manager_instance', 'endpoints', $endpoints );
 
 		new WPHead( $metas );
-
-		$endpoints = new Endpoints( $this->plugin, $metas );
 
 		new ButtonsContent( $endpoints );
 		new ButtonsImage( $endpoints );
 
 		$this->routes = new APIRoutes( $endpoints );
+
+		$this->register_styles();
 		$this->register_scripts();
 	}
 
 	/**
-	 * Register JavaScripts handles.
+	 * Register Stylesheet
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return void
+	 */
+	protected function register_styles() {
+
+		wp_register_style( $this->plugin_slug, $this->path_url . 'css/styles.css', array(), $this->version, 'all' );
+	}
+
+	/**
+	 * Register JavaScripts
 	 *
 	 * We serve two kind of interfaces, JSON and HTML.
 	 *
@@ -173,17 +190,14 @@ final class ViewPublic {
 	 * and it only requires jQuery to work.
 	 *
 	 * @since 1.0.0
-	 * @access public
+	 * @access protected
 	 *
 	 * @return void
 	 */
-	public function register_scripts() {
+	protected function register_scripts() {
 
-		if ( $this->routes->is_load_routes() ) {
-			wp_register_script( $this->plugin_slug, $this->path_url . 'js/app.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
-		} else {
-			wp_register_script( $this->plugin_slug, $this->path_url . 'js/scripts.js', array( 'jquery' ), $this->version, true );
-		}
+		wp_register_script( $this->plugin_slug . '-app', $this->path_url . 'js/app.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		wp_register_script( $this->plugin_slug, $this->path_url . 'js/scripts.js', array( 'jquery' ), $this->version, true );
 	}
 
 	/**
@@ -197,7 +211,7 @@ final class ViewPublic {
 	public function enqueue_styles() {
 
 		if ( $this->is_load_stylesheet() ) {
-			wp_enqueue_style( $this->plugin_slug, $this->path_url . 'css/styles.css', array(), $this->version, 'all' );
+			wp_enqueue_style( $this->plugin_slug );
 		}
 	}
 
@@ -211,7 +225,15 @@ final class ViewPublic {
 	 */
 	public function enqueue_scripts() {
 
-		wp_enqueue_script( $this->plugin_slug );
+		if ( ! $this->is_load_scripts() ) {
+			return;
+		}
+
+		if ( $this->is_json_mode() ) {
+			wp_enqueue_script( $this->plugin_slug . '-app' );
+		} else {
+			wp_enqueue_script( $this->plugin_slug );
+		}
 	}
 
 	/**
@@ -230,6 +252,58 @@ final class ViewPublic {
 			return false;
 		}
 
+		$ptc = $this->plugin->get_option( 'buttons_content', 'post_types' );
+		$pti = $this->plugin->get_option( 'buttons_image', 'post_types' );
+
+		$post_types = array_unique( array_merge( $ptc, $pti ) );
+
+		if ( ! is_singular( $post_types ) ) {
+			return false;
+		}
+
 		return (bool) $this->plugin->get_option( 'enqueue', 'enable_stylesheet' );
+	}
+
+	/**
+	 * Is the scripts should be loaded?
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return boolean
+	 */
+	protected function is_load_scripts() {
+
+		$ptc = $this->plugin->get_option( 'buttons_content', 'post_types' );
+		$pti = $this->plugin->get_option( 'buttons_image', 'post_types' );
+
+		$post_types = array_unique( array_merge( $ptc, $pti ) );
+
+		if ( ! is_singular( $post_types ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Is the JSON mode being used.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return boolean 	Return 'true' if the Buttons Mode is 'json',
+	 * 					and 'false' if the Buttons Mode is 'html'.
+	 */
+	protected function is_json_mode() {
+
+		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
+
+		if ( 'json' === $this->theme_supports->is( 'buttons-mode' ) ||
+			 'json' === $buttons_mode ) {
+			return true;
+		}
+
+		return false;
 	}
 }
