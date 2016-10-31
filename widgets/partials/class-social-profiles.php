@@ -42,6 +42,24 @@ final class WidgetSocialProfiles extends WP_Widget {
 	protected $widget_title;
 
 	/**
+	 * The ID of this plugin.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $plugin_slug;
+
+	/**
+	 * The unique identifier or prefix for database names.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $option_slug = 'ncsocman';
+
+	/**
 	 * Profile and Page usernames saved in the option.
 	 *
 	 * @since 1.0.0
@@ -72,16 +90,16 @@ final class WidgetSocialProfiles extends WP_Widget {
 	 */
 	public function __construct( Plugin $plugin ) {
 
-		$plugin_slug = $plugin->get_slug();
-		$option_slug = $plugin->get_opts();
+		$this->plugin_slug = $plugin->get_slug();
+		$this->option_slug = $plugin->get_opts();
 
-		$options = get_option( "{$option_slug}_profiles" );
+		$options = get_option( "{$this->option_slug}_profiles" );
 		$this->options = ! empty( $options ) ? $options : array();
 
 		$this->profiles = Options::social_profiles();
 
-		$this->widget_id = "{$plugin_slug}-profiles";
-		$this->widget_title = esc_html__( 'Social Media Profiles', 'ninecodes-social-manager' );
+		$this->widget_id = "{$this->plugin_slug}-profiles";
+		$this->widget_title = esc_html__( 'Follow Us', 'ninecodes-social-manager' );
 
 		parent::__construct($this->widget_id, esc_html__( 'Social Media Profiles', 'ninecodes-social-manager' ), array(
 			'classname' => $this->widget_id,
@@ -126,34 +144,23 @@ final class WidgetSocialProfiles extends WP_Widget {
 				<br>
 			<?php
 			foreach ( $this->options as $key => $value ) :
+
 				if ( empty( $value ) ) {
 					continue;
 				}
 
-				$key = sanitize_key( $key );
+				$key = esc_attr( sanitize_key( $key ) );
 				$id = esc_attr( $this->get_field_id( $key ) );
 
 				$name = esc_attr( $this->get_field_name( 'site' ) );
-				$name = "{$name}[{$key}]";
+				$name = esc_attr( "{$name}[{$key}]" );
 
 				$state = isset( $instance['site'][ $key ] ) ? $instance['site'][ $key ] : 1;
 				$state = checked( $state, 1, false );
 
-				echo wp_kses("<input id='{$id}' type='checkbox' class='checkbox' name='{$name}'' value='{$key}' {$state}>", array(
-					'input' => array(
-						'id' => true,
-						'class' => true,
-						'name' => true,
-						'value' => true,
-						'checked' => true,
-					),
-				));
-				echo wp_kses("<label for='{$id}'>{$this->profiles[$key]['label']}</label><br>", array(
-					'label' => array(
-						'for' => true,
-					),
-					'br' => array(),
-				));
+				echo "<input id='{$id}' type='checkbox' class='checkbox' name='{$name}'' value='{$key}' {$state}>";
+				echo "<label for='{$id}'>{$this->profiles[$key]['label']}</label><br>";
+
 			endforeach; ?>
 			</p>
 
@@ -167,26 +174,14 @@ final class WidgetSocialProfiles extends WP_Widget {
 					$views = Options::button_views();
 
 				foreach ( $views as $key => $label ) :
+
 					$key = sanitize_key( $key );
 
 					$state = isset( $instance['view'] ) && ! empty( $instance['view'] ) ? $instance['view'] : 'icon';
 					$state = checked( sanitize_key( $state ), $key, false );
 
-					echo wp_kses( "<input id='{$id}-{$key}' type='radio' name='{$name}' value='{$key}' {$state}>", array(
-						'input' => array(
-							'id' => true,
-							'type' => true,
-							'name' => true,
-							'value' => true,
-							'checked' => true,
-						),
-					) );
-					echo wp_kses( "<label for='{$id}-{$key}'>" . esc_html( $label ) . '</label><br>', array(
-						'label' => array(
-							'for' => true,
-						),
-						'br' => array(),
-					) );
+					echo "<input id='{$id}-{$key}' type='radio' name='{$name}' value='{$key}' {$state}>";
+					echo "<label for='{$id}-{$key}'>" . esc_html( $label ) . '</label><br>';
 				endforeach; ?>
 			</p>
 			<?php endif; ?>
@@ -232,6 +227,8 @@ final class WidgetSocialProfiles extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
+		wp_enqueue_style( $this->plugin_slug );
+
 		echo $args['before_widget']; // WPCS : XSS ok.
 
 		/*
@@ -252,10 +249,11 @@ final class WidgetSocialProfiles extends WP_Widget {
 		foreach ( $this->options as $key => $value ) {
 			$site = 0;
 
+
+
 			if ( ! isset( $instance['site'][ $key ] ) && ! empty( $value ) ) {
 				$site = 1;
 			}
-
 			if ( isset( $instance['site'][ $key ] ) && ! empty( $value ) ) {
 				$site = $instance['site'][ $key ];
 			}
@@ -268,6 +266,8 @@ final class WidgetSocialProfiles extends WP_Widget {
 				'label' => '',
 				'url' => '',
 			));
+
+
 
 			if ( ! $profiles['url'] ) {
 				continue;
@@ -293,6 +293,9 @@ final class WidgetSocialProfiles extends WP_Widget {
 				'svg' => array(
 					'xmlns' => true,
 					'viewbox' => true,
+				),
+				'use' => array(
+					'xlink:href' => true,
 				),
 				'path' => array(
 					'd' => true,
