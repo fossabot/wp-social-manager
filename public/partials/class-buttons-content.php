@@ -132,7 +132,7 @@ class ButtonsContent extends Buttons {
 					$list .= "<h4 class='{$prefix}-buttons__heading'>{$heading}</h4>";
 				endif;
 
-				$list .= "<span class='{$prefix}-buttons__list {$prefix}-buttons__list--{$view}' data-social-buttons='content'>";
+				$list .= "<div class='{$prefix}-buttons__list {$prefix}-buttons__list--{$view}' data-social-buttons='content'>";
 
 				foreach ( $includes as $site ) :
 
@@ -145,7 +145,7 @@ class ButtonsContent extends Buttons {
 					),'content' );
 
 				endforeach;
-				$list .= '</span>';
+				$list .= '</div>';
 				endif;
 
 			return $list;
@@ -181,7 +181,7 @@ class ButtonsContent extends Buttons {
 	 				<?php if ( ! empty( $heading ) ) : ?>
 	 				<h4 class="<?php echo esc_attr( $prefix ); ?>-buttons__heading"><?php echo esc_html( $heading ); ?></h4>
 	 				<?php endif; ?>
-	 				<span class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="content">
+	 				<div class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="content">
 	 				<?php foreach ( $includes as $site ) :
 
 	 					$icon = $this->get_button_icon( $site );
@@ -194,7 +194,7 @@ class ButtonsContent extends Buttons {
 
 	 					echo $list; // WPCS: XSS ok.
 	 				endforeach; ?>
-	 				</span>
+					</div>
 	 			</script>
 	 			<?php endif;
 	 			endif;
