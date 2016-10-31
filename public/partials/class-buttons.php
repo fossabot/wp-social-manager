@@ -245,6 +245,9 @@ abstract class Buttons implements ButtonsInterface {
 		$allowed_html['path'] = array(
 			'd' => true,
 		);
+		$allowed_html['use'] = array(
+			'xlink:href' => true,
+		);
 
 		return isset( $templates[ $view ] ) ? wp_kses( $templates[ $view ], $allowed_html ) : '';
 	}
