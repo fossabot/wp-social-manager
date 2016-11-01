@@ -172,7 +172,7 @@ class ButtonsImage extends Buttons {
 			$dom = new DOMDocument();
 			$doc = $dom->loadHTML( mb_convert_encoding( $list, 'HTML-ENTITIES', 'UTF-8' ) );
 
-			if ( ! $doc ) {
+			if ( ! $doc ) { // Clear error buffer.
 				libxml_clear_errors();
 			}
 
