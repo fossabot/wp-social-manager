@@ -42,12 +42,6 @@ class Endpoints {
 	public $metas;
 
 	/**
-	 * [$image_srcs description]
-	 * @var [type]
-	 */
-	protected $image_srcs;
-
-	/**
 	 * Constructor.
 	 *
 	 * Run the WordPress Hooks, add meta tags in the 'head' tag.
@@ -202,7 +196,7 @@ class Endpoints {
 	 *
 	 * @todo add inline docs referring to each site endpoint documentation page.
 	 *
-	 * @param integer $post_id  The WordPress post ID.
+	 * @param integer $post_id The WordPress post ID.
 	 * @return array An array of sites with their label / name and button endpoint url.
 	 */
 	public function get_image_endpoints( $post_id ) {
@@ -229,8 +223,8 @@ class Endpoints {
 			$button['site'] = $site;
 			$button['label'] = $label;
 			$button['endpoint'] = $endpoint;
-			$button['url'] = $metas['post_url'];
-			$button['title'] = $metas['post_title'];
+			$button['post_url'] = $metas['post_url'];
+			$button['post_title'] = $metas['post_title'];
 
 			$buttons = array_merge( $buttons, array( $button ) );
 		}
@@ -244,6 +238,20 @@ class Endpoints {
 		return $urls;
 	}
 
+	/**
+	 * Function to merge each image src to the button endpoint URL.
+	 *
+	 * @param array  $button {
+	 * 				The site button properties.
+	 * 				@type string $site 		 The button site unique key e.g. facebook, twitter, etc.
+	 * 				@type string $label 	 The button label or text.
+	 * 				@type string $endpoint 	 The site endpoint URL of the button.
+	 * 				@type string $post_url 	 The post URL.
+	 * 				@type string $post_title The post title.
+	 * }
+	 * @param string $src The image source URL.
+	 * @return array The button endpoint URL with the image src added.
+	 */
 	protected function joint_image_endpoints( $button, $src ) {
 
 		$url = array();
@@ -259,12 +267,13 @@ class Endpoints {
 			'pinterest' => array(
 				'label' => $button['label'],
 				'endpoint' => add_query_arg( array(
-					'url' => $button['url'],
-					'description' => $button['title'],
+					'url' => $button['post_url'],
+					'description' => $button['post_title'],
 					'is_video' => false,
-					'media' => $src
-				), $button['endpoint'] )
-			)
+					'media' => $src,
+					), $button['endpoint']
+				),
+			),
 		);
 
 		if ( isset( $endpoints[ $site ] ) ) {
@@ -275,8 +284,10 @@ class Endpoints {
 	}
 
 	/**
-	 * [get_content_image_srcs description]
-	 * @return [type] [description]
+	 * Function to get image sources in the post content.
+	 *
+	 * @param integer $post_id The post ID.
+	 * @return array List of image source URL
 	 */
 	protected function get_content_image_srcs( $post_id ) {
 
@@ -285,7 +296,11 @@ class Endpoints {
 		libxml_use_internal_errors( true );
 
 		$dom = new DOMDocument();
-		$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+		$doc = $dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+
+		if ( ! $doc ) { // Clear error buffer.
+			libxml_clear_errors();
+		}
 
 		$images = $dom->getElementsByTagName( 'img' );
 		$source = array();

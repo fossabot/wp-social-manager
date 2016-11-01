@@ -340,11 +340,16 @@ final class Metas {
 		}
 
 		$post = get_post( $id );
+		$content = $post->post_content;
 
 		libxml_use_internal_errors( true );
-
 		$dom = new DOMDocument();
-		$dom->loadHTML( mb_convert_encoding( $post->post_content, 'HTML-ENTITIES', 'UTF-8' ) );
+		$doc = $dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+
+		if ( ! $doc ) { // Clear error buffer.
+			libxml_clear_errors();
+		}
+
 		$images = $dom->getElementsByTagName( 'img' );
 
 		if ( 0 !== $images->length ) {
