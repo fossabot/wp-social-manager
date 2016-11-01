@@ -342,13 +342,14 @@ final class Metas {
 		$post = get_post( $id );
 		$content = $post->post_content;
 
-		libxml_use_internal_errors( true );
 		$dom = new DOMDocument();
+
+		$errors = libxml_use_internal_errors( true );
+
 		$doc = $dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
 
-		if ( ! $doc ) { // Clear error buffer.
-			libxml_clear_errors();
-		}
+		libxml_clear_errors();
+		libxml_use_internal_errors( $errors );
 
 		$images = $dom->getElementsByTagName( 'img' );
 
