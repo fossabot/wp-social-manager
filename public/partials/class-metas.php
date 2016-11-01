@@ -294,7 +294,7 @@ final class Metas {
 	 *
 	 * This method will try to retrieve image from a number of sources,
 	 * and return the image data based on the following priority order:
-	 * 1. Post Meta Image
+	 * 1. Post Meta Image or 'ninecodes_social_manager_meta' Filter
 	 * 2. Post Featured Image
 	 * 3. Post Content First Image
 	 * 4. Site Meta Image
@@ -308,16 +308,20 @@ final class Metas {
 	 */
 	public function get_post_image( $id ) {
 
-		$image = apply_filters( 'ninecodes_social_manager_meta', array(), $id, 'post-image' );
-
-		if ( ! empty( $image ) && isset( $image['src'] ) ) {
-			return $image;
-		}
-
 		$attachment_id = null;
 
 		if ( $this->is_meta_enabled() ) {
 			$attachment_id = $this->get_post_meta( $id, 'post_thumbnail' ); // Post Meta Image.
+		}
+
+		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), $attachment_id, $id, 'post-image' );
+
+		/*
+		 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
+		 * return the image immediately and don't proceed the codes that follow.
+		 */
+		if ( ! empty( $image_filter ) && isset( $image_filter['src'] ) ) {
+			return $image_filter;
 		}
 
 		if ( ! $attachment_id ) {
