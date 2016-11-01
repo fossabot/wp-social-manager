@@ -14,6 +14,8 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
+use \DOMDocument;
+
 /**
  * The class used for creating the social media endpoint URLs.
  *
@@ -51,6 +53,7 @@ class Endpoints {
 	 * @param Metas  $metas The Meta class instance.
 	 */
 	function __construct( Plugin $plugin, Metas $metas ) {
+
 		$this->metas = $metas;
 		$this->plugin = $plugin;
 	}
@@ -69,10 +72,6 @@ class Endpoints {
 	public function get_content_endpoints( $post_id ) {
 
 		$metas = $this->get_post_metas( $post_id );
-
-		if ( in_array( '', $metas, true ) ) {
-			return;
-		}
 
 		$sites = Options::button_sites( 'content' );
 		$includes = $this->plugin->get_option( 'buttons_content', 'includes' );
@@ -148,6 +147,7 @@ class Endpoints {
 							'url' => $metas['post_url'],
 							'description' => $metas['post_title'],
 							'is_video' => false,
+							'media' => $metas['post_image'],
 						),
 						$endpoint
 					);
@@ -196,7 +196,7 @@ class Endpoints {
 	 *
 	 * @todo add inline docs referring to each site endpoint documentation page.
 	 *
-	 * @param integer $post_id  The WordPress post ID.
+	 * @param integer $post_id The WordPress post ID.
 	 * @return array An array of sites with their label / name and button endpoint url.
 	 */
 	public function get_image_endpoints( $post_id ) {
@@ -208,39 +208,108 @@ class Endpoints {
 		}
 
 		$sites = Options::button_sites( 'image' );
-		$includes = $this->plugin->get_option( 'buttons_image', 'includes' );
 
 		$urls = array();
+		$buttons = array();
 
-		foreach ( $sites as $slug => $label ) {
+		foreach ( $sites as $site => $label ) {
 
-			$endpoint = self::get_endpoint_base( 'image', $slug );
+			$endpoint = self::get_endpoint_base( 'image', $site );
 
 			if ( ! $endpoint ) {
-				unset( $sites[ $slug ] );
+				unset( $sites[ $site ] );
 			}
 
-			$urls[ $slug ]['label'] = $label;
+			$button['site'] = $site;
+			$button['label'] = $label;
+			$button['endpoint'] = $endpoint;
+			$button['post_url'] = $metas['post_url'];
+			$button['post_title'] = $metas['post_title'];
 
-			switch ( $slug ) {
+			$buttons = array_merge( $buttons, array( $button ) );
+		}
 
-				case 'pinterest':
+		$srcs = $this->get_content_image_srcs( $post_id );
 
-					$urls[ $slug ]['endpoint'] = add_query_arg(
-						array(
-							'url' => $metas['post_url'],
-							'description' => $metas['post_title'],
-							'is_video' => false,
-							'media' => ''
-						),
-						$endpoint
-					);
-
-					break;
-			}
+		foreach ( $srcs as $key => $src ) {
+			$urls[] = array_map( array( $this, 'joint_image_endpoints' ), $buttons, array( $src ) );
 		}
 
 		return $urls;
+	}
+
+	/**
+	 * Function to merge each image src to the button endpoint URL.
+	 *
+	 * @param array  $button {
+	 * 				The site button properties.
+	 * 				@type string $site 		 The button site unique key e.g. facebook, twitter, etc.
+	 * 				@type string $label 	 The button label or text.
+	 * 				@type string $endpoint 	 The site endpoint URL of the button.
+	 * 				@type string $post_url 	 The post URL.
+	 * 				@type string $post_title The post title.
+	 * }
+	 * @param string $src The image source URL.
+	 * @return array The button endpoint URL with the image src added.
+	 */
+	protected function joint_image_endpoints( $button, $src ) {
+
+		$url = array();
+
+		if ( ! isset( $button['site'] ) ) {
+			return $url;
+		}
+
+		$site = $button['site'];
+		$endpoints = array(
+			'facebook' => array(),
+			'twitter' => array(),
+			'pinterest' => array(
+				'label' => $button['label'],
+				'endpoint' => add_query_arg( array(
+					'url' => $button['post_url'],
+					'description' => $button['post_title'],
+					'is_video' => false,
+					'media' => $src,
+					), $button['endpoint']
+				),
+			),
+		);
+
+		if ( isset( $endpoints[ $site ] ) ) {
+			$url[ $site ] = $endpoints[ $site ];
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Function to get image sources in the post content.
+	 *
+	 * @param integer $post_id The post ID.
+	 * @return array List of image source URL
+	 */
+	protected function get_content_image_srcs( $post_id ) {
+
+		$content = apply_filters( 'the_content', get_post_field( 'post_content', $post_id ) );
+
+		libxml_use_internal_errors( true );
+
+		$dom = new DOMDocument();
+		$doc = $dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+
+		if ( ! $doc ) { // Clear error buffer.
+			libxml_clear_errors();
+		}
+
+		$images = $dom->getElementsByTagName( 'img' );
+		$source = array();
+
+		foreach ( $images as $key => $img ) {
+			$source[] = $img->getAttribute( 'src' );
+		}
+
+		return $source;
 	}
 
 	/**
@@ -263,10 +332,13 @@ class Endpoints {
 			$post_url = $this->metas->get_post_url( $post_id );
 		}
 
+		$post_image = $this->metas->get_post_image( $post_id );
+
 		return array(
 			'post_title' => rawurlencode( $post_title ),
 			'post_description' => rawurlencode( $post_description ),
 			'post_url' => rawurlencode( $post_url ),
+			'post_image' => isset( $post_image['src'] ) ? rawurlencode( $post_image['src'] ) : '',
 		);
 	}
 

@@ -122,8 +122,8 @@ final class WPHead {
 			'site_image' => $this->metas->get_site_image(),
 		);
 
-		$og = $this->site_open_graph( $tag_args );
-		$tc = $this->site_twitter_card( $tag_args );
+		$og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'site', 'open-graph' ) );
+		$tc = $this->site_twitter_cards( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'site', 'twitter-cards' ) );
 
 		echo "<!-- START: Social Manager by NineCodes -->\n";
 		echo wp_kses( "{$og}{$tc}", array(
@@ -164,8 +164,8 @@ final class WPHead {
 			'post_author' => $this->metas->get_post_author( $post_id ),
 		);
 
-		$og = $this->post_open_graph( $tag_args );
-		$tc = $this->post_twitter_card( $tag_args );
+		$og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'open-graph' ) );
+		$tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'twitter-cards' ) );
 
 		echo "<!-- START: Social Manager by NineCodes -->\n";
 		echo wp_kses( "{$og}{$tc}", array(
@@ -259,7 +259,7 @@ final class WPHead {
 	 * }
 	 * @return string The Twitter Cards meta tags.
 	 */
-	public function site_twitter_card( $args ) {
+	public function site_twitter_cards( $args ) {
 
 		$meta = '';
 
@@ -399,7 +399,7 @@ final class WPHead {
 		$url = isset( $props['url'] ) ? trailingslashit( esc_url( $props['url'] ) ) : '';
 		$username = $this->plugin->get_option( 'profiles', 'facebook' );
 
-		$meta .= ($url && $username) ? sprintf( "<meta property='article:publisher' content='%s' />\n", esc_attr( "{$url}{$username}" )) : '';
+		$meta .= ($url && $username) ? sprintf( "<meta property='article:publisher' content='%s' />\n", esc_attr( "{$url}{$username}" ) ) : '';
 
 		$author = (array) $args['post_author'];
 
@@ -433,7 +433,7 @@ final class WPHead {
 	 * }
 	 * @return string The Twitter Cards meta tags.
 	 */
-	protected function post_twitter_card( $args ) {
+	protected function post_twitter_cards( $args ) {
 
 		$meta = '';
 		$args = wp_parse_args( $args, array(

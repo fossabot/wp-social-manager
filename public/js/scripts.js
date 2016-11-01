@@ -30,7 +30,7 @@
         var screenWidth = wind.innerWidth ? wind.innerWidth : docu.documentElement.clientWidth ? docu.documentElement.clientWidth : screen.width;
         var screenHeight = wind.innerHeight ? wind.innerHeight : docu.documentElement.clientHeight ? docu.documentElement.clientHeight : screen.height;
 
-        var width = 600;
+        var width = 560;
         var height = 430;
 
         var left = ( ( screenWidth / 2 ) - ( width / 2 ) ) + screenLeft;
