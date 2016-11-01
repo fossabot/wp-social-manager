@@ -230,6 +230,10 @@ class ButtonsImage extends Buttons {
 	 */
 	protected function is_buttons_image() {
 
+		if ( $this->in_amp() ) {
+			return false;
+		}
+
 		$enable = (bool) $this->plugin->get_option( 'buttons_image', 'enabled' );
 
 		if ( ! $enable ) {
