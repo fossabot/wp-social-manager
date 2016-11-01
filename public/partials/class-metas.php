@@ -294,7 +294,7 @@ final class Metas {
 	 *
 	 * This method will try to retrieve image from a number of sources,
 	 * and return the image data based on the following priority order:
-	 * 1. Post Meta Image
+	 * 1. Post Meta Image or 'ninecodes_social_manager_meta' Filter
 	 * 2. Post Featured Image
 	 * 3. Post Content First Image
 	 * 4. Site Meta Image
@@ -314,6 +314,16 @@ final class Metas {
 			$attachment_id = $this->get_post_meta( $id, 'post_thumbnail' ); // Post Meta Image.
 		}
 
+		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), $attachment_id, $id, 'post-image' );
+
+		/*
+		 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
+		 * return the image immediately and don't proceed the codes that follow.
+		 */
+		if ( ! empty( $image_filter ) && isset( $image_filter['src'] ) ) {
+			return $image_filter;
+		}
+
 		if ( ! $attachment_id ) {
 			$attachment_id = get_post_thumbnail_id( $id ); // Post Featured Image.
 		}
@@ -330,11 +340,16 @@ final class Metas {
 		}
 
 		$post = get_post( $id );
+		$content = $post->post_content;
 
 		libxml_use_internal_errors( true );
-
 		$dom = new DOMDocument();
-		$dom->loadHTML( mb_convert_encoding( $post->post_content, 'HTML-ENTITIES', 'UTF-8' ) );
+		$doc = $dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+
+		if ( ! $doc ) { // Clear error buffer.
+			libxml_clear_errors();
+		}
+
 		$images = $dom->getElementsByTagName( 'img' );
 
 		if ( 0 !== $images->length ) {

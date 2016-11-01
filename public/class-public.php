@@ -196,8 +196,8 @@ final class ViewPublic {
 	 */
 	protected function register_scripts() {
 
-		wp_register_script( $this->plugin_slug . '-app', $this->path_url . 'js/app.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
-		wp_register_script( $this->plugin_slug, $this->path_url . 'js/scripts.js', array( 'jquery' ), $this->version, true );
+		wp_register_script( $this->plugin_slug . '-app', $this->path_url . 'js/app.min.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		wp_register_script( $this->plugin_slug, $this->path_url . 'js/scripts.min.js', array( 'jquery' ), $this->version, true );
 	}
 
 	/**

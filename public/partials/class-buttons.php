@@ -245,6 +245,9 @@ abstract class Buttons implements ButtonsInterface {
 		$allowed_html['path'] = array(
 			'd' => true,
 		);
+		$allowed_html['use'] = array(
+			'xlink:href' => true,
+		);
 
 		return isset( $templates[ $view ] ) ? wp_kses( $templates[ $view ], $allowed_html ) : '';
 	}
@@ -357,5 +360,18 @@ abstract class Buttons implements ButtonsInterface {
 	 */
 	protected function get_button_attr_prefix() {
 		return Helpers::get_attr_prefix();
+	}
+
+	/**
+	 * The function utility to check if the content is rendered in AMP endpoint.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return boolean
+	 */
+	protected function in_amp() {
+
+		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ? true : false;
 	}
 }

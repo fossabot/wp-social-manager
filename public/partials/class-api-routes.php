@@ -123,7 +123,7 @@ class APIRoutes {
 			$args['id'] = absint( $post_id );
 		}
 
-		wp_localize_script( $this->plugin_slug . '-app', 'NineCodesSocialManager', $args );
+		wp_localize_script( $this->plugin_slug . '-app', 'nineCodesSocialManager', $args );
 	}
 
 	/**
@@ -179,7 +179,7 @@ class APIRoutes {
 			);
 
 			$response['content'] = $this->endpoints->get_content_endpoints( $request['id'] );
-			$response['image'] = $this->endpoints->get_image_endpoints( $request['id'] );
+			$response['images'] = $this->endpoints->get_image_endpoints( $request['id'] );
 
 		} else {
 

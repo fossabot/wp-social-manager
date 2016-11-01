@@ -72,12 +72,15 @@ class ButtonsImage extends Buttons {
 		libxml_use_internal_errors( true );
 
 		$dom = new DOMDocument();
-		$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+		$doc = $dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+
+		if ( ! $doc ) { // Clear error buffer.
+			libxml_clear_errors();
+		}
 
 		$prefix = $this->get_button_attr_prefix();
 
 		$images = $dom->getElementsByTagName( 'img' );
-
 		$wrap = $dom->createElement( 'span' );
 
 		$wrap->setAttribute( 'class', "{$prefix}-buttons {$prefix}-buttons--img {$prefix}-buttons--{$this->post_id}" );
@@ -161,12 +164,17 @@ class ButtonsImage extends Buttons {
 				$list .= '</span>';
 			endif;
 
+			libxml_use_internal_errors( true );
 			/**
 			 * Format the output to be a proper HTML markup,
 			 * so it can be safely append into the DOM.
 			 */
 			$dom = new DOMDocument();
-			$dom->loadHTML( mb_convert_encoding( $list, 'HTML-ENTITIES', 'UTF-8' ) );
+			$doc = $dom->loadHTML( mb_convert_encoding( $list, 'HTML-ENTITIES', 'UTF-8' ) );
+
+			if ( ! $doc ) { // Clear error buffer.
+				libxml_clear_errors();
+			}
 
 			return preg_replace( '/^<!DOCTYPE.+?>/', '', str_replace( array( '<html>', '</html>', '<body>', '</body>' ), array( '', '', '', '' ), $dom->saveHTML() ) );
 		endif;
@@ -221,6 +229,10 @@ class ButtonsImage extends Buttons {
 	 * @return boolean
 	 */
 	protected function is_buttons_image() {
+
+		if ( $this->in_amp() ) {
+			return false;
+		}
 
 		$enable = (bool) $this->plugin->get_option( 'buttons_image', 'enabled' );
 

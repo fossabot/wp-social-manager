@@ -151,6 +151,7 @@
 .ninecodes-social-manager-profiles__list--icon .ninecodes-social-manager-profiles__item {
     width: 26px;
     height: 26px;
+    margin-right: 10px;
     display: inline-block;
 }
 
