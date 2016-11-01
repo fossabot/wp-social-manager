@@ -5,11 +5,11 @@
     var api, target, source, SocialButton;
     var $template, $templateHTML;
 
-    if ( 'undefined' === typeof NineCodesSocialManager ) {
+    if ( 'undefined' === typeof nineCodesSocialManager ) {
         return;
     }
 
-    api = NineCodesSocialManager;
+    api = nineCodesSocialManager;
 
     if ( _.isUndefined( api.id ) ) {
         return;
@@ -126,11 +126,12 @@
 
             var self = this;
             var response = this.model.toJSON();
-            var responseImage = response.image;
+            var responseImage = response.images;
 
             var $images = $( '.' + api.attrPrefix + '-buttons--' + response.id );
 
-            $images.each(function(index) {
+            $images.each( function( index ) {
+
 				$( this ).append( self.template( {
 					data: responseImage[index][0]
 				} ) );
