@@ -91,6 +91,9 @@ final class Fields extends PepperPlaneFields {
 	 */
 	public function callback_image( $args ) {
 
+		// Enqueues all scripts, styles, settings, and templates necessary to use all media JavaScript APIs.
+		wp_enqueue_media();
+
 		$args  = $this->get_arguments( $args );
 
 		$id = esc_attr( "{$args['section']}_{$args['id']}" );
