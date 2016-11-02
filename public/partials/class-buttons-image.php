@@ -69,14 +69,14 @@ class ButtonsImage extends Buttons {
 			return $content;
 		}
 
-		libxml_use_internal_errors( true );
-
 		$dom = new DOMDocument();
-		$doc = $dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
 
-		if ( ! $doc ) { // Clear error buffer.
-			libxml_clear_errors();
-		}
+		$errors = libxml_use_internal_errors( true );
+
+		$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+
+		libxml_clear_errors();
+	   	libxml_use_internal_errors( $errors );
 
 		$prefix = $this->get_button_attr_prefix();
 
@@ -164,17 +164,18 @@ class ButtonsImage extends Buttons {
 				$list .= '</span>';
 			endif;
 
-			libxml_use_internal_errors( true );
 			/**
 			 * Format the output to be a proper HTML markup,
 			 * so it can be safely append into the DOM.
 			 */
 			$dom = new DOMDocument();
-			$doc = $dom->loadHTML( mb_convert_encoding( $list, 'HTML-ENTITIES', 'UTF-8' ) );
 
-			if ( ! $doc ) { // Clear error buffer.
-				libxml_clear_errors();
-			}
+			$errors = libxml_use_internal_errors( true );
+
+			$dom->loadHTML( mb_convert_encoding( $list, 'HTML-ENTITIES', 'UTF-8' ) );
+
+			libxml_clear_errors();
+	   		libxml_use_internal_errors( $errors );
 
 			return preg_replace( '/^<!DOCTYPE.+?>/', '', str_replace( array( '<html>', '</html>', '<body>', '</body>' ), array( '', '', '', '' ), $dom->saveHTML() ) );
 		endif;

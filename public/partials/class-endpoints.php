@@ -293,14 +293,14 @@ class Endpoints {
 
 		$content = apply_filters( 'the_content', get_post_field( 'post_content', $post_id ) );
 
-		libxml_use_internal_errors( true );
-
 		$dom = new DOMDocument();
-		$doc = $dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
 
-		if ( ! $doc ) { // Clear error buffer.
-			libxml_clear_errors();
-		}
+		$errors = libxml_use_internal_errors( true );
+
+		$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+
+		libxml_clear_errors();
+		libxml_use_internal_errors( $errors );
 
 		$images = $dom->getElementsByTagName( 'img' );
 		$source = array();
@@ -365,7 +365,7 @@ class Endpoints {
 		);
 
 		$endpoints['image'] = array(
-			'pinterest' => 'https://pinterest.com/pin/create/bookmarklet/',
+			'pinterest' => 'https://www.pinterest.com/pin/create/bookmarklet/',
 		);
 
 		return isset( $endpoints[ $of ][ $site ] ) ? $endpoints[ $of ][ $site ] : null;
