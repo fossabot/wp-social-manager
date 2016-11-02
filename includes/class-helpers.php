@@ -40,7 +40,7 @@ class Helpers {
 	 * @param string $name The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
 	 * @return string The icon of selected social media in SVG.
 	 */
-	final public static function get_social_icons( $name ) {
+	final public static function get_social_icons( $name = '' ) {
 
 		$path = plugin_dir_url( dirname( __FILE__ ) );
 
@@ -74,7 +74,7 @@ class Helpers {
 			'email' => apply_filters( 'ninecodes_social_manager_icon', $email, 'email', false ),
 		);
 
-		$icon = isset( $icons[ $name ] ) && ! empty( $icons[ $name ] ) ? $icons[ $name ] : '';
+		$output = isset( $icons[ $name ] ) ? $icons[ $name ] : $icons;
 
 		$allowed_html = wp_kses_allowed_html( 'post' );
 		$allowed_html['svg'] = array(
@@ -88,7 +88,7 @@ class Helpers {
 			'xlink:href' => true,
 		);
 
-		return wp_kses( $icon, $allowed_html );
+		return wp_kses( $output, $allowed_html );
 	}
 
 	/**
