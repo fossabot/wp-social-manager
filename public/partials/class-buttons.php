@@ -15,32 +15,11 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 use \DOMDocument;
 
 /**
- * Buttons Interface.
- *
- * @since 1.0.0
- */
-interface ButtonsInterface {
-	/**
-	 * The buttons have to have template script.
-	 *
-	 * @return void
-	 */
-	public function buttons_tmpl();
-
-	/**
-	 * The buttons have to have an HTML version.
-	 *
-	 * @return void
-	 */
-	public function buttons_html();
-}
-
-/**
  * The Class that define the social buttons output.
  *
  * @since 1.0.0
  */
-abstract class Buttons implements ButtonsInterface {
+abstract class Buttons {
 
 	/**
 	 * The Plugin class instance.
@@ -180,13 +159,6 @@ abstract class Buttons implements ButtonsInterface {
 	public function buttons_tmpl() {}
 
 	/**
-	 * The buttons html markup in HTML mode.
-	 *
-	 * @return void
-	 */
-	public function buttons_html() {}
-
-	/**
 	 * Determine and generate the buttons item view.
 	 *
 	 * @since 1.0.0
@@ -204,32 +176,29 @@ abstract class Buttons implements ButtonsInterface {
 	 *                        and the button icon.
 	 * @return string The formatted HTML list element to display the button.
 	 */
-	protected function button_view( $view, array $args, $context = '' ) {
+	protected function button_view( $view, $context, array $args ) {
 
-		if ( empty( $view ) || empty( $args ) || empty( $context ) ) {
+		if ( ! $view || ! $context || empty( $args ) ) {
 			return '';
 		}
 
 		$args = wp_parse_args( $args, array(
-			'site' => '',
-			'icon' => '',
-			'label' => '',
+			'prefix' => '',
+			'site'   => '',
+			'icon'   => '',
+			'label'  => '',
+			'url'    => '',
 		) );
 
 		if ( in_array( '', $args, true ) ) {
 			return;
 		}
 
-		$site = $args['site'];
-		$icon = $args['icon'];
-		$label = $args['label'];
-
-		$prefix = $this->get_button_attr_prefix();
-		$url = $this->get_button_url( $site, $context );
-
-		if ( empty( $url ) ) {
-			return '';
-		}
+		$prefix = $args['prefix'];
+		$site   = $args['site'];
+		$icon   = $args['icon'];
+		$label  = $args['label'];
+		$url    = $args['url'];
 
 		$templates = array(
 			'icon' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button' rel='nofollow'>{$icon}</a>",
@@ -250,44 +219,6 @@ abstract class Buttons implements ButtonsInterface {
 		);
 
 		return isset( $templates[ $view ] ) ? wp_kses( $templates[ $view ], $allowed_html ) : '';
-	}
-
-	/**
-	 * The function method to generate the buttons endpoint URLs
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @param string $site The site key or slug (e.g. `facebook`, `twitter`, etc.).
-	 * @param string $context The button context; `content` or `image`.
-	 * @return string The endpoint of the site specified in `$site`.
-	 */
-	protected function get_button_url( $site, $context ) {
-
-		if ( ! $site || ! $context ) {
-			return '';
-		}
-
-		if ( 'json' === $this->get_button_mode() ) {
-			return "{{data.{$site}.endpoint}}";
-		}
-
-		if ( 'html' === $this->get_button_mode() ) {
-
-			$urls = array();
-
-			switch ( $context ) {
-				case 'content':
-					$urls = $this->endpoints->get_content_endpoints( $this->post_id );
-					break;
-
-				case 'image':
-					$urls = $this->endpoints->get_image_endpoints( $this->post_id );
-					break;
-			}
-
-			return $urls[ $site ]['endpoint'];
-		}
 	}
 
 	/**
@@ -331,7 +262,7 @@ abstract class Buttons implements ButtonsInterface {
 	 *
 	 * @return string Whether JSON of HTML
 	 */
-	protected function get_button_mode() {
+	protected function get_buttons_mode() {
 
 		if ( null !== $this->mode && in_array( $this->mode, array( 'html', 'json' ), true ) ) {
 			return $this->mode;

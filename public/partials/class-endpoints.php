@@ -76,7 +76,7 @@ class Endpoints {
 		$sites = Options::button_sites( 'content' );
 		$includes = $this->plugin->get_option( 'buttons_content', 'includes' );
 
-		$urls = array();
+		$endpoints = array();
 
 		foreach ( $sites as $slug => $label ) {
 
@@ -86,13 +86,13 @@ class Endpoints {
 				unset( $sites[ $slug ] );
 			}
 
-			$urls[ $slug ]['label'] = $label;
+			$endpoints[ $slug ]['label'] = $label;
 
 			switch ( $slug ) {
 
 				case 'facebook' :
 
-					$urls[ $slug ]['endpoint'] = add_query_arg(
+					$endpoints[ $slug ]['endpoint'] = add_query_arg(
 						array( 'u' => $metas['post_url'] ),
 						$endpoint
 					);
@@ -112,13 +112,13 @@ class Endpoints {
 						$args['via'] = $profiles;
 					}
 
-					$urls[ $slug ]['endpoint'] = add_query_arg( $args, $endpoint );
+					$endpoints[ $slug ]['endpoint'] = add_query_arg( $args, $endpoint );
 
 					break;
 
 				case 'googleplus' :
 
-					$urls[ $slug ]['endpoint'] = add_query_arg(
+					$endpoints[ $slug ]['endpoint'] = add_query_arg(
 						array( 'url' => $metas['post_url'] ),
 						$endpoint
 					);
@@ -127,7 +127,7 @@ class Endpoints {
 
 				case 'linkedin' :
 
-					$urls[ $slug ]['endpoint'] = add_query_arg(
+					$endpoints[ $slug ]['endpoint'] = add_query_arg(
 						array(
 							'mini' => true,
 							'title' => $metas['post_title'],
@@ -142,7 +142,7 @@ class Endpoints {
 
 				case 'pinterest':
 
-					$urls[ $slug ]['endpoint'] = add_query_arg(
+					$endpoints[ $slug ]['endpoint'] = add_query_arg(
 						array(
 							'url' => $metas['post_url'],
 							'description' => $metas['post_title'],
@@ -156,7 +156,7 @@ class Endpoints {
 
 				case 'reddit':
 
-					$urls[ $slug ]['endpoint'] = add_query_arg(
+					$endpoints[ $slug ]['endpoint'] = add_query_arg(
 						array(
 							'url' => $metas['post_url'],
 							'post_title' => $metas['post_title'],
@@ -168,7 +168,7 @@ class Endpoints {
 
 				case 'email':
 
-					$urls[ $slug ]['endpoint'] = add_query_arg(
+					$endpoints[ $slug ]['endpoint'] = add_query_arg(
 						array(
 							'subject' => $metas['post_title'],
 							'body' => $metas['post_description'],
@@ -180,16 +180,16 @@ class Endpoints {
 
 				default:
 
-					$urls[ $slug ]['endpoint'] = false;
+					$endpoints[ $slug ]['endpoint'] = false;
 					break;
 			} // End switch().
 		} // End foreach().
 
-		return $urls;
+		return $endpoints;
 	}
 
 	/**
-	 * Get the buttons image endpoint urls.
+	 * Get the complete endpoint url for buttons on the image.
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -207,12 +207,10 @@ class Endpoints {
 			return;
 		}
 
-		$sites = Options::button_sites( 'image' );
-
-		$urls = array();
+		$endpoints = array();
 		$buttons = array();
 
-		foreach ( $sites as $site => $label ) {
+		foreach ( Options::button_sites( 'image' ) as $site => $label ) {
 
 			$endpoint = self::get_endpoint_base( 'image', $site );
 
@@ -232,10 +230,10 @@ class Endpoints {
 		$srcs = $this->get_content_image_srcs( $post_id );
 
 		foreach ( $srcs as $key => $src ) {
-			$urls[] = array_map( array( $this, 'joint_image_endpoints' ), $buttons, array( $src ) );
+			$endpoints = array_merge( $endpoints, array_map( array( $this, 'joint_image_endpoints' ), $buttons, array( $src ) ) );
 		}
 
-		return $urls;
+		return $endpoints;
 	}
 
 	/**
@@ -262,22 +260,24 @@ class Endpoints {
 
 		$site = $button['site'];
 		$endpoints = array(
-			'facebook' => array(),
-			'twitter' => array(),
+			'facebook' => array(), // Currently it does not return endpoint.
+			'twitter' => array(), // Currently it does not return endpoint.
 			'pinterest' => array(
+				'site' => 'pinterest',
 				'label' => $button['label'],
 				'endpoint' => add_query_arg( array(
-					'url' => $button['post_url'],
-					'description' => $button['post_title'],
-					'is_video' => false,
-					'media' => $src,
-					), $button['endpoint']
+						'url' => $button['post_url'],
+						'description' => $button['post_title'],
+						'is_video' => false,
+						'media' => $src,
+					),
+					$button['endpoint']
 				),
 			),
 		);
 
 		if ( isset( $endpoints[ $site ] ) ) {
-			$url[ $site ] = $endpoints[ $site ];
+			$url[] = $endpoints[ $site ];
 		}
 
 		return $url;
@@ -294,20 +294,18 @@ class Endpoints {
 		$content = apply_filters( 'the_content', get_post_field( 'post_content', $post_id ) );
 
 		$dom = new DOMDocument();
-
 		$errors = libxml_use_internal_errors( true );
 
 		$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
 
-		libxml_clear_errors();
-		libxml_use_internal_errors( $errors );
-
 		$images = $dom->getElementsByTagName( 'img' );
 		$source = array();
-
 		foreach ( $images as $key => $img ) {
 			$source[] = $img->getAttribute( 'src' );
 		}
+
+		libxml_clear_errors();
+		libxml_use_internal_errors( $errors );
 
 		return $source;
 	}
