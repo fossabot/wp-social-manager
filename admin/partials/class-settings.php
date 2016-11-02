@@ -671,8 +671,6 @@ final class Settings {
 			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'scripts';
 			wp_enqueue_script( "{$this->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 		}
-
-		wp_enqueue_media();
 	}
 
 	/**
