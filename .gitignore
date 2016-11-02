@@ -36,7 +36,18 @@
 ehthumbs.db
 Thumbs.db
 
-# Pre-processors #
+# Grunt #
+######################
+/build/
+/node_modules/
+npm-debug.log
+
+# Codekit #
+######################
+*.codekit
+
+# # Compiled files #
 ######################
 *.map
-/config.codekit
+*.min.js
+*.min.css
