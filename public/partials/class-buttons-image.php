@@ -151,20 +151,21 @@ class ButtonsImage extends Buttons {
 			$list = '';
 
 			if ( ! empty( $includes ) ) :
+
 				$prefix = $this->get_button_attr_prefix();
 				$view   = $this->plugin->get_option( 'buttons_image', 'view' );
 
 				$list .= "<span class='{$prefix}-buttons__list {$prefix}-buttons__list--{$view}' data-social-buttons='image'>";
 
-				foreach ( $includes as $key => $include ) :
-					$label = $this->get_button_label( $include->site, 'image' );
-					$icon  = $this->get_button_icon( $include->site );
-					$list .= $this->button_view($view, 'image', array(
+				foreach ( $includes as $site => $endpoint ) :
+					$label = $this->get_button_label( $site, 'image' );
+					$icon  = $this->get_button_icon( $site );
+					$list .= $this->button_view( $view, 'image', array(
 						'prefix' => $prefix,
-						'site'   => $include->site,
-						'icon'   => apply_filters( 'ninecodes_social_manager_icon', $icon, $include->site, 'button-image' ),
-						'label'  => $include->label,
-						'url'    => $include->endpoint,
+						'site' => $site,
+						'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-image' ),
+						'label' => $label,
+						'endpoint' => $endpoint,
 					));
 				endforeach;
 
@@ -205,6 +206,7 @@ class ButtonsImage extends Buttons {
 				$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' ); ?>
 
 			<?php if ( ! empty( $includes ) ) :
+
 				$prefix = $this->get_button_attr_prefix();
 				$view = $this->plugin->get_option( 'buttons_image', 'view' ); ?>
 
@@ -212,18 +214,19 @@ class ButtonsImage extends Buttons {
 				<span class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="image">
 
 				<?php foreach ( $includes as $site ) :
+
 					$label = $this->get_button_label( $site, 'image' );
 					$icon  = $this->get_button_icon( $site );
 					$list  = $this->button_view($view, 'image', array(
 						'prefix' => $prefix,
-						'site'   => $site,
-						'icon'   => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-image' ),
-						'label'  => $label,
-						'url'    => "{{data.{$site}.endpoint}}",
+						'site' => $site,
+						'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-image' ),
+						'label' => $label,
+						'endpoint' => "{{data.{$site}}}",
 					));
 
 					echo $list; // WPCS: XSS ok.
-endforeach; ?>
+				endforeach; ?>
 				</span>
 			</script>
 			<?php endif;

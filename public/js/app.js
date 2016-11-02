@@ -133,7 +133,7 @@
 
 			$images.each( function( index ) {
 				$( this ).append( self.template({
-					data: _.indexBy( response.images[index], 'site' )
+					data: response.images[index]
 				}) );
 			});
 

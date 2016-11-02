@@ -183,11 +183,11 @@ abstract class Buttons {
 		}
 
 		$args = wp_parse_args( $args, array(
-			'prefix' => '',
-			'site'   => '',
-			'icon'   => '',
-			'label'  => '',
-			'url'    => '',
+			'prefix'   => '',
+			'site'     => '',
+			'icon'     => '',
+			'label'    => '',
+			'endpoint' => '',
 		) );
 
 		if ( in_array( '', $args, true ) ) {
@@ -195,15 +195,15 @@ abstract class Buttons {
 		}
 
 		$prefix = $args['prefix'];
-		$site   = $args['site'];
-		$icon   = $args['icon'];
-		$label  = $args['label'];
-		$url    = $args['url'];
+		$site = $args['site'];
+		$icon = $args['icon'];
+		$label = $args['label'];
+		$endpoint = $args['endpoint'];
 
 		$templates = array(
-			'icon' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button' rel='nofollow'>{$icon}</a>",
-			'text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button' rel='nofollow'>{$label}</a>",
-			'icon-text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$url}' target='_blank' role='button' rel='nofollow'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a>",
+			'icon' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'>{$icon}</a>",
+			'text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'>{$label}</a>",
+			'icon-text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a>",
 		);
 
 		$allowed_html = wp_kses_allowed_html( 'post' );

@@ -260,24 +260,18 @@ class Endpoints {
 
 		$site = $button['site'];
 		$endpoints = array(
-			'facebook' => array(), // Currently it does not return endpoint.
-			'twitter' => array(), // Currently it does not return endpoint.
-			'pinterest' => array(
-				'site' => 'pinterest',
-				'label' => $button['label'],
-				'endpoint' => add_query_arg( array(
-						'url' => $button['post_url'],
-						'description' => $button['post_title'],
-						'is_video' => false,
-						'media' => $src,
-					),
-					$button['endpoint']
+			'pinterest' => add_query_arg( array(
+					'url' => $button['post_url'],
+					'description' => $button['post_title'],
+					'is_video' => false,
+					'media' => $src,
 				),
+				$button['endpoint']
 			),
 		);
 
 		if ( isset( $endpoints[ $site ] ) ) {
-			$url[] = $endpoints[ $site ];
+			$url[ $site ] = $endpoints[ $site ];
 		}
 
 		return $url;
