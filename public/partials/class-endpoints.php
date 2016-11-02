@@ -365,7 +365,7 @@ class Endpoints {
 		);
 
 		$endpoints['image'] = array(
-			'pinterest' => 'https://pinterest.com/pin/create/bookmarklet/',
+			'pinterest' => 'https://www.pinterest.com/pin/create/bookmarklet/',
 		);
 
 		return isset( $endpoints[ $of ][ $site ] ) ? $endpoints[ $of ][ $site ] : null;
