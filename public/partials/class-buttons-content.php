@@ -77,8 +77,22 @@ class ButtonsContent extends Buttons {
 			)
 		);
 
-		if ( 'html' === $this->get_button_mode() ) {
-			$button .= $this->buttons_html();
+		if ( 'html' === $this->get_buttons_mode() && $this->post_id ) {
+
+			/**
+			 * The API response object.
+			 *
+			 * @var object
+			 */
+			$response = wp_remote_get( trailingslashit( get_rest_url() ) . $this->plugin_slug . '/1.0/buttons?id=' . $this->post_id );
+
+			if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
+
+				$body = wp_remote_retrieve_body( $response );
+				$response = json_decode( $body );
+
+				$button .= $this->buttons_html( $response->content );
+			}
 		}
 
 		$closing_tag = '</div>';
@@ -110,39 +124,40 @@ class ButtonsContent extends Buttons {
 	 * @since 1.0.0
 	 * @access public
 	 *
+	 * @param object $includes Data to include in the button.
 	 * @return string The formatted HTML of the buttons.
 	 */
-	public function buttons_html() {
+	public function buttons_html( $includes ) {
 
 		if ( wp_script_is( $this->plugin_slug, 'enqueued' ) ) :
 
 			$list = '';
 
-			$view = $this->plugin->get_option( 'buttons_content', 'view' );
-			$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
-
-			$prefix = $this->get_button_attr_prefix();
-
 			if ( ! empty( $includes ) ) :
+
+				$prefix = $this->get_button_attr_prefix();
 
 				$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
 				$heading = esc_html( $heading );
 
-				if ( ! empty( $heading ) ) :
+				if ( ! empty( $heading ) ) {
 					$list .= "<h4 class='{$prefix}-buttons__heading'>{$heading}</h4>";
-				endif;
+				}
 
+				$view = $this->plugin->get_option( 'buttons_content', 'view' );
 				$list .= "<div class='{$prefix}-buttons__list {$prefix}-buttons__list--{$view}' data-social-buttons='content'>";
 
-				foreach ( $includes as $site ) :
+				foreach ( $includes as $site => $endpoint ) :
 
 					$icon = $this->get_button_icon( $site );
 					$label = $this->get_button_label( $site, 'content' );
-					$list .= $this->button_view( $view, array(
+					$list .= $this->button_view( $view, 'content', array(
+						'prefix' => $prefix,
 						'site' => $site,
 						'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-content' ),
 						'label' => $label,
-					),'content' );
+						'endpoint' => $endpoint,
+					) );
 
 				endforeach;
 				$list .= '</div>';
@@ -162,43 +177,38 @@ class ButtonsContent extends Buttons {
 	 */
 	public function buttons_tmpl() {
 
-		if ( 'json' === $this->get_button_mode() ) {
-
-			if ( false === $this->is_buttons_content() ) {
-				return;
-			}
-
+		if ( $this->is_buttons_content() && 'json' === $this->get_buttons_mode() ) :
 			if ( wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
 
-				$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
-				$view = $this->plugin->get_option( 'buttons_content', 'view' );
 				$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
 
-				$prefix = $this->get_button_attr_prefix(); ?>
+				if ( ! empty( $includes ) ) :
 
-	 			<?php if ( ! empty( $includes ) ) : ?>
-	 			<script type="text/html" id="tmpl-buttons-content">
-	 				<?php if ( ! empty( $heading ) ) : ?>
-	 				<h4 class="<?php echo esc_attr( $prefix ); ?>-buttons__heading"><?php echo esc_html( $heading ); ?></h4>
-	 				<?php endif; ?>
-	 				<div class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="content">
-	 				<?php foreach ( $includes as $site ) :
+				$prefix = $this->get_button_attr_prefix();
+				$view = $this->plugin->get_option( 'buttons_image', 'view' ); ?>
 
-	 					$icon = $this->get_button_icon( $site );
-						$label = $this->get_button_label( $site, 'content' );
-	 					$list = $this->button_view( $view, array(
-							'site' => $site,
-							'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-content' ),
-							'label' => $label,
-	 					),'content' );
+			<script type="text/html" id="tmpl-buttons-content">
+				<div class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="content">
 
-	 					echo $list; // WPCS: XSS ok.
-	 				endforeach; ?>
-					</div>
-	 			</script>
-	 			<?php endif;
-	 			endif;
-		}// End if().
+				<?php foreach ( $includes as $site ) :
+
+					$label = $this->get_button_label( $site, 'content' );
+					$icon  = $this->get_button_icon( $site );
+					$list  = $this->button_view($view, 'content', array(
+						'prefix' => $prefix,
+						'site' => $site,
+						'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-content' ),
+						'label' => $label,
+						'endpoint' => "{{data.{$site}}}",
+					));
+
+					echo $list; // WPCS: XSS ok.
+				endforeach; ?>
+				</div>
+			</script>
+			<?php endif;
+			endif;
+		endif;
 	}
 
 	/**
