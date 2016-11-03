@@ -21,16 +21,6 @@ use \DOMDocument;
  */
 class ButtonsImage extends Buttons {
 
-
-	/**
-	 * Get apis URL response.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @var object
-	 */
-	protected $response;
-
 	/**
 	 * Constructor
 	 *
@@ -90,6 +80,7 @@ class ButtonsImage extends Buttons {
 			$wrap->setAttribute( 'class', "{$prefix}-buttons {$prefix}-buttons--img {$prefix}-buttons--{$this->post_id}" );
 
 			foreach ( $images as $index => $img ) :
+
 				$wrap_id = absint( $index + 1 );
 				$wrap_id = sanitize_key( $wrap_id );
 
@@ -106,19 +97,22 @@ class ButtonsImage extends Buttons {
 					$wrap_clone->appendChild( $img );
 				}
 
-				if ( $this->is_buttons_image() && 'html' === $this->get_buttons_mode() ) :
+				if ( 'html' === $this->get_buttons_mode() && $this->post_id ) :
+
 					$response = wp_remote_get( trailingslashit( get_rest_url() ) . $this->plugin_slug . '/1.0/buttons?id=' . $this->post_id );
 
 					if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
+
 						$body = wp_remote_retrieve_body( $response );
-						$this->response = json_decode( $body );
+						$response = json_decode( $body );
 
 						$fragment = $dom->createDocumentFragment();
-						$fragment->appendXML( $this->buttons_html( $this->response->images[ $index ] ) );
+						$fragment->appendXML( $this->buttons_html( $response->images[ $index ] ) );
 
 						$wrap_clone->appendChild( $fragment );
 					}
 				endif;
+
 			endforeach;
 
 			$content = preg_replace('/^<!DOCTYPE.+?>/', '', str_replace(
@@ -142,22 +136,24 @@ class ButtonsImage extends Buttons {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $includes Sites to include in the buttons.
+	 * @param object $includes Data to include in the button.
 	 * @return string The formatted HTML of the buttons.
 	 */
 	public function buttons_html( $includes ) {
 
-		if ( 'html' === $this->get_buttons_mode() && wp_script_is( $this->plugin_slug, 'enqueued' ) ) :
+		if ( wp_script_is( $this->plugin_slug, 'enqueued' ) ) :
+
 			$list = '';
 
 			if ( ! empty( $includes ) ) :
 
 				$prefix = $this->get_button_attr_prefix();
-				$view   = $this->plugin->get_option( 'buttons_image', 'view' );
+				$view = $this->plugin->get_option( 'buttons_image', 'view' );
 
 				$list .= "<span class='{$prefix}-buttons__list {$prefix}-buttons__list--{$view}' data-social-buttons='image'>";
 
 				foreach ( $includes as $site => $endpoint ) :
+
 					$label = $this->get_button_label( $site, 'image' );
 					$icon  = $this->get_button_icon( $site );
 					$list .= $this->button_view( $view, 'image', array(
@@ -167,6 +163,7 @@ class ButtonsImage extends Buttons {
 						'label' => $label,
 						'endpoint' => $endpoint,
 					));
+
 				endforeach;
 
 				$list .= '</span>';
@@ -203,12 +200,13 @@ class ButtonsImage extends Buttons {
 
 		if ( $this->is_buttons_image() && 'json' === $this->get_buttons_mode() ) :
 			if ( wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
-				$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' ); ?>
 
-			<?php if ( ! empty( $includes ) ) :
+				$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' );
 
-				$prefix = $this->get_button_attr_prefix();
-				$view = $this->plugin->get_option( 'buttons_image', 'view' ); ?>
+				if ( ! empty( $includes ) ) :
+
+					$prefix = $this->get_button_attr_prefix();
+					$view = $this->plugin->get_option( 'buttons_image', 'view' ); ?>
 
 			<script type="text/html" id="tmpl-buttons-image">
 				<span class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="image">

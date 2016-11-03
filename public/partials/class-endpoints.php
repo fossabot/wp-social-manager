@@ -73,12 +73,17 @@ class Endpoints {
 
 		$metas = $this->get_post_metas( $post_id );
 
-		$sites = Options::button_sites( 'content' );
-		$includes = $this->plugin->get_option( 'buttons_content', 'includes' );
-
 		$endpoints = array();
+		$includes = $this->plugin->get_option( 'buttons_content', 'includes' );
+		$buttons = Options::button_sites( 'content' );
 
-		foreach ( $sites as $slug => $label ) {
+		foreach ( $buttons as $site => $label ) {
+			if ( ! in_array( $site, $includes, true ) ) {
+				unset( $buttons[ $site ] );
+			}
+		}
+
+		foreach ( $buttons as $slug => $label ) {
 
 			$endpoint = self::get_endpoint_base( 'content', $slug );
 
@@ -86,13 +91,11 @@ class Endpoints {
 				unset( $sites[ $slug ] );
 			}
 
-			$endpoints[ $slug ]['label'] = $label;
-
 			switch ( $slug ) {
 
 				case 'facebook' :
 
-					$endpoints[ $slug ]['endpoint'] = add_query_arg(
+					$endpoints[ $slug ] = add_query_arg(
 						array( 'u' => $metas['post_url'] ),
 						$endpoint
 					);
@@ -112,13 +115,13 @@ class Endpoints {
 						$args['via'] = $profiles;
 					}
 
-					$endpoints[ $slug ]['endpoint'] = add_query_arg( $args, $endpoint );
+					$endpoints[ $slug ] = add_query_arg( $args, $endpoint );
 
 					break;
 
 				case 'googleplus' :
 
-					$endpoints[ $slug ]['endpoint'] = add_query_arg(
+					$endpoints[ $slug ] = add_query_arg(
 						array( 'url' => $metas['post_url'] ),
 						$endpoint
 					);
@@ -127,7 +130,7 @@ class Endpoints {
 
 				case 'linkedin' :
 
-					$endpoints[ $slug ]['endpoint'] = add_query_arg(
+					$endpoints[ $slug ] = add_query_arg(
 						array(
 							'mini' => true,
 							'title' => $metas['post_title'],
@@ -142,7 +145,7 @@ class Endpoints {
 
 				case 'pinterest':
 
-					$endpoints[ $slug ]['endpoint'] = add_query_arg(
+					$endpoints[ $slug ] = add_query_arg(
 						array(
 							'url' => $metas['post_url'],
 							'description' => $metas['post_title'],
@@ -156,7 +159,7 @@ class Endpoints {
 
 				case 'reddit':
 
-					$endpoints[ $slug ]['endpoint'] = add_query_arg(
+					$endpoints[ $slug ] = add_query_arg(
 						array(
 							'url' => $metas['post_url'],
 							'post_title' => $metas['post_title'],
@@ -168,7 +171,7 @@ class Endpoints {
 
 				case 'email':
 
-					$endpoints[ $slug ]['endpoint'] = add_query_arg(
+					$endpoints[ $slug ] = add_query_arg(
 						array(
 							'subject' => $metas['post_title'],
 							'body' => $metas['post_description'],
@@ -180,7 +183,7 @@ class Endpoints {
 
 				default:
 
-					$endpoints[ $slug ]['endpoint'] = false;
+					$endpoints[ $slug ] = false;
 					break;
 			} // End switch().
 		} // End foreach().

@@ -146,9 +146,7 @@ abstract class Buttons {
 	 */
 	public function setups() {
 
-		if ( is_singular() ) {
-			$this->post_id = get_the_id();
-		}
+		$this->post_id = get_the_id();
 	}
 
 	/**
@@ -165,6 +163,8 @@ abstract class Buttons {
 	 * @access protected
 	 *
 	 * @param string $view The button view key (`icon`, `icon-text`, `text`).
+	 * @param array  $context The button attributes such as the 'site' name, button label,
+	 *                        and the button icon.
 	 * @param array  $args 	{
 	 *     The button attributes.
 	 *
@@ -172,8 +172,6 @@ abstract class Buttons {
 	 *     @type string $icon 	The respective site icon.
 	 *     @type string $label 	The site label / text.
 	 * }
-	 * @param array  $context The button attributes such as the 'site' name, button label,
-	 *                        and the button icon.
 	 * @return string The formatted HTML list element to display the button.
 	 */
 	protected function button_view( $view, $context, array $args ) {
