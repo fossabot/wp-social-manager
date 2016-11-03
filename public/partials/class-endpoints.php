@@ -73,6 +73,10 @@ class Endpoints {
 
 		$metas = $this->get_post_metas( $post_id );
 
+		if ( ! $metas['post_url'] ) {
+			return;
+		}
+
 		$endpoints = array();
 		$includes = $this->plugin->get_option( 'buttons_content', 'includes' );
 		$buttons = Options::button_sites( 'content' );
@@ -206,7 +210,7 @@ class Endpoints {
 
 		$metas = $this->get_post_metas( $post_id );
 
-		if ( in_array( '', $metas, true ) ) {
+		if ( ! $metas['post_url'] ) {
 			return;
 		}
 
