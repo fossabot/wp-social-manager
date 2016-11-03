@@ -184,8 +184,8 @@ class ButtonsContent extends Buttons {
 
 				if ( ! empty( $includes ) ) :
 
-				$prefix = $this->get_button_attr_prefix();
-				$view = $this->plugin->get_option( 'buttons_image', 'view' ); ?>
+					$prefix = $this->get_button_attr_prefix();
+					$view = $this->plugin->get_option( 'buttons_image', 'view' ); ?>
 
 			<script type="text/html" id="tmpl-buttons-content">
 				<div class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="content">

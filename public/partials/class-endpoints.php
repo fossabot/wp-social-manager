@@ -64,10 +64,10 @@ class Endpoints {
 	 * @since 1.0.0
 	 * @access protected
 	 *
-	 * @todo add inline docs referring to each site endpoint documentation page.
-	 *
 	 * @param array $post_id The WordPress post ID.
 	 * @return array An array of sites with their label / name and button endpoint url.
+	 *
+	 * TODO add inline docs referring to each site endpoint documentation page.
 	 */
 	public function get_content_endpoints( $post_id ) {
 
