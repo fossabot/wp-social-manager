@@ -1,159 +1,159 @@
-( function( $, undefined ) {
+(function( $, undefined ) {
 
-    'use strict';
+	'use strict';
 
-    var api, target, source, SocialButton;
-    var $template, $templateHTML;
+	var api, target, source, SocialButton;
+	var $template, $templateHTML;
 
-    if ( 'undefined' === typeof nineCodesSocialManager ) {
-        return;
-    }
+	if ( 'undefined' === typeof nineCodesSocialManager ) {
+		return;
+	}
 
-    api = nineCodesSocialManager;
+	api = nineCodesSocialManager;
 
-    if ( _.isUndefined( api.id ) ) {
-        return;
-    }
+	if ( _.isUndefined( api.id ) ) {
+		return;
+	}
 
-    SocialButton = {
-        Collection: {},
-        Model: {},
-        View: {}
-    };
+	SocialButton = {
+		Collection: {},
+		Model: {},
+		View: {}
+	};
 
-    _.templateSettings = {
-        interpolate: /\{\{(.+?)\}\}/g
-    };
+	_.templateSettings = {
+		interpolate: /\{\{(.+?)\}\}/g
+	};
 
-    SocialButton.Model = Backbone.Model.extend({
-        urlRoot: ( api.root + api.namespace ) + '/buttons'
-    });
+	SocialButton.Model = Backbone.Model.extend({
+		urlRoot: ( api.root + api.namespace ) + '/buttons',
+		defaults: {
+			id: null
+		}
+	});
 
-    SocialButton.View = Backbone.View.extend({
+	SocialButton.View = Backbone.View.extend({
 
-        el: 'body',
+		el: 'body',
 
-        initialize: function() {
+		initialize: function() {
 
-            $template = $( this.template );
+			$template = $( this.template );
 
-            if ( 0 === $template.length ) {
-                console.info( 'Template ' + this.template + ' is not available.' );
-                return;
-            }
+			if ( 0 === $template.length ) {
+				console.info( 'Template ' + this.template + ' is not available.' );
+				return;
+			}
 
-            $templateHTML = $template.html().trim();
+			$templateHTML = $template.html().trim();
 
-            if ( '' === $templateHTML ) {
-                console.info( 'Template HTML of ' + this.template + ' is empty.' );
-                return;
-            }
+			if ( '' === $templateHTML ) {
+				console.info( 'Template HTML of ' + this.template + ' is empty.' );
+				return;
+			}
 
-            this.template = _.template( $templateHTML );
-            this.listenTo( this.model, 'change:id', this.render );
-        },
+			this.template = _.template( $templateHTML );
+			this.listenTo( this.model, 'change:id', this.render );
+		},
 
-        buttonDialog: function( event ) {
+		buttonDialog: function( event ) {
 
-            event.preventDefault();
-            event.stopImmediatePropagation();
+			event.preventDefault();
+			event.stopImmediatePropagation();
 
-            target = event.currentTarget;
-            source = target.getAttribute( 'href' );
+			target = event.currentTarget;
+			source = target.getAttribute( 'href' );
 
-            if ( ! source || '' !== source ) {
-                this.windowPopup( source );
-                return;
-            }
+			if ( ! source || '' !== source ) {
+				this.windowPopup( source );
+				return;
+			}
 
-            return;
-        },
+			return;
+		},
 
-        windowPopup: function( url ) {
+		windowPopup: function( url ) {
 
-            var wind = window;
-            var docu = document;
+			var wind = window;
+			var docu = document;
 
-            var screenLeft = undefined !== wind.screenLeft ? wind.screenLeft : screen.left;
-            var screenTop = undefined !== wind.screenTop ? wind.screenTop : screen.top;
-            var screenWidth = wind.innerWidth ? wind.innerWidth : docu.documentElement.clientWidth ? docu.documentElement.clientWidth : screen.width;
-            var screenHeight = wind.innerHeight ? wind.innerHeight : docu.documentElement.clientHeight ? docu.documentElement.clientHeight : screen.height;
+			var screenLeft = undefined !== wind.screenLeft ? wind.screenLeft : screen.left;
+			var screenTop = undefined !== wind.screenTop ? wind.screenTop : screen.top;
+			var screenWidth = wind.innerWidth ? wind.innerWidth : docu.documentElement.clientWidth ? docu.documentElement.clientWidth : screen.width;
+			var screenHeight = wind.innerHeight ? wind.innerHeight : docu.documentElement.clientHeight ? docu.documentElement.clientHeight : screen.height;
 
-            var width = 560;
-            var height = 430;
+			var width = 560;
+			var height = 430;
 
-            var left = ( ( screenWidth / 2 ) - ( width / 2 ) ) + screenLeft;
-            var top = ( ( screenHeight / 2 ) - ( height / 2 ) ) + screenTop;
+			var left = ( ( screenWidth / 2 ) - ( width / 2 ) ) + screenLeft;
+			var top = ( ( screenHeight / 2 ) - ( height / 2 ) ) + screenTop;
 
-            var newWindow = wind.open( url, '', 'scrollbars=no,width=' + width + ',height=' + height + ',top=' + top + ',left=' + left );
+			var newWindow = wind.open( url, '', 'scrollbars=no,width=' + width + ',height=' + height + ',top=' + top + ',left=' + left );
 
-            if ( newWindow ) {
-                newWindow.focus();
-            }
-        }
-    });
+			if ( newWindow ) {
+				newWindow.focus();
+			}
+		}
+	});
 
-    SocialButton.View.Content = SocialButton.View.extend({
+	SocialButton.View.Content = SocialButton.View.extend({
 
-        template: '#tmpl-buttons-content',
+		template: '#tmpl-buttons-content',
 
-        events: {
-            'click [data-social-buttons="image"] a': 'buttonDialog'
-        },
+		events: {
+			'click [data-social-buttons="content"] a': 'buttonDialog'
+		},
 
-        render: function() {
+		render: function( model, resp, req ) {
 
-            var response = this.model.toJSON();
+			var response = model.toJSON();
 
-            $( '#' + api.attrPrefix + '-buttons-' + response.id )
-                .append( this.template( {
+			$( '#' + api.attrPrefix + '-buttons-' + req.data.id )
+				.append( this.template({
 					data: response.content
-				} ) );
+				}) );
 
-            return this;
-        }
-    });
+			return this;
+		}
+	});
 
-    SocialButton.View.Images = SocialButton.View.extend({
+	SocialButton.View.Images = SocialButton.View.extend({
 
-        template: '#tmpl-buttons-image',
+		template: '#tmpl-buttons-image',
 
-        events: {
-            'click [data-social-buttons="content"] a': 'buttonDialog'
-        },
+		events: {
+			'click [data-social-buttons="image"] a': 'buttonDialog'
+		},
 
-        render: function() {
+		render: function( model, resp, req ) {
 
-            var self = this;
-            var response = this.model.toJSON();
-            var responseImage = response.images;
+			var self = this;
+			var response = model.toJSON();
+			var $images = $( '.' + api.attrPrefix + '-buttons--' + req.data.id );
 
-            var $images = $( '.' + api.attrPrefix + '-buttons--' + response.id );
+			$images.each( function( index ) {
+				$( this ).append( self.template({
+					data: response.images[index]
+				}) );
+			});
 
-            $images.each( function( index ) {
+			return this;
+		}
+	});
 
-				$( this ).append( self.template( {
-					data: responseImage[index][0]
-				} ) );
-            });
+	SocialButton.Model = new SocialButton.Model();
+	SocialButton.Model.fetch({
+		data: {
+			id: api.id
+		}
+	});
 
-            return this;
-        }
-    });
+	new SocialButton.View.Content({
+		model: SocialButton.Model
+	});
 
-    SocialButton.Model = new SocialButton.Model();
-    SocialButton.Model.fetch({
-        data: {
-            id: api.id
-        }
-    });
-
-    new SocialButton.View.Content({
-        model: SocialButton.Model
-    });
-
-    new SocialButton.View.Images({
-        model: SocialButton.Model
-    });
+	new SocialButton.View.Images({
+		model: SocialButton.Model
+	});
 
 })( jQuery );
