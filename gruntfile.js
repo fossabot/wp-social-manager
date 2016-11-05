@@ -1,9 +1,9 @@
 /* eslint-env node */
-module.exports = function( grunt ) {
+module.exports = function(grunt) {
 
 	'use strict';
 
-	var csssrc = [ {
+	var csssrc = [{
 			expand: true,
 			cwd: './admin/css/',
 			src: [
@@ -21,16 +21,16 @@ module.exports = function( grunt ) {
 			],
 			dest: './public/css/',
 			ext: '.min.css'
-		} ],
+		}],
 
-		jssrc = [ {
+		jssrc = [{
 			expand: true,
 			cwd: './admin/js/',
 			src: [
 				'*.js',
 				'!*.min.js'
 			],
-			dest: 'admin/js/',
+			dest: './admin/js/',
 			ext: '.min.js'
 		}, {
 			expand: true,
@@ -39,13 +39,20 @@ module.exports = function( grunt ) {
 				'*.js',
 				'!*.min.js'
 			],
-			dest: 'public/js/',
+			dest: './public/js/',
 			ext: '.min.js'
-		} ];
+		}];
 
-	grunt.initConfig( {
+	grunt.initConfig({
 
-		pkg: grunt.file.readJSON( 'package.json' ),
+		pkg: grunt.file.readJSON('package.json'),
+
+		// Shell actions
+		shell: {
+			readme: {
+				command: 'cd ./dev-lib && ./generate-markdown-readme' // Generate the readme.md
+			}
+		},
 
 		// JavaScript linting with ESLint.
 		eslint: {
@@ -60,14 +67,17 @@ module.exports = function( grunt ) {
 
 		// Minify .js files.
 		uglify: {
-			options: {
-				preserveComments: false,
-				sourceMap: true
-			},
 			dev: {
+				options: {
+					preserveComments: false,
+					sourceMap: true
+				},
 				files: jssrc
 			},
 			build: {
+				options: {
+					preserveComments: false
+				},
 				files: jssrc
 			}
 		},
@@ -87,7 +97,7 @@ module.exports = function( grunt ) {
 
 		// Check textdomain errors.
 		checktextdomain: {
-			options:{
+			options: {
 				text_domain: '<%= pkg.name %>',
 				keywords: [
 					'__:1,2d',
@@ -107,7 +117,7 @@ module.exports = function( grunt ) {
 				]
 			},
 			files: {
-				src:	[
+				src: [
 					'*.php', // Include all files
 					'**/*.php', // Include all files
 					'!**/butterbean/**', // Exclude build/
@@ -136,73 +146,90 @@ module.exports = function( grunt ) {
 					'!**/README.md',
 					'!**/contributing.md'
 				],
-				dest: 'build',
+				dest: './build/',
 				expand: true,
 				dot: false
 			}
 		},
 
-		// Shell actions
-		shell: {
-			readme: {
-				command: 'cd ./dev-lib && ./generate-markdown-readme' // Generate the readme.md
+		compress: {
+			main: {
+				options: {
+					archive: '<%= pkg.name %>.<%= pkg.version %>.zip'
+				},
+				files: [
+					{
+						expand: true,
+						cwd: './build/',
+						src: ['**'],
+						dest: './<%= pkg.name %>/'
+					},
+				]
 			}
+		},
+
+		clean: {
+			build: ['./build/']
 		}
-	} );
+	});
 
 	// Load tasks
-	grunt.loadNpmTasks( 'grunt-shell' );
-	grunt.loadNpmTasks( 'grunt-checktextdomain' );
-	grunt.loadNpmTasks( 'grunt-eslint' );
-	grunt.loadNpmTasks( 'grunt-contrib-uglify' );
-	grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
-	grunt.loadNpmTasks( 'grunt-contrib-copy' );
+	grunt.loadNpmTasks('grunt-shell');
+	grunt.loadNpmTasks('grunt-checktextdomain');
+	grunt.loadNpmTasks('grunt-eslint');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-compress');
+	grunt.loadNpmTasks('grunt-contrib-clean');
 
 	// Register task to compile "readme.txt" to "readme.md"
-	grunt.registerTask( 'readme', [
+	grunt.registerTask('readme', [
 		'shell:readme'
-	] );
+	]);
 
 	// Register WordPress specific tasks.
-	grunt.registerTask( 'wordpress', [
+	grunt.registerTask('wordpress', [
 		'readme',
 		'checktextdomain'
-	] );
+	]);
 
 	// Register stylesheet specific tasks in "development" stage.
-	grunt.registerTask( 'styles:dev', [
+	grunt.registerTask('styles:dev', [
 		'cssmin:dev'
-	] );
+	]);
 
 	// Register stylesheet specific tasks for "build".
-	grunt.registerTask( 'styles:build', [
+	grunt.registerTask('styles:build', [
 		'cssmin:build'
-	] );
+	]);
 
 	// Register JavaScript specific tasks for "development" stage.
-	grunt.registerTask( 'javascript:dev', [
+	grunt.registerTask('javascript:dev', [
 		'eslint',
 		'uglify:dev'
-	] );
+	]);
 
 	// Register JavaScript specific tasks for "build" stage.
-	grunt.registerTask( 'javascript:build', [
+	grunt.registerTask('javascript:build', [
 		'eslint',
 		'uglify:build'
-	] );
+	]);
 
 	// Register grunt default tasks.
-	grunt.registerTask( 'default', [
+	grunt.registerTask('default', [
 		'wordpress',
 		'styles:dev',
 		'javascript:dev'
-	] );
+	]);
 
 	// Build package.
-	grunt.registerTask( 'build', [
+	grunt.registerTask('build', [
 		'wordpress',
 		'styles:build',
 		'javascript:build',
-		'copy'
-	] );
+		'copy',
+		'compress',
+		'clean:build'
+	]);
 };
