@@ -25,12 +25,12 @@ module.exports = function( grunt ) {
 
 		jssrc = [ {
 			expand: true,
-			cwd: './public/js/',
+			cwd: './admin/js/',
 			src: [
 				'*.js',
 				'!*.min.js'
 			],
-			dest: 'public/js/',
+			dest: 'admin/js/',
 			ext: '.min.js'
 		}, {
 			expand: true,
@@ -61,10 +61,10 @@ module.exports = function( grunt ) {
 		// Minify .js files.
 		uglify: {
 			options: {
-				preserveComments: false
+				preserveComments: false,
+				sourceMap: true
 			},
 			dev: {
-				sourceMap: true,
 				files: jssrc
 			},
 			build: {

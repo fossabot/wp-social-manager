@@ -5,10 +5,10 @@
 
 	var _mediaUploader,
 
-	/**
-	 * Backbone View to handle Media Uploader UI
-	 * in the setting page.
-	 */
+		/**
+		 * Backbone View to handle Media Uploader UI
+		 * in the setting page.
+		 */
 		MediaUploader = Backbone.View.extend({
 
 			events: {

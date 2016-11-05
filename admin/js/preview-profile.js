@@ -9,18 +9,19 @@
 	var _socialProfiles,
 		SocialProfiles = Backbone.View.extend({
 
-        // Events the input should listen to.
+        	// Events the input should listen to.
 			events: {
 				'input': 'previewUpdate'
 			},
 
-        /**
-         * Initialize the View
-         * On page load, render the preview if the value is set in the input.
-         *
-         * @return {Void} This is executed on initialization, and does not return anything.
-         */
+	        /**
+	         * Initialize the View
+	         * On page load, render the preview if the value is set in the input.
+	         *
+	         * @return {Void} This is executed on initialization, and does not return anything.
+	         */
 			initialize: function() {
+
 				this.wait = 150;
 				this.previewInit();
 			},
@@ -37,7 +38,7 @@
 
 			previewUpdate: _.throttle(function( event ) {
 				this.render( event.currentTarget );
-			}, this.wait ),
+			} ),
 
 			render: function( target ) {
 
