@@ -144,7 +144,11 @@ final class Metas {
 	 * @return string The website title
 	 */
 	public function get_site_title() {
-		return wp_kses( wp_get_document_title(), array() );
+
+		$title = $this->get_site_meta( 'title' );
+		$title = $title ? $title : wp_get_document_title();
+
+		return wp_kses( $title, array() );
 	}
 
 	/**
