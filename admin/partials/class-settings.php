@@ -253,7 +253,7 @@ final class Settings {
 						'id' => array(),
 					),
 			) );
-			$this->settings->render_header( array('title' => true ) );
+			$this->settings->render_header( array( 'title' => true ) );
 			$this->settings->render_form();
 			echo '</div>';
 		} );
@@ -637,7 +637,7 @@ final class Settings {
 				margin-top: 1.68em;
 			}
 			.wrap > .nav-tab-wrapper {
-				margin: 1.5em 0 1em;
+				margin: 1em 0 1em;
 				border-bottom: 1px solid #ccc;
 			}
 			.wrap .field-image-control {
