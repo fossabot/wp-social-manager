@@ -685,8 +685,13 @@ final class Settings {
 	public function enqueue_styles( array $args ) {
 
 		foreach ( $args as $name => $file ) {
+
 			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'styles';
 			wp_enqueue_style( "{$this->plugin_slug}-{$file}", "{$this->path_url}css/{$file}.min.css", array(), $this->version );
+
+			if ( 'image-upload' === $file ) {
+				wp_style_add_data( "{$this->plugin_slug}-{$file}", 'rtl', 'replace' );
+			}
 		}
 	}
 

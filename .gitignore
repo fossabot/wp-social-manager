@@ -51,3 +51,4 @@ npm-debug.log
 *.map
 *.min.js
 *.min.css
+*.min-rtl.css
