@@ -44,7 +44,7 @@ class ButtonsContent extends Buttons {
 	 * @return void
 	 */
 	protected function render() {
-		add_filter( 'the_content', array( $this, 'render_buttons' ), 100 );
+		add_filter( 'the_content', array( $this, 'render_buttons' ), 50 );
 	}
 
 	/**

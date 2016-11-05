@@ -47,7 +47,7 @@ class ButtonsImage extends Buttons {
 	 */
 	protected function render() {
 
-		add_filter( 'the_content', array( $this, 'render_buttons' ), 90 );
+		add_filter( 'the_content', array( $this, 'render_buttons' ), 50 );
 	}
 
 	/**
