@@ -188,6 +188,14 @@ class ButtonsContent extends Buttons {
 					$view = $this->plugin->get_option( 'buttons_image', 'view' ); ?>
 
 			<script type="text/html" id="tmpl-buttons-content">
+				<?php
+					$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
+					$heading = wp_kses( $heading, array() );
+
+				if ( ! empty( $heading ) ) {
+					echo wp_kses( "<h4 class='{$prefix}-buttons__heading'>{$heading}</h4>", array( 'h4' => array( 'class' => true ) ) );
+				}
+					?>
 				<div class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="content">
 
 				<?php foreach ( $includes as $site ) :
