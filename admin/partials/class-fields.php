@@ -60,6 +60,7 @@ final class Fields extends PepperPlaneFields {
 
 		// Actions.
 		add_action( "{$this->screen}_add_extra_field", array( $this, 'callback_image' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		// Filters.
 		add_filter( "{$this->screen}_field_scripts", array( $this, 'register_field_files' ) );
@@ -91,9 +92,6 @@ final class Fields extends PepperPlaneFields {
 	 */
 	public function callback_image( $args ) {
 
-		// Enqueues all scripts, styles, settings, and templates necessary to use all media JavaScript APIs.
-		wp_enqueue_media();
-
 		$args  = $this->get_arguments( $args );
 
 		$id = esc_attr( "{$args['section']}_{$args['id']}" );
@@ -116,7 +114,18 @@ final class Fields extends PepperPlaneFields {
 				<button type='button' id='{$id}-change' class='button change-media{$hide}' data-input='#{$id}'>" . esc_html__( 'Change image', 'ninecodes-social-manager' ) . "</button>
 				<button type='button' id='{$id}-remove' class='button remove-media{$hide}' data-input='#{$id}'>" . esc_html__( 'Remove image', 'ninecodes-social-manager' ) . '</button>
             </div>';
-
 		echo $html; // // WPCS: XSS ok. ?>
 	<?php }
+
+	/**
+	 * Enqueues all scripts, styles, settings, and templates necessary to use all media JavaScript APIs.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function enqueue_scripts() {
+		wp_enqueue_media();
+	}
 }

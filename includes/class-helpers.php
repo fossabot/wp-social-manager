@@ -44,19 +44,19 @@ class Helpers {
 
 		$path = plugin_dir_url( dirname( __FILE__ ) );
 
-		$facebook = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#facebook /></svg>";
-		$twitter = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#twitter /></svg>";
-		$instagram = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#instagram /></svg>";
-		$pinterest = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#pinterest /></svg>";
-		$linkedin = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#linkedin /></svg>";
-		$googleplus = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#googleplus /></svg>";
-		$youtube = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#youtube /></svg>";
-		$reddit = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#reddit /></svg>";
-		$dribbble = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#dribbble /></svg>";
-		$behance = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#behance /></svg>";
-		$github = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#github /></svg>";
-		$codepen = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#codepen /></svg>";
-		$email = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . "public/img/social-sites-icon.svg#email /></svg>";
+		$facebook = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#facebook /></svg>';
+		$twitter = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#twitter /></svg>';
+		$instagram = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#instagram /></svg>';
+		$pinterest = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#pinterest /></svg>';
+		$linkedin = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#linkedin /></svg>';
+		$googleplus = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#googleplus /></svg>';
+		$youtube = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#youtube /></svg>';
+		$reddit = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#reddit /></svg>';
+		$dribbble = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#dribbble /></svg>';
+		$behance = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#behance /></svg>';
+		$github = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#github /></svg>';
+		$codepen = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#codepen /></svg>';
+		$email = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><use xlink:href=' . $path . 'public/img/social-sites-icon.svg#email /></svg>';
 
 		$icons = array(
 			'facebook' => apply_filters( 'ninecodes_social_manager_icon', $facebook, 'facebook', false ),

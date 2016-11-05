@@ -231,7 +231,16 @@ final class Plugin {
 	 * @param string $key  The array key to retrieve from the option.
 	 * @return mixed The option value or null if option is not available.
 	 */
-	public function get_option( $name, $key ) {
-		return isset( $this->options[ $name ][ $key ] ) ? $this->options[ $name ][ $key ] : null;
+	public function get_option( $name = '', $key = '' ) {
+
+		if ( empty( $name ) ) {
+			return null;
+		}
+
+		if ( ! empty( $key ) ) {
+			return isset( $this->options[ $name ][ $key ] ) ? $this->options[ $name ][ $key ] : null;
+		} else {
+			return isset( $this->options[ $name ] ) ? $this->options[ $name ] : null;
+		}
 	}
 }

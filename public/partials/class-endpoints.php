@@ -64,14 +64,19 @@ class Endpoints {
 	 * @since 1.0.0
 	 * @access protected
 	 *
-	 * @todo add inline docs referring to each site endpoint documentation page.
-	 *
 	 * @param array $post_id The WordPress post ID.
 	 * @return array An array of sites with their label / name and button endpoint url.
+	 *
+	 * TODO add inline docs referring to each site endpoint documentation page.
 	 */
 	public function get_content_endpoints( $post_id ) {
 
+		$post_id = absint( $post_id );
 		$metas = $this->get_post_metas( $post_id );
+
+		if ( ! $metas['post_url'] || ! $metas['post_title'] ) {
+			return;
+		}
 
 		$endpoints = array();
 		$includes = $this->plugin->get_option( 'buttons_content', 'includes' );
@@ -136,7 +141,7 @@ class Endpoints {
 							'title' => $metas['post_title'],
 							'summary' => $metas['post_description'],
 							'url' => $metas['post_url'],
-							'source' => $metas['post_url'],
+							'source' => urlencode( get_site_url() ),
 						),
 						$endpoint
 					);
@@ -195,7 +200,7 @@ class Endpoints {
 	 * Get the complete endpoint url for buttons on the image.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @todo add inline docs referring to each site endpoint documentation page.
 	 *
@@ -204,9 +209,10 @@ class Endpoints {
 	 */
 	public function get_image_endpoints( $post_id ) {
 
+		$post_id = absint( $post_id );
 		$metas = $this->get_post_metas( $post_id );
 
-		if ( in_array( '', $metas, true ) ) {
+		if ( ! $metas['post_url'] || ! $metas['post_title'] ) {
 			return;
 		}
 
@@ -241,6 +247,9 @@ class Endpoints {
 
 	/**
 	 * Function to merge each image src to the button endpoint URL.
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 *
 	 * @param array  $button {
 	 * 				The site button properties.
@@ -283,6 +292,9 @@ class Endpoints {
 	/**
 	 * Function to get image sources in the post content.
 	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
 	 * @param integer $post_id The post ID.
 	 * @return array List of image source URL
 	 */
@@ -318,6 +330,7 @@ class Endpoints {
 	 */
 	protected function get_post_metas( $post_id ) {
 
+		$post_id = absint( $post_id );
 		$post_title = $this->metas->get_post_title( $post_id );
 		$post_description = $this->metas->get_post_description( $post_id );
 

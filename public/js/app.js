@@ -1,9 +1,16 @@
-(function( $, undefined ) {
+/*eslint no-unused-vars: ["error", { "vars": "local", "varsIgnorePattern": "^_" }]*/
+(function( $ ) {
 
 	'use strict';
 
-	var api, target, source, SocialButton;
-	var $template, $templateHTML;
+	var api,
+		target,
+		source,
+		SocialButton,
+		$template,
+		$templateHTML,
+		_socialButtonsContent,
+		_socialButtonsImage;
 
 	if ( 'undefined' === typeof nineCodesSocialManager ) {
 		return;
@@ -26,7 +33,7 @@
 	};
 
 	SocialButton.Model = Backbone.Model.extend({
-		urlRoot: ( api.root + api.namespace ) + '/buttons',
+		urlRoot: api.root + api.namespace + '/buttons',
 		defaults: {
 			id: null
 		}
@@ -74,21 +81,21 @@
 
 		windowPopup: function( url ) {
 
-			var wind = window;
-			var docu = document;
+			var wind = window,
+				docu = document,
+				screenLeft = undefined !== wind.screenLeft ? wind.screenLeft : screen.left,
+				screenTop = undefined !== wind.screenTop ? wind.screenTop : screen.top,
+				screenWidth = wind.innerWidth ? wind.innerWidth : docu.documentElement.clientWidth ? docu.documentElement.clientWidth : screen.width,
+				screenHeight = wind.innerHeight ? wind.innerHeight : docu.documentElement.clientHeight ? docu.documentElement.clientHeight : screen.height,
 
-			var screenLeft = undefined !== wind.screenLeft ? wind.screenLeft : screen.left;
-			var screenTop = undefined !== wind.screenTop ? wind.screenTop : screen.top;
-			var screenWidth = wind.innerWidth ? wind.innerWidth : docu.documentElement.clientWidth ? docu.documentElement.clientWidth : screen.width;
-			var screenHeight = wind.innerHeight ? wind.innerHeight : docu.documentElement.clientHeight ? docu.documentElement.clientHeight : screen.height;
+				width = 560,
+				height = 430,
+				divide = 2,
 
-			var width = 560;
-			var height = 430;
+				left =   screenWidth / divide  -  width / divide   + screenLeft,
+				top =   screenHeight / divide  -  height / divide   + screenTop,
 
-			var left = ( ( screenWidth / 2 ) - ( width / 2 ) ) + screenLeft;
-			var top = ( ( screenHeight / 2 ) - ( height / 2 ) ) + screenTop;
-
-			var newWindow = wind.open( url, '', 'scrollbars=no,width=' + width + ',height=' + height + ',top=' + top + ',left=' + left );
+				newWindow = wind.open( url, '', 'scrollbars=no,width=' + width + ',height=' + height + ',top=' + top + ',left=' + left );
 
 			if ( newWindow ) {
 				newWindow.focus();
@@ -127,9 +134,10 @@
 
 		render: function( model, resp, req ) {
 
-			var self = this;
-			var response = model.toJSON();
-			var $images = $( '.' + api.attrPrefix + '-buttons--' + req.data.id );
+			var self = this,
+				response = model.toJSON(),
+
+				$images = $( '.' + api.attrPrefix + '-buttons--' + req.data.id );
 
 			$images.each( function( index ) {
 				$( this ).append( self.template({
@@ -148,11 +156,11 @@
 		}
 	});
 
-	new SocialButton.View.Content({
+	_socialButtonsContent = new SocialButton.View.Content({
 		model: SocialButton.Model
 	});
 
-	new SocialButton.View.Images({
+	_socialButtonsImage = new SocialButton.View.Images({
 		model: SocialButton.Model
 	});
 

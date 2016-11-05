@@ -47,7 +47,7 @@ class ButtonsImage extends Buttons {
 	 */
 	protected function render() {
 
-		add_filter( 'the_content', array( $this, 'render_buttons' ), 90 );
+		add_filter( 'the_content', array( $this, 'render_buttons' ), 50 );
 	}
 
 	/**
@@ -66,6 +66,11 @@ class ButtonsImage extends Buttons {
 			return $content;
 		}
 
+		/**
+		 * The DOM Document instance
+		 *
+		 * @var DOMDocument
+		 */
 		$dom = new DOMDocument();
 		$errors = libxml_use_internal_errors( true );
 
@@ -88,30 +93,32 @@ class ButtonsImage extends Buttons {
 				$wrap_clone->setAttribute( 'id', "{$prefix}-buttons-{$this->post_id}-img-{$wrap_id}" );
 
 				if ( 'a' === $img->parentNode->nodeName ) {
+
 					$link_parent = $img->parentNode;
 
 					$link_parent->parentNode->replaceChild( $wrap_clone, $link_parent );
 					$wrap_clone->appendChild( $link_parent );
 				} else {
+
 					$img->parentNode->replaceChild( $wrap_clone, $img );
 					$wrap_clone->appendChild( $img );
 				}
 
-				if ( 'html' === $this->get_buttons_mode() && $this->post_id ) :
+				if ( 'html' === $this->get_buttons_mode() && $this->post_id ) {
 
 					$response = wp_remote_get( trailingslashit( get_rest_url() ) . $this->plugin_slug . '/1.0/buttons?id=' . $this->post_id );
 
 					if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
 
-						$body = wp_remote_retrieve_body( $response );
-						$response = json_decode( $body );
+						$response_body = wp_remote_retrieve_body( $response );
+						$response_json = json_decode( $response_body );
 
 						$fragment = $dom->createDocumentFragment();
-						$fragment->appendXML( $this->buttons_html( $response->images[ $index ] ) );
+						$fragment->appendXML( $this->buttons_html( $response_json->images[ $index ] ) );
 
 						$wrap_clone->appendChild( $fragment );
 					}
-				endif;
+				}
 
 			endforeach;
 

@@ -151,9 +151,8 @@ class APIRoutes {
 				'callback' => array( $this, 'response_buttons' ),
 				'args' => array(
 					'id' => array(
-						'sanitize_callback' => 'absint',
-						'validate_callback' => function( $param ) {
-							return ( $param );
+						'validate_callback' => function( $id ) {
+							return is_numeric( $id );
 						},
 					),
 				),
@@ -174,12 +173,14 @@ class APIRoutes {
 
 		if ( isset( $request['id'] ) ) {
 
+			$button_id = absint( $request['id'] );
+
 			$response = array(
-				'id' => $request['id'],
+				'id' => $button_id,
 			);
 
-			$response['content'] = $this->endpoints->get_content_endpoints( $request['id'] );
-			$response['images'] = $this->endpoints->get_image_endpoints( $request['id'] );
+			$response['content'] = $this->endpoints->get_content_endpoints( $button_id );
+			$response['images'] = $this->endpoints->get_image_endpoints( $button_id );
 
 		} else {
 

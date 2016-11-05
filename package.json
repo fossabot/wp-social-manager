@@ -1,8 +1,8 @@
 {
   "name": "ninecodes-social-manager",
   "title": "Social Manager by NineCodes",
-  "version": "1.0.0",
-  "description": "A WordPress plugin to optimize a website presence in social media.",
+  "version": "1.0.0-beta.7",
+  "description": "A WordPress plugin to optimize website presence in social media.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,22 +11,33 @@
     "url": "git+https://bitbucket.org/ninecodes/social-manager.git"
   },
   "keywords": [
+    "wordpress",
+    "plugin",
     "widget",
+    "json",
+    "api",
     "social-media",
+    "share",
     "facebook",
     "twitter",
-    "json",
-    "wp-api"
+    "pinterest"
   ],
   "author": "NineCodes",
+  "contributors": [
+    "Thoriq Firdaus <tfirdaus@outlook.com> (http://ninecodes.com)",
+    "Hongkiat Lim <me@hongkiat.com> (http://www.hongkiat.com)"
+  ],
   "license": "GPL-2.0+",
   "homepage": "https://bitbucket.org/ninecodes/social-manager#readme",
   "devDependencies": {
     "grunt": "~0.4.5",
-    "grunt-contrib-clean": "~1.0.0",
-    "grunt-contrib-copy": "~1.0.0",
     "grunt-checktextdomain": "~1.0.0",
-    "grunt-shell": "~1.3.0",
-    "grunt-wp-deploy": "^1.1.0"
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-compress": "^1.3.0",
+    "grunt-contrib-copy": "~1.0.0",
+    "grunt-contrib-cssmin": "~1.0.1",
+    "grunt-contrib-uglify": "~1.0.1",
+    "grunt-eslint": "^19.0.0",
+    "grunt-shell": "~1.3.0"
   }
 }
