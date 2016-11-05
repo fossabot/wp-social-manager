@@ -88,6 +88,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 	 */
 	public function __construct() {
 
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 30 );
 		add_action( 'ninecodes_social_manager_widget_setups', array( $this, 'setups' ), 10, 2 );
 	}
 
@@ -112,6 +113,21 @@ final class WidgetSocialProfiles extends WP_Widget {
 			'classname' => $this->widget_id,
 			'description' => esc_html__( 'Display list of social media profile and page URLs connected to this website.', 'ninecodes-social-manager' ),
 		) );
+	}
+
+	/**
+	 * Load the stylesheets for the public-facing side.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function enqueue_styles() {
+
+		if ( is_active_widget( false, false, $this->widget_id, true ) ) {
+			wp_enqueue_style( $this->plugin_slug );
+		}
 	}
 
 	/**
@@ -230,8 +246,6 @@ final class WidgetSocialProfiles extends WP_Widget {
 	 * @param array $instance The settings for the particular instance of the widget.
 	 */
 	public function widget( $args, $instance ) {
-
-		wp_enqueue_style( $this->plugin_slug );
 
 		echo $args['before_widget']; // WPCS : XSS ok.
 
