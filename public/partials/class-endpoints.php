@@ -73,7 +73,7 @@ class Endpoints {
 
 		$metas = $this->get_post_metas( $post_id );
 
-		if ( ! $metas['post_url'] ) {
+		if ( ! $metas['post_url'] || ! $metas['post_title'] ) {
 			return;
 		}
 
@@ -140,7 +140,7 @@ class Endpoints {
 							'title' => $metas['post_title'],
 							'summary' => $metas['post_description'],
 							'url' => $metas['post_url'],
-							'source' => $metas['post_url'],
+							'source' => urlencode( get_site_url() ),
 						),
 						$endpoint
 					);
@@ -199,7 +199,7 @@ class Endpoints {
 	 * Get the complete endpoint url for buttons on the image.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @todo add inline docs referring to each site endpoint documentation page.
 	 *
@@ -246,6 +246,9 @@ class Endpoints {
 	/**
 	 * Function to merge each image src to the button endpoint URL.
 	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
 	 * @param array  $button {
 	 * 				The site button properties.
 	 * 				@type string $site 		 The button site unique key e.g. facebook, twitter, etc.
@@ -286,6 +289,9 @@ class Endpoints {
 
 	/**
 	 * Function to get image sources in the post content.
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 *
 	 * @param integer $post_id The post ID.
 	 * @return array List of image source URL
