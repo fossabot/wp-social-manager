@@ -1,81 +1,86 @@
-;(function( $, _, Backbone ) {
+/*eslint no-unused-vars: ["error", { "vars": "local", "varsIgnorePattern": "^_" }]*/
+(function( $ ) {
 
-    'use strict';
+	'use strict';
 
     /**
      * The Backbone View to preview the "Social Profile" URL.
      */
-    var SocialProfiles = Backbone.View.extend({
+	var _socialProfiles,
+		SocialProfiles = Backbone.View.extend({
 
         // Events the input should listen to.
-        events: {
-            'input': 'previewUpdate'
-        },
+			events: {
+				'input': 'previewUpdate'
+			},
 
         /**
          * Initialize the View
          * On page load, render the preview if the value is set in the input.
+         *
+         * @return {Void} This is executed on initialization, and does not return anything.
          */
-        initialize: function() {
-            this.previewInit();
-        },
+			initialize: function() {
+				this.wait = 150;
+				this.previewInit();
+			},
 
-        previewInit: function() {
+			previewInit: function() {
 
-            var self = this;
+				var self = this;
 
-            this.$el.each(function() {
-                self.createPlaceholder( this );
-                self.render( this );
-            });
-        },
+				this.$el.each(function() {
+					self.createPlaceholder( this );
+					self.render( this );
+				});
+			},
 
-        previewUpdate: _.throttle(function( event ) {
-            this.render( event.currentTarget );
-        }, 150 ),
+			previewUpdate: _.throttle(function( event ) {
+				this.render( event.currentTarget );
+			}, this.wait ),
 
-        render: function( target ) {
+			render: function( target ) {
 
-            var id, value, url = target.getAttribute( 'data-url' );
+				var id, value, url = target.getAttribute( 'data-url' );
 
-            if ( url && '' !== url ) {
+				if ( url && '' !== url ) {
 
-                id = target.getAttribute( 'id' );
-                value = this.getValue( target );
+					id = target.getAttribute( 'id' );
+					value = this.getValue( target );
 
-                $( '#' + id + '-preview' ).html(function() {
+					$( '#' + id + '-preview' ).html(function() {
 
-                    var $this = $( this );
+						var $this = $( this ),
+							$siblings = $this.siblings().not( 'input' );
 
-                    var $siblings = $this.siblings().not( 'input' );
-                    $siblings.toggleClass( 'hide-if-js', '' !== value );
+						$siblings.toggleClass( 'hide-if-js', '' !== value );
 
-                    return ( '' !== value ) ? '<code>' + url + value + '</code>' : '';
-                });
-            }
+						return  '' !== value  ? '<code>' + url + value + '</code>' : '';
+					});
+				}
 
-            return this;
-        },
+				return this;
+			},
 
-        createPlaceholder: function( target ) {
+			createPlaceholder: function( target ) {
 
-            var attrID = target.getAttribute( 'id' );
+				var attrID = target.getAttribute( 'id' );
 
-            return $( target ).after( '<p id=' + attrID + '-preview></p>' );
-        },
+				return $( target ).after( '<p id=' + attrID + '-preview></p>' );
+			},
 
-        getValue: function( target ) {
+			getValue: function( target ) {
 
-            var value = target.value.replace( /\s+/g, '-' );
+				var value = target.value.replace( /\s+/g, '-' );
 
-            target.value = value;
+				target.value = value;
 
-            return value;
-        }
-    });
+				return value;
+			}
+		});
 
-    new SocialProfiles({
-        el: '.account-profile-control'
-    });
+	_socialProfiles = new SocialProfiles({
+		el: '.account-profile-control'
+	});
 
-})( jQuery, window._, window.Backbone, undefined );
+})( jQuery );
