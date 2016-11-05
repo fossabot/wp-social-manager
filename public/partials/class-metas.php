@@ -224,8 +224,8 @@ final class Metas {
 
 			return array(
 				'src' => esc_url( $src ),
-				'width' => (int) $width,
-				'height' => (int) $height,
+				'width' => absint( $width ),
+				'height' => absint( $height ),
 			);
 		}
 	}
@@ -241,6 +241,7 @@ final class Metas {
 	 */
 	public function get_post_title( $post_id ) {
 
+		$post_id = absint( $post_id );
 		$title = '';
 
 		// If Meta Tags is enabled check the Post meta for the title.
@@ -268,6 +269,7 @@ final class Metas {
 	 */
 	public function get_post_description( $post_id ) {
 
+		$post_id = absint( $post_id );
 		$description = '';
 
 		// If Meta Tags is enabled check the Post meta for the description.
@@ -308,18 +310,19 @@ final class Metas {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param  integer $id The post ID.
-	 * @return array      The image data consisting of the image source, width, and height
+	 * @param integer $post_id The post ID.
+	 * @return array The image data consisting of the image source, width, and height
 	 */
-	public function get_post_image( $id ) {
+	public function get_post_image( $post_id ) {
 
+		$post_id = absint( $post_id );
 		$attachment_id = null;
 
 		if ( $this->is_meta_enabled() ) {
-			$attachment_id = $this->get_post_meta( $id, 'post_thumbnail' ); // Post Meta Image.
+			$attachment_id = $this->get_post_meta( $post_id, 'post_thumbnail' ); // Post Meta Image.
 		}
 
-		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), $attachment_id, $id, 'post-image' );
+		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), $attachment_id, $post_id, 'post-image' );
 
 		/*
 		 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
@@ -330,7 +333,7 @@ final class Metas {
 		}
 
 		if ( ! $attachment_id ) {
-			$attachment_id = get_post_thumbnail_id( $id ); // Post Featured Image.
+			$attachment_id = get_post_thumbnail_id( $post_id ); // Post Featured Image.
 		}
 
 		if ( $attachment_id ) {
@@ -344,7 +347,7 @@ final class Metas {
 			);
 		}
 
-		$post = get_post( $id );
+		$post = get_post( $post_id );
 		$content = $post->post_content;
 
 		$dom = new DOMDocument();
@@ -407,6 +410,7 @@ final class Metas {
 	 */
 	public function get_post_url( $post_id ) {
 
+		$post_id = absint( $post_id );
 		$url = get_permalink( $post_id );
 
 		return esc_url( $url );
@@ -427,6 +431,7 @@ final class Metas {
 	 */
 	public function get_post_author( $post_id ) {
 
+		$post_id = absint( $post_id );
 		$post = get_post( $post_id );
 		$name = get_the_author_meta( 'display_name', $post->post_author );
 		$profiles = get_the_author_meta( $this->option_slug, $post->post_author );
