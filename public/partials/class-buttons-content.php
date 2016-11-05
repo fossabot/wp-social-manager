@@ -185,7 +185,7 @@ class ButtonsContent extends Buttons {
 				if ( ! empty( $includes ) ) :
 
 					$prefix = $this->get_button_attr_prefix();
-					$view = $this->plugin->get_option( 'buttons_image', 'view' ); ?>
+					$view = $this->plugin->get_option( 'buttons_content', 'view' ); ?>
 
 			<script type="text/html" id="tmpl-buttons-content">
 				<?php
