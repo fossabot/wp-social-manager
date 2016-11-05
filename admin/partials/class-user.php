@@ -167,7 +167,7 @@ final class User {
 			$profiles[ $key ] = sanitize_text_field( $value );
 		}
 
-		if ( current_user_can( 'edit_user' ) ) {
+		if ( current_user_can( 'edit_user', $user_id ) ) {
 			update_user_meta( $user_id, $this->option_slug, $profiles );
 		}
 	}

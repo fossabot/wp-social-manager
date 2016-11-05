@@ -27,7 +27,7 @@ final class Widgets {
 	 * @access protected
 	 * @var Plugin
 	 */
-	protected $plugin;
+	private $plugin;
 
 	/**
 	 * The plugin path directory.
@@ -50,7 +50,7 @@ final class Widgets {
 	 */
 	function __construct( Plugin $plugin ) {
 
-		$this->plugin   = $plugin;
+		$this->plugin = $plugin;
 		$this->path_dir = plugin_dir_path( __FILE__ );
 
 		$this->requires();
@@ -66,6 +66,7 @@ final class Widgets {
 	 * @return void
 	 */
 	protected function requires() {
+
 		require_once( $this->path_dir . 'partials/class-social-profiles.php' );
 	}
 
@@ -78,6 +79,7 @@ final class Widgets {
 	 * @return void
 	 */
 	protected function hooks() {
+
 		add_action( 'widgets_init', array( $this, 'setups' ) );
 	}
 
@@ -93,6 +95,67 @@ final class Widgets {
 	 * @return void
 	 */
 	public function setups() {
-		register_widget( new WidgetSocialProfiles( $this->plugin ) );
+
+		register_widget( __NAMESPACE__ . '\\WidgetSocialProfiles' );
+
+		do_action( 'ninecodes_social_manager_widget_setups', $this );
+	}
+
+	/**
+	 * Get the plugin slug.
+	 *
+	 * Slug is a unique identifier of the plugin.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string The plugin slug.
+	 */
+	public function get_slug() {
+
+		return $this->plugin->get_slug();
+	}
+
+	/**
+	 * Get the plugin opts.
+	 *
+	 * Opts herein is the unique identifier of the plugin option name.
+	 * It may be used for prefixing the option name or meta key.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string The plugin opts.
+	 */
+	public function get_opts() {
+
+		return $this->plugin->get_slug();
+	}
+
+	/**
+	 * Get the theme supports.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return ThemeSupports instance.
+	 */
+	public function get_theme_supports() {
+
+		return $this->plugin->theme_supports;
+	}
+
+	/**
+	 * Get the options saved in the database `wp_options`.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param string $name The option name.
+	 * @param string $key  The array key to retrieve from the option.
+	 * @return mixed The option value or null if option is not available.
+	 */
+	public function get_option( $name = '', $key = '' ) {
+		return $this->plugin->get_option( $name, $key );
 	}
 }

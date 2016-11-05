@@ -253,7 +253,7 @@ final class Settings {
 						'id' => array(),
 					),
 			) );
-			$this->settings->render_header( array('title' => true ) );
+			$this->settings->render_header( array( 'title' => true ) );
 			$this->settings->render_form();
 			echo '</div>';
 		} );
@@ -637,7 +637,7 @@ final class Settings {
 				margin-top: 1.68em;
 			}
 			.wrap > .nav-tab-wrapper {
-				margin: 1.5em 0 1em;
+				margin: 1em 0 1em;
 				border-bottom: 1px solid #ccc;
 			}
 			.wrap .field-image-control {
@@ -669,7 +669,7 @@ final class Settings {
 
 		foreach ( $args as $key => $file ) {
 			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'scripts';
-			wp_enqueue_script( "{$this->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+			wp_enqueue_script( "{$this->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.min.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 		}
 	}
 
@@ -686,7 +686,7 @@ final class Settings {
 
 		foreach ( $args as $name => $file ) {
 			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'styles';
-			wp_enqueue_style( "{$this->plugin_slug}-{$file}", "{$this->path_url}css/{$file}.css", array(), $this->version );
+			wp_enqueue_style( "{$this->plugin_slug}-{$file}", "{$this->path_url}css/{$file}.min.css", array(), $this->version );
 		}
 	}
 

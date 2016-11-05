@@ -1,110 +1,112 @@
-;(function( $, Backbone ) {
+/*eslint no-unused-vars: ["error", { "vars": "local", "varsIgnorePattern": "^_" }]*/
+(function( $, wp ) {
 
-    'use strict';
+	'use strict';
 
-    /**
-     * Backbone View to handle Media Uploader UI
-     * in the setting page.
-     */
-    var MediaUploader = Backbone.View.extend({
+	var _mediaUploader,
 
-        events: {
-            'click .add-media': 'selectMedia',
-            'click .change-media': 'selectMedia',
-            'click .remove-media': 'removeMedia'
-        },
+		/**
+		 * Backbone View to handle Media Uploader UI
+		 * in the setting page.
+		 */
+		MediaUploader = Backbone.View.extend({
 
-        initialize: function() {
+			events: {
+				'click .add-media': 'selectMedia',
+				'click .change-media': 'selectMedia',
+				'click .remove-media': 'removeMedia'
+			},
 
-            this.wpMediaUploader;
+			initialize: function() {
 
-            this.wpMedia();
-        },
+				this.wpMediaUploader = null;
+				this.wpMedia();
+			},
 
-        selectMedia: function( button ) {
+			selectMedia: function( button ) {
 
-            this.controls( button );
+				this.controls( button );
 
-            this.wpMediaWindow();
-        },
+				this.wpMediaWindow();
+			},
 
-        removeMedia: function( button ) {
+			removeMedia: function( button ) {
 
-            this.controls( button );
+				this.controls( button );
 
-            this.$input.val( '' );
-            this.$inputImg.html( '' );
-            this.controlState( '' );
-        },
+				this.$input.val( '' );
+				this.$inputImg.html( '' );
+				this.controlState( '' );
+			},
 
-        controls: function( button ) {
+			controls: function( button ) {
 
-            var inputId = $( button.target ).data( 'input' );
+				var inputId = $( button.target ).data( 'input' );
 
-            this.$input = $( inputId );
+				this.$input = $( inputId );
 
-            this.$inputWrap = $( inputId + '-wrap' );
-            this.$inputImg = $( inputId + '-img' );
+				this.$inputWrap = $( inputId + '-wrap' );
+				this.$inputImg = $( inputId + '-img' );
 
-            this.$controlAdd = $( inputId + '-add' );
-            this.$controlChange = $( inputId + '-change' );
-            this.$controlRemove = $( inputId + '-remove' );
-        },
+				this.$controlAdd = $( inputId + '-add' );
+				this.$controlChange = $( inputId + '-change' );
+				this.$controlRemove = $( inputId + '-remove' );
+			},
 
-        controlState: function( imgId, imgUrl ) {
+			controlState: function( imgId, imgUrl ) {
 
-            var state = ( imgId === parseInt( this.$input.val(), 10 ) && '' !== imgUrl );
+				var state =  imgId === parseInt( this.$input.val(), 10 ) && '' !== imgUrl ;
 
-            this.$inputWrap.toggleClass( 'is-set', state );
+				this.$inputWrap.toggleClass( 'is-set', state );
 
-            this.$controlAdd.toggleClass( 'hide-if-js', state );
-            this.$controlChange.toggleClass( 'hide-if-js', ! state );
-            this.$controlRemove.toggleClass( 'hide-if-js', ! state );
+				this.$controlAdd.toggleClass( 'hide-if-js', state );
+				this.$controlChange.toggleClass( 'hide-if-js', ! state );
+				this.$controlRemove.toggleClass( 'hide-if-js', ! state );
 
-            this.$inputImg.html(function() {
+				this.$inputImg.html(function() {
 
-                var imgEl = '';
+					var imgEl = '';
 
-                if ( imgUrl ) {
-                    imgEl = document.createElement( 'img' );
-                    imgEl.src = imgUrl;
-                }
-                return imgEl;
-            });
-        },
+					if ( imgUrl ) {
+						imgEl = document.createElement( 'img' );
+						imgEl.src = imgUrl;
+					}
+					return imgEl;
+				});
+			},
 
-        wpMedia: function() {
-            this.wpMediaUploader = wp.media.frames.file_frame = wp.media({
-                title: 'Site Meta Image',
-                button: {
-                    text: 'Set as Site Image'
-                },
-                multiple: false
-            });
-        },
+			wpMedia: function() {
+				this.wpMediaUploader = wp.media.frames.file_frame = wp.media({
+					title: 'Site Meta Image',
+					button: {
+						text: 'Set as Site Image'
+					},
+					multiple: false
+				});
+			},
 
-        wpMediaWindow: function() {
+			wpMediaWindow: function() {
 
-            this.wpMediaUploader.open();
+				this.wpMediaUploader.open();
 
-            this.wpMediaUploader.on( 'select', function() {
-                this.wpMediaSelect();
-            }.bind( this ) );
-        },
+				this.wpMediaUploader.on( 'select', function() {
+					this.wpMediaSelect();
+				}.bind( this ) );
+			},
 
-        wpMediaSelect: function() {
+			wpMediaSelect: function() {
 
-            var attach = this.wpMediaUploader.state().get( 'selection' ).first().toJSON();
-            var attachId = attach.id;
-            var attachURL = attach.url;
+				var attach = this.wpMediaUploader.state().get( 'selection' ).first().toJSON(),
+					attachId = attach.id,
+					attachURL = attach.url;
 
-            this.$input.val( attachId );
-            this.controlState( attachId, attachURL );
-        }
-    });
+				this.$input.val( attachId );
+				this.controlState( attachId, attachURL );
+			}
+		});
 
-    new MediaUploader({
-        el: '#ninecodes-social-manager-wrap'
-    });
+	_mediaUploader = new MediaUploader({
+		el: '#ninecodes-social-manager-wrap'
+	});
 
-})( jQuery, window.Backbone, undefined );
+})( jQuery, wp );

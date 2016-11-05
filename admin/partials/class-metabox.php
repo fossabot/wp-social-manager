@@ -322,7 +322,7 @@ final class Metabox {
 				'label' => 'Description',
 				'description' => "Set a one to two customized description of this {$this->post_type} that should appear within the social meta tag",
 				'attr' => array(
-					'placeholder' => $this->post_excerpt,
+					'placeholder' => strip_shortcodes( $this->post_excerpt ),
 					'class' => 'widefat',
 				),
 			)

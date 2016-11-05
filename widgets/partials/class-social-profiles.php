@@ -57,7 +57,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 	 * @access protected
 	 * @var string
 	 */
-	protected $option_slug = 'ncsocman';
+	protected $option_slug;
 
 	/**
 	 * Profile and Page usernames saved in the option.
@@ -85,18 +85,26 @@ final class WidgetSocialProfiles extends WP_Widget {
 	 *
 	 * @since 1.0.0
 	 * @access public
-	 *
-	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	public function __construct( Plugin $plugin ) {
+	public function __construct() {
 
-		$this->plugin_slug = $plugin->get_slug();
-		$this->option_slug = $plugin->get_opts();
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 30 );
+		add_action( 'ninecodes_social_manager_widget_setups', array( $this, 'setups' ), 10, 2 );
+	}
 
-		$options = get_option( "{$this->option_slug}_profiles" );
-		$this->options = ! empty( $options ) ? $options : array();
+	/**
+	 * Function to setup the widget.
+	 *
+	 * @param Widgets $widgets The Widgets class instance.
+	 * @return void
+	 */
+	public function setups( $widgets ) {
 
 		$this->profiles = Options::social_profiles();
+
+		$this->options = $widgets->get_option( 'profiles' );
+		$this->plugin_slug = $widgets->get_slug();
+		$this->option_slug = $widgets->get_opts();
 
 		$this->widget_id = "{$this->plugin_slug}-profiles";
 		$this->widget_title = esc_html__( 'Follow Us', 'ninecodes-social-manager' );
@@ -104,7 +112,22 @@ final class WidgetSocialProfiles extends WP_Widget {
 		parent::__construct($this->widget_id, esc_html__( 'Social Media Profiles', 'ninecodes-social-manager' ), array(
 			'classname' => $this->widget_id,
 			'description' => esc_html__( 'Display list of social media profile and page URLs connected to this website.', 'ninecodes-social-manager' ),
-		));
+		) );
+	}
+
+	/**
+	 * Load the stylesheets for the public-facing side.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function enqueue_styles() {
+
+		if ( is_active_widget( false, false, $this->widget_id, true ) ) {
+			wp_enqueue_style( $this->plugin_slug );
+		}
 	}
 
 	/**
@@ -132,11 +155,11 @@ final class WidgetSocialProfiles extends WP_Widget {
 			<?php
 				$message = esc_html__( 'Please add at least one social media profile of this website in the %s.', 'ninecodes-social-manager' );
 				$setting = '<a href="' . admin_url( 'options-general.php?page=ninecodes-social-manager' ) . '">' . esc_html__( 'setting page', 'ninecodes-social-manager' ) . '</a>';
-				echo wp_kses( sprintf( $message, $setting ), array(
+				echo wp_kses(sprintf( $message, $setting ), array(
 					'a' => array(
 						'href' => true,
 					),
-				) ); ?></p>
+				)); ?></p>
 			<?php else : ?>
 
 			<p>
@@ -144,7 +167,6 @@ final class WidgetSocialProfiles extends WP_Widget {
 				<br>
 			<?php
 			foreach ( $this->options as $key => $value ) :
-
 				if ( empty( $value ) ) {
 					continue;
 				}
@@ -158,9 +180,8 @@ final class WidgetSocialProfiles extends WP_Widget {
 				$state = isset( $instance['site'][ $key ] ) ? $instance['site'][ $key ] : 1;
 				$state = checked( $state, 1, false );
 
-				echo "<input id='{$id}' type='checkbox' class='checkbox' name='{$name}'' value='{$key}' {$state}>";
-				echo "<label for='{$id}'>{$this->profiles[$key]['label']}</label><br>";
-
+				echo "<input id='{$id}' type='checkbox' class='checkbox' name='{$name}'' value='{$key}' {$state}>"; // WPCS: XSS ok.
+				echo "<label for='{$id}'>{$this->profiles[$key]['label']}</label><br>"; // WPCS: XSS ok.
 			endforeach; ?>
 			</p>
 
@@ -174,14 +195,13 @@ final class WidgetSocialProfiles extends WP_Widget {
 					$views = Options::button_views();
 
 				foreach ( $views as $key => $label ) :
-
 					$key = sanitize_key( $key );
 
 					$state = isset( $instance['view'] ) && ! empty( $instance['view'] ) ? $instance['view'] : 'icon';
 					$state = checked( sanitize_key( $state ), $key, false );
 
-					echo "<input id='{$id}-{$key}' type='radio' name='{$name}' value='{$key}' {$state}>";
-					echo "<label for='{$id}-{$key}'>" . esc_html( $label ) . '</label><br>';
+					echo "<input id='{$id}-{$key}' type='radio' name='{$name}' value='{$key}' {$state}>"; // WPCS: XSS ok.
+					echo "<label for='{$id}-{$key}'>" . esc_html( $label ) . '</label><br>'; // WPCS: XSS ok.
 				endforeach; ?>
 			</p>
 			<?php endif; ?>
@@ -221,13 +241,11 @@ final class WidgetSocialProfiles extends WP_Widget {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $args 	  Display arguments including 'before_title', 'after_title',
-	 * 						  'before_widget', and 'after_widget'.
+	 * @param array $args     Display arguments including 'before_title', 'after_title',
+	 *                        'before_widget', and 'after_widget'.
 	 * @param array $instance The settings for the particular instance of the widget.
 	 */
 	public function widget( $args, $instance ) {
-
-		wp_enqueue_style( $this->plugin_slug );
 
 		echo $args['before_widget']; // WPCS : XSS ok.
 
@@ -249,8 +267,6 @@ final class WidgetSocialProfiles extends WP_Widget {
 		foreach ( $this->options as $key => $value ) {
 			$site = 0;
 
-
-
 			if ( ! isset( $instance['site'][ $key ] ) && ! empty( $value ) ) {
 				$site = 1;
 			}
@@ -267,8 +283,6 @@ final class WidgetSocialProfiles extends WP_Widget {
 				'url' => '',
 			));
 
-
-
 			if ( ! $profiles['url'] ) {
 				continue;
 			}
@@ -281,7 +295,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 					'icon' => Helpers::get_social_icons( $key ),
 			));
 
-			echo wp_kses( $list, array(
+			echo wp_kses($list, array(
 				'a' => array(
 					'class' => true,
 					'href' => true,
@@ -300,11 +314,10 @@ final class WidgetSocialProfiles extends WP_Widget {
 				'path' => array(
 					'd' => true,
 				),
-			) );
+			));
 		} // End foreach().
 
 		echo '</div>';
-
 		echo $args['after_widget']; // WPCS : XSS ok.
 	}
 

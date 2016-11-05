@@ -177,7 +177,7 @@ final class ViewPublic {
 	 */
 	protected function register_styles() {
 
-		wp_register_style( $this->plugin_slug, $this->path_url . 'css/styles.css', array(), $this->version, 'all' );
+		wp_register_style( $this->plugin_slug, $this->path_url . 'css/styles.min.css', array(), $this->version, 'all' );
 	}
 
 	/**
@@ -253,11 +253,13 @@ final class ViewPublic {
 		}
 
 		$ptc = $this->plugin->get_option( 'buttons_content', 'post_types' );
-		$pti = $this->plugin->get_option( 'buttons_image', 'post_types' );
+
+		$buttons_image = $this->plugin->get_option( 'buttons_image' ); // "Buttons Image" options;
+		$pti = ! $buttons_image['enabled'] ? array() : $buttons_image['post_types'];
 
 		$post_types = array_unique( array_merge( $ptc, $pti ) );
 
-		if ( ! is_singular( $post_types ) ) {
+		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
 			return false;
 		}
 
