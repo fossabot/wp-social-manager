@@ -251,7 +251,7 @@ final class Metas {
 		// If the title is still empty get the Post title.
 		if ( empty( $title ) ) {
 			$post = get_post( $post_id );
-			$title = apply_filters( 'the_title', $post->post_title );
+			$title = $post ? apply_filters( 'the_title', $post->post_title ) : '';
 		}
 
 		return wp_kses( $title, array() );
@@ -276,13 +276,18 @@ final class Metas {
 		}
 
 		// If the title is still empty get the Post excerpt.
-		if ( ! $description ) {
+		if ( empty( $description ) ) {
 
 			$post = get_post( $post_id );
-			$description = $post->post_excerpt;
+
+			if ( ! $post ) {
+				return '';
+			}
 
 			if ( empty( $post->post_excerpt ) ) {
 				$description = wp_trim_words( $post->post_content, 30, '...' );
+			} else {
+				$description = $post->post_excerpt;
 			}
 		}
 
