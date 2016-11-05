@@ -110,7 +110,7 @@ final class WPHead {
 	 */
 	public function site_meta_tags() {
 
-		if ( is_single() || ! $this->metas->is_meta_enabled() ) {
+		if ( is_singular() || is_attachment() || ! $this->metas->is_meta_enabled() ) {
 			return;
 		}
 
@@ -149,7 +149,7 @@ final class WPHead {
 	 */
 	public function post_meta_tags() {
 
-		if ( ! is_single() || ! $this->metas->is_meta_enabled() ) {
+		if ( ! is_singular() || is_attachment() || ! $this->metas->is_meta_enabled() ) {
 			return;
 		}
 
