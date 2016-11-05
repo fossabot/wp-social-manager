@@ -1,0 +1,9 @@
+{
+	"extends": "./dev-lib/.eslintrc",
+	"globals": {
+		"nineCodesSocialManager": false
+	},
+	"rules": {
+		"complexity": 0
+	}
+}
