@@ -71,6 +71,7 @@ class Endpoints {
 	 */
 	public function get_content_endpoints( $post_id ) {
 
+		$post_id = absint( $post_id );
 		$metas = $this->get_post_metas( $post_id );
 
 		if ( ! $metas['post_url'] || ! $metas['post_title'] ) {
@@ -208,9 +209,10 @@ class Endpoints {
 	 */
 	public function get_image_endpoints( $post_id ) {
 
+		$post_id = absint( $post_id );
 		$metas = $this->get_post_metas( $post_id );
 
-		if ( ! $metas['post_url'] ) {
+		if ( ! $metas['post_url'] || ! $metas['post_title'] ) {
 			return;
 		}
 
@@ -328,6 +330,7 @@ class Endpoints {
 	 */
 	protected function get_post_metas( $post_id ) {
 
+		$post_id = absint( $post_id );
 		$post_title = $this->metas->get_post_title( $post_id );
 		$post_description = $this->metas->get_post_description( $post_id );
 

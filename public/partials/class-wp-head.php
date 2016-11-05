@@ -153,7 +153,7 @@ final class WPHead {
 			return;
 		}
 
-		$post_id = get_the_id();
+		$post_id = absint( get_the_id() );
 
 		$tag_args = array(
 			'site_name' => $this->metas->get_site_name(),
@@ -202,10 +202,10 @@ final class WPHead {
 		$meta = '';
 
 		$args = wp_parse_args( $args, array(
-			'site_name' => false,
-			'site_title' => false,
-			'site_description' => false,
-			'site_url' => false,
+			'site_name' => '',
+			'site_title' => '',
+			'site_description' => '',
+			'site_url' => '',
 			'site_image' => array(),
 		) );
 
@@ -264,10 +264,10 @@ final class WPHead {
 		$meta = '';
 
 		$args = wp_parse_args( $args, array(
-			'site_name' => false,
-			'site_title' => false,
-			'site_description' => false,
-			'site_url' => false,
+			'site_name' => '',
+			'site_title' => '',
+			'site_description' => '',
+			'site_url' => '',
 			'site_image' => array(),
 		) );
 
@@ -328,10 +328,10 @@ final class WPHead {
 		$meta = '';
 
 		$args = wp_parse_args( $args, array(
-			'site_name' => false,
-			'post_title' => false,
-			'post_description' => false,
-			'post_url' => false,
+			'site_name' => '',
+			'post_title' => '',
+			'post_description' => '',
+			'post_url' => '',
 			'post_image' => array(),
 			'post_author' => array(),
 		) );
@@ -437,9 +437,9 @@ final class WPHead {
 
 		$meta = '';
 		$args = wp_parse_args( $args, array(
-			'post_title' => false,
-			'post_description' => false,
-			'post_url' => false,
+			'post_title' => '',
+			'post_description' => '',
+			'post_url' => '',
 			'post_image' => array(),
 			'post_author' => array(),
 		) );
@@ -454,7 +454,7 @@ final class WPHead {
 			$width  = $args['post_image']['width'];
 			$height = $args['post_image']['height'];
 
-			if ( $source && 0 !== $width && 0 !== $height ) {
+			if ( $source && $width && $height ) {
 
 				$meta .= sprintf( "<meta name='twitter:image:src' content='%s' />\n", esc_attr( $source ) );
 				$meta .= sprintf( "<meta name='twitter:image:width' content='%s' />\n", esc_attr( $width ) );

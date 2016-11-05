@@ -204,19 +204,19 @@ final class Metas {
 	 */
 	public function get_site_image() {
 
-		$attachment_id = $this->get_site_meta( 'image' );
-		$attachment_id = $attachment_id ? $attachment_id : get_theme_mod( 'custom_logo' );
-
 		if ( is_author() ) {
 
 			$author = get_queried_object();
 			$avatar = get_avatar_url( $author->ID, array( 'size' => 180 ) );
 			return array(
-					'src' => $avatar,
-					'width' => 180,
-					'height' => 180,
-				);
+				'src' => $avatar,
+				'width' => 180,
+				'height' => 180,
+			);
 		}
+
+		$attachment_id = $this->get_site_meta( 'image' );
+		$attachment_id = $attachment_id ? $attachment_id : get_theme_mod( 'custom_logo' );
 
 		if ( $attachment_id ) {
 
@@ -328,7 +328,14 @@ final class Metas {
 		 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
 		 * return the image immediately and don't proceed the codes that follow.
 		 */
-		if ( ! empty( $image_filter ) && isset( $image_filter['src'] ) ) {
+		if ( isset( $image_filter['src'] ) ) {
+
+			$image_filter = wp_parse_args( $image_filter, array(
+				'src' => '',
+				'width' => 0,
+				'height' => 0,
+			) );
+
 			return $image_filter;
 		}
 
@@ -348,32 +355,37 @@ final class Metas {
 		}
 
 		$post = get_post( $post_id );
-		$content = $post->post_content;
 
-		$dom = new DOMDocument();
+		if ( $post ) {
 
-		$errors = libxml_use_internal_errors( true );
+			$content = $post->post_content;
 
-		$doc = $dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+			$dom = new DOMDocument();
+			$errors = libxml_use_internal_errors( true );
 
-		libxml_clear_errors();
-		libxml_use_internal_errors( $errors );
+			$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
 
-		$images = $dom->getElementsByTagName( 'img' );
+			$images = $dom->getElementsByTagName( 'img' );
 
-		if ( 0 !== $images->length ) {
+			if ( 0 !== $images->length ) {
 
-			$src = $images->item( 0 )->getAttribute( 'src' );
-			$width = $images->item( 0 )->getAttribute( 'width' );
-			$height = $images->item( 0 )->getAttribute( 'height' );
+				$src = $images->item( 0 )->getAttribute( 'src' );
 
-			if ( $src ) {
-				return array(
-					'src' => esc_url( $src ),
-					'width' => $width && substr( $width, -1 ) === '%' ? absint( $width ) : 0,
-					'height' => $height && substr( $height, -1 ) === '%' ? absint( $height ) : 0,
-				);
+				if ( $src ) {
+
+					$width = $images->item( 0 )->getAttribute( 'width' );
+					$height = $images->item( 0 )->getAttribute( 'height' );
+
+					return array(
+						'src' => esc_url( $src ),
+						'width' => $width && substr( $width, -1 ) === '%' ? absint( $width ) : 0,
+						'height' => $height && substr( $height, -1 ) === '%' ? absint( $height ) : 0,
+					);
+				}
 			}
+
+			libxml_clear_errors();
+			libxml_use_internal_errors( $errors );
 		}
 
 		if ( $this->is_meta_enabled() ) {
@@ -385,7 +397,7 @@ final class Metas {
 			}
 		}
 
-		$site_logo = (int) get_theme_mod( 'custom_logo' ); // Site Custom Logo.
+		$site_logo = absint( get_theme_mod( 'custom_logo' ) ); // Site Custom Logo.
 
 		if ( $site_logo ) {
 
@@ -432,9 +444,10 @@ final class Metas {
 	public function get_post_author( $post_id ) {
 
 		$post_id = absint( $post_id );
+
 		$post = get_post( $post_id );
-		$name = get_the_author_meta( 'display_name', $post->post_author );
-		$profiles = get_the_author_meta( $this->option_slug, $post->post_author );
+		$name = $post ? get_the_author_meta( 'display_name', $post->post_author ) : '';
+		$profiles = $post ? get_the_author_meta( $this->option_slug, $post->post_author ) : array();
 
 		return array(
 			'display_name' => $name,
