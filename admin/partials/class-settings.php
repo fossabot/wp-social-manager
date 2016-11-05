@@ -669,7 +669,7 @@ final class Settings {
 
 		foreach ( $args as $key => $file ) {
 			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'scripts';
-			wp_enqueue_script( "{$this->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+			wp_enqueue_script( "{$this->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.min.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 		}
 	}
 
@@ -686,7 +686,7 @@ final class Settings {
 
 		foreach ( $args as $name => $file ) {
 			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'styles';
-			wp_enqueue_style( "{$this->plugin_slug}-{$file}", "{$this->path_url}css/{$file}.css", array(), $this->version );
+			wp_enqueue_style( "{$this->plugin_slug}-{$file}", "{$this->path_url}css/{$file}.min.css", array(), $this->version );
 		}
 	}
 

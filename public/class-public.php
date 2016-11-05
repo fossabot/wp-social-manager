@@ -177,7 +177,7 @@ final class ViewPublic {
 	 */
 	protected function register_styles() {
 
-		wp_register_style( $this->plugin_slug, $this->path_url . 'css/styles.css', array(), $this->version, 'all' );
+		wp_register_style( $this->plugin_slug, $this->path_url . 'css/styles.min.css', array(), $this->version, 'all' );
 	}
 
 	/**
