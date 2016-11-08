@@ -36,6 +36,11 @@
 ehthumbs.db
 Thumbs.db
 
+# Composer #
+######################
+/vendor/
+composer.lock
+
 # Grunt #
 ######################
 /build/
@@ -45,8 +50,9 @@ npm-debug.log
 # Codekit #
 ######################
 *.codekit
+*.codekit3
 
-# # Compiled files #
+# Compiled files #
 ######################
 *.map
 *.min.js
