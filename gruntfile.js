@@ -2,44 +2,73 @@
 module.exports = function(grunt) {
 
 	'use strict';
+	var cssAdmin = './admin/css/',
+		cssPublic = './public/css/',
+		jsAdmin = './admin/js/',
+		jsPublic = './public/js/',
 
-	var csssrc = [{
+		csssrc = [{
 			expand: true,
-			cwd: './admin/css/',
+			cwd: cssAdmin,
+			dest: cssAdmin,
 			src: [
 				'*.css',
-				'!*.min.css'
+				'!*.min.css',
+				'!*-rtl.css'
 			],
-			dest: './admin/css/',
 			ext: '.min.css'
 		}, {
 			expand: true,
-			cwd: './public/css/',
+			cwd: cssPublic,
+			dest: cssPublic,
 			src: [
 				'*.css',
-				'!*.min.css'
+				'!*.min.css',
+				'!*-rtl.css',
 			],
-			dest: './public/css/',
 			ext: '.min.css'
 		}],
 
+		csssrcRTL = [{
+			expand: true,
+			cwd: cssAdmin,
+			dest: cssAdmin,
+			src: [
+				'*.css',
+				'*.min.css',
+				'!*-rtl.css'
+			],
+			ext: '.min-rtl.css'
+		}, {
+			expand: true,
+			cwd: cssPublic,
+			dest: cssPublic,
+			src: [
+				'*.css',
+				'*.min.css',
+				'!*-rtl.css'
+			],
+			ext: '.min-rtl.css'
+		}],
+
+
 		jssrc = [{
 			expand: true,
-			cwd: './admin/js/',
+			cwd: jsAdmin,
+			dest: jsAdmin,
 			src: [
 				'*.js',
 				'!*.min.js'
 			],
-			dest: './admin/js/',
 			ext: '.min.js'
 		}, {
 			expand: true,
-			cwd: './public/js/',
+			cwd: jsPublic,
+			dest: jsPublic,
 			src: [
 				'*.js',
 				'!*.min.js'
 			],
-			dest: './public/js/',
 			ext: '.min.js'
 		}];
 
@@ -47,10 +76,18 @@ module.exports = function(grunt) {
 
 		pkg: grunt.file.readJSON('package.json'),
 
+		// VVV (Varying Vagrant Vagrants) Paths
+		vvv: {
+			'plugin': '/srv/www/wordpress-default/wp-content/plugins/<%= pkg.name %>'
+		},
+
 		// Shell actions
 		shell: {
 			readme: {
 				command: 'cd ./dev-lib && ./generate-markdown-readme' // Generate the readme.md
+			},
+			phpunit: {
+				command: 'vagrant ssh -c "cd <%= vvv.plugin %> && phpunit"'
 			}
 		},
 
@@ -90,8 +127,41 @@ module.exports = function(grunt) {
 				},
 				files: csssrc
 			},
+			rtl: {
+				files: csssrcRTL
+			},
 			build: {
 				files: csssrc
+			}
+		},
+
+		rtlcss: {
+			options: {
+				map: false,
+				saveUnmodified: false
+			},
+			reg: {
+				files: [{
+					expand: true,
+					cwd: cssAdmin,
+					dest: cssAdmin,
+					ext: '-rtl.css',
+					src: [
+						'*.css',
+						'!*-rtl.css',
+						'!*.min.css'
+					]
+				}, {
+					expand: true,
+					cwd: cssPublic,
+					dest: cssPublic,
+					ext: '-rtl.css',
+					src: [
+						'*.css',
+						'!*-rtl.css',
+						'!*.min.css'
+					]
+				}]
 			}
 		},
 
@@ -157,14 +227,12 @@ module.exports = function(grunt) {
 				options: {
 					archive: '<%= pkg.name %>.<%= pkg.version %>.zip'
 				},
-				files: [
-					{
-						expand: true,
-						cwd: './build/',
-						src: ['**'],
-						dest: './<%= pkg.name %>/'
-					},
-				]
+				files: [{
+					expand: true,
+					cwd: './build/',
+					src: ['**'],
+					dest: './<%= pkg.name %>/'
+				}, ]
 			}
 		},
 
@@ -177,6 +245,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('grunt-checktextdomain');
 	grunt.loadNpmTasks('grunt-eslint');
+	grunt.loadNpmTasks('grunt-rtlcss');
+
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-copy');
@@ -188,20 +258,30 @@ module.exports = function(grunt) {
 		'shell:readme'
 	]);
 
+	// Register Grunt task to run PHPUnit in VVV.
+	grunt.registerTask('phpunit', [
+		'shell:phpunit'
+	] );
+
 	// Register WordPress specific tasks.
 	grunt.registerTask('wordpress', [
 		'readme',
-		'checktextdomain'
+		'checktextdomain',
+		'phpunit'
 	]);
 
 	// Register stylesheet specific tasks in "development" stage.
 	grunt.registerTask('styles:dev', [
-		'cssmin:dev'
+		'rtlcss',
+		'cssmin:dev',
+		'cssmin:rtl'
 	]);
 
 	// Register stylesheet specific tasks for "build".
 	grunt.registerTask('styles:build', [
-		'cssmin:build'
+		'rtlcss',
+		'cssmin:build',
+		'cssmin:rtl'
 	]);
 
 	// Register JavaScript specific tasks for "development" stage.

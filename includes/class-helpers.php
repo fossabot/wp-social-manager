@@ -104,13 +104,17 @@ class Helpers {
 	 */
 	public static function get_attr_prefix() {
 
+		$custom = null;
+
 		$support = new ThemeSupports();
 		$support = $support->theme_supports();
 
-		$custom = isset( $support['attr-prefix'] ) ? $support['attr-prefix'] : self::$prefix;
+		if ( isset( $support['attr-prefix'] ) && ! empty( $support['attr-prefix'] ) ) {
+			$custom = $support['attr-prefix'];
+		}
 
 		// If the custom prefix is not the same as the default then use it.
-		$prefix = $custom !== self::$prefix ? $custom : self::$prefix;
+		$prefix = is_string( $custom ) && $custom !== self::$prefix ? $custom : self::$prefix;
 
 		return esc_attr( $prefix );
 	}

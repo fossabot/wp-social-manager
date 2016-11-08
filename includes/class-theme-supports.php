@@ -174,4 +174,16 @@ final class ThemeSupports {
 
 		return $mode;
 	}
+
+	/**
+	 * Get the feature name of the plugin.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string The feature name of the plugin.
+	 */
+	public function get_feature_name() {
+		return $this->feature;
+	}
 }

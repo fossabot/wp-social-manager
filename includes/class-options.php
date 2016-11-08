@@ -100,10 +100,10 @@ final class Options {
 		);
 
 		if ( is_string( $slug ) && ! empty( $slug ) ) {
-			$profiles = isset( $profiles[ $slug ] ) ? $profiles[ $slug ] : '';
+			return isset( $profiles[ $slug ] ) ? $profiles[ $slug ] : '';
+		} else {
+			return $profiles;
 		}
-
-		return $profiles;
 	}
 
 	/**
