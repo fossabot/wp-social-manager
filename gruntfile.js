@@ -76,10 +76,18 @@ module.exports = function(grunt) {
 
 		pkg: grunt.file.readJSON('package.json'),
 
+		// VVV (Varying Vagrant Vagrants) Paths
+		vvv: {
+			'plugin': '/srv/www/wordpress-default/wp-content/plugins/<%= pkg.name %>'
+		},
+
 		// Shell actions
 		shell: {
 			readme: {
 				command: 'cd ./dev-lib && ./generate-markdown-readme' // Generate the readme.md
+			},
+			phpunit: {
+				command: 'vagrant ssh -c "cd <%= vvv.plugin %> && phpunit"'
 			}
 		},
 
@@ -250,10 +258,16 @@ module.exports = function(grunt) {
 		'shell:readme'
 	]);
 
+	// Register Grunt task to run PHPUnit in VVV.
+	grunt.registerTask('phpunit', [
+		'shell:phpunit'
+	] );
+
 	// Register WordPress specific tasks.
 	grunt.registerTask('wordpress', [
 		'readme',
-		'checktextdomain'
+		'checktextdomain',
+		'phpunit'
 	]);
 
 	// Register stylesheet specific tasks in "development" stage.
