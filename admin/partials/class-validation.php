@@ -31,20 +31,18 @@ class Validation {
 	 */
 	final public function setting_profiles( $inputs ) {
 
-		foreach ( $inputs as $slug => $username ) {
+		/**
+		 * Return early, if the value is not an array or the value
+		 * is not an Associative array.
+		 */
+		if ( ! is_array( $inputs ) || ! $this->is_array_associative( $inputs ) ) {
+			return array();
+		}
 
-			$inputs[ $slug ] = sanitize_text_field( $username );
+		foreach ( $inputs as $key => $username ) {
 
-			if ( 2 >= strlen( $inputs[ $slug ] ) && 0 !== strlen( $inputs[ $slug ] ) ) :
-
-				$inputs[ $slug ] = '';
-
-				add_settings_error( $slug,
-					'social-username-length',
-					esc_html__( 'A username generally should contains at least 3 characters (or more).', 'ninecodes-social-manager' ),
-					'error'
-				);
-			endif;
+			$slug = sanitize_key( $key );
+			$inputs[ $slug ] = is_string( $username ) ? sanitize_text_field( $username ) : '';
 		}
 
 		return $inputs;
@@ -69,12 +67,12 @@ class Validation {
 			'post_types' => array(),
 		) );
 
-		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
 		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
 		$inputs['placement'] = $this->validate_radio( $inputs['placement'], Options::button_placements() );
+		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
 
-		$inputs['post_types'] = $this->validate_multicheckbox( $inputs['post_types'], Options::post_types() );
 		$inputs['includes'] = $this->validate_multicheckbox( $inputs['includes'], Options::button_sites( 'content' ) );
+		$inputs['post_types'] = $this->validate_multicheckbox( $inputs['post_types'], Options::post_types() );
 
 		return $inputs;
 	}
@@ -197,7 +195,8 @@ class Validation {
 	 * @return string Return 'on' if the input is checked, otherwise an empty string.
 	 */
 	final public function validate_checkbox( $input ) {
-		return ( 'on' === $input ) ? 'on' : '';
+		$check = (bool) $input;
+		return $input ? 'on' : '';
 	}
 
 	/**
