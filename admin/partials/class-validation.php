@@ -26,26 +26,32 @@ class Validation {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param mixed $inputs Unsanitized inputs being saved.
+	 * @param mixed $input Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_profiles( $inputs ) {
+	final public function setting_profiles( $input ) {
 
 		/**
 		 * Return early, if the value is not an array or the value
 		 * is not an Associative array.
 		 */
-		if ( ! is_array( $inputs ) || ! $this->is_array_associative( $inputs ) ) {
+		if ( ! is_array( $input ) || ! $this->is_array_associative( $input ) ) {
 			return array();
 		}
 
-		foreach ( $inputs as $key => $username ) {
+		$output = array();
+		$profiles = Options::social_profiles();
+
+		foreach ( $input as $key => $username ) {
 
 			$slug = sanitize_key( $key );
-			$inputs[ $slug ] = is_string( $username ) ? sanitize_text_field( $username ) : '';
+
+			if ( array_key_exists( $slug, $profiles ) ) {
+				$output[ $slug ] = is_string( $username ) ? sanitize_text_field( $username ) : '';
+			}
 		}
 
-		return $inputs;
+		return $output;
 	}
 
 	/**
