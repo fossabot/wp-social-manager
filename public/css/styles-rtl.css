@@ -1,0 +1,298 @@
+/**
+ * Basic Elements Styling
+ */
+
+[class^="ninecodes-social-manager"] svg {
+    display: block;
+}
+
+[class^="ninecodes-social-manager"] a {
+    display: inline-block;
+    text-decoration: none;
+    box-shadow: none !important;
+    /** override TwentySixteen default styles **/
+    border: 0 !important;
+}
+
+
+/**
+ * Icon and Text Coloring
+ */
+
+[class^="ninecodes-social-manager"] .item-facebook:hover {
+    color: #3b5998;
+}
+
+[class^="ninecodes-social-manager"] .item-twitter:hover {
+    color: #1da1f2;
+}
+
+[class^="ninecodes-social-manager"] .item-instagram:hover {
+    color: #833ab4;
+}
+
+[class^="ninecodes-social-manager"] .item-pinterest:hover {
+    color: #bd081c;
+}
+
+[class^="ninecodes-social-manager"] .item-linkedin:hover {
+    color: #0077b5;
+}
+
+[class^="ninecodes-social-manager"] .item-googleplus:hover {
+    color: #dd4b39;
+}
+
+[class^="ninecodes-social-manager"] .item-youtube:hover {
+    color: #cd201f;
+}
+
+[class^="ninecodes-social-manager"] .item-reddit:hover {
+    color: #ff4500;
+}
+
+[class^="ninecodes-social-manager"] .item-dribbble:hover {
+    color: #ea4c89;
+}
+
+[class^="ninecodes-social-manager"] .item-behance:hover {
+    color: #1769ff;
+}
+
+[class^="ninecodes-social-manager"] .item-github:hover {
+    color: #333;
+}
+
+[class^="ninecodes-social-manager"] .item-codepen:hover {
+    color: #000;
+}
+
+[class^="ninecodes-social-manager"] .item-email:hover {
+    color: #999;
+}
+
+[class^="ninecodes-social-manager"] .item-facebook:hover svg {
+    fill: #3b5998;
+}
+
+[class^="ninecodes-social-manager"] .item-twitter:hover svg {
+    fill: #1da1f2;
+}
+
+[class^="ninecodes-social-manager"] .item-instagram:hover svg {
+    fill: #833ab4;
+}
+
+[class^="ninecodes-social-manager"] .item-pinterest:hover svg {
+    fill: #bd081c;
+}
+
+[class^="ninecodes-social-manager"] .item-linkedin:hover svg {
+    fill: #0077b5;
+}
+
+[class^="ninecodes-social-manager"] .item-googleplus:hover svg {
+    fill: #dd4b39;
+}
+
+[class^="ninecodes-social-manager"] .item-youtube:hover svg {
+    fill: #cd201f;
+}
+
+[class^="ninecodes-social-manager"] .item-reddit:hover svg {
+    fill: #ff4500;
+}
+
+[class^="ninecodes-social-manager"] .item-dribbble:hover svg {
+    fill: #ea4c89;
+}
+
+[class^="ninecodes-social-manager"] .item-behance:hover svg {
+    fill: #1769ff;
+}
+
+[class^="ninecodes-social-manager"] .item-github:hover svg {
+    fill: #333;
+}
+
+[class^="ninecodes-social-manager"] .item-codepen:hover svg {
+    fill: #000;
+}
+
+[class^="ninecodes-social-manager"] .item-email:hover svg {
+    fill: #999;
+}
+
+.ninecodes-social-manager-buttons__list {
+    display: block;
+}
+
+.ninecodes-social-manager-buttons__item {
+    margin-left: .86em;
+}
+
+.rtl .ninecodes-social-manager-buttons__item {
+    margin-left: .86em;
+    margin-right: 0;
+}
+
+.ninecodes-social-manager-buttons .ninecodes-social-manager-buttons__heading {
+    margin-top: 0;
+    margin-bottom: 1em;
+    font-size: 0.864em;
+}
+
+
+/**
+ * View Icons
+ */
+
+.ninecodes-social-manager-buttons__list--icon .ninecodes-social-manager-buttons__item,
+.ninecodes-social-manager-profiles__list--icon .ninecodes-social-manager-profiles__item {
+    width: 26px;
+    height: 26px;
+    margin-left: 10px;
+    display: inline-block;
+}
+
+
+/**
+ * View Text
+ */
+
+.ninecodes-social-manager-buttons__list--text a {
+    margin-left: 1em;
+}
+
+.ninecodes-social-manager-profiles__list--text a {
+    display: block;
+    padding: .64em 0;
+}
+
+
+/**
+ * View Icon Text
+ */
+
+.ninecodes-social-manager-buttons__list--icon-text {
+    font-size: 0.86em;
+}
+
+.ninecodes-social-manager-buttons__list--icon-text,
+.ninecodes-social-manager-buttons__list--icon-text a,
+.ninecodes-social-manager-profiles__list--icon-text a {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ninecodes-social-manager-buttons__list--icon-text a,
+.ninecodes-social-manager-profiles__list--icon-text a {
+    padding-top: .46em;
+    padding-bottom: .46em;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.ninecodes-social-manager-profiles__item-icon,
+.ninecodes-social-manager-buttons__item-icon {
+    width: 26px;
+    height: 26px;
+    margin: 0 0 0 6px;
+}
+
+.rtl .ninecodes-social-manager-buttons__item-icon,
+.rtl .ninecodes-social-manager-profiles__item-icon {
+    margin-left: 0;
+    margin-right: 6px;
+}
+
+
+/**
+ * Buttons Content
+ */
+
+.ninecodes-social-manager-buttons--content-before {
+    margin-bottom: 2em;
+}
+
+.ninecodes-social-manager-buttons--content-after {
+    margin-top: 2em;
+}
+
+
+/**
+ * Buttons Image
+ */
+
+.ninecodes-social-manager-buttons--img {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    font-size: 0.86em;
+}
+
+.ninecodes-social-manager-buttons--img .ninecodes-social-manager-buttons__list {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    visibility: hidden;
+}
+
+.ninecodes-social-manager-buttons--img .ninecodes-social-manager-buttons__item {
+    margin-left: 0;
+    background-color: #000;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 3px;
+    margin-bottom: 0;
+}
+
+.ninecodes-social-manager-buttons--img .ninecodes-social-manager-buttons__item:hover {
+    color: #fff;
+}
+
+.ninecodes-social-manager-buttons--img .ninecodes-social-manager-buttons__item svg,
+.ninecodes-social-manager-buttons--img .ninecodes-social-manager-buttons__item:hover svg {
+    fill: #fff;
+}
+
+.ninecodes-social-manager-buttons--img .item-pinterest {
+    background-color: #bd081c;
+}
+
+.ninecodes-social-manager-buttons--img:hover img {
+    opacity: 0.8;
+}
+
+.ninecodes-social-manager-buttons--img:hover .ninecodes-social-manager-buttons__list {
+    visibility: visible;
+}
+
+.ninecodes-social-manager-buttons--img .ninecodes-social-manager-buttons__list--icon .ninecodes-social-manager-buttons__item {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+}
+
+.ninecodes-social-manager-buttons--img .ninecodes-social-manager-buttons__list--text .ninecodes-social-manager-buttons__item {
+    padding: 6px 12px;
+}
+
+
+/**
+ * "Social Profiles" Widget
+ */
+
+.ninecodes-social-manager-profiles__item,
+.ninecodes-social-manager-profiles__item a {
+    display: block;
+    color: #000;
+}
+
+.rtl .ninecodes-social-manager-profiles__item {
+    margin-left: 0;
+    margin-right: 0.86em;
+}

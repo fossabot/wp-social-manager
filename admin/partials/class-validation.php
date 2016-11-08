@@ -26,28 +26,32 @@ class Validation {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param mixed $inputs Unsanitized inputs being saved.
+	 * @param mixed $input Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_profiles( $inputs ) {
+	final public function setting_profiles( $input ) {
 
-		foreach ( $inputs as $slug => $username ) {
-
-			$inputs[ $slug ] = sanitize_text_field( $username );
-
-			if ( 2 >= strlen( $inputs[ $slug ] ) && 0 !== strlen( $inputs[ $slug ] ) ) :
-
-				$inputs[ $slug ] = '';
-
-				add_settings_error( $slug,
-					'social-username-length',
-					esc_html__( 'A username generally should contains at least 3 characters (or more).', 'ninecodes-social-manager' ),
-					'error'
-				);
-			endif;
+		/**
+		 * Return early, if the value is not an array or the value
+		 * is not an Associative array.
+		 */
+		if ( ! is_array( $input ) || ! $this->is_array_associative( $input ) ) {
+			return array();
 		}
 
-		return $inputs;
+		$output = array();
+		$profiles = Options::social_profiles();
+
+		foreach ( $input as $key => $username ) {
+
+			$slug = sanitize_key( $key );
+
+			if ( array_key_exists( $slug, $profiles ) ) {
+				$output[ $slug ] = is_string( $username ) ? sanitize_text_field( $username ) : '';
+			}
+		}
+
+		return $output;
 	}
 
 	/**
@@ -69,12 +73,12 @@ class Validation {
 			'post_types' => array(),
 		) );
 
-		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
 		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
 		$inputs['placement'] = $this->validate_radio( $inputs['placement'], Options::button_placements() );
+		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
 
-		$inputs['post_types'] = $this->validate_multicheckbox( $inputs['post_types'], Options::post_types() );
 		$inputs['includes'] = $this->validate_multicheckbox( $inputs['includes'], Options::button_sites( 'content' ) );
+		$inputs['post_types'] = $this->validate_multicheckbox( $inputs['post_types'], Options::post_types() );
 
 		return $inputs;
 	}
@@ -197,7 +201,8 @@ class Validation {
 	 * @return string Return 'on' if the input is checked, otherwise an empty string.
 	 */
 	final public function validate_checkbox( $input ) {
-		return ( 'on' === $input ) ? 'on' : '';
+		$check = (bool) $input;
+		return $input ? 'on' : '';
 	}
 
 	/**

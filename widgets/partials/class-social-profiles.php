@@ -256,13 +256,17 @@ final class WidgetSocialProfiles extends WP_Widget {
 		$widget_title = ! isset( $instance['title'] ) ? $this->widget_title : $instance['title'];
 
 		if ( ! empty( $widget_title ) ) {
-				$widget_title = wp_kses( apply_filters( 'widget_title', $widget_title ), array() );
-				echo $args['before_title'] . $widget_title . $args['after_title']; // WPCS : XSS ok, sanitization ok.
+			$widget_title = apply_filters( 'widget_title', $widget_title );
+			echo wp_kses_post( $args['before_title'] . $widget_title . $args['after_title'] );
 		}
 
 		$view = isset( $instance['view'] ) ? $instance['view'] : 'icon';
 
-		echo "<div class='{$this->widget_id}__list {$this->widget_id}__list--{$view}'>"; // WPCS : XSS ok.
+		echo wp_kses( "<div class='{$this->widget_id}__list {$this->widget_id}__list--{$view}'>", array(
+			'div' => array(
+				'class' => true,
+			),
+		) );
 
 		foreach ( $this->options as $key => $value ) {
 			$site = 0;
@@ -318,7 +322,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 		} // End foreach().
 
 		echo '</div>';
-		echo $args['after_widget']; // WPCS : XSS ok.
+		echo wp_kses_post( $args['after_widget'] );
 	}
 
 	/**
