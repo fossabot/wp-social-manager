@@ -197,12 +197,11 @@ final class Settings {
 		add_action( 'init', array( $this, 'frontend_setups' ) );
 
 		add_action( 'admin_menu', array( $this, 'setting_menu' ) );
-		add_action( 'admin_init', array( $this, 'setting_setups' ), 10 );
-
+		add_action( 'admin_init', array( $this, 'setting_setups' ) );
 		add_action( 'admin_init', array( $this, 'setting_pages' ), 15 );
-		add_action( 'admin_init', array( $this, 'setting_sections' ), 15 );
-		add_action( 'admin_init', array( $this, 'setting_fields' ), 15 );
-		add_action( 'admin_init', array( $this, 'setting_init' ), 20 );
+		add_action( 'admin_init', array( $this, 'setting_sections' ), 20 );
+		add_action( 'admin_init', array( $this, 'setting_fields' ), 25 );
+		add_action( 'admin_init', array( $this, 'setting_init' ), 30 );
 
 		add_action( "{$this->option_slug}_admin_enqueue_scripts", array( $this, 'enqueue_scripts' ), 10, 1 );
 		add_action( "{$this->option_slug}_admin_enqueue_styles", array( $this, 'enqueue_styles' ), 10, 1 );
