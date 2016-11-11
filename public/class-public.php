@@ -150,18 +150,16 @@ final class ViewPublic {
 	 */
 	public function setups() {
 
-		$metas = new Metas( $this->plugin );
-		$endpoints = new Endpoints( $this->plugin, $metas );
+		$this->metas = new Metas( $this->plugin );
+		$this->endpoints = new Endpoints( $this->plugin, $this->metas );
 
-		do_action( 'ninecodes_social_manager_instance', 'metas', $metas );
-		do_action( 'ninecodes_social_manager_instance', 'endpoints', $endpoints );
+		$this->wp_head = new WPHead( $this->metas );
+		$this->buttons_content = new ButtonsContent( $this->endpoints );
+		$this->buttons_image = new ButtonsImage( $this->endpoints );
+		$this->routes = new APIRoutes( $this->endpoints );
 
-		new WPHead( $metas );
-
-		new ButtonsContent( $endpoints );
-		new ButtonsImage( $endpoints );
-
-		$this->routes = new APIRoutes( $endpoints );
+		do_action( 'ninecodes_social_manager_instance', 'metas', $this->metas );
+		do_action( 'ninecodes_social_manager_instance', 'endpoints', $this->endpoints );
 
 		$this->register_styles();
 		$this->register_scripts();
@@ -248,19 +246,15 @@ final class ViewPublic {
 	 * 					It will also return 'false' if the 'Enable Stylesheet' is unchecked.
 	 */
 	protected function is_load_stylesheet() {
-
+		/*
+		 * Don't load the plugin stylesheet, if the theme already loads its own stylesheet
+		 * via the 'add_theme_support()' function.
+		 */
 		if ( true === (bool) $this->theme_supports->is( 'stylesheet' ) ) {
 			return false;
 		}
 
-		$ptc = $this->plugin->get_option( 'buttons_content', 'post_types' );
-
-		$buttons_image = $this->plugin->get_option( 'buttons_image' ); // "Buttons Image" options;
-		$pti = ! $buttons_image['enabled'] ? array() : $buttons_image['post_types'];
-
-		$post_types = array_unique( array_merge( $ptc, $pti ) );
-
-		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
+		if ( ! $this->is_buttons_active() ) {
 			return false;
 		}
 
@@ -277,16 +271,13 @@ final class ViewPublic {
 	 */
 	protected function is_load_scripts() {
 
-		$ptc = $this->plugin->get_option( 'buttons_content', 'post_types' );
-		$pti = $this->plugin->get_option( 'buttons_image', 'post_types' );
+		$load = true;
 
-		$post_types = array_unique( array_merge( $ptc, $pti ) );
-
-		if ( ! is_singular( $post_types ) ) {
-			return false;
+		if ( ! $this->is_buttons_active() ) {
+			$load = false;
 		}
 
-		return true;
+		return $load;
 	}
 
 	/**
@@ -308,5 +299,34 @@ final class ViewPublic {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Is the buttons active?
+	 *
+	 * - Check if the buttons content has the post types set.
+	 * - Check if the buttons image is enabled. If the buttons image is enabled, check if it has the post types set.
+	 * - Check if the the current post types are viewed.
+	 *
+	 * @return boolean True or false depending on the above conditions.
+	 */
+	protected function is_buttons_active() {
+
+		$active = true;
+
+		$buttons_image = $this->plugin->get_option( 'buttons_image' ); // Get "Buttons Image" options.
+
+		$post_types_content = $this->plugin->get_option( 'buttons_content', 'post_types' );
+		$post_types_image = isset( $buttons_image['enabled'] ) && 'on' === $buttons_image['enabled'] ? $buttons_image['post_types'] : array();
+		$post_types = array_unique( array_merge(
+			$post_types_content,
+			$post_types_image
+		) );
+
+		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
+			$active = false;
+		}
+
+		return $active;
 	}
 }
