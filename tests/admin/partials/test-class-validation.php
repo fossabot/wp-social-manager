@@ -14,7 +14,7 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * The class to test the "Plugin" class instance.
+ * The class to test the "Validation" class.
  *
  * @since 1.0.0
  */

@@ -11,7 +11,9 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * Test the Plugin class instance.
+ * The class to test the "Options" class.
+ *
+ * @since 1.0.0
  */
 class TestOptions extends WP_UnitTestCase {
 
