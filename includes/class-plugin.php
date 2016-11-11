@@ -70,6 +70,15 @@ final class Plugin {
 	protected $options;
 
 	/**
+	 * An array of option retrieved from the 'wp_options' table.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var array
+	 */
+	protected $wp_options;
+
+	/**
 	 * The ThemeSupports class instance.
 	 *
 	 * @since 1.0.0
@@ -88,6 +97,26 @@ final class Plugin {
 	public $languages;
 
 	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	function __construct() {
+
+		$this->options = array(
+			'profiles' => "{$this->option_slug}_profiles",
+			'buttons_content' => "{$this->option_slug}_buttons_content",
+			'buttons_image' => "{$this->option_slug}_buttons_image",
+			'metas_site' => "{$this->option_slug}_metas_site",
+			'enqueue' => "{$this->option_slug}_enqueue",
+			'modes' => "{$this->option_slug}_modes",
+		);
+	}
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Load the dependencies, define the locale, and set the hooks for the admin area and
@@ -98,13 +127,28 @@ final class Plugin {
 	 *
 	 * @return void
 	 */
-	function __construct() {
+	public function initialize() {
 
 		$this->path_dir = plugin_dir_path( dirname( __FILE__ ) );
 
 		$this->requires();
 		$this->setups();
 		$this->hooks();
+	}
+
+	/**
+	 * Clean database upon uninstalling the plugin.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function uninstall() {
+
+		foreach ( $this->options as $key => $option_name ) {
+			delete_option( $option_name );
+		}
 	}
 
 	/**
@@ -151,21 +195,16 @@ final class Plugin {
 	 */
 	protected function setups() {
 
-		$this->options = array(
-			'profiles' => get_option( "{$this->option_slug}_profiles" ),
-			'buttons_content' => get_option( "{$this->option_slug}_buttons_content" ),
-			'buttons_image' => get_option( "{$this->option_slug}_buttons_image" ),
-			'metas_site' => get_option( "{$this->option_slug}_metas_site" ),
-			'enqueue' => get_option( "{$this->option_slug}_enqueue" ),
-			'modes' => get_option( "{$this->option_slug}_modes" ),
-		);
+		foreach ( $this->options as $key => $option_name ) {
+			$this->wp_options[ $key ] = get_option( $option_name );
+		}
 
 		$this->theme_supports = new ThemeSupports();
 		$this->languages = new Languages( $this->plugin_slug );
 
-		new ViewAdmin( $this );
-		new ViewPublic( $this );
-		new Widgets( $this );
+		$this->admin = new ViewAdmin( $this );
+		$this->public = new ViewPublic( $this );
+		$this->widgets = new Widgets( $this );
 	}
 
 	/**
@@ -232,15 +271,17 @@ final class Plugin {
 	 * @return mixed The option value or null if option is not available.
 	 */
 	public function get_option( $name = '', $key = '' ) {
-
+		/*
+		 * The $name parameter is required. If the $name is not set, simply return `null`.
+		 */
 		if ( empty( $name ) ) {
 			return null;
 		}
 
-		if ( ! empty( $key ) ) {
-			return isset( $this->options[ $name ][ $key ] ) ? $this->options[ $name ][ $key ] : null;
-		} else {
-			return isset( $this->options[ $name ] ) ? $this->options[ $name ] : null;
+		if ( $name && $key ) {
+			return isset( $this->wp_options[ $name ][ $key ] ) ? $this->wp_options[ $name ][ $key ] : null;
 		}
+
+		return isset( $this->wp_options[ $name ] ) ? $this->wp_options[ $name ] : null;
 	}
 }

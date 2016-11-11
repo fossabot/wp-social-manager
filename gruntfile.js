@@ -223,7 +223,20 @@ module.exports = function(grunt) {
 		},
 
 		compress: {
-			main: {
+			build: {
+				options: {
+					archive: '<%= pkg.name %>.<%= pkg.version %>+<%= grunt.template.today("yymmddHHMM") %>.zip'
+				},
+				files: [{
+					expand: true,
+					cwd: './build/',
+					src: ['**'],
+
+					// When the .zip file is uncompressed (e.g. 'ninecodes-social-media').
+					dest: './<%= pkg.name %>-<%= pkg.version %>-<%= grunt.template.today("yymmddHHMM") %>/'
+				}, ]
+			},
+			release: {
 				options: {
 					archive: '<%= pkg.name %>.<%= pkg.version %>.zip'
 				},
@@ -231,13 +244,16 @@ module.exports = function(grunt) {
 					expand: true,
 					cwd: './build/',
 					src: ['**'],
+
+					// When the .zip file is uncompressed (e.g. 'ninecodes-social-media').
 					dest: './<%= pkg.name %>/'
 				}, ]
 			}
 		},
 
 		clean: {
-			build: ['./build/']
+			build: ['./build/'],
+			zip: ['./<%= pkg.name %>*.zip']
 		}
 	});
 
@@ -305,11 +321,12 @@ module.exports = function(grunt) {
 
 	// Build package.
 	grunt.registerTask('build', [
+		'clean:zip',
 		'wordpress',
 		'styles:build',
 		'javascript:build',
 		'copy',
-		'compress',
+		'compress:build',
 		'clean:build'
 	]);
 };

@@ -4,12 +4,11 @@
 Optimize your website presence in social media.
 
 **Contributors:** [ninecodes](https://profiles.wordpress.org/ninecodes), [tfirdaus](https://profiles.wordpress.org/tfirdaus), [hongkiat](https://profiles.wordpress.org/hongkiat)  
-**Tags:** [widget](https://wordpress.org/plugins/tags/widget), [json](https://wordpress.org/plugins/tags/json), [wp-api](https://wordpress.org/plugins/tags/wp-api), [social-media](https://wordpress.org/plugins/tags/social-media), [facebook](https://wordpress.org/plugins/tags/facebook), [twitter](https://wordpress.org/plugins/tags/twitter), [pinterest](https://wordpress.org/plugins/tags/pinterest), [open-graph](https://wordpress.org/plugins/tags/open-graph), [twitter-cards](https://wordpress.org/plugins/tags/twitter-cards)  
+**Tags:** [widget](https://wordpress.org/plugins/tags/widget), [json](https://wordpress.org/plugins/tags/json), [wp-api](https://wordpress.org/plugins/tags/wp-api), [social-media](https://wordpress.org/plugins/tags/social-media), [sharing](https://wordpress.org/plugins/tags/sharing), [facebook](https://wordpress.org/plugins/tags/facebook), [twitter](https://wordpress.org/plugins/tags/twitter), [pinterest](https://wordpress.org/plugins/tags/pinterest), [open-graph](https://wordpress.org/plugins/tags/open-graph), [twitter-cards](https://wordpress.org/plugins/tags/twitter-cards)  
 **Requires at least:** 4.5  
 **Tested up to:** 4.6  
 **Stable tag:** 1.0.0  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
-**Donate link:** http://example.com/  
 
 ## Description ##
 
@@ -81,7 +80,7 @@ Keep in mind setting the prefix to other than 'ninecodes-social-manager' will al
 
 **Changing the Buttons Mode**
 
-The plugin offers 2 modes, `HTML` and `JSON`, to generate, what we call it, the **Social Buttons**; the buttons that allow your site users to share share content on social media. By default the mode is set to `HTML`, which will *echo* all the HTML markup in the post content. But, if you are building a [*headless* WordPress theme](https://pantheon.io/decoupled-cms) using whatever JavaScript renders (Backbone, Angular, React, Vue, Ember, you name it), you might want to switch the plugin to the `JSON` mode.
+The plugin offers 2 modes, `HTML` and `JSON`, to generate, what called as the **Social Buttons**; the buttons that allow your site users to share content on social media. By default the mode is set to `HTML`, which will *echo* all the HTML markup in the post content. But, if you are building a [*headless* WordPress theme](https://pantheon.io/decoupled-cms) using whatever JavaScript renders (Backbone, Angular, React, Vue, Ember, you name it), you might want to switch the plugin to the `JSON` mode.
 
 ```
 add_theme_support( 'ninecodes-social-manager', array(
@@ -93,9 +92,6 @@ add_theme_support( 'ninecodes-social-manager', array(
 ## Frequently Asked Questions ##
 
 None, at the moment. Please ask. :)
-
-## Screenshots ##
-
 
 ## Changelog ##
 

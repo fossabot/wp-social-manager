@@ -3,11 +3,11 @@
  * Plugin Name: Social Manager by NineCodes
  * Plugin URI: http://wordpress.org/plugins/ninecodes-social-manager
  * Description: Optimize your website presence in social media.
- * Version: 1.0.0-beta.8
- * Author: Thoriq Firdaus
- * Author URI: https://github.com/tfirdaus
+ * Version: 1.0.0-beta.9
+ * Author: NineCodes
+ * Author URI: https://profiles.wordpress.org/ninecodes
  * License: GPL-2.0+
- * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Requires at least: 4.5
  * Tested up to: 4.6
@@ -82,6 +82,14 @@ require_once $path_dir . 'includes/class-plugin.php';
  * through the function_exists() function.
  */
 function ninecodes_social_manager() {
-	new Plugin();
+
+	static $plugin;
+
+	if ( is_null( $plugin ) ) {
+		$plugin = new Plugin();
+		$plugin->initialize();
+	}
+
+	return $plugin;
 }
 ninecodes_social_manager();
