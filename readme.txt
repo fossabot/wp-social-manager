@@ -1,7 +1,6 @@
 === Social Manager by NineCodes ===
 Contributors: ninecodes, tfirdaus, hongkiat
-Donate link: http://example.com/
-Tags: widget, json, wp-api, social-media, facebook, twitter, pinterest, open-graph, twitter-cards
+Tags: widget, json, wp-api, social-media, sharing, facebook, twitter, pinterest, open-graph, twitter-cards
 Requires at least: 4.5
 Tested up to: 4.6
 Stable tag: 1.0.0
