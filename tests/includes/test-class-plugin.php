@@ -45,7 +45,7 @@ class TestPlugin extends WP_UnitTestCase {
 	 * @access public
 	 * @var string
 	 */
-	public $plugin_opts = 'ncsocman';
+	public $option_slug = 'ncsocman';
 
 	/**
 	 * Setup.
@@ -76,7 +76,7 @@ class TestPlugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_plugin_get_opts() {
-		$this->assertEquals( $this->plugin_opts, $this->plugin->get_opts() );
+		$this->assertEquals( $this->option_slug, $this->plugin->get_opts() );
 	}
 
 	/**

@@ -14,7 +14,7 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * The class to test the "Plugin" class instance.
+ * The class to test the "Settings" class.
  *
  * TODO: Add tests for the Settings default values.
  *

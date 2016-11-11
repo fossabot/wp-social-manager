@@ -597,7 +597,7 @@ final class Settings {
 			'description' => esc_html__( 'Select the link mode to append when the content or the image is shared.', 'ninecodes-social-manager' ),
 			'type' => 'radio',
 			'options' => Options::link_modes(),
-			'default' => 'shortlink',
+			'default' => 'permalink',
 		);
 
 		$this->pages = $this->settings->add_field( 'advanced', 'modes', $link_mode_fields );
