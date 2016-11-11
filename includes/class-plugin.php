@@ -163,9 +163,9 @@ final class Plugin {
 		$this->theme_supports = new ThemeSupports();
 		$this->languages = new Languages( $this->plugin_slug );
 
-		new ViewAdmin( $this );
-		new ViewPublic( $this );
-		new Widgets( $this );
+		$this->admin = new ViewAdmin( $this );
+		$this->public = new ViewPublic( $this );
+		$this->widgets = new Widgets( $this );
 	}
 
 	/**
@@ -233,14 +233,14 @@ final class Plugin {
 	 */
 	public function get_option( $name = '', $key = '' ) {
 
-		if ( empty( $name ) ) {
+		if ( ! $name ) {
 			return null;
 		}
 
-		if ( ! empty( $key ) ) {
+		if ( $key ) {
 			return isset( $this->options[ $name ][ $key ] ) ? $this->options[ $name ][ $key ] : null;
-		} else {
-			return isset( $this->options[ $name ] ) ? $this->options[ $name ] : null;
 		}
+
+		return isset( $this->options[ $name ] ) ? $this->options[ $name ] : null;
 	}
 }
