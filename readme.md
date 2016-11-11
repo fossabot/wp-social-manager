@@ -81,7 +81,7 @@ Keep in mind setting the prefix to other than 'ninecodes-social-manager' will al
 
 **Changing the Buttons Mode**
 
-The plugin offers 2 modes, `HTML` and `JSON`, to generate, what we call it, the **Social Buttons**; the buttons that allow your site users to share share content on social media. By default the mode is set to `HTML`, which will *echo* all the HTML markup in the post content. But, if you are building a [*headless* WordPress theme](https://pantheon.io/decoupled-cms) using whatever JavaScript renders (Backbone, Angular, React, Vue, Ember, you name it), you might want to switch the plugin to the `JSON` mode.
+The plugin offers 2 modes, `HTML` and `JSON`, to generate, what called as the **Social Buttons**; the buttons that allow your site users to share content on social media. By default the mode is set to `HTML`, which will *echo* all the HTML markup in the post content. But, if you are building a [*headless* WordPress theme](https://pantheon.io/decoupled-cms) using whatever JavaScript renders (Backbone, Angular, React, Vue, Ember, you name it), you might want to switch the plugin to the `JSON` mode.
 
 ```
 add_theme_support( 'ninecodes-social-manager', array(
@@ -93,9 +93,6 @@ add_theme_support( 'ninecodes-social-manager', array(
 ## Frequently Asked Questions ##
 
 None, at the moment. Please ask. :)
-
-## Screenshots ##
-
 
 ## Changelog ##
 
