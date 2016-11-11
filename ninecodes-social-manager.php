@@ -4,8 +4,8 @@
  * Plugin URI: http://wordpress.org/plugins/ninecodes-social-manager
  * Description: Optimize your website presence in social media.
  * Version: 1.0.0-beta.9
- * Author: Thoriq Firdaus
- * Author URI: https://github.com/tfirdaus
+ * Author: NineCodes
+ * Author URI: https://profiles.wordpress.org/ninecodes
  * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  *
