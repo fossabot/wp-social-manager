@@ -233,7 +233,7 @@ module.exports = function(grunt) {
 					src: ['**'],
 
 					// When the .zip file is uncompressed (e.g. 'ninecodes-social-media').
-					dest: './<%= pkg.name %>.<%= pkg.version %>+<%= grunt.template.today("yymmddHHMM") %>/'
+					dest: './<%= pkg.name %>-<%= pkg.version %>-<%= grunt.template.today("yymmddHHMM") %>/'
 				}, ]
 			},
 			release: {
