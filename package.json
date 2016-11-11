@@ -2,33 +2,30 @@
   "name": "ninecodes-social-manager",
   "title": "Social Manager by NineCodes",
   "version": "1.0.0-beta.9",
-  "description": "A WordPress plugin to optimize website presence in social media.",
+  "description": "Optimize your website presence in social media.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/ninecodes/social-manager.git"
+    "url": "bitbucket:ninecodes/social-manager"
   },
   "keywords": [
-    "wordpress",
-    "plugin",
-    "widget",
-    "json",
-    "api",
-    "social-media",
-    "share",
-    "facebook",
-    "twitter",
-    "pinterest"
+    "widget", "json", "wp-api", "social-media", "sharing", "facebook", "twitter", "pinterest", "open-graph", "twitter-cards"
   ],
-  "author": "NineCodes",
+  "author": {
+    "name": "NineCodes",
+    "url": "https://profiles.wordpress.org/ninecodes"
+  },
   "contributors": [
-    "Thoriq Firdaus <tfirdaus@outlook.com> (http://ninecodes.com)",
-    "Hongkiat Lim <me@hongkiat.com> (http://www.hongkiat.com)"
+    "Thoriq Firdaus <tfirdaus@outlook.com>",
+    "Hongkiat Lim <me@hongkiat.com>"
   ],
-  "license": "GPL-2.0+",
-  "homepage": "https://bitbucket.org/ninecodes/social-manager#readme",
+  "license": {
+    "type": "GPL-2.0+",
+    "url": "http://www.gnu.org/licenses/gpl-2.0.html"
+  },
+  "homepage": "http://wordpress.org/plugins/ninecodes-social-manager",
   "devDependencies": {
     "eslint": "^3.9.1",
     "grunt": "~0.4.5",
