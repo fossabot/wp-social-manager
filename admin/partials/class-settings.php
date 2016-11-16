@@ -635,9 +635,13 @@ final class Settings {
 			.wrap > form > div.notice {
 				margin-top: 1.68em;
 			}
-			.wrap > .nav-tab-wrapper {
-				margin: 1em 0 1em;
+			.branch-4-5 .wrap > .nav-tab-wrapper,
+			.branch-4-6 .wrap > .nav-tab-wrapper {
 				border-bottom: 1px solid #ccc;
+				margin: 0;
+				padding-top: 9px;
+				padding-bottom: 0;
+				line-height: inherit;
 			}
 			.wrap .field-image-control {
 				margin-top: 0.867em;
