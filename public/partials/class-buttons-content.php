@@ -235,7 +235,7 @@ class ButtonsContent extends Buttons {
 
 		$post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
 
-		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
+		if ( empty( $post_types ) ) {
 			return false;
 		}
 

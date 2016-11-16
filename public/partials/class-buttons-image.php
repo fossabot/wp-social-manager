@@ -261,7 +261,7 @@ class ButtonsImage extends Buttons {
 
 		$post_types = (array) $this->plugin->get_option( 'buttons_image', 'post_types' );
 
-		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
+		if ( empty( $post_types ) ) {
 			return false;
 		}
 
