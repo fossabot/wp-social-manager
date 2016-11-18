@@ -12,6 +12,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
+use \WP_REST_Request;
 use \WP_REST_Server;
 use \WP_REST_Response;
 
@@ -136,6 +137,12 @@ class APIRoutes {
 	 */
 	public function register_routes() {
 
+		register_rest_route( $this->namespace, '/social-manager', array( array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'response_plugin' ),
+			),
+		) );
+
 		/**
 		 * Register the '/buttons' route.
 		 *
@@ -146,14 +153,15 @@ class APIRoutes {
 		 *
 		 * @uses \WP_REST_Server
 		 */
-		register_rest_route( $this->namespace, '/social-manager', array( array(
+		register_rest_route( $this->namespace, '/social-manager/buttons', array( array(
 				'methods' => WP_REST_Server::READABLE,
-				'callback' => array( $this, 'response_plugins' ),
+				'callback' => array( $this, 'response_buttons' ),
 				'args' => array(
-					'buttons' => array(
+					'id' => array(
 						'validate_callback' => function( $id ) {
 							return is_numeric( $id );
 						},
+						'required' => true,
 					),
 				),
 			),
@@ -161,38 +169,45 @@ class APIRoutes {
 	}
 
 	/**
-	 * Return the '/buttons' route response.
+	 * Return the '/social-manager' route response.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $request The passed parameters in the route.
-	 * @return WP_REST_Response A REST response object.
+	 * @param WP_REST_Request $request Data from the request.
+	 * @return WP_REST_Respon
 	 */
-	public function response_plugins( $request ) {
+	public function response_plugin( WP_REST_Request $request ) {
 
-		if ( isset( $request['buttons'] ) ) {
+		return new WP_REST_Response( array(
+			'plugin_name' => 'Social Manager by NineCodes',
+			'plugin_url' => 'http://wordpress.org/plugins/ninecodes-social-manager',
+			'version' => $this->version,
+			'contributors' => array(
+				'Thoriq Firdaus',
+				'Hongkiat Lim',
+			),
+		), 200 );
+	}
 
-			$button_id = absint( $request['buttons'] );
+	/**
+	 * Return the '/social-manager/buttons' route response.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param WP_REST_Request $request The passed parameters in the route.
+	 * @return WP_REST_Response
+	 */
+	public function response_buttons( WP_REST_Request $request ) {
 
-			$response = array(
-				'id' => $button_id,
-				'content' => $this->endpoints->get_content_endpoints( $button_id ),
-				'images' => $this->endpoints->get_image_endpoints( $button_id ),
-			);
+		$button_id = absint( $request['id'] );
 
-		} else {
-
-			$response = array(
-				'plugin_name' => 'Social Manager by NineCodes',
-				'plugin_url' => 'http://wordpress.org/plugins/ninecodes-social-manager',
-				'version' => $this->version,
-				'contributors' => array(
-					'Thoriq Firdaus',
-					'Hongkiat Lim',
-				),
-			);
-		}
+		$response = array(
+			'id' => $button_id,
+			'content' => $this->endpoints->get_content_endpoints( $button_id ),
+			'images' => $this->endpoints->get_image_endpoints( $button_id ),
+		);
 
 		return new WP_REST_Response( $response, 200 );
 	}

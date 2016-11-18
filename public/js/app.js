@@ -38,7 +38,7 @@
 
 	SocialButtons.Model = Backbone.Model.extend({
 		sync: api.sync,
-		url: '/social-manager',
+		url: '/social-manager/buttons',
 		defaults: {
 			id: null
 		}
@@ -120,7 +120,7 @@
 
 			var response = model.toJSON();
 
-			$( '#' + api.attrPrefix + '-buttons-' + req.data.buttons )
+			$( '#' + api.attrPrefix + '-buttons-' + req.data.id )
 				.append( this.template({
 					data: response.content
 				}) );
@@ -142,7 +142,7 @@
 			var self = this,
 				response = model.toJSON(),
 
-				$images = $( '.' + api.attrPrefix + '-buttons--' + req.data.buttons );
+				$images = $( '.' + api.attrPrefix + '-buttons--' + req.data.id );
 
 			$images.each( function( index ) {
 				$( this ).append( self.template({
@@ -157,7 +157,7 @@
 	SocialButtons.Model = new SocialButtons.Model();
 	SocialButtons.Model.fetch({
 		data: {
-			buttons: api.id
+			id: api.id
 		}
 	});
 
