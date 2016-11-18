@@ -1,45 +1,50 @@
-/*eslint no-unused-vars: ["error", { "vars": "local", "varsIgnorePattern": "^_" }]*/
+/*eslint no-unused-vars: ["error", { "vars": "local", "varsIgnorePattern": "^social" }]*/
 (function( $ ) {
 
 	'use strict';
 
 	var api,
-		target,
-		source,
-		SocialButton,
+		SocialButtons,
+		socialButtonsContent,
+		socialButtonsImage,
 		$template,
-		$templateHTML,
-		_socialButtonsContent,
-		_socialButtonsImage;
+		$templateHTML;
 
-	if ( 'undefined' === typeof nineCodesSocialManager ) {
+	if ( _.isUndefined( nineCodesSocialManager ) ||
+		 _.isUndefined( nineCodesSocialManager.id ) ) {
 		return;
 	}
-
-	api = nineCodesSocialManager;
-
-	if ( _.isUndefined( api.id ) ) {
-		return;
-	}
-
-	SocialButton = {
-		Collection: {},
-		Model: {},
-		View: {}
-	};
 
 	_.templateSettings = {
 		interpolate: /\{\{(.+?)\}\}/g
 	};
 
-	SocialButton.Model = Backbone.Model.extend({
-		urlRoot: api.root + api.namespace + '/buttons',
+	api = nineCodesSocialManager;
+	api.route = api.root + api.namespace;
+	api.sync = function(method, model, options) {
+
+		_.extend(options, {
+			url: api.route + (_.isFunction(model.url) ? model.url() : model.url)
+		});
+
+		return Backbone.sync(method, model, options);
+	};
+
+	SocialButtons = {
+		Collection: {},
+		Model: {},
+		View: {}
+	};
+
+	SocialButtons.Model = Backbone.Model.extend({
+		sync: api.sync,
+		url: '/social-manager',
 		defaults: {
 			id: null
 		}
 	});
 
-	SocialButton.View = Backbone.View.extend({
+	SocialButtons.View = Backbone.View.extend({
 
 		el: 'body',
 
@@ -68,8 +73,8 @@
 			event.preventDefault();
 			event.stopImmediatePropagation();
 
-			target = event.currentTarget;
-			source = target.getAttribute( 'href' );
+			var target = event.currentTarget,
+				source = target.getAttribute( 'href' );
 
 			if ( ! source || '' !== source ) {
 				this.windowPopup( source );
@@ -103,7 +108,7 @@
 		}
 	});
 
-	SocialButton.View.Content = SocialButton.View.extend({
+	SocialButtons.View.Content = SocialButtons.View.extend({
 
 		template: '#tmpl-buttons-content',
 
@@ -115,7 +120,7 @@
 
 			var response = model.toJSON();
 
-			$( '#' + api.attrPrefix + '-buttons-' + req.data.id )
+			$( '#' + api.attrPrefix + '-buttons-' + req.data.buttons )
 				.append( this.template({
 					data: response.content
 				}) );
@@ -124,7 +129,7 @@
 		}
 	});
 
-	SocialButton.View.Images = SocialButton.View.extend({
+	SocialButtons.View.Images = SocialButtons.View.extend({
 
 		template: '#tmpl-buttons-image',
 
@@ -137,7 +142,7 @@
 			var self = this,
 				response = model.toJSON(),
 
-				$images = $( '.' + api.attrPrefix + '-buttons--' + req.data.id );
+				$images = $( '.' + api.attrPrefix + '-buttons--' + req.data.buttons );
 
 			$images.each( function( index ) {
 				$( this ).append( self.template({
@@ -149,19 +154,19 @@
 		}
 	});
 
-	SocialButton.Model = new SocialButton.Model();
-	SocialButton.Model.fetch({
+	SocialButtons.Model = new SocialButtons.Model();
+	SocialButtons.Model.fetch({
 		data: {
-			id: api.id
+			buttons: api.id
 		}
 	});
 
-	_socialButtonsContent = new SocialButton.View.Content({
-		model: SocialButton.Model
+	socialButtonsContent = new SocialButtons.View.Content({
+		model: SocialButtons.Model
 	});
 
-	_socialButtonsImage = new SocialButton.View.Images({
-		model: SocialButton.Model
+	socialButtonsImage = new SocialButtons.View.Images({
+		model: SocialButtons.Model
 	});
 
 })( jQuery );

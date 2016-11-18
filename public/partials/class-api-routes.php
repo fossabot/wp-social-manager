@@ -29,7 +29,7 @@ class APIRoutes {
 	 * @access protected
 	 * @var string
 	 */
-	protected $api_version = '1.0';
+	protected $api_version = 'v1';
 
 	/**
 	 * The unique identifier of the route.
@@ -66,7 +66,7 @@ class APIRoutes {
 		$this->version = $endpoints->plugin->get_version();
 		$this->theme_supports = $endpoints->plugin->get_theme_supports();
 
-		$this->namespace = $this->plugin_slug . '/' . $this->api_version;
+		$this->namespace = 'ninecodes/' . $this->api_version;
 
 		$this->hooks();
 	}
@@ -146,11 +146,11 @@ class APIRoutes {
 		 *
 		 * @uses \WP_REST_Server
 		 */
-		register_rest_route( $this->namespace, '/buttons', array( array(
+		register_rest_route( $this->namespace, '/social-manager', array( array(
 				'methods' => WP_REST_Server::READABLE,
-				'callback' => array( $this, 'response_buttons' ),
+				'callback' => array( $this, 'response_plugins' ),
 				'args' => array(
-					'id' => array(
+					'buttons' => array(
 						'validate_callback' => function( $id ) {
 							return is_numeric( $id );
 						},
@@ -169,18 +169,17 @@ class APIRoutes {
 	 * @param array $request The passed parameters in the route.
 	 * @return WP_REST_Response A REST response object.
 	 */
-	public function response_buttons( $request ) {
+	public function response_plugins( $request ) {
 
-		if ( isset( $request['id'] ) ) {
+		if ( isset( $request['buttons'] ) ) {
 
-			$button_id = absint( $request['id'] );
+			$button_id = absint( $request['buttons'] );
 
 			$response = array(
 				'id' => $button_id,
+				'content' => $this->endpoints->get_content_endpoints( $button_id ),
+				'images' => $this->endpoints->get_image_endpoints( $button_id ),
 			);
-
-			$response['content'] = $this->endpoints->get_content_endpoints( $button_id );
-			$response['images'] = $this->endpoints->get_image_endpoints( $button_id );
 
 		} else {
 
@@ -196,5 +195,17 @@ class APIRoutes {
 		}
 
 		return new WP_REST_Response( $response, 200 );
+	}
+
+	/**
+	 * Function ot get the plugin api namespace.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string The name space and the version.
+	 */
+	public function get_namespace() {
+		return $this->namespace;
 	}
 }
