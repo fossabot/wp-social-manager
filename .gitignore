@@ -45,6 +45,7 @@ composer.lock
 ######################
 /build/
 /node_modules/
+/ninecodes-*
 npm-debug.log
 
 # Codekit #
