@@ -209,6 +209,7 @@ module.exports = function(grunt) {
 					'public/**',
 					'widgets/**',
 					'includes/**',
+					'languages/**',
 					'readme.txt',
 					'!**/*.map',
 					'!**/changelog.md',
