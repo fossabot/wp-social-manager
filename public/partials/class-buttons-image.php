@@ -106,7 +106,7 @@ class ButtonsImage extends Buttons {
 
 				if ( 'html' === $this->get_buttons_mode() && $this->post_id ) {
 
-					$response = wp_remote_get( trailingslashit( get_rest_url() ) . $this->plugin_slug . '/1.0/buttons?id=' . $this->post_id );
+					$response = wp_remote_get( trailingslashit( get_rest_url() ) . 'ninecodes/v1/social-manager/buttons/' . $this->post_id . '?select=images' );
 
 					if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
 

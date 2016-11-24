@@ -153,15 +153,22 @@ class APIRoutes {
 		 *
 		 * @uses \WP_REST_Server
 		 */
-		register_rest_route( $this->namespace, '/social-manager/buttons', array( array(
+		register_rest_route( $this->namespace, '/social-manager/buttons/(?P<id>[\\d]+)', array( array(
 				'methods' => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'response_buttons' ),
 				'args' => array(
 					'id' => array(
-						'validate_callback' => function( $id ) {
-							return is_numeric( $id );
+						'sanitize_callback' => 'absint',
+						'validate_callback' => function( $param, $request, $key ) {
+							return is_numeric( $param );
 						},
 						'required' => true,
+					),
+					'select' => array(
+						'sanitize_callback' => 'sanitize_key',
+						'validate_callback' => function( $param, $request, $key ) {
+							return is_string( $param ) && ! empty( $param ) && in_array( $param, array( 'content', 'images' ), true );
+						},
 					),
 				),
 			),
@@ -201,13 +208,27 @@ class APIRoutes {
 	 */
 	public function response_buttons( WP_REST_Request $request ) {
 
-		$button_id = absint( $request['id'] );
+		$button_id = $request['id'];
+		$response = array( 'id' => $button_id );
 
-		$response = array(
-			'id' => $button_id,
-			'content' => $this->endpoints->get_content_endpoints( $button_id ),
-			'images' => $this->endpoints->get_image_endpoints( $button_id ),
-		);
+		if ( isset( $request['select'] ) && ! empty( $request['select'] ) ) {
+
+			$select = $request['select'];
+
+			if ( 'content' === $select ) {
+				$response['content'] = $this->endpoints->get_content_endpoints( $button_id );
+			}
+
+			if ( 'images' === $select ) {
+				$response['images'] = $this->endpoints->get_image_endpoints( $button_id );
+			}
+		} else {
+
+			$response = array_merge( $response, array(
+				'content' => $this->endpoints->get_content_endpoints( $button_id ),
+				'images' => $this->endpoints->get_image_endpoints( $button_id ),
+			) );
+		}
 
 		return new WP_REST_Response( $response, 200 );
 	}

@@ -84,7 +84,7 @@ class ButtonsContent extends Buttons {
 			 *
 			 * @var object
 			 */
-			$response = wp_remote_get( trailingslashit( get_rest_url() ) . $this->plugin_slug . '/1.0/buttons?id=' . $this->post_id );
+			$response = wp_remote_get( trailingslashit( get_rest_url() ) . 'ninecodes/v1/social-manager/buttons/' . $this->post_id . '?select=content' );
 
 			if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
 
