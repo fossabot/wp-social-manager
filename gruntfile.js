@@ -317,7 +317,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', [
 		'wordpress',
 		'styles:dev',
-		'javascript:dev'
+		'scripts:dev'
 	]);
 
 	// Build package.
@@ -325,7 +325,7 @@ module.exports = function(grunt) {
 		'clean:zip',
 		'wordpress',
 		'styles:build',
-		'javascript:build',
+		'scripts:build',
 		'copy',
 		'compress:build',
 		'clean:build'
