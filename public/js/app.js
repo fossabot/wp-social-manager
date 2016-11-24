@@ -38,9 +38,11 @@
 
 	SocialButtons.Model = Backbone.Model.extend({
 		sync: api.sync,
-		url: '/social-manager/buttons',
+		url: '/social-manager/buttons/' + api.id,
 		defaults: {
-			id: null
+			id: null,
+			content: {},
+			images: []
 		}
 	});
 
@@ -116,13 +118,13 @@
 			'click [data-social-buttons="content"] a': 'buttonDialog'
 		},
 
-		render: function( model, resp, req ) {
+		render: function( model ) {
 
-			var response = model.toJSON();
+			var resp = model.toJSON();
 
-			$( '#' + api.attrPrefix + '-buttons-' + req.data.id )
+			$( '#' + api.attrPrefix + '-buttons-' + resp.id )
 				.append( this.template({
-					data: response.content
+					data: resp.content
 				}) );
 
 			return this;
@@ -137,16 +139,15 @@
 			'click [data-social-buttons="image"] a': 'buttonDialog'
 		},
 
-		render: function( model, resp, req ) {
+		render: function( model ) {
 
 			var self = this,
-				response = model.toJSON(),
-
-				$images = $( '.' + api.attrPrefix + '-buttons--' + req.data.id );
+				resp = model.toJSON(),
+				$images = $( '.' + api.attrPrefix + '-buttons--' + resp.id );
 
 			$images.each( function( index ) {
 				$( this ).append( self.template({
-					data: response.images[index]
+					data: resp.images[index]
 				}) );
 			});
 
@@ -155,11 +156,7 @@
 	});
 
 	SocialButtons.Model = new SocialButtons.Model();
-	SocialButtons.Model.fetch({
-		data: {
-			id: api.id
-		}
-	});
+	SocialButtons.Model.fetch();
 
 	socialButtonsContent = new SocialButtons.View.Content({
 		model: SocialButtons.Model
