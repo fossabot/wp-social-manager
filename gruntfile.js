@@ -302,13 +302,13 @@ module.exports = function(grunt) {
 	]);
 
 	// Register JavaScript specific tasks for "development" stage.
-	grunt.registerTask('javascript:dev', [
+	grunt.registerTask('scripts:dev', [
 		'eslint',
 		'uglify:dev'
 	]);
 
 	// Register JavaScript specific tasks for "build" stage.
-	grunt.registerTask('javascript:build', [
+	grunt.registerTask('scripts:build', [
 		'eslint',
 		'uglify:build'
 	]);
