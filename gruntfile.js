@@ -228,19 +228,6 @@ module.exports = function(grunt) {
 		compress: {
 			build: {
 				options: {
-					archive: '<%= pkg.name %>.<%= pkg.version %>+<%= grunt.template.today("yymmddHHMM") %>.zip'
-				},
-				files: [{
-					expand: true,
-					cwd: './build/',
-					src: ['**'],
-
-					// When the .zip file is uncompressed (e.g. 'ninecodes-social-media').
-					dest: './<%= pkg.name %>-<%= pkg.version %>-<%= grunt.template.today("yymmddHHMM") %>/'
-				}, ]
-			},
-			release: {
-				options: {
 					archive: '<%= pkg.name %>.<%= pkg.version %>.zip'
 				},
 				files: [{
@@ -251,7 +238,7 @@ module.exports = function(grunt) {
 					// When the .zip file is uncompressed (e.g. 'ninecodes-social-media').
 					dest: './<%= pkg.name %>/'
 				}, ]
-			}
+			},
 		},
 
 		clean: {
