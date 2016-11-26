@@ -190,8 +190,9 @@ module.exports = function(grunt) {
 				src: [
 					'*.php', // Include all files
 					'**/*.php', // Include all files
-					'!**/butterbean/**', // Exclude build/
-					'!**/wp-settings/**', // Exclude build/
+					'!**/bb-metabox/**', // Exclude sub-modules/
+					'!**/bb-metabox-extend/**', // Exclude sub-modules/
+					'!**/wp-settings/**', // Exclude sub-modules/
 					'!build/**', // Exclude build/
 					'!node_modules/**', // Exclude node_modules/
 					'!tests/**' // Exclude tests/

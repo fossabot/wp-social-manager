@@ -203,10 +203,6 @@ final class Settings {
 	 */
 	protected function requires() {
 
-		require_once( $this->path_dir . 'partials/wp-settings/wp-settings.php' );
-		require_once( $this->path_dir . 'partials/wp-settings/wp-settings-fields.php' );
-		require_once( $this->path_dir . 'partials/wp-settings/wp-settings-install.php' );
-
 		require_once( $this->path_dir . 'partials/class-fields.php' );
 		require_once( $this->path_dir . 'partials/class-helps.php' );
 	}

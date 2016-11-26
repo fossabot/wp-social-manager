@@ -166,6 +166,15 @@ final class Plugin {
 		require_once( $this->path_dir . 'includes/class-options.php' );
 		require_once( $this->path_dir . 'includes/class-theme-supports.php' );
 
+		require_once( $this->path_dir . 'includes/wp-settings/wp-settings.php' );
+		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-fields.php' );
+		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-install.php' );
+
+		add_action( 'plugins_loaded', function() {
+			require_once( $this->path_dir . 'includes/bb-metabox/butterbean.php' );
+			require_once( $this->path_dir . 'includes/bb-metabox-extend/butterbean-extend.php' );
+		} );
+
 		require_once( $this->path_dir . 'admin/class-admin.php' );
 		require_once( $this->path_dir . 'public/class-public.php' );
 		require_once( $this->path_dir . 'widgets/class-widgets.php' );
