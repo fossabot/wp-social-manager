@@ -1,12 +1,12 @@
 [submodule "admin/partials/butterbean-extend"]
 	path = admin/partials/butterbean-extend
 	url = https://tfirdaus@github.com/tfirdaus/butterbean-extend.git
-[submodule "admin/partials/pepperplane"]
-	path = admin/partials/pepperplane
-	url = https://tfirdaus@github.com/tfirdaus/pepperplane.git
 [submodule "admin/partials/butterbean"]
 	path = admin/partials/butterbean
 	url = https://tfirdaus@github.com/justintadlock/butterbean
 [submodule "dev-lib"]
 	path = dev-lib
 	url = https://tfirdaus@github.com/xwp/wp-dev-lib
+[submodule "admin/partials/wp-settings"]
+	path = admin/partials/wp-settings
+	url = https://tfirdaus@bitbucket.org/ninecodes/wp-settings
