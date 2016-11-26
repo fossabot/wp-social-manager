@@ -106,7 +106,14 @@ class ButtonsImage extends Buttons {
 
 				if ( 'html' === $this->get_buttons_mode() && $this->post_id ) {
 
-					$response = wp_remote_get( trailingslashit( get_rest_url() ) . 'ninecodes/v1/social-manager/buttons/' . $this->post_id . '?select=images' );
+					$root = trailingslashit( get_rest_url() );
+
+					/**
+					 * The API response object.
+					 *
+					 * @var object
+					 */
+					$response = wp_remote_get( $root . 'ninecodes/v1/social-manager/buttons/' . $this->post_id . '?select=images' );
 
 					if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
 
@@ -259,9 +266,13 @@ class ButtonsImage extends Buttons {
 			return false;
 		}
 
-		$post_types = (array) $this->plugin->get_option( 'buttons_image', 'post_types' );
+		$post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
 
-		if ( empty( $post_types ) ) {
+		/**
+		 * NOTE: The social media buttons currently do not support Home and Archive display.
+		 * But, we plan to have it in the future.
+		 */
+		if ( empty( $post_types ) || is_home() || is_archive() ) {
 			return false;
 		}
 

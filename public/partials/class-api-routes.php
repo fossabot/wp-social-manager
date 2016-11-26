@@ -58,7 +58,7 @@ class APIRoutes {
 	 *
 	 * @param Endpoints $endpoints The Endpoints class instance.
 	 */
-	function __construct( Endpoints $endpoints ) {
+	public function __construct( Endpoints $endpoints ) {
 
 		$this->endpoints = $endpoints;
 
@@ -80,7 +80,7 @@ class APIRoutes {
 	 *
 	 * @return void
 	 */
-	protected function hooks() {
+	public function hooks() {
 
 		add_filter( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'localize_scripts' ) );
@@ -153,7 +153,7 @@ class APIRoutes {
 		 *
 		 * @uses \WP_REST_Server
 		 */
-		register_rest_route( $this->namespace, '/social-manager/buttons/(?P<id>[\\d]+)', array( array(
+		register_rest_route( $this->namespace, '/social-manager/buttons/(?P<id>[\d]+)', array( array(
 				'methods' => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'response_buttons' ),
 				'args' => array(
@@ -162,7 +162,7 @@ class APIRoutes {
 						'validate_callback' => function( $param, $request, $key ) {
 							return is_numeric( $param );
 						},
-						'required' => true,
+						// 'required' => true,
 					),
 					'select' => array(
 						'sanitize_callback' => 'sanitize_key',
@@ -186,7 +186,7 @@ class APIRoutes {
 	 */
 	public function response_plugin( WP_REST_Request $request ) {
 
-		return new WP_REST_Response( array(
+		$response = array(
 			'plugin_name' => 'Social Manager by NineCodes',
 			'plugin_url' => 'http://wordpress.org/plugins/ninecodes-social-manager',
 			'version' => $this->version,
@@ -194,7 +194,9 @@ class APIRoutes {
 				'Thoriq Firdaus',
 				'Hongkiat Lim',
 			),
-		), 200 );
+		);
+
+		return new WP_REST_Response( $response, 200 );
 	}
 
 	/**

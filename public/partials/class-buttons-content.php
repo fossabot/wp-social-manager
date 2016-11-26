@@ -12,6 +12,8 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
+use \WP_Http as WP_HTTP;
+
 /**
  * The Class that define the social buttons output.
  *
@@ -79,12 +81,14 @@ class ButtonsContent extends Buttons {
 
 		if ( 'html' === $this->get_buttons_mode() && $this->post_id ) {
 
+			$root = trailingslashit( get_rest_url() );
+
 			/**
 			 * The API response object.
 			 *
 			 * @var object
 			 */
-			$response = wp_remote_get( trailingslashit( get_rest_url() ) . 'ninecodes/v1/social-manager/buttons/' . $this->post_id . '?select=content' );
+			$response = wp_remote_get( $root . 'ninecodes/v1/social-manager/buttons/' . $this->post_id . '?select=content' );
 
 			if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
 
@@ -235,7 +239,11 @@ class ButtonsContent extends Buttons {
 
 		$post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
 
-		if ( empty( $post_types ) ) {
+		/**
+		 * NOTE: The social media buttons currently do not support Home and Archive display.
+		 * But, we plan to have it in the future.
+		 */
+		if ( empty( $post_types ) || is_home() || is_archive() ) {
 			return false;
 		}
 
