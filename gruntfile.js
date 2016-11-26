@@ -191,7 +191,7 @@ module.exports = function(grunt) {
 					'*.php', // Include all files
 					'**/*.php', // Include all files
 					'!**/butterbean/**', // Exclude build/
-					'!**/pepperplane/**', // Exclude build/
+					'!**/wp-settings/**', // Exclude build/
 					'!build/**', // Exclude build/
 					'!node_modules/**', // Exclude node_modules/
 					'!tests/**' // Exclude tests/

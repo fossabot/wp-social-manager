@@ -12,7 +12,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use \PepperPlane;
+use \NineCodes\WPSettings;
 
 /**
  * The Settings class is used to register the option menu, the option page,
@@ -86,15 +86,6 @@ final class Settings {
 	protected $path_url;
 
 	/**
-	 * PepperPlane class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var PepperPlane
-	 */
-	protected $settings;
-
-	/**
 	 * The admin screen base name.
 	 *
 	 * @since 1.0.0
@@ -143,6 +134,42 @@ final class Settings {
 	protected $document_title;
 
 	/**
+	 * WPSettings\Settings class instance.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @var WPSettings\Settings
+	 */
+	public $settings;
+
+	/**
+	 * Validation class instance.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @var Validation
+	 */
+	public $validate;
+
+	/**
+	 * Fields class instance.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @var Fields
+	 */
+	public $fields;
+
+	/**
+	 * Helps class instance.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @var Helps
+	 */
+	public $helps;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since 1.0.0
@@ -176,9 +203,9 @@ final class Settings {
 	 */
 	protected function requires() {
 
-		require_once( $this->path_dir . 'partials/pepperplane/pepperplane.php' );
-		require_once( $this->path_dir . 'partials/pepperplane/pepperplane-fields.php' );
-		require_once( $this->path_dir . 'partials/pepperplane/pepperplane-install.php' );
+		require_once( $this->path_dir . 'partials/wp-settings/wp-settings.php' );
+		require_once( $this->path_dir . 'partials/wp-settings/wp-settings-fields.php' );
+		require_once( $this->path_dir . 'partials/wp-settings/wp-settings-install.php' );
 
 		require_once( $this->path_dir . 'partials/class-fields.php' );
 		require_once( $this->path_dir . 'partials/class-helps.php' );
@@ -202,9 +229,6 @@ final class Settings {
 		add_action( 'admin_init', array( $this, 'setting_sections' ), 20 );
 		add_action( 'admin_init', array( $this, 'setting_fields' ), 25 );
 		add_action( 'admin_init', array( $this, 'setting_init' ), 30 );
-
-		add_action( "{$this->option_slug}_admin_enqueue_scripts", array( $this, 'enqueue_scripts' ), 10, 1 );
-		add_action( "{$this->option_slug}_admin_enqueue_styles", array( $this, 'enqueue_styles' ), 10, 1 );
 	}
 
 	/**
@@ -216,20 +240,15 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @see PepperPlane
-	 * @see SettingsExtend
-	 * @see Fields
-	 * @see Helps
-	 *
 	 * @return void
 	 */
 	public function setting_setups() {
 
-		$this->settings = new PepperPlane( $this->option_slug );
+		$this->settings = new WPSettings\Settings( $this->option_slug );
 		$this->validate = new Validation();
 
-		new Fields( $this->option_slug );
-		new Helps( $this->screen );
+		$this->fields = new Fields( $this->screen );
+		$this->helps = new Helps( $this->screen );
 	}
 
 	/**
@@ -258,6 +277,8 @@ final class Settings {
 		} );
 
 		add_action( "admin_print_styles-{$this->screen}", array( $this, 'print_setting_styles' ), 20, 1 );
+		add_action( "{$this->screen}_enqueue_scripts", array( $this, 'enqueue_scripts' ), 10, 1 );
+		add_action( "{$this->screen}_enqueue_styles", array( $this, 'enqueue_styles' ), 10, 1 );
 	}
 
 	/**
@@ -613,6 +634,7 @@ final class Settings {
 	 * @return void
 	 */
 	public function setting_init() {
+
 		$this->settings->init( $this->screen, $this->pages );
 		$this->settings->install();
 	}
@@ -671,7 +693,13 @@ final class Settings {
 	public function enqueue_scripts( array $args ) {
 
 		foreach ( $args as $key => $file ) {
+
 			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'scripts';
+
+			if ( 'image-upload' === $file ) {
+				wp_enqueue_media();
+			}
+
 			wp_enqueue_script( "{$this->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.min.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 		}
 	}
@@ -690,6 +718,7 @@ final class Settings {
 		foreach ( $args as $name => $file ) {
 
 			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'styles';
+
 			wp_enqueue_style( "{$this->plugin_slug}-{$file}", "{$this->path_url}css/{$file}.min.css", array(), $this->version );
 
 			if ( 'image-upload' === $file ) {
