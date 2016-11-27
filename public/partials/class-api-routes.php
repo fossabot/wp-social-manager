@@ -21,7 +21,7 @@ use \WP_REST_Response;
  *
  * @since 1.0.0
  */
-class APIRoutes {
+class APIRoutes extends Endpoints {
 
 	/**
 	 * The API version number.
@@ -31,15 +31,6 @@ class APIRoutes {
 	 * @var string
 	 */
 	protected $api_version = 'v1';
-
-	/**
-	 * The unique identifier of the route.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $plugin_slug;
 
 	/**
 	 * The API unique namespace.
@@ -56,17 +47,12 @@ class APIRoutes {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param Endpoints $endpoints The Endpoints class instance.
+	 * @param ViewPublic $public The ViewPublic class instance.
 	 */
-	public function __construct( Endpoints $endpoints ) {
+	public function __construct( ViewPublic $public ) {
+		parent::__construct( $public );
 
-		$this->endpoints = $endpoints;
-
-		$this->plugin = $endpoints->plugin;
-		$this->plugin_slug = $endpoints->plugin->get_slug();
-		$this->version = $endpoints->plugin->get_version();
-		$this->theme_supports = $endpoints->plugin->get_theme_supports();
-
+		$this->version = $public->plugin->get_version();
 		$this->namespace = 'ninecodes/' . $this->api_version;
 
 		$this->hooks();
@@ -218,17 +204,17 @@ class APIRoutes {
 			$select = $request['select'];
 
 			if ( 'content' === $select ) {
-				$response['content'] = $this->endpoints->get_content_endpoints( $button_id );
+				$response['content'] = $this->get_content_endpoints( $button_id );
 			}
 
 			if ( 'images' === $select ) {
-				$response['images'] = $this->endpoints->get_image_endpoints( $button_id );
+				$response['images'] = $this->get_image_endpoints( $button_id );
 			}
 		} else {
 
 			$response = array_merge( $response, array(
-				'content' => $this->endpoints->get_content_endpoints( $button_id ),
-				'images' => $this->endpoints->get_image_endpoints( $button_id ),
+				'content' => $this->get_content_endpoints( $button_id ),
+				'images' => $this->get_image_endpoints( $button_id ),
 			) );
 		}
 

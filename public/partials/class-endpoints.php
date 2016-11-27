@@ -21,42 +21,7 @@ use \DOMDocument;
  *
  * @since 1.0.0
  */
-class Endpoints {
-
-	/**
-	 * The unique identifier or prefix for database names.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	public $plugin;
-
-	/**
-	 * The Meta class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var null
-	 */
-	public $metas;
-
-	/**
-	 * Constructor.
-	 *
-	 * Run the WordPress Hooks, add meta tags in the 'head' tag.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param Plugin $plugin The Plugin class instance.
-	 * @param Metas  $metas The Meta class instance.
-	 */
-	function __construct( Plugin $plugin, Metas $metas ) {
-
-		$this->metas = $metas;
-		$this->plugin = $plugin;
-	}
+class Endpoints extends Metas {
 
 	/**
 	 * Get the buttons content endpoint urls.
@@ -331,16 +296,16 @@ class Endpoints {
 	protected function get_post_metas( $post_id ) {
 
 		$post_id = absint( $post_id );
-		$post_title = $this->metas->get_post_title( $post_id );
-		$post_description = $this->metas->get_post_description( $post_id );
+		$post_title = $this->get_post_title( $post_id );
+		$post_description = $this->get_post_description( $post_id );
 
 		if ( 'shortlink' === $this->plugin->get_option( 'modes', 'link_mode' ) ) {
 			$post_url = wp_get_shortlink( $post_id );
 		} else {
-			$post_url = $this->metas->get_post_url( $post_id );
+			$post_url = $this->get_post_url( $post_id );
 		}
 
-		$post_image = $this->metas->get_post_image( $post_id );
+		$post_image = $this->get_post_image( $post_id );
 
 		return array(
 			'post_title' => rawurlencode( $post_title ),

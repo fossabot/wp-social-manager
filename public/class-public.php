@@ -23,6 +23,15 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 final class ViewPublic {
 
 	/**
+	 * The Plugin class instance.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @var string
+	 */
+	public $plugin;
+
+	/**
 	 * The ID of this plugin.
 	 *
 	 * @since 1.0.0
@@ -66,15 +75,6 @@ final class ViewPublic {
 	 * @var ThemeSupports
 	 */
 	protected $theme_supports;
-
-	/**
-	 * The Metas class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Metas
-	 */
-	protected $metas;
 
 	/**
 	 * Constructor.
@@ -150,16 +150,10 @@ final class ViewPublic {
 	 */
 	public function setups() {
 
-		$this->metas = new Metas( $this->plugin );
-		$this->endpoints = new Endpoints( $this->plugin, $this->metas );
-
-		$this->wp_head = new WPHead( $this->metas );
-		$this->buttons_content = new ButtonsContent( $this->endpoints );
-		$this->buttons_image = new ButtonsImage( $this->endpoints );
-		$this->routes = new APIRoutes( $this->endpoints );
-
-		do_action( 'ninecodes_social_manager_instance', 'metas', $this->metas );
-		do_action( 'ninecodes_social_manager_instance', 'endpoints', $this->endpoints );
+		$this->wp_head = new WPHead( $this );
+		$this->buttons_content = new ButtonsContent( $this );
+		$this->buttons_image = new ButtonsImage( $this );
+		$this->routes = new APIRoutes( $this );
 
 		$this->register_styles();
 		$this->register_scripts();

@@ -22,6 +22,16 @@ use \WP_Http as WP_HTTP;
 class ButtonsContent extends Buttons {
 
 	/**
+	 * The response of `get_content_endpoints()` function
+	 * in HTML buttons modes.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var array
+	 */
+	protected $response;
+
+	/**
 	 * Constructor
 	 *
 	 * Initialize the Buttons abstract class, and render the buttons
@@ -30,11 +40,45 @@ class ButtonsContent extends Buttons {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param Endpoints $endpoints The Endpoints class instance.
+	 * @param ViewPublic $public The ViewPublic class instance.
 	 */
-	function __construct( Endpoints $endpoints ) {
-		parent::__construct( $endpoints );
+	function __construct( ViewPublic $public ) {
+		parent::__construct( $public );
+
+		$this->view = $this->plugin->get_option( 'buttons_content', 'view' );
+		$this->placement = $this->plugin->get_option( 'buttons_content', 'placement' );
+
+		$this->hooks();
 		$this->render();
+	}
+
+	/**
+	 * [hooks description]
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return void
+	 */
+	protected function hooks() {
+
+		add_action( 'wp', array( $this, 'setups_html' ), -30 );
+		add_action( 'wp_footer', array( $this, 'buttons_tmpl' ), -30 );
+	}
+
+	/**
+	 * Function to setup the image buttons when it is in HTML mode.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function setups_html() {
+
+		if ( 'html' === $this->mode && is_singular() ) {
+			$this->response = $this->get_content_endpoints( get_the_id() );
+		}
 	}
 
 	/**
@@ -46,6 +90,7 @@ class ButtonsContent extends Buttons {
 	 * @return void
 	 */
 	protected function render() {
+
 		add_filter( 'the_content', array( $this, 'render_buttons' ), 50 );
 	}
 
@@ -62,58 +107,53 @@ class ButtonsContent extends Buttons {
 	 */
 	public function render_buttons( $content ) {
 
+		$button = '';
+		$post_id = get_the_id();
+
 		if ( false === $this->is_buttons_content() ) {
 			return $content;
 		}
 
-		$place = $this->plugin->get_option( 'buttons_content', 'placement' );
-		$prefix = $this->get_button_attr_prefix();
+		$is_html = 'html' === $this->mode && $this->response && is_singular();
+		$is_json = 'json' === $this->mode;
 
-		$opening_tag = "<div class='{$prefix}-buttons {$prefix}-buttons--content {$prefix}-buttons--content-{$place}' id='{$prefix}-buttons-{$this->post_id}'>";
-		$button = apply_filters( 'ninecodes_social_manager_buttons_html', $opening_tag, 'wrap-opening',
-			'button-content',
-			array(
-				'post_id' => $this->post_id,
-				'prefix' => $prefix,
-				'placement' => $place,
-			)
-		);
+		if ( $is_html || $is_json ) {
 
-		if ( 'html' === $this->get_buttons_mode() && $this->post_id ) {
+			$opening_tag = "<div class='{$this->prefix}-buttons {$this->prefix}-buttons--content {$this->prefix}-buttons--content-{$this->placement}' id='{$this->prefix}-buttons-{$post_id}'>";
 
-			$root = trailingslashit( get_rest_url() );
-
-			/**
-			 * The API response object.
-			 *
-			 * @var object
-			 */
-			$response = wp_remote_get( $root . 'ninecodes/v1/social-manager/buttons/' . $this->post_id . '?select=content' );
-
-			if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
-
-				$body = wp_remote_retrieve_body( $response );
-				$response = json_decode( $body );
-
-				$button .= $this->buttons_html( $response->content );
-			}
+			$button .= apply_filters( 'ninecodes_social_manager_buttons_html', $opening_tag,
+				'wrap-opening',
+				'button-content',
+				array(
+					'post_id' => $post_id,
+					'prefix' => $this->prefix,
+					'placement' => $this->placement,
+				)
+			);
 		}
 
-		$closing_tag = '</div>';
-		$button .= apply_filters( 'ninecodes_social_manager_buttons_html', $closing_tag, 'wrap-closing',
-			'button-content',
-			array(
-				'post_id' => $this->post_id,
-				'prefix' => $prefix,
-				'placement' => $place,
-			)
-		);
+		if ( $is_html ) {
+			$button .= $this->buttons_html( $this->response );
+		}
 
-		if ( 'before' === $place ) {
+		if ( $is_html || $is_json ) {
+			$closing_tag = '</div>';
+			$button .= apply_filters( 'ninecodes_social_manager_buttons_html', $closing_tag,
+				'wrap-closing',
+				'button-content',
+				array(
+					'post_id' => $post_id,
+					'prefix' => $this->prefix,
+					'placement' => $this->placement,
+				)
+			);
+		}
+
+		if ( 'before' === $this->placement ) {
 			$content = preg_replace( '/\s*$^\s*/m', "\n", $button ) . $content;
 		}
 
-		if ( 'after' === $place ) {
+		if ( 'after' === $this->placement ) {
 			$content = $content . preg_replace( '/\s*$^\s*/m', "\n", $button );
 		}
 
@@ -133,42 +173,36 @@ class ButtonsContent extends Buttons {
 	 */
 	public function buttons_html( $includes ) {
 
-		if ( wp_script_is( $this->plugin_slug, 'enqueued' ) ) :
+		$list = '';
 
-			$list = '';
+		if ( ! empty( $includes ) ) :
 
-			if ( ! empty( $includes ) ) :
+			$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
+			$heading = esc_html( $heading );
 
-				$prefix = $this->get_button_attr_prefix();
+			if ( ! empty( $heading ) ) {
+				$list .= "<h4 class='{$this->prefix}-buttons__heading'>{$heading}</h4>";
+			}
 
-				$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
-				$heading = esc_html( $heading );
+			$list .= "<div class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-buttons='content'>";
 
-				if ( ! empty( $heading ) ) {
-					$list .= "<h4 class='{$prefix}-buttons__heading'>{$heading}</h4>";
-				}
+			foreach ( $includes as $site => $endpoint ) :
 
-				$view = $this->plugin->get_option( 'buttons_content', 'view' );
-				$list .= "<div class='{$prefix}-buttons__list {$prefix}-buttons__list--{$view}' data-social-buttons='content'>";
+				$icon = $this->get_button_icon( $site );
+				$label = $this->get_button_label( $site, 'content' );
+				$list .= $this->button_view( $this->view, 'content', array(
+					'prefix' => $this->prefix,
+					'site' => $site,
+					'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-content' ),
+					'label' => $label,
+					'endpoint' => $endpoint,
+				) );
 
-				foreach ( $includes as $site => $endpoint ) :
+			endforeach;
+			$list .= '</div>';
+			endif;
 
-					$icon = $this->get_button_icon( $site );
-					$label = $this->get_button_label( $site, 'content' );
-					$list .= $this->button_view( $view, 'content', array(
-						'prefix' => $prefix,
-						'site' => $site,
-						'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-content' ),
-						'label' => $label,
-						'endpoint' => $endpoint,
-					) );
-
-				endforeach;
-				$list .= '</div>';
-				endif;
-
-			return $list;
-		endif;
+		return $list;
 	}
 
 	/**
@@ -181,45 +215,40 @@ class ButtonsContent extends Buttons {
 	 */
 	public function buttons_tmpl() {
 
-		if ( $this->is_buttons_content() && 'json' === $this->get_buttons_mode() ) :
-			if ( wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
+		if ( $this->is_buttons_content() && 'json' === $this->mode ) :
+			if ( wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) : ?>
 
-				$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
+		<script type="text/html" id="tmpl-buttons-content">
+		<?php
+			$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
+			$heading = wp_kses( $heading, array() );
 
-				if ( ! empty( $includes ) ) :
+		if ( ! empty( $heading ) ) {
+			echo wp_kses( "<h4 class='{$this->prefix}-buttons__heading'>{$heading}</h4>", array( 'h4' => array( 'class' => true ) ) );
+		} ?>
+			<div class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-buttons="content">
 
-					$prefix = $this->get_button_attr_prefix();
-					$view = $this->plugin->get_option( 'buttons_content', 'view' ); ?>
+			<?php
 
-			<script type="text/html" id="tmpl-buttons-content">
-				<?php
-					$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
-					$heading = wp_kses( $heading, array() );
+			$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
 
-				if ( ! empty( $heading ) ) {
-					echo wp_kses( "<h4 class='{$prefix}-buttons__heading'>{$heading}</h4>", array( 'h4' => array( 'class' => true ) ) );
-				}
-					?>
-				<div class="<?php echo esc_attr( $prefix ); ?>-buttons__list <?php echo esc_attr( $prefix ); ?>-buttons__list--<?php echo esc_attr( $view ); ?>" data-social-buttons="content">
+			foreach ( $includes as $site ) :
 
-				<?php foreach ( $includes as $site ) :
+				$label = $this->get_button_label( $site, 'content' );
+				$icon  = $this->get_button_icon( $site );
+				$list  = $this->button_view( $this->view, 'content', array(
+					'prefix' => $this->prefix,
+					'site' => $site,
+					'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-content' ),
+					'label' => $label,
+					'endpoint' => "{{data.{$site}}}",
+				));
 
-					$label = $this->get_button_label( $site, 'content' );
-					$icon  = $this->get_button_icon( $site );
-					$list  = $this->button_view($view, 'content', array(
-						'prefix' => $prefix,
-						'site' => $site,
-						'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-content' ),
-						'label' => $label,
-						'endpoint' => "{{data.{$site}}}",
-					));
-
-					echo $list; // WPCS: XSS ok.
+				echo $list; // WPCS: XSS ok.
 				endforeach; ?>
-				</div>
-			</script>
-			<?php endif;
-			endif;
+			</div>
+		</script>
+		<?php endif;
 		endif;
 	}
 
@@ -240,6 +269,8 @@ class ButtonsContent extends Buttons {
 		$post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
 
 		/**
+		 * If post types are not selected.
+		 *
 		 * NOTE: The social media buttons currently do not support Home and Archive display.
 		 * But, we plan to have it in the future.
 		 */
@@ -253,19 +284,19 @@ class ButtonsContent extends Buttons {
 			return false;
 		}
 
-		$place = $this->plugin->get_option( 'buttons_content', 'placement' );
+		$placement = $this->plugin->get_option( 'buttons_content', 'placement' );
 
-		if ( ! in_array( $place, array_keys( Options::button_placements() ), true ) ) {
+		if ( ! in_array( $placement, array_keys( Options::button_placements() ), true ) ) {
 			return false;
 		}
 
-		$meta = $this->metas->get_post_meta( $this->post_id, 'buttons_content' );
+		$post_meta = $this->get_post_meta( get_the_id(), 'buttons_content' );
 
 		/**
 		 * If it is 'null' we assume that the meta post either not yet created or
 		 * the associated key, 'buttons_image', in the meta is not set. So, we
 		 * return to the default 'true'.
 		 */
-		return ( null === $meta ) ? true : $meta;
+		return ( null === $post_meta ) ? true : $post_meta;
 	}
 }
