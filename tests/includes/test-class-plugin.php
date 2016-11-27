@@ -54,7 +54,24 @@ class TestPlugin extends WP_UnitTestCase {
 	 */
 	public function setUp() {
 		parent::setUp();
+
 		$this->plugin = new Plugin();
+		$this->plugin->initialize();
+
+		add_option( 'ncsocman_buttons_content', array(
+			'includes' => array_keys( Options::button_sites( 'content' ) ),
+		) );
+		add_option( 'ncsocman_buttons_image', array(
+			'includes' => array_keys( Options::button_sites( 'image' ) ),
+		) );
+	}
+
+	/**
+	 * Tear down.
+	 */
+	function tearDown() {
+		$this->plugin = null;
+		parent::tearDown();
 	}
 
 	/**
@@ -82,6 +99,8 @@ class TestPlugin extends WP_UnitTestCase {
 	/**
 	 * Test the plugin option.
 	 *
+	 * TODO Add more test for get_option() that retrieve value from database.
+	 *
 	 * @since 1.0.0
 	 * @access public
 	 * @return void
@@ -96,5 +115,21 @@ class TestPlugin extends WP_UnitTestCase {
 
 		$int = $this->plugin->get_option( 123 ); // integer name.
 		$this->assertNull( $int );
+
+		$buttons_content = $this->plugin->get_option( 'buttons_content', 'includes' );
+
+		$this->assertEquals( 7, count( $buttons_content ) );
+		$this->assertTrue( in_array( 'facebook', $buttons_content, true ) );
+		$this->assertTrue( in_array( 'twitter', $buttons_content, true ) );
+		$this->assertTrue( in_array( 'googleplus', $buttons_content, true ) );
+		$this->assertTrue( in_array( 'pinterest', $buttons_content, true ) );
+		$this->assertTrue( in_array( 'linkedin', $buttons_content, true ) );
+		$this->assertTrue( in_array( 'reddit', $buttons_content, true ) );
+		$this->assertTrue( in_array( 'email', $buttons_content, true ) );
+
+		$buttons_image = $this->plugin->get_option( 'buttons_image', 'includes' );
+
+		$this->assertEquals( 1, count( $buttons_image ) );
+		$this->assertTrue( in_array( 'pinterest', $buttons_image, true ) );
 	}
 }
