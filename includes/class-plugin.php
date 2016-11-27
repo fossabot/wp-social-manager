@@ -70,15 +70,6 @@ final class Plugin {
 	protected $options;
 
 	/**
-	 * An array of option retrieved from the 'wp_options' table.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var array
-	 */
-	protected $wp_options;
-
-	/**
 	 * The ThemeSupports class instance.
 	 *
 	 * @since 1.0.0
