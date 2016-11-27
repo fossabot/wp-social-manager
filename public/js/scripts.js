@@ -32,7 +32,7 @@
 
 			width = 560,
 			height = 430,
-			divide = 430,
+			divide = 2,
 
 			left = screenWidth / divide - width / divide + screenLeft,
 			top = screenHeight / divide - height / divide + screenTop,

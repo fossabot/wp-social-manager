@@ -99,8 +99,8 @@
 				height = 430,
 				divide = 2,
 
-				left =   screenWidth / divide  -  width / divide   + screenLeft,
-				top =   screenHeight / divide  -  height / divide   + screenTop,
+				left = screenWidth / divide  -  width / divide   + screenLeft,
+				top = screenHeight / divide  -  height / divide   + screenTop,
 
 				newWindow = wind.open( url, '', 'scrollbars=no,width=' + width + ',height=' + height + ',top=' + top + ',left=' + left );
 
