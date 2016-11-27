@@ -23,14 +23,14 @@ use \WP_REST_Request;
 class TestAPIRoutes extends WP_UnitTestCase {
 
 	/**
-	 * The WP_Rest_Server
+	 * The APIRoutes
 	 *
 	 * @since 1.0.0
 	 * @access protected
 	 *
-	 * @var WP_REST_Server
+	 * @var APIRoutes
 	 */
-	protected $server;
+	protected $routes;
 
 	/**
 	 * Setup.
@@ -46,10 +46,10 @@ class TestAPIRoutes extends WP_UnitTestCase {
 		$this->server = $wp_rest_server = new WP_REST_Server;
 
 		// Constructing the plugin classes.
-		$this->plugin = new Plugin();
-		$this->metas = new Metas( $this->plugin );
-		$this->endpoints = new Endpoints( $this->plugin, $this->metas );
-		$this->routes = new APIRoutes( $this->endpoints );
+		$plugin = new Plugin();
+		$public = new ViewPublic( $plugin );
+
+		$this->routes = new APIRoutes( $public );
 
 		do_action( 'rest_api_init' );
 	}
@@ -95,9 +95,10 @@ class TestAPIRoutes extends WP_UnitTestCase {
 	 */
 	public function tearDown() {
 
-		parent::tearDown();
-
 		global $wp_rest_server;
 		$wp_rest_server = null;
+		$this->routes = null;
+
+		parent::tearDown();
 	}
 }
