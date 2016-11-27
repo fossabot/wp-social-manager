@@ -68,6 +68,8 @@ class TestPlugin extends WP_UnitTestCase {
 
 	/**
 	 * Tear down.
+	 *
+	 * @inheritdoc
 	 */
 	function tearDown() {
 		$this->plugin = null;
@@ -79,6 +81,7 @@ class TestPlugin extends WP_UnitTestCase {
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
 	 * @return void
 	 */
 	public function test_plugin_get_slug() {
@@ -90,10 +93,81 @@ class TestPlugin extends WP_UnitTestCase {
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
 	 * @return void
 	 */
 	public function test_plugin_get_opts() {
+
+		$this->assertTrue( method_exists( $this->plugin, 'get_opts' ),  'Class does not have method \'get_opts\'' );
 		$this->assertEquals( $this->option_slug, $this->plugin->get_opts() );
+	}
+
+	/**
+	 * Test the 'get_theme_supports()' method.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_plugin_get_theme_supports() {
+
+		// Make sure the method exist.
+		$this->assertTrue( method_exists( $this->plugin, 'get_theme_supports' ),  'Class does not have method \'get_theme_supports\'' );
+
+		// Make sure the method returns correct instance.
+		$this->assertInstanceOf( '\NineCodes\SocialManager\ThemeSupports', $this->plugin->get_theme_supports() );
+	}
+
+	/**
+	 * Test the 'get_view_admin()' method.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_plugin_get_view_admin() {
+
+		// Make sure the method exist.
+		$this->assertTrue( method_exists( $this->plugin, 'get_view_admin' ),  'Class does not have method \'get_view_admin\'' );
+
+		// Make sure the method returns correct instance.
+		$this->assertInstanceOf( '\NineCodes\SocialManager\ViewAdmin', $this->plugin->get_view_admin() );
+	}
+
+	/**
+	 * Test the 'get_view_public()' method.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_plugin_get_view_public() {
+
+		// Make sure the method exist.
+		$this->assertTrue( method_exists( $this->plugin, 'get_view_public' ),  'Class does not have method \'get_view_public\'' );
+
+		// Make sure the method returns correct instance.
+		$this->assertInstanceOf( '\NineCodes\SocialManager\ViewPublic', $this->plugin->get_view_public() );
+	}
+
+	/**
+	 * Test the 'get_widgets()' method.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_plugin_get_widgets() {
+
+		// Make sure the method exist.
+		$this->assertTrue( method_exists( $this->plugin, 'get_widgets' ),  'Class does not have method \'get_widgets\'' );
+
+		// Make sure the method returns correct instance.
+		$this->assertInstanceOf( '\NineCodes\SocialManager\Widgets', $this->plugin->get_widgets() );
 	}
 
 	/**
@@ -103,6 +177,7 @@ class TestPlugin extends WP_UnitTestCase {
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
 	 * @return void
 	 */
 	public function test_plugin_get_option() {
@@ -115,10 +190,23 @@ class TestPlugin extends WP_UnitTestCase {
 
 		$int = $this->plugin->get_option( 123 ); // integer name.
 		$this->assertNull( $int );
+	}
+
+	/**
+	 * Test the 'buttons_content' option.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_plugin_get_option_buttons_content() {
 
 		$buttons_content = $this->plugin->get_option( 'buttons_content', 'includes' );
 
+		// Count, in case we will add more in the future.
 		$this->assertEquals( 7, count( $buttons_content ) );
+
 		$this->assertTrue( in_array( 'facebook', $buttons_content, true ) );
 		$this->assertTrue( in_array( 'twitter', $buttons_content, true ) );
 		$this->assertTrue( in_array( 'googleplus', $buttons_content, true ) );
@@ -126,10 +214,23 @@ class TestPlugin extends WP_UnitTestCase {
 		$this->assertTrue( in_array( 'linkedin', $buttons_content, true ) );
 		$this->assertTrue( in_array( 'reddit', $buttons_content, true ) );
 		$this->assertTrue( in_array( 'email', $buttons_content, true ) );
+	}
+
+	/**
+	 * Test the 'buttons_image' option.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_plugin_get_option_buttons_image() {
 
 		$buttons_image = $this->plugin->get_option( 'buttons_image', 'includes' );
 
+		// Count, in case we will add more in the future.
 		$this->assertEquals( 1, count( $buttons_image ) );
+
 		$this->assertTrue( in_array( 'pinterest', $buttons_image, true ) );
 	}
 }
