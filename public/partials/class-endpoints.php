@@ -27,9 +27,9 @@ class Endpoints extends Metas {
 	 * Get the buttons content endpoint urls.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
-	 * @param array $post_id The WordPress post ID.
+	 * @param integer $post_id The WordPress post ID.
 	 * @return array An array of sites with their label / name and button endpoint url.
 	 *
 	 * TODO add inline docs referring to each site endpoint documentation page.
@@ -39,22 +39,22 @@ class Endpoints extends Metas {
 		$post_id = absint( $post_id );
 		$metas = $this->get_post_metas( $post_id );
 
+		$endpoints = array();
+
 		if ( ! $metas['post_url'] || ! $metas['post_title'] ) {
-			return;
+			return $endpoints;
 		}
 
-		$endpoints = array();
 		$includes = $this->plugin->get_option( 'buttons_content', 'includes' );
 		$buttons = Options::button_sites( 'content' );
 
 		foreach ( $buttons as $site => $label ) {
-			if ( ! in_array( $site, $includes, true ) ) {
+			if ( ! in_array( $site, (array) $includes, true ) ) {
 				unset( $buttons[ $site ] );
 			}
 		}
 
 		foreach ( $buttons as $slug => $label ) {
-
 			$endpoint = self::get_endpoint_base( 'content', $slug );
 
 			if ( ! $endpoint ) {
@@ -62,9 +62,7 @@ class Endpoints extends Metas {
 			}
 
 			switch ( $slug ) {
-
-				case 'facebook' :
-
+				case 'facebook':
 					$endpoints[ $slug ] = add_query_arg(
 						array( 'u' => $metas['post_url'] ),
 						$endpoint
@@ -72,8 +70,7 @@ class Endpoints extends Metas {
 
 					break;
 
-				case 'twitter' :
-
+				case 'twitter':
 					$profiles = $this->plugin->get_option( 'profiles', 'twitter' );
 
 					$args = array(
@@ -89,8 +86,7 @@ class Endpoints extends Metas {
 
 					break;
 
-				case 'googleplus' :
-
+				case 'googleplus':
 					$endpoints[ $slug ] = add_query_arg(
 						array( 'url' => $metas['post_url'] ),
 						$endpoint
@@ -98,8 +94,7 @@ class Endpoints extends Metas {
 
 					break;
 
-				case 'linkedin' :
-
+				case 'linkedin':
 					$endpoints[ $slug ] = add_query_arg(
 						array(
 							'mini' => true,
@@ -114,7 +109,6 @@ class Endpoints extends Metas {
 					break;
 
 				case 'pinterest':
-
 					$endpoints[ $slug ] = add_query_arg(
 						array(
 							'url' => $metas['post_url'],
@@ -128,7 +122,6 @@ class Endpoints extends Metas {
 					break;
 
 				case 'reddit':
-
 					$endpoints[ $slug ] = add_query_arg(
 						array(
 							'url' => $metas['post_url'],
@@ -140,7 +133,6 @@ class Endpoints extends Metas {
 					break;
 
 				case 'email':
-
 					$endpoints[ $slug ] = add_query_arg(
 						array(
 							'subject' => $metas['post_title'],
@@ -152,7 +144,6 @@ class Endpoints extends Metas {
 					break;
 
 				default:
-
 					$endpoints[ $slug ] = false;
 					break;
 			} // End switch().
@@ -185,7 +176,6 @@ class Endpoints extends Metas {
 		$buttons = array();
 
 		foreach ( Options::button_sites( 'image' ) as $site => $label ) {
-
 			$endpoint = self::get_endpoint_base( 'image', $site );
 
 			if ( ! $endpoint ) {
@@ -217,12 +207,12 @@ class Endpoints extends Metas {
 	 * @access protected
 	 *
 	 * @param array  $button {
-	 * 				The site button properties.
-	 * 				@type string $site 		 The button site unique key e.g. facebook, twitter, etc.
-	 * 				@type string $label 	 The button label or text.
-	 * 				@type string $endpoint 	 The site endpoint URL of the button.
-	 * 				@type string $post_url 	 The post URL.
-	 * 				@type string $post_title The post title.
+	 *              The site button properties.
+	 *              @type string $site       The button site unique key e.g. facebook, twitter, etc.
+	 *              @type string $label      The button label or text.
+	 *              @type string $endpoint   The site endpoint URL of the button.
+	 *              @type string $post_url   The post URL.
+	 *              @type string $post_title The post title.
 	 * }
 	 * @param string $src The image source URL.
 	 * @return array The button endpoint URL with the image src added.
@@ -237,7 +227,8 @@ class Endpoints extends Metas {
 
 		$site = $button['site'];
 		$endpoints = array(
-			'pinterest' => add_query_arg( array(
+			'pinterest' => add_query_arg(
+				array(
 					'url' => $button['post_url'],
 					'description' => $button['post_title'],
 					'is_video' => false,
@@ -343,5 +334,4 @@ class Endpoints extends Metas {
 
 		return isset( $endpoints[ $of ][ $site ] ) ? $endpoints[ $of ][ $site ] : null;
 	}
-
 }
