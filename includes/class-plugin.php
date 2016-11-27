@@ -97,10 +97,37 @@ final class Plugin {
 	public $languages;
 
 	/**
-	 * Constructor.
+	 * The ViewAdmin class instance.
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 * @var ViewAdmin
+	 */
+	protected $admin;
+
+	/**
+	 * The ViewPublic class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var ViewPublic
+	 */
+	protected $public;
+
+	/**
+	 * The Widgets class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Widgets
+	 */
+	protected $widgets;
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 *
 	 * @return void
 	 */
@@ -204,10 +231,6 @@ final class Plugin {
 	 */
 	protected function setups() {
 
-		foreach ( $this->options as $key => $option_name ) {
-			$this->wp_options[ $key ] = get_option( $option_name );
-		}
-
 		$this->theme_supports = new ThemeSupports();
 		$this->languages = new Languages( $this->plugin_slug );
 
@@ -287,10 +310,12 @@ final class Plugin {
 			return null;
 		}
 
+		$option = isset( $this->options[ $name ] ) ? get_option( $this->options[ $name ] ) : null;
+
 		if ( $name && $key ) {
-			return isset( $this->wp_options[ $name ][ $key ] ) ? $this->wp_options[ $name ][ $key ] : null;
+			return isset( $option[ $key ] ) ? $option[ $key ] : null;
 		}
 
-		return isset( $this->wp_options[ $name ] ) ? $this->wp_options[ $name ] : null;
+		return $option ? $option : null;
 	}
 }
