@@ -293,6 +293,42 @@ final class Plugin {
 	}
 
 	/**
+	 * Get the ViewAdmin instance.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return ViewAdmin instance.
+	 */
+	public function get_view_admin() {
+		return $this->admin;
+	}
+
+	/**
+	 * Get the ViewPublic instance.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return ViewPublic instance.
+	 */
+	public function get_view_public() {
+		return $this->public;
+	}
+
+	/**
+	 * Get the Widgets instance.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return Widgets instance.
+	 */
+	public function get_widgets() {
+		return $this->widgets;
+	}
+
+	/**
 	 * Get the options saved in the database `wp_options`.
 	 *
 	 * @since 1.0.0
