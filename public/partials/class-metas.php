@@ -370,7 +370,7 @@ class Metas {
 
 		$post = get_post( $post_id );
 
-		if ( $post ) {
+		if ( $post && ! empty( $post->post_content ) ) {
 
 			$content = $post->post_content;
 
