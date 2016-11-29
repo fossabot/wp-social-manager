@@ -110,7 +110,7 @@ class APIRoutes extends Endpoints {
 			$args['id'] = absint( $post_id );
 		}
 
-		wp_localize_script( $this->plugin_slug . '-app', 'nineCodesSocialManager', $args );
+		wp_localize_script( $this->plugin_slug . '-app', 'nineCodesSocialManagerAPI', $args );
 	}
 
 	/**

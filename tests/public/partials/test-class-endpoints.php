@@ -133,7 +133,7 @@ class TestEndpoints extends WP_UnitTestCase {
 		// We should only have 1 image.
 		$this->assertEquals( 1, count( $response ) );
 
-		foreach ($response as $res) {
+		foreach ( $response as $res ) {
 
 			// Count the number, in case we will add more in the future.
 			$this->assertEquals( 1, count( $res ) );

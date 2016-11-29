@@ -133,8 +133,8 @@ final class ViewPublic {
 	protected function hooks() {
 
 		add_action( 'init', array( $this, 'setups' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 30 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 30 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), -10 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), -10 );
 	}
 
 	/**
