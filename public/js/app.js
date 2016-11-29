@@ -79,6 +79,11 @@
 			var target = event.currentTarget,
 				source = target.getAttribute( 'href' );
 
+			if ( 0 === source.indexOf( 'mailto:' ) ) {
+				window.location.href = source;
+				return;
+			}
+
 			if ( ! source || '' !== source ) {
 				this.windowPopup( source );
 				return;
