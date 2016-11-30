@@ -286,6 +286,8 @@ class Endpoints extends Metas {
 	 */
 	protected function get_post_metas( $post_id ) {
 
+		$charset = get_bloginfo( 'charset' );
+
 		$post_id = absint( $post_id );
 		$post_title = $this->get_post_title( $post_id );
 		$post_description = $this->get_post_description( $post_id );
@@ -299,8 +301,8 @@ class Endpoints extends Metas {
 		$post_image = $this->get_post_image( $post_id );
 
 		return array(
-			'post_title' => rawurlencode( $post_title ),
-			'post_description' => rawurlencode( $post_description ),
+			'post_title' => rawurlencode( html_entity_decode( $post_title, ENT_COMPAT, 'UTF-8' ) ),
+			'post_description' => rawurlencode( html_entity_decode( $post_description, ENT_COMPAT, 'UTF-8' ) ),
 			'post_url' => rawurlencode( $post_url ),
 			'post_image' => isset( $post_image['src'] ) ? rawurlencode( $post_image['src'] ) : '',
 		);
