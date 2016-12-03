@@ -29,29 +29,45 @@ class TestSettings extends WP_UnitTestCase {
 	 */
 	public function setUp() {
 
-		parent::setUp();
-
 		$this->plugin = new Plugin();
+		$this->settings = new Settings( $this->plugin );
 	}
 
 	/**
 	 * Ensure all hooks are present
 	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
 	 * @return void
 	 */
 	public function test_settings_hooks() {
 
-		$settings = new Settings( $this->plugin );
-		$plugin_opts = $this->plugin->get_opts();
+		$this->assertEquals( 10, has_action( 'init', array( $this->settings, 'frontend_setups' ) ) );
+		$this->assertEquals( 10, has_action( 'admin_menu', array( $this->settings, 'setting_menu' ) ) );
 
-		$this->assertEquals( 10, has_action( 'init', array( $settings, 'frontend_setups' ) ) );
-		$this->assertEquals( 10, has_action( 'admin_menu', array( $settings, 'setting_menu' ) ) );
-		$this->assertEquals( 10, has_action( 'admin_init', array( $settings, 'setting_setups' ) ) );
-		$this->assertEquals( 15, has_action( 'admin_init', array( $settings, 'setting_pages' ) ) );
-		$this->assertEquals( 20, has_action( 'admin_init', array( $settings, 'setting_sections' ) ) );
-		$this->assertEquals( 25, has_action( 'admin_init', array( $settings, 'setting_fields' ) ) );
-		$this->assertEquals( 30, has_action( 'admin_init', array( $settings, 'setting_init' ) ) );
-		$this->assertEquals( 10, has_action( "{$plugin_opts}_admin_enqueue_scripts", array( $settings, 'enqueue_scripts' ) ) );
-		$this->assertEquals( 10, has_action( "{$plugin_opts}_admin_enqueue_styles", array( $settings, 'enqueue_styles' ) ) );
+		$this->assertEquals( 10, has_action( 'admin_init', array( $this->settings, 'setting_setups' ) ) );
+		$this->assertEquals( 15, has_action( 'admin_init', array( $this->settings, 'setting_pages' ) ) );
+		$this->assertEquals( 20, has_action( 'admin_init', array( $this->settings, 'setting_sections' ) ) );
+		$this->assertEquals( 25, has_action( 'admin_init', array( $this->settings, 'setting_fields' ) ) );
+		$this->assertEquals( 30, has_action( 'admin_init', array( $this->settings, 'setting_init' ) ) );
+	}
+
+	/**
+	 * Function to test the setting is set up with proper classes.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_setting_setups() {
+
+		$this->settings->setting_setups();
+
+		$this->assertInstanceOf( '\NineCodes\WPSettings\Settings', $this->settings->settings );
+		$this->assertInstanceOf( '\NineCodes\SocialManager\Validation', $this->settings->validate );
+		$this->assertInstanceOf( '\NineCodes\SocialManager\Fields', $this->settings->fields );
+		$this->assertInstanceOf( '\NineCodes\SocialManager\Helps', $this->settings->helps );
 	}
 }

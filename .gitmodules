@@ -1,12 +1,12 @@
-[submodule "admin/partials/butterbean-extend"]
-	path = admin/partials/butterbean-extend
-	url = https://tfirdaus@github.com/tfirdaus/butterbean-extend.git
-[submodule "admin/partials/pepperplane"]
-	path = admin/partials/pepperplane
-	url = https://tfirdaus@github.com/tfirdaus/pepperplane.git
-[submodule "admin/partials/butterbean"]
-	path = admin/partials/butterbean
-	url = https://tfirdaus@github.com/justintadlock/butterbean
 [submodule "dev-lib"]
 	path = dev-lib
 	url = https://tfirdaus@github.com/xwp/wp-dev-lib
+[submodule "includes/bb-metabox"]
+	path = includes/bb-metabox
+	url = https://tfirdaus@github.com/justintadlock/butterbean
+[submodule "includes/bb-metabox-extend"]
+	path = includes/bb-metabox-extend
+	url = https://tfirdaus@github.com/tfirdaus/butterbean-extend
+[submodule "includes/wp-settings"]
+	path = includes/wp-settings
+	url = https://tfirdaus@bitbucket.org/ninecodes/wp-settings

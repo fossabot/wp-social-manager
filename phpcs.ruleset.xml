@@ -13,7 +13,7 @@
 	<!-- Allow the use of camelCase variable name since the plugin is employing DOMDocument object. -->
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
 		<properties>
-            <property name="customPropertiesWhitelist" value="parentNode" type="array"/>
+            <property name="customVariablesWhitelist" value="parentNode" type="array"/>
         </properties>
 	</rule>
 	<!-- <link:>https://github.com/squizlabs/PHP_CodeSniffer/issues/870</link:> -->

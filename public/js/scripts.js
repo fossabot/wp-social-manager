@@ -12,6 +12,11 @@
 		target = event.currentTarget;
 		source = target.getAttribute( 'href' );
 
+		if ( 0 === source.indexOf( 'mailto:' ) ) {
+			window.location.href = source;
+			return;
+		}
+
 		if ( ! source || '' !== source ) {
 			windowPopup( source );
 			return;
@@ -32,7 +37,7 @@
 
 			width = 560,
 			height = 430,
-			divide = 430,
+			divide = 2,
 
 			left = screenWidth / divide - width / divide + screenLeft,
 			top = screenHeight / divide - height / divide + screenTop,

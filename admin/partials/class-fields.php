@@ -4,6 +4,8 @@
  *
  * @package SocialManager
  * @subpackage Admin\Fields
+ *
+ * TODO: Merge these custom fields to WPSettings.
  */
 
 namespace NineCodes\SocialManager;
@@ -12,14 +14,14 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use \PepperPlaneFields;
+use \NineCodes\WPSettings;
 
 /**
  * The Fields class is used for registering the new setting field using PepperPlane.
  *
  * @since 1.0.0
  */
-final class Fields extends PepperPlaneFields {
+final class Fields extends WPSettings\Fields {
 
 	/**
 	 * The admin screen base / ID
@@ -40,9 +42,8 @@ final class Fields extends PepperPlaneFields {
 	 *
 	 * @param string $screen The admin screen base / ID.
 	 */
-	public function __construct( $screen ) {
-
-		if ( is_string( $screen ) && ! empty( $screen ) ) {
+	public function __construct( $screen = '' ) {
+		if ( ! empty( $screen ) ) {
 			$this->screen = $screen;
 			$this->hooks();
 		}
@@ -59,8 +60,7 @@ final class Fields extends PepperPlaneFields {
 	protected function hooks() {
 
 		// Actions.
-		add_action( "{$this->screen}_add_extra_field", array( $this, 'callback_image' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( "{$this->screen}_extra_field", array( $this, 'callback_image' ) );
 
 		// Filters.
 		add_filter( "{$this->screen}_field_scripts", array( $this, 'register_field_files' ) );
@@ -116,16 +116,4 @@ final class Fields extends PepperPlaneFields {
             </div>';
 		echo $html; // // WPCS: XSS ok. ?>
 	<?php }
-
-	/**
-	 * Enqueues all scripts, styles, settings, and templates necessary to use all media JavaScript APIs.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function enqueue_scripts() {
-		wp_enqueue_media();
-	}
 }

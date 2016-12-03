@@ -19,71 +19,16 @@ use \DOMDocument;
  *
  * @since 1.0.0
  */
-abstract class Buttons {
+abstract class Buttons extends Endpoints {
 
 	/**
-	 * The Plugin class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Plugin
-	 */
-	protected $plugin;
-
-	/**
-	 * The Metas class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Metas
-	 */
-	protected $metas;
-
-	/**
-	 * The Endpoints class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Endpoints
-	 */
-	protected $endpoints;
-
-	/**
-	 * The ThemeSupports class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var ThemeSupports
-	 */
-	protected $theme_supports;
-
-	/**
-	 * The WordPress post ID.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var integer
-	 */
-	protected $post_id;
-
-	/**
-	 * The plugin unique identifier.
+	 * The button attribute prefix.
 	 *
 	 * @since 1.0.0
 	 * @access protected
 	 * @var string
 	 */
-	protected $plugin_slug;
-
-	/**
-	 * The plugin option name.
-	 * Sometimes used for meta key.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $option_slug;
+	protected $prefix;
 
 	/**
 	 * The button mode, 'json' or 'html'.
@@ -100,53 +45,13 @@ abstract class Buttons {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param Endpoints $endpoints The Endpoints class instance.
+	 * @param ViewPublic $public The ViewPublic class instance.
 	 */
-	function __construct( Endpoints $endpoints ) {
+	function __construct( ViewPublic $public ) {
+		parent::__construct( $public );
 
-		$this->endpoints = $endpoints;
-
-		$this->metas = $endpoints->metas;
-		$this->plugin = $endpoints->plugin;
-
-		$this->plugin_slug = $endpoints->plugin->get_slug();
-		$this->option_slug = $endpoints->plugin->get_opts();
-		$this->theme_supports = $endpoints->plugin->get_theme_supports();
-
-		$this->hooks();
-	}
-
-	/**
-	 * Run Filters and Actions required.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return void
-	 */
-	protected function hooks() {
-
-		add_action( 'wp_head', array( $this, 'setups' ), -30 );
-		add_action( 'wp_footer', array( $this, 'buttons_tmpl' ), -30 );
-	}
-
-	/**
-	 * Setup the buttons.
-	 *
-	 * The setups may involve running some Classes, Functions,
-	 * and sometimes WordPress Hooks that are required to render
-	 * the social buttons.
-	 *
-	 * Get the current WordPress post ID.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return void
-	 */
-	public function setups() {
-
-		$this->post_id = get_the_id();
+		$this->prefix = $this->get_buttons_attr_prefix();
+		$this->mode = $this->get_buttons_mode();
 	}
 
 	/**
@@ -262,18 +167,15 @@ abstract class Buttons {
 	 */
 	protected function get_buttons_mode() {
 
-		if ( null !== $this->mode && in_array( $this->mode, array( 'html', 'json' ), true ) ) {
-			return $this->mode;
-		}
-
+		$theme_supports = $this->plugin->get_theme_supports();
 		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
 
-		if ( 'json' === $this->theme_supports->is( 'buttons-mode' ) ||
+		if ( 'json' === $theme_supports->is( 'buttons-mode' ) ||
 			 'json' === $buttons_mode ) {
 			return 'json';
 		}
 
-		if ( 'html' === $this->theme_supports->is( 'buttons-mode' ) ||
+		if ( 'html' === $theme_supports->is( 'buttons-mode' ) ||
 			 'html' === $buttons_mode ) {
 			return 'html';
 		}
@@ -287,7 +189,7 @@ abstract class Buttons {
 	 *
 	 * @return string The attribute prefix.
 	 */
-	protected function get_button_attr_prefix() {
+	protected function get_buttons_attr_prefix() {
 		return Helpers::get_attr_prefix();
 	}
 

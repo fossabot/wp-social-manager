@@ -12,6 +12,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
+use \WP_REST_Request;
 use \WP_REST_Server;
 use \WP_REST_Response;
 
@@ -20,7 +21,7 @@ use \WP_REST_Response;
  *
  * @since 1.0.0
  */
-class APIRoutes {
+class APIRoutes extends Endpoints {
 
 	/**
 	 * The API version number.
@@ -29,16 +30,7 @@ class APIRoutes {
 	 * @access protected
 	 * @var string
 	 */
-	protected $api_version = '1.0';
-
-	/**
-	 * The unique identifier of the route.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $plugin_slug;
+	protected $api_version = 'v1';
 
 	/**
 	 * The API unique namespace.
@@ -55,18 +47,13 @@ class APIRoutes {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param Endpoints $endpoints The Endpoints class instance.
+	 * @param ViewPublic $public The ViewPublic class instance.
 	 */
-	function __construct( Endpoints $endpoints ) {
+	public function __construct( ViewPublic $public ) {
+		parent::__construct( $public );
 
-		$this->endpoints = $endpoints;
-
-		$this->plugin = $endpoints->plugin;
-		$this->plugin_slug = $endpoints->plugin->get_slug();
-		$this->version = $endpoints->plugin->get_version();
-		$this->theme_supports = $endpoints->plugin->get_theme_supports();
-
-		$this->namespace = $this->plugin_slug . '/' . $this->api_version;
+		$this->version = $public->plugin->get_version();
+		$this->namespace = 'ninecodes/' . $this->api_version;
 
 		$this->hooks();
 	}
@@ -79,7 +66,7 @@ class APIRoutes {
 	 *
 	 * @return void
 	 */
-	protected function hooks() {
+	public function hooks() {
 
 		add_filter( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'localize_scripts' ) );
@@ -123,7 +110,7 @@ class APIRoutes {
 			$args['id'] = absint( $post_id );
 		}
 
-		wp_localize_script( $this->plugin_slug . '-app', 'nineCodesSocialManager', $args );
+		wp_localize_script( $this->plugin_slug . '-app', 'nineCodesSocialManagerAPI', $args );
 	}
 
 	/**
@@ -136,6 +123,12 @@ class APIRoutes {
 	 */
 	public function register_routes() {
 
+		register_rest_route( $this->namespace, '/social-manager', array( array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'response_plugin' ),
+			),
+		) );
+
 		/**
 		 * Register the '/buttons' route.
 		 *
@@ -146,13 +139,21 @@ class APIRoutes {
 		 *
 		 * @uses \WP_REST_Server
 		 */
-		register_rest_route( $this->namespace, '/buttons', array( array(
+		register_rest_route( $this->namespace, '/social-manager/buttons/(?P<id>[\d]+)', array( array(
 				'methods' => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'response_buttons' ),
 				'args' => array(
 					'id' => array(
-						'validate_callback' => function( $id ) {
-							return is_numeric( $id );
+						'sanitize_callback' => 'absint',
+						'validate_callback' => function( $param, $request, $key ) {
+							return is_numeric( $param );
+						},
+						// 'required' => true,
+					),
+					'select' => array(
+						'sanitize_callback' => 'sanitize_key',
+						'validate_callback' => function( $param, $request, $key ) {
+							return is_string( $param ) && ! empty( $param ) && in_array( $param, array( 'content', 'images' ), true );
 						},
 					),
 				),
@@ -161,40 +162,74 @@ class APIRoutes {
 	}
 
 	/**
-	 * Return the '/buttons' route response.
+	 * Return the '/social-manager' route response.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $request The passed parameters in the route.
-	 * @return WP_REST_Response A REST response object.
+	 * @param WP_REST_Request $request Data from the request.
+	 * @return WP_REST_Respon
 	 */
-	public function response_buttons( $request ) {
+	public function response_plugin( WP_REST_Request $request ) {
 
-		if ( isset( $request['id'] ) ) {
+		$response = array(
+			'plugin_name' => 'Social Manager by NineCodes',
+			'plugin_url' => 'http://wordpress.org/plugins/ninecodes-social-manager',
+			'version' => $this->version,
+			'contributors' => array(
+				'Thoriq Firdaus',
+				'Hongkiat Lim',
+			),
+		);
 
-			$button_id = absint( $request['id'] );
+		return new WP_REST_Response( $response, 200 );
+	}
 
-			$response = array(
-				'id' => $button_id,
-			);
+	/**
+	 * Return the '/social-manager/buttons' route response.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param WP_REST_Request $request The passed parameters in the route.
+	 * @return WP_REST_Response
+	 */
+	public function response_buttons( WP_REST_Request $request ) {
 
-			$response['content'] = $this->endpoints->get_content_endpoints( $button_id );
-			$response['images'] = $this->endpoints->get_image_endpoints( $button_id );
+		$button_id = $request['id'];
+		$response = array( 'id' => $button_id );
 
+		if ( isset( $request['select'] ) && ! empty( $request['select'] ) ) {
+
+			$select = $request['select'];
+
+			if ( 'content' === $select ) {
+				$response['content'] = $this->get_content_endpoints( $button_id );
+			}
+
+			if ( 'images' === $select ) {
+				$response['images'] = $this->get_image_endpoints( $button_id );
+			}
 		} else {
 
-			$response = array(
-				'plugin_name' => 'Social Manager by NineCodes',
-				'plugin_url' => 'http://wordpress.org/plugins/ninecodes-social-manager',
-				'version' => $this->version,
-				'contributors' => array(
-					'Thoriq Firdaus',
-					'Hongkiat Lim',
-				),
-			);
+			$response = array_merge( $response, array(
+				'content' => $this->get_content_endpoints( $button_id ),
+				'images' => $this->get_image_endpoints( $button_id ),
+			) );
 		}
 
 		return new WP_REST_Response( $response, 200 );
+	}
+
+	/**
+	 * Function ot get the plugin api namespace.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string The name space and the version.
+	 */
+	public function get_namespace() {
+		return $this->namespace;
 	}
 }

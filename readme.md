@@ -12,6 +12,24 @@ Optimize your website presence in social media.
 
 ## Description ##
 
+Social Manager by NineCodes optimize your website in social media with [Open Graph](http://ogp.me/) and [Twitter Cards](https://dev.twitter.com/cards/overview) meta tags to your posts and pages. These meta tags help social media, like Facebook and Twitter, to understand your content structure better as well as enable them to render the content on the [Feed](https://www.facebook.com/help/327131014036297/) nicely. This plugin allows you to customize the meta tags, so you have more control over your posts and pages presentation on these social media.
+
+Other features included in the plugin:
+### Social Buttons ###
+Display social buttons to allow your readers sharing your website posts and pages to Facebook, Twitter, Pinterest, LinkedIn, Reddit, etc. You can also display the social buttons on the images within the content.
+
+With the increasing trend on using WordPress as a [*headless* CMS](https://2016.sydney.wordcamp.org/session/using-wordpress-as-a-headless-cms/), this plugin also exposes a couple of custom **JSON API** routes using the [WP-API](http://v2.wp-api.org/) infrastructure in WordPress. The API allows developers to retrieve the social media sharing endpoint URLs of a particular post or page and render the sharing buttons in, for example, a JavaScript-based theme.
+
+### Social Profiles ###
+With this plugin you can add your social profile and page URLs and display them on a widget. No need to mess around with your theme Menu ever again; the widget will stay there even when you've changed the theme.
+
+### Hooks ###
+For developers, you can utilize the Action and Filter Hooks to customize the plugin. See the "Installation" tab for a few examples, and dig the source code for more.
+
+### Requirements ###
+- PHP 5.3 or above.
+- WordPress 4.5 or above.
+
 
 ## Installation ##
 
