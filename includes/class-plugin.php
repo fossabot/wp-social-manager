@@ -70,15 +70,6 @@ final class Plugin {
 	protected $options;
 
 	/**
-	 * An array of option retrieved from the 'wp_options' table.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var array
-	 */
-	protected $wp_options;
-
-	/**
 	 * The ThemeSupports class instance.
 	 *
 	 * @since 1.0.0
@@ -97,10 +88,37 @@ final class Plugin {
 	public $languages;
 
 	/**
-	 * Constructor.
+	 * The ViewAdmin class instance.
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 * @var ViewAdmin
+	 */
+	protected $admin;
+
+	/**
+	 * The ViewPublic class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var ViewPublic
+	 */
+	protected $public;
+
+	/**
+	 * The Widgets class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Widgets
+	 */
+	protected $widgets;
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 * @access protected
 	 *
 	 * @return void
 	 */
@@ -166,6 +184,15 @@ final class Plugin {
 		require_once( $this->path_dir . 'includes/class-options.php' );
 		require_once( $this->path_dir . 'includes/class-theme-supports.php' );
 
+		require_once( $this->path_dir . 'includes/wp-settings/wp-settings.php' );
+		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-fields.php' );
+		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-install.php' );
+
+		add_action( 'plugins_loaded', function() {
+			require_once( $this->path_dir . 'includes/bb-metabox/butterbean.php' );
+			require_once( $this->path_dir . 'includes/bb-metabox-extend/butterbean-extend.php' );
+		} );
+
 		require_once( $this->path_dir . 'admin/class-admin.php' );
 		require_once( $this->path_dir . 'public/class-public.php' );
 		require_once( $this->path_dir . 'widgets/class-widgets.php' );
@@ -194,10 +221,6 @@ final class Plugin {
 	 * @return void
 	 */
 	protected function setups() {
-
-		foreach ( $this->options as $key => $option_name ) {
-			$this->wp_options[ $key ] = get_option( $option_name );
-		}
 
 		$this->theme_supports = new ThemeSupports();
 		$this->languages = new Languages( $this->plugin_slug );
@@ -261,6 +284,42 @@ final class Plugin {
 	}
 
 	/**
+	 * Get the ViewAdmin instance.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return ViewAdmin instance.
+	 */
+	public function get_view_admin() {
+		return $this->admin;
+	}
+
+	/**
+	 * Get the ViewPublic instance.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return ViewPublic instance.
+	 */
+	public function get_view_public() {
+		return $this->public;
+	}
+
+	/**
+	 * Get the Widgets instance.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return Widgets instance.
+	 */
+	public function get_widgets() {
+		return $this->widgets;
+	}
+
+	/**
 	 * Get the options saved in the database `wp_options`.
 	 *
 	 * @since 1.0.0
@@ -278,10 +337,12 @@ final class Plugin {
 			return null;
 		}
 
+		$option = isset( $this->options[ $name ] ) ? get_option( $this->options[ $name ] ) : null;
+
 		if ( $name && $key ) {
-			return isset( $this->wp_options[ $name ][ $key ] ) ? $this->wp_options[ $name ][ $key ] : null;
+			return isset( $option[ $key ] ) ? $option[ $key ] : null;
 		}
 
-		return isset( $this->wp_options[ $name ] ) ? $this->wp_options[ $name ] : null;
+		return $option ? $option : null;
 	}
 }

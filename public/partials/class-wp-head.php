@@ -17,25 +17,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-final class WPHead {
-
-	/**
-	 * The Meta class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Meta
-	 */
-	protected $metas;
-
-	/**
-	 * The unique identifier or prefix for database names.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $option_slug;
+final class WPHead extends Metas {
 
 	/**
 	 * The current website language.
@@ -55,16 +37,27 @@ final class WPHead {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param Metas $metas The Metas class instance.
+	 * @param ViewPublic $public The ViewPublic class instance.
 	 */
-	function __construct( Metas $metas ) {
-
-		$this->metas = $metas;
-		$this->plugin = $metas->plugin;
-		$this->option_slug = $metas->plugin->get_opts();
+	function __construct( ViewPublic $public ) {
+		parent::__construct( $public );
 
 		$this->hooks();
-		$this->setups();
+	}
+
+	/**
+	 * Run Filters and Actions required.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return void
+	 */
+	protected function hooks() {
+
+		add_action( 'wp', array( $this, 'setups' ), -10 );
+		add_action( 'wp_head', array( $this, 'site_meta_tags' ), -10 );
+		add_action( 'wp_head', array( $this, 'post_meta_tags' ), -10 );
 	}
 
 	/**
@@ -79,22 +72,8 @@ final class WPHead {
 	 *
 	 * @return void
 	 */
-	protected function setups() {
+	public function setups() {
 		$this->locale = get_locale();
-	}
-
-	/**
-	 * Run Filters and Actions required.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return void
-	 */
-	protected function hooks() {
-
-		add_action( 'wp_head', array( $this, 'site_meta_tags' ), -10 );
-		add_action( 'wp_head', array( $this, 'post_meta_tags' ), -10 );
 	}
 
 	/**
@@ -110,16 +89,16 @@ final class WPHead {
 	 */
 	public function site_meta_tags() {
 
-		if ( is_singular() || is_attachment() || ! $this->metas->is_meta_enabled() ) {
+		if ( is_singular() || is_attachment() || ! $this->is_meta_enabled() ) {
 			return;
 		}
 
 		$tag_args = array(
-			'site_name' => $this->metas->get_site_name(),
-			'site_title' => $this->metas->get_site_title(),
-			'site_description' => $this->metas->get_site_description(),
-			'site_url' => $this->metas->get_site_url(),
-			'site_image' => $this->metas->get_site_image(),
+			'site_name' => $this->get_site_name(),
+			'site_title' => $this->get_site_title(),
+			'site_description' => $this->get_site_description(),
+			'site_url' => $this->get_site_url(),
+			'site_image' => $this->get_site_image(),
 		);
 
 		$og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'site', 'open-graph' ) );
@@ -149,19 +128,19 @@ final class WPHead {
 	 */
 	public function post_meta_tags() {
 
-		if ( ! is_singular() || is_attachment() || ! $this->metas->is_meta_enabled() ) {
+		if ( ! is_singular() || is_attachment() || ! $this->is_meta_enabled() ) {
 			return;
 		}
 
 		$post_id = absint( get_the_id() );
 
 		$tag_args = array(
-			'site_name' => $this->metas->get_site_name(),
-			'post_title' => $this->metas->get_post_title( $post_id ),
-			'post_description' => $this->metas->get_post_description( $post_id ),
-			'post_url' => $this->metas->get_post_url( $post_id ),
-			'post_image' => $this->metas->get_post_image( $post_id ),
-			'post_author' => $this->metas->get_post_author( $post_id ),
+			'site_name' => $this->get_site_name(),
+			'post_title' => $this->get_post_title( $post_id ),
+			'post_description' => $this->get_post_description( $post_id ),
+			'post_url' => $this->get_post_url( $post_id ),
+			'post_image' => $this->get_post_image( $post_id ),
+			'post_author' => $this->get_post_author( $post_id ),
 		);
 
 		$og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'open-graph' ) );

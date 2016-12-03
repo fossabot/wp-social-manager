@@ -19,7 +19,25 @@ use \DOMDocument;
  *
  * @since 1.0.0
  */
-final class Metas {
+class Metas {
+
+	/**
+	 * The Plugin class instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Plugin
+	 */
+	protected $plugin;
+
+	/**
+	 * The ID of this plugin.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $plugin_slug;
 
 	/**
 	 * The unique identifier or prefix for database names.
@@ -31,15 +49,6 @@ final class Metas {
 	protected $option_slug;
 
 	/**
-	 * The options required to render the meta data.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var null
-	 */
-	protected $options;
-
-	/**
 	 * Constructor.
 	 *
 	 * Run the WordPress Hooks, add meta tags in the 'head' tag.
@@ -47,12 +56,13 @@ final class Metas {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param Plugin $plugin The Plugin class instance.
+	 * @param ViewPublic $public The ViewPublic class instance.
 	 */
-	function __construct( Plugin $plugin ) {
+	function __construct( ViewPublic $public ) {
 
-		$this->plugin = $plugin;
-		$this->option_slug = $plugin->get_opts();
+		$this->plugin = $public->plugin;
+		$this->plugin_slug = $public->plugin->get_slug();
+		$this->option_slug = $public->plugin->get_opts();
 	}
 
 	/**
@@ -360,7 +370,7 @@ final class Metas {
 
 		$post = get_post( $post_id );
 
-		if ( $post ) {
+		if ( $post && ! empty( $post->post_content ) ) {
 
 			$content = $post->post_content;
 

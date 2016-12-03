@@ -44,6 +44,7 @@ composer.lock
 # Grunt #
 ######################
 /build/
+/ninecodes-social-manager/
 /node_modules/
 npm-debug.log
 

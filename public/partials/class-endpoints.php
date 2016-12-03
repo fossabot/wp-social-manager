@@ -21,50 +21,15 @@ use \DOMDocument;
  *
  * @since 1.0.0
  */
-class Endpoints {
-
-	/**
-	 * The unique identifier or prefix for database names.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	public $plugin;
-
-	/**
-	 * The Meta class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var null
-	 */
-	public $metas;
-
-	/**
-	 * Constructor.
-	 *
-	 * Run the WordPress Hooks, add meta tags in the 'head' tag.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param Plugin $plugin The Plugin class instance.
-	 * @param Metas  $metas The Meta class instance.
-	 */
-	function __construct( Plugin $plugin, Metas $metas ) {
-
-		$this->metas = $metas;
-		$this->plugin = $plugin;
-	}
+class Endpoints extends Metas {
 
 	/**
 	 * Get the buttons content endpoint urls.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
-	 * @param array $post_id The WordPress post ID.
+	 * @param integer $post_id The WordPress post ID.
 	 * @return array An array of sites with their label / name and button endpoint url.
 	 *
 	 * TODO add inline docs referring to each site endpoint documentation page.
@@ -74,22 +39,22 @@ class Endpoints {
 		$post_id = absint( $post_id );
 		$metas = $this->get_post_metas( $post_id );
 
+		$endpoints = array();
+
 		if ( ! $metas['post_url'] || ! $metas['post_title'] ) {
-			return;
+			return $endpoints;
 		}
 
-		$endpoints = array();
 		$includes = $this->plugin->get_option( 'buttons_content', 'includes' );
 		$buttons = Options::button_sites( 'content' );
 
 		foreach ( $buttons as $site => $label ) {
-			if ( ! in_array( $site, $includes, true ) ) {
+			if ( ! in_array( $site, (array) $includes, true ) ) {
 				unset( $buttons[ $site ] );
 			}
 		}
 
 		foreach ( $buttons as $slug => $label ) {
-
 			$endpoint = self::get_endpoint_base( 'content', $slug );
 
 			if ( ! $endpoint ) {
@@ -97,9 +62,7 @@ class Endpoints {
 			}
 
 			switch ( $slug ) {
-
-				case 'facebook' :
-
+				case 'facebook':
 					$endpoints[ $slug ] = add_query_arg(
 						array( 'u' => $metas['post_url'] ),
 						$endpoint
@@ -107,8 +70,7 @@ class Endpoints {
 
 					break;
 
-				case 'twitter' :
-
+				case 'twitter':
 					$profiles = $this->plugin->get_option( 'profiles', 'twitter' );
 
 					$args = array(
@@ -124,8 +86,7 @@ class Endpoints {
 
 					break;
 
-				case 'googleplus' :
-
+				case 'googleplus':
 					$endpoints[ $slug ] = add_query_arg(
 						array( 'url' => $metas['post_url'] ),
 						$endpoint
@@ -133,8 +94,7 @@ class Endpoints {
 
 					break;
 
-				case 'linkedin' :
-
+				case 'linkedin':
 					$endpoints[ $slug ] = add_query_arg(
 						array(
 							'mini' => true,
@@ -149,7 +109,6 @@ class Endpoints {
 					break;
 
 				case 'pinterest':
-
 					$endpoints[ $slug ] = add_query_arg(
 						array(
 							'url' => $metas['post_url'],
@@ -163,7 +122,6 @@ class Endpoints {
 					break;
 
 				case 'reddit':
-
 					$endpoints[ $slug ] = add_query_arg(
 						array(
 							'url' => $metas['post_url'],
@@ -175,7 +133,6 @@ class Endpoints {
 					break;
 
 				case 'email':
-
 					$endpoints[ $slug ] = add_query_arg(
 						array(
 							'subject' => $metas['post_title'],
@@ -187,7 +144,6 @@ class Endpoints {
 					break;
 
 				default:
-
 					$endpoints[ $slug ] = false;
 					break;
 			} // End switch().
@@ -220,7 +176,6 @@ class Endpoints {
 		$buttons = array();
 
 		foreach ( Options::button_sites( 'image' ) as $site => $label ) {
-
 			$endpoint = self::get_endpoint_base( 'image', $site );
 
 			if ( ! $endpoint ) {
@@ -252,12 +207,12 @@ class Endpoints {
 	 * @access protected
 	 *
 	 * @param array  $button {
-	 * 				The site button properties.
-	 * 				@type string $site 		 The button site unique key e.g. facebook, twitter, etc.
-	 * 				@type string $label 	 The button label or text.
-	 * 				@type string $endpoint 	 The site endpoint URL of the button.
-	 * 				@type string $post_url 	 The post URL.
-	 * 				@type string $post_title The post title.
+	 *              The site button properties.
+	 *              @type string $site       The button site unique key e.g. facebook, twitter, etc.
+	 *              @type string $label      The button label or text.
+	 *              @type string $endpoint   The site endpoint URL of the button.
+	 *              @type string $post_url   The post URL.
+	 *              @type string $post_title The post title.
 	 * }
 	 * @param string $src The image source URL.
 	 * @return array The button endpoint URL with the image src added.
@@ -272,7 +227,8 @@ class Endpoints {
 
 		$site = $button['site'];
 		$endpoints = array(
-			'pinterest' => add_query_arg( array(
+			'pinterest' => add_query_arg(
+				array(
 					'url' => $button['post_url'],
 					'description' => $button['post_title'],
 					'is_video' => false,
@@ -330,21 +286,23 @@ class Endpoints {
 	 */
 	protected function get_post_metas( $post_id ) {
 
+		$charset = get_bloginfo( 'charset' );
+
 		$post_id = absint( $post_id );
-		$post_title = $this->metas->get_post_title( $post_id );
-		$post_description = $this->metas->get_post_description( $post_id );
+		$post_title = $this->get_post_title( $post_id );
+		$post_description = $this->get_post_description( $post_id );
 
 		if ( 'shortlink' === $this->plugin->get_option( 'modes', 'link_mode' ) ) {
 			$post_url = wp_get_shortlink( $post_id );
 		} else {
-			$post_url = $this->metas->get_post_url( $post_id );
+			$post_url = $this->get_post_url( $post_id );
 		}
 
-		$post_image = $this->metas->get_post_image( $post_id );
+		$post_image = $this->get_post_image( $post_id );
 
 		return array(
-			'post_title' => rawurlencode( $post_title ),
-			'post_description' => rawurlencode( $post_description ),
+			'post_title' => rawurlencode( html_entity_decode( $post_title, ENT_COMPAT, 'UTF-8' ) ),
+			'post_description' => rawurlencode( html_entity_decode( $post_description, ENT_COMPAT, 'UTF-8' ) ),
 			'post_url' => rawurlencode( $post_url ),
 			'post_image' => isset( $post_image['src'] ) ? rawurlencode( $post_image['src'] ) : '',
 		);
@@ -378,5 +336,4 @@ class Endpoints {
 
 		return isset( $endpoints[ $of ][ $site ] ) ? $endpoints[ $of ][ $site ] : null;
 	}
-
 }

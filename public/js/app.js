@@ -1,45 +1,53 @@
-/*eslint no-unused-vars: ["error", { "vars": "local", "varsIgnorePattern": "^_" }]*/
-(function( $ ) {
+/*eslint no-unused-vars: ["error", { "vars": "local", "varsIgnorePattern": "^social" }]*/
+(function( window, $ ) {
 
 	'use strict';
 
-	var api,
-		target,
-		source,
-		SocialButton,
+	var socialButtonsContent,
+		socialButtonsImage,
+		socialButtonsModel,
 		$template,
-		$templateHTML,
-		_socialButtonsContent,
-		_socialButtonsImage;
+		$templateHTML;
 
-	if ( 'undefined' === typeof nineCodesSocialManager ) {
+	if ( _.isUndefined( window.nineCodesSocialManagerAPI ) ||
+		 _.isUndefined( window.nineCodesSocialManagerAPI.id ) ) {
 		return;
 	}
-
-	api = nineCodesSocialManager;
-
-	if ( _.isUndefined( api.id ) ) {
-		return;
-	}
-
-	SocialButton = {
-		Collection: {},
-		Model: {},
-		View: {}
-	};
 
 	_.templateSettings = {
 		interpolate: /\{\{(.+?)\}\}/g
 	};
 
-	SocialButton.Model = Backbone.Model.extend({
-		urlRoot: api.root + api.namespace + '/buttons',
+	window.nineCodesSocialManager = window.nineCodesSocialManagerAPI || {};
+
+	nineCodesSocialManager.app = nineCodesSocialManager.app || {};
+	nineCodesSocialManager.app.route = nineCodesSocialManager.root + nineCodesSocialManager.namespace;
+	nineCodesSocialManager.app.sync = function(method, model, options) {
+
+		_.extend(options, {
+			url: nineCodesSocialManager.app.route + '/social-manager/buttons/' + (_.isFunction(model.url) ? model.url() : model.url)
+		});
+
+		return Backbone.sync(method, model, options);
+	};
+
+	nineCodesSocialManager.Buttons = nineCodesSocialManager.Buttons || {};
+	nineCodesSocialManager.Buttons = {
+		Collection: {},
+		Model: {},
+		View: {}
+	};
+
+	nineCodesSocialManager.Buttons.Model = Backbone.Model.extend({
+		sync: nineCodesSocialManager.app.sync,
 		defaults: {
-			id: null
+			id: null,
+			content: {},
+			images: []
 		}
 	});
 
-	SocialButton.View = Backbone.View.extend({
+	nineCodesSocialManager.Buttons.View = Backbone.View.extend({
 
 		el: 'body',
 
@@ -68,8 +76,13 @@
 			event.preventDefault();
 			event.stopImmediatePropagation();
 
-			target = event.currentTarget;
-			source = target.getAttribute( 'href' );
+			var target = event.currentTarget,
+				source = target.getAttribute( 'href' );
+
+			if ( 0 === source.indexOf( 'mailto:' ) ) {
+				window.location.href = source;
+				return;
+			}
 
 			if ( ! source || '' !== source ) {
 				this.windowPopup( source );
@@ -92,8 +105,8 @@
 				height = 430,
 				divide = 2,
 
-				left =   screenWidth / divide  -  width / divide   + screenLeft,
-				top =   screenHeight / divide  -  height / divide   + screenTop,
+				left = screenWidth / divide  -  width / divide   + screenLeft,
+				top = screenHeight / divide  -  height / divide   + screenTop,
 
 				newWindow = wind.open( url, '', 'scrollbars=no,width=' + width + ',height=' + height + ',top=' + top + ',left=' + left );
 
@@ -103,7 +116,7 @@
 		}
 	});
 
-	SocialButton.View.Content = SocialButton.View.extend({
+	nineCodesSocialManager.Buttons.View.Content = nineCodesSocialManager.Buttons.View.extend({
 
 		template: '#tmpl-buttons-content',
 
@@ -111,20 +124,20 @@
 			'click [data-social-buttons="content"] a': 'buttonDialog'
 		},
 
-		render: function( model, resp, req ) {
+		render: function( model ) {
 
-			var response = model.toJSON();
+			var resp = model.toJSON();
 
-			$( '#' + api.attrPrefix + '-buttons-' + req.data.id )
+			$( '#' + nineCodesSocialManager.attrPrefix + '-buttons-' + resp.id )
 				.append( this.template({
-					data: response.content
+					data: resp.content
 				}) );
 
 			return this;
 		}
 	});
 
-	SocialButton.View.Images = SocialButton.View.extend({
+	nineCodesSocialManager.Buttons.View.Images = nineCodesSocialManager.Buttons.View.extend({
 
 		template: '#tmpl-buttons-image',
 
@@ -132,16 +145,15 @@
 			'click [data-social-buttons="image"] a': 'buttonDialog'
 		},
 
-		render: function( model, resp, req ) {
+		render: function( model ) {
 
 			var self = this,
-				response = model.toJSON(),
-
-				$images = $( '.' + api.attrPrefix + '-buttons--' + req.data.id );
+				resp = model.toJSON(),
+				$images = $( '.' + nineCodesSocialManager.attrPrefix + '-buttons--' + resp.id );
 
 			$images.each( function( index ) {
 				$( this ).append( self.template({
-					data: response.images[index]
+					data: resp.images[index]
 				}) );
 			});
 
@@ -149,19 +161,16 @@
 		}
 	});
 
-	SocialButton.Model = new SocialButton.Model();
-	SocialButton.Model.fetch({
-		data: {
-			id: api.id
-		}
+	socialButtonsModel = new nineCodesSocialManager.Buttons.Model();
+	socialButtonsModel.url = nineCodesSocialManager.id;
+	socialButtonsModel.fetch();
+
+	socialButtonsContent = new nineCodesSocialManager.Buttons.View.Content({
+		model: socialButtonsModel
 	});
 
-	_socialButtonsContent = new SocialButton.View.Content({
-		model: SocialButton.Model
+	socialButtonsImage = new nineCodesSocialManager.Buttons.View.Images({
+		model: socialButtonsModel
 	});
 
-	_socialButtonsImage = new SocialButton.View.Images({
-		model: SocialButton.Model
-	});
-
-})( jQuery );
+})(window, jQuery );

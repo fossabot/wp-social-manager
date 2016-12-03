@@ -112,31 +112,12 @@ final class Metabox {
 	 */
 	private function hooks() {
 
-		// Load `ButterBean` library.
-		add_action( 'plugins_loaded', array( $this, 'requires' ) );
-
 		// Register managers.
 		add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
 
 		// Register sections, settings, and controls.
 		add_action( 'butterbean_register', array( $this, 'register_section_buttons' ), -90, 2 );
 		add_action( 'butterbean_register', array( $this, 'register_section_meta' ), -90, 2 );
-	}
-
-	/**
-	 * Load dependencies.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return void
-	 */
-	public function requires() {
-
-		$this->path_dir = plugin_dir_path( __FILE__ );
-
-		require_once( $this->path_dir . 'butterbean/butterbean.php' );
-		require_once( $this->path_dir . 'butterbean-extend/butterbean-extend.php' );
 	}
 
 	/**

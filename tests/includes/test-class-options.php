@@ -107,6 +107,7 @@ class TestOptions extends WP_UnitTestCase {
 
 		$content = Options::button_sites( 'content' ); // Button content keys.
 
+		$this->assertEquals( 7, count( $content ) );
 		$this->assertArrayHasKey( 'facebook', $content );
 		$this->assertArrayHasKey( 'twitter', $content );
 		$this->assertArrayHasKey( 'googleplus', $content );
@@ -117,6 +118,7 @@ class TestOptions extends WP_UnitTestCase {
 
 		$image = Options::button_sites( 'image' ); // Button image keys.
 
+		$this->assertEquals( 1, count( $image ) );
 		$this->assertArrayHasKey( 'pinterest', $image );
 	}
 

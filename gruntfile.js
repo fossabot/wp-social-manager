@@ -190,8 +190,10 @@ module.exports = function(grunt) {
 				src: [
 					'*.php', // Include all files
 					'**/*.php', // Include all files
-					'!**/butterbean/**', // Exclude build/
-					'!**/pepperplane/**', // Exclude build/
+					'!includes/bb-metabox/**', // Exclude sub-modules/
+					'!includes/bb-metabox-extend/**', // Exclude sub-modules/
+					'!includes/wp-settings/**', // Exclude sub-modules/
+					'!<%= pkg.name %>/**', // Exclude build/
 					'!build/**', // Exclude build/
 					'!node_modules/**', // Exclude node_modules/
 					'!tests/**' // Exclude tests/
@@ -209,6 +211,7 @@ module.exports = function(grunt) {
 					'public/**',
 					'widgets/**',
 					'includes/**',
+					'languages/**',
 					'readme.txt',
 					'!**/*.map',
 					'!**/changelog.md',
@@ -225,19 +228,6 @@ module.exports = function(grunt) {
 		compress: {
 			build: {
 				options: {
-					archive: '<%= pkg.name %>.<%= pkg.version %>+<%= grunt.template.today("yymmddHHMM") %>.zip'
-				},
-				files: [{
-					expand: true,
-					cwd: './build/',
-					src: ['**'],
-
-					// When the .zip file is uncompressed (e.g. 'ninecodes-social-media').
-					dest: './<%= pkg.name %>-<%= pkg.version %>-<%= grunt.template.today("yymmddHHMM") %>/'
-				}, ]
-			},
-			release: {
-				options: {
 					archive: '<%= pkg.name %>.<%= pkg.version %>.zip'
 				},
 				files: [{
@@ -248,7 +238,7 @@ module.exports = function(grunt) {
 					// When the .zip file is uncompressed (e.g. 'ninecodes-social-media').
 					dest: './<%= pkg.name %>/'
 				}, ]
-			}
+			},
 		},
 
 		clean: {
@@ -301,13 +291,13 @@ module.exports = function(grunt) {
 	]);
 
 	// Register JavaScript specific tasks for "development" stage.
-	grunt.registerTask('javascript:dev', [
+	grunt.registerTask('scripts:dev', [
 		'eslint',
 		'uglify:dev'
 	]);
 
 	// Register JavaScript specific tasks for "build" stage.
-	grunt.registerTask('javascript:build', [
+	grunt.registerTask('scripts:build', [
 		'eslint',
 		'uglify:build'
 	]);
@@ -316,7 +306,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', [
 		'wordpress',
 		'styles:dev',
-		'javascript:dev'
+		'scripts:dev'
 	]);
 
 	// Build package.
@@ -324,7 +314,7 @@ module.exports = function(grunt) {
 		'clean:zip',
 		'wordpress',
 		'styles:build',
-		'javascript:build',
+		'scripts:build',
 		'copy',
 		'compress:build',
 		'clean:build'
