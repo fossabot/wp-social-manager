@@ -14,10 +14,6 @@
 		return;
 	}
 
-	_.templateSettings = {
-		interpolate: /\{\{(.+?)\}\}/g
-	};
-
 	window.nineCodesSocialManager = window.nineCodesSocialManagerAPI || {};
 
 	nineCodesSocialManager.app = nineCodesSocialManager.app || {};
@@ -67,7 +63,11 @@
 				return;
 			}
 
-			this.template = _.template( $templateHTML );
+			this.template = _.template( $templateHTML, {
+				evaluate:    /<#([\s\S]+?)#>/g,
+				interpolate: /\{\{\{([\s\S]+?)\}\}\}/g,
+				escape:      /\{\{([^\}]+?)\}\}(?!\})/g,
+			} );
 			this.listenTo( this.model, 'change:id', this.render );
 		},
 
@@ -131,7 +131,7 @@
 			$( '#' + nineCodesSocialManager.attrPrefix + '-buttons-' + resp.id )
 				.append( this.template({
 					data: resp.content
-				}) );
+				}));
 
 			return this;
 		}
@@ -154,7 +154,7 @@
 			$images.each( function( index ) {
 				$( this ).append( self.template({
 					data: resp.images[index]
-				}) );
+				}));
 			});
 
 			return this;
