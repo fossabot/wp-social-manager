@@ -115,6 +115,7 @@ final class ViewPublic {
 
 		require_once( $this->path_dir . 'partials/class-metas.php' );
 		require_once( $this->path_dir . 'partials/class-wp-head.php' );
+		require_once( $this->path_dir . 'partials/class-wp-footer.php' );
 		require_once( $this->path_dir . 'partials/class-endpoints.php' );
 		require_once( $this->path_dir . 'partials/class-api-routes.php' );
 		require_once( $this->path_dir . 'partials/class-buttons.php' );
@@ -151,6 +152,8 @@ final class ViewPublic {
 	public function setups() {
 
 		$this->wp_head = new WPHead( $this );
+		$this->wp_footer = new WPFooter( $this );
+
 		$this->buttons_content = new ButtonsContent( $this );
 		$this->buttons_image = new ButtonsImage( $this );
 		$this->routes = new APIRoutes( $this );
