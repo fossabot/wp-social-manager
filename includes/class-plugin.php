@@ -239,7 +239,11 @@ final class Plugin {
 	 * @return string The plugin version number.
 	 */
 	public function get_version() {
-		return $this->version;
+
+		/**
+		 * Filter useful to prepend query during development to flush cache.
+		 */
+		return apply_filters( 'ninecodes_social_manager_version', $this->version );
 	}
 
 	/**
