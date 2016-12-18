@@ -146,7 +146,7 @@ final class WPHead extends Metas {
 		$og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'open-graph' ) );
 		$tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'twitter-cards' ) );
 
-		echo "<!-- START: Social Manager by NineCodes -->\n";
+		echo "\n<!-- START: Social Meta Tags (Social Manager by NineCodes) -->\n";
 		echo wp_kses( "{$og}{$tc}", array(
 			'meta' => array(
 			'property' => array(),
@@ -154,7 +154,7 @@ final class WPHead extends Metas {
 			'name' => array(),
 			),
 		) );
-		echo "<!-- END: Social Manager by NineCodes -->\n";
+		echo "<!-- END: Social Meta Tags (Social Manager by NineCodes) -->\n\n";
 	}
 
 	/**
