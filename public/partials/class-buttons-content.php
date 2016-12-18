@@ -120,7 +120,6 @@ class ButtonsContent extends Buttons {
 		if ( $is_html || $is_json ) {
 
 			$opening_tag = "<div class='{$this->prefix}-buttons {$this->prefix}-buttons--content {$this->prefix}-buttons--content-{$this->placement}' id='{$this->prefix}-buttons-{$post_id}'>";
-
 			$button .= apply_filters( 'ninecodes_social_manager_buttons_html', $opening_tag,
 				'wrap-opening',
 				'button-content',
@@ -193,7 +192,11 @@ class ButtonsContent extends Buttons {
 				$list .= $this->button_view( $this->view, 'content', array(
 					'prefix' => $this->prefix,
 					'site' => $site,
-					'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-content' ),
+					'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, array(
+						'site' => $site,
+						'prefix' => $this->prefix,
+						'context' => 'button-content',
+					) ),
 					'label' => $label,
 					'endpoint' => $endpoint,
 				) );
@@ -220,33 +223,38 @@ class ButtonsContent extends Buttons {
 
 		<script type="text/html" id="tmpl-buttons-content">
 		<?php
-			$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
-			$heading = wp_kses( $heading, array() );
+
+		$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
+		$heading = wp_kses( $heading, array() );
 
 		if ( ! empty( $heading ) ) {
-			echo wp_kses( "<h4 class='{$this->prefix}-buttons__heading'>{$heading}</h4>", array( 'h4' => array( 'class' => true ) ) );
-		} ?>
-			<div class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-buttons="content">
 
-			<?php
+			echo wp_kses( "<h4 class='{$this->prefix}-buttons__heading'>{$heading}</h4>", array(
+				'h4' => array(
+					'class' => true,
+				),
+			) );
 
-			$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
+		} ?><div class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-buttons="content"><?php
 
-			foreach ( $includes as $site ) :
+			$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' ); foreach ( $includes as $site ) :
 
-				$label = $this->get_button_label( $site, 'content' );
-				$icon  = $this->get_button_icon( $site );
-				$list  = $this->button_view( $this->view, 'content', array(
-					'prefix' => $this->prefix,
+			$label = $this->get_button_label( $site, 'content' );
+			$icon  = $this->get_button_icon( $site );
+			$list  = $this->button_view( $this->view, 'content', array(
+				'prefix' => $this->prefix,
+				'site' => $site,
+				'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, array(
 					'site' => $site,
-					'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-content' ),
-					'label' => $label,
-					'endpoint' => "{{data.{$site}}}",
-				));
+					'prefix' => $this->prefix,
+					'context' => 'button-content',
+				) ),
+				'label' => $label,
+				'endpoint' => "{{ data.{$site} }}",
+			));
 
-				echo $list; // WPCS: XSS ok.
-				endforeach; ?>
-			</div>
+			echo $list; // WPCS: XSS ok.
+		endforeach; ?></div>
 		</script>
 		<?php endif;
 		endif;

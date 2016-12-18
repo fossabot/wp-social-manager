@@ -200,7 +200,11 @@ class ButtonsImage extends Buttons {
 				$list .= $this->button_view( $this->view, 'image', array(
 					'prefix' => $this->prefix,
 					'site' => $site,
-					'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-image' ),
+					'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, array(
+						'site' => $site,
+						'prefix' => $this->prefix,
+						'context' => 'button-image',
+					) ),
 					'label' => $label,
 					'endpoint' => $endpoint,
 				));
@@ -238,28 +242,31 @@ class ButtonsImage extends Buttons {
 	public function buttons_tmpl() {
 
 		if ( $this->is_buttons_image() && 'json' === $this->mode && wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
-
 			$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' );
 
-			if ( ! empty( $includes ) ) : ?>
-		<script type="text/html" id="tmpl-buttons-image">
-			<span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-buttons="image">
-			<?php foreach ( $includes as $site ) :
+			if ( ! empty( $includes ) ) : ?><script type="text/html" id="tmpl-buttons-image">
+		<span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-buttons="image"><?php
 
-				$label = $this->get_button_label( $site, 'image' );
-				$icon  = $this->get_button_icon( $site );
-				$list  = $this->button_view($this->view, 'image', array(
-					'prefix' => $this->prefix,
+		foreach ( $includes as $site ) :
+
+			$label = $this->get_button_label( $site, 'image' );
+			$icon  = $this->get_button_icon( $site );
+			$list  = $this->button_view($this->view, 'image', array(
+				'prefix' => $this->prefix,
+				'site' => $site,
+				'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, array(
 					'site' => $site,
-					'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, $site, 'button-image' ),
-					'label' => $label,
-					'endpoint' => "{{data.{$site}}}",
-				));
+					'prefix' => $this->prefix,
+					'context' => 'button-image',
+				) ),
+				'label' => $label,
+				'endpoint' => "{{ data.{$site} }}",
+			));
 
-				echo $list; // WPCS: XSS ok.
-			endforeach; ?>
-			</span>
+			echo $list; // WPCS: XSS ok.
+		endforeach; ?></span>
 		</script>
+
 		<?php endif;
 		endif;
 	}

@@ -50,7 +50,7 @@ abstract class Buttons extends Endpoints {
 	function __construct( ViewPublic $public ) {
 		parent::__construct( $public );
 
-		$this->prefix = $this->get_buttons_attr_prefix();
+		$this->prefix = $this->get_attr_prefix();
 		$this->mode = $this->get_buttons_mode();
 	}
 
@@ -116,6 +116,7 @@ abstract class Buttons extends Endpoints {
 		);
 		$allowed_html['path'] = array(
 			'd' => true,
+			'fill-rule' => true,
 		);
 		$allowed_html['use'] = array(
 			'xlink:href' => true,
@@ -189,7 +190,7 @@ abstract class Buttons extends Endpoints {
 	 *
 	 * @return string The attribute prefix.
 	 */
-	protected function get_buttons_attr_prefix() {
+	protected function get_attr_prefix() {
 		return Helpers::get_attr_prefix();
 	}
 
