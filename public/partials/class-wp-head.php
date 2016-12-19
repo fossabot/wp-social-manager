@@ -200,7 +200,7 @@ final class WPHead extends Metas {
 			$height = $args['site_image']['height'];
 
 			if ( $source && $width && $height ) {
-				$meta .= sprintf( "<meta property='og:image:url' content='%s' />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta property='og:image' content='%s' />\n", esc_attr( $source ) );
 				$meta .= sprintf( "<meta property='og:image:width' content='%s' />\n", esc_attr( $width ) );
 				$meta .= sprintf( "<meta property='og:image:height' content='%s' />\n", esc_attr( $height ) );
 			} elseif ( $source ) {
@@ -326,7 +326,7 @@ final class WPHead extends Metas {
 			$height = $args['post_image']['height'];
 
 			if ( $source && $width && $height ) {
-				$meta .= sprintf( "<meta property='og:image:url' content='%s' />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta property='og:image' content='%s' />\n", esc_attr( $source ) );
 				$meta .= sprintf( "<meta property='og:image:width' content='%s' />\n", esc_attr( $width ) );
 				$meta .= sprintf( "<meta property='og:image:height' content='%s' />\n", esc_attr( $height ) );
 			} elseif ( $source ) {
