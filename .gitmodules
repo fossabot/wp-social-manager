@@ -6,7 +6,7 @@
 	url = https://tfirdaus@github.com/justintadlock/butterbean
 [submodule "includes/bb-metabox-extend"]
 	path = includes/bb-metabox-extend
-	url = https://tfirdaus@github.com/tfirdaus/butterbean-extend
+	url = https://tfirdaus@github.com/ninecodes/bb-extend
 [submodule "includes/wp-settings"]
 	path = includes/wp-settings
 	url = https://tfirdaus@bitbucket.org/ninecodes/wp-settings
