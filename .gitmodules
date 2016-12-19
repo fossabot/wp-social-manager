@@ -9,4 +9,4 @@
 	url = https://tfirdaus@github.com/ninecodes/bb-extend
 [submodule "includes/wp-settings"]
 	path = includes/wp-settings
-	url = https://tfirdaus@bitbucket.org/ninecodes/wp-settings
+	url = https://tfirdaus@github.com/ninecodes/wp-settings
