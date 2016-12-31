@@ -8,10 +8,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "bitbucket:ninecodes/social-manager"
+    "url": "github:ninecodes/social-manager"
   },
   "keywords": [
-    "widget", "json", "wp-api", "social-media", "sharing", "facebook", "twitter", "pinterest", "open-graph", "twitter-cards"
+    "widget",
+    "json",
+    "wp-api",
+    "social-media",
+    "sharing",
+    "facebook",
+    "twitter",
+    "pinterest",
+    "open-graph",
+    "twitter-cards"
   ],
   "author": {
     "name": "NineCodes",
@@ -21,10 +30,7 @@
     "Thoriq Firdaus <tfirdaus@outlook.com>",
     "Hongkiat Lim <me@hongkiat.com>"
   ],
-  "license": {
-    "type": "GPL-2.0+",
-    "url": "http://www.gnu.org/licenses/gpl-2.0.html"
-  },
+  "license": "GPL-2.0",
   "homepage": "http://wordpress.org/plugins/ninecodes-social-manager",
   "devDependencies": {
     "eslint": "^3.9.1",
@@ -35,8 +41,10 @@
     "grunt-contrib-copy": "~1.0.0",
     "grunt-contrib-cssmin": "~1.0.1",
     "grunt-contrib-uglify": "~1.0.1",
+    "grunt-contrib-watch": "^1.0.0",
     "grunt-eslint": "^19.0.0",
     "grunt-rtlcss": "^2.0.1",
-    "grunt-shell": "~1.3.0"
+    "grunt-shell": "~1.3.0",
+    "grunt-wp-deploy": "^1.2.0"
   }
 }
