@@ -6,7 +6,7 @@ Optimize your website presence in social media.
 **Contributors:** [ninecodes](https://profiles.wordpress.org/ninecodes), [tfirdaus](https://profiles.wordpress.org/tfirdaus), [hongkiat](https://profiles.wordpress.org/hongkiat)  
 **Tags:** [widget](https://wordpress.org/plugins/tags/widget), [json](https://wordpress.org/plugins/tags/json), [wp-api](https://wordpress.org/plugins/tags/wp-api), [social-media](https://wordpress.org/plugins/tags/social-media), [sharing](https://wordpress.org/plugins/tags/sharing), [facebook](https://wordpress.org/plugins/tags/facebook), [twitter](https://wordpress.org/plugins/tags/twitter), [pinterest](https://wordpress.org/plugins/tags/pinterest), [open-graph](https://wordpress.org/plugins/tags/open-graph), [twitter-cards](https://wordpress.org/plugins/tags/twitter-cards)  
 **Requires at least:** 4.5  
-**Tested up to:** 4.6  
+**Tested up to:** 4.7  
 **Stable tag:** 1.0.1  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 
@@ -14,7 +14,7 @@ Optimize your website presence in social media.
 
 ## Description ##
 
-Social Manager by NineCodes optimize your website in social media with [Open Graph](http://ogp.me/) and [Twitter Cards](https://dev.twitter.com/cards/overview) meta tags to your posts and pages. These meta tags help social media, like Facebook and Twitter, to understand your content structure better as well as enable them to render the content on the [Feed](https://www.facebook.com/help/327131014036297/) nicely. This plugin allows you to customize the meta tags, so you have more control over your posts and pages presentation on these social media.
+Social Manager optimize your website in social media with [Open Graph](http://ogp.me/) and [Twitter Cards](https://dev.twitter.com/cards/overview) meta tags to your posts and pages. These meta tags help social media, like Facebook and Twitter, to understand your content structure better as well as enable them to render the content on the [News Feed](https://www.facebook.com/help/327131014036297/) nicely. This plugin allows you to customize the meta tags, so you have more control over your posts and pages presentation on these social media.
 
 Other features included in the plugin:
 ### Social Buttons ###
@@ -88,8 +88,8 @@ add_theme_support( 'ninecodes-social-manager', array(
 The plugin add prefix `ninecodes-social-manager` to (almost) any HTML elements it outputs at the front-end (your theme), for example:
 
 ```html
-<div class="ninecodes-social-manager-buttons ninecodes-social-manager-buttons--content ninecodes-social-manager-buttons--content-after" id="ninecodes-social-manager-buttons-1241"><div class="ninecodes-social-manager-buttons__list ninecodes-social-manager-buttons__list--icon" data-social-buttons="content">
-</div>
+&lt;div class=&quot;ninecodes-social-manager-buttons ninecodes-social-manager-buttons--content ninecodes-social-manager-buttons--content-after&quot; id=&quot;ninecodes-social-manager-buttons-1241&quot;&gt;&lt;div class=&quot;ninecodes-social-manager-buttons__list ninecodes-social-manager-buttons__list--icon&quot; data-social-buttons=&quot;content&quot;&gt;
+&lt;/div&gt;
 ```
 
 Don't like it? You can change this prefix to anything you prefer by adding the `attr-prefix`, for example:

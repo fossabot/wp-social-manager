@@ -2,7 +2,7 @@
 Contributors: ninecodes, tfirdaus, hongkiat
 Tags: widget, json, wp-api, social-media, sharing, facebook, twitter, pinterest, open-graph, twitter-cards
 Requires at least: 4.5
-Tested up to: 4.6
+Tested up to: 4.7
 Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -11,7 +11,7 @@ Optimize your website presence in social media.
 
 == Description ==
 
-Social Manager by NineCodes optimize your website in social media with [Open Graph](http://ogp.me/) and [Twitter Cards](https://dev.twitter.com/cards/overview) meta tags to your posts and pages. These meta tags help social media, like Facebook and Twitter, to understand your content structure better as well as enable them to render the content on the [Feed](https://www.facebook.com/help/327131014036297/) nicely. This plugin allows you to customize the meta tags, so you have more control over your posts and pages presentation on these social media.
+Social Manager optimize your website in social media with [Open Graph](http://ogp.me/) and [Twitter Cards](https://dev.twitter.com/cards/overview) meta tags to your posts and pages. These meta tags help social media, like Facebook and Twitter, to understand your content structure better as well as enable them to render the content on the [News Feed](https://www.facebook.com/help/327131014036297/) nicely. This plugin allows you to customize the meta tags, so you have more control over your posts and pages presentation on these social media.
 
 Other features included in the plugin:
 
@@ -87,8 +87,8 @@ Set the `stylesheet` to `false` will dequeue the plugin stylesheet. This allows 
 
 The plugin add prefix `ninecodes-social-manager` to (almost) any HTML elements it outputs at the front-end (your theme), for example:
 
-<pre lang="html"><div class="ninecodes-social-manager-buttons ninecodes-social-manager-buttons--content ninecodes-social-manager-buttons--content-after" id="ninecodes-social-manager-buttons-1241"><div class="ninecodes-social-manager-buttons__list ninecodes-social-manager-buttons__list--icon" data-social-buttons="content">
-</div></pre>
+<pre lang="html">&lt;div class=&quot;ninecodes-social-manager-buttons ninecodes-social-manager-buttons--content ninecodes-social-manager-buttons--content-after&quot; id=&quot;ninecodes-social-manager-buttons-1241&quot;&gt;&lt;div class=&quot;ninecodes-social-manager-buttons__list ninecodes-social-manager-buttons__list--icon&quot; data-social-buttons=&quot;content&quot;&gt;
+&lt;/div&gt;</pre>
 
 Don't like it? You can change this prefix to anything you prefer by adding the `attr-prefix`, for example:
 
