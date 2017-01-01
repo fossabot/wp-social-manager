@@ -2,7 +2,9 @@
 module.exports = function(grunt) {
 
 	'use strict';
-	var adminDirCSS = './admin/css/',
+	var stage = grunt.option('stage') || 'release',
+
+		adminDirCSS = './admin/css/',
 		adminDirJS = './admin/js/',
 		publicDirCSS = './public/css/',
 		publicDirJS = './public/js/',
@@ -76,9 +78,8 @@ module.exports = function(grunt) {
 
 		pkg: grunt.file.readJSON('package.json'),
 
-		// VVV (Varying Vagrant Vagrants) Paths.
-		vvv: {
-			'plugin': '/srv/www/wordpress-default/wp-content/plugins/<%= pkg.name %>'
+		config: {
+			plugin_path: '/srv/www/wordpress-default/wp-content/plugins/<%= pkg.name %>' // Plugins path in VVV.
 		},
 
 		// Shell actions.
@@ -87,10 +88,10 @@ module.exports = function(grunt) {
 				command: 'cd ./dev-lib && ./generate-markdown-readme' // Generate the readme.md
 			},
 			phpunit: {
-				command: 'vagrant ssh -c "cd <%= vvv.plugin %> && phpunit"'
+				command: 'vagrant ssh -c "cd <%= config.plugin_path %> && phpunit"'
 			},
-			trunk: {
-				command: 'open /tmp/<%= pkg.name %>/trunk'
+			tmp: {
+				command: 'open /tmp/<%= pkg.name %>'
 			}
 		},
 
@@ -124,7 +125,7 @@ module.exports = function(grunt) {
 			},
 			readme: {
 				files: ['readme.txt'],
-				tasks: ['readme'],
+				tasks: ['shell:readme'],
 				options: {
 					interrupt: true,
 				},
@@ -243,6 +244,28 @@ module.exports = function(grunt) {
 			}
 		},
 
+		'string-replace': {
+			version: {
+				files: {
+					'./readme.txt': './readme.txt',
+					'./<%= pkg.name %>.php': './<%= pkg.name %>.php',
+					'./includes/class-plugin.php': './includes/class-plugin.php'
+				},
+				options: {
+					replacements: [{
+						pattern: /\Stable tag: (.*)/g,
+						replacement: 'Stable tag: <%= pkg.version %>'
+					}, {
+						pattern: /\Version: (.*)/g,
+						replacement: 'Version: <%= pkg.version %>'
+					},{
+						pattern: /\protected \$version = (.*)/g,
+						replacement: 'protected $version = \'<%= pkg.version %>\';'
+					}]
+				}
+			}
+		},
+
 		// Build a deploy-able plugin.
 		copy: {
 			build: {
@@ -327,6 +350,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-checktextdomain');
 	grunt.loadNpmTasks('grunt-eslint');
 	grunt.loadNpmTasks('grunt-rtlcss');
+	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-wp-deploy');
 
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -335,49 +359,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-watch');
-
-	// Register task to compile "readme.txt" to "readme.md"
-	grunt.registerTask('readme', [
-		'shell:readme'
-	]);
-
-	// Register Grunt task to run PHPUnit in VVV.
-	grunt.registerTask('phpunit', [
-		'shell:phpunit'
-	]);
-
-	// Register WordPress specific tasks.
-	grunt.registerTask('wordpress', [
-		'readme',
-		'checktextdomain',
-		'phpunit'
-	]);
-
-	// Register stylesheet specific tasks in "development" stage.
-	grunt.registerTask('styles:dev', [
-		'rtlcss',
-		'cssmin:dev',
-		'cssmin:rtl'
-	]);
-
-	// Register stylesheet specific tasks for "build".
-	grunt.registerTask('styles:build', [
-		'rtlcss',
-		'cssmin:build',
-		'cssmin:rtl'
-	]);
-
-	// Register JavaScript specific tasks for "development" stage.
-	grunt.registerTask('scripts:dev', [
-		'eslint',
-		'uglify:dev'
-	]);
-
-	// Register JavaScript specific tasks for "build" stage.
-	grunt.registerTask('scripts:build', [
-		'eslint',
-		'uglify:build'
-	]);
 
 	// Register grunt default tasks.
 	grunt.registerTask('default', [
@@ -391,8 +372,8 @@ module.exports = function(grunt) {
 	grunt.registerTask('build', [
 		'clean:zip',
 		'wordpress',
-		'styles:build',
-		'scripts:build',
+		'styles:prod',
+		'scripts:prod',
 		'copy:build'
 	]);
 
@@ -403,27 +384,72 @@ module.exports = function(grunt) {
 		'clean:build'
 	]);
 
-	// Deploy trunk update to WordPress.org repository.
-	grunt.registerTask('deploy:assets', [
-		'build',
-		'shell:trunk',
-		'wp_deploy:assets',
-		'clean:build'
+	/**
+	 * ==================================================
+	 * Register Test specific tasks
+	 * ==================================================
+	 */
+	grunt.registerTask('test', [
+		'shell:phpunit'
 	]);
 
-	// Deploy trunk update to WordPress.org repository.
-	grunt.registerTask('deploy:trunk', [
-		'build',
-		'shell:trunk',
-		'wp_deploy:trunk',
-		'clean:build'
+	/**
+	 * ==================================================
+	 * Register JavaScript specific tasks
+	 * ==================================================
+	 */
+
+	// "Development" stage.
+	grunt.registerTask('styles:dev', [
+		'rtlcss',
+		'cssmin:dev',
+		'cssmin:rtl'
 	]);
 
-	// Deploy a new release to WordPress.org repository.
-	grunt.registerTask('deploy:release', [
+	// "Production" stage.
+	grunt.registerTask('styles:prod', [
+		'rtlcss',
+		'cssmin:build',
+		'cssmin:rtl'
+	]);
+
+	/**
+	 * ==================================================
+	 * Register JavaScript specific tasks
+	 * ==================================================
+	 */
+
+	// "Development" stage.
+	grunt.registerTask('scripts:dev', [
+		'eslint',
+		'uglify:dev'
+	]);
+
+	// "Production" stage.
+	grunt.registerTask('scripts:prod', [
+		'eslint',
+		'uglify:build'
+	]);
+
+	/**
+	 * ==================================================
+	 * Register WordPress specific tasks
+	 * ==================================================
+	 */
+
+	// Check and compile WordPress files.
+	grunt.registerTask('wordpress', [
+		'string-replace:version',
+		'shell:readme',
+		'shell:phpunit',
+		'checktextdomain'
+	]);
+
+	// Deploy to WordPress.org repository.
+	grunt.registerTask('deploy', [
 		'build',
-		'shell:trunk',
-		'wp_deploy:release',
+		'shell:tmp',
+		'wp_deploy:' + stage,
 		'clean:build'
 	]);
 };
