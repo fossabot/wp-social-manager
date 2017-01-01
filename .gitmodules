@@ -10,3 +10,6 @@
 [submodule "includes/wp-settings"]
 	path = includes/wp-settings
 	url = https://tfirdaus@github.com/ninecodes/wp-settings
+[submodule "includes/ogp"]
+	path = includes/ogp
+	url = https://tfirdaus@github.com/niallkennedy/open-graph-protocol-tools
