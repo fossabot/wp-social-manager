@@ -318,6 +318,7 @@ final class WPHead extends Metas {
 		$ogp->setLocale( get_locale() );
 		$ogp->setSiteName( $args['site_name'] );
 		$ogp->setTitle( $args['post_title'] );
+		$ogp->setURL( $args['post_url'] );
 		$ogp->setDescription( $args['post_description'] );
 
 		/**
