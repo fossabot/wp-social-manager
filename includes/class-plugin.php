@@ -188,6 +188,8 @@ final class Plugin {
 		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-fields.php' );
 		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-install.php' );
 
+		require_once( $this->path_dir . 'includes/ogp/open-graph-protocol.php' );
+
 		add_action( 'plugins_loaded', array( $this, 'butterbean' ) );
 
 		require_once( $this->path_dir . 'admin/class-admin.php' );
