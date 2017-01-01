@@ -49,7 +49,7 @@ final class Plugin {
 	 * @access protected
 	 * @var string
 	 */
-	protected $version = '1.0.2';
+	protected $version = '1.0.3';
 
 	/**
 	 * The path directory relative to the current file.
@@ -187,6 +187,8 @@ final class Plugin {
 		require_once( $this->path_dir . 'includes/wp-settings/wp-settings.php' );
 		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-fields.php' );
 		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-install.php' );
+
+		require_once( $this->path_dir . 'includes/ogp/open-graph-protocol.php' );
 
 		add_action( 'plugins_loaded', array( $this, 'butterbean' ) );
 
