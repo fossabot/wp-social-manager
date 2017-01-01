@@ -12,6 +12,10 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
+use \OpenGraphProtocol;
+use \OpenGraphProtocolImage;
+use \OpenGraphProtocolArticle;
+
 /**
  * The class to generate social meta tags within the 'head' tag of the website.
  *
@@ -104,7 +108,7 @@ final class WPHead extends Metas {
 		$og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'site', 'open-graph' ) );
 		$tc = $this->site_twitter_cards( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'site', 'twitter-cards' ) );
 
-		echo "<!-- START: Social Manager by NineCodes -->\n";
+		echo "\n<!-- START: Social Manager by NineCodes -->\n";
 		echo wp_kses( "{$og}{$tc}", array(
 			'meta' => array(
 			'property' => array(),
@@ -112,7 +116,7 @@ final class WPHead extends Metas {
 			'name' => array(),
 			),
 		) );
-		echo "<!-- END: Social Manager by NineCodes -->\n";
+		echo "<!-- END: Social Manager by NineCodes -->\n\n";
 	}
 
 	/**
@@ -188,35 +192,27 @@ final class WPHead extends Metas {
 			'site_image' => array(),
 		) );
 
-		$meta .= $args['site_name'] ? sprintf( "<meta property='og:site_name' content='%s' />\n", esc_attr( $args['site_name'] ) ) : '';
-		$meta .= $args['site_title'] ? sprintf( "<meta property='og:title' content='%s' />\n", esc_attr( $args['site_title'] ) ) : '';
-		$meta .= $args['site_description'] ? sprintf( "<meta property='og:description' content='%s' />\n", esc_attr( $args['site_description'] ) ) : '';
-		$meta .= $args['site_url'] ? sprintf( "<meta property='og:url' content='%s' />\n", esc_url( $args['site_url'] ) ) : '';
+		$ogp = new OpenGraphProtocol();
+
+		$ogp->setType( 'website' );
+		$ogp->setLocale( get_locale() );
+		$ogp->setURL( $args['site_url'] );
+		$ogp->setSiteName( $args['site_name'] );
+		$ogp->setTitle( $args['site_title'] );
+		$ogp->setDescription( $args['site_description'] );
 
 		if ( ! empty( $args['site_image'] ) ) {
 
-			$source = $args['site_image']['src'];
-			$width  = $args['site_image']['width'];
-			$height = $args['site_image']['height'];
+			$image = new OpenGraphProtocolImage();
 
-			if ( $source && $width && $height ) {
-				$meta .= sprintf( "<meta property='og:image' content='%s' />\n", esc_attr( $source ) );
-				$meta .= sprintf( "<meta property='og:image:width' content='%s' />\n", esc_attr( $width ) );
-				$meta .= sprintf( "<meta property='og:image:height' content='%s' />\n", esc_attr( $height ) );
-			} elseif ( $source ) {
-				$meta .= sprintf( "<meta property='og:image' content='%s' />\n", esc_attr( $source ) );
-			}
+			$image->setURL( $args['site_image']['src'] );
+			$image->setWidth( $args['site_image']['width'] );
+			$image->setHeight( $args['site_image']['height'] );
+
+			$ogp->addImage( $image );
 		}
 
-		if ( ! empty( $meta ) ) {
-
-			$type = "<meta property='og:type' content='website' />\n";
-			$locale = sprintf( "<meta property='og:locale' content='%s' />\n", esc_attr( $this->locale ) );
-
-			$meta = $type . $locale . $meta;
-		}
-
-		return $meta;
+		return $ogp->toHTML() . "\n";
 	}
 
 	/**
@@ -250,16 +246,16 @@ final class WPHead extends Metas {
 			'site_image' => array(),
 		) );
 
-		$meta .= $args['site_title'] ? sprintf( "<meta name='twitter:title' content='%s' />\n", esc_attr( $args['site_title'] ) ) : '';
-		$meta .= $args['site_description'] ? sprintf( "<meta name='twitter:description' content='%s' />\n", esc_attr( $args['site_description'] ) ) : '';
-		$meta .= $args['site_url'] ? sprintf( "<meta name='twitter:url' content='%s' />\n", esc_url( $args['site_url'] ) ) : '';
+		$meta .= $args['site_title'] ? sprintf( "<meta name=\"twitter:title\" content=\"%s\" />\n", esc_attr( $args['site_title'] ) ) : '';
+		$meta .= $args['site_description'] ? sprintf( "<meta name=\"twitter:description\" content=\"%s\" />\n", esc_attr( $args['site_description'] ) ) : '';
+		$meta .= $args['site_url'] ? sprintf( "<meta name=\"twitter:url\" content=\"%s\" />\n", esc_url( $args['site_url'] ) ) : '';
 
 		if ( ! empty( $meta ) ) {
 
 			$twitter = $this->plugin->get_option( 'profiles', 'twitter' );
 
-			$site = $twitter ? sprintf( "<meta name='twitter:site' content='@%s' />\n", esc_attr( $twitter ) ) : '';
-			$type = "<meta name='twitter:card' content='summary' />\n";
+			$site = $twitter ? sprintf( "<meta name=\"twitter:site\" content=\"@%s\" />\n", esc_attr( $twitter ) ) : '';
+			$type = "<meta name=\"twitter:card\" content=\"summary\" />\n";
 			$meta = $site . $type . $meta;
 		}
 
@@ -271,12 +267,12 @@ final class WPHead extends Metas {
 
 			if ( $source && $width && $height ) {
 
-				$meta .= sprintf( "<meta name='twitter:image:src' content='%s' />\n", esc_attr( $source ) );
-				$meta .= sprintf( "<meta name='twitter:image:width' content='%s' />\n", esc_attr( $width ) );
-				$meta .= sprintf( "<meta name='twitter:image:height' content='%s' />\n", esc_attr( $height ) );
+				$meta .= sprintf( "<meta name=\"twitter:image:src\" content=\"%s\" />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta name=\"twitter:image:width\" content=\"%s\" />\n", esc_attr( $width ) );
+				$meta .= sprintf( "<meta name=\"twitter:image:height\" content=\"%s\" />\n", esc_attr( $height ) );
 			} elseif ( $source ) {
 
-				$meta .= sprintf( "<meta name='twitter:image' content='%s' />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta name=\"twitter:image\" content=\"%s\" />\n", esc_attr( $source ) );
 			}
 		}
 
@@ -315,38 +311,70 @@ final class WPHead extends Metas {
 			'post_author' => array(),
 		) );
 
-		$meta .= $args['post_title'] ? sprintf( "<meta property='og:title' content='%s' />\n", esc_attr( $args['post_title'] ) ) : '';
-		$meta .= $args['post_description'] ? sprintf( "<meta property='og:description' content='%s' />\n", esc_attr( $args['post_description'] ) ) : '';
-		$meta .= $args['post_url'] ? sprintf( "<meta property='og:url' content='%s' />\n", esc_url( $args['post_url'] ) ) : '';
+		$ogp = new OpenGraphProtocol();
+		$article = new OpenGraphProtocolArticle();
 
-		if ( ! empty( $args['post_image'] ) ) {
+		$ogp->setType( 'article' );
+		$ogp->setLocale( get_locale() );
+		$ogp->setSiteName( $args['site_name'] );
+		$ogp->setTitle( $args['post_title'] );
+		$ogp->setDescription( $args['post_description'] );
 
-			$source = $args['post_image']['src'];
-			$width  = $args['post_image']['width'];
-			$height = $args['post_image']['height'];
+		/**
+		 * The author data.
+		 *
+		 * @var array {
+		 * 		@type string $profiles The the user social media profiles username (facebook, twitter, etc.).
+		 * 		@type string $display_name The set display name.
+		 * }
+		 */
+		$author = (array) $args['post_author'];
 
-			if ( $source && $width && $height ) {
-				$meta .= sprintf( "<meta property='og:image' content='%s' />\n", esc_attr( $source ) );
-				$meta .= sprintf( "<meta property='og:image:width' content='%s' />\n", esc_attr( $width ) );
-				$meta .= sprintf( "<meta property='og:image:height' content='%s' />\n", esc_attr( $height ) );
-			} elseif ( $source ) {
-				$meta .= sprintf( "<meta property='og:image' content='%s' />\n", esc_attr( $source ) );
+		if ( ! empty( $author ) ) {
+
+			$property = Options::social_profiles( 'facebook' );
+			$property_url = isset( $property['url'] ) ? trailingslashit( esc_url( $property['url'] ) ) : '';
+
+			if ( isset( $author['profiles']['facebook'] ) && ! empty( $author['profiles']['facebook'] ) ) {
+				$article->addAuthor( "{$property_url}{$author['profiles']['facebook']}" );
+			} else {
+				$meta .= sprintf( "<meta name=\"author\" content=\"%s\" />\n", esc_attr( "{$author['display_name']}" ) );
 			}
 		}
 
-		if ( ! empty( $meta ) ) {
+		if ( ! empty( $args['post_image'] ) ) {
 
-			$type = "<meta property='og:type' content='article' />\n";
-			$locale = sprintf( "<meta property='og:locale' content='%s' />\n", esc_attr( $this->locale ) );
+			$image = new OpenGraphProtocolImage();
 
-			$meta = $type . $locale . $meta;
+			$image->setURL( $args['post_image']['src'] );
+			$image->setWidth( $args['post_image']['width'] );
+			$image->setHeight( $args['post_image']['height'] );
+
+			$ogp->addImage( $image );
 		}
 
-		$site = $args['site_name'] ? sprintf( "<meta property='og:site_name' content='%s' />\n", esc_attr( $args['site_name'] ) ) : '';
+		/**
+		 * Open Graph Core object.
+		 *
+		 * @var string
+		 */
+		$og = $ogp->toHTML() . "\n";
 
-		$graph = $this->post_facebook_graph( $args );
+		/**
+		 * Open Graph article object.
+		 *
+		 * @var string
+		 */
+		$og_article = $article->toHTML() ? $article->toHTML() . "\n" : '';
 
-		return $site . $meta . $graph;
+		/**
+		 * Facebook proprietary Open Graph meta tag.
+		 *
+		 * @var string
+		 */
+		$og_fb = $this->post_facebook_graph( $args );
+
+		return $og . $og_article . $og_fb . $meta;
 	}
 
 	/**
@@ -373,22 +401,18 @@ final class WPHead extends Metas {
 
 		$meta = '';
 
-		$props = Options::social_profiles( 'facebook' );
+		$property = Options::social_profiles( 'facebook' );
+		$property_url = isset( $property['url'] ) ? trailingslashit( esc_url( $property['url'] ) ) : '';
 
-		$url = isset( $props['url'] ) ? trailingslashit( esc_url( $props['url'] ) ) : '';
+		/**
+		 * Facebook username of the website (not the user) added in the Settings page.
+		 *
+		 * NOTE: The 'article:publisher' is Facebook proprietary meta tag; it does not specified in ogp.me.
+		 *
+		 * @var string
+		 */
 		$username = $this->plugin->get_option( 'profiles', 'facebook' );
-
-		$meta .= ($url && $username) ? sprintf( "<meta property='article:publisher' content='%s' />\n", esc_attr( "{$url}{$username}" ) ) : '';
-
-		$author = (array) $args['post_author'];
-
-		if ( ! empty( $author ) ) {
-			if ( isset( $author['profiles']['facebook'] ) && ! empty( $author['profiles']['facebook'] ) ) {
-				$meta .= sprintf( "<meta property='article:author' content='%s' />\n", esc_attr( "{$url}{$author['profiles']['facebook']}" ) );
-			} else {
-				$meta .= sprintf( "<meta name='author' content='%s' />\n", esc_attr( "{$author['display_name']}" ) );
-			}
-		}
+		$meta .= ($property_url && $username) ? sprintf( "<meta property=\"article:publisher\" content=\"%s\" />\n", esc_attr( "{$property_url}{$username}" ) ) : '';
 
 		return $meta;
 	}
@@ -423,9 +447,9 @@ final class WPHead extends Metas {
 			'post_author' => array(),
 		) );
 
-		$meta .= $args['post_title'] ? sprintf( "<meta name='twitter:title' content='%s' />\n", esc_attr( $args['post_title'] ) ) : '';
-		$meta .= $args['post_description'] ? sprintf( "<meta name='twitter:description' content='%s' />\n", esc_attr( $args['post_description'] ) ) : '';
-		$meta .= $args['post_url'] ? sprintf( "<meta name='twitter:url' content='%s' />\n", esc_url( $args['post_url'] ) ) : '';
+		$meta .= $args['post_title'] ? sprintf( "<meta name=\"twitter:title\" content=\"%s\" />\n", esc_attr( $args['post_title'] ) ) : '';
+		$meta .= $args['post_description'] ? sprintf( "<meta name=\"twitter:description\" content=\"%s\" />\n", esc_attr( $args['post_description'] ) ) : '';
+		$meta .= $args['post_url'] ? sprintf( "<meta name=\"twitter:url\" content=\"%s\" />\n", esc_url( $args['post_url'] ) ) : '';
 
 		if ( ! empty( $args['post_image'] ) ) {
 
@@ -435,12 +459,12 @@ final class WPHead extends Metas {
 
 			if ( $source && $width && $height ) {
 
-				$meta .= sprintf( "<meta name='twitter:image:src' content='%s' />\n", esc_attr( $source ) );
-				$meta .= sprintf( "<meta name='twitter:image:width' content='%s' />\n", esc_attr( $width ) );
-				$meta .= sprintf( "<meta name='twitter:image:height' content='%s' />\n", esc_attr( $height ) );
+				$meta .= sprintf( "<meta name=\"twitter:image:src\" content=\"%s\" />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta name=\"twitter:image:width\" content=\"%s\" />\n", esc_attr( $width ) );
+				$meta .= sprintf( "<meta name=\"twitter:image:height\" content=\"%s\" />\n", esc_attr( $height ) );
 			} elseif ( $source ) {
 
-				$meta .= sprintf( "<meta name='twitter:image' content='%s' />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta name=\"twitter:image\" content=\"%s\" />\n", esc_attr( $source ) );
 			}
 		}
 
@@ -448,15 +472,15 @@ final class WPHead extends Metas {
 
 			$twitter = $this->plugin->get_option( 'profiles', 'twitter' );
 
-			$site = $twitter ? sprintf( "<meta name='twitter:site' content='@%s' />\n", esc_attr( $twitter ) ) : '';
-			$type = "<meta name='twitter:card' content='summary_large_image' />\n";
+			$site = $twitter ? sprintf( "<meta name=\"twitter:site\" content=\"@%s\" />\n", esc_attr( $twitter ) ) : '';
+			$type = "<meta name=\"twitter:card\" content=\"summary_large_image\" />\n";
 			$meta = $site . $type . $meta;
 		}
 
 		$author = (array) $args['post_author'];
 
 		if ( isset( $author['profiles']['twitter'] ) && ! empty( $author['profiles']['twitter'] ) ) {
-			$meta .= sprintf( "<meta name='twitter:creator' content='@%s' />\n", esc_attr( "{$author['profiles']['twitter']}" ) );
+			$meta .= sprintf( "<meta name=\"twitter:creator\" content=\"@%s\" />\n", esc_attr( "{$author['profiles']['twitter']}" ) );
 		}
 
 		return $meta;
