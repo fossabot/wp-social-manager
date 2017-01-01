@@ -2,9 +2,13 @@
   "name": "ninecodes-social-manager",
   "title": "Social Manager by NineCodes",
   "version": "1.0.2",
+  "wordpress": {
+    "requires_at_least": "4.5",
+    "tested_up_to": "4.7"
+  },
   "description": "Optimize your website presence in social media.",
   "scripts": {
-    "version": "grunt string-replace:version --verbose",
+    "version": "grunt version --verbose",
     "deploy:trunk": "grunt deploy --stage=trunk",
     "deploy:assets": "grunt deploy --stage=assets",
     "deploy": "grunt deploy --stage=release"
