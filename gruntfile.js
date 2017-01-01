@@ -118,6 +118,13 @@ module.exports = function(grunt) {
 				options: {
 					interrupt: true,
 				},
+			},
+			readme: {
+				files: ['readme.txt'],
+				tasks: ['readme'],
+				options: {
+					interrupt: true,
+				},
 			}
 		},
 

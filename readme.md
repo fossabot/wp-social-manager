@@ -7,7 +7,7 @@ Optimize your website presence in social media.
 **Tags:** [widget](https://wordpress.org/plugins/tags/widget), [json](https://wordpress.org/plugins/tags/json), [wp-api](https://wordpress.org/plugins/tags/wp-api), [social-media](https://wordpress.org/plugins/tags/social-media), [sharing](https://wordpress.org/plugins/tags/sharing), [facebook](https://wordpress.org/plugins/tags/facebook), [twitter](https://wordpress.org/plugins/tags/twitter), [pinterest](https://wordpress.org/plugins/tags/pinterest), [open-graph](https://wordpress.org/plugins/tags/open-graph), [twitter-cards](https://wordpress.org/plugins/tags/twitter-cards)  
 **Requires at least:** 4.5  
 **Tested up to:** 4.6  
-**Stable tag:** 1.0.0  
+**Stable tag:** 1.0.1  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 
 [![Build Status](https://travis-ci.org/ninecodes/social-manager.svg?branch=master)](https://travis-ci.org/ninecodes/social-manager) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com) 
@@ -28,9 +28,13 @@ With this plugin you can add your social profile and page URLs and display them 
 ### Hooks ###
 For developers, you can utilize the Action and Filter Hooks to customize the plugin. See the "Installation" tab for a few examples, and dig the source code for more.
 
+### Translations ###
+- English
+- Indonesia
+
 ### Requirements ###
-- PHP 5.3 or above.
-- WordPress 4.5 or above.
+- PHP 5.3 or above
+- WordPress 4.5 or above
 
 
 ## Installation ##
@@ -64,7 +68,7 @@ Then, login to your server *with the credentials given by your hosting provider*
 ### Once Activated: ###
 1. This plugin adds a new setting page named **Social** under the **Settings** menu in the WordPress admin screen. You can customize the output made by the plugin through this page.
 2. This plugin also adds some extra fields in the user profile edit screen (`/wp-admin/profile.php`).
-2. This plugin registers a custom route at `ninecodes-social-manager/1.0/buttons`.
+2. This plugin registers a custom route at `/ninecodes/v1/social-manager/buttons`.
 
 ### For Theme Developers: ###
 If you are a Theme developer, you can add `add_theme_support( 'ninecodes-social-manager' )` in `functions.php` of your theme themes to customize the plugin at Theme level. The following are the "features" that we currently support.
@@ -73,7 +77,7 @@ If you are a Theme developer, you can add `add_theme_support( 'ninecodes-social-
 
 Set the `stylesheet` to `false` will dequeue the plugin stylesheet. This allows you to customize the the plugin output through your theme stylesheet to match your theme design as a whole without having to do an override.
 
-```
+```php
 add_theme_support( 'ninecodes-social-manager', array(
 	'stylesheet' => false,
 ) );
@@ -83,14 +87,14 @@ add_theme_support( 'ninecodes-social-manager', array(
 
 The plugin add prefix `ninecodes-social-manager` to (almost) any HTML elements it outputs at the front-end (your theme), for example:
 
-```
+```html
 <div class="ninecodes-social-manager-buttons ninecodes-social-manager-buttons--content ninecodes-social-manager-buttons--content-after" id="ninecodes-social-manager-buttons-1241"><div class="ninecodes-social-manager-buttons__list ninecodes-social-manager-buttons__list--icon" data-social-buttons="content">
 </div>
 ```
 
 Don't like it? You can change this prefix to anything you prefer by adding the `attr-prefix`, for example:
 
-```
+```php
 add_theme_support( 'ninecodes-social-manager', array(
 	'attr-prefix' => 'social',
 ) );
@@ -102,7 +106,7 @@ Keep in mind setting the prefix to other than 'ninecodes-social-manager' will al
 
 The plugin offers 2 modes, `HTML` and `JSON`, to generate, what called as the **Social Buttons**; the buttons that allow your site users to share content on social media. By default the mode is set to `HTML`, which will *echo* all the HTML markup in the post content. But, if you are building a [*headless* WordPress theme](https://pantheon.io/decoupled-cms) using whatever JavaScript renders (Backbone, Angular, React, Vue, Ember, you name it), you might want to switch the plugin to the `JSON` mode.
 
-```
+```php
 add_theme_support( 'ninecodes-social-manager', array(
 	'buttons-mode' => 'json',
 ) );
@@ -113,13 +117,27 @@ add_theme_support( 'ninecodes-social-manager', array(
 
 None, at the moment. Please ask. :)
 
+## Screenshots ##
+
+
 ## Changelog ##
+
+### 1.0.1 ###
+* Added: screenshot images.
+* Fixed: code block formatting in the `readme.txt`.
+* Fixed: endpoint address stated in the "Installation" section of `readme.txt`.
+* Fixed: the use of `$this` keyword in the metabox required files path.
+* Changed: the JavaScript function to compile Underscore template.
+* Changed: call Backbone Model `.fetch()` method after the Views are already instantiated.
 
 ### 1.0.0 ###
 * Initial release.
 
 
 ## Upgrade Notice ##
+
+### 1.0.1 ###
+* Added screenshot images, fixed a number of bugs and error formatting in `readme.txt` file, and a few improvements in the JavaScript.
 
 ### 1.0.0 ###
 * Initial release.

@@ -49,7 +49,7 @@ final class Plugin {
 	 * @access protected
 	 * @var string
 	 */
-	protected $version = '1.0.0';
+	protected $version = '1.0.1';
 
 	/**
 	 * The path directory relative to the current file.
@@ -188,14 +188,25 @@ final class Plugin {
 		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-fields.php' );
 		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-install.php' );
 
-		add_action( 'plugins_loaded', function() {
-			require_once( $this->path_dir . 'includes/bb-metabox/butterbean.php' );
-			require_once( $this->path_dir . 'includes/bb-metabox-extend/butterbean-extend.php' );
-		} );
+		add_action( 'plugins_loaded', array( $this, 'butterbean' ) );
 
 		require_once( $this->path_dir . 'admin/class-admin.php' );
 		require_once( $this->path_dir . 'public/class-public.php' );
 		require_once( $this->path_dir . 'widgets/class-widgets.php' );
+	}
+
+	/**
+	 * Load the Butterbean
+	 *
+	 * @since 1.0.1
+	 * @access protected
+	 *
+	 * @return void
+	 */
+	public function butterbean() {
+
+		require_once( $this->path_dir . 'includes/bb-metabox/butterbean.php' );
+		require_once( $this->path_dir . 'includes/bb-metabox-extend/butterbean-extend.php' );
 	}
 
 	/**
