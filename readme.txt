@@ -123,26 +123,37 @@ None, at the moment. Please ask. :)
 
 == Changelog ==
 
-= 1.0.2 =
-* Changed: namespacing Backbone application
-* Changed: remove `edit_user_profile_update` duplicate action
-* Changed: set dependency of the `preview-profile.js` to just `backbone`. The `backbone` will also enqueue `jquery` and `underscore`.
-* Changed: Feed to News Feed (Facebook)
-* Changed: Update "Tested up to" to 4.7.
-* Changed: Transform HTML markup in `readme.txt` to its entity (also fixed wp.org render HTML code block issue).
+= [1.0.3] - 2017-2-1 =
+* __Added__: [Open Graph Protocol Tools](https://github.com/niallkennedy/open-graph-protocol-tools) library files.
+* __Changed__: use Open Graph Protocol Tools methods to generate Open Graph meta tags for validation and standardization.
+* __Changed__: use double quotes instead of single quote to wrap up Twitter Cards meta tags value following meta tags generated through [Open Graph Protocol Tools](https://github.com/niallkennedy/open-graph-protocol-tools).
+* __Changed__: shorten the plugin name (drop "by NineCodes").
 
-= 1.0.1 =
-* Added: screenshot images.
-* Fixed: code block formatting in the `readme.txt`.
-* Fixed: endpoint address stated in the "Installation" section of `readme.txt`.
-* Fixed: the use of `$this` keyword in the metabox required files path.
-* Changed: the JavaScript function to compile Underscore template.
-* Changed: call Backbone Model `.fetch()` method after the Views are already instantiated.
+
+= [1.0.2] - 2017-1-1 =
+* __Changed__: namespacing Backbone application
+* __Changed__: set dependency of the `preview-profile.js` to just `backbone`. The `backbone` will also enqueue `jquery` and `underscore`.
+* __Changed__: feed to News Feed (Facebook)
+* __Changed__: update "Tested up to" to 4.7.
+* __Changed__: transform HTML markup in `readme.txt` to its entity (also fixed wp.org render HTML code block issue).
+* __Removed__: remove `edit_user_profile_update` duplicate action
+
+
+= [1.0.1] - 2017-1-1 =
+* __Added__: screenshot images.
+* __Fixed__: code block formatting in the `readme.txt`.
+* __Fixed__: endpoint address stated in the "Installation" section of `readme.txt`.
+* __Fixed__: the use of `$this` keyword in the metabox required files path.
+* __Changed__: the JavaScript function to compile Underscore template.
+* __Changed__: call Backbone Model `.fetch()` method after the Views are already instantiated.
 
 = 1.0.0 =
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+* A few Minor changes in the generated meta tags.
 
 = 1.0.2 =
 * A few minor bug fixes, tweaks in Backbone application, and fixed `readme.txt` formatting issue.
