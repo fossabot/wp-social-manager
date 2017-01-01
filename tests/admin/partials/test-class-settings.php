@@ -31,6 +31,8 @@ class TestSettings extends WP_UnitTestCase {
 
 		parent::setUp();
 
+		require_once realpath( dirname( __FILE__ ) . '/../../..' ) . '/ninecodes-social-manager.php';
+
 		$this->plugin = new Plugin();
 		$this->settings = new Settings( $this->plugin );
 	}
