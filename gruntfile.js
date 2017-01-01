@@ -261,6 +261,12 @@ module.exports = function(grunt) {
 					},{
 						pattern: /\protected \$version = (.*)/g,
 						replacement: 'protected $version = \'<%= pkg.version %>\';'
+					}, {
+						pattern: /\Requires at least: (.*)/g,
+						replacement: 'Requires at least: <%= pkg.wordpress.requires_at_least %>'
+					}, {
+						pattern: /\Tested up to: (.*)/g,
+						replacement: 'Tested up to: <%= pkg.wordpress.tested_up_to %>'
 					}]
 				}
 			}
@@ -439,10 +445,16 @@ module.exports = function(grunt) {
 
 	// Check and compile WordPress files.
 	grunt.registerTask('wordpress', [
-		'string-replace:version',
+		'version',
 		'shell:readme',
 		'shell:phpunit',
 		'checktextdomain'
+	]);
+
+	// Check and compile WordPress files.
+	grunt.registerTask('version', [
+		'string-replace:version',
+		'shell:readme'
 	]);
 
 	// Deploy to WordPress.org repository.
