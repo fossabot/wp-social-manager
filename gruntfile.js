@@ -88,6 +88,9 @@ module.exports = function(grunt) {
 			},
 			phpunit: {
 				command: 'vagrant ssh -c "cd <%= vvv.plugin %> && phpunit"'
+			},
+			trunk: {
+				command: 'open /tmp/<%= pkg.name %>/trunk'
 			}
 		},
 
@@ -288,11 +291,32 @@ module.exports = function(grunt) {
 
 		// Deploys a build directory to the WordPress SVN repo.
 		wp_deploy: {
-			deploy: {
+			release: {
 				options: {
 					plugin_slug: '<%= pkg.name %>',
 					build_dir: 'build',
 					assets_dir: 'wp-assets'
+				}
+			},
+
+			// Only commit the assets directory.
+			assets: {
+				options: {
+					plugin_slug: '<%= pkg.name %>',
+					build_dir: 'build',
+					assets_dir: 'wp-assets',
+					deploy_trunk: false
+
+				}
+			},
+
+			// Only deploy to trunk (e.g. when only updating the 'Tested up to' value and not deploying a release).
+			trunk: {
+				options: {
+					plugin_slug: '<%= pkg.name %>',
+					build_dir: 'build',
+					assets_dir: 'wp-assets',
+					deploy_tag: false
 				}
 			}
 		}
@@ -379,10 +403,27 @@ module.exports = function(grunt) {
 		'clean:build'
 	]);
 
-	// Deploy plugin to WordPress.org repository.
-	grunt.registerTask('deploy', [
+	// Deploy trunk update to WordPress.org repository.
+	grunt.registerTask('deploy:assets', [
 		'build',
-		'wp_deploy',
+		'shell:trunk',
+		'wp_deploy:assets',
+		'clean:build'
+	]);
+
+	// Deploy trunk update to WordPress.org repository.
+	grunt.registerTask('deploy:trunk', [
+		'build',
+		'shell:trunk',
+		'wp_deploy:trunk',
+		'clean:build'
+	]);
+
+	// Deploy a new release to WordPress.org repository.
+	grunt.registerTask('deploy:release', [
+		'build',
+		'shell:trunk',
+		'wp_deploy:release',
 		'clean:build'
 	]);
 };
