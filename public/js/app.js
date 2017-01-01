@@ -3,12 +3,21 @@
 
 	'use strict';
 
-	var socialButtonsContent,
+	var tmplButtonContent,
+		tmplButtonImage,
+		socialButtonsContent,
 		socialButtonsImage,
 		socialButtonsModel;
 
 	if (_.isUndefined(window.nineCodesSocialManagerAPI) ||
 		_.isUndefined(window.nineCodesSocialManagerAPI.id)) {
+		return;
+	}
+
+	tmplButtonContent = document.getElementById( 'tmpl-buttons-content' );
+	tmplButtonImage = document.getElementById( 'tmpl-buttons-image' );
+
+	if ( ! tmplButtonContent && ! tmplButtonImage ) {
 		return;
 	}
 
@@ -122,6 +131,8 @@
 
 			var resp = model.toJSON();
 
+			console.log(this.template);
+
 			$('#' + nineCodesSocialManager.attrPrefix + '-buttons-' + resp.id)
 				.append(this.template(resp.content));
 
@@ -154,13 +165,17 @@
 	socialButtonsModel = new nineCodesSocialManager.Buttons.Model();
 	socialButtonsModel.url = nineCodesSocialManager.id;
 
-	socialButtonsContent = new nineCodesSocialManager.Buttons.View.Content({
-		model: socialButtonsModel
-	});
+	if ( tmplButtonContent ) {
+		socialButtonsContent = new nineCodesSocialManager.Buttons.View.Content({
+			model: socialButtonsModel
+		});
+	}
 
-	socialButtonsImage = new nineCodesSocialManager.Buttons.View.Images({
-		model: socialButtonsModel
-	});
+	if ( tmplButtonImage ) {
+		socialButtonsImage = new nineCodesSocialManager.Buttons.View.Images({
+			model: socialButtonsModel
+		});
+	}
 
 	socialButtonsModel.fetch();
 
