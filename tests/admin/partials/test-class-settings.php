@@ -29,6 +29,8 @@ class TestSettings extends WP_UnitTestCase {
 	 */
 	public function setUp() {
 
+		parent::setUp();
+
 		$this->plugin = new Plugin();
 		$this->settings = new Settings( $this->plugin );
 	}
