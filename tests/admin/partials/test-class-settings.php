@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestPlugin
+ * Class TestSettings
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -31,9 +31,9 @@ class TestSettings extends WP_UnitTestCase {
 
 		parent::setUp();
 
-		require_once realpath( dirname( __FILE__ ) . '/../../..' ) . '/ninecodes-social-manager.php';
-
 		$this->plugin = new Plugin();
+		$this->plugin_slug = $this->plugin->get_slug();
+
 		$this->settings = new Settings( $this->plugin );
 	}
 

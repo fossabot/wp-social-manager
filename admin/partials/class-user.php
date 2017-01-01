@@ -94,7 +94,6 @@ final class User {
 		add_action( 'edit_user_profile', array( $this, 'add_social_profiles' ), -30 );
 		add_action( 'personal_options_update', array( $this, 'save_social_profiles' ), -30 );
 		add_action( 'edit_user_profile_update', array( $this, 'save_social_profiles' ), -30 );
-		add_action( 'edit_user_profile_update', array( $this, 'save_social_profiles' ), -30 );
 	}
 
 	/**
@@ -198,6 +197,6 @@ final class User {
 	 */
 	public function enqueue_scripts() {
 		$file = 'preview-profile';
-		wp_enqueue_script( "{$this->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+		wp_enqueue_script( "{$this->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.min.js", array( 'backbone' ), $this->version, true );
 	}
 }
