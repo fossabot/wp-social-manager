@@ -131,7 +131,7 @@
 
 	nineCodesSocialManager.Buttons.View.Images = nineCodesSocialManager.Buttons.View.extend({
 
-		template: nineCodesSocialManager.app.tmpl('buttons-content'),
+		template: nineCodesSocialManager.app.tmpl('buttons-image'),
 
 		events: {
 			'click [data-social-buttons="image"] a': 'buttonDialog'
