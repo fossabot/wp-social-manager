@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestPlugin
+ * Class TestValidation
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
