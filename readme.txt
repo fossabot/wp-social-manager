@@ -125,6 +125,7 @@ None, at the moment. Please ask. :)
 * Added: screenshot images.
 * Fixed: code block formatting in the `readme.txt`.
 * Fixed: endpoint address stated in the "Installation" section of `readme.txt`.
+* Fixed: the use of `$this` keyword in the metabox required files path.
 * Changed: the JavaScript function to compile Underscore template.
 * Changed: call Backbone Model `.fetch()` method after the Views are already instantiated.
 
@@ -134,7 +135,7 @@ None, at the moment. Please ask. :)
 == Upgrade Notice ==
 
 = 1.0.1 =
-* Added screenshot images, fixed error formatting in `readme.txt` file, and a few improvements in the JavaScript.
+* Added screenshot images, fixed a number of bugs and error formatting in `readme.txt` file, and a few improvements in the JavaScript.
 
 = 1.0.0 =
 * Initial release.
