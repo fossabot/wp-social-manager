@@ -203,7 +203,7 @@ final class Plugin {
 	 *
 	 * @return void
 	 */
-	public function buttterbean() {
+	public function butterbean() {
 
 		require_once( $this->path_dir . 'includes/bb-metabox/butterbean.php' );
 		require_once( $this->path_dir . 'includes/bb-metabox-extend/butterbean-extend.php' );
