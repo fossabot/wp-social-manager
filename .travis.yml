@@ -8,13 +8,7 @@ php:
     - 5.3
     - 7.0
 
-branches:
-  only:
-    - master
-    - develop
-
 env:
-    - WP_VERSION=4.5 WP_MULTISITE=0
     - WP_VERSION=trunk WP_MULTISITE=0
     - WP_VERSION=latest WP_MULTISITE=0
 
