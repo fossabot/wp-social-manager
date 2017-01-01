@@ -1,6 +1,6 @@
 {
   "name": "ninecodes-social-manager",
-  "title": "Social Manager by NineCodes",
+  "title": "Social Manager",
   "version": "1.0.2",
   "wordpress": {
     "requires_at_least": "4.5",

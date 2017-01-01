@@ -1,4 +1,4 @@
-=== Social Manager by NineCodes ===
+=== Social Manager ===
 Contributors: ninecodes, tfirdaus, hongkiat
 Tags: widget, json, wp-api, social-media, sharing, facebook, twitter, pinterest, open-graph, twitter-cards
 Requires at least: 4.5
@@ -33,8 +33,8 @@ For developers, you can utilize the Action and Filter Hooks to customize the plu
 Translate this plugin to your language on [__translate.wordpress.org__](https://translate.wordpress.org/projects/wp-plugins/ninecodes-social-manager).
 
 = Requirements =
-- PHP 5.3 or above
-- WordPress 4.5 or above
+- PHP 5.3 or higher
+- WordPress 4.5 or higher
 
 == Installation ==
 

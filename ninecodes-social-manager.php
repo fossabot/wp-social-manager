@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Social Manager by NineCodes
+ * Plugin Name: Social Manager
  * Plugin URI: http://wordpress.org/plugins/ninecodes-social-manager
  * Description: Optimize your website presence in social media.
  * Version: 1.0.2
