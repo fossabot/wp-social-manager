@@ -66,6 +66,24 @@ class TestEndpoints extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Function to test Class methods availability.
+	 *
+	 * @since 1.0.4
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_methods() {
+
+		$this->assertTrue( method_exists( $this->endpoints, 'get_content_endpoints' ),  'Class does not have method \'get_content_endpoints\'' );
+		$this->assertTrue( method_exists( $this->endpoints, 'get_image_endpoints' ),  'Class does not have method \'get_image_endpoints\'' );
+		$this->assertTrue( method_exists( $this->endpoints, 'joint_image_endpoints' ),  'Class does not have method \'joint_image_endpoints\'' );
+		$this->assertTrue( method_exists( $this->endpoints, 'get_content_image_srcs' ),  'Class does not have method \'get_content_image_srcs\'' );
+		$this->assertTrue( method_exists( $this->endpoints, 'get_post_metas' ),  'Class does not have method \'get_post_metas\'' );
+		$this->assertTrue( method_exists( $this->endpoints, 'get_endpoint_base' ),  'Class does not have method \'get_endpoint_base\'' );
+	}
+
+	/**
 	 * Function to test 'get_content_endpoints()' function.
 	 *
 	 * @since 1.0.0
@@ -74,8 +92,6 @@ class TestEndpoints extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_get_content_endpoints() {
-
-		$this->assertTrue( method_exists( $this->endpoints, 'get_content_endpoints' ),  'Class does not have method \'get_content_endpoints\'' );
 
 		// Create a post.
 		$post_id = $this->factory->post->create();
@@ -122,8 +138,6 @@ class TestEndpoints extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_get_image_endpoints() {
-
-		$this->assertTrue( method_exists( $this->endpoints, 'get_image_endpoints' ),  'Class does not have method \'get_image_endpoints\'' );
 
 		$post_id = $this->factory->post->create( array(
 			'post_content' => 'This is an image <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150" width=350" height="150" >.',
