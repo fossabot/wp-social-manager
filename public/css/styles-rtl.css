@@ -200,6 +200,7 @@
 
 .ninecodes-social-manager-profiles__item-icon,
 .ninecodes-social-manager-buttons__item-icon {
+    display: block;
     width: 26px;
     height: 26px;
     margin: 0 0 0 6px;
@@ -240,14 +241,14 @@
     position: absolute;
     top: 8px;
     right: 8px;
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
 
 .ninecodes-social-manager-buttons--img .ninecodes-social-manager-buttons__item {
     margin-left: 0;
     background-color: #000;
     color: #fff;
-    padding: 6px 10px;
+    padding: 6px 8px;
     border-radius: 3px;
     margin-bottom: 0;
 }
@@ -274,9 +275,10 @@
 }
 
 .ninecodes-social-manager-buttons--img .ninecodes-social-manager-buttons__list--icon .ninecodes-social-manager-buttons__item {
-    width: 36px;
-    height: 36px;
-    padding: 6px;
+    width: 34px;
+    height: 34px;
+    padding: 4px;
+    display: block;
 }
 
 .ninecodes-social-manager-buttons--img .ninecodes-social-manager-buttons__list--text .ninecodes-social-manager-buttons__item {
