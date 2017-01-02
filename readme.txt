@@ -11,7 +11,7 @@ Optimize your website presence in social media.
 
 == Description ==
 
-Social Manager optimize your website in social media with [Open Graph](http://ogp.me/) and [Twitter Cards](https://dev.twitter.com/cards/overview) meta tags to your posts and pages. These meta tags help social media, like Facebook and Twitter, to understand your content structure better as well as enable them to render the content on the [News Feed](https://www.facebook.com/help/327131014036297/) nicely. This plugin allows you to customize the meta tags, so you have more control over your posts and pages presentation on these social media.
+Social Manager optimize your website in social media with [Open Graph](http://ogp.me/) and [Twitter Cards](https://dev.twitter.com/cards/overview) meta tags. These meta tags help social media, like Facebook and Twitter, to understand your content structure better as well as enable them to render the content on the [News Feed](https://www.facebook.com/help/327131014036297/) nicely. This plugin allows you to customize the meta tags, so you have more control over your posts and pages presentation on these social media.
 
 Other features included in the plugin:
 
@@ -87,12 +87,7 @@ Set the `stylesheet` to `false` will dequeue the plugin stylesheet. This allows 
 
 **Custom attribute prefix**
 
-The plugin add prefix `ninecodes-social-manager` to (almost) any HTML elements it outputs at the front-end (your theme), for example:
-
-<pre lang="html">&lt;div class=&quot;ninecodes-social-manager-buttons ninecodes-social-manager-buttons--content ninecodes-social-manager-buttons--content-after&quot; id=&quot;ninecodes-social-manager-buttons-1241&quot;&gt;&lt;div class=&quot;ninecodes-social-manager-buttons__list ninecodes-social-manager-buttons__list--icon&quot; data-social-buttons=&quot;content&quot;&gt;
-&lt;/div&gt;</pre>
-
-Don't like it? You can change this prefix to anything you prefer by adding the `attr-prefix`, for example:
+The plugin add prefix `ninecodes-social-manager` to (almost) any HTML elements it outputs at the front-end (your theme). If you don't like it, you can change this prefix to anything you prefer by adding the `attr-prefix`, for example:
 
 <pre lang="php">add_theme_support( 'ninecodes-social-manager', array(
 	'attr-prefix' => 'social',
@@ -123,23 +118,29 @@ None, at the moment. Please ask. :)
 
 == Changelog ==
 
-= [1.0.3] - 2017-2-1 =
+= [1.0.4] - 2017-1-08 =
+* __Changed__: render the icons before anything else, which should allow the icons to render ASAP without being blocked by slow JavaScript files.
+* __Changed__: remove enclosed slash for Twitter Cards meta tags.
+* __Fixed__: adjust the icon size and padding ensuring the icon is perfectly aligned to the center.
+
+
+= [1.0.3] - 2017-1-02 =
 * __Added__: [Open Graph Protocol Tools](https://github.com/niallkennedy/open-graph-protocol-tools) library files.
 * __Changed__: use Open Graph Protocol Tools methods to generate Open Graph meta tags for validation and standardization.
 * __Changed__: use double quotes instead of single quote to wrap up Twitter Cards meta tags value following meta tags generated through [Open Graph Protocol Tools](https://github.com/niallkennedy/open-graph-protocol-tools).
 * __Changed__: shorten the plugin name (drop "by NineCodes").
 
 
-= [1.0.2] - 2017-1-1 =
+= [1.0.2] - 2017-01-01 =
 * __Changed__: namespacing Backbone application
 * __Changed__: set dependency of the `preview-profile.js` to just `backbone`. The `backbone` will also enqueue `jquery` and `underscore`.
 * __Changed__: feed to News Feed (Facebook)
 * __Changed__: update "Tested up to" to 4.7.
 * __Changed__: transform HTML markup in `readme.txt` to its entity (also fixed wp.org render HTML code block issue).
-* __Removed__: remove `edit_user_profile_update` duplicate action
+* __Changed__: remove `edit_user_profile_update` duplicate action
 
 
-= [1.0.1] - 2017-1-1 =
+= [1.0.1] - 2017-01-01 =
 * __Added__: screenshot images.
 * __Fixed__: code block formatting in the `readme.txt`.
 * __Fixed__: endpoint address stated in the "Installation" section of `readme.txt`.
