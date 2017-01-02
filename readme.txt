@@ -3,7 +3,7 @@ Contributors: ninecodes, tfirdaus, hongkiat
 Tags: widget, json, wp-api, social-media, sharing, facebook, twitter, pinterest, open-graph, twitter-cards
 Requires at least: 4.5
 Tested up to: 4.7
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,7 +118,7 @@ None, at the moment. Please ask. :)
 
 == Changelog ==
 
-= [1.0.4] - 2017-1-08 =
+= [1.0.4] - 2017-1-03 =
 * __Changed__: render the icons before anything else, which should allow the icons to render ASAP without being blocked by slow JavaScript files.
 * __Changed__: remove enclosed slash for Twitter Cards meta tags.
 * __Fixed__: adjust the icon size and padding ensuring the icon is perfectly aligned to the center.

@@ -7,7 +7,7 @@ Optimize your website presence in social media.
 **Tags:** [widget](https://wordpress.org/plugins/tags/widget), [json](https://wordpress.org/plugins/tags/json), [wp-api](https://wordpress.org/plugins/tags/wp-api), [social-media](https://wordpress.org/plugins/tags/social-media), [sharing](https://wordpress.org/plugins/tags/sharing), [facebook](https://wordpress.org/plugins/tags/facebook), [twitter](https://wordpress.org/plugins/tags/twitter), [pinterest](https://wordpress.org/plugins/tags/pinterest), [open-graph](https://wordpress.org/plugins/tags/open-graph), [twitter-cards](https://wordpress.org/plugins/tags/twitter-cards)  
 **Requires at least:** 4.5  
 **Tested up to:** 4.7  
-**Stable tag:** 1.0.3  
+**Stable tag:** 1.0.4  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 
 [![Build Status](https://travis-ci.org/ninecodes/social-manager.svg?branch=master)](https://travis-ci.org/ninecodes/social-manager) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com) 
@@ -117,7 +117,7 @@ None, at the moment. Please ask. :)
 
 ## Changelog ##
 
-### [1.0.4] - 2017-1-08 ###
+### [1.0.4] - 2017-1-03 ###
 * __Changed__: render the icons before anything else, which should allow the icons to render ASAP without being blocked by slow JavaScript files.
 * __Changed__: remove enclosed slash for Twitter Cards meta tags.
 * __Fixed__: adjust the icon size and padding ensuring the icon is perfectly aligned to the center.
