@@ -54,7 +54,7 @@ final class WPFooter {
 	 */
 	protected function hooks() {
 
-		add_action( 'wp_footer', array( $this, 'icon_reference_svg' ), -30 );
+		add_action( 'wp_footer', array( $this, 'icon_reference_svg' ), -50 );
 	}
 
 	/**
