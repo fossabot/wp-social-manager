@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestPlugin
+ * Class TestEndpoints
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -14,7 +14,7 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * The class to test the "ThemeSupports" class instance.
+ * The class to test the "TestEndpoints" class instance.
  *
  * @since 1.0.0
  */
