@@ -246,16 +246,16 @@ final class WPHead extends Metas {
 			'site_image' => array(),
 		) );
 
-		$meta .= $args['site_title'] ? sprintf( "<meta name=\"twitter:title\" content=\"%s\" />\n", esc_attr( $args['site_title'] ) ) : '';
-		$meta .= $args['site_description'] ? sprintf( "<meta name=\"twitter:description\" content=\"%s\" />\n", esc_attr( $args['site_description'] ) ) : '';
-		$meta .= $args['site_url'] ? sprintf( "<meta name=\"twitter:url\" content=\"%s\" />\n", esc_url( $args['site_url'] ) ) : '';
+		$meta .= $args['site_title'] ? sprintf( "<meta name=\"twitter:title\" content=\"%s\">\n", esc_attr( $args['site_title'] ) ) : '';
+		$meta .= $args['site_description'] ? sprintf( "<meta name=\"twitter:description\" content=\"%s\">\n", esc_attr( $args['site_description'] ) ) : '';
+		$meta .= $args['site_url'] ? sprintf( "<meta name=\"twitter:url\" content=\"%s\">\n", esc_url( $args['site_url'] ) ) : '';
 
 		if ( ! empty( $meta ) ) {
 
 			$twitter = $this->plugin->get_option( 'profiles', 'twitter' );
 
-			$site = $twitter ? sprintf( "<meta name=\"twitter:site\" content=\"@%s\" />\n", esc_attr( $twitter ) ) : '';
-			$type = "<meta name=\"twitter:card\" content=\"summary\" />\n";
+			$site = $twitter ? sprintf( "<meta name=\"twitter:site\" content=\"@%s\">\n", esc_attr( $twitter ) ) : '';
+			$type = "<meta name=\"twitter:card\" content=\"summary\">\n";
 			$meta = $site . $type . $meta;
 		}
 
@@ -267,12 +267,12 @@ final class WPHead extends Metas {
 
 			if ( $source && $width && $height ) {
 
-				$meta .= sprintf( "<meta name=\"twitter:image:src\" content=\"%s\" />\n", esc_attr( $source ) );
-				$meta .= sprintf( "<meta name=\"twitter:image:width\" content=\"%s\" />\n", esc_attr( $width ) );
-				$meta .= sprintf( "<meta name=\"twitter:image:height\" content=\"%s\" />\n", esc_attr( $height ) );
+				$meta .= sprintf( "<meta name=\"twitter:image:src\" content=\"%s\">\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta name=\"twitter:image:width\" content=\"%s\">\n", esc_attr( $width ) );
+				$meta .= sprintf( "<meta name=\"twitter:image:height\" content=\"%s\">\n", esc_attr( $height ) );
 			} elseif ( $source ) {
 
-				$meta .= sprintf( "<meta name=\"twitter:image\" content=\"%s\" />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta name=\"twitter:image\" content=\"%s\">\n", esc_attr( $source ) );
 			}
 		}
 
@@ -339,7 +339,7 @@ final class WPHead extends Metas {
 			if ( isset( $author['profiles']['facebook'] ) && ! empty( $author['profiles']['facebook'] ) ) {
 				$article->addAuthor( "{$property_url}{$author['profiles']['facebook']}" );
 			} else {
-				$meta .= sprintf( "<meta name=\"author\" content=\"%s\" />\n", esc_attr( "{$author['display_name']}" ) );
+				$meta .= sprintf( "<meta name=\"author\" content=\"%s\">\n", esc_attr( "{$author['display_name']}" ) );
 			}
 		}
 
@@ -413,7 +413,7 @@ final class WPHead extends Metas {
 		 * @var string
 		 */
 		$username = $this->plugin->get_option( 'profiles', 'facebook' );
-		$meta .= ($property_url && $username) ? sprintf( "<meta property=\"article:publisher\" content=\"%s\" />\n", esc_attr( "{$property_url}{$username}" ) ) : '';
+		$meta .= ($property_url && $username) ? sprintf( "<meta property=\"article:publisher\" content=\"%s\">\n", esc_attr( "{$property_url}{$username}" ) ) : '';
 
 		return $meta;
 	}
@@ -448,9 +448,9 @@ final class WPHead extends Metas {
 			'post_author' => array(),
 		) );
 
-		$meta .= $args['post_title'] ? sprintf( "<meta name=\"twitter:title\" content=\"%s\" />\n", esc_attr( $args['post_title'] ) ) : '';
-		$meta .= $args['post_description'] ? sprintf( "<meta name=\"twitter:description\" content=\"%s\" />\n", esc_attr( $args['post_description'] ) ) : '';
-		$meta .= $args['post_url'] ? sprintf( "<meta name=\"twitter:url\" content=\"%s\" />\n", esc_url( $args['post_url'] ) ) : '';
+		$meta .= $args['post_title'] ? sprintf( "<meta name=\"twitter:title\" content=\"%s\">\n", esc_attr( $args['post_title'] ) ) : '';
+		$meta .= $args['post_description'] ? sprintf( "<meta name=\"twitter:description\" content=\"%s\">\n", esc_attr( $args['post_description'] ) ) : '';
+		$meta .= $args['post_url'] ? sprintf( "<meta name=\"twitter:url\" content=\"%s\">\n", esc_url( $args['post_url'] ) ) : '';
 
 		if ( ! empty( $args['post_image'] ) ) {
 
@@ -460,12 +460,12 @@ final class WPHead extends Metas {
 
 			if ( $source && $width && $height ) {
 
-				$meta .= sprintf( "<meta name=\"twitter:image:src\" content=\"%s\" />\n", esc_attr( $source ) );
-				$meta .= sprintf( "<meta name=\"twitter:image:width\" content=\"%s\" />\n", esc_attr( $width ) );
-				$meta .= sprintf( "<meta name=\"twitter:image:height\" content=\"%s\" />\n", esc_attr( $height ) );
+				$meta .= sprintf( "<meta name=\"twitter:image:src\" content=\"%s\">\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta name=\"twitter:image:width\" content=\"%s\">\n", esc_attr( $width ) );
+				$meta .= sprintf( "<meta name=\"twitter:image:height\" content=\"%s\">\n", esc_attr( $height ) );
 			} elseif ( $source ) {
 
-				$meta .= sprintf( "<meta name=\"twitter:image\" content=\"%s\" />\n", esc_attr( $source ) );
+				$meta .= sprintf( "<meta name=\"twitter:image\" content=\"%s\">\n", esc_attr( $source ) );
 			}
 		}
 
@@ -473,15 +473,15 @@ final class WPHead extends Metas {
 
 			$twitter = $this->plugin->get_option( 'profiles', 'twitter' );
 
-			$site = $twitter ? sprintf( "<meta name=\"twitter:site\" content=\"@%s\" />\n", esc_attr( $twitter ) ) : '';
-			$type = "<meta name=\"twitter:card\" content=\"summary_large_image\" />\n";
+			$site = $twitter ? sprintf( "<meta name=\"twitter:site\" content=\"@%s\">\n", esc_attr( $twitter ) ) : '';
+			$type = "<meta name=\"twitter:card\" content=\"summary_large_image\">\n";
 			$meta = $site . $type . $meta;
 		}
 
 		$author = (array) $args['post_author'];
 
 		if ( isset( $author['profiles']['twitter'] ) && ! empty( $author['profiles']['twitter'] ) ) {
-			$meta .= sprintf( "<meta name=\"twitter:creator\" content=\"@%s\" />\n", esc_attr( "{$author['profiles']['twitter']}" ) );
+			$meta .= sprintf( "<meta name=\"twitter:creator\" content=\"@%s\">\n", esc_attr( "{$author['profiles']['twitter']}" ) );
 		}
 
 		return $meta;
