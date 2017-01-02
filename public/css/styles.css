@@ -241,7 +241,7 @@
     position: absolute;
     top: 8px;
     left: 8px;
-    /*visibility: hidden;*/
+    visibility: hidden;
 }
 
 .ninecodes-social-manager-buttons--img .ninecodes-social-manager-buttons__item {
