@@ -25,9 +25,6 @@ With the increasing trend on using WordPress as a [*headless* CMS](https://2016.
 ### Social Profiles ###
 With this plugin you can add your social profile and page URLs and display them on a widget. No need to mess around with your theme Menu ever again; the widget will stay there even when you've changed the theme.
 
-### Hooks ###
-For developers, you can utilize the Action and Filter Hooks to customize the plugin. See the "Installation" tab for a few examples, and dig the source code for more.
-
 ### Translations ###
 - English
 - Indonesia
