@@ -46,13 +46,15 @@ final class WPFooter {
 	 * Run Filters and Actions required.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.4 - Set the 'icon_reference_svg' priority higher (-30) to render the before anything else,
+	 *				  which should allow the icons to rendere ASAP without being blocked by slow JavaScript files.
 	 * @access protected
 	 *
 	 * @return void
 	 */
 	protected function hooks() {
 
-		add_action( 'wp_footer', array( $this, 'icon_reference_svg' ), 99 );
+		add_action( 'wp_footer', array( $this, 'icon_reference_svg' ), -50 );
 	}
 
 	/**
@@ -176,7 +178,7 @@ final class WPFooter {
 	echo wp_kses( $symbol, $allowed_html );
 } ?>
 </svg>
-<!-- END: SVG Icon Sprites (Social Manager by NineCodes) -->
+<!-- END: SVG Icon Sprites -->
 		<?php
 		endif;
 	}

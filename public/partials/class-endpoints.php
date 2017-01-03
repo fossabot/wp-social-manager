@@ -149,7 +149,7 @@ class Endpoints extends Metas {
 			} // End switch().
 		} // End foreach().
 
-		return $endpoints;
+		return array( 'endpoints' => $endpoints );
 	}
 
 	/**
@@ -197,7 +197,7 @@ class Endpoints extends Metas {
 			$endpoints = array_merge( $endpoints, array_map( array( $this, 'joint_image_endpoints' ), $buttons, array( $src ) ) );
 		}
 
-		return $endpoints;
+		return array( 'endpoints' => $endpoints );
 	}
 
 	/**
