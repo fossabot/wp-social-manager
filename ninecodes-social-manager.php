@@ -57,7 +57,7 @@ require_once $path_dir . 'includes/class-requirements.php';
  * @var Requirements
  */
 $require = new Requirements(
-	'Social Manager by NineCodes',
+	'Social Manager',
 	plugin_basename( __FILE__ ), array(
 		'PHP' => '5.3.0',
 		'WordPress' => '4.5',
