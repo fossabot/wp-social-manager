@@ -7,11 +7,11 @@ Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Optimize your website presence in social media.
+Helps optimizing your website in social media.
 
 == Description ==
 
-Social Manager optimize your website in social media with [Open Graph](http://ogp.me/) and [Twitter Cards](https://dev.twitter.com/cards/overview) meta tags. These meta tags help social media, like Facebook and Twitter, to understand your content structure better as well as enable them to render the content on the [News Feed](https://www.facebook.com/help/327131014036297/) nicely. This plugin allows you to customize the meta tags, so you have more control over your posts and pages presentation on these social media.
+This plugin helps you optimize your website in social media with [Open Graph](http://ogp.me/) and [Twitter Cards](https://dev.twitter.com/cards/overview) meta tags. Facebook, Twitter, and other social media sites will scan these meta tags to understand your content structure better as well as enable them to render the content preview on their [News Feed](https://www.facebook.com/help/327131014036297/) properly. This plugin allows you to customize the meta tags, so you have more control over your posts and pages presentation.
 
 Other features included in the plugin:
 
@@ -71,9 +71,9 @@ Then, login to your server *with the credentials given by your hosting provider*
 
 1. This plugin adds a new setting page named **Social** under the **Settings** menu in the WordPress admin screen. You can customize the output made by the plugin through this page.
 2. This plugin also adds some extra fields in the user profile edit screen (`/wp-admin/profile.php`).
-2. This plugin registers a custom route at `/ninecodes/v1/social-manager/buttons`.
+3. This plugin registers a custom route at `/ninecodes/v1/social-manager/buttons`.
 
-= For Theme Developers: =
+== Theme Support ==
 
 If you are a Theme developer, you can add `add_theme_support( 'ninecodes-social-manager' )` in `functions.php` of your theme themes to customize the plugin at Theme level. The following are the "features" that we currently support.
 
@@ -121,6 +121,10 @@ None, at the moment. Please ask. :)
 = [1.0.4] - 2017-1-03 =
 * __Changed__: render the icons before anything else, which should allow the icons to render ASAP without being blocked by slow JavaScript files.
 * __Changed__: remove enclosed slash for Twitter Cards meta tags.
+* __Changed__: incorrect file header.
+* __Changed__: move the `add_theme_support` usage instruction to "Theme Support" section under "Other Notes" tab.
+* __Changed__: the "END:" comment tags for consistency.
+* __Changed__: the button endpoint URLs should be under ‘endpoints’ object, and the Underscore.js template following this change.
 * __Fixed__: adjust the icon size and padding ensuring the icon is perfectly aligned to the center.
 
 
@@ -153,8 +157,11 @@ None, at the moment. Please ask. :)
 
 == Upgrade Notice ==
 
+= 1.0.4 =
+* A few minor bug fixes, and changes in to retain consistency.
+
 = 1.0.3 =
-* A few Minor changes in the generated meta tags.
+* A few minor changes in the generated meta tags.
 
 = 1.0.2 =
 * A few minor bug fixes, tweaks in Backbone application, and fixed `readme.txt` formatting issue.
