@@ -25,9 +25,7 @@ With this plugin you can add your social profile and page URLs and display them 
 
 = Translations =
 - English
-- Indonesia
-
-Translate this plugin to your language on [__translate.wordpress.org__](https://translate.wordpress.org/projects/wp-plugins/ninecodes-social-manager).
+- Indonesian
 
 = Requirements =
 - PHP 5.3 or higher
@@ -38,8 +36,9 @@ Translate this plugin to your language on [__translate.wordpress.org__](https://
 = WordPress Plugins Directory (Recommended): =
 
 1. Visit **Plugins > Add New**
-2. Search for **Social Manager by NineCodes**
-3. Activate **Social Manager by NineCodes** from the Plugins page.
+2. Search for **Social Manager**
+3. Click the "Install Now" button on **Social Manager** by [NineCodes](profiles.wordpress.org/ninecodes/)
+3. Activate **Social Manager** from the Plugins page.
 
 = Manual Upload: =
 
@@ -48,7 +47,7 @@ Translate this plugin to your language on [__translate.wordpress.org__](https://
 3. Click **Upload Plugin**
 4. Click the **Choose File** button, and select the plugin `.zip` archive you have just downloaded.
 6. Click the **Install Now** button.
-3. Activate **Social Manager by NineCodes** from the Plugins page.
+3. Activate **Social Manager** from the Plugins page.
 
 = FTP Upload: =
 
@@ -62,7 +61,7 @@ Then, login to your server *with the credentials given by your hosting provider*
 
 1. Download the plugin `.zip` archive.
 2. Unzip the archive and upload the `ninecodes-social-manager` folder into the plugin folder (`/wp-content/plugins/`).
-3. Activate **Social Manager by NineCodes** from the Plugins page.
+3. Activate **Social Manager** from the Plugins page.
 
 = Once Activated: =
 
@@ -115,6 +114,11 @@ None, at the moment. Please ask. :)
 
 == Changelog ==
 
+= [1.0.5] - 2017-01-05 =
+* __Changed__: Update the translation file source (`.pot`).
+* __Changed__: Indonesian translation (`.mo` and `.po`).
+
+
 = [1.0.4] - 2017-01-03 =
 * __Changed__: render the icons before anything else, which should allow the icons to render ASAP without being blocked by slow JavaScript files.
 * __Changed__: remove enclosed slash for Twitter Cards meta tags.
@@ -153,6 +157,9 @@ None, at the moment. Please ask. :)
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.5 =
+* Update translations; the source file `.pot` as well as the Indonesian `.mo` and `.po`.
 
 = 1.0.4 =
 * A few minor bug fixes, and changes to retain consistency.
