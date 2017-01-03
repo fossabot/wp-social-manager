@@ -155,7 +155,7 @@
 				$images = $('.' + nineCodesSocialManager.attrPrefix + '-buttons--' + resp.id);
 
 			$images.each(function(index) {
-				$(this).append(self.template(resp.images[index]));
+				$(this).append(self.template(resp.images.endpoints[index]));
 			});
 
 			return this;

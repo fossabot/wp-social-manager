@@ -166,11 +166,11 @@ final class ViewPublic {
 	 * Register Stylesheet
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @return void
 	 */
-	protected function register_styles() {
+	public function register_styles() {
 
 		wp_register_style( $this->plugin_slug, $this->path_url . 'css/styles.min.css', array(), $this->version, 'all' );
 		wp_style_add_data( $this->plugin_slug, 'rtl', 'replace' );
@@ -190,7 +190,7 @@ final class ViewPublic {
 	 *
 	 * @return void
 	 */
-	protected function register_scripts() {
+	public function register_scripts() {
 
 		wp_register_script( $this->plugin_slug . '-app', $this->path_url . 'js/app.min.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 		wp_register_script( $this->plugin_slug, $this->path_url . 'js/scripts.min.js', array( 'jquery' ), $this->version, true );
@@ -242,7 +242,7 @@ final class ViewPublic {
 	 * 					via the 'add_theme_support' function.
 	 * 					It will also return 'false' if the 'Enable Stylesheet' is unchecked.
 	 */
-	protected function is_load_stylesheet() {
+	public function is_load_stylesheet() {
 		/*
 		 * Don't load the plugin stylesheet, if the theme already loads its own stylesheet
 		 * via the 'add_theme_support()' function.
@@ -266,7 +266,7 @@ final class ViewPublic {
 	 *
 	 * @return boolean
 	 */
-	protected function is_load_scripts() {
+	public function is_load_scripts() {
 
 		$load = true;
 
@@ -286,7 +286,7 @@ final class ViewPublic {
 	 * @return boolean 	Return 'true' if the Buttons Mode is 'json',
 	 * 					and 'false' if the Buttons Mode is 'html'.
 	 */
-	protected function is_json_mode() {
+	public function is_json_mode() {
 
 		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
 
@@ -307,7 +307,7 @@ final class ViewPublic {
 	 *
 	 * @return boolean True or false depending on the above conditions.
 	 */
-	protected function is_buttons_active() {
+	public function is_buttons_active() {
 
 		$active = true;
 

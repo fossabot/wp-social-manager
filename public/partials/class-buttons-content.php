@@ -77,7 +77,9 @@ class ButtonsContent extends Buttons {
 	public function setups_html() {
 
 		if ( 'html' === $this->mode && is_singular() ) {
-			$this->response = $this->get_content_endpoints( get_the_id() );
+
+			$response = $this->get_content_endpoints( get_the_id() );
+			$this->response = $response['endpoints'];
 		}
 	}
 
@@ -221,8 +223,7 @@ class ButtonsContent extends Buttons {
 		if ( $this->is_buttons_content() && 'json' === $this->mode ) :
 			if ( wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) : ?>
 
-		<script type="text/html" id="tmpl-buttons-content">
-		<?php
+		<script type="text/html" id="tmpl-buttons-content"><?php
 
 		$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
 		$heading = wp_kses( $heading, array() );
@@ -250,12 +251,11 @@ class ButtonsContent extends Buttons {
 					'context' => 'button-content',
 				) ),
 				'label' => $label,
-				'endpoint' => "{{ data.{$site} }}",
+				'endpoint' => "{{ data.endpoints.{$site} }}",
 			));
 
 			echo $list; // WPCS: XSS ok.
-		endforeach; ?></div>
-		</script>
+		endforeach; ?></div></script>
 		<?php endif;
 		endif;
 	}

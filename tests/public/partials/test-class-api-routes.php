@@ -55,6 +55,24 @@ class TestAPIRoutes extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Function to test Class methods availability.
+	 *
+	 * @since 1.0.4
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_methods() {
+
+		$this->assertTrue( method_exists( $this->routes, 'hooks' ),  'Class does not have method \'hooks\'' );
+		$this->assertTrue( method_exists( $this->routes, 'localize_scripts' ),  'Class does not have method \'localize_scripts\'' );
+		$this->assertTrue( method_exists( $this->routes, 'register_routes' ),  'Class does not have method \'register_routes\'' );
+		$this->assertTrue( method_exists( $this->routes, 'response_plugin' ),  'Class does not have method \'response_plugin\'' );
+		$this->assertTrue( method_exists( $this->routes, 'response_buttons' ),  'Class does not have method \'response_buttons\'' );
+		$this->assertTrue( method_exists( $this->routes, 'get_namespace' ),  'Class does not have method \'get_namespace\'' );
+	}
+
+	/**
 	 * Function to test hooks.
 	 *
 	 * @since 1.0.0
@@ -65,6 +83,7 @@ class TestAPIRoutes extends WP_UnitTestCase {
 	public function test_hooks() {
 
 		$this->assertEquals( 10, has_filter( 'rest_api_init', array( $this->routes, 'register_routes' ) ) );
+		$this->assertEquals( 10, has_filter( 'wp_enqueue_scripts', array( $this->routes, 'localize_scripts' ) ) );
 	}
 
 	/**

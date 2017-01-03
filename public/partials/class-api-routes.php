@@ -148,7 +148,6 @@ class APIRoutes extends Endpoints {
 						'validate_callback' => function( $param, $request, $key ) {
 							return is_numeric( $param );
 						},
-						// 'required' => true,
 					),
 					'select' => array(
 						'sanitize_callback' => 'sanitize_key',
@@ -173,7 +172,7 @@ class APIRoutes extends Endpoints {
 	public function response_plugin( WP_REST_Request $request ) {
 
 		$response = array(
-			'plugin_name' => 'Social Manager by NineCodes',
+			'plugin_name' => 'Social Manager',
 			'plugin_url' => 'http://wordpress.org/plugins/ninecodes-social-manager',
 			'version' => $this->version,
 			'contributors' => array(
@@ -204,7 +203,9 @@ class APIRoutes extends Endpoints {
 			$select = $request['select'];
 
 			if ( 'content' === $select ) {
-				$response['content'] = $this->get_content_endpoints( $button_id );
+				$response['content'] = array(
+					'endpoints' => $this->get_content_endpoints( $button_id ),
+				);
 			}
 
 			if ( 'images' === $select ) {
