@@ -250,7 +250,7 @@ class ButtonsContent extends Buttons {
 					'context' => 'button-content',
 				) ),
 				'label' => $label,
-				'endpoint' => "{{ data.{$site} }}",
+				'endpoint' => "{{ data.endpoints.{$site} }}",
 			));
 
 			echo $list; // WPCS: XSS ok.

@@ -97,36 +97,40 @@ class TestEndpoints extends WP_UnitTestCase {
 		$post_id = $this->factory->post->create();
 		$response = $this->endpoints->get_content_endpoints( $post_id );
 
+		$this->assertArrayHasKey( 'endpoints', $response );
+
+		$endpoints = $response['endpoints'];
+
 		// Count the number, in case we will add more in the future.
-		$this->assertEquals( 7, count( $response ) );
+		$this->assertEquals( 7, count( $endpoints ) );
 
-		$this->assertArrayHasKey( 'facebook', $response );
-		$this->assertNotFalse( filter_var( $response['facebook'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $response['facebook'], 'https://www.facebook.com/sharer/sharer.php' ) );
+		$this->assertArrayHasKey( 'facebook', $endpoints );
+		$this->assertNotFalse( filter_var( $endpoints['facebook'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoints['facebook'], 'https://www.facebook.com/sharer/sharer.php' ) );
 
-		$this->assertArrayHasKey( 'twitter', $response );
-		$this->assertNotFalse( filter_var( $response['twitter'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $response['twitter'], 'https://twitter.com/intent/tweet' ) );
+		$this->assertArrayHasKey( 'twitter', $endpoints );
+		$this->assertNotFalse( filter_var( $endpoints['twitter'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoints['twitter'], 'https://twitter.com/intent/tweet' ) );
 
-		$this->assertArrayHasKey( 'googleplus', $response );
-		$this->assertNotFalse( filter_var( $response['googleplus'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $response['googleplus'], 'https://plus.google.com/share' ) );
+		$this->assertArrayHasKey( 'googleplus', $endpoints );
+		$this->assertNotFalse( filter_var( $endpoints['googleplus'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoints['googleplus'], 'https://plus.google.com/share' ) );
 
-		$this->assertArrayHasKey( 'pinterest', $response );
-		$this->assertNotFalse( filter_var( $response['pinterest'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $response['pinterest'], 'https://www.pinterest.com/pin/create/bookmarklet/' ) );
+		$this->assertArrayHasKey( 'pinterest', $endpoints );
+		$this->assertNotFalse( filter_var( $endpoints['pinterest'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoints['pinterest'], 'https://www.pinterest.com/pin/create/bookmarklet/' ) );
 
-		$this->assertArrayHasKey( 'linkedin', $response );
-		$this->assertNotFalse( filter_var( $response['linkedin'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $response['linkedin'], 'https://www.linkedin.com/shareArticle' ) );
+		$this->assertArrayHasKey( 'linkedin', $endpoints );
+		$this->assertNotFalse( filter_var( $endpoints['linkedin'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoints['linkedin'], 'https://www.linkedin.com/shareArticle' ) );
 
-		$this->assertArrayHasKey( 'reddit', $response );
-		$this->assertNotFalse( filter_var( $response['reddit'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $response['reddit'], 'https://www.reddit.com/submit' ) );
+		$this->assertArrayHasKey( 'reddit', $endpoints );
+		$this->assertNotFalse( filter_var( $endpoints['reddit'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoints['reddit'], 'https://www.reddit.com/submit' ) );
 
-		$this->assertArrayHasKey( 'email', $response );
-		$this->assertNotFalse( filter_var( $response['email'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $response['email'], 'mailto:' ) );
+		$this->assertArrayHasKey( 'email', $endpoints );
+		$this->assertNotFalse( filter_var( $endpoints['email'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoints['email'], 'mailto:' ) );
 	}
 
 	/**
@@ -144,10 +148,14 @@ class TestEndpoints extends WP_UnitTestCase {
 		) );
 		$response = $this->endpoints->get_image_endpoints( $post_id );
 
-		// We should only have 1 image.
-		$this->assertEquals( 1, count( $response ) );
+		$this->assertArrayHasKey( 'endpoints', $response );
 
-		foreach ( $response as $res ) {
+		$endpoints = $response['endpoints'];
+
+		// We should only have 1 image.
+		$this->assertEquals( 1, count( $endpoints ) );
+
+		foreach ( $endpoints as $res ) {
 
 			// Count the number, in case we will add more in the future.
 			$this->assertEquals( 1, count( $res ) );
