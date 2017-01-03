@@ -65,11 +65,11 @@ abstract class Buttons extends Endpoints {
 	 * Determine and generate the buttons item view.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.4 - Fix incorrect parameter description.
 	 * @access protected
 	 *
 	 * @param string $view The button view key (`icon`, `icon-text`, `text`).
-	 * @param array  $context The button attributes such as the 'site' name, button label,
-	 *                        and the button icon.
+	 * @param array  $context Whether the sharing button is for `content` or `image`.
 	 * @param array  $args 	{
 	 *     The button attributes.
 	 *
