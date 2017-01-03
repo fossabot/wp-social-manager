@@ -221,8 +221,7 @@ class ButtonsContent extends Buttons {
 		if ( $this->is_buttons_content() && 'json' === $this->mode ) :
 			if ( wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) : ?>
 
-		<script type="text/html" id="tmpl-buttons-content">
-		<?php
+		<script type="text/html" id="tmpl-buttons-content"><?php
 
 		$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
 		$heading = wp_kses( $heading, array() );
@@ -254,8 +253,7 @@ class ButtonsContent extends Buttons {
 			));
 
 			echo $list; // WPCS: XSS ok.
-		endforeach; ?></div>
-		</script>
+		endforeach; ?></div></script>
 		<?php endif;
 		endif;
 	}
