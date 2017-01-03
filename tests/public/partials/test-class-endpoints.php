@@ -148,21 +148,19 @@ class TestEndpoints extends WP_UnitTestCase {
 		) );
 		$response = $this->endpoints->get_image_endpoints( $post_id );
 
-		$this->assertArrayHasKey( 'endpoints', $response );
-
-		$endpoints = $response['endpoints'];
-
 		// We should only have 1 image.
-		$this->assertEquals( 1, count( $endpoints ) );
+		$this->assertEquals( 1, count( $response ) );
 
-		foreach ( $endpoints as $res ) {
+		foreach ( $response as $res ) {
+
+			$endpoints = $res['endpoints'];
 
 			// Count the number, in case we will add more in the future.
 			$this->assertEquals( 1, count( $res ) );
 
-			$this->assertArrayHasKey( 'pinterest', $res );
-			$this->assertNotFalse( filter_var( $res['pinterest'], FILTER_VALIDATE_URL ) );
-			$this->assertEquals( 0, strpos( $res['pinterest'], 'https://www.pinterest.com/pin/create/bookmarklet/' ) );
+			$this->assertArrayHasKey( 'pinterest', $endpoints );
+			$this->assertNotFalse( filter_var( $endpoints['pinterest'], FILTER_VALIDATE_URL ) );
+			$this->assertEquals( 0, strpos( $endpoints['pinterest'], 'https://www.pinterest.com/pin/create/bookmarklet/' ) );
 		}
 	}
 }

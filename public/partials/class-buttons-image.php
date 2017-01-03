@@ -77,8 +77,7 @@ class ButtonsImage extends Buttons {
 
 		if ( 'html' === $this->mode && is_singular() ) {
 
-			$response = $this->get_image_endpoints( get_the_id() );
-			$this->response = $response['endpoints'];
+			$this->response = $this->get_image_endpoints( get_the_id() );
 		}
 	}
 
@@ -157,7 +156,7 @@ class ButtonsImage extends Buttons {
 					if ( $is_html ) {
 
 						$fragment = $dom->createDocumentFragment();
-						$fragment->appendXML( $this->buttons_html( $this->response[ $index ] ) );
+						$fragment->appendXML( $this->buttons_html( $this->response[ $index ]['endpoints'] ) );
 						$wrap_clone->appendChild( $fragment );
 					}
 
@@ -246,7 +245,10 @@ class ButtonsImage extends Buttons {
 		if ( $this->is_buttons_image() && 'json' === $this->mode && wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
 			$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' );
 
-			if ( ! empty( $includes ) ) : ?><script type="text/html" id="tmpl-buttons-image"><span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-buttons="image"><?php
+			if ( ! empty( $includes ) ) : ?><script type="text/html" id="tmpl-buttons-image">
+<# if ( 0 !== data.length ) { #>
+	<# _.each( data, function( data ) { #>
+<span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-buttons="image"><?php
 
 foreach ( $includes as $site ) :
 
@@ -261,11 +263,14 @@ foreach ( $includes as $site ) :
 			'context' => 'button-image',
 		) ),
 		'label' => $label,
-		'endpoint' => "{{ data.{$site} }}",
+		'endpoint' => "{{ data.endpoints.{$site} }}",
 	));
 
 	echo $list; // WPCS: XSS ok.
-endforeach; ?></span></script>
+endforeach; ?></span>
+	<# } ); #>
+<# } #>
+</script>
 
 		<?php endif;
 		endif;

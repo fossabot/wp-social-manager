@@ -197,7 +197,7 @@ class Endpoints extends Metas {
 			$endpoints = array_merge( $endpoints, array_map( array( $this, 'joint_image_endpoints' ), $buttons, array( $src ) ) );
 		}
 
-		return array( 'endpoints' => $endpoints );
+		return $endpoints;
 	}
 
 	/**
@@ -242,7 +242,7 @@ class Endpoints extends Metas {
 			$url[ $site ] = $endpoints[ $site ];
 		}
 
-		return $url;
+		return array( 'endpoints' => $url );
 	}
 
 	/**

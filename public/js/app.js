@@ -131,8 +131,6 @@
 
 			var resp = model.toJSON();
 
-			console.log(this.template);
-
 			$('#' + nineCodesSocialManager.attrPrefix + '-buttons-' + resp.id)
 				.append(this.template(resp.content));
 
@@ -150,18 +148,22 @@
 
 		render: function(model) {
 
-			var self = this,
-				resp = model.toJSON(),
+			var resp = model.toJSON(),
 				$images = $('.' + nineCodesSocialManager.attrPrefix + '-buttons--' + resp.id);
 
-			$images.each(function(index) {
-				$(this).append(self.template(resp.images.endpoints[index]));
-			});
+			$images.each(function(index, image) {
+				$(image).append(this.template(resp.images));
+			}.bind(this));
 
 			return this;
 		}
 	});
 
+	/**
+	 * The model to interact with the Buttons API.
+	 *
+	 * @type {nineCodesSocialManager}
+	 */
 	socialButtonsModel = new nineCodesSocialManager.Buttons.Model();
 	socialButtonsModel.url = nineCodesSocialManager.id;
 
