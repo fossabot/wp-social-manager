@@ -155,7 +155,7 @@ None, at the moment. Please ask. :)
 == Upgrade Notice ==
 
 = 1.0.4 =
-* A few minor bug fixes, and changes in to retain consistency.
+* A few minor bug fixes and changes in the custom endpoint API responses to retain consistency.
 
 = 1.0.3 =
 * A few minor changes in the generated meta tags.
