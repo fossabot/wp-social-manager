@@ -178,7 +178,7 @@ final class WPFooter {
 	echo wp_kses( $symbol, $allowed_html );
 } ?>
 </svg>
-<!-- END: SVG Icon Sprites (Social Manager by NineCodes) -->
+<!-- END: SVG Icon Sprites -->
 		<?php
 		endif;
 	}
