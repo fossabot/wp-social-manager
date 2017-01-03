@@ -76,7 +76,9 @@ class ButtonsImage extends Buttons {
 	public function setups_html() {
 
 		if ( 'html' === $this->mode && is_singular() ) {
-			$this->response = $this->get_image_endpoints( get_the_id() );
+
+			$response = $this->get_image_endpoints( get_the_id() );
+			$this->response = $response['endpoints'];
 		}
 	}
 
