@@ -118,7 +118,7 @@ None, at the moment. Please ask. :)
 
 ## Changelog ##
 
-### [1.0.4] - 2017-1-03 ###
+### [1.0.4] - 2017-01-03 ###
 * __Changed__: render the icons before anything else, which should allow the icons to render ASAP without being blocked by slow JavaScript files.
 * __Changed__: remove enclosed slash for Twitter Cards meta tags.
 * __Changed__: incorrect file header.
@@ -127,7 +127,7 @@ None, at the moment. Please ask. :)
 * __Changed__: the button endpoint URLs should be under ‘endpoints’ object, and the Underscore.js template following this change.
 * __Fixed__: adjust the icon size and padding ensuring the icon is perfectly aligned to the center.
 
-### [1.0.3] - 2017-1-02 ###
+### [1.0.3] - 2017-01-02 ###
 * __Added__: [Open Graph Protocol Tools](https://github.com/niallkennedy/open-graph-protocol-tools) library files.
 * __Changed__: use Open Graph Protocol Tools methods to generate Open Graph meta tags for validation and standardization.
 * __Changed__: use double quotes instead of single quote to wrap up Twitter Cards meta tags value following meta tags generated through [Open Graph Protocol Tools](https://github.com/niallkennedy/open-graph-protocol-tools).
