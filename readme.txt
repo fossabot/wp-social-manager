@@ -25,7 +25,7 @@ With this plugin you can add your social profile and page URLs and display them 
 
 = Translations =
 - English
-- Indonesia
+- Indonesian
 
 Translate this plugin to your language on [__translate.wordpress.org__](https://translate.wordpress.org/projects/wp-plugins/ninecodes-social-manager).
 
@@ -37,18 +37,19 @@ Translate this plugin to your language on [__translate.wordpress.org__](https://
 
 = WordPress Plugins Directory (Recommended): =
 
-1. Visit **Plugins > Add New**
-2. Search for **Social Manager by NineCodes**
-3. Activate **Social Manager by NineCodes** from the Plugins page.
+1. Visit _Plugins > Add New_
+2. Search for **Social Manager**
+3. On the search result, click the "Install Now" button of **Social Manager** by NineCodes
+3. Activate **Social Manager** from the Plugins page.
 
 = Manual Upload: =
 
 1. Download the plugin `.zip` archive.
-2. Visit **Plugins > Add New**.
+2. Visit _Plugins > Add New_
 3. Click **Upload Plugin**
-4. Click the **Choose File** button, and select the plugin `.zip` archive you have just downloaded.
-6. Click the **Install Now** button.
-3. Activate **Social Manager by NineCodes** from the Plugins page.
+4. Click **Choose File**, and select the plugin `.zip` package you have just downloaded.
+6. Click **Install Now**.
+3. Activate **Social Manager** from the Plugins page.
 
 = FTP Upload: =
 
@@ -62,7 +63,7 @@ Then, login to your server *with the credentials given by your hosting provider*
 
 1. Download the plugin `.zip` archive.
 2. Unzip the archive and upload the `ninecodes-social-manager` folder into the plugin folder (`/wp-content/plugins/`).
-3. Activate **Social Manager by NineCodes** from the Plugins page.
+3. Activate **Social Manager** from the _Plugins_ page.
 
 = Once Activated: =
 
@@ -115,6 +116,11 @@ None, at the moment. Please ask. :)
 
 == Changelog ==
 
+= [1.0.5] - 2017-01-05 =
+* __Changed__: Update the translation file source (`.pot`).
+* __Changed__: Indonesian translation (`.mo` and `.po`).
+
+
 = [1.0.4] - 2017-01-03 =
 * __Changed__: render the icons before anything else, which should allow the icons to render ASAP without being blocked by slow JavaScript files.
 * __Changed__: remove enclosed slash for Twitter Cards meta tags.
@@ -153,6 +159,9 @@ None, at the moment. Please ask. :)
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.5 =
+* Update translations; the source file `.pot` as well as the Indonesian `.mo` and `.po`.
 
 = 1.0.4 =
 * A few minor bug fixes, and changes to retain consistency.
