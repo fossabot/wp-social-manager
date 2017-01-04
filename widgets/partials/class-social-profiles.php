@@ -102,9 +102,10 @@ final class WidgetSocialProfiles extends WP_Widget {
 
 		$this->profiles = Options::social_profiles();
 
-		$this->options = $widgets->get_option( 'profiles' );
-		$this->plugin_slug = $widgets->get_slug();
-		$this->option_slug = $widgets->get_opts();
+		$this->widgets = $widgets;
+		$this->options = $widgets->plugin->get_option( 'profiles' );
+		$this->plugin_slug = $widgets->plugin->get_slug();
+		$this->option_slug = $widgets->plugin->get_opts();
 
 		$this->widget_id = "{$this->plugin_slug}-profiles";
 		$this->widget_title = esc_html__( 'Follow Us', 'ninecodes-social-manager' );
@@ -119,13 +120,16 @@ final class WidgetSocialProfiles extends WP_Widget {
 	 * Load the stylesheets for the public-facing side.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.5 - Do not enqueue the stylesheet when the stylesheet is disabled.
 	 * @access public
 	 *
 	 * @return void
 	 */
 	public function enqueue_styles() {
 
-		if ( is_active_widget( false, false, $this->widget_id, true ) ) {
+		if ( $this->widgets->public->is_load_stylesheet() &&
+			 is_active_widget( false, false, $this->widget_id, true ) ) {
+
 			wp_enqueue_style( $this->plugin_slug );
 		}
 	}
