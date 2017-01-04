@@ -305,6 +305,10 @@ final class ViewPublic {
 	 * - Check if the buttons image is enabled. If the buttons image is enabled, check if it has the post types set.
 	 * - Check if the the current post types are viewed.
 	 *
+	 * @since 1.0.0
+	 * @since 1.0.5 - Wrap the button conditional for single post in `is_singular()`.
+	 * @access public
+	 *
 	 * @return boolean True or false depending on the above conditions.
 	 */
 	public function is_buttons_active() {
@@ -313,15 +317,18 @@ final class ViewPublic {
 
 		$buttons_image = $this->plugin->get_option( 'buttons_image' ); // Get "Buttons Image" options.
 
-		$post_types_content = $this->plugin->get_option( 'buttons_content', 'post_types' );
-		$post_types_image = isset( $buttons_image['enabled'] ) && 'on' === $buttons_image['enabled'] ? $buttons_image['post_types'] : array();
-		$post_types = array_unique( array_merge(
-			$post_types_content,
-			$post_types_image
-		) );
+		if ( is_singular() ) {
 
-		if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
-			$active = false;
+			$post_types_content = $this->plugin->get_option( 'buttons_content', 'post_types' );
+			$post_types_image = isset( $buttons_image['enabled'] ) && 'on' === $buttons_image['enabled'] ? $buttons_image['post_types'] : array();
+			$post_types = array_unique( array_merge(
+				$post_types_content,
+				$post_types_image
+			) );
+
+			if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
+				$active = false;
+			}
 		}
 
 		return $active;
