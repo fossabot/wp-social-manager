@@ -96,7 +96,7 @@ add_theme_support( 'ninecodes-social-manager', array(
 ) );
 ```
 
-Keep in mind setting the prefix to other than 'ninecodes-social-manager' will also dequeue the stylesheet much like setting the `stylesheet` to false; you will have to add the styles on your own.
+Keep in mind, setting the prefix to other than `ninecodes-social-manager` will also dequeue the stylesheet much like setting the `stylesheet` to false; you will have to add the styles on your own.
 
 **Changing the Buttons Mode**
 
@@ -143,6 +143,7 @@ None, at the moment. Please ask. :)
 ### [1.0.5] - 2017-01-05 ###
 * __Changed__: Update the translation file source (`.pot`).
 * __Changed__: Indonesian translation (`.mo` and `.po`).
+* __Fixed__: Stylesheet must not be enqueued when disabled even when the Social Profile Widget is active.
 
 ### [1.0.4] - 2017-01-03 ###
 * __Changed__: render the icons before anything else, which should allow the icons to render ASAP without being blocked by slow JavaScript files.
@@ -182,7 +183,7 @@ None, at the moment. Please ask. :)
 ## Upgrade Notice ##
 
 ### 1.0.5 ###
-* Update translations; the source file `.pot` as well as the Indonesian `.mo` and `.po`.
+* Update translations and fixed bug with the stylesheet enqueue when the "Social Media Profiles" widget is active.
 
 ### 1.0.4 ###
 * A few minor bug fixes, and changes to retain consistency.

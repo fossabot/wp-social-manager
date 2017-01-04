@@ -16,18 +16,28 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  * The Widget class is used for registering custom widgets of the plugin.
  *
  * @since 1.0.0
+ * @since 1.0.5 - Remove unnecessary methods `get_slug()`, `get_opts()`, `get_theme_supports()`, and `get_option`
  */
 final class Widgets {
-
 
 	/**
 	 * The Plugin class instance.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @since 1.0.5 - Make public
+	 * @access public
 	 * @var Plugin
 	 */
-	private $plugin;
+	public $plugin;
+
+	/**
+	 * The ViewPublic class instance.
+	 *
+	 * @since 1.0.5
+	 * @access public
+	 * @var ViewPublic
+	 */
+	public $public;
 
 	/**
 	 * The plugin path directory.
@@ -45,12 +55,14 @@ final class Widgets {
 	 * and run the WordPress Hooks to register the custom widgets.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.5 - Add $public property
 	 *
 	 * @param Plugin $plugin The Plugin class instance.
 	 */
 	function __construct( Plugin $plugin ) {
 
 		$this->plugin = $plugin;
+		$this->public = $plugin->get_view_public();
 		$this->path_dir = plugin_dir_path( __FILE__ );
 
 		$this->requires();
@@ -99,63 +111,5 @@ final class Widgets {
 		register_widget( __NAMESPACE__ . '\\WidgetSocialProfiles' );
 
 		do_action( 'ninecodes_social_manager_widget_setups', $this );
-	}
-
-	/**
-	 * Get the plugin slug.
-	 *
-	 * Slug is a unique identifier of the plugin.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string The plugin slug.
-	 */
-	public function get_slug() {
-
-		return $this->plugin->get_slug();
-	}
-
-	/**
-	 * Get the plugin opts.
-	 *
-	 * Opts herein is the unique identifier of the plugin option name.
-	 * It may be used for prefixing the option name or meta key.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string The plugin opts.
-	 */
-	public function get_opts() {
-
-		return $this->plugin->get_slug();
-	}
-
-	/**
-	 * Get the theme supports.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return ThemeSupports instance.
-	 */
-	public function get_theme_supports() {
-
-		return $this->plugin->theme_supports;
-	}
-
-	/**
-	 * Get the options saved in the database `wp_options`.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param string $name The option name.
-	 * @param string $key  The array key to retrieve from the option.
-	 * @return mixed The option value or null if option is not available.
-	 */
-	public function get_option( $name = '', $key = '' ) {
-		return $this->plugin->get_option( $name, $key );
 	}
 }
