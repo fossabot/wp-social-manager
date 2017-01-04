@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Social Manager by NineCodes\n"
-"POT-Creation-Date: 2017-01-03 23:27+0700\n"
-"PO-Revision-Date: 2017-01-03 23:28+0700\n"
+"POT-Creation-Date: 2016-10-23 23:45+0700\n"
+"PO-Revision-Date: 2016-10-23 23:45+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: id_ID\n"
@@ -23,19 +23,19 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-2: dev-lib\n"
 "X-Poedit-SearchPathExcluded-3: admin/partials/pepperplane\n"
 
-#: admin/partials/class-fields.php:110
+#: admin/partials/class-fields.php:109
 msgid "No Image Selected"
 msgstr "Tak ada gambar yang dipilih"
 
-#: admin/partials/class-fields.php:113
+#: admin/partials/class-fields.php:112
 msgid "Add image"
 msgstr "Tambah gambar"
 
-#: admin/partials/class-fields.php:114
+#: admin/partials/class-fields.php:113
 msgid "Change image"
 msgstr "Ubah gambar"
 
-#: admin/partials/class-fields.php:115
+#: admin/partials/class-fields.php:114
 msgid "Remove image"
 msgstr "Hapus gambar"
 
@@ -43,19 +43,19 @@ msgstr "Hapus gambar"
 msgid "Overview"
 msgstr "Ringkasan"
 
-#: admin/partials/class-helps.php:99 admin/partials/class-settings.php:294
+#: admin/partials/class-helps.php:99 admin/partials/class-settings.php:278
 msgid "Accounts"
 msgstr "Akun"
 
-#: admin/partials/class-helps.php:106 admin/partials/class-settings.php:299
+#: admin/partials/class-helps.php:106 admin/partials/class-settings.php:283
 msgid "Buttons"
 msgstr "Tombol"
 
-#: admin/partials/class-helps.php:113 admin/partials/class-settings.php:304
+#: admin/partials/class-helps.php:113 admin/partials/class-settings.php:288
 msgid "Metas"
 msgstr "Meta"
 
-#: admin/partials/class-helps.php:120 admin/partials/class-settings.php:309
+#: admin/partials/class-helps.php:120 admin/partials/class-settings.php:293
 msgid "Advanced"
 msgstr "Lanjutan"
 
@@ -182,27 +182,27 @@ msgstr "Open Graph Protocol"
 msgid "Twitter Cards"
 msgstr "Twitter Cards"
 
-#: admin/partials/class-metabox.php:164 admin/partials/class-settings.php:260
+#: admin/partials/class-metabox.php:183 admin/partials/class-settings.php:246
 msgid "Social"
 msgstr "Sosial"
 
-#: admin/partials/class-settings.php:261
+#: admin/partials/class-settings.php:247
 msgid "Social Settings"
 msgstr "Pengaturan Sosial"
 
-#: admin/partials/class-settings.php:326
+#: admin/partials/class-settings.php:310
 msgid "Profiles & Pages"
 msgstr "Profil & Halaman"
 
-#: admin/partials/class-settings.php:327
+#: admin/partials/class-settings.php:311
 msgid "Add the social media profiles and pages related to this website."
 msgstr "Tambahkan profil media sosial dan laman terkait dengan situs ini."
 
-#: admin/partials/class-settings.php:335
+#: admin/partials/class-settings.php:319
 msgid "Content"
 msgstr "Konten"
 
-#: admin/partials/class-settings.php:336
+#: admin/partials/class-settings.php:320
 msgid ""
 "Options to configure the social media buttons that allows people to share, "
 "like, or save content of this site."
@@ -210,83 +210,83 @@ msgstr ""
 "Pilihan untuk mengatur tombol media sosial yang memungkinkan pengunjung "
 "untuk berbagi atau menyimpan konten dari situs ini."
 
-#: admin/partials/class-settings.php:341
+#: admin/partials/class-settings.php:325
 msgid "Image"
 msgstr "Gambar"
 
-#: admin/partials/class-settings.php:342
+#: admin/partials/class-settings.php:326
 msgid ""
 "Options to configure the social media buttons shown on the content images."
 msgstr ""
 "Pilihan untuk mengatur tombol media sosial yang akan ditampilkan pada gambar "
 "di konten."
 
-#: admin/partials/class-settings.php:360
+#: admin/partials/class-settings.php:344
 msgid "Modes"
 msgstr "Mode"
 
-#: admin/partials/class-settings.php:361
+#: admin/partials/class-settings.php:345
 msgid "Configure the modes that work best for your website."
 msgstr "Atur mode terbaik yang dapat bekerja untuk website Anda."
 
-#: admin/partials/class-settings.php:428 admin/partials/class-settings.php:487
+#: admin/partials/class-settings.php:412 admin/partials/class-settings.php:471
 msgid "Show the buttons in"
 msgstr "Tampilkan tombol di"
 
-#: admin/partials/class-settings.php:429
+#: admin/partials/class-settings.php:413
 #, php-format
 msgid "Select the %s that are allowed to show the social media buttons."
 msgstr "Pilih %s yang diizinkan untuk menampilkan tombol media sosial."
 
-#: admin/partials/class-settings.php:429 admin/partials/class-settings.php:488
+#: admin/partials/class-settings.php:413 admin/partials/class-settings.php:472
 msgid "Post Types"
 msgstr "Jenis Post"
 
-#: admin/partials/class-settings.php:435 admin/partials/class-settings.php:496
+#: admin/partials/class-settings.php:419 admin/partials/class-settings.php:480
 msgid "Buttons View"
 msgstr "Tampilan Tombol"
 
-#: admin/partials/class-settings.php:436
+#: admin/partials/class-settings.php:420
 msgid "Select the social media buttons appearance shown in the content."
 msgstr ""
 "Pilihan untuk mengatur tampilan tombol media sosial yang akan ditampilkan "
 "dalam konten."
 
-#: admin/partials/class-settings.php:444
+#: admin/partials/class-settings.php:428
 msgid "Buttons Placement"
 msgstr "Penempatan Tombol"
 
-#: admin/partials/class-settings.php:445
+#: admin/partials/class-settings.php:429
 msgid "Select the location to show the social media buttons in the content."
 msgstr "Pilih lokasi dalam konten untuk menampilkan tombol media sosial."
 
-#: admin/partials/class-settings.php:452
+#: admin/partials/class-settings.php:436
 msgid "Buttons Heading"
 msgstr "Judul Tombol"
 
-#: admin/partials/class-settings.php:453
+#: admin/partials/class-settings.php:437
 #, php-format
 msgid "Set the heading shown before the buttons (e.g. %s)."
 msgstr "Atur judul yang ditampilkan sebelum tombol (misal %s)."
 
-#: admin/partials/class-settings.php:454
+#: admin/partials/class-settings.php:438
 msgid "Share on:"
 msgstr "Bagikan ke:"
 
-#: admin/partials/class-settings.php:458 admin/partials/class-settings.php:505
-#: widgets/partials/class-social-profiles.php:166
+#: admin/partials/class-settings.php:442 admin/partials/class-settings.php:489
+#: widgets/partials/class-social-profiles.php:125
 msgid "Include these"
 msgstr "Sertakan berikut"
 
-#: admin/partials/class-settings.php:476
+#: admin/partials/class-settings.php:460
 msgid "Image Buttons Display"
 msgstr "Tampilan Tombol Gambar"
 
-#: admin/partials/class-settings.php:477
+#: admin/partials/class-settings.php:461
 msgid "Show the social media buttons on images in the content"
 msgstr "Tampilkan tombol media sosial pada gambar dalam konten"
 
-#: admin/partials/class-settings.php:488
+#: admin/partials/class-settings.php:472
 #, php-format
 msgid ""
 "List of %s that are allowed to show the social media buttons on the images "
@@ -295,7 +295,7 @@ msgstr ""
 "Daftar %s yang diizinkan untuk menampilkan tombol media sosial pada gambar "
 "dalam konten."
 
-#: admin/partials/class-settings.php:497
+#: admin/partials/class-settings.php:481
 msgid ""
 "Select the social media buttons appearance shown on the images of the "
 "content."
@@ -303,19 +303,19 @@ msgstr ""
 "Pilihan untuk mengatur tampilan tombol media sosial yang akan ditampilkan "
 "pada gambar di konten."
 
-#: admin/partials/class-settings.php:524
+#: admin/partials/class-settings.php:508
 msgid "Enable Meta Tags"
 msgstr "Aktifkan Meta Tags"
 
-#: admin/partials/class-settings.php:525
+#: admin/partials/class-settings.php:509
 msgid "Generate social media meta tags on this website"
 msgstr "Sematkan meta tag media sosial di website ini"
 
-#: admin/partials/class-settings.php:536 admin/partials/class-settings.php:537
+#: admin/partials/class-settings.php:520 admin/partials/class-settings.php:521
 msgid "Site Name"
 msgstr "Nama Website"
 
-#: admin/partials/class-settings.php:538
+#: admin/partials/class-settings.php:522
 #, php-format
 msgid ""
 "The website name or brand as it should appear within the social media meta "
@@ -324,21 +324,21 @@ msgstr ""
 "Nama atau merek website yang akan termuat dalam meta tag media sosial (misal "
 "%s)"
 
-#: admin/partials/class-settings.php:547 admin/partials/class-settings.php:548
+#: admin/partials/class-settings.php:531 admin/partials/class-settings.php:532
 msgid "Site Title"
 msgstr "Judul Website"
 
-#: admin/partials/class-settings.php:549
+#: admin/partials/class-settings.php:533
 msgid ""
 "The title of this website as it should appear within the social media meta "
 "tags."
 msgstr "Judul dari situs ini yang akan termuat dalam meta tag media sosial."
 
-#: admin/partials/class-settings.php:558
+#: admin/partials/class-settings.php:542
 msgid "Site Description"
 msgstr "Deskripsi Website"
 
-#: admin/partials/class-settings.php:559
+#: admin/partials/class-settings.php:543
 msgid ""
 "A one to two sentence describing this website that should appear within the "
 "social media meta tags."
@@ -346,11 +346,11 @@ msgstr ""
 "Satu atau dua kalimat yang mendeskripsikan website ini yang akan termuat "
 "dalam meta tag media sosial."
 
-#: admin/partials/class-settings.php:571
+#: admin/partials/class-settings.php:555
 msgid "Site Image"
 msgstr "Gambar Website"
 
-#: admin/partials/class-settings.php:572
+#: admin/partials/class-settings.php:556
 msgid ""
 "An image URL which should represent this website within the social media "
 "meta tags (e.g. Open Graph, Twitter Cards, etc.)"
@@ -358,51 +358,56 @@ msgstr ""
 "URL gambar yang mewakili website ini yang akan termuat dalam meta tag media "
 "sosial (seperti Open Graph, Twitter Cards, dll)"
 
-#: admin/partials/class-settings.php:580 admin/partials/class-settings.php:588
+#: admin/partials/class-settings.php:564 admin/partials/class-settings.php:572
 msgid "Enable Stylesheet"
 msgstr "Aktifkan Stylesheet"
 
-#: admin/partials/class-settings.php:582
+#: admin/partials/class-settings.php:566
 msgid ""
 "The Theme being used in this website has included the styles in its own "
 "stylesheet."
 msgstr ""
 "Tema yang digunakan dalam website ini sudah memuat stylesheet tersendiri."
 
-#: admin/partials/class-settings.php:589
+#: admin/partials/class-settings.php:573
 msgid "Load the plugin stylesheet to apply essential styles."
 msgstr ""
 "Sematkan stylesheet dari plugin ini untuk mengaplikasikan tampilan dasar."
 
-#: admin/partials/class-settings.php:601
+#: admin/partials/class-settings.php:585
 msgid "Buttons Mode"
 msgstr "Mode Tombol"
 
-#: admin/partials/class-settings.php:602
+#: admin/partials/class-settings.php:586
 msgid "Select the mode to render the social media buttons."
 msgstr "Pilih mode untuk membuat tombol media sosial."
 
-#: admin/partials/class-settings.php:613
+#: admin/partials/class-settings.php:597
 msgid "Link Mode"
 msgstr "Mode Tautan"
 
-#: admin/partials/class-settings.php:614
+#: admin/partials/class-settings.php:598
 msgid "Select the link mode to append when the content or the image is shared."
 msgstr ""
 "Pilih mode tautan yang ditambahkan ketika konten atau gambar dibagikan di "
 "sosial media."
 
-#: admin/partials/class-user.php:117
+#: admin/partials/class-user.php:118
 msgid "Social Profiles"
 msgstr "Profil Sosial Me"
 
-#: admin/partials/class-user.php:118
+#: admin/partials/class-user.php:119
 msgid "Your very own social media profiles and pages."
 msgstr "Profile dan halaman sosial media Anda."
 
-#: admin/partials/class-user.php:159
+#: admin/partials/class-user.php:160
 msgid "Bummer! you do not have the authority to save this inputs."
 msgstr "Gelandangan! Anda tidak memiliki wewenang untuk menyimpan input ini."
+
+#: admin/partials/class-validation.php:44
+msgid "A username generally should contains at least 3 characters (or more)."
+msgstr ""
+"Sebuah nama pengguna umumnya harus berisi minimal 3 karakter (atau lebih)."
 
 #: includes/class-options.php:43
 #, php-format
@@ -485,41 +490,38 @@ msgstr "Sebelum konten"
 msgid "After the content"
 msgstr "Setelah konten"
 
-#: widgets/partials/class-social-profiles.php:110
-msgid "Follow Us"
-msgstr "Ikuti Kami"
-
-#: widgets/partials/class-social-profiles.php:112
+#: widgets/partials/class-social-profiles.php:84
+#: widgets/partials/class-social-profiles.php:86
 msgid "Social Media Profiles"
 msgstr "Profil Sosial Media"
 
-#: widgets/partials/class-social-profiles.php:114
+#: widgets/partials/class-social-profiles.php:88
 msgid ""
 "Display list of social media profile and page URLs connected to this website."
 msgstr ""
 "Menampilkan daftar URL profil dan halaman media sosial yang terhubung ke "
 "situs ini."
 
-#: widgets/partials/class-social-profiles.php:149
+#: widgets/partials/class-social-profiles.php:108
 msgid "Title:"
 msgstr "Judul:"
 
-#: widgets/partials/class-social-profiles.php:156
+#: widgets/partials/class-social-profiles.php:115
 #, php-format
 msgid "Please add at least one social media profile of this website in the %s."
 msgstr "Tambahkan setidaknya satu profil media sosial dari situs ini di %s."
 
-#: widgets/partials/class-social-profiles.php:157
+#: widgets/partials/class-social-profiles.php:116
 msgid "setting page"
 msgstr "halaman pengaturan"
 
-#: widgets/partials/class-social-profiles.php:189
+#: widgets/partials/class-social-profiles.php:161
 msgid "View:"
 msgstr "Tampilan:"
 
 #. Plugin Name of the plugin/theme
-msgid "Social Manager"
-msgstr "Social Manager"
+msgid "Social Manager by NineCodes"
+msgstr "Social Manager oleh NineCodes"
 
 #. Plugin URI of the plugin/theme
 msgid "http://wordpress.org/plugins/ninecodes-social-manager"
@@ -530,26 +532,12 @@ msgid "Optimize your website presence in social media."
 msgstr "Mengoptimalkan tampilan website anda pada media sosial."
 
 #. Author of the plugin/theme
-msgid "NineCodes"
-msgstr "NineCodes"
+msgid "Thoriq Firdaus"
+msgstr "Thoriq Firdaus"
 
 #. Author URI of the plugin/theme
-msgid "https://profiles.wordpress.org/ninecodes"
-msgstr "https://profiles.wordpress.org/ninecodes"
-
-#~ msgid ""
-#~ "A username generally should contains at least 3 characters (or more)."
-#~ msgstr ""
-#~ "Sebuah nama pengguna umumnya harus berisi minimal 3 karakter (atau lebih)."
-
-#~ msgid "Social Manager by NineCodes"
-#~ msgstr "Social Manager oleh NineCodes"
-
-#~ msgid "Thoriq Firdaus"
-#~ msgstr "Thoriq Firdaus"
-
-#~ msgid "https://github.com/tfirdaus"
-#~ msgstr "https://github.com/tfirdaus"
+msgid "https://github.com/tfirdaus"
+msgstr "https://github.com/tfirdaus"
 
 #~ msgid ""
 #~ "Select the social media buttons visual appearance displayed in the "
