@@ -117,7 +117,7 @@ final class ViewPublic {
 		require_once( $this->path_dir . 'partials/class-wp-head.php' );
 		require_once( $this->path_dir . 'partials/class-wp-footer.php' );
 		require_once( $this->path_dir . 'partials/class-endpoints.php' );
-		require_once( $this->path_dir . 'partials/class-api-routes.php' );
+		require_once( $this->path_dir . 'partials/class-routes-buttons-v1.php' );
 		require_once( $this->path_dir . 'partials/class-buttons.php' );
 		require_once( $this->path_dir . 'partials/class-buttons-content.php' );
 		require_once( $this->path_dir . 'partials/class-buttons-image.php' );
@@ -156,7 +156,8 @@ final class ViewPublic {
 
 		$this->buttons_content = new ButtonsContent( $this );
 		$this->buttons_image = new ButtonsImage( $this );
-		$this->routes = new APIRoutes( $this );
+
+		$this->routes_buttons = new RESTButtonsController( $this );
 
 		$this->register_styles();
 		$this->register_scripts();

@@ -21,7 +21,7 @@ use \WP_REST_Response;
  *
  * @since 1.0.0
  */
-class APIRoutes extends Endpoints {
+class RESTButtonsController extends Endpoints {
 
 	/**
 	 * The API version number.

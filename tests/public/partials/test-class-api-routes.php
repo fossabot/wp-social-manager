@@ -49,7 +49,7 @@ class TestAPIRoutes extends WP_UnitTestCase {
 		$plugin = new Plugin();
 		$public = new ViewPublic( $plugin );
 
-		$this->routes = new APIRoutes( $public );
+		$this->routes = new RESTButtonsController( $public );
 
 		do_action( 'rest_api_init' );
 	}
