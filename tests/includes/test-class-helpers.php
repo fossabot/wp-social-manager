@@ -58,7 +58,7 @@ class TestHelpers extends WP_UnitTestCase {
 	public function test_get_attr_prefix() {
 
 		$prefix = Helpers::get_attr_prefix();
-		$this->assertEquals( $this->plugin->get_slug(), $prefix );
+		$this->assertEquals( 'social-manager', $prefix );
 	}
 
 	/**
@@ -94,7 +94,7 @@ class TestHelpers extends WP_UnitTestCase {
 		));
 
 		$prefix = Helpers::get_attr_prefix();
-		$this->assertEquals( $this->plugin->get_slug(), $prefix );
+		$this->assertEquals( 'social-manager', $prefix );
 	}
 
 	/**
@@ -112,7 +112,7 @@ class TestHelpers extends WP_UnitTestCase {
 		));
 
 		$prefix = Helpers::get_attr_prefix();
-		$this->assertEquals( $this->plugin->get_slug(), $prefix );
+		$this->assertEquals( 'social-manager', $prefix );
 	}
 
 	/**
@@ -130,6 +130,6 @@ class TestHelpers extends WP_UnitTestCase {
 		));
 
 		$prefix = Helpers::get_attr_prefix();
-		$this->assertEquals( $this->plugin->get_slug(), $prefix );
+		$this->assertEquals( 'social-manager', $prefix );
 	}
 }

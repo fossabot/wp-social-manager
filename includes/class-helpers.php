@@ -29,7 +29,7 @@ class Helpers {
 	 * @access public
 	 * @var string
 	 */
-	public static $prefix = 'ninecodes-social-manager';
+	public static $prefix = 'social-manager';
 
 	/**
 	 * Function method to get the social media icons in SVG.
