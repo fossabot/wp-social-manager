@@ -92,7 +92,62 @@ class ButtonsImage extends Buttons {
 	 */
 	protected function render() {
 
+		add_filter( 'the_content', array( $this, 'pre_render_buttons' ), -10 );
 		add_filter( 'the_content', array( $this, 'render_buttons' ), 51 );
+	}
+
+	/**
+	 * Before adding the wrapper and render the button.
+	 *
+	 * This function allows us, for example, to append attribute to image before the shortocode,
+	 * in the content is rendered.
+	 *
+	 * @since 1.0.6
+	 * @access public
+	 *
+	 * @param string $content The post content.
+	 * @return string The content with each image wrapped in an element to display
+	 *                the social buttons on the images.
+	 */
+	public function pre_render_buttons( $content ) {
+
+		if ( ! $this->is_buttons_image() || empty( $content ) ) {
+			return $content;
+		}
+
+		/**
+		 * The DOM Document instance
+		 *
+		 * @var DOMDocument
+		 */
+		$dom = new DOMDocument();
+		$errors = libxml_use_internal_errors( true );
+
+		$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+		$images = $dom->getElementsByTagName( 'img' );
+
+		if ( 0 === $images->length ) { // If we have at least 1 image.
+
+			$content = $this->to_html( $dom );
+
+			libxml_clear_errors();
+			libxml_use_internal_errors( $errors );
+
+			return $content;
+		}
+
+		$post_id = get_the_id();
+
+		foreach ( $images as $index => $img ) :
+			$img->setAttribute( 'data-social-manager', 'ContentImage-' . $post_id );
+		endforeach;
+
+		$content = $this->to_html( $dom );
+
+		libxml_clear_errors();
+		libxml_use_internal_errors( $errors );
+
+		return $content;
 	}
 
 	/**
@@ -111,7 +166,7 @@ class ButtonsImage extends Buttons {
 	 */
 	public function render_buttons( $content ) {
 
-		if ( ! $this->is_buttons_image() ) {
+		if ( ! $this->is_buttons_image() || empty( $content ) ) {
 			return $content;
 		}
 
@@ -154,14 +209,16 @@ class ButtonsImage extends Buttons {
 				$wrap_id = absint( $index + 1 );
 				$resp_src = $this->response[ $index ]['src'];
 
-				$img->setAttribute( 'data-social-manager', 'ContentImage-' . $post_id );
-
 				$attributes = array();
 				foreach ( $img->attributes as $attr ) {
 					$attributes[ $attr->nodeName ] = $attr->nodeValue;
 				}
 
-				if ( $is_html && in_array( $resp_src, $attributes, true )  ) {
+				if ( ! isset( $attributes['data-social-manager'] ) ) {
+					continue;
+				}
+
+				if ( $is_html && in_array( $resp_src, $attributes, true ) && "ContentImage-{$post_id}" === $attributes['data-social-manager'] ) {
 
 					$wrap_clone = $wrap->cloneNode();
 					$wrap_clone->setAttribute( 'id', "{$this->prefix}-buttons-{$post_id}-img-{$wrap_id}" );
