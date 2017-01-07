@@ -38,12 +38,13 @@ class ButtonsImage extends Buttons {
 	 * in the content.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Change the class parameter to the Plugin instance.
 	 * @access public
 	 *
-	 * @param ViewPublic $public The ViewPublic class instance.
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	function __construct( ViewPublic $public ) {
-		parent::__construct( $public );
+	function __construct( Plugin $plugin ) {
+		parent::__construct( $plugin );
 
 		$this->view = $this->plugin->get_option( 'buttons_image', 'view' );
 
@@ -77,7 +78,7 @@ class ButtonsImage extends Buttons {
 
 		if ( 'html' === $this->mode && is_singular() ) {
 
-			$this->response = $this->get_image_endpoints( get_the_id() );
+			$this->response = $this->endpoints->get_image_endpoints( get_the_id() );
 		}
 	}
 
@@ -98,6 +99,10 @@ class ButtonsImage extends Buttons {
 	 * Add social wrapper element into the images in the content.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Add `data-social-manager` attribute when the img src match with the src in the endpoints response.
+	 * 				- Wrap the image with `<span>` only on HTML Mode.
+	 * 				- (HTML Mode) Only wrap the image with `<span>` element when the img src match with the src in the endpoints response.
+	 * 				- Use the new method `to_html()` from the parent class to return the content.
 	 * @access public
 	 *
 	 * @param string $content The post content.
@@ -105,8 +110,6 @@ class ButtonsImage extends Buttons {
 	 *                the social buttons on the images.
 	 */
 	public function render_buttons( $content ) {
-
-		$post_id = get_the_id();
 
 		if ( ! $this->is_buttons_image() ) {
 			return $content;
@@ -128,15 +131,37 @@ class ButtonsImage extends Buttons {
 			$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
 			$images = $dom->getElementsByTagName( 'img' );
 
-			if ( 0 !== $images->length ) : // If we have at least 1 image.
+			if ( 0 === $images->length ) { // If we have at least 1 image.
+
+				$content = $this->to_html( $dom );
+
+				libxml_clear_errors();
+				libxml_use_internal_errors( $errors );
+
+				return $content;
+			}
+
+			$post_id = get_the_id();
+
+			if ( $is_html ) {
 
 				$wrap = $dom->createElement( 'span' );
 				$wrap->setAttribute( 'class', "{$this->prefix}-buttons {$this->prefix}-buttons--img {$this->prefix}-buttons--{$post_id}" );
+			}
 
-				foreach ( $images as $index => $img ) :
+			foreach ( $images as $index => $img ) :
 
-					$wrap_id = absint( $index + 1 );
-					$wrap_id = sanitize_key( $wrap_id );
+				$wrap_id = absint( $index + 1 );
+				$resp_src = $this->response[ $index ]['src'];
+
+				$img->setAttribute( 'data-social-manager', 'ContentImage-' . $post_id );
+
+				$attributes = array();
+				foreach ( $img->attributes as $attr ) {
+					$attributes[ $attr->nodeName ] = $attr->nodeValue;
+				}
+
+				if ( $is_html && in_array( $resp_src, $attributes, true )  ) {
 
 					$wrap_clone = $wrap->cloneNode();
 					$wrap_clone->setAttribute( 'id', "{$this->prefix}-buttons-{$post_id}-img-{$wrap_id}" );
@@ -153,21 +178,14 @@ class ButtonsImage extends Buttons {
 						$wrap_clone->appendChild( $img );
 					}
 
-					if ( $is_html ) {
+					$fragment = $dom->createDocumentFragment();
+					$fragment->appendXML( $this->buttons_html( $this->response[ $index ]['endpoints'] ) );
+					$wrap_clone->appendChild( $fragment );
+				}
 
-						$fragment = $dom->createDocumentFragment();
-						$fragment->appendXML( $this->buttons_html( $this->response[ $index ]['endpoints'] ) );
-						$wrap_clone->appendChild( $fragment );
-					}
+			endforeach;
 
-				endforeach;
-
-				$content = preg_replace('/^<!DOCTYPE.+?>/', '', str_replace(
-					array( '<html>', '</html>', '<body>', '</body>' ),
-					array( '', '', '', '' ),
-					$dom->saveHTML()
-				));
-			endif;
+			$content = $this->to_html( $dom );
 
 			libxml_clear_errors();
 			libxml_use_internal_errors( $errors );
@@ -182,6 +200,7 @@ class ButtonsImage extends Buttons {
 	 * Used when the "Buttons Mode" is set to 'HTML'.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Renamed `data-social-buttons` to `data-social-manager` of the `span` (wrapper) element.
 	 * @access public
 	 *
 	 * @param object $includes Data to include in the button.
@@ -193,7 +212,7 @@ class ButtonsImage extends Buttons {
 
 		if ( ! empty( $includes ) ) :
 
-			$list .= "<span class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-buttons='image'>";
+			$list .= "<span class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsImage\">";
 
 			foreach ( $includes as $site => $endpoint ) :
 				$label = $this->get_button_label( $site, 'image' );
@@ -222,20 +241,19 @@ class ButtonsImage extends Buttons {
 		$errors = libxml_use_internal_errors( true );
 		$dom->loadHTML( mb_convert_encoding( $list, 'HTML-ENTITIES', 'UTF-8' ) );
 
+		$list = $this->to_html( $dom );
+
 		libxml_clear_errors();
 		libxml_use_internal_errors( $errors );
 
-		return preg_replace('/^<!DOCTYPE.+?>/', '', str_replace(
-			array( '<html>', '</html>', '<body>', '</body>' ),
-			array( '', '', '', '' ),
-			$dom->saveHTML()
-		));
+		return $list;
 	}
 
 	/**
 	 * Add the Underscore.js template of the social media buttons.
 	 *
 	 * @since   1.0.0
+	 * @since 	1.0.6 - Renamed `data-social-buttons` to `data-social-manager` of the `span` (wrapper) element.
 	 * @access  public
 	 *
 	 * @return void
@@ -246,9 +264,7 @@ class ButtonsImage extends Buttons {
 			$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' );
 
 			if ( ! empty( $includes ) ) : ?><script type="text/html" id="tmpl-buttons-image">
-<# if ( 0 !== data.length ) { #>
-	<# _.each( data, function( data ) { #>
-<span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-buttons="image"><?php
+<span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsImage"><?php
 
 foreach ( $includes as $site ) :
 
@@ -268,8 +284,6 @@ foreach ( $includes as $site ) :
 
 	echo $list; // WPCS: XSS ok.
 endforeach; ?></span>
-	<# } ); #>
-<# } #>
 </script>
 
 		<?php endif;
@@ -312,7 +326,13 @@ endforeach; ?></span>
 			return false;
 		}
 
-		$post_meta = $this->get_post_meta( get_the_id(), 'buttons_image' );
+		/**
+		 * Get the post meta value whether the Social Buttons Image is enabled or not.
+		 *
+		 * @since 1.0.6 - Use the $this->metas property to utilitze the Meta instance methods.
+		 * @var boolean
+		 */
+		$post_meta = $this->metas->get_post_meta( get_the_id(), 'buttons_image' );
 
 		/**
 		 * If it is 'null' we assume that the meta post either not yet created or
