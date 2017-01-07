@@ -56,7 +56,26 @@ class TestPublic extends WP_UnitTestCase {
 		$plugin->initialize();
 
 		$this->plugin_slug = $plugin->get_slug();
-		$this->public = new ViewPublic( $plugin );
+		$this->public = $plugin->get_view_public();
+	}
+
+	/**
+	 * Function to test Class properties / attributes.
+	 *
+	 * @since 1.0.6
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_properties() {
+
+		$this->assertClassHasAttribute( 'plugin', ViewPublic::class );
+		$this->assertClassHasAttribute( 'plugin_slug', ViewPublic::class );
+		$this->assertClassHasAttribute( 'option_slug', ViewPublic::class );
+		$this->assertClassHasAttribute( 'version', ViewPublic::class );
+		$this->assertClassHasAttribute( 'theme_supports', ViewPublic::class );
+		$this->assertClassHasAttribute( 'path_dir', ViewPublic::class );
+		$this->assertClassHasAttribute( 'path_url', ViewPublic::class );
 	}
 
 	/**
