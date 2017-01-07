@@ -52,6 +52,15 @@ class RESTButtonsController extends WP_REST_Controller {
 	protected $namespace;
 
 	/**
+	 * The REST Base.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 * @var string
+	 */
+	protected $rest_base;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -69,6 +78,7 @@ class RESTButtonsController extends WP_REST_Controller {
 		$this->plugin_slug = $plugin->get_slug();
 		$this->version = $plugin->get_version();
 		$this->namespace = $this->get_namespace();
+		$this->rest_base = $this->get_rest_base();
 
 		$this->hooks();
 	}
@@ -83,6 +93,18 @@ class RESTButtonsController extends WP_REST_Controller {
 	 */
 	public function get_namespace() {
 		return 'ninecodes/' . $this->api_version;
+	}
+
+	/**
+	 * Get REST Base.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string
+	 */
+	public function get_rest_base() {
+		return 'buttons';
 	}
 
 	/**
@@ -163,13 +185,15 @@ class RESTButtonsController extends WP_REST_Controller {
 		 * This route requires the 'id' parameter that passes
 		 * the post ID.
 		 *
-		 * @example http://local.wordpress.dev/wp-json/ninecodes-social-manager/1.0/buttons?id=79
+		 * @example http://local.wordpress.dev/wp-json/ninecodes/v1/social-manager/buttons/79
 		 *
-		 * @uses \WP_REST_Server
+		 * @uses WP_REST_Server
 		 */
-		register_rest_route( $this->namespace, '/social-manager/buttons/(?P<id>[\d]+)', array( array(
+		register_rest_route( $this->namespace, '/social-manager/' . $this->rest_base . '/(?P<id>[\d]+)', array(
+			array(
 				'methods' => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_item' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
 				'args' => array(
 					'args' => array(
 						'context' => $this->get_context_param( array( 'default' => 'view' ) ),
@@ -238,7 +262,10 @@ class RESTButtonsController extends WP_REST_Controller {
 	}
 
 	/**
-	 * Prepare a post status object for serialization
+	 * Prepare a post status object for serialization.
+	 *
+	 * @since 1.0.6
+	 * @access public
 	 *
 	 * @param stdClass        $object The original object (Post ID, and ).
 	 * @param WP_REST_Request $request The passed parameters in the route.
@@ -292,5 +319,18 @@ class RESTButtonsController extends WP_REST_Controller {
 		 * @param WP_REST_Request   $request  Request used to generate the response.
 		 */
 		return apply_filters( 'rest_prepare_social_manager_buttons', $response, $object, $request );
+	}
+
+	/**
+	 * Check if a given request has access to get a specific item.
+	 *
+	 * @since 1.0.6
+	 * @access public
+	 *
+	 * @param  WP_REST_Request $request Full details about the request.
+	 * @return bool
+	 */
+	public function get_item_permissions_check( $request ) {
+		return true;
 	}
 }
