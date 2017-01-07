@@ -26,10 +26,11 @@ final class ViewPublic {
 	 * The Plugin class instance.
 	 *
 	 * @since 1.0.0
-	 * @access public
+	 * @since 1.0.6 - Made `protected`
+	 * @access protected
 	 * @var string
 	 */
-	public $plugin;
+	protected $plugin;
 
 	/**
 	 * The ID of this plugin.
@@ -39,6 +40,15 @@ final class ViewPublic {
 	 * @var string
 	 */
 	protected $plugin_slug;
+
+	/**
+	 * The ID of this plugin.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 * @var string
+	 */
+	protected $option_slug;
 
 	/**
 	 * The aboslute path directory to the .
@@ -117,7 +127,7 @@ final class ViewPublic {
 		require_once( $this->path_dir . 'partials/class-wp-head.php' );
 		require_once( $this->path_dir . 'partials/class-wp-footer.php' );
 		require_once( $this->path_dir . 'partials/class-endpoints.php' );
-		require_once( $this->path_dir . 'partials/class-routes-buttons-v1.php' );
+		require_once( $this->path_dir . 'partials/class-rest-buttons.php' );
 		require_once( $this->path_dir . 'partials/class-buttons.php' );
 		require_once( $this->path_dir . 'partials/class-buttons-content.php' );
 		require_once( $this->path_dir . 'partials/class-buttons-image.php' );
@@ -151,13 +161,12 @@ final class ViewPublic {
 	 */
 	public function setups() {
 
-		$this->wp_head = new WPHead( $this );
-		$this->wp_footer = new WPFooter( $this );
+		$wp_head = new WPHead( $this->plugin );
+		$wp_footer = new WPFooter();
 
-		$this->buttons_content = new ButtonsContent( $this );
-		$this->buttons_image = new ButtonsImage( $this );
-
-		$this->routes_buttons = new RESTButtonsController( $this );
+		$buttons_content = new ButtonsContent( $this->plugin );
+		$buttons_image = new ButtonsImage( $this->plugin );
+		$rest_buttons = new RESTButtonsController( $this->plugin );
 
 		$this->register_styles();
 		$this->register_scripts();
