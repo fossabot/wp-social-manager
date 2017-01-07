@@ -46,7 +46,6 @@ class TestWPHead extends WP_UnitTestCase {
 	 * @inheritdoc
 	 */
 	public function setUp() {
-
 		parent::setUp();
 
 		// Setup the plugin.
@@ -55,12 +54,8 @@ class TestWPHead extends WP_UnitTestCase {
 
 		$this->option_slug = $plugin->get_opts();
 
-		// Setup WPHead Dependencies.
-		$public = new ViewPublic( $plugin );
-		$metas = new Metas( $public );
-
 		// The Class instance to test.
-		$this->wp_head = new WPHead( $metas );
+		$this->wp_head = new WPHead( $plugin );
 		$this->wp_head->setups();
 	}
 
@@ -77,9 +72,6 @@ class TestWPHead extends WP_UnitTestCase {
 		$this->assertClassHasAttribute( 'plugin', WPHead::class );
 		$this->assertClassHasAttribute( 'metas', WPHead::class );
 		$this->assertClassHasAttribute( 'locale', WPHead::class );
-
-		$this->assertInstanceOf( Plugin::class, $this->wp_head->plugin );
-		$this->assertInstanceOf( Metas::class, $this->wp_head->metas );
 	}
 
 	/**
@@ -247,7 +239,80 @@ class TestWPHead extends WP_UnitTestCase {
 
 		/**
 		 * ============================================================
-		 * The `site_meta_tags` method when the site metas is disabled.
+		 * The `post_meta_tags` method when run in a single post with
+		 * content filled.
+		 * ============================================================
+		 */
+		update_option( $this->option_slug . '_metas_site', array(
+			'enabled' => 'on',
+		) );
+
+		$post_id = $this->factory()->post->create( array(
+			'post_title' => 'Hello World #1',
+			'post_content' => '(Content) Lorem ipsum dolor sit amet.',
+			'post_excerpt' => '',
+		) );
+
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		$this->assertTrue( is_single() );
+
+		ob_start();
+		$this->wp_head->post_meta_tags();
+		$buffer = ob_get_clean();
+
+		// Open Graph.
+		$this->assertContains( '<meta property="og:type" content="article">', $buffer );
+		$this->assertContains( '<meta property="og:site_name" content="' . get_bloginfo( 'name' ) . '"', $buffer );
+		$this->assertContains( '<meta property="og:title" content="Hello World #1">', $buffer );
+		$this->assertContains( '<meta property="og:description" content="(Content) Lorem ipsum dolor sit amet."', $buffer );
+		$this->assertContains( '<meta property="og:url" content="' . get_permalink( $post_id ) . '"', $buffer );
+
+		// Twitter Cards.
+		$this->assertContains( '<meta name="twitter:title" content="Hello World #1">', $buffer );
+		$this->assertContains( '<meta name="twitter:description" content="(Content) Lorem ipsum dolor sit amet.">', $buffer );
+
+		/**
+		 * ============================================================
+		 * The `post_meta_tags` method when run in a single post with
+		 * content and the excerpt filled.
+		 * ============================================================
+		 */
+		update_option( $this->option_slug . '_metas_site', array(
+			'enabled' => 'on',
+		) );
+
+		$post_id = $this->factory()->post->create( array(
+			'post_title' => 'Hello World #2',
+			'post_content' => '(Content) Lorem ipsum dolor sit amet.',
+			'post_excerpt' => '(Excerpt) Lorem ipsum dolor.',
+		) );
+
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		$this->assertTrue( is_single() );
+
+		ob_start();
+		$this->wp_head->post_meta_tags();
+		$buffer = ob_get_clean();
+
+		// Open Graph.
+		$this->assertContains( '<meta property="og:type" content="article">', $buffer );
+		$this->assertContains( '<meta property="og:site_name" content="' . get_bloginfo( 'name' ) . '"', $buffer );
+		$this->assertContains( '<meta property="og:title" content="Hello World #2">', $buffer );
+		$this->assertContains( '<meta property="og:description" content="(Excerpt) Lorem ipsum dolor."', $buffer );
+		$this->assertContains( '<meta property="og:url" content="' . get_permalink( $post_id ) . '"', $buffer );
+
+		// Twitter Cards.
+		$this->assertContains( '<meta name="twitter:title" content="Hello World #2">', $buffer );
+		$this->assertContains( '<meta name="twitter:description" content="(Excerpt) Lorem ipsum dolor.">', $buffer );
+		$this->assertContains( '<meta name="twitter:url" content="' . get_permalink( $post_id ) . '">', $buffer );
+
+		/**
+		 * ============================================================
+		 * The `post_meta_tags` method when the site metas is disabled.
 		 * ============================================================
 		 */
 
