@@ -52,6 +52,7 @@ class TestHelpers extends WP_UnitTestCase {
 	 * Test the Helper that retrieves element attribute prefix.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Update the default attr prefix.
 	 * @access public
 	 * @return void
 	 */
@@ -84,6 +85,7 @@ class TestHelpers extends WP_UnitTestCase {
 	 * is passed with an empty string.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Update the default attr prefix.
 	 * @access public
 	 * @return void
 	 */
@@ -102,6 +104,7 @@ class TestHelpers extends WP_UnitTestCase {
 	 * is passed with a falsy value.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Update the default attr prefix.
 	 * @access public
 	 * @return void
 	 */
@@ -120,6 +123,7 @@ class TestHelpers extends WP_UnitTestCase {
 	 * an integer.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Update the default attr prefix.
 	 * @access public
 	 * @return void
 	 */

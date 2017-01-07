@@ -26,6 +26,7 @@ class Helpers {
 	 * The default attribute prefix.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Change the default attribute from 'ninecodes-social-manager'.
 	 * @access public
 	 * @var string
 	 */
