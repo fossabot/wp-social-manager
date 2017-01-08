@@ -1,9 +1,9 @@
 <?php
 /**
- * Public: APIRoutes class
+ * Public: RESTButtonsController class
  *
  * @package SocialManager
- * @subpackage Public\APIRoutes
+ * @subpackage Public\REST
  */
 
 namespace NineCodes\SocialManager;
@@ -12,6 +12,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
+use \WP_Error;
 use \WP_REST_Request;
 use \WP_REST_Server;
 use \WP_REST_Response;
@@ -21,6 +22,7 @@ use \WP_REST_Controller;
  * The class use for registering custom API Routes using WP-API.
  *
  * @since 1.0.0
+ * @since 1.0.6 - Extend WP_REST_Controller, and rename class.
  */
 class RESTButtonsController extends WP_REST_Controller {
 
@@ -98,7 +100,7 @@ class RESTButtonsController extends WP_REST_Controller {
 	/**
 	 * Get REST Base.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.6
 	 * @access public
 	 *
 	 * @return string
@@ -134,10 +136,9 @@ class RESTButtonsController extends WP_REST_Controller {
 	public function localize_scripts() {
 
 		$content = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
+		$image = array();
 
-		if ( ! (bool) $this->plugin->get_option( 'buttons_image', 'enabled' ) ) {
-			$image = array();
-		} else {
+		if ( (bool) $this->plugin->get_option( 'buttons_image', 'enabled' ) ) {
 			$image = (array) $this->plugin->get_option( 'buttons_image', 'post_types' );
 		}
 
@@ -172,12 +173,12 @@ class RESTButtonsController extends WP_REST_Controller {
 	 */
 	public function register_routes() {
 
-		register_rest_route( $this->namespace, '/social-manager', array( array(
+		register_rest_route($this->namespace, '/social-manager', array( array(
 				'methods' => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_plugin_info' ),
 				'schema' => array( $this, 'get_public_item_schema' ),
 			),
-		) );
+		));
 
 		/**
 		 * Register the '/buttons' route.
@@ -185,35 +186,37 @@ class RESTButtonsController extends WP_REST_Controller {
 		 * This route requires the 'id' parameter that passes
 		 * the post ID.
 		 *
+		 * @since 1.0.6 - Add 'enum', 'type' and 'description' to the 'select' parameter.
+		 * 				- Add 'context' arguments.
+		 * 				- Remove 'id' from the args list.
 		 * @example http://local.wordpress.dev/wp-json/ninecodes/v1/social-manager/buttons/79
 		 *
 		 * @uses WP_REST_Server
 		 */
-		register_rest_route( $this->namespace, '/social-manager/' . $this->rest_base . '/(?P<id>[\d]+)', array(
+		register_rest_route($this->namespace, '/social-manager/' . $this->rest_base . '/(?P<id>[\d]+)', array(
 			array(
 				'methods' => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_item' ),
 				'permission_callback' => array( $this, 'get_item_permissions_check' ),
 				'args' => array(
-					'args' => array(
-						'context' => $this->get_context_param( array( 'default' => 'view' ) ),
-					),
-					'id' => array(
-						'sanitize_callback' => 'absint',
-						'validate_callback' => function( $param, $request, $key ) {
-							return is_numeric( $param );
-						},
+					'context' => $this->get_context_param(
+						array(
+							'default' => 'view',
+						)
 					),
 					'select' => array(
+						'description' => esc_html__( 'Limit response to a particular social buttons set.', 'ninecodes-social-manager' ),
+						'type' => 'string',
+						'enum' => array( 'content', 'images' ),
 						'sanitize_callback' => 'sanitize_key',
-						'validate_callback' => function( $param, $request, $key ) {
+						'validate_callback' => function ( $param, $request, $key ) {
 							return is_string( $param ) && ! empty( $param ) && in_array( $param, array( 'content', 'images' ), true );
 						},
 					),
 				),
 				'schema' => array( $this, 'get_public_item_schema' ),
 			),
-		) );
+		));
 	}
 
 	/**
@@ -251,7 +254,15 @@ class RESTButtonsController extends WP_REST_Controller {
 	 */
 	public function get_item( $request ) {
 
-		$post_id = $request['id'];
+		$post_id = absint( $request['id'] );
+		$post_status = get_post_status( $post_id );
+
+		if ( 'publish' !== $post_status ) {
+			return new WP_Error( 'rest_social_buttons_invalid_id', esc_html__( 'Invalid buttons ID.', 'ninecodes-social-manager' ), array(
+				'status' => 404,
+			) );
+		}
+
 		$obj = array(
 			'id' => $post_id,
 			'link' => get_permalink( $post_id ),
@@ -277,36 +288,34 @@ class RESTButtonsController extends WP_REST_Controller {
 		$href   = $this->get_namespace() . '/social-manager/buttons/' . $object->id;
 		$select = isset( $request['select'] ) && ! empty( $request['select'] ) ? $request['select'] : '';
 
-		if ( $select ) {
+		switch ( $select ) {
 
-			if ( 'content' === $select ) {
+			case 'content':
 				$data['content'] = $this->endpoints->get_content_endpoints( $object->id );
-			}
+				break;
 
-			if ( 'images' === $select ) {
+			case 'images':
 				$data['images'] = $this->endpoints->get_image_endpoints( $object->id );
-			}
-		} else {
+				break;
 
-			$data = array_merge( $data, array(
-				'content' => $this->endpoints->get_content_endpoints( $object->id ),
-				'images' => $this->endpoints->get_image_endpoints( $object->id ),
-			) );
+			default:
+				$data = array_merge($data, array(
+					'content' => $this->endpoints->get_content_endpoints( $object->id ),
+					'images' => $this->endpoints->get_image_endpoints( $object->id ),
+				));
+				break;
 		}
-
-		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
-
-		$data = $this->add_additional_fields_to_object( $data, $request );
-		$data = $this->filter_response_by_context( $data, $context );
 
 		$response = rest_ensure_response( $data );
 
 		if ( $select ) {
-			$response->add_link( 'self', add_query_arg( 'select', $select, rest_url( $href ) ) );
+			$response->add_link( 'self', rest_url( $href ) );
 		} else {
 			$response->add_link( 'self', rest_url( $href ) );
-			$response->add_link( 'buttons:content', add_query_arg( 'select', 'content', rest_url( $href ) ) );
-			$response->add_link( 'buttons:image', add_query_arg( 'select', 'image', rest_url( $href ) ) );
+			$response->add_link( 'section', array(
+				'content' => add_query_arg( 'select', 'content', rest_url( $href ) ),
+				'image' => add_query_arg( 'select', 'image', rest_url( $href ) ),
+			) );
 		}
 
 		/**
@@ -318,7 +327,7 @@ class RESTButtonsController extends WP_REST_Controller {
 		 * @param object            $status   The original object.
 		 * @param WP_REST_Request   $request  Request used to generate the response.
 		 */
-		return apply_filters( 'rest_prepare_social_manager_buttons', $response, $object, $request );
+		return apply_filters( 'ninecodes_social_manager_buttons_rest_prepare', $response, $object, $request );
 	}
 
 	/**
