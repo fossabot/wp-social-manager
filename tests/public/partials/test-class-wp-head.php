@@ -69,9 +69,12 @@ class TestWPHead extends WP_UnitTestCase {
 	 */
 	public function test_properties() {
 
-		$this->assertClassHasAttribute( 'plugin', WPHead::class );
-		$this->assertClassHasAttribute( 'metas', WPHead::class );
-		$this->assertClassHasAttribute( 'locale', WPHead::class );
+		if ( version_compare( PHP_VERSION, '5.5.0', '>=' ) ) {
+
+			$this->assertClassHasAttribute( 'plugin', WPHead::class );
+			$this->assertClassHasAttribute( 'metas', WPHead::class );
+			$this->assertClassHasAttribute( 'locale', WPHead::class );
+		}
 	}
 
 	/**
