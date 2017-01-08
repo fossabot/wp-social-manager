@@ -280,7 +280,7 @@ final class ViewPublic {
 
 		$load = true;
 
-		if ( ! $this->is_buttons_active() ) {
+		if ( ! $this->is_buttons_active() || ! is_singular() ) {
 			$load = false;
 		}
 
