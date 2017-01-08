@@ -92,8 +92,8 @@ class ButtonsImage extends Buttons {
 	 */
 	protected function render() {
 
-		add_filter( 'the_content', array( $this, 'pre_render_buttons' ), -10 );
-		add_filter( 'the_content', array( $this, 'render_buttons' ), 51 );
+		add_filter( 'the_content', array( $this, 'pre_render_buttons' ), -55 );
+		add_filter( 'the_content', array( $this, 'render_buttons' ), 55 );
 	}
 
 	/**
@@ -111,7 +111,7 @@ class ButtonsImage extends Buttons {
 	 */
 	public function pre_render_buttons( $content ) {
 
-		if ( ! $this->is_buttons_image() || empty( $content ) ) {
+		if ( empty( $content ) || ! $this->is_buttons_image() || 'publish' !== $this->get_post_status() ) {
 			return $content;
 		}
 
@@ -127,12 +127,6 @@ class ButtonsImage extends Buttons {
 		$images = $dom->getElementsByTagName( 'img' );
 
 		if ( 0 === $images->length ) { // If we have at least 1 image.
-
-			$content = $this->to_html( $dom );
-
-			libxml_clear_errors();
-			libxml_use_internal_errors( $errors );
-
 			return $content;
 		}
 
@@ -166,7 +160,7 @@ class ButtonsImage extends Buttons {
 	 */
 	public function render_buttons( $content ) {
 
-		if ( ! $this->is_buttons_image() || empty( $content ) ) {
+		if ( empty( $content ) || ! $this->is_buttons_image() || 'publish' !== $this->get_post_status() ) {
 			return $content;
 		}
 
@@ -187,12 +181,6 @@ class ButtonsImage extends Buttons {
 			$images = $dom->getElementsByTagName( 'img' );
 
 			if ( 0 === $images->length ) { // If we have at least 1 image.
-
-				$content = $this->to_html( $dom );
-
-				libxml_clear_errors();
-				libxml_use_internal_errors( $errors );
-
 				return $content;
 			}
 
