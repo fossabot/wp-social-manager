@@ -52,11 +52,15 @@ class TestPublic extends WP_UnitTestCase {
 		parent::setUp();
 
 		// Setup the plugin.
-		$plugin = new Plugin();
-		$plugin->initialize();
+		$this->plugin = new Plugin();
+		$this->theme_supports = new ThemeSupports();
 
-		$this->plugin_slug = $plugin->get_slug();
-		$this->public = $plugin->get_view_public();
+		$this->plugin->initialize();
+
+		$this->plugin_slug = $this->plugin->get_slug();
+		$this->option_slug = $this->plugin->get_opts();
+
+		$this->public = $this->plugin->get_view_public();
 	}
 
 	/**
@@ -138,7 +142,13 @@ class TestPublic extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_register_scripts() {}
+	public function test_register_scripts() {
+
+		$this->public->register_scripts();
+
+		$this->assertTrue( wp_script_is( $this->plugin_slug . '-app', 'registered' ) );
+		$this->assertTrue( wp_script_is( $this->plugin_slug, 'registered' ) );
+	}
 
 	/**
 	 * Function to test 'enqueue_styles' method.
@@ -148,7 +158,10 @@ class TestPublic extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_enqueue_styles() {}
+	public function test_enqueue_styles() {
+
+		$this->assertFalse( wp_style_is( $this->plugin_slug, 'enqueued' ) );
+	}
 
 	/**
 	 * Function to test 'is_load_stylesheet' method.
@@ -158,7 +171,86 @@ class TestPublic extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_is_load_stylesheet() {}
+	public function test_is_load_stylesheet() {
+
+		// Create a single post.
+		$post_id = $this->factory()->post->create();
+
+		// Set the default value.
+		update_option( $this->option_slug . '_enqueue', array(
+			'enable_stylesheet' => 'on',
+		) );
+
+		/**
+		 * ============================================================
+		 * Stylesheet is disabled through the add_theme_support.
+		 * ============================================================
+		 */
+		add_theme_support( 'ninecodes-social-manager', array(
+			'stylesheet' => true,
+		) );
+		do_action( 'init' ); // The `theme_supports` method is run through the 'init' Action.
+
+		$this->assertFalse( $this->public->is_load_stylesheet() );
+
+		add_theme_support( 'ninecodes-social-manager', array(
+			'stylesheet' => false,
+		) );
+		do_action( 'init' ); // The `theme_supports` method is run through the 'init' Action.
+
+		$this->assertTrue( $this->public->is_load_stylesheet() );
+
+		/**
+		 * ============================================================
+		 * The Social Buttons is not active.
+		 * - Social Buttons Content post type is not selected.
+		 * - Social Buttons Image is disabled.
+		 * ============================================================
+		 */
+		update_option( $this->option_slug . '_buttons_image', array(
+			'enabled' => '',
+			'post_types' => array(),
+		) );
+		update_option( $this->option_slug . '_buttons_content', array(
+			'post_types' => array(),
+		) );
+
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		$this->assertFalse( $this->public->is_load_stylesheet() );
+
+		/**
+		 * ============================================================
+		 * The Social Buttons Content is not active,
+		 * But, the Social Buttons Image is set in enabled and
+		 * should be shown in 'post'.
+		 * ============================================================
+		 */
+		update_option( $this->option_slug . '_buttons_image', array(
+			'enabled' => 'on',
+			'post_types' => array( 'post' ),
+		) );
+
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		$this->assertTrue( $this->public->is_load_stylesheet() );
+
+		/**
+		 * ============================================================
+		 * Stylesheet is enabled in the 'Settings'.
+		 * ============================================================
+		 */
+		// Stylesheet is enabled.
+		$this->assertTrue( $this->public->is_load_stylesheet() );
+
+		// Disable Stylesheet.
+		update_option( $this->option_slug . '_enqueue', array(
+			'enable_stylesheet' => 'on',
+		) );
+		$this->assertTrue( $this->public->is_load_stylesheet() );
+	}
 
 	/**
 	 * Function to test 'is_load_scripts' method.
