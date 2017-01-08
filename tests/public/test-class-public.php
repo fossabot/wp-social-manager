@@ -64,28 +64,6 @@ class TestPublic extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Function to test Class properties / attributes.
-	 *
-	 * @since 1.0.6
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function test_properties() {
-
-		if ( version_compare( PHP_VERSION, '5.5.0' ) >= 0 ) {
-
-			$this->assertClassHasAttribute( 'plugin', ViewPublic::class );
-			$this->assertClassHasAttribute( 'plugin_slug', ViewPublic::class );
-			$this->assertClassHasAttribute( 'option_slug', ViewPublic::class );
-			$this->assertClassHasAttribute( 'version', ViewPublic::class );
-			$this->assertClassHasAttribute( 'theme_supports', ViewPublic::class );
-			$this->assertClassHasAttribute( 'path_dir', ViewPublic::class );
-			$this->assertClassHasAttribute( 'path_url', ViewPublic::class );
-		}
-	}
-
-	/**
 	 * Function to test Class methods availability.
 	 *
 	 * @since 1.0.4

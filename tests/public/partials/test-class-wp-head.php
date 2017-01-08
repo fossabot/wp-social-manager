@@ -60,24 +60,6 @@ class TestWPHead extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Function to test Class properties / attributes.
-	 *
-	 * @since 1.0.6
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function test_properties() {
-
-		if ( version_compare( PHP_VERSION, '5.5.0', '>=' ) ) {
-
-			$this->assertClassHasAttribute( 'plugin', WPHead::class );
-			$this->assertClassHasAttribute( 'metas', WPHead::class );
-			$this->assertClassHasAttribute( 'locale', WPHead::class );
-		}
-	}
-
-	/**
 	 * Function to test Class methods availability.
 	 *
 	 * @since 1.0.6
