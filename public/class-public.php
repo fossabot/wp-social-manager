@@ -325,9 +325,9 @@ final class ViewPublic {
 
 		$active = true;
 
-		$buttons_image = $this->plugin->get_option( 'buttons_image' ); // Get "Buttons Image" options.
-
 		if ( is_singular() ) {
+
+			$buttons_image = $this->plugin->get_option( 'buttons_image' ); // Get "Buttons Image" options.
 
 			$post_types_content = $this->plugin->get_option( 'buttons_content', 'post_types' );
 			$post_types_image = isset( $buttons_image['enabled'] ) && 'on' === $buttons_image['enabled'] ? $buttons_image['post_types'] : array();
