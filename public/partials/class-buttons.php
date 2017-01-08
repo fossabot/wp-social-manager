@@ -32,6 +32,15 @@ abstract class Buttons {
 	protected $plugin;
 
 	/**
+	 * The ID of this plugin.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $plugin_slug;
+
+	/**
 	 * The Endpoints instance.
 	 *
 	 * @since 1.0.6
@@ -229,6 +238,21 @@ abstract class Buttons {
 	 */
 	protected function in_amp() {
 		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ? true : false;
+	}
+
+	/**
+	 * The function to get the post status.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 *
+	 * @return boolean|string Returns false if ID is not exist, else the post status.
+	 */
+	protected function get_post_status() {
+
+		$post_id = get_the_id();
+
+		return get_post_status( $post_id );
 	}
 
 	/**
