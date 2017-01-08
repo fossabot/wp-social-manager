@@ -152,6 +152,7 @@ class ButtonsImage extends Buttons {
 	 * 				- Wrap the image with `<span>` only on HTML Mode.
 	 * 				- (HTML Mode) Only wrap the image with `<span>` element when the img src match with the src in the endpoints response.
 	 * 				- Use the new method `to_html()` from the parent class to return the content.
+	 * 				- Prevent appending the social buttons when the post is not yet published.
 	 * @access public
 	 *
 	 * @param string $content The post content.

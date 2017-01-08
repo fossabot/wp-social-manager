@@ -118,6 +118,7 @@ class ButtonsContent extends Buttons {
 	 * Append or prepend the social media buttons wrapper element into the content.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Prevent appending the social buttons when the post is not yet published.
 	 * @access public
 	 *
 	 * @param string $content The post content.
@@ -130,7 +131,7 @@ class ButtonsContent extends Buttons {
 		$button = '';
 		$post_id = get_the_id();
 
-		if ( false === $this->is_buttons_content() ) {
+		if ( ! $this->is_buttons_content() || 'publish' !== $this->get_post_status() ) {
 			return $content;
 		}
 
