@@ -88,7 +88,7 @@ add_theme_support( 'ninecodes-social-manager', array(
 
 **Custom attribute prefix**
 
-The plugin add prefix `ninecodes-social-manager` to (almost) any HTML elements it outputs at the front-end (your theme). If you don't like it, you can change this prefix to anything you prefer by adding the `attr-prefix`, for example:
+The plugin add prefix `social-manager` to (almost) any HTML elements it generates at the front-end (your theme). You can change this prefix to anything you want by adding the `attr-prefix`, for example:
 
 ```php
 add_theme_support( 'ninecodes-social-manager', array(
@@ -96,7 +96,7 @@ add_theme_support( 'ninecodes-social-manager', array(
 ) );
 ```
 
-Keep in mind, setting the prefix to other than `social-manager` will dequeue the stylesheet much like setting the `stylesheet` to `true`; you will have to add the styles on your own.
+Keep in mind that changing the prefix to other than `social-manager` will dequeue the stylesheet much like setting the `stylesheet` to `true`. So you will have to add the styles at your end.
 
 **Changing the Buttons Mode**
 
