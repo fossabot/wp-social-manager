@@ -264,9 +264,10 @@ final class WidgetSocialProfiles extends WP_Widget {
 			echo wp_kses_post( $args['before_title'] . $widget_title . $args['after_title'] );
 		}
 
+		$prefix = Helpers::get_attr_prefix();
 		$view = isset( $instance['view'] ) ? $instance['view'] : 'icon';
 
-		echo wp_kses( "<div class='{$this->widget_id}__list {$this->widget_id}__list--{$view}'>", array(
+		echo wp_kses( "<div class='{$prefix}-profiles {$prefix}-profiles--{$view}'>", array(
 			'div' => array(
 				'class' => true,
 			),
@@ -297,10 +298,10 @@ final class WidgetSocialProfiles extends WP_Widget {
 
 			$key = sanitize_key( $key );
 			$list = self::list_views($view, array(
-					'site' => $key,
-					'label' => esc_html( $profiles['label'] ),
-					'url' => esc_url( trailingslashit( $profiles['url'] ) . $this->options[ $key ] ),
-					'icon' => Helpers::get_social_icons( $key ),
+				'site' => $key,
+				'label' => esc_html( $profiles['label'] ),
+				'url' => esc_url( trailingslashit( $profiles['url'] ) . $this->options[ $key ] ),
+				'icon' => Helpers::get_social_icons( $key ),
 			));
 
 			echo wp_kses($list, array(

@@ -21,7 +21,40 @@ use \DOMDocument;
  *
  * @since 1.0.0
  */
-class Endpoints extends Metas {
+class Endpoints {
+
+	/**
+	 * The Plugin class instance.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 * @var Plugin
+	 */
+	protected $plugin;
+
+	/**
+	 * The Metas class instance.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 * @var Metas
+	 */
+	protected $metas;
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.6
+	 * @access public
+	 *
+	 * @param Plugin $plugin The Plugin class instance.
+	 * @param Metas  $metas The Metas class instance.
+	 */
+	function __construct( Plugin $plugin, Metas $metas ) {
+
+		$this->plugin = $plugin;
+		$this->metas = $metas;
+	}
 
 	/**
 	 * Get the buttons content endpoint urls.
@@ -168,12 +201,12 @@ class Endpoints extends Metas {
 		$post_id = absint( $post_id );
 		$metas = $this->get_post_metas( $post_id );
 
-		if ( ! $metas['post_url'] || ! $metas['post_title'] ) {
-			return;
-		}
-
 		$endpoints = array();
 		$buttons = array();
+
+		if ( ! $metas['post_url'] || ! $metas['post_title'] ) {
+			return $endpoints;
+		}
 
 		foreach ( Options::button_sites( 'image' ) as $site => $label ) {
 			$endpoint = self::get_endpoint_base( 'image', $site );
@@ -191,9 +224,10 @@ class Endpoints extends Metas {
 			$buttons = array_merge( $buttons, array( $button ) );
 		}
 
-		$srcs = $this->get_content_image_srcs( $post_id );
+		$content = get_post_field( 'post_content', $post_id );
+		$image_srcs = $this->get_content_image_srcs( $content );
 
-		foreach ( $srcs as $key => $src ) {
+		foreach ( $image_srcs as $key => $src ) {
 			$endpoints = array_merge( $endpoints, array_map( array( $this, 'joint_image_endpoints' ), $buttons, array( $src ) ) );
 		}
 
@@ -219,10 +253,10 @@ class Endpoints extends Metas {
 	 */
 	protected function joint_image_endpoints( $button, $src ) {
 
-		$url = array();
+		$urls = array();
 
 		if ( ! isset( $button['site'] ) ) {
-			return $url;
+			return $urls;
 		}
 
 		$site = $button['site'];
@@ -239,10 +273,13 @@ class Endpoints extends Metas {
 		);
 
 		if ( isset( $endpoints[ $site ] ) ) {
-			$url[ $site ] = $endpoints[ $site ];
+			$urls[ $site ] = $endpoints[ $site ];
 		}
 
-		return array( 'endpoints' => $url );
+		return array(
+			'src' => $src,
+			'endpoints' => $urls,
+		);
 	}
 
 	/**
@@ -251,20 +288,22 @@ class Endpoints extends Metas {
 	 * @since 1.0.0
 	 * @access protected
 	 *
-	 * @param integer $post_id The post ID.
-	 * @return array List of image source URL
+	 * @param integer $content The post content.
+	 * @return array List of image source URL.
 	 */
-	protected function get_content_image_srcs( $post_id ) {
-
-		$content = apply_filters( 'the_content', get_post_field( 'post_content', $post_id ) );
+	protected function get_content_image_srcs( $content ) {
 
 		$dom = new DOMDocument();
 		$errors = libxml_use_internal_errors( true );
 
 		$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
-
 		$images = $dom->getElementsByTagName( 'img' );
 		$source = array();
+
+		if ( 0 === $images->length ) {
+			return $source;
+		}
+
 		foreach ( $images as $key => $img ) {
 			$source[] = $img->getAttribute( 'src' );
 		}
@@ -289,16 +328,16 @@ class Endpoints extends Metas {
 		$charset = get_bloginfo( 'charset' );
 
 		$post_id = absint( $post_id );
-		$post_title = $this->get_post_title( $post_id );
-		$post_description = $this->get_post_description( $post_id );
+		$post_title = $this->metas->get_post_title( $post_id );
+		$post_description = $this->metas->get_post_description( $post_id );
 
 		if ( 'shortlink' === $this->plugin->get_option( 'modes', 'link_mode' ) ) {
 			$post_url = wp_get_shortlink( $post_id );
 		} else {
-			$post_url = $this->get_post_url( $post_id );
+			$post_url = $this->metas->get_post_url( $post_id );
 		}
 
-		$post_image = $this->get_post_image( $post_id );
+		$post_image = $this->metas->get_post_image( $post_id );
 
 		return array(
 			'post_title' => rawurlencode( html_entity_decode( $post_title, ENT_COMPAT, 'UTF-8' ) ),

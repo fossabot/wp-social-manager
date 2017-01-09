@@ -93,13 +93,16 @@ class TestThemeSupports extends WP_UnitTestCase {
 	public function test_theme_supports_stylesheet() {
 
 		add_theme_support($this->theme_supports->get_feature_name(), array(
-			'stylesheet' => false,
+			'stylesheet' => true,
 		));
 
 		$supports = $this->theme_supports->theme_supports();
 
 		$this->assertArrayHasKey( 'stylesheet', $supports );
-		$this->assertFalse( $supports['stylesheet'] );
+		$this->assertTrue( $supports['stylesheet'] );
+
+		$is = $this->theme_supports->is( 'stylesheet' );
+		$this->assertTrue( $is );
 	}
 
 	/**

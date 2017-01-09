@@ -23,21 +23,20 @@ final class WPFooter {
 	 * The element prefix attribute.
 	 *
 	 * @since 1.0.0
-	 * @access public
+	 * @access protected
 	 *
 	 * @var string
 	 */
-	public $prefix;
+	protected $prefix;
 
 	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
 	 * @access public
-	 *
-	 * @param ViewPublic $public The ViewPublic class instance.
 	 */
-	function __construct( ViewPublic $public ) {
+	function __construct() {
+
 		$this->prefix = Helpers::get_attr_prefix();
 		$this->hooks();
 	}

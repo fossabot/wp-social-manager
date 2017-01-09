@@ -18,8 +18,36 @@ use \DOMDocument;
  * The Class that define the social buttons output.
  *
  * @since 1.0.0
+ * @since 1.0.6 - Remove Endpoints class as the parent class.
  */
-abstract class Buttons extends Endpoints {
+abstract class Buttons {
+
+	/**
+	 * The Plugin class instance.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 * @var string
+	 */
+	protected $plugin;
+
+	/**
+	 * The ID of this plugin.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $plugin_slug;
+
+	/**
+	 * The Endpoints instance.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 * @var Endpoints
+	 */
+	protected $endpoints;
 
 	/**
 	 * The button attribute prefix.
@@ -43,12 +71,18 @@ abstract class Buttons extends Endpoints {
 	 * Constructor: Initialize the Buttons Class
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Add & instantiate Metas and Endpoints class in the Constructor.
 	 * @access public
 	 *
-	 * @param ViewPublic $public The ViewPublic class instance.
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	function __construct( ViewPublic $public ) {
-		parent::__construct( $public );
+	function __construct( Plugin $plugin ) {
+
+		$this->metas = new Metas( $plugin );
+		$this->endpoints = new Endpoints( $plugin, $this->metas );
+
+		$this->plugin = $plugin;
+		$this->plugin_slug = $plugin->get_slug();
 
 		$this->prefix = $this->get_attr_prefix();
 		$this->mode = $this->get_buttons_mode();
@@ -203,7 +237,39 @@ abstract class Buttons extends Endpoints {
 	 * @return boolean
 	 */
 	protected function in_amp() {
-
 		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ? true : false;
+	}
+
+	/**
+	 * The function to get the post status.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 *
+	 * @return boolean|string Returns false if ID is not exist, else the post status.
+	 */
+	protected function get_post_status() {
+
+		$post_id = get_the_id();
+
+		return get_post_status( $post_id );
+	}
+
+	/**
+	 * Save the DOM and remove the extranouse elements generated.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 *
+	 * @param DOMDocument $dom [description].
+	 * @return string
+	 */
+	protected function to_html( DOMDocument $dom ) {
+
+		return preg_replace('/^<!DOCTYPE.+?>/', '', str_replace(
+			array( '<html>', '</html>', '<body>', '</body>' ),
+			array( '', '', '', '' ),
+			$dom->saveHTML()
+		));
 	}
 }

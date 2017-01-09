@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Social Manager\n"
-"POT-Creation-Date: 2017-01-04 10:11+0700\n"
-"PO-Revision-Date: 2017-01-04 10:12+0700\n"
+"POT-Creation-Date: 2017-01-08 15:43+0700\n"
+"PO-Revision-Date: 2017-01-08 15:44+0700\n"
 "Last-Translator: \n"
 "Language-Team: NineCodes <admin@ninecodes.com>\n"
 "Language: id_ID\n"
@@ -277,7 +277,7 @@ msgid "Share on:"
 msgstr "Bagikan ke:"
 
 #: admin/partials/class-settings.php:458 admin/partials/class-settings.php:505
-#: widgets/partials/class-social-profiles.php:166
+#: widgets/partials/class-social-profiles.php:170
 msgid "Include these"
 msgstr "Sertakan berikut"
 
@@ -488,35 +488,47 @@ msgstr "Sebelum konten"
 msgid "After the content"
 msgstr "Setelah konten"
 
-#: widgets/partials/class-social-profiles.php:110
+#: includes/class-plugin.php:271
+msgid "Settings"
+msgstr "Pengaturan"
+
+#: public/partials/class-rest-buttons.php:203
+msgid "Limit response to a particular social buttons set."
+msgstr "Batasi respon pada satu set tombol sosial tertentu."
+
+#: public/partials/class-rest-buttons.php:259
+msgid "Invalid buttons ID."
+msgstr "ID tombol tak valid."
+
+#: widgets/partials/class-social-profiles.php:111
 msgid "Follow Us"
 msgstr "Ikuti Kami"
 
-#: widgets/partials/class-social-profiles.php:112
+#: widgets/partials/class-social-profiles.php:113
 msgid "Social Media Profiles"
 msgstr "Profil Sosial Media"
 
-#: widgets/partials/class-social-profiles.php:114
+#: widgets/partials/class-social-profiles.php:115
 msgid ""
 "Display list of social media profile and page URLs connected to this website."
 msgstr ""
 "Menampilkan daftar URL profil dan halaman media sosial yang terhubung ke "
 "situs ini."
 
-#: widgets/partials/class-social-profiles.php:149
+#: widgets/partials/class-social-profiles.php:153
 msgid "Title:"
 msgstr "Judul:"
 
-#: widgets/partials/class-social-profiles.php:156
+#: widgets/partials/class-social-profiles.php:160
 #, php-format
 msgid "Please add at least one social media profile of this website in the %s."
 msgstr "Tambahkan setidaknya satu profil media sosial dari situs ini di %s."
 
-#: widgets/partials/class-social-profiles.php:157
+#: widgets/partials/class-social-profiles.php:161
 msgid "setting page"
 msgstr "halaman pengaturan"
 
-#: widgets/partials/class-social-profiles.php:189
+#: widgets/partials/class-social-profiles.php:193
 msgid "View:"
 msgstr "Tampilan:"
 
@@ -539,3 +551,6 @@ msgstr "NineCodes"
 #. Author URI of the plugin/theme
 msgid "https://profiles.wordpress.org/ninecodes"
 msgstr "https://profiles.wordpress.org/ninecodes"
+
+#~ msgid "Invalid buttons id."
+#~ msgstr "ID Tombol tak valid."
