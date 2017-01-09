@@ -41,8 +41,8 @@ class TestEndpoints extends WP_UnitTestCase {
 		$plugin = new Plugin();
 		$plugin->initialize();
 
-		$public = new ViewPublic( $plugin );
-		$this->endpoints = new Endpoints( $public );
+		$metas = new Metas( $plugin );
+		$this->endpoints = new Endpoints( $plugin, $metas );
 
 		// Add the buttons content option value.
 		add_option( $plugin->get_opts() . '_buttons_content', array(
@@ -143,8 +143,10 @@ class TestEndpoints extends WP_UnitTestCase {
 	 */
 	public function test_get_image_endpoints() {
 
+		$image_src = 'https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150';
+
 		$post_id = $this->factory->post->create( array(
-			'post_content' => 'This is an image <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150" width=350" height="150" >.',
+			'post_content' => 'This is an image <img src="' . $image_src . '" width=350" height="150" >.',
 		) );
 		$response = $this->endpoints->get_image_endpoints( $post_id );
 
@@ -153,14 +155,15 @@ class TestEndpoints extends WP_UnitTestCase {
 
 		foreach ( $response as $res ) {
 
+			$this->assertArrayHasKey( 'src', $res );
+			$this->assertArrayHasKey( 'endpoints', $res );
+
 			$endpoints = $res['endpoints'];
 
-			// Count the number, in case we will add more in the future.
-			$this->assertEquals( 1, count( $res ) );
-
+			$this->assertEquals( 1, count( $endpoints ) ); // Count the number, in case we will add more in the future.
 			$this->assertArrayHasKey( 'pinterest', $endpoints );
 			$this->assertNotFalse( filter_var( $endpoints['pinterest'], FILTER_VALIDATE_URL ) );
-			$this->assertEquals( 0, strpos( $endpoints['pinterest'], 'https://www.pinterest.com/pin/create/bookmarklet/' ) );
+			$this->assertEquals( 0, strpos( $endpoints['pinterest'], add_query_arg( 'url', rawurlencode( $image_src ), 'https://www.pinterest.com/pin/create/bookmarklet/' ) ) );
 		}
 	}
 }

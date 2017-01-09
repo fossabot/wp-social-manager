@@ -1,4 +1,4 @@
-(function( $ ) {
+jQuery(function( $ ) {
 
 	'use strict';
 
@@ -49,7 +49,6 @@
 		}
 	}
 
-	$( 'body' ).on( 'click', '[data-social-buttons="content"] a', buttonDialog );
-	$( 'body' ).on( 'click', '[data-social-buttons="image"] a', buttonDialog );
-
-})( jQuery, undefined );
+	$( 'body' ).on( 'click', '[data-social-manager="ButtonsContent"] a', buttonDialog );
+	$( 'body' ).on( 'click', '[data-social-manager="ButtonsImage"] a', buttonDialog );
+});

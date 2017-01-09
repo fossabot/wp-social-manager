@@ -14,10 +14,10 @@
 		return;
 	}
 
-	tmplButtonContent = document.getElementById( 'tmpl-buttons-content' );
-	tmplButtonImage = document.getElementById( 'tmpl-buttons-image' );
+	tmplButtonContent = document.getElementById('tmpl-buttons-content');
+	tmplButtonImage = document.getElementById('tmpl-buttons-image');
 
-	if ( ! tmplButtonContent && ! tmplButtonImage ) {
+	if (!tmplButtonContent && !tmplButtonImage) {
 		return;
 	}
 
@@ -34,6 +34,12 @@
 		return Backbone.sync(method, model, options);
 	};
 
+	/**
+	 * Function to add and parse template in the script element.
+	 *
+	 * @since 1.0.6
+	 * @type {Function}
+	 */
 	nineCodesSocialManager.app.tmpl = _.memoize(function(id) {
 		var compiled,
 			options = {
@@ -45,6 +51,27 @@
 
 		return function(data) {
 			compiled = compiled || _.template($('#tmpl-' + id).html(), null, options);
+			return compiled(data);
+		};
+	});
+
+	/**
+	 * Function to parse template string.
+	 *
+	 * @since 1.0.6
+	 * @type {Function}
+	 */
+	nineCodesSocialManager.app.tmplString = _.memoize(function(string) {
+		var compiled,
+			options = {
+				evaluate: /<#([\s\S]+?)#>/g,
+				interpolate: /\{\{\{([\s\S]+?)\}\}\}/g,
+				escape: /\{\{([^\}]+?)\}\}(?!\})/g,
+				variable: 'data'
+			};
+
+		return function(data) {
+			compiled = compiled || _.template(string, null, options);
 			return compiled(data);
 		};
 	});
@@ -65,9 +92,31 @@
 		}
 	});
 
+	/**
+	 * Backbone view for button.
+	 *
+	 * @type {Backbone}
+	 */
 	nineCodesSocialManager.Buttons.View = Backbone.View.extend({
 
 		el: 'body',
+
+		constructor: function() {
+
+			/**
+			 * The Underscore Templates
+			 *
+			 * @since 1.0.6
+			 * @type {Object}
+			 */
+			this.template = {
+				buttonsContent: nineCodesSocialManager.app.tmpl('buttons-content'),
+				buttonsImage: nineCodesSocialManager.app.tmpl('buttons-image'),
+				imgWrapper: nineCodesSocialManager.app.tmplString('<span class="{{ data.prefix }}-buttons {{ data.prefix }}-buttons--img {{ data.prefix }}-buttons--{{ data.id }}"></span>'),
+			};
+
+			Backbone.View.apply(this, arguments);
+		},
 
 		initialize: function() {
 
@@ -119,41 +168,100 @@
 		}
 	});
 
+	/**
+	 * Social Buttons View for Content.
+	 *
+	 * @since 1.0.0
+	 * @since 1.0.6 - Change the click Event delegate element.
+	 *        		- Remove 'template' (merge with the `nineCodesSocialManager.Buttons.View`).
+	 * @type {nineCodesSocialManager}
+	 */
 	nineCodesSocialManager.Buttons.View.Content = nineCodesSocialManager.Buttons.View.extend({
 
-		template: nineCodesSocialManager.app.tmpl('buttons-content'),
-
+		/**
+		 * DOM Events
+		 *
+		 * @since 1.0.0
+		 * @since 1.0.6 - Change the click Event delegate element.
+		 * @type {Object}
+		 */
 		events: {
-			'click [data-social-buttons="content"] a': 'buttonDialog'
+			'click [data-social-manager="ButtonsContent"] a': 'buttonDialog'
 		},
 
+		/**
+		 * The function method to render the Buttons Image.
+		 *
+		 * @param {Object} model nineCodesSocialManager.Buttons.Model
+		 * @return {Object} nineCodesSocialManager.Buttons.View.Content
+		 */
 		render: function(model) {
 
-			var resp = model.toJSON();
+			var resp = model.toJSON(),
+				$content = $('#' + nineCodesSocialManager.attrPrefix + '-buttons-' + resp.id);
 
-			$('#' + nineCodesSocialManager.attrPrefix + '-buttons-' + resp.id)
-				.append(this.template(resp.content));
+			try {
+				$content.append(this.template.buttonsContent(resp.content));
+			} catch ( err ) {
+				console.info(err.name, err.message);
+			}
 
 			return this;
 		}
 	});
 
+	/**
+	 * Social Buttons View for Images.
+	 *
+	 * @since 1.0.0
+	 * @since 1.0.6 - Remove 'template' (merge with the `nineCodesSocialManager.Buttons.View`).
+	 * @type {nineCodesSocialManager}
+	 */
 	nineCodesSocialManager.Buttons.View.Images = nineCodesSocialManager.Buttons.View.extend({
 
-		template: nineCodesSocialManager.app.tmpl('buttons-image'),
-
+		/**
+		 * DOM Events
+		 *
+		 * @since 1.0.0
+		 * @since 1.0.6 - Change the click Event delegate element.
+		 * @type {Object}
+		 */
 		events: {
-			'click [data-social-buttons="image"] a': 'buttonDialog'
+			'click [data-social-manager="ButtonsImage"] a': 'buttonDialog'
 		},
 
+		/**
+		 * The function method to render the Buttons Image.
+		 *
+		 * @param {Object} model nineCodesSocialManager.Buttons.Model
+		 * @return {Object} nineCodesSocialManager.Buttons.View.Images
+		 */
 		render: function(model) {
 
-			var resp = model.toJSON(),
-				$images = $('.' + nineCodesSocialManager.attrPrefix + '-buttons--' + resp.id);
+			var self = this,
+				resp = model.toJSON(),
+				span = this.template.imgWrapper({
+					id: resp.id,
+					prefix: nineCodesSocialManager.attrPrefix
+				}),
+				$images = $('[data-social-manager="ContentImage-'+ resp.id +'"]');
 
-			$images.each(function(index, image) {
-				$(image).append(this.template(resp.images));
-			}.bind(this));
+			$images.each(function(i, img) {
+
+				try {
+					var imageAttrs = _.reduce(img.attributes, function(attrs, attribute) {
+							attrs[attribute.name] = attribute.value;
+							return attrs;
+						}, {}),
+						imageSrcResp = resp.images[i].src;
+
+					if (_.contains(imageAttrs, imageSrcResp)) {
+						$(img).wrap(span).after(self.template.buttonsImage(resp.images[i]));
+					}
+				} catch ( err ) {
+					console.info(err.name, err.message);
+				}
+			});
 
 			return this;
 		}
@@ -167,18 +275,31 @@
 	socialButtonsModel = new nineCodesSocialManager.Buttons.Model();
 	socialButtonsModel.url = nineCodesSocialManager.id;
 
-	if ( tmplButtonContent ) {
+	if (tmplButtonContent) {
+
+		/**
+		 * Instantiate the View to render Buttons Content.
+		 *
+		 * @type {nineCodesSocialManager}
+		 */
 		socialButtonsContent = new nineCodesSocialManager.Buttons.View.Content({
 			model: socialButtonsModel
 		});
 	}
 
-	if ( tmplButtonImage ) {
+	if (tmplButtonImage) {
+
+		/**
+		 * Instantiate the View to render Buttons Image.
+		 *
+		 * @type {nineCodesSocialManager}
+		 */
 		socialButtonsImage = new nineCodesSocialManager.Buttons.View.Images({
 			model: socialButtonsModel
 		});
 	}
 
+	// Fetch data from the API.
 	socialButtonsModel.fetch();
 
 })(window, jQuery);

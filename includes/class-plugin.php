@@ -49,7 +49,7 @@ final class Plugin {
 	 * @access protected
 	 * @var string
 	 */
-	protected $version = '1.0.5';
+	protected $version = '1.0.6';
 
 	/**
 	 * The path directory relative to the current file.
@@ -215,10 +215,22 @@ final class Plugin {
 	 * Run Filters and Actions required.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Add `plugin_action_links_` hook to display "Settings" link.
 	 * @access protected
+	 *
+	 * @return void
 	 */
 	protected function hooks() {
 
+		/**
+		 * Add the Action link for the plugin in the Plugin list screen.
+		 *
+		 * !important that the plugin file name is always referring to the plugin main file
+		 * in the plugin's root folder instead of the sub-folders in order for the function to work.
+		 *
+		 * @see https://developer.wordpress.org/reference/hooks/prefixplugin_action_links_plugin_file/
+		 */
+		add_filter( 'plugin_action_links_' . plugin_basename( "{$this->path_dir}{$this->plugin_slug}.php" ), array( $this, 'plugin_action_links' ) );
 		add_action( 'init', array( $this->languages, 'load_plugin_textdomain' ) );
 	}
 
@@ -241,6 +253,25 @@ final class Plugin {
 		$this->admin = new ViewAdmin( $this );
 		$this->public = new ViewPublic( $this );
 		$this->widgets = new Widgets( $this );
+	}
+
+	/**
+	 * Add the action link in Plugin list screen.
+	 *
+	 * @since 1.0.6
+	 * @access public
+	 *
+	 * @param  array $links WordPress built-in links (e.g. Activate, Deactivate, and Edit).
+	 * @return array        Action links with the new one added.
+	 */
+	public function plugin_action_links( $links ) {
+
+		$markup = '<a href="' . esc_url( get_admin_url( null, 'options-general.php?page=%2$s' ) ) . '">%1$s</a>';
+		$settings = array(
+			'settings' => sprintf( $markup, esc_html__( 'Settings', 'ninecodes-social-manager' ), $this->plugin_slug ),
+		);
+
+		return array_merge( $settings, $links );
 	}
 
 	/**

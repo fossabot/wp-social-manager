@@ -26,10 +26,11 @@ class Helpers {
 	 * The default attribute prefix.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Change the default attribute from 'ninecodes-social-manager'.
 	 * @access public
 	 * @var string
 	 */
-	public static $prefix = 'ninecodes-social-manager';
+	public static $prefix = 'social-manager';
 
 	/**
 	 * Function method to get the social media icons in SVG.

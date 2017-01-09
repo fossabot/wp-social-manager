@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Social Manager\n"
-"POT-Creation-Date: 2017-01-04 10:09+0700\n"
+"POT-Creation-Date: 2017-01-08 15:43+0700\n"
 "PO-Revision-Date: 2016-10-23 16:59+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -240,7 +240,7 @@ msgid "Share on:"
 msgstr ""
 
 #: admin/partials/class-settings.php:458 admin/partials/class-settings.php:505
-#: widgets/partials/class-social-profiles.php:166
+#: widgets/partials/class-social-profiles.php:170
 msgid "Include these"
 msgstr ""
 
@@ -436,33 +436,45 @@ msgstr ""
 msgid "After the content"
 msgstr ""
 
-#: widgets/partials/class-social-profiles.php:110
+#: includes/class-plugin.php:271
+msgid "Settings"
+msgstr ""
+
+#: public/partials/class-rest-buttons.php:203
+msgid "Limit response to a particular social buttons set."
+msgstr ""
+
+#: public/partials/class-rest-buttons.php:259
+msgid "Invalid buttons ID."
+msgstr ""
+
+#: widgets/partials/class-social-profiles.php:111
 msgid "Follow Us"
 msgstr ""
 
-#: widgets/partials/class-social-profiles.php:112
+#: widgets/partials/class-social-profiles.php:113
 msgid "Social Media Profiles"
 msgstr ""
 
-#: widgets/partials/class-social-profiles.php:114
+#: widgets/partials/class-social-profiles.php:115
 msgid ""
 "Display list of social media profile and page URLs connected to this website."
 msgstr ""
 
-#: widgets/partials/class-social-profiles.php:149
+#: widgets/partials/class-social-profiles.php:153
 msgid "Title:"
 msgstr ""
 
-#: widgets/partials/class-social-profiles.php:156
+#: widgets/partials/class-social-profiles.php:160
 #, php-format
 msgid "Please add at least one social media profile of this website in the %s."
 msgstr ""
 
-#: widgets/partials/class-social-profiles.php:157
+#: widgets/partials/class-social-profiles.php:161
 msgid "setting page"
 msgstr ""
 
-#: widgets/partials/class-social-profiles.php:189
+#: widgets/partials/class-social-profiles.php:193
 msgid "View:"
 msgstr ""
 

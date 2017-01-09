@@ -85,7 +85,7 @@ final class ThemeSupports {
 		if ( current_theme_supports( $this->feature ) ) {
 			$supports = get_theme_support( $this->feature );
 
-			if ( is_array( $supports ) ) {
+			if ( is_array( $supports ) && ! empty( $supports ) ) {
 				$this->supports = $supports[0];
 			} else {
 				$this->supports = $supports;

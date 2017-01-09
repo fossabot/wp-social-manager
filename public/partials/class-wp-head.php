@@ -20,8 +20,27 @@ use \OpenGraphProtocolArticle;
  * The class to generate social meta tags within the 'head' tag of the website.
  *
  * @since 1.0.0
+ * @since 1.0.6 - Remove Metas class as the parent class.
  */
-final class WPHead extends Metas {
+final class WPHead {
+
+	/**
+	 * The Plugin class instance.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 * @var string
+	 */
+	protected $plugin;
+
+	/**
+	 * The Metas class instance.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 * @var string
+	 */
+	protected $metas;
 
 	/**
 	 * The current website language.
@@ -35,16 +54,17 @@ final class WPHead extends Metas {
 	/**
 	 * Constructor.
 	 *
-	 * Get the Metas instance, instantiate the setups and hooks
-	 * to render the meta tags in the 'head' tag.
-	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Add & instantiate Metas class in the Constructor.
 	 * @access public
 	 *
-	 * @param ViewPublic $public The ViewPublic class instance.
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	function __construct( ViewPublic $public ) {
-		parent::__construct( $public );
+	function __construct( Plugin $plugin ) {
+
+		$this->metas = new Metas( $plugin );
+
+		$this->plugin = $plugin;
 
 		$this->hooks();
 	}
@@ -87,22 +107,23 @@ final class WPHead extends Metas {
 	 * archive pages (e.g. Categories, Tags, and Custom Taxonomy Terms).
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Use $this->metas property to access the Metas class method.
 	 * @access public
 	 *
 	 * @return void
 	 */
 	public function site_meta_tags() {
 
-		if ( is_singular() || is_attachment() || ! $this->is_meta_enabled() ) {
+		if ( is_singular() || is_attachment() || ! $this->metas->is_meta_enabled() ) {
 			return;
 		}
 
 		$tag_args = array(
-			'site_name' => $this->get_site_name(),
-			'site_title' => $this->get_site_title(),
-			'site_description' => $this->get_site_description(),
-			'site_url' => $this->get_site_url(),
-			'site_image' => $this->get_site_image(),
+			'site_name' => $this->metas->get_site_name(),
+			'site_title' => $this->metas->get_site_title(),
+			'site_description' => $this->metas->get_site_description(),
+			'site_url' => $this->metas->get_site_url(),
+			'site_image' => $this->metas->get_site_image(),
 		);
 
 		$og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'site', 'open-graph' ) );
@@ -126,25 +147,26 @@ final class WPHead extends Metas {
 	 * of any Post Types.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Use $this->metas property to access the Metas class method.
 	 * @access public
 	 *
 	 * @return void
 	 */
 	public function post_meta_tags() {
 
-		if ( ! is_singular() || is_attachment() || ! $this->is_meta_enabled() ) {
+		if ( ! is_singular() || is_attachment() || ! $this->metas->is_meta_enabled() ) {
 			return;
 		}
 
 		$post_id = absint( get_the_id() );
 
 		$tag_args = array(
-			'site_name' => $this->get_site_name(),
-			'post_title' => $this->get_post_title( $post_id ),
-			'post_description' => $this->get_post_description( $post_id ),
-			'post_url' => $this->get_post_url( $post_id ),
-			'post_image' => $this->get_post_image( $post_id ),
-			'post_author' => $this->get_post_author( $post_id ),
+			'site_name' => $this->metas->get_site_name(),
+			'post_title' => $this->metas->get_post_title( $post_id ),
+			'post_description' => $this->metas->get_post_description( $post_id ),
+			'post_url' => $this->metas->get_post_url( $post_id ),
+			'post_image' => $this->metas->get_post_image( $post_id ),
+			'post_author' => $this->metas->get_post_author( $post_id ),
 		);
 
 		$og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'open-graph' ) );

@@ -12,14 +12,30 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use \WP_Http as WP_HTTP;
-
 /**
  * The Class that define the social buttons output.
  *
  * @since 1.0.0
  */
 class ButtonsContent extends Buttons {
+
+	/**
+	 * The Buttons Content view set in the Settings.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 * @var string
+	 */
+	protected $view;
+
+	/**
+	 * The Buttons Content placmeent set in the Settings.
+	 *
+	 * @since 1.0.6
+	 * @access protected
+	 * @var string
+	 */
+	protected $placement;
 
 	/**
 	 * The response of `get_content_endpoints()` function
@@ -38,12 +54,13 @@ class ButtonsContent extends Buttons {
 	 * in the content.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Change the class parameter to the Plugin instance.
 	 * @access public
 	 *
-	 * @param ViewPublic $public The ViewPublic class instance.
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	function __construct( ViewPublic $public ) {
-		parent::__construct( $public );
+	function __construct( Plugin $plugin ) {
+		parent::__construct( $plugin );
 
 		$this->view = $this->plugin->get_option( 'buttons_content', 'view' );
 		$this->placement = $this->plugin->get_option( 'buttons_content', 'placement' );
@@ -70,6 +87,7 @@ class ButtonsContent extends Buttons {
 	 * Function to setup the image buttons when it is in HTML mode.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Use $this->endpoints property to access the Endpoints class method.
 	 * @access public
 	 *
 	 * @return void
@@ -78,7 +96,7 @@ class ButtonsContent extends Buttons {
 
 		if ( 'html' === $this->mode && is_singular() ) {
 
-			$response = $this->get_content_endpoints( get_the_id() );
+			$response = $this->endpoints->get_content_endpoints( get_the_id() );
 			$this->response = $response['endpoints'];
 		}
 	}
@@ -100,6 +118,7 @@ class ButtonsContent extends Buttons {
 	 * Append or prepend the social media buttons wrapper element into the content.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Prevent appending the social buttons when the post is not yet published.
 	 * @access public
 	 *
 	 * @param string $content The post content.
@@ -112,7 +131,7 @@ class ButtonsContent extends Buttons {
 		$button = '';
 		$post_id = get_the_id();
 
-		if ( false === $this->is_buttons_content() ) {
+		if ( ! $this->is_buttons_content() || 'publish' !== $this->get_post_status() ) {
 			return $content;
 		}
 
@@ -167,6 +186,7 @@ class ButtonsContent extends Buttons {
 	 * Used when the "Buttons Mode" is set to 'HTML'.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Renamed `data-social-buttons` to `data-social-manager` of the `span` (wrapper) element.
 	 * @access public
 	 *
 	 * @param object $includes Data to include in the button.
@@ -185,7 +205,7 @@ class ButtonsContent extends Buttons {
 				$list .= "<h4 class='{$this->prefix}-buttons__heading'>{$heading}</h4>";
 			}
 
-			$list .= "<div class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-buttons='content'>";
+			$list .= "<div class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsContent\">";
 
 			foreach ( $includes as $site => $endpoint ) :
 
@@ -214,6 +234,7 @@ class ButtonsContent extends Buttons {
 	 * Add the Underscore.js template of the social media buttons.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Renamed `data-social-buttons` to `data-social-manager` of the `span` (wrapper) element.
 	 * @access public
 	 *
 	 * @return void
@@ -236,7 +257,7 @@ class ButtonsContent extends Buttons {
 				),
 			) );
 
-		} ?><div class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-buttons="content"><?php
+		} ?><div class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsContent"><?php
 
 			$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' ); foreach ( $includes as $site ) :
 
@@ -264,6 +285,7 @@ class ButtonsContent extends Buttons {
 	 * The Utility method to check if buttons content should be generated.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Use $this->metas property to access the Metas class method.
 	 * @access protected
 	 *
 	 * @return boolean
@@ -298,7 +320,7 @@ class ButtonsContent extends Buttons {
 			return false;
 		}
 
-		$post_meta = $this->get_post_meta( get_the_id(), 'buttons_content' );
+		$post_meta = $this->metas->get_post_meta( get_the_id(), 'buttons_content' );
 
 		/**
 		 * If it is 'null' we assume that the meta post either not yet created or

@@ -54,15 +54,16 @@ class Metas {
 	 * Run the WordPress Hooks, add meta tags in the 'head' tag.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.6 - Change the class parameter to the Plugin instance.
 	 * @access public
 	 *
-	 * @param ViewPublic $public The ViewPublic class instance.
+	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	function __construct( ViewPublic $public ) {
+	function __construct( Plugin $plugin ) {
 
-		$this->plugin = $public->plugin;
-		$this->plugin_slug = $public->plugin->get_slug();
-		$this->option_slug = $public->plugin->get_opts();
+		$this->plugin = $plugin;
+		$this->plugin_slug = $plugin->get_slug();
+		$this->option_slug = $plugin->get_opts();
 	}
 
 	/**

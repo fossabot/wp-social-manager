@@ -2,20 +2,20 @@
 # Social Manager
 
 ![Banner](wp-assets/banner-1544x500.png)
-Helps optimizing your website in social media.
+Lightweight, clean and optimized social media plugin for WordPress.
 
 **Contributors:** [ninecodes](https://profiles.wordpress.org/ninecodes), [tfirdaus](https://profiles.wordpress.org/tfirdaus), [hongkiat](https://profiles.wordpress.org/hongkiat)  
 **Tags:** [widget](https://wordpress.org/plugins/tags/widget), [json](https://wordpress.org/plugins/tags/json), [wp-api](https://wordpress.org/plugins/tags/wp-api), [social-media](https://wordpress.org/plugins/tags/social-media), [sharing](https://wordpress.org/plugins/tags/sharing), [facebook](https://wordpress.org/plugins/tags/facebook), [twitter](https://wordpress.org/plugins/tags/twitter), [pinterest](https://wordpress.org/plugins/tags/pinterest), [open-graph](https://wordpress.org/plugins/tags/open-graph), [twitter-cards](https://wordpress.org/plugins/tags/twitter-cards)  
 **Requires at least:** 4.5  
 **Tested up to:** 4.7  
-**Stable tag:** 1.0.5  
+**Stable tag:** 1.0.6  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 
 [![Build Status](https://travis-ci.org/ninecodes/social-manager.svg?branch=master)](https://travis-ci.org/ninecodes/social-manager) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com) 
 
 ## Description ##
 
-This plugin helps you optimize your website in social media with [Open Graph](http://ogp.me/) and [Twitter Cards](https://dev.twitter.com/cards/overview) meta tags. Facebook, Twitter, and other social media sites will scan these meta tags to understand your content structure better as well as enable them to render the content preview on their [News Feed](https://www.facebook.com/help/327131014036297/) properly. This plugin allows you to customize the meta tags, so you have more control over your posts and pages presentation.
+This plugin helps you optimize your website for social media with [Open Graph](http://ogp.me/) and [Twitter Cards](https://dev.twitter.com/cards/overview) meta tags. Facebook, Twitter, and other social media sites will evaluate these meta tags to understand your content better and enable to preview the content on the [News Feed](https://www.facebook.com/help/327131014036297/) nicely. This plugin allows you to customize the meta tags, so you have more control over your posts and pages presentation.
 
 Other features included in the plugin:
 ### Social Buttons ###
@@ -74,15 +74,15 @@ Then, login to your server *with the credentials given by your hosting provider*
 
 ## Theme Support ##
 
-If you are a Theme developer, you can add `add_theme_support( 'ninecodes-social-manager' )` in `functions.php` of your theme themes to customize the plugin at Theme level. The following are the "features" that we currently support.
+If you are a Theme developer, you can add `add_theme_support( 'ninecodes-social-manager' )` in the `functions.php` of your theme themes to customize the plugin at Theme level. The following are the "features" that this plugin currently supports.
 
 **Remove the plugin stylesheet**
 
-Set the `stylesheet` to `false` will dequeue the plugin stylesheet. This allows you to customize the the plugin output through your theme stylesheet to match your theme design as a whole without having to do an override.
+Set the `stylesheet` to `true` will dequeue the plugin stylesheet. This allows you to customize the the plugin output through your theme stylesheet to match your theme design as a whole without having to do an override.
 
 ```php
 add_theme_support( 'ninecodes-social-manager', array(
-	'stylesheet' => false,
+	'stylesheet' => true, // Means the theme supports (loads) the stylesheet.
 ) );
 ```
 
@@ -96,7 +96,7 @@ add_theme_support( 'ninecodes-social-manager', array(
 ) );
 ```
 
-Keep in mind, setting the prefix to other than `ninecodes-social-manager` will also dequeue the stylesheet much like setting the `stylesheet` to false; you will have to add the styles on your own.
+Keep in mind, setting the prefix to other than `social-manager` will dequeue the stylesheet much like setting the `stylesheet` to `true`; you will have to add the styles on your own.
 
 **Changing the Buttons Mode**
 
@@ -140,6 +140,19 @@ None, at the moment. Please ask. :)
 
 ## Changelog ##
 
+### [1.0.6] - 2017-01-10 ###
+* __Added__: Add "Settings" link in the plugin Table List.
+* __Changed__: Improved `/buttons` API by extending `WP_REST_Controller`.
+* __Changed__: The translation file source (`.pot`) to add the new strings in the source code.
+* __Changed__: Indonesian translation files (`.mo` and `.po`) following the changes in the `.pot` .
+* __Changed__: Element attribute prefix from `ninecodes-social-manager` to `social-manager`.
+* __Changed__: The `data-social-buttons` attributes now is `data-social-manager`.
+* __Fixed__: Do not load stylesheet when it is disabled in the **Settings** page, even when the widget is active.
+* __Fixed__: Do not render the social buttons when the post is not published.
+* __Fixed__: Only load the scripts in a single post, page, and custom post type.
+
+Read more at [Version 1.0.6 Release Note](https://github.com/ninecodes/social-manager/releases/tag/v1.0.6)
+
 ### [1.0.5] - 2017-01-05 ###
 * __Changed__: Update the translation file source (`.pot`).
 * __Changed__: Indonesian translation (`.mo` and `.po`).
@@ -181,6 +194,9 @@ None, at the moment. Please ask. :)
 
 
 ## Upgrade Notice ##
+
+### 1.0.6 ###
+* Numerous bug fixes, and improvements in the REST API response as well as in the plugin code structure.
 
 ### 1.0.5 ###
 * Update translations and fixed bug with the stylesheet enqueue when the "Social Media Profiles" widget is active.
