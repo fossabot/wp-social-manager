@@ -469,4 +469,64 @@ class Metas {
 			'profiles' => $profiles,
 		);
 	}
+
+	/**
+	 * The method to get the "post" section.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @param integer $post_id The post ID.
+	 * @return string Selected or default section.
+	 */
+	public function get_post_section( $post_id ) {
+
+		$post_id = absint( $post_id );
+		$section = $this->get_post_meta( $post_id, 'post_section' ); // Post Meta Image.
+
+		if ( ! $section ) {
+			$section = $this->get_default_post_section( $post_id );
+		}
+
+		return wp_kses( $section, array() ); // Get the first term found.
+	}
+
+	/**
+	 * The method to get the "post" section.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @param integer $post_id The post ID.
+	 * @return string The default post section.
+	 */
+	protected function get_default_post_section( $post_id ) {
+
+		$post_id = absint( $post_id );
+		$post_type = get_post_type( $post_id );
+		$taxonomies = get_object_taxonomies( $post_type, 'object' );
+
+		/**
+		 * Get list of hierarchical taxonomies like a category.
+		 *
+		 * @var array
+		 */
+		$hierarchical = array();
+		foreach ( $taxonomies as $slug => $tax ) {
+			if ( (bool) $tax->hierarchical ) {
+				$hierarchical[] = $slug;
+			}
+		}
+
+		/**
+		 * Get list terms of the first hierarchical taxonomy on the list.
+		 *
+		 * @var array
+		 */
+		$sections = wp_get_post_terms( $post_id, $hierarchical[0], array(
+			'fields' => 'names',
+		) );
+
+		return is_array( $sections ) && ! empty( $sections ) ? $sections[0] : ''; // Return the first term on the list.
+	}
 }
