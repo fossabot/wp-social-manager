@@ -47,6 +47,8 @@ class TestWPHead extends WP_UnitTestCase {
 	 */
 	public function setUp() {
 		parent::setUp();
+		_clean_term_filters();
+		wp_cache_delete( 'last_changed', 'terms' );
 
 		// Setup the plugin.
 		$plugin = new Plugin();
@@ -274,6 +276,20 @@ class TestWPHead extends WP_UnitTestCase {
 			'post_excerpt' => '(Excerpt) Lorem ipsum dolor.',
 		) );
 
+		$cat_default = get_option( 'default_category' );
+		$cat_1 = $this->factory()->category->create( array(
+			'slug' => 'cat-1',
+			'name' => 'Category 1',
+			'description' => 'Description of Category 1',
+		) );
+		$cat_2 = $this->factory()->category->create( array(
+			'slug' => 'cat-2',
+			'name' => 'Category 2',
+			'description' => 'Description of Category 2',
+		) );
+
+		wp_set_post_terms( $post_id, array( $cat_1, $cat_2 ), 'category' );
+
 		$this->go_to( '?p=' . $post_id );
 		setup_postdata( get_post( $post_id ) );
 
@@ -289,6 +305,7 @@ class TestWPHead extends WP_UnitTestCase {
 		$this->assertContains( '<meta property="og:title" content="Hello World #2">', $buffer );
 		$this->assertContains( '<meta property="og:description" content="(Excerpt) Lorem ipsum dolor."', $buffer );
 		$this->assertContains( '<meta property="og:url" content="' . get_permalink( $post_id ) . '"', $buffer );
+		$this->assertContains( '<meta property="article:section" content="Category 1"', $buffer );
 
 		// Twitter Cards.
 		$this->assertContains( '<meta name="twitter:title" content="Hello World #2">', $buffer );
