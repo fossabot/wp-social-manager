@@ -167,6 +167,7 @@ final class WPHead {
 			'post_url' => $this->metas->get_post_url( $post_id ),
 			'post_image' => $this->metas->get_post_image( $post_id ),
 			'post_author' => $this->metas->get_post_author( $post_id ),
+			'post_section' => $this->metas->get_post_section( $post_id ),
 		);
 
 		$og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'open-graph' ) );
@@ -329,6 +330,7 @@ final class WPHead {
 			'post_title' => '',
 			'post_description' => '',
 			'post_url' => '',
+			'post_section' => '',
 			'post_image' => array(),
 			'post_author' => array(),
 		) );
@@ -342,6 +344,8 @@ final class WPHead {
 		$ogp->setTitle( $args['post_title'] );
 		$ogp->setURL( $args['post_url'] );
 		$ogp->setDescription( $args['post_description'] );
+
+		$article->setSection( $args['post_section'] );
 
 		/**
 		 * The author data.
