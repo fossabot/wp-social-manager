@@ -328,28 +328,32 @@ final class Metabox {
 			)
 		);
 
+		$choices = array();
+		$sections = array();
+		$tags = array();
+
 		$taxonomies = get_object_taxonomies( $this->post_type, 'object' );
 
-		$terms = array();
-		$choices = array();
-
 		foreach ( $taxonomies as $slug => $tax ) {
-			if ( (bool) $tax->hierarchical ) {
 
-				$terms[ $slug ] = wp_get_post_terms( $this->post_id, $slug, array(
+			if ( 'post_format' === $tax->name ) {
+				continue;
+			}
+
+			if ( $tax->hierarchical ) {
+				$terms = wp_get_post_terms( $this->post_id, $slug, array(
 					'fields' => 'all',
 				) );
-
-				$sections = $this->post_section_choices( $terms[ $slug ] );
-
-				$choices[] = array(
+				$sections[] = array(
 					'label' => $tax->label,
-					'choices' => $sections,
+					'choices' => $this->post_section_choices( $terms ),
 				);
+			} else {
+				$tags[ $tax->name ] = $tax->label;
 			}
 		}
 
-		if ( ! empty( $terms ) && ! empty( $choices ) ) :
+		if ( ! empty( $sections ) ) :
 
 			$manager->register_control( 'post_section',
 				array(
@@ -357,24 +361,47 @@ final class Metabox {
 					'section' => 'meta_tags',
 					'label' => esc_html__( 'Section', 'ninecodes-social-manager' ),
 					'description' => sprintf( esc_html__( 'The section of your website to which the %s belongs', 'ninecodes-social-manager' ), $this->post_type ),
-					'choices' => $choices,
+					'choices' => $sections,
 				)
 			);
 
 			$manager->register_setting( 'post_section',
 				array(
 					'type' => 'serialize',
-					'sanitize_callback' => 'sanitize_text_field',
+					'sanitize_callback' => 'sanitize_key',
+				)
+			);
+		endif;
+
+		if ( 1 > count( $tags ) && empty( $tags ) ) :
+
+			$manager->register_control( 'post_tag',
+				array(
+					'type' => 'select',
+					'section' => 'meta_tags',
+					'label' => esc_html__( 'Tags', 'ninecodes-social-manager' ),
+					'description' => sprintf( esc_html__( 'Select which Taxonomy to use as this %s meta tags. Tag words associated with this article.', 'ninecodes-social-manager' ), $this->post_type ),
+					'choices' => $tags,
+				)
+			);
+
+			$manager->register_setting( 'post_tag',
+				array(
+					'type' => 'serialize',
+					'sanitize_callback' => 'sanitize_key',
 				)
 			);
 		endif;
 	}
 
 	/**
-	 * Function to form a post section
+	 * Function to filter the post_section choices.
 	 *
-	 * @param [type] $terms [description].
-	 * @return [type] [description]
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @param array $terms The list of term.
+	 * @return array The post_section choice; the value and label.
 	 */
 	public function post_section_choices( $terms ) {
 

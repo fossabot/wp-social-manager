@@ -504,7 +504,42 @@ class Metas {
 	}
 
 	/**
-	 * The method to get the "post" section.
+	 * The method to get the "post" tag.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @param integer $post_id The post ID.
+	 * @return array List of tag words.
+	 */
+	public function get_post_tags( $post_id ) {
+
+		$post_id = absint( $post_id );
+		$post = get_post( $post_id );
+
+		$tags = array();
+
+		/**
+		 * The taxonomy slug of the Tag.
+		 *
+		 * @var string.
+		 */
+		$post_tag = $this->get_post_meta( $post_id, 'post_tag' );
+
+		if ( $post_tag ) {
+			$terms = wp_get_post_terms( $post_id, $post_tag );
+			foreach ( $terms as $key => $term ) {
+				$tags[] = $term->name;
+			}
+		} else {
+			$tags = $this->get_default_post_tags( $post_id );
+		}
+
+		return $tags;
+	}
+
+	/**
+	 * The method to get the "post" default section.
 	 *
 	 * @since 1.1.0
 	 * @access public
@@ -514,7 +549,6 @@ class Metas {
 	 */
 	protected function get_default_post_section( $post_id ) {
 
-		$post_id = absint( $post_id );
 		$post_type = get_post_type( $post_id );
 		$taxonomies = get_object_taxonomies( $post_type, 'object' );
 
@@ -523,10 +557,10 @@ class Metas {
 		 *
 		 * @var array
 		 */
-		$hierarchical = array();
+		$sections = array();
 		foreach ( $taxonomies as $slug => $tax ) {
-			if ( (bool) $tax->hierarchical ) {
-				$hierarchical[] = $slug;
+			if ( true === $tax->hierarchical ) {
+				$sections[] = $slug;
 			}
 		}
 
@@ -535,10 +569,46 @@ class Metas {
 		 *
 		 * @var array
 		 */
-		$sections = wp_get_post_terms( $post_id, $hierarchical[0], array(
+		$terms = wp_get_post_terms( $post_id, $sections[0], array(
 			'fields' => 'names',
 		) );
 
-		return is_array( $sections ) && ! empty( $sections ) ? $sections[0] : ''; // Return the first term on the list.
+		return is_array( $terms ) && ! empty( $terms ) ? $terms[0] : ''; // Return the first term on the list.
+	}
+
+	/**
+	 * The method to get the "post" default tags.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @param integer $post_id The post ID.
+	 * @return string The list of tags.
+	 */
+	protected function get_default_post_tags( $post_id ) {
+
+		$post_type = get_post_type( $post_id );
+		$taxonomies = get_object_taxonomies( $post_type, 'object' );
+
+		/**
+		 * Get list of hierarchical taxonomies like a category.
+		 *
+		 * @var array
+		 */
+		$taxs = array();
+		foreach ( $taxonomies as $slug => $tax ) {
+			if ( false === $tax->hierarchical && 'post_format' !== $slug ) {
+				$taxs[] = $slug;
+			}
+		}
+
+		$terms = wp_get_post_terms( $post_id, $taxs[0] );
+
+		$tags = array();
+		foreach ( $terms as $key => $term ) {
+			$tags[] = $term->name;
+		}
+
+		return $tags;
 	}
 }

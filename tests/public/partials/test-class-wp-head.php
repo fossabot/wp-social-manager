@@ -2,7 +2,8 @@
 /**
  * Class TestWPHead
  *
- * TODO: Add tests for the Filters Hooks.
+ * TODO: - Add tests for the Filters Hooks.
+ * 		 - Add tests for Custom Taxonomy.
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -409,6 +410,58 @@ class TestWPHead extends WP_UnitTestCase {
 		$buffer = ob_get_clean();
 
 		$this->assertContains( '<meta property="article:section" content="Category 1">', $buffer );
+	}
+
+	/**
+	 * The `post_meta_tags` method with post_tag meta tags.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_post_meta_tags_with_post_tags() {
+
+		update_option($this->option_slug . '_metas_site', array(
+			'enabled' => 'on',
+		));
+
+		$tag_1 = $this->factory()->term->create(array(
+			'name' => 'Tag 1',
+			'taxonomy' => 'post_tag',
+		));
+		$tag_2 = $this->factory()->term->create(array(
+			'name' => 'Tag 2',
+			'taxonomy' => 'post_tag',
+		));
+
+		$post_id = $this->factory()->post->create( array(
+			'post_title' => 'Post Meta Section',
+		) );
+		wp_set_post_terms( $post_id, array( $tag_1, $tag_2 ), 'post_tag' );
+
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		$this->assertTrue( is_single() ); // Ensure we are on single post.
+
+		ob_start();
+		$this->wp_head->post_meta_tags();
+		$buffer = ob_get_clean();
+
+		$this->assertContains( '<meta property="article:tag" content="Tag 1">', $buffer );
+		$this->assertContains( '<meta property="article:tag" content="Tag 2">', $buffer );
+
+		/**
+		 * Test when one of the tag is removed.
+		 */
+		wp_remove_object_terms( $post_id, $tag_1, 'post_tag' );
+
+		ob_start();
+		$this->wp_head->post_meta_tags();
+		$buffer = ob_get_clean();
+
+		$this->assertContains( '<meta property="article:tag" content="Tag 2">', $buffer );
 	}
 
 	/**
