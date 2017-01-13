@@ -482,13 +482,25 @@ class Metas {
 	public function get_post_section( $post_id ) {
 
 		$post_id = absint( $post_id );
-		$section = $this->get_post_meta( $post_id, 'post_section' ); // Post Meta Image.
+		$post = get_post( $post_id );
 
-		if ( ! $section ) {
-			$section = $this->get_default_post_section( $post_id );
+		$post_section = explode( '-', $this->get_post_meta( $post_id, 'post_section' ) );
+
+		$taxonomy = isset( $post_section[0] ) ? sanitize_key( $post_section[0] ) : '';
+		$term_id = isset( $post_section[1] ) ? absint( $post_section[1] ) : null;
+
+		/**
+		 * Make sure the post has the term attached,
+		 * otherwise it should fallback to default post section.
+		 */
+		if ( has_term( $term_id, $taxonomy, $post ) ) {
+			$term = get_term( $term_id, $taxonomy, $post );
+			$section_name = $term->name;
+		} else {
+			$section_name = $this->get_default_post_section( $post_id );
 		}
 
-		return wp_kses( $section, array() ); // Get the first term found.
+		return wp_kses( $section_name, array() ); // Get the first term found.
 	}
 
 	/**
