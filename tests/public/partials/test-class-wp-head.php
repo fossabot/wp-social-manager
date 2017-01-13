@@ -293,6 +293,7 @@ class TestWPHead extends WP_UnitTestCase {
 		$this->assertContains( '<meta property="og:image" content="https://example.org/upload/image.jpg">', $buffer );
 
 		// Twitter Cards.
+		$this->assertContains( '<meta name="twitter:card" content="summary_large_image">', $buffer );
 		$this->assertContains( '<meta name="twitter:title" content="Hello World #1">', $buffer );
 		$this->assertContains( '<meta name="twitter:description" content="(Content) Lorem ipsum dolor sit amet.">', $buffer );
 		$this->assertContains( '<meta name="twitter:url" content="' . get_permalink( $post_id ) . '">', $buffer );
@@ -362,6 +363,7 @@ class TestWPHead extends WP_UnitTestCase {
 		$this->assertContains( '<meta property="og:url" content="' . get_permalink( $post_id ) . '">', $buffer );
 
 		// Twitter Cards.
+		$this->assertContains( '<meta name="twitter:card" content="summary_large_image">', $buffer );
 		$this->assertContains( '<meta name="twitter:title" content="Hello World #2">', $buffer );
 		$this->assertContains( '<meta name="twitter:description" content="(Excerpt) Lorem ipsum dolor.">', $buffer );
 		$this->assertContains( '<meta name="twitter:url" content="' . get_permalink( $post_id ) . '">', $buffer );
