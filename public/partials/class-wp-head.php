@@ -364,7 +364,7 @@ final class WPHead {
 
 			if ( isset( $author['profiles']['facebook'] ) && ! empty( $author['profiles']['facebook'] ) ) {
 				$article->addAuthor( "{$property_url}{$author['profiles']['facebook']}" );
-			} else {
+			} elseif ( isset( $author['display_name'] ) && ! empty( $author['display_name'] ) ) {
 				$meta .= sprintf( "<meta name=\"author\" content=\"%s\">\n", esc_attr( "{$author['display_name']}" ) );
 			}
 		}
