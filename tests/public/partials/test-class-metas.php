@@ -140,7 +140,7 @@ class TestMetas extends WP_UnitTestCase {
 		$this->assertEquals( 'Category 3', $this->metas->get_post_section( $post_id ) );
 
 		// When `post_section` meta is set.
-		update_post_meta( $post_id, $this->option_slug, array( 'post_section' => 'Category XYZ' ) );
-		$this->assertEquals( 'Category XYZ', $this->metas->get_post_section( $post_id ) );
+		update_post_meta( $post_id, $this->option_slug, array( 'post_section' => "category-{$c5}" ) );
+		$this->assertEquals( 'Category 5', $this->metas->get_post_section( $post_id ) );
 	}
 }
