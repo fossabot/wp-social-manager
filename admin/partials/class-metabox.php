@@ -337,11 +337,14 @@ final class Metabox {
 			if ( (bool) $tax->hierarchical ) {
 
 				$terms[ $slug ] = wp_get_post_terms( $this->post_id, $slug, array(
-					'fields' => 'names',
+					'fields' => 'all',
 				) );
+
+				$sections = $this->post_section_choices( $terms[ $slug ] );
+
 				$choices[] = array(
 					'label' => $tax->label,
-					'choices' => $this->post_section_choices( $terms[ $slug ] ),
+					'choices' => $sections,
 				);
 			}
 		}
@@ -376,8 +379,8 @@ final class Metabox {
 	public function post_section_choices( $terms ) {
 
 		$choices = array();
-		foreach ( $terms as $key => $name ) {
-			$choices[ $name ] = $name;
+		foreach ( $terms as $key => $term ) {
+			$choices[ "{$term->taxonomy}-{$term->term_id}" ] = $term->name;
 		}
 
 		return $choices;
