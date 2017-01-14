@@ -139,17 +139,7 @@ class ButtonsContent extends Buttons {
 		$is_json = 'json' === $this->mode;
 
 		if ( $is_html || $is_json ) {
-
-			$opening_tag = "<div class='{$this->prefix}-buttons {$this->prefix}-buttons--content {$this->prefix}-buttons--content-{$this->placement}' id='{$this->prefix}-buttons-{$post_id}'>";
-			$button .= apply_filters( 'ninecodes_social_manager_buttons_html', $opening_tag,
-				'wrap-opening',
-				'button-content',
-				array(
-					'post_id' => $post_id,
-					'prefix' => $this->prefix,
-					'placement' => $this->placement,
-				)
-			);
+			$button .= "<div class='{$this->prefix}-buttons {$this->prefix}-buttons--content {$this->prefix}-buttons--content-{$this->placement}' id='{$this->prefix}-buttons-{$post_id}'>";
 		}
 
 		if ( $is_html ) {
@@ -157,16 +147,7 @@ class ButtonsContent extends Buttons {
 		}
 
 		if ( $is_html || $is_json ) {
-			$closing_tag = '</div>';
-			$button .= apply_filters( 'ninecodes_social_manager_buttons_html', $closing_tag,
-				'wrap-closing',
-				'button-content',
-				array(
-					'post_id' => $post_id,
-					'prefix' => $this->prefix,
-					'placement' => $this->placement,
-				)
-			);
+			$button .= '</div>';
 		}
 
 		if ( 'before' === $this->placement ) {
@@ -205,20 +186,27 @@ class ButtonsContent extends Buttons {
 				$list .= "<h4 class='{$this->prefix}-buttons__heading'>{$heading}</h4>";
 			}
 
+			$prefix = $this->prefix;
+			$icons = $this->get_button_icons();
+			$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, array(
+				'attr_prefix' => $prefix,
+			), 'buttons-content' );
+
 			$list .= "<div class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsContent\">";
 
 			foreach ( $includes as $site => $endpoint ) :
 
-				$icon = $this->get_button_icon( $site );
+				$icon = isset( $icons[ $site ] ) ? $icons[ $site ] : null;
+
+				if ( ! $icon ) {
+					continue;
+				}
+
 				$label = $this->get_button_label( $site, 'content' );
 				$list .= $this->button_view( $this->view, 'content', array(
-					'prefix' => $this->prefix,
+					'attr_prefix' => $prefix,
 					'site' => $site,
-					'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, array(
-						'site' => $site,
-						'prefix' => $this->prefix,
-						'context' => 'button-content',
-					) ),
+					'icon' => $icon,
 					'label' => $label,
 					'endpoint' => $endpoint,
 				) );
@@ -259,18 +247,28 @@ class ButtonsContent extends Buttons {
 
 		} ?><div class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsContent"><?php
 
-			$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' ); foreach ( $includes as $site ) :
+		$prefix = $this->prefix;
+
+		$icons = $this->get_button_icons();
+		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, array(
+			'attr_prefix' => $prefix,
+		), 'buttons-content' );
+
+		$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
+
+		foreach ( $includes as $site ) :
+
+			$icon = isset( $icons[ $site ] ) ? $icons[ $site ] : null;
+
+			if ( ! $icon ) {
+				continue;
+			}
 
 			$label = $this->get_button_label( $site, 'content' );
-			$icon  = $this->get_button_icon( $site );
 			$list  = $this->button_view( $this->view, 'content', array(
-				'prefix' => $this->prefix,
+				'attr_prefix' => $prefix,
 				'site' => $site,
-				'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, array(
-					'site' => $site,
-					'prefix' => $this->prefix,
-					'context' => 'button-content',
-				) ),
+				'icon' => $icon,
 				'label' => $label,
 				'endpoint' => "{{ data.endpoints.{$site} }}",
 			));

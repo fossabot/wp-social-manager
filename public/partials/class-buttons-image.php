@@ -260,17 +260,25 @@ class ButtonsImage extends Buttons {
 
 			$list .= "<span class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsImage\">";
 
+			$prefix = $this->prefix;
+			$icons  = $this->get_button_icons();
+			$icons  = apply_filters( 'ninecodes_social_manager_icons', $icons, array(
+				'attr_prefix' => $prefix,
+			), 'buttons-image' );
+
 			foreach ( $includes as $site => $endpoint ) :
+
+				$icon = isset( $icons[ $site ] ) ? $icons[ $site ] : null;
+
+				if ( ! $icon ) {
+					continue;
+				}
+
 				$label = $this->get_button_label( $site, 'image' );
-				$icon  = $this->get_button_icon( $site );
 				$list .= $this->button_view( $this->view, 'image', array(
-					'prefix' => $this->prefix,
+					'attr_prefix' => $prefix,
 					'site' => $site,
-					'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, array(
-						'site' => $site,
-						'prefix' => $this->prefix,
-						'context' => 'button-image',
-					) ),
+					'icon' => $icon,
 					'label' => $label,
 					'endpoint' => $endpoint,
 				));
@@ -312,18 +320,25 @@ class ButtonsImage extends Buttons {
 			if ( ! empty( $includes ) ) : ?><script type="text/html" id="tmpl-buttons-image">
 <span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsImage"><?php
 
+$prefix = $this->prefix;
+$icons  = $this->get_button_icons();
+$icons  = apply_filters( 'ninecodes_social_manager_icons', $icons, array(
+	'attr_prefix' => $prefix,
+), 'buttons-image' );
+
 foreach ( $includes as $site ) :
 
 	$label = $this->get_button_label( $site, 'image' );
-	$icon  = $this->get_button_icon( $site );
-	$list  = $this->button_view($this->view, 'image', array(
-		'prefix' => $this->prefix,
+	$icon = isset( $icons[ $site ] ) ? $icons[ $site ] : null;
+
+	if ( ! $icon ) {
+		continue;
+	}
+
+	$list = $this->button_view($this->view, 'image', array(
+		'attr_prefix' => $prefix,
 		'site' => $site,
-		'icon' => apply_filters( 'ninecodes_social_manager_icon', $icon, array(
-			'site' => $site,
-			'prefix' => $this->prefix,
-			'context' => 'button-image',
-		) ),
+		'icon' => $icon,
 		'label' => $label,
 		'endpoint' => "{{ data.endpoints.{$site} }}",
 	));
