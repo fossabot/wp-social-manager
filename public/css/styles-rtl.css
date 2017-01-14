@@ -8,7 +8,6 @@
     display: block;
 }
 
-
 [class^="social-manager"] a {
     display: inline-block;
     text-decoration: none;
@@ -292,4 +291,15 @@
 .widget .social-manager-profiles__item,
 .widget .social-manager-profiles__item a {
     color: #000;
+}
+
+
+/**
+ * "Social Profiles" Author Template Tag
+ */
+.social-manager-profiles-author {
+	margin: 15px 0;
+}
+.social-manager-profiles-author__item {
+    margin-left: 10px;
 }
