@@ -131,6 +131,7 @@ final class ViewPublic {
 		require_once( $this->path_dir . 'partials/class-buttons.php' );
 		require_once( $this->path_dir . 'partials/class-buttons-content.php' );
 		require_once( $this->path_dir . 'partials/class-buttons-image.php' );
+		require_once( $this->path_dir . 'partials/function-template-tags.php' );
 	}
 
 	/**

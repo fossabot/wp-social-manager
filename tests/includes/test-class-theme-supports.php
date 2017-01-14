@@ -217,5 +217,9 @@ class TestThemeSupports extends WP_UnitTestCase {
 
 		$this->assertEquals( 'social', $this->theme_supports->is( 'attr-prefix' ) );
 		$this->assertTrue( $this->theme_supports->is( 'stylesheet' ) ); // The `stylesheet` support should turn to true.
+
+		add_theme_support($this->theme_supports->get_feature_name(), array(
+			'attr_prefix' => '',
+		));
 	}
 }
