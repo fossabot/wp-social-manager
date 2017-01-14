@@ -133,6 +133,7 @@ final class Metabox {
 	 * @return void
 	 */
 	public function setups( Plugin $plugin ) {
+
 		$this->plugin = $plugin;
 		$this->option_slug = $plugin->get_opts();
 	}
@@ -158,11 +159,10 @@ final class Metabox {
 		add_action( 'admin_head-post-new.php', array( $this, 'admin_head_enqueues' ), 10 );
 
 		// Register our custom manager.
-		$butterbean->register_manager(
-			$this->option_slug,
+		$butterbean->register_manager( $this->option_slug,
 			array(
 				'label'      => esc_html__( 'Social', 'ninecodes-social-manager' ),
-				'post_type'  => array( 'post', 'page', 'product' ),
+				'post_type'  => array( 'post', 'page' ),
 				'context'    => 'normal',
 				'priority'   => 'high',
 				'capability' => 'publish_posts',
@@ -186,10 +186,9 @@ final class Metabox {
 		$manager = $butterbean->get_manager( $this->option_slug );
 
 		// Register a section.
-		$manager->register_section(
-			'buttons',
+		$manager->register_section( 'buttons',
 			array(
-				'label' => 'Buttons',
+				'label' => esc_html__( 'Buttons', 'ninecodes-social-manager' ),
 				'icon'  => 'dashicons-thumbs-up',
 			)
 		);
@@ -199,21 +198,20 @@ final class Metabox {
 		if ( in_array( $post_type, $post_types, true ) ) {
 
 			// Register a setting.
-			$manager->register_setting(
-				'buttons_content',
+			$manager->register_control( 'buttons_content',
+				array(
+					'type' => 'checkbox',
+					'section' => 'buttons',
+					'label' => esc_html__( 'Content Social Media Buttons', 'ninecodes-social-manager' ),
+					'description' => sprintf( esc_html__( 'Display the buttons that allow people to share, like, or save this %s in social media', 'ninecodes-social-manager' ), $this->post_type ),
+				)
+			);
+
+			$manager->register_setting( 'buttons_content',
 				array(
 					'type' => 'serialize',
 					'default' => 1,
 					'sanitize_callback' => 'butterbean_validate_boolean',
-				)
-			);
-			$manager->register_control(
-				'buttons_content',
-				array(
-					'type' => 'checkbox',
-					'section' => 'buttons',
-					'label' => 'Content Social Media Buttons',
-					'description' => "Display the buttons that allow people to share, like, or save this {$this->post_type} in social media",
 				)
 			);
 		}
@@ -224,21 +222,20 @@ final class Metabox {
 		if ( in_array( $post_type, $post_types, true ) && $enabled ) {
 
 			// Register a setting.
-			$manager->register_setting(
-				'buttons_image',
+			$manager->register_control( 'buttons_image',
+				array(
+					'type' => 'checkbox',
+					'section' => 'buttons',
+					'label' => esc_html__( 'Image Social Media Buttons', 'ninecodes-social-manager' ),
+					'description' => sprintf( esc_html__( 'Display the social media buttons that allow people to share, like, or save images of this %s in social media', 'ninecodes-social-manager' ), $this->post_type ),
+				)
+			);
+
+			$manager->register_setting( 'buttons_image',
 				array(
 					'type' => 'serialize',
 					'default' => 1,
 					'sanitize_callback' => 'butterbean_validate_boolean',
-				)
-			);
-			$manager->register_control(
-				'buttons_image',
-				array(
-					'type' => 'checkbox',
-					'section' => 'buttons',
-					'label' => 'Image Social Media Buttons',
-					'description' => "Display the social media buttons that allow people to share, like, or save images of this {$this->post_type} in social media",
 				)
 			);
 		}
@@ -265,21 +262,20 @@ final class Metabox {
 		// Get our custom manager object.
 		$manager = $butterbean->get_manager( $this->option_slug );
 
-		$manager->register_section(
-			'meta_tags',
+		$manager->register_section( 'meta_tags',
 			array(
-				'label' => 'Metas',
+				'label' => esc_html__( 'Metas', 'ninecodes-social-manager' ),
 				'icon'  => 'dashicons-editor-code',
 			)
 		);
 
-		$manager->register_control(
-			'post_title',
+		// The post title control.
+		$manager->register_control( 'post_title',
 			array(
 				'type' => 'text',
 				'section' => 'meta_tags',
-				'label' => 'Title',
-				'description' => "Set a customized title of this {$this->post_type} as it should appear within the social meta tag",
+				'label' => esc_html__( 'Title', 'ninecodes-social-manager' ),
+				'description' => sprintf( esc_html__( 'Set a customized title of this %s as it should appear within the social meta tag', 'ninecodes-social-manager' ), $this->post_type ),
 				'attr' => array(
 					'class' => 'widefat',
 					'placeholder' => $this->post_title,
@@ -287,21 +283,20 @@ final class Metabox {
 			)
 		);
 
-		$manager->register_setting(
-			'post_title',
+		$manager->register_setting( 'post_title',
 			array(
 				'type' => 'serialize',
 				'sanitize_callback' => 'sanitize_text_field',
 			)
 		);
 
-		$manager->register_control(
-			'post_excerpt',
+		// The post excerpt or description control.
+		$manager->register_control( 'post_excerpt',
 			array(
 				'type' => 'textarea',
 				'section' => 'meta_tags',
-				'label' => 'Description',
-				'description' => "Set a one to two customized description of this {$this->post_type} that should appear within the social meta tag",
+				'label' => esc_html__( 'Description', 'ninecodes-social-manager' ),
+				'description' => sprintf( esc_html__( 'Set a one to two customized description of this %s that should appear within the social meta tag', 'ninecodes-social-manager' ), $this->post_type ),
 				'attr' => array(
 					'placeholder' => strip_shortcodes( $this->post_excerpt ),
 					'class' => 'widefat',
@@ -309,8 +304,7 @@ final class Metabox {
 			)
 		);
 
-		$manager->register_setting(
-			'post_excerpt',
+		$manager->register_setting( 'post_excerpt',
 			array(
 				'type' => 'serialize',
 				'sanitize_callback' => 'wp_kses',
@@ -318,23 +312,105 @@ final class Metabox {
 		);
 
 		// Image upload control.
-		$manager->register_control(
-			'post_thumbnail',
+		$manager->register_control( 'post_thumbnail',
 			array(
-				'type'        => 'image',
-				'section'     => 'meta_tags',
-				'label'       => 'Image',
-				'description' => "Set a custom image URL which should represent this {$this->post_type} within the social meta tag",
-				'size'        => 'large',
+				'type' => 'image',
+				'section' => 'meta_tags',
+				'label' => esc_html__( 'Image', 'ninecodes-social-manager' ),
+				'description' => sprintf( esc_html__( 'Set a custom image URL which should represent this within the social meta tag', 'ninecodes-social-manager' ), $this->post_type ),
+				'size' => 'large',
 			)
 		);
-		$manager->register_setting(
-			'post_thumbnail',
+		$manager->register_setting( 'post_thumbnail',
 			array(
 				'type' => 'serialize',
 				'sanitize_callback' => array( $this, 'sanitize_absint' ),
 			)
 		);
+
+		$choices = array();
+		$sections = array();
+		$tags = array();
+
+		$taxonomies = get_object_taxonomies( $this->post_type, 'object' );
+
+		foreach ( $taxonomies as $slug => $tax ) {
+
+			if ( 'post_format' === $tax->name ) {
+				continue;
+			}
+
+			if ( $tax->hierarchical ) {
+				$terms = wp_get_post_terms( $this->post_id, $slug, array(
+					'fields' => 'all',
+				) );
+				$sections[] = array(
+					'label' => $tax->label,
+					'choices' => $this->post_section_choices( $terms ),
+				);
+			} else {
+				$tags[ $tax->name ] = $tax->label;
+			}
+		}
+
+		if ( ! empty( $sections ) ) :
+
+			$manager->register_control( 'post_section',
+				array(
+					'type' => 'select-group',
+					'section' => 'meta_tags',
+					'label' => esc_html__( 'Section', 'ninecodes-social-manager' ),
+					'description' => sprintf( esc_html__( 'The section of your website to which the %s belongs', 'ninecodes-social-manager' ), $this->post_type ),
+					'choices' => $sections,
+				)
+			);
+
+			$manager->register_setting( 'post_section',
+				array(
+					'type' => 'serialize',
+					'sanitize_callback' => 'sanitize_key',
+				)
+			);
+		endif;
+
+		if ( 1 > count( $tags ) && empty( $tags ) ) :
+
+			$manager->register_control( 'post_tag',
+				array(
+					'type' => 'select',
+					'section' => 'meta_tags',
+					'label' => esc_html__( 'Tags', 'ninecodes-social-manager' ),
+					'description' => sprintf( esc_html__( 'Select which Taxonomy to use as this %s meta tags. The tags are words associated with this article.', 'ninecodes-social-manager' ), $this->post_type ),
+					'choices' => $tags,
+				)
+			);
+
+			$manager->register_setting( 'post_tag',
+				array(
+					'type' => 'serialize',
+					'sanitize_callback' => 'sanitize_key',
+				)
+			);
+		endif;
+	}
+
+	/**
+	 * Function to filter the post_section choices.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @param array $terms The list of term.
+	 * @return array The post_section choice; the value and label.
+	 */
+	public function post_section_choices( $terms ) {
+
+		$choices = array();
+		foreach ( $terms as $key => $term ) {
+			$choices[ "{$term->taxonomy}-{$term->term_id}" ] = $term->name;
+		}
+
+		return $choices;
 	}
 
 	/**
@@ -409,6 +485,8 @@ final class Metabox {
 			.butterbean-manager .butterbean-description { color: #555; }
 			.butterbean-manager .butterbean-nav .dashicons { font-size: 1em }
 			.butterbean-manager .butterbean-nav li[aria-selected=true] a { font-weight: 400 }
+			.butterbean-manager .butterbean-control-select-group select,
+			.butterbean-manager .butterbean-control-select select { min-width: 35% }
 		</style>
 	<?php }
 

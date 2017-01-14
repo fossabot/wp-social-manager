@@ -167,6 +167,10 @@ final class WPHead {
 			'post_url' => $this->metas->get_post_url( $post_id ),
 			'post_image' => $this->metas->get_post_image( $post_id ),
 			'post_author' => $this->metas->get_post_author( $post_id ),
+			'post_section' => $this->metas->get_post_section( $post_id ),
+			'post_tags' => $this->metas->get_post_tags( $post_id ),
+			'post_published_time' => get_post_time( 'c', true ),
+			'post_modified_time' => get_post_modified_time( 'c', true ),
 		);
 
 		$og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'open-graph' ) );
@@ -329,8 +333,12 @@ final class WPHead {
 			'post_title' => '',
 			'post_description' => '',
 			'post_url' => '',
+			'post_section' => '',
+			'post_tags' => array(),
 			'post_image' => array(),
 			'post_author' => array(),
+			'post_published_time' => '',
+			'post_modified_time' => '',
 		) );
 
 		$ogp = new OpenGraphProtocol();
@@ -342,6 +350,15 @@ final class WPHead {
 		$ogp->setTitle( $args['post_title'] );
 		$ogp->setURL( $args['post_url'] );
 		$ogp->setDescription( $args['post_description'] );
+
+		$article->setSection( $args['post_section'] );
+
+		foreach ( $args['post_tags'] as $key => $tag ) {
+			$article->addTag( $tag );
+		}
+
+		$article->setPublishedTime( $args['post_published_time'] );
+		$article->setModifiedTime( $args['post_modified_time'] );
 
 		/**
 		 * The author data.
@@ -360,7 +377,7 @@ final class WPHead {
 
 			if ( isset( $author['profiles']['facebook'] ) && ! empty( $author['profiles']['facebook'] ) ) {
 				$article->addAuthor( "{$property_url}{$author['profiles']['facebook']}" );
-			} else {
+			} elseif ( isset( $author['display_name'] ) && ! empty( $author['display_name'] ) ) {
 				$meta .= sprintf( "<meta name=\"author\" content=\"%s\">\n", esc_attr( "{$author['display_name']}" ) );
 			}
 		}
