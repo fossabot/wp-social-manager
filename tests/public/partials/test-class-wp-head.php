@@ -2,8 +2,12 @@
 /**
  * Class TestWPHead
  *
- * TODO: - Add tests for the Filters Hooks.
- * 		 - Add tests for Custom Taxonomy.
+ * TODO:
+ * - Add tests for Image added in the Customizer Site Icons.
+ * - Add tests for Image added in Featured Image.
+ * - Add tests for Image added in Custom Meta.
+ * - Add tests for Custom Taxonomy
+ * - Add tests for Site Meta filter.
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -20,6 +24,7 @@ use \WP_UnitTestCase;
  * The class to test the "TestWPHead" class instance.
  *
  * @since 1.0.6
+ * @since 1.1.0 Add test meta tags filter hook.
  */
 class TestWPHead extends WP_UnitTestCase {
 
@@ -299,6 +304,22 @@ class TestWPHead extends WP_UnitTestCase {
 		$this->assertContains( '<meta name="twitter:description" content="(Content) Lorem ipsum dolor sit amet.">', $buffer );
 		$this->assertContains( '<meta name="twitter:url" content="' . get_permalink( $post_id ) . '">', $buffer );
 		$this->assertContains( '<meta name="twitter:image" content="https://example.org/upload/image.jpg">', $buffer );
+
+		$post_id = $this->factory()->post->create(array(
+			'post_title' => 'Hello World #1',
+			'post_content' => '(Content) Lorem ipsum dolor sit amet.',
+			'post_excerpt' => '',
+		));
+
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+		$this->assertTrue( is_single() );
+
+		ob_start();
+		$this->wp_head->post_meta_tags();
+		$buffer = ob_get_clean();
+
+		$this->assertNotContains( '<meta property="og:image" content="https://example.org/upload/image.jpg">', $buffer );
 	}
 
 	/**
@@ -350,7 +371,7 @@ class TestWPHead extends WP_UnitTestCase {
 		$this->go_to( '?p=' . $post_id );
 		setup_postdata( get_post( $post_id ) );
 
-		$this->assertTrue( is_single() );
+		$this->assertTrue( is_single() ); // Make sure we are on single post.
 
 		ob_start();
 		$this->wp_head->post_meta_tags();
@@ -478,5 +499,147 @@ class TestWPHead extends WP_UnitTestCase {
 			'enabled' => '',
 		));
 		$this->assertNull( $this->wp_head->post_meta_tags() );
+	}
+
+	/**
+	 * Test post meta tags filter hook.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_post_meta_tags_filter_hook() {
+
+		update_option($this->option_slug . '_metas_site', array(
+			'enabled' => 'on',
+		));
+
+		$post_id = $this->factory()->post->create(array(
+			'post_title' => 'Hello World #2',
+			'post_content' => '(Content) Lorem ipsum dolor sit amet.',
+			'post_excerpt' => '(Excerpt) Lorem ipsum dolor.',
+		));
+
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		$this->assertTrue( is_single() ); // Make sure we are on single post.
+
+		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $meta_tags ) {
+
+			unset( $meta_tags['post_description'] );
+			unset( $meta_tags['post_url'] );
+
+			return $meta_tags;
+		} );
+
+		ob_start();
+		$this->wp_head->post_meta_tags();
+		$buffer = ob_get_clean();
+
+		// Open Graph.
+		$this->assertNotContains( '<meta property="og:description" content="(Excerpt) Lorem ipsum dolor.">', $buffer );
+		$this->assertNotContains( '<meta property="og:url" content="' . get_permalink( $post_id ) . '">', $buffer );
+
+		// Twitter Cards.
+		$this->assertNotContains( '<meta name="twitter:description" content="(Excerpt) Lorem ipsum dolor.">', $buffer );
+		$this->assertNotContains( '<meta name="twitter:url" content="' . get_permalink( $post_id ) . '">', $buffer );
+	}
+
+	/**
+	 * Test post meta tags filter hook for "Open Graph".
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_post_meta_tags_filter_hook_open_graph() {
+
+		update_option($this->option_slug . '_metas_site', array(
+			'enabled' => 'on',
+		));
+
+		$post_id = $this->factory()->post->create(array(
+			'post_title' => 'Hello World #2',
+			'post_content' => '(Content) Lorem ipsum dolor sit amet.',
+			'post_excerpt' => '(Excerpt) Lorem ipsum dolor.',
+		));
+
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		$this->assertTrue( is_single() ); // Make sure we are on single post.
+
+		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $metas, $subject ) {
+
+			if ( 'OpenGraph' === $subject ) {
+				unset( $metas['post_description'] );
+				unset( $metas['post_url'] );
+			}
+
+			return $metas;
+		}, 10, 2 );
+
+		ob_start();
+		$this->wp_head->post_meta_tags();
+		$buffer = ob_get_clean();
+
+		// Open Graph.
+		$this->assertNotContains( '<meta property="og:description" content="(Excerpt) Lorem ipsum dolor.">', $buffer );
+		$this->assertNotContains( '<meta property="og:url" content="' . get_permalink( $post_id ) . '">', $buffer );
+
+		// Twitter Cards.
+		$this->assertContains( '<meta name="twitter:description" content="(Excerpt) Lorem ipsum dolor.">', $buffer );
+		$this->assertContains( '<meta name="twitter:url" content="' . get_permalink( $post_id ) . '">', $buffer );
+	}
+
+	/**
+	 * Test post meta tags filter hook for "Twitter Cards".
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_post_meta_tags_filter_hook_twitter_cards() {
+
+		update_option($this->option_slug . '_metas_site', array(
+			'enabled' => 'on',
+		));
+
+		$post_id = $this->factory()->post->create(array(
+			'post_title' => 'Hello World #2',
+			'post_content' => '(Content) Lorem ipsum dolor sit amet.',
+			'post_excerpt' => '(Excerpt) Lorem ipsum dolor.',
+		));
+
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		$this->assertTrue( is_single() ); // Make sure we are on single post.
+
+		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $metas, $subject ) {
+
+			if ( 'TwitterCards' === $subject ) {
+				unset( $metas['post_description'] );
+				unset( $metas['post_url'] );
+			}
+
+			return $metas;
+		}, 10, 2 );
+
+		ob_start();
+		$this->wp_head->post_meta_tags();
+		$buffer = ob_get_clean();
+
+		// Open Graph.
+		$this->assertContains( '<meta property="og:description" content="(Excerpt) Lorem ipsum dolor.">', $buffer );
+		$this->assertContains( '<meta property="og:url" content="' . get_permalink( $post_id ) . '">', $buffer );
+
+		// Twitter Cards.
+		$this->assertNotContains( '<meta name="twitter:description" content="(Excerpt) Lorem ipsum dolor.">', $buffer );
+		$this->assertNotContains( '<meta name="twitter:url" content="' . get_permalink( $post_id ) . '">', $buffer );
 	}
 }

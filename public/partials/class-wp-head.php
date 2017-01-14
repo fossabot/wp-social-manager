@@ -118,19 +118,18 @@ final class WPHead {
 			return;
 		}
 
-		$tag_args = array(
+		$meta_tags = apply_filters( 'ninecodes_social_manager_site_meta_tags', array(
 			'site_name' => $this->metas->get_site_name(),
 			'site_title' => $this->metas->get_site_title(),
 			'site_description' => $this->metas->get_site_description(),
 			'site_url' => $this->metas->get_site_url(),
 			'site_image' => $this->metas->get_site_image(),
-		);
-
-		$og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'site', 'open-graph' ) );
-		$tc = $this->site_twitter_cards( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'site', 'twitter-cards' ) );
+		) );
+		$meta_tags_og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'OpenGraph' ) );
+		$meta_tags_tc = $this->site_twitter_cards( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'TwitterCards' ) );
 
 		echo "\n<!-- START: Social Meta Tags (Social Manager by NineCodes) -->\n";
-		echo wp_kses( "{$og}{$tc}", array(
+		echo wp_kses( "{$meta_tags_og}{$meta_tags_tc}", array(
 			'meta' => array(
 			'property' => array(),
 			'content' => array(),
@@ -158,9 +157,8 @@ final class WPHead {
 			return;
 		}
 
-		$post_id = absint( get_the_id() );
-
-		$tag_args = array(
+		$post_id = get_the_id();
+		$meta_tags = apply_filters( 'ninecodes_social_manager_post_meta_tags', array(
 			'site_name' => $this->metas->get_site_name(),
 			'post_title' => $this->metas->get_post_title( $post_id ),
 			'post_description' => $this->metas->get_post_description( $post_id ),
@@ -171,13 +169,12 @@ final class WPHead {
 			'post_tags' => $this->metas->get_post_tags( $post_id ),
 			'post_published_time' => get_post_time( 'c', true ),
 			'post_modified_time' => get_post_modified_time( 'c', true ),
-		);
-
-		$og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'open-graph' ) );
-		$tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'twitter-cards' ) );
+		), '' );
+		$meta_tags_og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'OpenGraph' ) );
+		$meta_tags_tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'TwitterCards' ) );
 
 		echo "\n<!-- START: Social Meta Tags (Social Manager by NineCodes) -->\n";
-		echo wp_kses( "{$og}{$tc}", array(
+		echo wp_kses( "{$meta_tags_og}{$meta_tags_tc}", array(
 			'meta' => array(
 			'property' => array(),
 			'content' => array(),

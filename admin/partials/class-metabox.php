@@ -203,7 +203,10 @@ final class Metabox {
 					'type' => 'checkbox',
 					'section' => 'buttons',
 					'label' => esc_html__( 'Content Social Media Buttons', 'ninecodes-social-manager' ),
-					'description' => sprintf( esc_html__( 'Display the buttons that allow people to share, like, or save this %s in social media', 'ninecodes-social-manager' ), $this->post_type ),
+					'description' => sprintf(
+						/* translators: %s - the post type label i.e. Post, Page, etc. */
+						esc_html__( 'Display the buttons that allow people to share, like, or save this %s in social media', 'ninecodes-social-manager' ),
+					$this->post_type ),
 				)
 			);
 
@@ -227,7 +230,10 @@ final class Metabox {
 					'type' => 'checkbox',
 					'section' => 'buttons',
 					'label' => esc_html__( 'Image Social Media Buttons', 'ninecodes-social-manager' ),
-					'description' => sprintf( esc_html__( 'Display the social media buttons that allow people to share, like, or save images of this %s in social media', 'ninecodes-social-manager' ), $this->post_type ),
+					'description' => sprintf(
+						/* translators: %s - the post type label i.e. Post, Page, etc. */
+						esc_html__( 'Display the social media buttons that allow people to share, like, or save images of this %s in social media', 'ninecodes-social-manager' ),
+					$this->post_type ),
 				)
 			);
 
@@ -275,7 +281,10 @@ final class Metabox {
 				'type' => 'text',
 				'section' => 'meta_tags',
 				'label' => esc_html__( 'Title', 'ninecodes-social-manager' ),
-				'description' => sprintf( esc_html__( 'Set a customized title of this %s as it should appear within the social meta tag', 'ninecodes-social-manager' ), $this->post_type ),
+				'description' => sprintf(
+					/* translators: %s - the post type label i.e. Post, Page, etc. */
+					esc_html__( 'Set a customized title of this %s as it should appear within the social meta tag', 'ninecodes-social-manager' ),
+				$this->post_type ),
 				'attr' => array(
 					'class' => 'widefat',
 					'placeholder' => $this->post_title,
@@ -296,7 +305,10 @@ final class Metabox {
 				'type' => 'textarea',
 				'section' => 'meta_tags',
 				'label' => esc_html__( 'Description', 'ninecodes-social-manager' ),
-				'description' => sprintf( esc_html__( 'Set a one to two customized description of this %s that should appear within the social meta tag', 'ninecodes-social-manager' ), $this->post_type ),
+				'description' => sprintf(
+					/* translators: %s - the post type label i.e. Post, Page, etc. */
+					esc_html__( 'Set a one to two customized description of this %s that should appear within the social meta tag', 'ninecodes-social-manager' ),
+				$this->post_type ),
 				'attr' => array(
 					'placeholder' => strip_shortcodes( $this->post_excerpt ),
 					'class' => 'widefat',
@@ -317,7 +329,10 @@ final class Metabox {
 				'type' => 'image',
 				'section' => 'meta_tags',
 				'label' => esc_html__( 'Image', 'ninecodes-social-manager' ),
-				'description' => sprintf( esc_html__( 'Set a custom image URL which should represent this within the social meta tag', 'ninecodes-social-manager' ), $this->post_type ),
+				'description' => sprintf(
+					/* translators: %s - the post type label i.e. Post, Page, etc. */
+					esc_html__( 'Set a custom image URL which should represent this within the social meta tag', 'ninecodes-social-manager' ),
+				$this->post_type ),
 				'size' => 'large',
 			)
 		);
@@ -360,7 +375,10 @@ final class Metabox {
 					'type' => 'select-group',
 					'section' => 'meta_tags',
 					'label' => esc_html__( 'Section', 'ninecodes-social-manager' ),
-					'description' => sprintf( esc_html__( 'The section of your website to which the %s belongs', 'ninecodes-social-manager' ), $this->post_type ),
+					'description' => sprintf(
+						/* translators: %s - the post type label i.e. Post, Page, etc. */
+						esc_html__( 'The section of your website to which the %s belongs', 'ninecodes-social-manager' ),
+					$this->post_type ),
 					'choices' => $sections,
 				)
 			);
@@ -380,7 +398,10 @@ final class Metabox {
 					'type' => 'select',
 					'section' => 'meta_tags',
 					'label' => esc_html__( 'Tags', 'ninecodes-social-manager' ),
-					'description' => sprintf( esc_html__( 'Select which Taxonomy to use as this %s meta tags. The tags are words associated with this article.', 'ninecodes-social-manager' ), $this->post_type ),
+					'description' => sprintf(
+						/* translators: %s - the post type label i.e. Post, Page, etc. */
+						esc_html__( 'Select which Taxonomy to use as this %s meta tags. The tags are words associated with this article.', 'ninecodes-social-manager' ),
+					$this->post_type ),
 					'choices' => $tags,
 				)
 			);
