@@ -287,7 +287,7 @@ final class Plugin {
 		/**
 		 * Filter useful to prepend query during development to flush cache.
 		 */
-		return apply_filters( 'ninecodes_social_manager_version', $this->version );
+		return $this->version;
 	}
 
 	/**
