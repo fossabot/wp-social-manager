@@ -76,14 +76,145 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_get_the_author_social_profiles() {
+	public function test_get_the_site_social_profile() {
 
-		add_user_meta( $this->user_id, $this->option_slug, array(
+		update_option( 'ncsocman_profiles', array(
 			'facebook' => 'zuck',
 			'twitter' => 'jack',
 			'instagram' => 'jane',
 			'googleplus' => '+john',
 			'github' => 'tfirdaus',
+		) );
+
+		$site_profiles = get_the_site_social_profiles();
+
+		$doc = new \DOMDocument();
+		libxml_use_internal_errors( true );
+		$doc->loadHTML( $site_profiles );
+
+		$href = array();
+		$anchor_html = array();
+
+		$prefix = Helpers::get_attr_prefix();
+		$anchors = $doc->getElementsByTagName( 'a' );
+
+		foreach ( $anchors as $key => $anchor ) {
+
+			$href[] = $anchor->getAttribute( 'href' );
+			$anchor_html[] = $doc->saveXML( $anchor );
+		}
+
+		// Check if the href url pointing to the correct address.
+		$this->assertContains( 'https://www.facebook.com/zuck', $href );
+		$this->assertContains( 'https://twitter.com/jack', $href );
+		$this->assertContains( 'https://instagram.com/jane', $href );
+		$this->assertContains( 'https://plus.google.com/+john', $href );
+		$this->assertContains( 'https://github.com/tfirdaus', $href );
+
+		// Check the HTML markup. (Default: Icon).
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-facebook\" href=\"https://www.facebook.com/zuck\" target=\"_blank\"><svg><use xlink:href=\"#{$prefix}-icon-facebook\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-twitter\" href=\"https://twitter.com/jack\" target=\"_blank\"><svg><use xlink:href=\"#{$prefix}-icon-twitter\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-instagram\" href=\"https://instagram.com/jane\" target=\"_blank\"><svg><use xlink:href=\"#{$prefix}-icon-instagram\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-googleplus\" href=\"https://plus.google.com/+john\" target=\"_blank\"><svg><use xlink:href=\"#{$prefix}-icon-googleplus\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-github\" href=\"https://github.com/tfirdaus\" target=\"_blank\"><svg><use xlink:href=\"#{$prefix}-icon-github\"/></svg></a>", $anchor_html );
+
+		delete_option( 'ncsocman_profiles' );
+	}
+
+	/**
+	 * Function to test the 'get_the_author_social_profiles' set with 'text' view.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_get_the_site_social_profile_view_text() {
+
+		update_option( 'ncsocman_profiles', array(
+			'facebook' => 'foo',
+			'twitter' => 'foo',
+			'instagram' => 'foo',
+			'googleplus' => '+foo',
+			'github' => 'foo',
+		) );
+
+		$site_profiles = get_the_site_social_profiles( array( 'view' => 'text' ) );
+
+		$doc = new \DOMDocument();
+		libxml_use_internal_errors( true );
+		$doc->loadHTML( $site_profiles );
+
+		$anchor_html = array();
+
+		$prefix = Helpers::get_attr_prefix();
+		$anchors = $doc->getElementsByTagName( 'a' );
+
+		foreach ( $anchors as $key => $anchor ) {
+			$anchor_html[] = $doc->saveXML( $anchor );
+		}
+
+		// Check the HTML markup. (Text).
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-facebook\" href=\"https://www.facebook.com/foo\" target=\"_blank\">Facebook</a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-twitter\" href=\"https://twitter.com/foo\" target=\"_blank\">Twitter</a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-instagram\" href=\"https://instagram.com/foo\" target=\"_blank\">Instagram</a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-googleplus\" href=\"https://plus.google.com/+foo\" target=\"_blank\">Google+</a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-github\" href=\"https://github.com/foo\" target=\"_blank\">Github</a>", $anchor_html );
+
+		delete_option( 'ncsocman_profiles' );
+	}
+
+	/**
+	 * Function to test the 'get_the_author_social_profiles' set with 'icon-text' view.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_get_the_site_social_profile_view_text_icon() {
+
+		update_option( 'ncsocman_profiles', array(
+			'facebook' => 'yo',
+		) );
+
+		$site_profiles = get_the_site_social_profiles( array( 'view' => 'icon-text' ) );
+
+		$doc = new \DOMDocument();
+		libxml_use_internal_errors( true );
+		$doc->loadHTML( $site_profiles );
+
+		$anchor_html = array();
+
+		$prefix = Helpers::get_attr_prefix();
+		$anchors = $doc->getElementsByTagName( 'a' );
+
+		foreach ( $anchors as $key => $anchor ) {
+			$anchor_html[] = $doc->saveXML( $anchor );
+		}
+
+		// Check the HTML markup. (Icon Text).
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-facebook\" href=\"https://www.facebook.com/yo\" target=\"_blank\"><span class=\"{$prefix}-profiles__item-icon\"><svg><use xlink:href=\"#{$prefix}-icon-facebook\"/></svg></span><span class=\"{$prefix}-profiles__item-text\">Facebook</span></a>", $anchor_html );
+
+		delete_option( 'ncsocman_profiles' );
+	}
+
+	/**
+	 * Function to test the 'get_the_author_social_profiles'.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_get_the_author_social_profiles() {
+
+		add_user_meta( $this->user_id, $this->option_slug, array(
+			'facebook' => 'foobar',
+			'twitter' => 'foobar',
+			'instagram' => 'foobar',
+			'googleplus' => '+foobar',
+			'github' => 'foobar',
 		) );
 
 		$social_profiles = get_the_author_social_profiles( $this->user_id );
@@ -93,16 +224,29 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 		$doc->loadHTML( $social_profiles );
 
 		$href = array();
+		$anchor_html = array();
+
+		$prefix = Helpers::get_attr_prefix();
 		$anchors = $doc->getElementsByTagName( 'a' );
 
 		foreach ( $anchors as $key => $anchor ) {
 			$href[] = $anchor->getAttribute( 'href' );
+			$anchor_html[] = $doc->saveXML( $anchor );
 		}
 
-		$this->assertContains( 'https://www.facebook.com/zuck', $href );
-		$this->assertContains( 'https://twitter.com/jack', $href );
-		$this->assertContains( 'https://instagram.com/jane', $href );
-		$this->assertContains( 'https://plus.google.com/+john', $href );
-		$this->assertContains( 'https://github.com/tfirdaus', $href );
+		$this->assertContains( 'https://www.facebook.com/foobar', $href );
+		$this->assertContains( 'https://twitter.com/foobar', $href );
+		$this->assertContains( 'https://instagram.com/foobar', $href );
+		$this->assertContains( 'https://plus.google.com/+foobar', $href );
+		$this->assertContains( 'https://github.com/foobar', $href );
+
+		// Check the HTML markup. (Default: Icon).
+		$this->assertContains( "<a class=\"{$prefix}-profiles-author__item item-facebook\" href=\"https://www.facebook.com/foobar\" target=\"_blank\" rel=\"nofollow\" title=\"Follow Foo on Facebook\"><svg><use xlink:href=\"#{$prefix}-icon-facebook\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles-author__item item-twitter\" href=\"https://twitter.com/foobar\" target=\"_blank\" rel=\"nofollow\" title=\"Follow Foo on Twitter\"><svg><use xlink:href=\"#{$prefix}-icon-twitter\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles-author__item item-instagram\" href=\"https://instagram.com/foobar\" target=\"_blank\" rel=\"nofollow\" title=\"Follow Foo on Instagram\"><svg><use xlink:href=\"#{$prefix}-icon-instagram\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles-author__item item-googleplus\" href=\"https://plus.google.com/+foobar\" target=\"_blank\" rel=\"nofollow\" title=\"Follow Foo on Google+\"><svg><use xlink:href=\"#{$prefix}-icon-googleplus\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles-author__item item-github\" href=\"https://github.com/foobar\" target=\"_blank\" rel=\"nofollow\" title=\"Follow Foo on Github\"><svg><use xlink:href=\"#{$prefix}-icon-github\"/></svg></a>", $anchor_html );
+
+		delete_user_meta( $this->user_id, $this->option_slug );
 	}
 }
