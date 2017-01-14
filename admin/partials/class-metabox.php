@@ -380,7 +380,7 @@ final class Metabox {
 					'type' => 'select',
 					'section' => 'meta_tags',
 					'label' => esc_html__( 'Tags', 'ninecodes-social-manager' ),
-					'description' => sprintf( esc_html__( 'Select which Taxonomy to use as this %s meta tags. Tag words associated with this article.', 'ninecodes-social-manager' ), $this->post_type ),
+					'description' => sprintf( esc_html__( 'Select which Taxonomy to use as this %s meta tags. The tags are words associated with this article.', 'ninecodes-social-manager' ), $this->post_type ),
 					'choices' => $tags,
 				)
 			);

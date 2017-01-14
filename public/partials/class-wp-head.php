@@ -169,6 +169,8 @@ final class WPHead {
 			'post_author' => $this->metas->get_post_author( $post_id ),
 			'post_section' => $this->metas->get_post_section( $post_id ),
 			'post_tags' => $this->metas->get_post_tags( $post_id ),
+			'post_published_time' => get_post_time( 'c', true ),
+			'post_modified_time' => get_post_modified_time( 'c', true ),
 		);
 
 		$og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_meta_tags', $tag_args, 'post', 'open-graph' ) );
@@ -335,6 +337,8 @@ final class WPHead {
 			'post_tags' => array(),
 			'post_image' => array(),
 			'post_author' => array(),
+			'post_published_time' => '',
+			'post_modified_time' => '',
 		) );
 
 		$ogp = new OpenGraphProtocol();
@@ -352,6 +356,9 @@ final class WPHead {
 		foreach ( $args['post_tags'] as $key => $tag ) {
 			$article->addTag( $tag );
 		}
+
+		$article->setPublishedTime( $args['post_published_time'] );
+		$article->setModifiedTime( $args['post_modified_time'] );
 
 		/**
 		 * The author data.
