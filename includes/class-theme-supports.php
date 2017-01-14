@@ -116,7 +116,10 @@ final class ThemeSupports {
 
 		$supports = array(
 			'stylesheet' => $this->stylesheet(),
+			'attr-prefix' => $this->attr_prefix(),
+			'attr_prefix' => $this->attr_prefix(),
 			'buttons-mode' => $this->buttons_mode(),
+			'buttons_mode' => $this->buttons_mode(),
 		);
 
 		return isset( $supports[ $feature ] ) ? $supports[ $feature ] : false;
@@ -137,42 +140,71 @@ final class ThemeSupports {
 		 * to style the plugin output.
 		 */
 		if ( isset( $this->supports['stylesheet'] ) ) {
-			$stylesheet = (bool) $this->supports['stylesheet'];
-			return $stylesheet;
+			return (bool) $this->supports['stylesheet'];
+		}
+
+		return (bool) $this->attr_prefix();
+	}
+
+	/**
+	 * Function to check if the theme support the 'attr_prefix' feature.
+	 *
+	 * @since 1.1.0
+	 * @access protected
+	 *
+	 * @return string The attribute prefix.
+	 */
+	protected function attr_prefix() {
+
+		$supports = (array) $this->supports;
+		$default = (string) Helpers::$prefix;
+
+		$prefix = '';
+
+		if ( array_key_exists( 'attr-prefix', $supports ) ) {
+			$prefix = $this->supports['attr-prefix'];
+		}
+
+		if ( array_key_exists( 'attr_prefix', $supports ) ) {
+			$prefix = $this->supports['attr_prefix'];
 		}
 
 		/**
 		 * If the prefix is the same as the attribute prefix,
 		 * we can assume that the theme will add custom stylesheet.
 		 */
-		if ( isset( $this->supports['attr-prefix'] ) ) {
-			$prefix = Helpers::$prefix !== $this->supports['attr-prefix'] ? true : false;
-			return $prefix;
-		}
+		return ! empty( $prefix ) && $default !== (string) $prefix ? $prefix : false;
 	}
 
 	/**
 	 * Function to check if the theme support the 'buttons-mode' feature.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.0 Add alias: 'buttons-mode' || 'buttons_mode'.
 	 * @access protected
 	 *
-	 * @return boolean
+	 * @return boolean|string String is either 'html' or 'json', false if this feature is not defined.
 	 */
 	protected function buttons_mode() {
 
-		$mode = false;
+		$supports = (array) $this->supports;
+		$haystack = (array) Options::buttons_modes();
 
-		if ( isset( $this->supports['buttons-mode'] ) ) {
-			$yep = (string) $this->supports['buttons-mode'];
-			$haystack = (array) Options::buttons_modes();
+		$mode = '';
 
-			if ( key_exists( $yep, $haystack ) ) {
-				$mode = $yep;
-			}
+		if ( array_key_exists( 'buttons-mode', $supports ) ) {
+			$mode = $this->supports['buttons-mode'];
 		}
 
-		return $mode;
+		if ( array_key_exists( 'buttons_mode', $supports ) ) {
+			$mode = $this->supports['buttons_mode'];
+		}
+
+		if ( $mode && array_key_exists( $mode, $haystack ) ) {
+			return $mode;
+		}
+
+		return false;
 	}
 
 	/**

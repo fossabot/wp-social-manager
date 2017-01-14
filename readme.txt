@@ -85,10 +85,10 @@ Set the `stylesheet` to `true` will dequeue the plugin stylesheet. This allows y
 
 **Custom attribute prefix**
 
-The plugin add prefix `social-manager` to (almost) any HTML elements it generates at the front-end (your theme). You can change this prefix to anything you want by adding the `attr-prefix`, for example:
+The plugin add prefix `social-manager` to (almost) any HTML elements it generates at the front-end (your theme). You can change this prefix to anything you want by adding the `attr_prefix`, for example:
 
 <pre lang="php">add_theme_support( 'ninecodes-social-manager', array(
-	'attr-prefix' => 'social',
+	'attr_prefix' => 'social',
 ) );</pre>
 
 Keep in mind that changing the prefix to other than `social-manager` will dequeue the stylesheet much like setting the `stylesheet` to `true`. So you will have to add the styles at your end.
@@ -98,7 +98,7 @@ Keep in mind that changing the prefix to other than `social-manager` will dequeu
 The plugin offers 2 modes, `HTML` and `JSON`, to generate, what called as the **Social Buttons**; the buttons that allow your site users to share content on social media. By default the mode is set to `HTML`, which will *echo* all the HTML markup in the post content. But, if you are building a [*headless* WordPress theme](https://pantheon.io/decoupled-cms) using whatever JavaScript renders (Backbone, Angular, React, Vue, Ember, you name it), you might want to switch the plugin to the `JSON` mode.
 
 <pre lang="php">add_theme_support( 'ninecodes-social-manager', array(
-	'buttons-mode' => 'json',
+	'buttons_mode' => 'json',
 ) );</pre>
 
 == Frequently Asked Questions ==
