@@ -552,6 +552,8 @@ class Metas {
 	 */
 	protected function get_default_post_section( $post_id ) {
 
+		$terms = '';
+
 		$post_type = get_post_type( $post_id );
 		$taxonomies = get_object_taxonomies( $post_type, 'object' );
 
@@ -567,14 +569,17 @@ class Metas {
 			}
 		}
 
-		/**
-		 * Get list terms of the first hierarchical taxonomy on the list.
-		 *
-		 * @var array
-		 */
-		$terms = wp_get_post_terms( $post_id, $sections[0], array(
-			'fields' => 'names',
-		) );
+		if ( isset( $sections[0] ) ) {
+
+			/**
+			 * Get list terms of the first hierarchical taxonomy on the list.
+			 *
+			 * @var array
+			 */
+			$terms = wp_get_post_terms( $post_id, $sections[0], array(
+				'fields' => 'names',
+			) );
+		}
 
 		return is_array( $terms ) && ! empty( $terms ) ? $terms[0] : ''; // Return the first term on the list.
 	}
@@ -589,6 +594,8 @@ class Metas {
 	 * @return string The list of tags.
 	 */
 	protected function get_default_post_tags( $post_id ) {
+
+		$tags = array();
 
 		$post_type = get_post_type( $post_id );
 		$taxonomies = get_object_taxonomies( $post_type, 'object' );
@@ -605,11 +612,14 @@ class Metas {
 			}
 		}
 
-		$terms = wp_get_post_terms( $post_id, $taxs[0] );
+		if ( isset( $taxs[0] ) ) {
 
-		$tags = array();
-		foreach ( $terms as $key => $term ) {
-			$tags[] = $term->name;
+			$terms = wp_get_post_terms( $post_id, $taxs[0] );
+
+			$tags = array();
+			foreach ( $terms as $key => $term ) {
+				$tags[] = $term->name;
+			}
 		}
 
 		return $tags;
