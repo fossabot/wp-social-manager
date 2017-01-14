@@ -103,9 +103,11 @@ final class WidgetSocialProfiles extends WP_Widget {
 		$this->profiles = Options::social_profiles();
 
 		$this->widgets = $widgets;
-		$this->options = $widgets->plugin->get_option( 'profiles' );
 		$this->plugin_slug = $widgets->plugin->get_slug();
 		$this->option_slug = $widgets->plugin->get_opts();
+
+		$this->site_profiles = $widgets->plugin->get_option( 'profiles' );
+		$this->script_enqueue = $widgets->plugin->get_option( 'enqueue' );
 
 		$this->widget_id = "{$this->plugin_slug}-profiles";
 		$this->widget_title = esc_html__( 'Follow Us', 'ninecodes-social-manager' );
@@ -127,9 +129,11 @@ final class WidgetSocialProfiles extends WP_Widget {
 	 */
 	public function enqueue_styles() {
 
-		if ( $this->widgets->public->is_load_stylesheet() &&
-			 is_active_widget( false, false, $this->widget_id, true ) ) {
+		if ( ! is_active_widget( false, false, $this->widget_id, true ) ) {
+			return;
+		}
 
+		if ( isset( $this->script_enqueue['enable_stylesheet'] ) && 'on' === $this->script_enqueue['enable_stylesheet'] ) {
 			wp_enqueue_style( $this->plugin_slug );
 		}
 	}
@@ -154,7 +158,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 				<input class="widefat" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
 			</p>
 
-			<?php if ( ! array_filter( $this->options ) ) :  ?>
+			<?php if ( ! array_filter( $this->site_profiles ) ) :  ?>
 			<p>
 			<?php
 				$message = esc_html__( 'Please add at least one social media profile of this website in the %s.', 'ninecodes-social-manager' );
@@ -170,7 +174,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 				<label><?php esc_html_e( 'Include these', 'ninecodes-social-manager' ); ?></label>
 				<br>
 			<?php
-			foreach ( $this->options as $key => $value ) :
+			foreach ( $this->site_profiles as $key => $value ) :
 				if ( empty( $value ) ) {
 					continue;
 				}
@@ -228,7 +232,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 		$instance['title'] = sanitize_text_field( $input['title'] );
 		$instance['view'] = sanitize_key( $input['view'] ? $input['view'] : 'icon' );
 
-		foreach ( $this->options as $key => $value ) {
+		foreach ( $this->site_profiles as $key => $value ) {
 			if ( empty( $value ) ) {
 				continue;
 			}
@@ -273,7 +277,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 			),
 		) );
 
-		foreach ( $this->options as $key => $value ) {
+		foreach ( $this->site_profiles as $key => $value ) {
 			$site = 0;
 
 			if ( ! isset( $instance['site'][ $key ] ) && ! empty( $value ) ) {
@@ -300,7 +304,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 			$list = self::list_views($view, array(
 				'site' => $key,
 				'label' => esc_html( $profiles['label'] ),
-				'url' => esc_url( trailingslashit( $profiles['url'] ) . $this->options[ $key ] ),
+				'url' => esc_url( trailingslashit( $profiles['url'] ) . $this->site_profiles[ $key ] ),
 				'icon' => Helpers::get_social_icons( $key ),
 			));
 
