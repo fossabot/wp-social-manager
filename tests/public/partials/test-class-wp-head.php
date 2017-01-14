@@ -299,6 +299,22 @@ class TestWPHead extends WP_UnitTestCase {
 		$this->assertContains( '<meta name="twitter:description" content="(Content) Lorem ipsum dolor sit amet.">', $buffer );
 		$this->assertContains( '<meta name="twitter:url" content="' . get_permalink( $post_id ) . '">', $buffer );
 		$this->assertContains( '<meta name="twitter:image" content="https://example.org/upload/image.jpg">', $buffer );
+
+		$post_id = $this->factory()->post->create(array(
+			'post_title' => 'Hello World #1',
+			'post_content' => '(Content) Lorem ipsum dolor sit amet.',
+			'post_excerpt' => '',
+		));
+
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+		$this->assertTrue( is_single() );
+
+		ob_start();
+		$this->wp_head->post_meta_tags();
+		$buffer = ob_get_clean();
+
+		$this->assertNotContains( '<meta property="og:image" content="https://example.org/upload/image.jpg">', $buffer );
 	}
 
 	/**
