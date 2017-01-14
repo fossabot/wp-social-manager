@@ -2,7 +2,7 @@
 /**
  * Class TestWPFooter
  *
- * TODO: Add tests for the Filters Hooks.
+ * TODO: Add test for wp_kses.
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -149,5 +149,61 @@ class TestWPFooter extends WP_UnitTestCase {
 
 		$this->assertEquals( $prefix . '-icon-email', $symbols->item( 12 )->getAttribute( 'id' ) );
 		$this->assertEquals( 'M13.235 12.565c-.425.326-.99.505-1.59.505s-1.168-.18-1.593-.505L2.008 6.402v11.665c0 .59.48 1.07 1.07 1.07h17.844c.59 0 1.07-.48 1.07-1.07V5.933c0-.025-.005-.048-.006-.072l-8.75 6.705zm-1.16-.89l8.886-6.808c-.012 0-.025-.004-.038-.004H3.078c-.203 0-.39.06-.552.157l8.686 6.656c.23.176.632.177.863 0z', $paths->item( 12 )->getAttribute( 'd' ) );
+	}
+
+	/**
+	 * Function to test filter hook in `get_svg_symbols` method.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_get_svg_symbols_filters() {
+
+		$symbols = $this->wp_footer->get_svg_symbols();
+
+		$this->assertArrayHasKey( 'facebook', $symbols );
+		$this->assertArrayHasKey( 'twitter', $symbols );
+		$this->assertArrayHasKey( 'instagram', $symbols );
+		$this->assertArrayHasKey( 'pinterest', $symbols );
+		$this->assertArrayHasKey( 'linkedin', $symbols );
+		$this->assertArrayHasKey( 'googleplus', $symbols );
+		$this->assertArrayHasKey( 'youtube', $symbols );
+		$this->assertArrayHasKey( 'reddit', $symbols );
+		$this->assertArrayHasKey( 'dribbble', $symbols );
+		$this->assertArrayHasKey( 'behance', $symbols );
+		$this->assertArrayHasKey( 'github', $symbols );
+		$this->assertArrayHasKey( 'codepen', $symbols );
+		$this->assertArrayHasKey( 'email', $symbols );
+
+		// Remove a few symbols.
+		add_filter( 'ninecodes_social_manager_svg_symbols', function( $svg_symbols, $args ) {
+
+			unset( $svg_symbols['facebook'] );
+			unset( $svg_symbols['twitter'] );
+			unset( $svg_symbols['instagram'] );
+
+			return $svg_symbols;
+		}, 10, 2 );
+
+		$symbols = $this->wp_footer->get_svg_symbols();
+
+		$this->assertArrayNotHasKey( 'facebook', $symbols );
+		$this->assertArrayNotHasKey( 'twitter', $symbols );
+		$this->assertArrayNotHasKey( 'instagram', $symbols );
+
+		// Add a new symbol (Please ignore the svg markup).
+		add_filter( 'ninecodes_social_manager_svg_symbols', function( $svg_symbols, $args ) {
+
+			$svg_symbols['ello'] = '<g id="Capa_3"><g><circle cx="151.25" cy="151.25" r="151.25"/><path fill="none" stroke="#FFFFFF" stroke-width="17" stroke-linecap="round" stroke-linejoin="bevel" stroke-miterlimit="10" d="
+			M72,171c20.766,83.064,136,81.5,158.5-1"/></g></g>';
+
+			return $svg_symbols;
+		}, 10, 2 );
+
+		$symbols = $this->wp_footer->get_svg_symbols();
+
+		$this->assertArrayHasKey( 'ello', $symbols );
 	}
 }
