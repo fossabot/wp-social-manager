@@ -2,8 +2,12 @@
 /**
  * Class TestWPHead
  *
- * TODO: - Add tests for the Filters Hooks.
- * 		 - Add tests for Custom Taxonomy.
+ * TODO:
+ * - Add tests for Image added in the Customizer Site Icons.
+ * - Add tests for Image added in Featured Image.
+ * - Add tests for Image added in Custom Meta.
+ * - Add tests for Custom Taxonomy
+ * - Add tests for Site Meta filter.
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -20,6 +24,7 @@ use \WP_UnitTestCase;
  * The class to test the "TestWPHead" class instance.
  *
  * @since 1.0.6
+ * @since 1.1.0 Add test meta tags filter hook.
  */
 class TestWPHead extends WP_UnitTestCase {
 
@@ -366,7 +371,7 @@ class TestWPHead extends WP_UnitTestCase {
 		$this->go_to( '?p=' . $post_id );
 		setup_postdata( get_post( $post_id ) );
 
-		$this->assertTrue( is_single() );
+		$this->assertTrue( is_single() ); // Make sure we are on single post.
 
 		ob_start();
 		$this->wp_head->post_meta_tags();
@@ -519,7 +524,7 @@ class TestWPHead extends WP_UnitTestCase {
 		$this->go_to( '?p=' . $post_id );
 		setup_postdata( get_post( $post_id ) );
 
-		$this->assertTrue( is_single() );
+		$this->assertTrue( is_single() ); // Make sure we are on single post.
 
 		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $meta_tags ) {
 
@@ -565,11 +570,11 @@ class TestWPHead extends WP_UnitTestCase {
 		$this->go_to( '?p=' . $post_id );
 		setup_postdata( get_post( $post_id ) );
 
-		$this->assertTrue( is_single() );
+		$this->assertTrue( is_single() ); // Make sure we are on single post.
 
 		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $metas, $subject ) {
 
-			if ( 'open-graph' === $subject ) {
+			if ( 'OpenGraph' === $subject ) {
 				unset( $metas['post_description'] );
 				unset( $metas['post_url'] );
 			}
@@ -613,11 +618,11 @@ class TestWPHead extends WP_UnitTestCase {
 		$this->go_to( '?p=' . $post_id );
 		setup_postdata( get_post( $post_id ) );
 
-		$this->assertTrue( is_single() );
+		$this->assertTrue( is_single() ); // Make sure we are on single post.
 
 		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $metas, $subject ) {
 
-			if ( 'twitter-cards' === $subject ) {
+			if ( 'TwitterCards' === $subject ) {
 				unset( $metas['post_description'] );
 				unset( $metas['post_url'] );
 			}

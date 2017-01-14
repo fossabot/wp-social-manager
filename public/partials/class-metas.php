@@ -337,13 +337,16 @@ class Metas {
 			$attachment_id = $this->get_post_meta( $post_id, 'post_thumbnail' ); // Post Meta Image.
 		}
 
-		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), $attachment_id, $post_id, 'post-image' );
+		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), array(
+			'post_id' => $post_id,
+			'attachment_id' => $attachment_id,
+		), 'PostImage' );
 
 		/*
 		 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
 		 * return the image immediately and don't proceed the codes that follow.
 		 */
-		if ( isset( $image_filter['src'] ) ) {
+		if ( isset( $image_filter['src'] ) && ! empty( $image_filter['src'] ) ) {
 
 			$image_filter = wp_parse_args( $image_filter, array(
 				'src' => '',

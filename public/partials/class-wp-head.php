@@ -125,8 +125,8 @@ final class WPHead {
 			'site_url' => $this->metas->get_site_url(),
 			'site_image' => $this->metas->get_site_image(),
 		) );
-		$meta_tags_og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'open-graph' ) );
-		$meta_tags_tc = $this->site_twitter_cards( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'twitter-cards' ) );
+		$meta_tags_og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'OpenGraph' ) );
+		$meta_tags_tc = $this->site_twitter_cards( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'TwitterCards' ) );
 
 		echo "\n<!-- START: Social Meta Tags (Social Manager by NineCodes) -->\n";
 		echo wp_kses( "{$meta_tags_og}{$meta_tags_tc}", array(
@@ -170,8 +170,8 @@ final class WPHead {
 			'post_published_time' => get_post_time( 'c', true ),
 			'post_modified_time' => get_post_modified_time( 'c', true ),
 		), '' );
-		$meta_tags_og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'open-graph' ) );
-		$meta_tags_tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'twitter-cards' ) );
+		$meta_tags_og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'OpenGraph' ) );
+		$meta_tags_tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'TwitterCards' ) );
 
 		echo "\n<!-- START: Social Meta Tags (Social Manager by NineCodes) -->\n";
 		echo wp_kses( "{$meta_tags_og}{$meta_tags_tc}", array(

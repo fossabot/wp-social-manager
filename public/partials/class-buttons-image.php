@@ -261,10 +261,7 @@ class ButtonsImage extends Buttons {
 			$list .= "<span class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsImage\">";
 
 			$prefix = $this->prefix;
-			$icons  = $this->get_button_icons();
-			$icons  = apply_filters( 'ninecodes_social_manager_icons', $icons, array(
-				'attr_prefix' => $prefix,
-			), 'buttons-image' );
+			$icons = $this->get_button_icons();
 
 			foreach ( $includes as $site => $endpoint ) :
 
@@ -321,10 +318,7 @@ class ButtonsImage extends Buttons {
 <span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsImage"><?php
 
 $prefix = $this->prefix;
-$icons  = $this->get_button_icons();
-$icons  = apply_filters( 'ninecodes_social_manager_icons', $icons, array(
-	'attr_prefix' => $prefix,
-), 'buttons-image' );
+$icons = $this->get_button_icons();
 
 foreach ( $includes as $site ) :
 
@@ -349,6 +343,24 @@ endforeach; ?></span>
 
 		<?php endif;
 		endif;
+	}
+
+	/**
+	 * Override parent buttons icon method.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @return array
+	 */
+	public function get_button_icons() {
+
+		$icons = parent::get_button_icons();
+		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, array(
+			'attr_prefix' => $this->prefix,
+		), 'ButtonsImage' );
+
+		return $icons;
 	}
 
 	/**

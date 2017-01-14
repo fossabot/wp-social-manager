@@ -188,9 +188,6 @@ class ButtonsContent extends Buttons {
 
 			$prefix = $this->prefix;
 			$icons = $this->get_button_icons();
-			$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, array(
-				'attr_prefix' => $prefix,
-			), 'buttons-content' );
 
 			$list .= "<div class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsContent\">";
 
@@ -248,35 +245,49 @@ class ButtonsContent extends Buttons {
 		} ?><div class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsContent"><?php
 
 		$prefix = $this->prefix;
-
 		$icons = $this->get_button_icons();
-		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, array(
-			'attr_prefix' => $prefix,
-		), 'buttons-content' );
 
 		$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
 
-		foreach ( $includes as $site ) :
+foreach ( $includes as $site ) :
 
-			$icon = isset( $icons[ $site ] ) ? $icons[ $site ] : null;
+	$icon = isset( $icons[ $site ] ) ? $icons[ $site ] : null;
 
-			if ( ! $icon ) {
-				continue;
-			}
+	if ( ! $icon ) {
+		continue;
+	}
 
-			$label = $this->get_button_label( $site, 'content' );
-			$list  = $this->button_view( $this->view, 'content', array(
-				'attr_prefix' => $prefix,
-				'site' => $site,
-				'icon' => $icon,
-				'label' => $label,
-				'endpoint' => "{{ data.endpoints.{$site} }}",
-			));
+	$label = $this->get_button_label( $site, 'content' );
+	$list  = $this->button_view( $this->view, 'content', array(
+		'attr_prefix' => $prefix,
+		'site' => $site,
+		'icon' => $icon,
+		'label' => $label,
+		'endpoint' => "{{ data.endpoints.{$site} }}",
+	));
 
-			echo $list; // WPCS: XSS ok.
+	echo $list; // WPCS: XSS ok.
 		endforeach; ?></div></script>
 		<?php endif;
 		endif;
+	}
+
+	/**
+	 * Override parent buttons icon method.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @return array
+	 */
+	public function get_button_icons() {
+
+		$icons = parent::get_button_icons();
+		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, array(
+			'attr_prefix' => $this->prefix,
+		), 'ButtonsContent' );
+
+		return $icons;
 	}
 
 	/**
