@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Social Manager\n"
-"POT-Creation-Date: 2017-01-08 15:43+0700\n"
-"PO-Revision-Date: 2017-01-08 15:44+0700\n"
+"POT-Creation-Date: 2017-01-25 09:47+0700\n"
+"PO-Revision-Date: 2017-01-25 10:01+0700\n"
 "Last-Translator: \n"
 "Language-Team: NineCodes <admin@ninecodes.com>\n"
 "Language: id_ID\n"
@@ -50,11 +50,13 @@ msgstr "Ringkasan"
 msgid "Accounts"
 msgstr "Akun"
 
-#: admin/partials/class-helps.php:106 admin/partials/class-settings.php:299
+#: admin/partials/class-helps.php:106 admin/partials/class-metabox.php:191
+#: admin/partials/class-settings.php:299
 msgid "Buttons"
 msgstr "Tombol"
 
-#: admin/partials/class-helps.php:113 admin/partials/class-settings.php:304
+#: admin/partials/class-helps.php:113 admin/partials/class-metabox.php:273
+#: admin/partials/class-settings.php:304
 msgid "Metas"
 msgstr "Meta"
 
@@ -185,21 +187,98 @@ msgstr "Open Graph Protocol"
 msgid "Twitter Cards"
 msgstr "Twitter Cards"
 
-#: admin/partials/class-metabox.php:164 admin/partials/class-settings.php:260
+#: admin/partials/class-metabox.php:164
 msgid "Social"
 msgstr "Sosial"
 
+#: admin/partials/class-metabox.php:205
+msgid "Content Social Media Buttons"
+msgstr ""
+
+#: admin/partials/class-metabox.php:208
+#, php-format
+msgid ""
+"Display the buttons that allow people to share, like, or save this %s in "
+"social media"
+msgstr ""
+
+#: admin/partials/class-metabox.php:232
+msgid "Image Social Media Buttons"
+msgstr ""
+
+#: admin/partials/class-metabox.php:235
+#, php-format
+msgid ""
+"Display the social media buttons that allow people to share, like, or save "
+"images of this %s in social media"
+msgstr ""
+
+#: admin/partials/class-metabox.php:283
+msgid "Title"
+msgstr ""
+
+#: admin/partials/class-metabox.php:286
+#, php-format
+msgid ""
+"Set a customized title of this %s as it should appear within the social meta "
+"tag"
+msgstr ""
+
+#: admin/partials/class-metabox.php:307
+msgid "Description"
+msgstr ""
+
+#: admin/partials/class-metabox.php:310
+#, php-format
+msgid ""
+"Set a one to two customized description of this %s that should appear within "
+"the social meta tag"
+msgstr ""
+
+#: admin/partials/class-metabox.php:331 admin/partials/class-settings.php:341
+msgid "Image"
+msgstr "Gambar"
+
+#: admin/partials/class-metabox.php:334
+msgid ""
+"Set a custom image URL which should represent this within the social meta tag"
+msgstr ""
+
+#: admin/partials/class-metabox.php:377
+msgid "Section"
+msgstr ""
+
+#: admin/partials/class-metabox.php:380
+#, php-format
+msgid "The section of your website to which the %s belongs"
+msgstr ""
+
+#: admin/partials/class-metabox.php:400
+msgid "Tags"
+msgstr ""
+
+#: admin/partials/class-metabox.php:403
+#, php-format
+msgid ""
+"Select which Taxonomy to use as this %s meta tags. The tags are words "
+"associated with this article."
+msgstr ""
+
+#: admin/partials/class-settings.php:260
+msgid "Social Media"
+msgstr ""
+
 #: admin/partials/class-settings.php:261
-msgid "Social Settings"
-msgstr "Pengaturan Sosial"
+msgid "Social Media Settings"
+msgstr ""
 
 #: admin/partials/class-settings.php:326
-msgid "Profiles & Pages"
-msgstr "Profil & Halaman"
+msgid "Profiles"
+msgstr ""
 
 #: admin/partials/class-settings.php:327
-msgid "Add the social media profiles and pages related to this website."
-msgstr "Tambahkan profil media sosial dan laman terkait dengan situs ini."
+msgid "Add all social media profiles and pages for this website."
+msgstr ""
 
 #: admin/partials/class-settings.php:335
 msgid "Content"
@@ -212,10 +291,6 @@ msgid ""
 msgstr ""
 "Pilihan untuk mengatur tombol media sosial yang memungkinkan pengunjung "
 "untuk berbagi atau menyimpan konten dari situs ini."
-
-#: admin/partials/class-settings.php:341
-msgid "Image"
-msgstr "Gambar"
 
 #: admin/partials/class-settings.php:342
 msgid ""
@@ -277,7 +352,7 @@ msgid "Share on:"
 msgstr "Bagikan ke:"
 
 #: admin/partials/class-settings.php:458 admin/partials/class-settings.php:505
-#: widgets/partials/class-social-profiles.php:170
+#: widgets/partials/class-social-profiles.php:174
 msgid "Include these"
 msgstr "Sertakan berikut"
 
@@ -492,43 +567,48 @@ msgstr "Setelah konten"
 msgid "Settings"
 msgstr "Pengaturan"
 
-#: public/partials/class-rest-buttons.php:203
+#: public/partials/class-rest-buttons.php:208
 msgid "Limit response to a particular social buttons set."
 msgstr "Batasi respon pada satu set tombol sosial tertentu."
 
-#: public/partials/class-rest-buttons.php:259
+#: public/partials/class-rest-buttons.php:261
 msgid "Invalid buttons ID."
 msgstr "ID tombol tak valid."
 
-#: widgets/partials/class-social-profiles.php:111
+#: public/partials/function-template-tags.php:147
+#, php-format
+msgid "Follow %1$s on %2$s"
+msgstr ""
+
+#: widgets/partials/class-social-profiles.php:113
 msgid "Follow Us"
 msgstr "Ikuti Kami"
 
-#: widgets/partials/class-social-profiles.php:113
+#: widgets/partials/class-social-profiles.php:115
 msgid "Social Media Profiles"
 msgstr "Profil Sosial Media"
 
-#: widgets/partials/class-social-profiles.php:115
+#: widgets/partials/class-social-profiles.php:117
 msgid ""
 "Display list of social media profile and page URLs connected to this website."
 msgstr ""
 "Menampilkan daftar URL profil dan halaman media sosial yang terhubung ke "
 "situs ini."
 
-#: widgets/partials/class-social-profiles.php:153
+#: widgets/partials/class-social-profiles.php:157
 msgid "Title:"
 msgstr "Judul:"
 
-#: widgets/partials/class-social-profiles.php:160
+#: widgets/partials/class-social-profiles.php:164
 #, php-format
 msgid "Please add at least one social media profile of this website in the %s."
 msgstr "Tambahkan setidaknya satu profil media sosial dari situs ini di %s."
 
-#: widgets/partials/class-social-profiles.php:161
+#: widgets/partials/class-social-profiles.php:165
 msgid "setting page"
 msgstr "halaman pengaturan"
 
-#: widgets/partials/class-social-profiles.php:193
+#: widgets/partials/class-social-profiles.php:197
 msgid "View:"
 msgstr "Tampilan:"
 
@@ -551,6 +631,15 @@ msgstr "NineCodes"
 #. Author URI of the plugin/theme
 msgid "https://profiles.wordpress.org/ninecodes"
 msgstr "https://profiles.wordpress.org/ninecodes"
+
+#~ msgid "Social Settings"
+#~ msgstr "Pengaturan Sosial"
+
+#~ msgid "Profiles & Pages"
+#~ msgstr "Profil & Halaman"
+
+#~ msgid "Add the social media profiles and pages related to this website."
+#~ msgstr "Tambahkan profil media sosial dan laman terkait dengan situs ini."
 
 #~ msgid "Invalid buttons id."
 #~ msgstr "ID Tombol tak valid."
