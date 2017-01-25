@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Social Media Manager\n"
-"POT-Creation-Date: 2017-01-24 17:39+0700\n"
+"POT-Creation-Date: 2017-01-25 10:39+0700\n"
 "PO-Revision-Date: 2016-10-23 16:59+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -254,9 +254,7 @@ msgid "Content"
 msgstr ""
 
 #: admin/partials/class-settings.php:336
-msgid ""
-"Options to configure the social media buttons that allows people to share, "
-"like, or save content of this site."
+msgid "Configure how social media buttons display on your content pages."
 msgstr ""
 
 #: admin/partials/class-settings.php:342
@@ -272,69 +270,68 @@ msgstr ""
 msgid "Configure the modes that work best for your website."
 msgstr ""
 
-#: admin/partials/class-settings.php:428 admin/partials/class-settings.php:487
-msgid "Show the buttons in"
+#: admin/partials/class-settings.php:427 admin/partials/class-settings.php:476
+msgid "Buttons to include"
 msgstr ""
 
-#: admin/partials/class-settings.php:429
+#: admin/partials/class-settings.php:435 admin/partials/class-settings.php:495
+msgid "Buttons Visibility"
+msgstr ""
+
+#: admin/partials/class-settings.php:436
 #, php-format
 msgid "Select the %s that are allowed to show the social media buttons."
 msgstr ""
 
-#: admin/partials/class-settings.php:429 admin/partials/class-settings.php:488
+#: admin/partials/class-settings.php:436 admin/partials/class-settings.php:496
 msgid "Post Types"
 msgstr ""
 
-#: admin/partials/class-settings.php:435 admin/partials/class-settings.php:496
-msgid "Buttons View"
+#: admin/partials/class-settings.php:442 admin/partials/class-settings.php:504
+msgid "Buttons Views"
 msgstr ""
 
-#: admin/partials/class-settings.php:436
+#: admin/partials/class-settings.php:443
 msgid "Select the social media buttons appearance shown in the content."
 msgstr ""
 
-#: admin/partials/class-settings.php:444
-msgid "Buttons Placement"
-msgstr ""
-
-#: admin/partials/class-settings.php:445
-msgid "Select the location to show the social media buttons in the content."
+#: admin/partials/class-settings.php:451
+msgid "Buttons Placements"
 msgstr ""
 
 #: admin/partials/class-settings.php:452
-msgid "Buttons Heading"
+msgid "Select the location to show the social media buttons in the content."
 msgstr ""
 
-#: admin/partials/class-settings.php:453
+#: admin/partials/class-settings.php:459
+msgid "Buttons Header"
+msgstr ""
+
+#: admin/partials/class-settings.php:460
 #, php-format
 msgid "Set the heading shown before the buttons (e.g. %s)."
 msgstr ""
 
-#: admin/partials/class-settings.php:454
+#: admin/partials/class-settings.php:461
 msgid "Share on:"
 msgstr ""
 
-#: admin/partials/class-settings.php:458 admin/partials/class-settings.php:505
-#: widgets/partials/class-social-profiles.php:174
-msgid "Include these"
+#: admin/partials/class-settings.php:484
+msgid "Buttons Image Display"
 msgstr ""
 
-#: admin/partials/class-settings.php:476
-msgid "Image Buttons Display"
-msgstr ""
-
-#: admin/partials/class-settings.php:477
+#: admin/partials/class-settings.php:485
 msgid "Show the social media buttons on images in the content"
 msgstr ""
 
-#: admin/partials/class-settings.php:488
+#: admin/partials/class-settings.php:496
 #, php-format
 msgid ""
 "List of %s that are allowed to show the social media buttons on the images "
 "of the content."
 msgstr ""
 
-#: admin/partials/class-settings.php:497
+#: admin/partials/class-settings.php:505
 msgid ""
 "Select the social media buttons appearance shown on the images of the "
 "content."
@@ -554,12 +551,16 @@ msgstr ""
 msgid "setting page"
 msgstr ""
 
+#: widgets/partials/class-social-profiles.php:174
+msgid "Include these"
+msgstr ""
+
 #: widgets/partials/class-social-profiles.php:197
 msgid "View:"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-msgid "Social Manager"
+msgid "Social Media Manager"
 msgstr ""
 
 #. Plugin URI of the plugin/theme

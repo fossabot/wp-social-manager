@@ -4,11 +4,11 @@
  *
  * @since 1.0.0
  *
- * @package SocialManager
+ * @package SocialMediaManager
  * @subpackage Uninstaller
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 // If uninstall not called from WordPress, then exit.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {

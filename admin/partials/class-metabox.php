@@ -2,11 +2,11 @@
 /**
  * Admin: Metabox class
  *
- * @package SocialManager
+ * @package SocialMediaManager
  * @subpackage Admin\Metabox
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

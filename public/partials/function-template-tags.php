@@ -2,12 +2,12 @@
 /**
  * General Template Tag Functions
  *
- * @package SocialManager
+ * @package SocialMediaManager
  * @subpackage TemplateTags
  */
 
-use \NineCodes\SocialManager\Options as Options;
-use \NineCodes\SocialManager\Helpers as Helpers;
+use \NineCodes\SocialMediaManager\Options as Options;
+use \NineCodes\SocialMediaManager\Helpers as Helpers;
 
 if ( ! function_exists( 'get_the_site_social_profiles' ) ) {
 

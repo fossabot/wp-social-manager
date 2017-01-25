@@ -2,11 +2,11 @@
 /**
  * Public: WPFooter class
  *
- * @package SocialManager
+ * @package SocialMediaManager
  * @subpackage Public\WPFooter
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -134,7 +134,7 @@ final class WPFooter {
 
 		if ( 0 !== count( $symbols ) ) : ?>
 <!--
-	START: SVG Icon Sprites (Social Manager by NineCodes)
+	START: SVG Icon Sprites (Social Media Manager by NineCodes)
 	Read: https://css-tricks.com/svg-sprites-use-better-icon-fonts/
 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0" height="0" display="none">

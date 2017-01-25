@@ -2,11 +2,11 @@
 /**
  * Admin: Settings class
  *
- * @package SocialManager
+ * @package SocialMediaManager
  * @subpackage Admin\Settings
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -472,14 +472,6 @@ final class Settings {
 
 		$this->pages = $this->settings->add_fields( 'buttons', 'buttons_image', array(
 			array(
-				'id' => 'includes',
-				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
-				'type' => 'multicheckbox',
-				'options' => Options::button_sites( 'image' ),
-				'default' => array_keys( Options::button_sites( 'image' ) ),
-				'class' => 'sharing-image-setting hide-if-js',
-			),
-			array(
 				'id' => 'enabled',
 				'label' => esc_html__( 'Buttons Image Display', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Show the social media buttons on images in the content', 'ninecodes-social-manager' ),
@@ -489,6 +481,14 @@ final class Settings {
 					'data-enqueue-script' => 'toggle-control',
 					'data-toggle' => '.sharing-image-setting',
 				),
+			),
+			array(
+				'id' => 'includes',
+				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
+				'type' => 'multicheckbox',
+				'options' => Options::button_sites( 'image' ),
+				'default' => array_keys( Options::button_sites( 'image' ) ),
+				'class' => 'sharing-image-setting hide-if-js',
 			),
 			array(
 				'id' => 'post_types',

@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Social Manager
+ * Plugin Name: Social Media Manager
  * Plugin URI: http://wordpress.org/plugins/ninecodes-social-manager
  * Description: Optimize your website presence in social media.
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: NineCodes
  * Author URI: https://profiles.wordpress.org/ninecodes
  * License: GPL-2.0+
@@ -27,15 +27,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * @package SocialManager
+ * @package SocialMediaManager
  */
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use NineCodes\SocialManager\Plugin;
-use NineCodes\SocialManager\Requirements;
+use NineCodes\SocialMediaManager\Plugin;
+use NineCodes\SocialMediaManager\Requirements;
 
 /**
  * Get the filesystem directory path (with trailing slash) for
@@ -57,7 +57,7 @@ require_once $path_dir . 'includes/class-requirements.php';
  * @var Requirements
  */
 $require = new Requirements(
-	'Social Manager',
+	'Social Media Manager',
 	plugin_basename( __FILE__ ), array(
 		'PHP' => '5.3.0',
 		'WordPress' => '4.5',
