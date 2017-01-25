@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"Project-Id-Version: Social Manager\n"
-"POT-Creation-Date: 2017-01-08 15:43+0700\n"
+"Project-Id-Version: Social Media Manager\n"
+"POT-Creation-Date: 2017-01-25 10:39+0700\n"
 "PO-Revision-Date: 2016-10-23 16:59+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -50,11 +50,13 @@ msgstr ""
 msgid "Accounts"
 msgstr ""
 
-#: admin/partials/class-helps.php:106 admin/partials/class-settings.php:299
+#: admin/partials/class-helps.php:106 admin/partials/class-metabox.php:191
+#: admin/partials/class-settings.php:299
 msgid "Buttons"
 msgstr ""
 
-#: admin/partials/class-helps.php:113 admin/partials/class-settings.php:304
+#: admin/partials/class-helps.php:113 admin/partials/class-metabox.php:273
+#: admin/partials/class-settings.php:304
 msgid "Metas"
 msgstr ""
 
@@ -154,20 +156,97 @@ msgstr ""
 msgid "Twitter Cards"
 msgstr ""
 
-#: admin/partials/class-metabox.php:164 admin/partials/class-settings.php:260
+#: admin/partials/class-metabox.php:164
 msgid "Social"
 msgstr ""
 
+#: admin/partials/class-metabox.php:205
+msgid "Content Social Media Buttons"
+msgstr ""
+
+#: admin/partials/class-metabox.php:208
+#, php-format
+msgid ""
+"Display the buttons that allow people to share, like, or save this %s in "
+"social media"
+msgstr ""
+
+#: admin/partials/class-metabox.php:232
+msgid "Image Social Media Buttons"
+msgstr ""
+
+#: admin/partials/class-metabox.php:235
+#, php-format
+msgid ""
+"Display the social media buttons that allow people to share, like, or save "
+"images of this %s in social media"
+msgstr ""
+
+#: admin/partials/class-metabox.php:283
+msgid "Title"
+msgstr ""
+
+#: admin/partials/class-metabox.php:286
+#, php-format
+msgid ""
+"Set a customized title of this %s as it should appear within the social meta "
+"tag"
+msgstr ""
+
+#: admin/partials/class-metabox.php:307
+msgid "Description"
+msgstr ""
+
+#: admin/partials/class-metabox.php:310
+#, php-format
+msgid ""
+"Set a one to two customized description of this %s that should appear within "
+"the social meta tag"
+msgstr ""
+
+#: admin/partials/class-metabox.php:331 admin/partials/class-settings.php:341
+msgid "Image"
+msgstr ""
+
+#: admin/partials/class-metabox.php:334
+msgid ""
+"Set a custom image URL which should represent this within the social meta tag"
+msgstr ""
+
+#: admin/partials/class-metabox.php:377
+msgid "Section"
+msgstr ""
+
+#: admin/partials/class-metabox.php:380
+#, php-format
+msgid "The section of your website to which the %s belongs"
+msgstr ""
+
+#: admin/partials/class-metabox.php:400
+msgid "Tags"
+msgstr ""
+
+#: admin/partials/class-metabox.php:403
+#, php-format
+msgid ""
+"Select which Taxonomy to use as this %s meta tags. The tags are words "
+"associated with this article."
+msgstr ""
+
+#: admin/partials/class-settings.php:260
+msgid "Social Media"
+msgstr ""
+
 #: admin/partials/class-settings.php:261
-msgid "Social Settings"
+msgid "Social Media Settings"
 msgstr ""
 
 #: admin/partials/class-settings.php:326
-msgid "Profiles & Pages"
+msgid "Profiles"
 msgstr ""
 
 #: admin/partials/class-settings.php:327
-msgid "Add the social media profiles and pages related to this website."
+msgid "Add all social media profiles and pages for this website."
 msgstr ""
 
 #: admin/partials/class-settings.php:335
@@ -175,13 +254,7 @@ msgid "Content"
 msgstr ""
 
 #: admin/partials/class-settings.php:336
-msgid ""
-"Options to configure the social media buttons that allows people to share, "
-"like, or save content of this site."
-msgstr ""
-
-#: admin/partials/class-settings.php:341
-msgid "Image"
+msgid "Configure how social media buttons display on your content pages."
 msgstr ""
 
 #: admin/partials/class-settings.php:342
@@ -197,69 +270,68 @@ msgstr ""
 msgid "Configure the modes that work best for your website."
 msgstr ""
 
-#: admin/partials/class-settings.php:428 admin/partials/class-settings.php:487
-msgid "Show the buttons in"
+#: admin/partials/class-settings.php:427 admin/partials/class-settings.php:476
+msgid "Buttons to include"
 msgstr ""
 
-#: admin/partials/class-settings.php:429
+#: admin/partials/class-settings.php:435 admin/partials/class-settings.php:495
+msgid "Buttons Visibility"
+msgstr ""
+
+#: admin/partials/class-settings.php:436
 #, php-format
 msgid "Select the %s that are allowed to show the social media buttons."
 msgstr ""
 
-#: admin/partials/class-settings.php:429 admin/partials/class-settings.php:488
+#: admin/partials/class-settings.php:436 admin/partials/class-settings.php:496
 msgid "Post Types"
 msgstr ""
 
-#: admin/partials/class-settings.php:435 admin/partials/class-settings.php:496
-msgid "Buttons View"
+#: admin/partials/class-settings.php:442 admin/partials/class-settings.php:504
+msgid "Buttons Views"
 msgstr ""
 
-#: admin/partials/class-settings.php:436
+#: admin/partials/class-settings.php:443
 msgid "Select the social media buttons appearance shown in the content."
 msgstr ""
 
-#: admin/partials/class-settings.php:444
-msgid "Buttons Placement"
-msgstr ""
-
-#: admin/partials/class-settings.php:445
-msgid "Select the location to show the social media buttons in the content."
+#: admin/partials/class-settings.php:451
+msgid "Buttons Placements"
 msgstr ""
 
 #: admin/partials/class-settings.php:452
-msgid "Buttons Heading"
+msgid "Select the location to show the social media buttons in the content."
 msgstr ""
 
-#: admin/partials/class-settings.php:453
+#: admin/partials/class-settings.php:459
+msgid "Buttons Header"
+msgstr ""
+
+#: admin/partials/class-settings.php:460
 #, php-format
 msgid "Set the heading shown before the buttons (e.g. %s)."
 msgstr ""
 
-#: admin/partials/class-settings.php:454
+#: admin/partials/class-settings.php:461
 msgid "Share on:"
 msgstr ""
 
-#: admin/partials/class-settings.php:458 admin/partials/class-settings.php:505
-#: widgets/partials/class-social-profiles.php:170
-msgid "Include these"
+#: admin/partials/class-settings.php:484
+msgid "Buttons Image Display"
 msgstr ""
 
-#: admin/partials/class-settings.php:476
-msgid "Image Buttons Display"
-msgstr ""
-
-#: admin/partials/class-settings.php:477
+#: admin/partials/class-settings.php:485
 msgid "Show the social media buttons on images in the content"
 msgstr ""
 
-#: admin/partials/class-settings.php:488
+#: admin/partials/class-settings.php:496
 #, php-format
 msgid ""
 "List of %s that are allowed to show the social media buttons on the images "
 "of the content."
 msgstr ""
 
-#: admin/partials/class-settings.php:497
+#: admin/partials/class-settings.php:505
 msgid ""
 "Select the social media buttons appearance shown on the images of the "
 "content."
@@ -440,46 +512,55 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: public/partials/class-rest-buttons.php:203
+#: public/partials/class-rest-buttons.php:208
 msgid "Limit response to a particular social buttons set."
 msgstr ""
 
-#: public/partials/class-rest-buttons.php:259
+#: public/partials/class-rest-buttons.php:261
 msgid "Invalid buttons ID."
 msgstr ""
 
-#: widgets/partials/class-social-profiles.php:111
-msgid "Follow Us"
+#: public/partials/function-template-tags.php:147
+#, php-format
+msgid "Follow %1$s on %2$s"
 msgstr ""
 
 #: widgets/partials/class-social-profiles.php:113
-msgid "Social Media Profiles"
+msgid "Follow Us"
 msgstr ""
 
 #: widgets/partials/class-social-profiles.php:115
+msgid "Social Media Profiles"
+msgstr ""
+
+#: widgets/partials/class-social-profiles.php:117
 msgid ""
 "Display list of social media profile and page URLs connected to this website."
 msgstr ""
 
-#: widgets/partials/class-social-profiles.php:153
+#: widgets/partials/class-social-profiles.php:157
 msgid "Title:"
 msgstr ""
 
-#: widgets/partials/class-social-profiles.php:160
+#: widgets/partials/class-social-profiles.php:164
 #, php-format
 msgid "Please add at least one social media profile of this website in the %s."
 msgstr ""
 
-#: widgets/partials/class-social-profiles.php:161
+#: widgets/partials/class-social-profiles.php:165
 msgid "setting page"
 msgstr ""
 
-#: widgets/partials/class-social-profiles.php:193
+#: widgets/partials/class-social-profiles.php:174
+msgid "Include these"
+msgstr ""
+
+#: widgets/partials/class-social-profiles.php:197
 msgid "View:"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-msgid "Social Manager"
+msgid "Social Media Manager"
 msgstr ""
 
 #. Plugin URI of the plugin/theme

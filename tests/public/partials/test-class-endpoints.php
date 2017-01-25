@@ -2,11 +2,11 @@
 /**
  * Class TestEndpoints
  *
- * @package NineCodes\SocialManager;
+ * @package NineCodes\SocialMediaManager;
  * @subpackage Tests
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 /**
  * Load Global classes;

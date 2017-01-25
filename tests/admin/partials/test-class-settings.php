@@ -2,11 +2,11 @@
 /**
  * Class TestSettings
  *
- * @package NineCodes\SocialManager;
+ * @package NineCodes\SocialMediaManager;
  * @subpackage Tests
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 /**
  * Load WP_UnitTestCase;
@@ -70,8 +70,8 @@ class TestSettings extends WP_UnitTestCase {
 		$this->settings->setting_setups();
 
 		$this->assertInstanceOf( '\NineCodes\WPSettings\Settings', $this->settings->settings );
-		$this->assertInstanceOf( '\NineCodes\SocialManager\Validation', $this->settings->validate );
-		$this->assertInstanceOf( '\NineCodes\SocialManager\Fields', $this->settings->fields );
-		$this->assertInstanceOf( '\NineCodes\SocialManager\Helps', $this->settings->helps );
+		$this->assertInstanceOf( '\NineCodes\SocialMediaManager\Validation', $this->settings->validate );
+		$this->assertInstanceOf( '\NineCodes\SocialMediaManager\Fields', $this->settings->fields );
+		$this->assertInstanceOf( '\NineCodes\SocialMediaManager\Helps', $this->settings->helps );
 	}
 }

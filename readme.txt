@@ -1,9 +1,9 @@
-=== Social Manager ===
+=== Social Media Manager ===
 Contributors: ninecodes, tfirdaus, hongkiat
 Tags: widget, json, wp-api, social-media, sharing, facebook, twitter, pinterest, open-graph, twitter-cards
 Requires at least: 4.5
 Tested up to: 4.7
-Stable tag: 1.0.6
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,12 +15,12 @@ This plugin helps you optimize your website for social media with [Open Graph](h
 
 Other features included in the plugin:
 
-= Social Buttons =
+= Social Media Buttons =
 Display social buttons to allow your readers sharing your website posts and pages to Facebook, Twitter, Pinterest, LinkedIn, Reddit, etc. You can also display the social buttons on the images within the content.
 
 With the increasing trend on using WordPress as a [*headless* CMS](https://2016.sydney.wordcamp.org/session/using-wordpress-as-a-headless-cms/), this plugin also exposes a couple of custom **JSON API** routes using the [WP-API](http://v2.wp-api.org/) infrastructure in WordPress. The API allows developers to retrieve the social media sharing endpoint URLs of a particular post or page and render the sharing buttons in, for example, a JavaScript-based theme.
 
-= Social Profiles =
+= Social Media Profiles =
 With this plugin you can add your social profile and page URLs and display them on a widget. No need to mess around with your theme Menu ever again; the widget will stay there even when you've changed the theme.
 
 = Translations =
@@ -38,9 +38,9 @@ Translate this plugin to your language on [__translate.wordpress.org__](https://
 = WordPress Plugins Directory (Recommended): =
 
 1. Visit _Plugins > Add New_
-2. Search for **Social Manager**
-3. On the search result, click the "Install Now" button of **Social Manager** by NineCodes
-3. Activate **Social Manager** from the Plugins page.
+2. Search for **Social Media Manager**
+3. On the search result, click the "Install Now" button of **Social Media Manager** by NineCodes
+3. Activate **Social Media Manager** from the Plugins page.
 
 = Manual Upload: =
 
@@ -49,7 +49,7 @@ Translate this plugin to your language on [__translate.wordpress.org__](https://
 3. Click **Upload Plugin**
 4. Click **Choose File**, and select the plugin `.zip` package you have just downloaded.
 6. Click **Install Now**.
-3. Activate **Social Manager** from the Plugins page.
+3. Activate **Social Media Manager** from the Plugins page.
 
 = FTP Upload: =
 
@@ -63,7 +63,7 @@ Then, login to your server *with the credentials given by your hosting provider*
 
 1. Download the plugin `.zip` archive.
 2. Unzip the archive and upload the `ninecodes-social-manager` folder into the plugin folder (`/wp-content/plugins/`).
-3. Activate **Social Manager** from the _Plugins_ page.
+3. Activate **Social Media Manager** from the _Plugins_ page.
 
 = Once Activated: =
 
@@ -85,20 +85,20 @@ Set the `stylesheet` to `true` will dequeue the plugin stylesheet. This allows y
 
 **Custom attribute prefix**
 
-The plugin add prefix `ninecodes-social-manager` to (almost) any HTML elements it outputs at the front-end (your theme). If you don't like it, you can change this prefix to anything you prefer by adding the `attr-prefix`, for example:
+The plugin add prefix `social-manager` to (almost) any HTML elements it generates at the front-end (your theme). You can change this prefix to anything you want by adding the `attr_prefix`, for example:
 
 <pre lang="php">add_theme_support( 'ninecodes-social-manager', array(
-	'attr-prefix' => 'social',
+	'attr_prefix' => 'social',
 ) );</pre>
 
-Keep in mind, setting the prefix to other than `social-manager` will dequeue the stylesheet much like setting the `stylesheet` to `true`; you will have to add the styles on your own.
+Keep in mind that changing the prefix to other than `social-manager` will dequeue the stylesheet much like setting the `stylesheet` to `true`. So you will have to add the styles at your end.
 
 **Changing the Buttons Mode**
 
 The plugin offers 2 modes, `HTML` and `JSON`, to generate, what called as the **Social Buttons**; the buttons that allow your site users to share content on social media. By default the mode is set to `HTML`, which will *echo* all the HTML markup in the post content. But, if you are building a [*headless* WordPress theme](https://pantheon.io/decoupled-cms) using whatever JavaScript renders (Backbone, Angular, React, Vue, Ember, you name it), you might want to switch the plugin to the `JSON` mode.
 
 <pre lang="php">add_theme_support( 'ninecodes-social-manager', array(
-	'buttons-mode' => 'json',
+	'buttons_mode' => 'json',
 ) );</pre>
 
 == Frequently Asked Questions ==
@@ -115,6 +115,17 @@ None, at the moment. Please ask. :)
 6. Social buttons to share the content image.
 
 == Changelog ==
+
+= [1.1.0] - 2017-01-25 =
+* __Added__: `get_the_site_social_profiles` and `the_site_social_profiles` template tag to show the social profile on an arbitrary location within the theme.
+* __Added__: `get_the_author_social_profiles` and `the_author_social_profiles` template tag to show the social profile of specified author on an arbitrary location within the theme.
+* __Added__: New social media meta tags such as `article:section`, `article:tag`, `article:published_date`, and `article:modified_date`.
+* __Added__: Aliases for `add_theme_supports` name.
+* __Changed__: Improved Filter hooks of the Icons.
+* __Changed__: Setting menu label to "Social Media", instead of just "Social".
+* __Changed__: Setting screen title to "Social Media Settings", instead of just "Social Settings".
+* __Changed__: A few option inputs description and labels for better UX.
+
 
 = [1.0.6] - 2017-01-10 =
 * __Added__: Add "Settings" link in the plugin Table List.
@@ -174,6 +185,9 @@ Read more at [Version 1.0.6 Release Note](https://github.com/ninecodes/social-ma
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+* Added template tag functions, additional Open Graph meta tags, improvement on the Filter hooks, and numerous bug fixes.
 
 = 1.0.6 =
 * Numerous bug fixes, and improvements in the REST API response as well as in the plugin code structure.

@@ -2,11 +2,11 @@
 /**
  * This file defines the Options class.
  *
- * @package SocialManager
+ * @package SocialMediaManager
  * @subpackage Options
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

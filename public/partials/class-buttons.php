@@ -2,11 +2,11 @@
 /**
  * Public: Buttons Class
  *
- * @package SocialManager
+ * @package SocialMediaManager
  * @subpackage Public\Buttons
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -120,10 +120,10 @@ abstract class Buttons {
 		}
 
 		$args = wp_parse_args( $args, array(
-			'prefix'   => '',
-			'site'     => '',
-			'icon'     => '',
-			'label'    => '',
+			'attr_prefix' => '',
+			'site' => '',
+			'icon' => '',
+			'label' => '',
 			'endpoint' => '',
 		) );
 
@@ -131,7 +131,7 @@ abstract class Buttons {
 			return;
 		}
 
-		$prefix = $args['prefix'];
+		$prefix = $args['attr_prefix'];
 		$site = $args['site'];
 		$icon = $args['icon'];
 		$label = $args['label'];
@@ -170,6 +170,18 @@ abstract class Buttons {
 	 */
 	protected function get_button_icon( $site ) {
 		return Helpers::get_social_icons( $site );
+	}
+
+	/**
+	 * The function utility to get all the icons.
+	 *
+	 * @since 1.1.0
+	 * @access protected
+	 *
+	 * @return array The list of icon.
+	 */
+	protected function get_button_icons() {
+		return Helpers::get_social_icons();
 	}
 
 	/**

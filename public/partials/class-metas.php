@@ -2,11 +2,11 @@
 /**
  * Public: Meta class
  *
- * @package SocialManager
+ * @package SocialMediaManager
  * @subpackage Public\Metas
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -337,13 +337,16 @@ class Metas {
 			$attachment_id = $this->get_post_meta( $post_id, 'post_thumbnail' ); // Post Meta Image.
 		}
 
-		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), $attachment_id, $post_id, 'post-image' );
+		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), array(
+			'post_id' => $post_id,
+			'attachment_id' => $attachment_id,
+		), 'PostImage' );
 
 		/*
 		 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
 		 * return the image immediately and don't proceed the codes that follow.
 		 */
-		if ( isset( $image_filter['src'] ) ) {
+		if ( isset( $image_filter['src'] ) && ! empty( $image_filter['src'] ) ) {
 
 			$image_filter = wp_parse_args( $image_filter, array(
 				'src' => '',
@@ -468,5 +471,157 @@ class Metas {
 			'display_name' => $name,
 			'profiles' => $profiles,
 		);
+	}
+
+	/**
+	 * The method to get the "post" section.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @param integer $post_id The post ID.
+	 * @return string Selected or default section.
+	 */
+	public function get_post_section( $post_id ) {
+
+		$post_id = absint( $post_id );
+		$post = get_post( $post_id );
+
+		$post_section = explode( '-', $this->get_post_meta( $post_id, 'post_section' ) );
+
+		$taxonomy = isset( $post_section[0] ) ? sanitize_key( $post_section[0] ) : '';
+		$term_id = isset( $post_section[1] ) ? absint( $post_section[1] ) : null;
+
+		/**
+		 * Make sure the post has the term attached,
+		 * otherwise it should fallback to default post section.
+		 */
+		if ( has_term( $term_id, $taxonomy, $post ) ) {
+			$term = get_term( $term_id, $taxonomy, $post );
+			$section_name = $term->name;
+		} else {
+			$section_name = $this->get_default_post_section( $post_id );
+		}
+
+		return wp_kses( $section_name, array() ); // Get the first term found.
+	}
+
+	/**
+	 * The method to get the "post" tag.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @param integer $post_id The post ID.
+	 * @return array List of tag words.
+	 */
+	public function get_post_tags( $post_id ) {
+
+		$post_id = absint( $post_id );
+		$post = get_post( $post_id );
+
+		$tags = array();
+
+		/**
+		 * The taxonomy slug of the Tag.
+		 *
+		 * @var string.
+		 */
+		$post_tag = $this->get_post_meta( $post_id, 'post_tag' );
+
+		if ( $post_tag ) {
+			$terms = wp_get_post_terms( $post_id, $post_tag );
+			foreach ( $terms as $key => $term ) {
+				$tags[] = $term->name;
+			}
+		} else {
+			$tags = $this->get_default_post_tags( $post_id );
+		}
+
+		return $tags;
+	}
+
+	/**
+	 * The method to get the "post" default section.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @param integer $post_id The post ID.
+	 * @return string The default post section.
+	 */
+	protected function get_default_post_section( $post_id ) {
+
+		$terms = '';
+
+		$post_type = get_post_type( $post_id );
+		$taxonomies = get_object_taxonomies( $post_type, 'object' );
+
+		/**
+		 * Get list of hierarchical taxonomies like a category.
+		 *
+		 * @var array
+		 */
+		$sections = array();
+		foreach ( $taxonomies as $slug => $tax ) {
+			if ( true === $tax->hierarchical ) {
+				$sections[] = $slug;
+			}
+		}
+
+		if ( isset( $sections[0] ) ) {
+
+			/**
+			 * Get list terms of the first hierarchical taxonomy on the list.
+			 *
+			 * @var array
+			 */
+			$terms = wp_get_post_terms( $post_id, $sections[0], array(
+				'fields' => 'names',
+			) );
+		}
+
+		return is_array( $terms ) && ! empty( $terms ) ? $terms[0] : ''; // Return the first term on the list.
+	}
+
+	/**
+	 * The method to get the "post" default tags.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 *
+	 * @param integer $post_id The post ID.
+	 * @return string The list of tags.
+	 */
+	protected function get_default_post_tags( $post_id ) {
+
+		$tags = array();
+
+		$post_type = get_post_type( $post_id );
+		$taxonomies = get_object_taxonomies( $post_type, 'object' );
+
+		/**
+		 * Get list of hierarchical taxonomies like a category.
+		 *
+		 * @var array
+		 */
+		$taxs = array();
+		foreach ( $taxonomies as $slug => $tax ) {
+			if ( false === $tax->hierarchical && 'post_format' !== $slug ) {
+				$taxs[] = $slug;
+			}
+		}
+
+		if ( isset( $taxs[0] ) ) {
+
+			$terms = wp_get_post_terms( $post_id, $taxs[0] );
+
+			$tags = array();
+			foreach ( $terms as $key => $term ) {
+				$tags[] = $term->name;
+			}
+		}
+
+		return $tags;
 	}
 }

@@ -5,10 +5,10 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @package SocialManager
+ * @package SocialMediaManager
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -49,7 +49,7 @@ final class Plugin {
 	 * @access protected
 	 * @var string
 	 */
-	protected $version = '1.0.6';
+	protected $version = '1.0.7';
 
 	/**
 	 * The path directory relative to the current file.
@@ -287,7 +287,7 @@ final class Plugin {
 		/**
 		 * Filter useful to prepend query during development to flush cache.
 		 */
-		return apply_filters( 'ninecodes_social_manager_version', $this->version );
+		return $this->version;
 	}
 
 	/**

@@ -2,11 +2,11 @@
 /**
  * Class TestPlugin
  *
- * @package NineCodes\SocialManager;
+ * @package NineCodes\SocialMediaManager;
  * @subpackage Tests
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 /**
  * Load WP_UnitTestCase;
@@ -116,6 +116,21 @@ class TestThemeSupports extends WP_UnitTestCase {
 	public function test_theme_supports_buttons_mode_html() {
 
 		add_theme_support($this->theme_supports->get_feature_name(), array(
+			'buttons_mode' => 'html',
+		));
+
+		$supports = $this->theme_supports->theme_supports();
+
+		$this->assertArrayHasKey( 'buttons_mode', $supports );
+		$this->assertEquals( 'html', $supports['buttons_mode'] );
+
+		$is = $this->theme_supports->is( 'buttons_mode' );
+		$this->assertEquals( 'html', $is );
+
+		/**
+		 * Feature name alias: `buttons-mode`.
+		 */
+		add_theme_support($this->theme_supports->get_feature_name(), array(
 			'buttons-mode' => 'html',
 		));
 
@@ -139,6 +154,21 @@ class TestThemeSupports extends WP_UnitTestCase {
 	public function test_theme_supports_buttons_mode_json() {
 
 		add_theme_support($this->theme_supports->get_feature_name(), array(
+			'buttons_mode' => 'json',
+		));
+
+		$supports = $this->theme_supports->theme_supports();
+
+		$this->assertArrayHasKey( 'buttons_mode', $supports );
+		$this->assertEquals( 'json', $supports['buttons_mode'] );
+
+		$is = $this->theme_supports->is( 'buttons_mode' );
+		$this->assertEquals( 'json', $is );
+
+		/**
+		 * Feature name alias: `buttons-mode`.
+		 */
+		add_theme_support($this->theme_supports->get_feature_name(), array(
 			'buttons-mode' => 'json',
 		));
 
@@ -152,7 +182,7 @@ class TestThemeSupports extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test the TestThemeSupports 'attr-prefix' feature.
+	 * Test the TestThemeSupports 'attr_prefix' feature.
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -162,6 +192,21 @@ class TestThemeSupports extends WP_UnitTestCase {
 	public function test_theme_supports_attr_prefix() {
 
 		add_theme_support($this->theme_supports->get_feature_name(), array(
+			'attr_prefix' => 'social',
+		));
+
+		$supports = $this->theme_supports->theme_supports();
+
+		$this->assertArrayHasKey( 'attr_prefix', $supports );
+		$this->assertEquals( 'social', $supports['attr_prefix'] );
+
+		$this->assertEquals( 'social', $this->theme_supports->is( 'attr_prefix' ) );
+		$this->assertTrue( $this->theme_supports->is( 'stylesheet' ) ); // The `stylesheet` support should turn to true.
+
+		/**
+		 * Alias feature name: `attr-prefix`.
+		 */
+		add_theme_support($this->theme_supports->get_feature_name(), array(
 			'attr-prefix' => 'social',
 		));
 
@@ -170,7 +215,11 @@ class TestThemeSupports extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'attr-prefix', $supports );
 		$this->assertEquals( 'social', $supports['attr-prefix'] );
 
-		$is = $this->theme_supports->is( 'attr-prefix' );
-		$this->assertFalse( $is );
+		$this->assertEquals( 'social', $this->theme_supports->is( 'attr-prefix' ) );
+		$this->assertTrue( $this->theme_supports->is( 'stylesheet' ) ); // The `stylesheet` support should turn to true.
+
+		add_theme_support($this->theme_supports->get_feature_name(), array(
+			'attr_prefix' => '',
+		));
 	}
 }

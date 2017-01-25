@@ -89,9 +89,6 @@ module.exports = function(grunt) {
 			},
 			phpunit: {
 				command: 'vagrant ssh -c "cd <%= config.plugin_path %> && phpunit"'
-			},
-			tmp: {
-				command: 'open /tmp/<%= pkg.name %>'
 			}
 		},
 
@@ -460,7 +457,6 @@ module.exports = function(grunt) {
 	// Deploy to WordPress.org repository.
 	grunt.registerTask('deploy', [
 		'build',
-		'shell:tmp',
 		'wp_deploy:' + stage,
 		'clean:build'
 	]);

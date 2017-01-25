@@ -2,11 +2,11 @@
 /**
  * Class TestPlugin
  *
- * @package NineCodes\SocialManager;
+ * @package NineCodes\SocialMediaManager;
  * @subpackage Tests
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 use \WP_UnitTestCase;
 
