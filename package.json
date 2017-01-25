@@ -1,7 +1,7 @@
 {
   "name": "ninecodes-social-manager",
-  "title": "Social Manager",
-  "version": "1.0.6",
+  "title": "Social Media Manager",
+  "version": "1.0.7",
   "wordpress": {
     "requires_at_least": "4.5",
     "tested_up_to": "4.7"

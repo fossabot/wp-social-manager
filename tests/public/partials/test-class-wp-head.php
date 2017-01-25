@@ -9,11 +9,11 @@
  * - Add tests for Custom Taxonomy
  * - Add tests for Site Meta filter.
  *
- * @package NineCodes\SocialManager;
+ * @package NineCodes\SocialMediaManager;
  * @subpackage Tests
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 /**
  * Load WP_UnitTestCase;
@@ -130,7 +130,7 @@ class TestWPHead extends WP_UnitTestCase {
 		$buffer = ob_get_clean();
 
 		$this->assertTrue( is_home() );
-		$this->assertContains( '<!-- START: Social Meta Tags (Social Manager by NineCodes) -->', $buffer );
+		$this->assertContains( '<!-- START: Social Media Meta Tags (Social Media Manager by NineCodes) -->', $buffer );
 
 		// Open Graph.
 		$this->assertContains( '<meta property="og:type" content="website">', $buffer );
@@ -146,7 +146,7 @@ class TestWPHead extends WP_UnitTestCase {
 		$this->assertContains( '<meta name="twitter:description" content="' . get_bloginfo( 'description' ) . '">', $buffer );
 		$this->assertContains( '<meta name="twitter:url" content="' . get_home_url() . '">', $buffer );
 
-		$this->assertContains( '<!-- END: Social Manager -->', $buffer );
+		$this->assertContains( '<!-- END: Social Media Meta Tags -->', $buffer );
 	}
 
 	/**

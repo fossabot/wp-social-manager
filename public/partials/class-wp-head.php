@@ -2,11 +2,11 @@
 /**
  * Public: WPHead class
  *
- * @package SocialManager
+ * @package SocialMediaManager
  * @subpackage Public\WPHead
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -128,7 +128,7 @@ final class WPHead {
 		$meta_tags_og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'OpenGraph' ) );
 		$meta_tags_tc = $this->site_twitter_cards( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'TwitterCards' ) );
 
-		echo "\n<!-- START: Social Meta Tags (Social Manager by NineCodes) -->\n";
+		echo "\n<!-- START: Social Media Meta Tags (Social Media Manager by NineCodes) -->\n";
 		echo wp_kses( "{$meta_tags_og}{$meta_tags_tc}", array(
 			'meta' => array(
 			'property' => array(),
@@ -136,7 +136,7 @@ final class WPHead {
 			'name' => array(),
 			),
 		) );
-		echo "<!-- END: Social Manager -->\n\n";
+		echo "<!-- END: Social Media Meta Tags -->\n\n";
 	}
 
 	/**
@@ -173,7 +173,7 @@ final class WPHead {
 		$meta_tags_og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'OpenGraph' ) );
 		$meta_tags_tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'TwitterCards' ) );
 
-		echo "\n<!-- START: Social Meta Tags (Social Manager by NineCodes) -->\n";
+		echo "\n<!-- START: Social Media Meta Tags (Social Media Manager by NineCodes) -->\n";
 		echo wp_kses( "{$meta_tags_og}{$meta_tags_tc}", array(
 			'meta' => array(
 			'property' => array(),
@@ -181,7 +181,7 @@ final class WPHead {
 			'name' => array(),
 			),
 		) );
-		echo "<!-- END: Social Meta Tags -->\n\n";
+		echo "<!-- END: Social Media Meta Tags -->\n\n";
 	}
 
 	/**

@@ -2,11 +2,11 @@
 /**
  * Public: ButtonsImage Class
  *
- * @package SocialManager
+ * @package SocialMediaManager
  * @subpackage Public\Buttons
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

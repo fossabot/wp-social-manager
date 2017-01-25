@@ -1,9 +1,9 @@
-=== Social Manager ===
+=== Social Media Manager ===
 Contributors: ninecodes, tfirdaus, hongkiat
 Tags: widget, json, wp-api, social-media, sharing, facebook, twitter, pinterest, open-graph, twitter-cards
 Requires at least: 4.5
 Tested up to: 4.7
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,12 +15,12 @@ This plugin helps you optimize your website for social media with [Open Graph](h
 
 Other features included in the plugin:
 
-= Social Buttons =
+= Social Media Buttons =
 Display social buttons to allow your readers sharing your website posts and pages to Facebook, Twitter, Pinterest, LinkedIn, Reddit, etc. You can also display the social buttons on the images within the content.
 
 With the increasing trend on using WordPress as a [*headless* CMS](https://2016.sydney.wordcamp.org/session/using-wordpress-as-a-headless-cms/), this plugin also exposes a couple of custom **JSON API** routes using the [WP-API](http://v2.wp-api.org/) infrastructure in WordPress. The API allows developers to retrieve the social media sharing endpoint URLs of a particular post or page and render the sharing buttons in, for example, a JavaScript-based theme.
 
-= Social Profiles =
+= Social Media Profiles =
 With this plugin you can add your social profile and page URLs and display them on a widget. No need to mess around with your theme Menu ever again; the widget will stay there even when you've changed the theme.
 
 = Translations =
@@ -38,9 +38,9 @@ Translate this plugin to your language on [__translate.wordpress.org__](https://
 = WordPress Plugins Directory (Recommended): =
 
 1. Visit _Plugins > Add New_
-2. Search for **Social Manager**
-3. On the search result, click the "Install Now" button of **Social Manager** by NineCodes
-3. Activate **Social Manager** from the Plugins page.
+2. Search for **Social Media Manager**
+3. On the search result, click the "Install Now" button of **Social Media Manager** by NineCodes
+3. Activate **Social Media Manager** from the Plugins page.
 
 = Manual Upload: =
 
@@ -49,7 +49,7 @@ Translate this plugin to your language on [__translate.wordpress.org__](https://
 3. Click **Upload Plugin**
 4. Click **Choose File**, and select the plugin `.zip` package you have just downloaded.
 6. Click **Install Now**.
-3. Activate **Social Manager** from the Plugins page.
+3. Activate **Social Media Manager** from the Plugins page.
 
 = FTP Upload: =
 
@@ -63,7 +63,7 @@ Then, login to your server *with the credentials given by your hosting provider*
 
 1. Download the plugin `.zip` archive.
 2. Unzip the archive and upload the `ninecodes-social-manager` folder into the plugin folder (`/wp-content/plugins/`).
-3. Activate **Social Manager** from the _Plugins_ page.
+3. Activate **Social Media Manager** from the _Plugins_ page.
 
 = Once Activated: =
 

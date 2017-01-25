@@ -4,11 +4,11 @@
  *
  * TODO: Add test for wp_kses.
  *
- * @package NineCodes\SocialManager;
+ * @package NineCodes\SocialMediaManager;
  * @subpackage Tests
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 /**
  * Load WP_UnitTestCase;

@@ -2,11 +2,11 @@
 /**
  * This file defines the ThemeSupports class.
  *
- * @package SocialManager
+ * @package SocialMediaManager
  * @subpackage ThemeSupports
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

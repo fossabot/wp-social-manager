@@ -2,11 +2,11 @@
 /**
  * Public: RESTButtonsController class
  *
- * @package SocialManager
+ * @package SocialMediaManager
  * @subpackage Public\REST
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialMediaManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -231,7 +231,7 @@ class RESTButtonsController extends WP_REST_Controller {
 	public function get_plugin_info( $request ) {
 
 		$response = array(
-			'plugin_name' => 'Social Manager',
+			'plugin_name' => 'Social Media Manager',
 			'plugin_url' => 'http://wordpress.org/plugins/ninecodes-social-manager',
 			'version' => $this->version,
 			'contributors' => array(
