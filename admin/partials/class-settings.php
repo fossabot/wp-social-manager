@@ -257,8 +257,8 @@ final class Settings {
 	 */
 	public function setting_menu() {
 
-		$menu_title = esc_html__( 'Social', 'ninecodes-social-manager' );
-		$page_title = esc_html__( 'Social Settings', 'ninecodes-social-manager' );
+		$menu_title = esc_html__( 'Social Media', 'ninecodes-social-manager' );
+		$page_title = esc_html__( 'Social Media Settings', 'ninecodes-social-manager' );
 
 		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $this->plugin_slug, function() {
 			echo wp_kses( "<div class='wrap' id='{$this->plugin_slug}-wrap'>", array(
@@ -323,8 +323,8 @@ final class Settings {
 
 		$this->pages = $this->settings->add_section( 'accounts', array(
 				'id' => 'profiles',
-				'title' => esc_html__( 'Profiles & Pages', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Add the social media profiles and pages related to this website.', 'ninecodes-social-manager' ),
+				'title' => esc_html__( 'Profiles', 'ninecodes-social-manager' ),
+				'description' => esc_html__( 'Add all social media profiles and pages for this website.', 'ninecodes-social-manager' ),
 				'validate_callback' => array( $this->validate, 'setting_profiles' ),
 			)
 		);
@@ -333,7 +333,7 @@ final class Settings {
 			array(
 				'id' => 'buttons_content',
 				'title' => esc_html__( 'Content', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Options to configure the social media buttons that allows people to share, like, or save content of this site.', 'ninecodes-social-manager' ),
+				'description' => esc_html__( 'Configure how social media buttons display on your content pages.', 'ninecodes-social-manager' ),
 				'validate_callback' => array( $this->validate, 'setting_buttons_content' ),
 			),
 			array(
@@ -423,16 +423,23 @@ final class Settings {
 
 		$this->pages = $this->settings->add_fields( 'buttons', 'buttons_content', array(
 			array(
+				'id' => 'includes',
+				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
+				'type' => 'multicheckbox',
+				'options' => Options::button_sites( 'content' ),
+				'default' => array_keys( Options::button_sites( 'content' ) ),
+			),
+			array(
 				'id' => 'post_types',
 				'type' => 'multicheckbox',
-				'label' => esc_html__( 'Show the buttons in', 'ninecodes-social-manager' ),
+				'label' => esc_html__( 'Buttons Visibility', 'ninecodes-social-manager' ),
 				'description' => wp_kses( sprintf( __( 'Select the %s that are allowed to show the social media buttons.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 				'options' => Options::post_types(),
 				'default' => array( 'post' ),
 			),
 			array(
 				'id' => 'view',
-				'label' => esc_html__( 'Buttons View', 'ninecodes-social-manager' ),
+				'label' => esc_html__( 'Buttons Views', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Select the social media buttons appearance shown in the content.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
 				'options' => Options::button_views(),
@@ -441,7 +448,7 @@ final class Settings {
 			array(
 				'id' => 'placement',
 				'type' => 'radio',
-				'label' => esc_html__( 'Buttons Placement', 'ninecodes-social-manager' ),
+				'label' => esc_html__( 'Buttons Placements', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Select the location to show the social media buttons in the content.', 'ninecodes-social-manager' ),
 				'options' => Options::button_placements(),
 				'default' => 'after',
@@ -449,16 +456,9 @@ final class Settings {
 			array(
 				'id' => 'heading',
 				'type' => 'text',
-				'label' => esc_html__( 'Buttons Heading', 'ninecodes-social-manager' ),
+				'label' => esc_html__( 'Buttons Header', 'ninecodes-social-manager' ),
 				'description' => sprintf( esc_html__( 'Set the heading shown before the buttons (e.g. %s).', 'ninecodes-social-manager' ), '<code>Share on:</code>' ),
 				'default' => esc_html__( 'Share on:', 'ninecodes-social-manager' ),
-			),
-			array(
-				'id' => 'includes',
-				'label' => esc_html__( 'Include these', 'ninecodes-social-manager' ),
-				'type' => 'multicheckbox',
-				'options' => Options::button_sites( 'content' ),
-				'default' => array_keys( Options::button_sites( 'content' ) ),
 			),
 		) );
 
@@ -472,8 +472,16 @@ final class Settings {
 
 		$this->pages = $this->settings->add_fields( 'buttons', 'buttons_image', array(
 			array(
+				'id' => 'includes',
+				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
+				'type' => 'multicheckbox',
+				'options' => Options::button_sites( 'image' ),
+				'default' => array_keys( Options::button_sites( 'image' ) ),
+				'class' => 'sharing-image-setting hide-if-js',
+			),
+			array(
 				'id' => 'enabled',
-				'label' => esc_html__( 'Image Buttons Display', 'ninecodes-social-manager' ),
+				'label' => esc_html__( 'Buttons Image Display', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Show the social media buttons on images in the content', 'ninecodes-social-manager' ),
 				'type' => 'checkbox',
 				'attr' => array(
@@ -484,7 +492,7 @@ final class Settings {
 			),
 			array(
 				'id' => 'post_types',
-				'label' => esc_html__( 'Show the buttons in', 'ninecodes-social-manager' ),
+				'label' => esc_html__( 'Buttons Visibility', 'ninecodes-social-manager' ),
 				'description' => wp_kses( sprintf( __( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 				'type' => 'multicheckbox',
 				'options' => Options::post_types(),
@@ -493,19 +501,11 @@ final class Settings {
 			),
 			array(
 				'id' => 'view',
-				'label' => esc_html__( 'Buttons View', 'ninecodes-social-manager' ),
+				'label' => esc_html__( 'Buttons Views', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Select the social media buttons appearance shown on the images of the content.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
 				'options' => Options::button_views(),
 				'default' => 'icon',
-				'class' => 'sharing-image-setting hide-if-js',
-			),
-			array(
-				'id' => 'includes',
-				'label' => esc_html__( 'Include these', 'ninecodes-social-manager' ),
-				'type' => 'multicheckbox',
-				'options' => Options::button_sites( 'image' ),
-				'default' => array_keys( Options::button_sites( 'image' ) ),
 				'class' => 'sharing-image-setting hide-if-js',
 			),
 		) );
