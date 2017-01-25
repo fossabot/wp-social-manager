@@ -3,7 +3,7 @@ Contributors: ninecodes, tfirdaus, hongkiat
 Tags: widget, json, wp-api, social-media, sharing, facebook, twitter, pinterest, open-graph, twitter-cards
 Requires at least: 4.5
 Tested up to: 4.7
-Stable tag: 1.0.7
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,6 +116,17 @@ None, at the moment. Please ask. :)
 
 == Changelog ==
 
+= [1.1.0] - 2017-01-25 =
+* __Added__: `get_the_site_social_profiles` and `the_site_social_profiles` template tag to show the social profile on an arbitrary location within the theme.
+* __Added__: `get_the_author_social_profiles` and `the_author_social_profiles` template tag to show the social profile of specified author on an arbitrary location within the theme.
+* __Added__: New social media meta tags such as `article:section`, `article:tag`, `article:published_date`, and `article:modified_date`.
+* __Added__: Aliases for `add_theme_supports` name.
+* __Changed__: Improved Filter hooks of the Icons.
+* __Changed__: Setting menu label to "Social Media", instead of just "Social".
+* __Changed__: Setting screen title to "Social Media Settings", instead of just "Social Settings".
+* __Changed__: A few option inputs description and labels for better UX.
+
+
 = [1.0.6] - 2017-01-10 =
 * __Added__: Add "Settings" link in the plugin Table List.
 * __Changed__: Improved `/buttons` API by extending `WP_REST_Controller`.
@@ -174,6 +185,9 @@ Read more at [Version 1.0.6 Release Note](https://github.com/ninecodes/social-ma
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+* Added template tag functions, additional Open Graph meta tags, improvement on the Filter hooks, and numerous bug fixes.
 
 = 1.0.6 =
 * Numerous bug fixes, and improvements in the REST API response as well as in the plugin code structure.
