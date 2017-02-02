@@ -84,24 +84,19 @@ if ( ! function_exists( 'the_site_social_profiles' ) ) {
 
 		$return = get_the_site_social_profiles( $args );
 
-		echo wp_kses_post( $return, array(
-			'svg' => array(
-				'xmlns' => true,
-				'viewbox' => true,
-			),
-			'title' => true,
-			'symbol' => array(
-				'id' => true,
-				'viewbox' => true,
-			),
-			'path' => array(
-				'd' => true,
-				'fill-rule' => true,
-			),
-			'use' => array(
-				'xlink:href' => true,
-			),
-		) );
+		$allowed_html = wp_kses_allowed_html( 'post' );
+		$allowed_html['svg'] = array(
+			'xmlns' => true,
+			'viewbox' => true,
+		);
+		$allowed_html['path'] = array(
+			'd' => true,
+		);
+		$allowed_html['use'] = array(
+			'xlink:href' => true,
+		);
+
+		echo wp_kses( $return, $allowed_html );
 	}
 }
 
@@ -141,12 +136,13 @@ if ( ! function_exists( 'get_the_author_social_profiles' ) ) {
 					continue;
 				}
 
+				$icon = $icons[ $site ];
 				$url = esc_url( trailingslashit( $profiles[ $site ]['url'] ) . $username );
 
 				/* translators: %1$s - The author name. %2$s - The social media label. */
 				$title = sprintf( esc_html__( 'Follow %1$s on %2$s', 'ninecodes-social-manager' ), $author_name, $profiles[ $site ]['label'] );
 
-				$return .= "<a class=\"{$prefix}-profiles-author__item item-{$site}\" href=\"{$url}\" target=\"_blank\" rel=\"nofollow\" title=\"{$title}\">{$icons[ $site ]}</a>";
+				$return .= "<a class=\"{$prefix}-profiles-author__item item-{$site}\" href=\"{$url}\" target=\"_blank\" rel=\"nofollow\" title=\"{$title}\">{$icon}</a>";
 		 	endforeach;
 			$return .= '</div>';
 		endif;
@@ -167,25 +163,20 @@ if ( ! function_exists( 'the_author_social_profiles' ) ) {
 	 */
 	function the_author_social_profiles( $user_id = null ) {
 
-		$return = get_the_author_social_profiles();
+		$return = get_the_author_social_profiles( $user_id );
 
-		echo wp_kses_post( $return, array(
-			'svg' => array(
-				'xmlns' => true,
-				'viewbox' => true,
-			),
-			'title' => true,
-			'symbol' => array(
-				'id' => true,
-				'viewbox' => true,
-			),
-			'path' => array(
-				'd' => true,
-				'fill-rule' => true,
-			),
-			'use' => array(
-				'xlink:href' => true,
-			),
-		) );
+		$allowed_html = wp_kses_allowed_html( 'post' );
+		$allowed_html['svg'] = array(
+			'xmlns' => true,
+			'viewbox' => true,
+		);
+		$allowed_html['path'] = array(
+			'd' => true,
+		);
+		$allowed_html['use'] = array(
+			'xlink:href' => true,
+		);
+
+		echo wp_kses( $return, $allowed_html );
 	}
 } // End if().
