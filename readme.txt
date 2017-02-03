@@ -3,7 +3,7 @@ Contributors: ninecodes, tfirdaus, hongkiat
 Tags: widget, json, wp-api, social-media, sharing, facebook, twitter, pinterest, open-graph, twitter-cards
 Requires at least: 4.5
 Tested up to: 4.7
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,6 +116,10 @@ None, at the moment. Please ask. :)
 
 == Changelog ==
 
+= [1.1.1] - 2017-02-03 =
+* __Fixed__: The template tags, `the_author_social_profiles` and `the_site_social_profiles`, output sanitization.
+
+
 = [1.1.0] - 2017-01-25 =
 * __Added__: `get_the_site_social_profiles` and `the_site_social_profiles` template tag to show the social profile on an arbitrary location within the theme.
 * __Added__: `get_the_author_social_profiles` and `the_author_social_profiles` template tag to show the social profile of specified author on an arbitrary location within the theme.
@@ -185,6 +189,9 @@ Read more at [Version 1.0.6 Release Note](https://github.com/ninecodes/social-ma
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+* Fixed the template tag function output.
 
 = 1.1.0 =
 * Added template tag functions, additional Open Graph meta tags, improvement on the Filter hooks, and numerous bug fixes.
