@@ -2,11 +2,11 @@
 /**
  * Public: WPHead class
  *
- * @package SocialMediaManager
+ * @package SocialManager
  * @subpackage Public\WPHead
  */
 
-namespace NineCodes\SocialMediaManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

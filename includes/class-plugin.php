@@ -5,10 +5,10 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @package SocialMediaManager
+ * @package SocialManager
  */
 
-namespace NineCodes\SocialMediaManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -49,7 +49,7 @@ final class Plugin {
 	 * @access protected
 	 * @var string
 	 */
-	protected $version = '1.1.1';
+	protected $version = '1.1.2';
 
 	/**
 	 * The path directory relative to the current file.
@@ -178,6 +178,8 @@ final class Plugin {
 	 * @return void
 	 */
 	protected function requires() {
+
+		require_once( $this->path_dir . 'includes/function-utilities.php' );
 
 		require_once( $this->path_dir . 'includes/class-i18n.php' );
 		require_once( $this->path_dir . 'includes/class-helpers.php' );

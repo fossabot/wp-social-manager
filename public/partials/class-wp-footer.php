@@ -2,11 +2,11 @@
 /**
  * Public: WPFooter class
  *
- * @package SocialMediaManager
+ * @package SocialManager
  * @subpackage Public\WPFooter
  */
 
-namespace NineCodes\SocialMediaManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

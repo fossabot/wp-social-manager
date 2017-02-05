@@ -2,13 +2,13 @@
 /**
  * Admin: Fields class
  *
- * @package SocialMediaManager
+ * @package SocialManager
  * @subpackage Admin\Fields
  *
  * TODO: Merge these custom fields to WPSettings.
  */
 
-namespace NineCodes\SocialMediaManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

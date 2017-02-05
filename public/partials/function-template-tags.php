@@ -2,12 +2,13 @@
 /**
  * General Template Tag Functions
  *
- * @package SocialMediaManager
+ * @package SocialManager
  * @subpackage TemplateTags
  */
 
-use \NineCodes\SocialMediaManager\Options as Options;
-use \NineCodes\SocialMediaManager\Helpers as Helpers;
+use \NineCodes\SocialManager;
+use \NineCodes\SocialManager\Options as Options;
+use \NineCodes\SocialManager\Helpers as Helpers;
 
 if ( ! function_exists( 'get_the_site_social_profiles' ) ) {
 
@@ -82,21 +83,9 @@ if ( ! function_exists( 'the_site_social_profiles' ) ) {
 	 */
 	function the_site_social_profiles( $args = array() ) {
 
-		$return = get_the_site_social_profiles( $args );
+		$profiles = get_the_site_social_profiles( $args );
 
-		$allowed_html = wp_kses_allowed_html( 'post' );
-		$allowed_html['svg'] = array(
-			'xmlns' => true,
-			'viewbox' => true,
-		);
-		$allowed_html['path'] = array(
-			'd' => true,
-		);
-		$allowed_html['use'] = array(
-			'xlink:href' => true,
-		);
-
-		echo wp_kses( $return, $allowed_html );
+		echo SocialManager\kses_icon( $profiles ); // WPCS: XSS ok.
 	}
 }
 
@@ -139,7 +128,7 @@ if ( ! function_exists( 'get_the_author_social_profiles' ) ) {
 				$icon = $icons[ $site ];
 				$url = esc_url( trailingslashit( $profiles[ $site ]['url'] ) . $username );
 
-				/* translators: %1$s - The author name. %2$s - The social media label. */
+				/* translators: 1. The author name. 2. The social media label. */
 				$title = sprintf( esc_html__( 'Follow %1$s on %2$s', 'ninecodes-social-manager' ), $author_name, $profiles[ $site ]['label'] );
 
 				$return .= "<a class=\"{$prefix}-profiles-author__item item-{$site}\" href=\"{$url}\" target=\"_blank\" rel=\"nofollow\" title=\"{$title}\">{$icon}</a>";
@@ -163,20 +152,8 @@ if ( ! function_exists( 'the_author_social_profiles' ) ) {
 	 */
 	function the_author_social_profiles( $user_id = null ) {
 
-		$return = get_the_author_social_profiles( $user_id );
+		$profiles = get_the_author_social_profiles( $user_id );
 
-		$allowed_html = wp_kses_allowed_html( 'post' );
-		$allowed_html['svg'] = array(
-			'xmlns' => true,
-			'viewbox' => true,
-		);
-		$allowed_html['path'] = array(
-			'd' => true,
-		);
-		$allowed_html['use'] = array(
-			'xlink:href' => true,
-		);
-
-		echo wp_kses( $return, $allowed_html );
+		echo SocialManager\kses_icon( $profiles ); // WPCS: XSS ok.
 	}
 } // End if().

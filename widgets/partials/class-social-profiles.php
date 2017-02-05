@@ -2,11 +2,11 @@
 /**
  * Widget: WidgetSocialProfiles class
  *
- * @package SocialMediaManager
+ * @package SocialManager
  * @subpackage Widgets\SocialProfiles
  */
 
-namespace NineCodes\SocialMediaManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
