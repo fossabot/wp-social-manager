@@ -3,7 +3,7 @@ Contributors: ninecodes, tfirdaus, hongkiat
 Tags: widget, json, wp-api, social-media, sharing, facebook, twitter, pinterest, open-graph, twitter-cards
 Requires at least: 4.5
 Tested up to: 4.7
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,6 +116,13 @@ None, at the moment. Please ask. :)
 
 == Changelog ==
 
+= [1.1.2] - 2017-02-05 =
+* __Added__: `kses_icon` function to sanitize icon output.
+* __Changed__: The plugin screenshot showing the Profiles screen in the Social Media Setting page.
+* __Changed__: Translator comments in a number translate-able strings with more than one type identifiers.
+* __Fixed__: Namespace for backward compatibility.
+
+
 = [1.1.1] - 2017-02-03 =
 * __Fixed__: The template tags, `the_author_social_profiles` and `the_site_social_profiles`, output sanitization.
 
@@ -189,6 +196,9 @@ Read more at [Version 1.0.6 Release Note](https://github.com/ninecodes/social-ma
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.1.2 =
+* Sanitize icon output, fixed namespace for backward compatibility, and update screenshot.
 
 = 1.1.1 =
 * Fixed the template tag function output.
