@@ -1,2 +1,1 @@
 ASSETS_DIR=wp-assets
-PHPCS_IGNORE='tests/*,includes/vendor/*' # See also PATH_INCLUDES below
