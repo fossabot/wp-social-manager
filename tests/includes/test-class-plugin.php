@@ -2,11 +2,11 @@
 /**
  * Class TestPlugin
  *
- * @package NineCodes\SocialMediaManager;
+ * @package NineCodes\SocialManager;
  * @subpackage Tests
  */
 
-namespace NineCodes\SocialMediaManager;
+namespace NineCodes\SocialManager;
 
 /**
  * Load WP_UnitTestCase;
@@ -116,7 +116,7 @@ class TestPlugin extends WP_UnitTestCase {
 		$this->assertTrue( method_exists( $this->plugin, 'get_theme_supports' ),  'Class does not have method \'get_theme_supports\'' );
 
 		// Make sure the method returns correct instance.
-		$this->assertInstanceOf( '\NineCodes\SocialMediaManager\ThemeSupports', $this->plugin->get_theme_supports() );
+		$this->assertInstanceOf( '\NineCodes\SocialManager\ThemeSupports', $this->plugin->get_theme_supports() );
 	}
 
 	/**
@@ -133,7 +133,7 @@ class TestPlugin extends WP_UnitTestCase {
 		$this->assertTrue( method_exists( $this->plugin, 'get_view_admin' ),  'Class does not have method \'get_view_admin\'' );
 
 		// Make sure the method returns correct instance.
-		$this->assertInstanceOf( '\NineCodes\SocialMediaManager\ViewAdmin', $this->plugin->get_view_admin() );
+		$this->assertInstanceOf( '\NineCodes\SocialManager\ViewAdmin', $this->plugin->get_view_admin() );
 	}
 
 	/**
@@ -150,7 +150,7 @@ class TestPlugin extends WP_UnitTestCase {
 		$this->assertTrue( method_exists( $this->plugin, 'get_view_public' ),  'Class does not have method \'get_view_public\'' );
 
 		// Make sure the method returns correct instance.
-		$this->assertInstanceOf( '\NineCodes\SocialMediaManager\ViewPublic', $this->plugin->get_view_public() );
+		$this->assertInstanceOf( '\NineCodes\SocialManager\ViewPublic', $this->plugin->get_view_public() );
 	}
 
 	/**
@@ -167,7 +167,7 @@ class TestPlugin extends WP_UnitTestCase {
 		$this->assertTrue( method_exists( $this->plugin, 'get_widgets' ),  'Class does not have method \'get_widgets\'' );
 
 		// Make sure the method returns correct instance.
-		$this->assertInstanceOf( '\NineCodes\SocialMediaManager\Widgets', $this->plugin->get_widgets() );
+		$this->assertInstanceOf( '\NineCodes\SocialManager\Widgets', $this->plugin->get_widgets() );
 	}
 
 	/**

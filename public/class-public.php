@@ -2,11 +2,11 @@
 /**
  * Public: ViewPublic class
  *
- * @package SocialMediaManager
+ * @package SocialManager
  * @subpackage Public
  */
 
-namespace NineCodes\SocialMediaManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

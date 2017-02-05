@@ -2,11 +2,11 @@
 /**
  * Public: Meta class
  *
- * @package SocialMediaManager
+ * @package SocialManager
  * @subpackage Public\Metas
  */
 
-namespace NineCodes\SocialMediaManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

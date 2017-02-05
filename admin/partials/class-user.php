@@ -2,11 +2,11 @@
 /**
  * Admin: User class
  *
- * @package SocialMediaManager
+ * @package SocialManager
  * @subpackage Admin\User
  */
 
-namespace NineCodes\SocialMediaManager;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.

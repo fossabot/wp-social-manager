@@ -4,11 +4,11 @@
  *
  * TODO: Add tests for the empty functions in this file.
  *
- * @package NineCodes\SocialMediaManager;
+ * @package NineCodes\SocialManager;
  * @subpackage Tests
  */
 
-namespace NineCodes\SocialMediaManager;
+namespace NineCodes\SocialManager;
 
 /**
  * Load WP_UnitTestCase;
