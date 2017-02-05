@@ -2,12 +2,13 @@
 /**
  * General Template Tag Functions
  *
- * @package SocialMediaManager
+ * @package SocialManager
  * @subpackage TemplateTags
  */
 
-use \NineCodes\SocialMediaManager\Options as Options;
-use \NineCodes\SocialMediaManager\Helpers as Helpers;
+use \NineCodes\SocialManager;
+use \NineCodes\SocialManager\Options as Options;
+use \NineCodes\SocialManager\Helpers as Helpers;
 
 if ( ! function_exists( 'get_the_site_social_profiles' ) ) {
 
@@ -82,21 +83,9 @@ if ( ! function_exists( 'the_site_social_profiles' ) ) {
 	 */
 	function the_site_social_profiles( $args = array() ) {
 
-		$return = get_the_site_social_profiles( $args );
+		$profiles = get_the_site_social_profiles( $args );
 
-		$allowed_html = wp_kses_allowed_html( 'post' );
-		$allowed_html['svg'] = array(
-			'xmlns' => true,
-			'viewbox' => true,
-		);
-		$allowed_html['path'] = array(
-			'd' => true,
-		);
-		$allowed_html['use'] = array(
-			'xlink:href' => true,
-		);
-
-		echo wp_kses( $return, $allowed_html );
+		echo SocialManager\kses_icon( $profiles ); // WPCS: XSS ok.
 	}
 }
 
@@ -163,20 +152,8 @@ if ( ! function_exists( 'the_author_social_profiles' ) ) {
 	 */
 	function the_author_social_profiles( $user_id = null ) {
 
-		$return = get_the_author_social_profiles( $user_id );
+		$profiles = get_the_author_social_profiles( $user_id );
 
-		$allowed_html = wp_kses_allowed_html( 'post' );
-		$allowed_html['svg'] = array(
-			'xmlns' => true,
-			'viewbox' => true,
-		);
-		$allowed_html['path'] = array(
-			'd' => true,
-		);
-		$allowed_html['use'] = array(
-			'xlink:href' => true,
-		);
-
-		echo wp_kses( $return, $allowed_html );
+		echo SocialManager\kses_icon( $profiles ); // WPCS: XSS ok.
 	}
 } // End if().
