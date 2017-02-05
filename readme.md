@@ -8,7 +8,7 @@ Lightweight, clean and optimized social media plugin for WordPress.
 **Tags:** [widget](https://wordpress.org/plugins/tags/widget), [json](https://wordpress.org/plugins/tags/json), [wp-api](https://wordpress.org/plugins/tags/wp-api), [social-media](https://wordpress.org/plugins/tags/social-media), [sharing](https://wordpress.org/plugins/tags/sharing), [facebook](https://wordpress.org/plugins/tags/facebook), [twitter](https://wordpress.org/plugins/tags/twitter), [pinterest](https://wordpress.org/plugins/tags/pinterest), [open-graph](https://wordpress.org/plugins/tags/open-graph), [twitter-cards](https://wordpress.org/plugins/tags/twitter-cards)  
 **Requires at least:** 4.5  
 **Tested up to:** 4.7  
-**Stable tag:** 1.1.1  
+**Stable tag:** 1.1.2  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 
 [![Build Status](https://travis-ci.org/ninecodes/social-manager.svg?branch=master)](https://travis-ci.org/ninecodes/social-manager) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com) 
@@ -140,6 +140,12 @@ None, at the moment. Please ask. :)
 
 ## Changelog ##
 
+### [1.1.2] - 2017-02-05 ###
+* __Added__: `kses_icon` function to sanitize icon output.
+* __Changed__: The plugin screenshot showing the Profiles screen in the Social Media Setting page.
+* __Changed__: Translator comments in a number translate-able strings with more than one type identifiers.
+* __Fixed__: Namespace for backward compatibility.
+
 ### [1.1.1] - 2017-02-03 ###
 * __Fixed__: The template tags, `the_author_social_profiles` and `the_site_social_profiles`, output sanitization.
 
@@ -207,6 +213,9 @@ Read more at [Version 1.0.6 Release Note](https://github.com/ninecodes/social-ma
 
 
 ## Upgrade Notice ##
+
+### 1.1.2 ###
+* Sanitize icon output, fixed namespace for backward compatibility, and update screenshot.
 
 ### 1.1.1 ###
 * Fixed the template tag function output.

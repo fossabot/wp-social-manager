@@ -1,12 +1,12 @@
 {
   "name": "ninecodes-social-manager",
   "title": "Social Media Manager",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "wordpress": {
     "requires_at_least": "4.5",
     "tested_up_to": "4.7"
   },
-  "description": "Optimize your website presence in social media.",
+  "description": "Lightweight, clean and optimized social media plugin for WordPress.",
   "scripts": {
     "version": "grunt version --verbose",
     "deploy:trunk": "grunt deploy --stage=trunk",
