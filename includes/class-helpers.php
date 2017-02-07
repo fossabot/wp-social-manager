@@ -38,10 +38,10 @@ class Helpers {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param string $name The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
+	 * @param string $site The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
 	 * @return string The icon of selected social media in SVG.
 	 */
-	final public static function get_social_icons( $name = '' ) {
+	final public static function get_social_icons( $site = '' ) {
 
 		$path = plugin_dir_url( dirname( __FILE__ ) );
 		$prefix = esc_attr( self::get_attr_prefix() );
@@ -63,29 +63,22 @@ class Helpers {
 		);
 
 		/**
-		 * Hooks to filter all the icons at once.
+		 * Filter all icons.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta value to filter.
+		 * @param array  $args 	  An array of arguments.
 		 *
 		 * @var array
 		 */
-		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, array(
-			'attr-prefix' => $prefix,
-		), '' );
+		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, 'all', array(
+			'attr_prefix' => $prefix,
+		) );
 
-		$output = isset( $icons[ $name ] ) ? $icons[ $name ] : $icons;
+		$output = isset( $icons[ $site ] ) ? kses_icon( $icons[ $site ] ) : array_map( __NAMESPACE__ . '\\kses_icon', $icons );
 
-		$allowed_html = wp_kses_allowed_html( 'post' );
-		$allowed_html['svg'] = array(
-			'xmlns' => true,
-			'viewbox' => true,
-		);
-		$allowed_html['path'] = array(
-			'd' => true,
-		);
-		$allowed_html['use'] = array(
-			'xlink:href' => true,
-		);
-
-		return wp_kses( $output, $allowed_html );
+		return $output;
 	}
 
 	/**
@@ -101,7 +94,7 @@ class Helpers {
 	 */
 	public static function get_attr_prefix() {
 
-		$prefix = self::$prefix;
+		$prefix = self::$prefix; // Default prefix.
 		$custom = null;
 
 		$support = new ThemeSupports();
@@ -111,7 +104,7 @@ class Helpers {
 			$custom = $support['attr-prefix'];
 		}
 
-		if ( isset( $support['attr_prefix'] ) ) {
+		if ( isset( $support['attr_prefix'] ) ) { // Alias.
 			$custom = $support['attr_prefix'];
 		}
 

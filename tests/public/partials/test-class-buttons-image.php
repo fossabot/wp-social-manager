@@ -72,11 +72,11 @@ class TestButtonsImage extends WP_UnitTestCase {
 	public function test_get_button_icons() {
 
 		$icons = Helpers::get_social_icons();
-		$this->assertEquals( $icons, $this->buttons_image->get_button_icons() );
+		$this->assertEquals( $icons, $this->buttons_image->get_buttons_icons() );
 
-		add_filter( 'ninecodes_social_manager_icons', function( $icons, $args, $subject ) {
+		add_filter( 'ninecodes_social_manager_icons', function( $icons, $context, $args  ) {
 
-			if ( 'ButtonsImage' === $subject ) {
+			if ( 'buttons_image' === $context ) {
 
 				unset( $icons['facebook'] );
 				unset( $icons['twitter'] );
@@ -87,13 +87,13 @@ class TestButtonsImage extends WP_UnitTestCase {
 		}, 10, 3 );
 
 		// ButtonsImage should have not theses removed keys.
-		$this->assertArrayNotHasKey( 'facebook', $this->buttons_image->get_button_icons() );
-		$this->assertArrayNotHasKey( 'twitter', $this->buttons_image->get_button_icons() );
-		$this->assertArrayNotHasKey( 'dribbble', $this->buttons_image->get_button_icons() );
+		$this->assertArrayNotHasKey( 'facebook', $this->buttons_image->get_buttons_icons() );
+		$this->assertArrayNotHasKey( 'twitter', $this->buttons_image->get_buttons_icons() );
+		$this->assertArrayNotHasKey( 'dribbble', $this->buttons_image->get_buttons_icons() );
 
 		// ButtonsContent should have theses removed keys.
-		$this->assertArrayHasKey( 'facebook', $this->buttons_content->get_button_icons() );
-		$this->assertArrayHasKey( 'twitter', $this->buttons_content->get_button_icons() );
-		$this->assertArrayHasKey( 'dribbble', $this->buttons_content->get_button_icons() );
+		$this->assertArrayHasKey( 'facebook', $this->buttons_content->get_buttons_icons() );
+		$this->assertArrayHasKey( 'twitter', $this->buttons_content->get_buttons_icons() );
+		$this->assertArrayHasKey( 'dribbble', $this->buttons_content->get_buttons_icons() );
 	}
 }

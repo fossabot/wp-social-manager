@@ -113,7 +113,7 @@ abstract class Buttons {
 	 * }
 	 * @return string The formatted HTML list element to display the button.
 	 */
-	protected function button_view( $view, $context, array $args ) {
+	protected function buttons_view( $view, $context, array $args ) {
 
 		if ( ! $view || ! $context || empty( $args ) ) {
 			return '';
@@ -143,24 +143,11 @@ abstract class Buttons {
 			'icon-text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a>",
 		);
 
-		$allowed_html = wp_kses_allowed_html( 'post' );
-		$allowed_html['svg'] = array(
-			'xmlns' => true,
-			'viewbox' => true,
-		);
-		$allowed_html['path'] = array(
-			'd' => true,
-			'fill-rule' => true,
-		);
-		$allowed_html['use'] = array(
-			'xlink:href' => true,
-		);
-
-		return isset( $templates[ $view ] ) ? wp_kses( $templates[ $view ], $allowed_html ) : '';
+		return isset( $templates[ $view ] ) ? kses_icon( $templates[ $view ] ) : '';
 	}
 
 	/**
-	 * The function utility to get the button icon.
+	 * The function utility to get a single button icon.
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -168,8 +155,8 @@ abstract class Buttons {
 	 * @param string $site The site key e.g. 'facebook', 'twitter', etc.
 	 * @return string The icon in SVG format.
 	 */
-	protected function get_button_icon( $site ) {
-		return Helpers::get_social_icons( $site );
+	protected function get_buttons_icon( $site ) {
+		return self::get_buttons_icons( $site );
 	}
 
 	/**
@@ -178,10 +165,30 @@ abstract class Buttons {
 	 * @since 1.1.0
 	 * @access protected
 	 *
+	 * @param string $site The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
 	 * @return array The list of icon.
 	 */
-	protected function get_button_icons() {
-		return Helpers::get_social_icons();
+	protected function get_buttons_icons( $site = '' ) {
+
+		$icons = Helpers::get_social_icons();
+
+		/**
+		 * Filter all icons displayed in the social media buttons.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta value to filter.
+		 * @param array  $args 	  An array of arguments.
+		 *
+		 * @var array
+		 */
+		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, 'buttons', array(
+			'attr_prefix' => $this->prefix,
+		) );
+
+		$icons = isset( $icons[ $site ] ) ? kses_icon( $icons[ $site ] ) : array_map( __NAMESPACE__ . '\\kses_icon', $icons );
+
+		return $icons;
 	}
 
 	/**
@@ -194,7 +201,7 @@ abstract class Buttons {
 	 * @param string $context The button context, 'content' or 'image'.
 	 * @return null|string Return null, if the context is incorrect or the key is unset.
 	 */
-	protected function get_button_label( $site, $context ) {
+	protected function get_buttons_label( $site, $context ) {
 
 		if ( in_array( $context, array( 'content', 'image' ), true ) ) {
 			$buttons = Options::button_sites( $context );

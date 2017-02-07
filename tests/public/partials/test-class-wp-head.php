@@ -28,7 +28,6 @@ use \WP_UnitTestCase;
  */
 class TestWPHead extends WP_UnitTestCase {
 
-
 	/**
 	 * The unique identifier or prefix for database names.
 	 *
@@ -572,9 +571,9 @@ class TestWPHead extends WP_UnitTestCase {
 
 		$this->assertTrue( is_single() ); // Make sure we are on single post.
 
-		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $metas, $subject ) {
+		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $metas, $context ) {
 
-			if ( 'OpenGraph' === $subject ) {
+			if ( 'open_graph' === $context ) {
 				unset( $metas['post_description'] );
 				unset( $metas['post_url'] );
 			}
@@ -620,9 +619,9 @@ class TestWPHead extends WP_UnitTestCase {
 
 		$this->assertTrue( is_single() ); // Make sure we are on single post.
 
-		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $metas, $subject ) {
+		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $metas, $context ) {
 
-			if ( 'TwitterCards' === $subject ) {
+			if ( 'twitter_cards' === $context ) {
 				unset( $metas['post_description'] );
 				unset( $metas['post_url'] );
 			}
