@@ -632,7 +632,6 @@ final class Settings {
 	public function setting_init() {
 
 		$this->settings->init( $this->screen, $this->pages );
-		$this->settings->install();
 	}
 
 	/**
