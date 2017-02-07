@@ -221,7 +221,7 @@ final class Settings {
 
 		add_action( 'admin_menu', array( $this, 'setting_menu' ) );
 		add_action( 'admin_init', array( $this, 'setting_setups' ) );
-		add_action( 'admin_init', array( $this, 'setting_pages' ), 15 );
+		add_action( 'admin_init', array( $this, 'setting_tabs' ), 15 );
 		add_action( 'admin_init', array( $this, 'setting_sections' ), 20 );
 		add_action( 'admin_init', array( $this, 'setting_fields' ), 25 );
 		add_action( 'admin_init', array( $this, 'setting_init' ), 30 );
@@ -285,9 +285,9 @@ final class Settings {
 	 *
 	 * @return void
 	 */
-	public function setting_pages() {
+	public function setting_tabs() {
 
-		$this->pages = $this->settings->add_pages( array(
+		$setting_tabs = array(
 			array(
 				'id' => 'accounts',
 				'slug' => 'accounts',
@@ -308,7 +308,15 @@ final class Settings {
 				'slug' => 'advanced',
 				'title' => esc_html__( 'Advanced', 'ninecodes-social-manager' ),
 			),
-		) );
+		);
+
+		$setting_tabs_extra = apply_filters( 'ninecodes_social_manager_setting_tabs', array() );
+
+		if ( ! empty( $setting_tabs_extra ) ) {
+			$setting_tabs = array_push( $tabs, $setting_tabs_extra );
+		}
+
+		$this->tabs = $this->settings->add_pages( $setting_tabs );
 	}
 
 	/**
@@ -321,46 +329,79 @@ final class Settings {
 	 */
 	public function setting_sections() {
 
-		$this->pages = $this->settings->add_section( 'accounts', array(
-				'id' => 'profiles',
-				'title' => esc_html__( 'Profiles', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Add all social media profiles and pages for this website.', 'ninecodes-social-manager' ),
-				'validate_callback' => array( $this->validate, 'setting_profiles' ),
-			)
-		);
+		foreach ( $this->tabs as $key => $tab ) {
 
-		$this->pages = $this->settings->add_sections( 'buttons', array(
-			array(
-				'id' => 'buttons_content',
-				'title' => esc_html__( 'Content', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Configure how social media buttons display on your content pages.', 'ninecodes-social-manager' ),
-				'validate_callback' => array( $this->validate, 'setting_buttons_content' ),
-			),
-			array(
-				'id' => 'buttons_image',
-				'title' => esc_html__( 'Image', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Options to configure the social media buttons shown on the content images.', 'ninecodes-social-manager' ),
-				'validate_callback' => array( $this->validate, 'setting_buttons_image' ),
-			),
-		) );
+			$tab_id = isset( $tab['id'] ) && ! empty( $tab['id'] ) ? $tab['id'] : '';
 
-		$this->pages = $this->settings->add_section( 'metas', array(
-				'id' => 'metas_site',
-				'validate_callback' => array( $this->validate, 'setting_site_metas' ),
-			)
-		);
+			if ( empty( $tab_id ) ) {
+				continue;
+			}
 
-		$this->pages = $this->settings->add_section( 'advanced', array(
-			'id' => 'enqueue',
-			'validate_callback' => array( $this->validate, 'setting_advanced' ),
-		) );
+			switch ( $tab_id ) {
 
-		$this->pages = $this->settings->add_section( 'advanced', array(
-			'id' => 'modes',
-			'title' => esc_html__( 'Modes', 'ninecodes-social-manager' ),
-			'description' => esc_html__( 'Configure the modes that work best for your website.', 'ninecodes-social-manager' ),
-			'validate_callback' => array( $this->validate, 'setting_modes' ),
-		) );
+				case 'accounts':
+					$sections = array(
+						array(
+							'id' => 'profiles',
+							'title' => esc_html__( 'Profiles', 'ninecodes-social-manager' ),
+							'description' => esc_html__( 'Add all social media profiles and pages for this website.', 'ninecodes-social-manager' ),
+							'validate_callback' => array( $this->validate, 'setting_profiles' ),
+						),
+					);
+					break;
+
+				case 'buttons':
+					$sections = array(
+						array(
+							'id' => 'buttons_content',
+							'title' => esc_html__( 'Content', 'ninecodes-social-manager' ),
+							'description' => esc_html__( 'Configure how social media buttons display on your content pages.', 'ninecodes-social-manager' ),
+							'validate_callback' => array( $this->validate, 'setting_buttons_content' ),
+						),
+						array(
+							'id' => 'buttons_image',
+							'title' => esc_html__( 'Image', 'ninecodes-social-manager' ),
+							'description' => esc_html__( 'Options to configure the social media buttons shown on the content images.', 'ninecodes-social-manager' ),
+							'validate_callback' => array( $this->validate, 'setting_buttons_image' ),
+						),
+					);
+					break;
+
+				case 'metas':
+					$sections = array(
+						array(
+							'id' => 'metas_site',
+							'validate_callback' => array( $this->validate, 'setting_site_metas' ),
+						),
+					);
+					break;
+
+				case 'advanced':
+					$sections = array(
+						array(
+							'id' => 'enqueue',
+							'validate_callback' => array( $this->validate, 'setting_advanced' ),
+						),
+						array(
+							'id' => 'modes',
+							'title' => esc_html__( 'Modes', 'ninecodes-social-manager' ),
+							'description' => esc_html__( 'Configure the modes that work best for your website.', 'ninecodes-social-manager' ),
+							'validate_callback' => array( $this->validate, 'setting_modes' ),
+						),
+					);
+					break;
+
+				default:
+					$sections = array();
+					break;
+			}
+
+			$sections = apply_filters( 'ninecodes_social_manager_setting_sections', $sections, $tab_id );
+
+			if ( ! empty( $sections ) ) {
+				$this->tabs = $this->settings->add_sections( $tab_id, $sections );
+			}
+		}
 	}
 
 	/**
@@ -410,7 +451,7 @@ final class Settings {
 				),
 			);
 
-			$this->pages = $this->settings->add_field( 'accounts', 'profiles', $profile_field );
+			$this->tabs = $this->settings->add_field( 'accounts', 'profiles', $profile_field );
 		}
 
 		/**
@@ -421,7 +462,7 @@ final class Settings {
 		 * ================================================================
 		 */
 
-		$this->pages = $this->settings->add_fields( 'buttons', 'buttons_content', array(
+		$this->tabs = $this->settings->add_fields( 'buttons', 'buttons_content', array(
 			array(
 				'id' => 'includes',
 				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
@@ -470,7 +511,7 @@ final class Settings {
 		 * ================================================================
 		 */
 
-		$this->pages = $this->settings->add_fields( 'buttons', 'buttons_image', array(
+		$this->tabs = $this->settings->add_fields( 'buttons', 'buttons_image', array(
 			array(
 				'id' => 'enabled',
 				'label' => esc_html__( 'Buttons Image Display', 'ninecodes-social-manager' ),
@@ -517,7 +558,7 @@ final class Settings {
 		 * ================================================================
 		 */
 
-		$this->pages = $this->settings->add_fields( 'metas', 'metas_site', array(
+		$this->tabs = $this->settings->add_fields( 'metas', 'metas_site', array(
 			array(
 				'id' => 'enabled',
 				'type' => 'checkbox',
@@ -592,7 +633,7 @@ final class Settings {
 			);
 		endif;
 
-		$this->pages = $this->settings->add_field( 'advanced', 'enqueue', $stylesheet_fields );
+		$this->tabs = $this->settings->add_field( 'advanced', 'enqueue', $stylesheet_fields );
 
 		if ( ! (bool) $this->theme_supports->is( 'buttons-mode' ) ) :
 
@@ -605,7 +646,7 @@ final class Settings {
 				'default' => 'html',
 			);
 
-			$this->pages = $this->settings->add_field( 'advanced', 'modes', $buttons_mode_fields );
+			$this->tabs = $this->settings->add_field( 'advanced', 'modes', $buttons_mode_fields );
 		endif;
 
 		$link_mode_fields = array(
@@ -617,7 +658,7 @@ final class Settings {
 			'default' => 'permalink',
 		);
 
-		$this->pages = $this->settings->add_field( 'advanced', 'modes', $link_mode_fields );
+		$this->tabs = $this->settings->add_field( 'advanced', 'modes', $link_mode_fields );
 	}
 
 	/**
@@ -631,7 +672,7 @@ final class Settings {
 	 */
 	public function setting_init() {
 
-		$this->settings->init( $this->screen, $this->pages );
+		$this->settings->init( $this->screen, $this->tabs );
 	}
 
 	/**
