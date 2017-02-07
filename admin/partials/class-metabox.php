@@ -150,9 +150,13 @@ final class Metabox {
 	 */
 	public function register_manager( $butterbean, $post_type ) {
 
+		// List of post types enabled.
+		$post_types = $this->post_types_enabled();
+		$post_types = array_merge( array_values( $post_types['buttons_content'] ), array_values( $post_types['buttons_image'] ) );
+
 		// Load internal post and post type objects.
-		$this->load_post();
-		$this->load_post_type( $post_type );
+		$this->post_data();
+		$this->post_type_label( $post_type );
 
 		// Load internal styles or scripts.
 		add_action( 'admin_head-post.php', array( $this, 'admin_head_enqueues' ), 10 );
@@ -162,7 +166,7 @@ final class Metabox {
 		$butterbean->register_manager( $this->option_slug,
 			array(
 				'label'      => esc_html__( 'Social', 'ninecodes-social-manager' ),
-				'post_type'  => array( 'post', 'page' ),
+				'post_type'  => array_unique( $post_types ),
 				'context'    => 'normal',
 				'priority'   => 'high',
 				'capability' => 'publish_posts',
@@ -182,6 +186,9 @@ final class Metabox {
 	 */
 	public function register_section_buttons( $butterbean, $post_type ) {
 
+		// List of post types enabled.
+		$post_types = $this->post_types_enabled();
+
 		// Get our custom manager object.
 		$manager = $butterbean->get_manager( $this->option_slug );
 
@@ -193,9 +200,7 @@ final class Metabox {
 			)
 		);
 
-		$post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
-
-		if ( in_array( $post_type, $post_types, true ) ) {
+		if ( in_array( $post_type, $post_types['buttons_content'], true ) ) {
 
 			// Register a setting.
 			$manager->register_control( 'buttons_content',
@@ -219,10 +224,7 @@ final class Metabox {
 			);
 		}
 
-		$enabled = (bool) $this->plugin->get_option( 'buttons_image', 'enabled' );
-		$post_types = (array) $this->plugin->get_option( 'buttons_image', 'post_types' );
-
-		if ( in_array( $post_type, $post_types, true ) && $enabled ) {
+		if ( in_array( $post_type, $post_types['buttons_image'], true ) ) {
 
 			// Register a setting.
 			$manager->register_control( 'buttons_image',
@@ -368,7 +370,7 @@ final class Metabox {
 			}
 		}
 
-		if ( ! empty( $sections ) ) :
+		if ( ! empty( $sections['choices'] ) ) :
 
 			$manager->register_control( 'post_section',
 				array(
@@ -457,7 +459,7 @@ final class Metabox {
 	 *
 	 * @return void
 	 */
-	protected function load_post() {
+	protected function post_data() {
 
 		$this->post_id = isset( $_GET['post'] ) ? $this->sanitize_absint( $_GET['post'] ) : 0;
 
@@ -480,11 +482,36 @@ final class Metabox {
 	 * @param string $post_type The post type slug / name.
 	 * @return void
 	 */
-	protected function load_post_type( $post_type ) {
+	protected function post_type_label( $post_type ) {
 
 		$objects = get_post_type_object( $post_type );
 
 		$this->post_type = strtolower( $objects->labels->singular_name );
+	}
+
+	/**
+	 * The function utility to get selected post types to display social media buttons.
+	 *
+	 * @since 1.1.3
+	 * @access protected
+	 *
+	 * @return array
+	 */
+	protected function post_types_enabled() {
+
+		$buttons_content_post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
+
+		$buttons_image_post_types = array();
+		$buttons_image_enabled = (bool) $this->plugin->get_option( 'buttons_image', 'enabled' );
+
+		if ( true === $buttons_image_enabled ) {
+			$buttons_image_post_types = (array) $this->plugin->get_option( 'buttons_image', 'post_types' );
+		}
+
+		return array(
+			'buttons_content' => $buttons_content_post_types,
+			'buttons_image' => $buttons_image_post_types,
+		);
 	}
 
 	/**
