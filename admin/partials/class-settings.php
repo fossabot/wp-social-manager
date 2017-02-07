@@ -310,6 +310,15 @@ final class Settings {
 			),
 		);
 
+		/**
+		 * Filter the setting tabs.
+		 *
+		 * This filter allows developer to add new tabs on the setting page.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @var array
+		 */
 		$setting_tabs_extra = apply_filters( 'ninecodes_social_manager_setting_tabs', array() );
 
 		if ( ! empty( $setting_tabs_extra ) ) {
@@ -396,6 +405,17 @@ final class Settings {
 					break;
 			}
 
+			/**
+			 * Filter the setting sections.
+			 *
+			 * This filter allows developer to add or remove new sections on the registered Tabs.
+			 *
+			 * @since 1.1.3
+			 *
+			 * @param string $tab_id The Tab ID.
+			 *
+			 * @var array
+			 */
 			$sections = apply_filters( 'ninecodes_social_manager_setting_sections', $sections, $tab_id );
 
 			if ( ! empty( $sections ) ) {
