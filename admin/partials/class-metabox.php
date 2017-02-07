@@ -168,7 +168,7 @@ final class Metabox {
 				'label'      => esc_html__( 'Social Media', 'ninecodes-social-manager' ),
 				'post_type'  => array_unique( $post_types ),
 				'context'    => 'normal',
-				'priority'   => 'high',
+				'priority'   => 'low',
 				'capability' => 'publish_posts',
 			)
 		);
