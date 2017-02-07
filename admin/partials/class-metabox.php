@@ -165,7 +165,7 @@ final class Metabox {
 		// Register our custom manager.
 		$butterbean->register_manager( $this->option_slug,
 			array(
-				'label'      => esc_html__( 'Social', 'ninecodes-social-manager' ),
+				'label'      => esc_html__( 'Social Media', 'ninecodes-social-manager' ),
 				'post_type'  => array_unique( $post_types ),
 				'context'    => 'normal',
 				'priority'   => 'high',
@@ -358,19 +358,23 @@ final class Metabox {
 			}
 
 			if ( $tax->hierarchical ) {
+
 				$terms = wp_get_post_terms( $this->post_id, $slug, array(
 					'fields' => 'all',
 				) );
-				$sections[] = array(
-					'label' => $tax->label,
-					'choices' => $this->post_section_choices( $terms ),
-				);
+
+				if ( 0 !== count( $this->post_section_choices( $terms ) ) ) {
+					$sections[] = array(
+						'label' => $tax->label,
+						'choices' => $this->post_section_choices( $terms ),
+					);
+				}
 			} else {
 				$tags[ $tax->name ] = $tax->label;
 			}
 		}
 
-		if ( ! empty( $sections['choices'] ) ) :
+		if ( ! empty( $sections ) ) :
 
 			$manager->register_control( 'post_section',
 				array(
