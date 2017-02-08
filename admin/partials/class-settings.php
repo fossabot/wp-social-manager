@@ -283,11 +283,11 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @return void
+	 * @return array List of tabs id, slug, and title.
 	 */
 	public function setting_tabs() {
 
-		$setting_tabs = array(
+		$tabs = array(
 			array(
 				'id' => 'accounts',
 				'slug' => 'accounts',
@@ -319,13 +319,39 @@ final class Settings {
 		 *
 		 * @var array
 		 */
-		$setting_tabs_extra = apply_filters( 'ninecodes_social_manager_setting_tabs', array() );
+		$tabs_extra = (array) apply_filters( 'ninecodes_social_manager_setting_tabs', array() );
 
-		if ( ! empty( $setting_tabs_extra ) ) {
-			$setting_tabs = array_push( $tabs, $setting_tabs_extra );
+		if ( ! empty( $tabs_extra ) ) {
+
+			if ( is_array_associative( $tabs_extra ) ) {
+
+				$tabs_extra = $this->_sanitize_tabs( $tabs_extra );
+
+				if ( false === array_search( '', $tabs_extra, true ) ) {
+					$tabs = array_merge( $tabs, array( $tabs_extra ) );
+				}
+			} else {
+
+				$tabs_extra = array_map( array( $this, '_sanitize_tabs' ), $tabs_extra );
+
+				foreach ( $tabs_extra as $i => $t ) {
+					if ( false !== array_search( '', $t, true ) ) {
+						unset( $tabs_extra[ $i ] );
+					}
+				}
+
+				$tabs = array_merge( $tabs, $tabs_extra );
+			}
 		}
 
-		$this->tabs = $this->settings->add_pages( $setting_tabs );
+		/**
+		 * Register the tabs.
+		 *
+		 * @var array
+		 */
+		$this->tabs = $this->settings->add_pages( $tabs );
+
+		return $tabs;
 	}
 
 	/**
@@ -827,5 +853,29 @@ final class Settings {
 		$title = capital_P_dangit( $title );
 
 		$this->document_title = $title;
+	}
+
+	/**
+	 * The function method to sanitize tabs information array.
+	 *
+	 * @since 1.1.3
+	 * @access protected
+	 *
+	 * @param array $tab The tab ID, slug, and Title.
+	 * @return array
+	 */
+	protected function _sanitize_tabs( array $tab ) {
+
+		$tab = wp_parse_args( $tab, array(
+			'id' => '',
+			'slug' => '',
+			'title' => '',
+		) );
+
+		$tab['id'] = sanitize_key( $tab['id'] );
+		$tab['slug'] = sanitize_key( $tab['slug'] );
+		$tab['title'] = esc_html( $tab['title'] );
+
+		return $tab;
 	}
 }
