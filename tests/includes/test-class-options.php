@@ -33,7 +33,6 @@ class TestOptions extends WP_UnitTestCase {
 		$this->assertEmpty( Options::social_profiles( 'xyz' ) );
 
 		foreach ( Options::social_profiles() as $key => $arr ) {
-
 			$this->assertArrayHasKey( 'label', $arr, 'The' . $key . ' profile must has a label' );
 			$this->assertArrayHasKey( 'url', $arr, 'The' . $key . ' profile must has a URL' );
 			$this->assertArrayHasKey( 'description', $arr, 'The' . $key . ' profile must has a description' );
@@ -42,8 +41,54 @@ class TestOptions extends WP_UnitTestCase {
 			$this->assertNotEmpty( $arr['url'], 'The' . $key . ' url must not empty' );
 			$this->assertNotEmpty( $arr['description'], 'The' . $key . ' description must not empty' );
 
-			$this->assertStringStartsWith( 'http', $arr['url'], 'The' . $key . ' URL must starts with the HTTP protocol' );
+			$this->assertStringStartsWith( 'http', $arr['url'], 'The' . $key . ' URL must starts with the HTTP/HTTPS protocol' );
 		}
+
+		/**
+		 * Test the filter hook to add a new Social Media profiles.
+		 *
+		 * @since 1.1.3
+		 */
+		add_filter( 'ninecodes_social_manager_options', function ( $value, $context ) {
+
+			if ( 'profiles' === $context ) {
+
+				$value['ello'] = array(
+					'label' => 'Ello',
+					'url' => 'https://ello.co', // No slash at the end or the URL.
+					'description' => 'Set your Ello username',
+				);
+
+				// Bad example; array given with no value.
+				$value['myspace'] = array();
+
+				// Bad example; HTML element in the label and description, and URL without the HTTP protocol.
+				$value['friendster'] = array(
+					'label' => '<strong>Friendster</strong>',
+					'url' => 'friendster.com', // No slash at the end or the URL.
+					'description' => '<p>Set your <strong>Friendster</strong> username</p>',
+				);
+			}
+
+			return $value;
+		}, 10, 2 );
+
+		$profiles_filtered = Options::social_profiles();
+
+		$this->assertArrayHasKey( 'ello', $profiles_filtered );
+		$this->assertEquals( 'Ello', $profiles_filtered['ello']['label'] );
+		$this->assertEquals( 'https://ello.co/', $profiles_filtered['ello']['url'] );
+		$this->assertEquals( 'Set your Ello username', $profiles_filtered['ello']['description'] );
+
+		$this->assertArrayHasKey( 'myspace', $profiles_filtered );
+		$this->assertEquals( 'Example', $profiles_filtered['myspace']['label'] );
+		$this->assertEquals( 'http://example.com/', $profiles_filtered['myspace']['url'] );
+		$this->assertEquals( 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, repudiandae.', $profiles_filtered['myspace']['description'] );
+
+		$this->assertArrayHasKey( 'friendster', $profiles_filtered );
+		$this->assertEquals( 'Friendster', $profiles_filtered['friendster']['label'] );
+		$this->assertEquals( 'http://friendster.com/', $profiles_filtered['friendster']['url'] );
+		$this->assertEquals( 'Set your <strong>Friendster</strong> username', $profiles_filtered['friendster']['description'] );
 	}
 
 	/**
@@ -64,6 +109,59 @@ class TestOptions extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test button placements option output.
+	 *
+	 * @since 1.1.3
+	 * @access public
+	 * @return void
+	 */
+	public function test_button_placements() {
+
+		$placements = Options::button_placements();
+
+		$this->assertArrayHasKey( 'before', $placements );
+		$this->assertArrayHasKey( 'after', $placements );
+
+		/**
+		 * Test the filter hook to add a new Social Media button placements.
+		 *
+		 * @since 1.1.3
+		 */
+		add_filter( 'ninecodes_social_manager_options', function ( $value, $context ) {
+
+			if ( 'button_placements' === $context ) {
+
+				$value['before'] = 'Before the content'; // Duplicate.
+				$value['sebelum'] = 'Before the content'; // Duplicate value.
+				$value['after'] = 'Sesudah konten'; // Duplicate key.
+
+				$value['before'] = 'before the Content'; // Identical value.
+				$value['Before'] = 'Before the content'; // Identical key.
+
+				$value['float'] = 'Float'; // New.
+				$value['withscript'] = '<span>Script</span>'; // Just bad value.
+			}
+
+			return $value;
+		}, 10, 2 );
+
+		$placements_filtered = Options::button_placements();
+
+		$this->assertEquals( array_merge( $placements, array(
+			'float' => 'Float',
+			'withscript' => '&lt;span&gt;Script&lt;/span&gt;',
+		) ), $placements_filtered );
+
+		// Test a valid new addition.
+		$this->assertArrayHasKey( 'float', $placements_filtered );
+		$this->assertEquals( 'Float', $placements_filtered['float'] );
+
+		// Test a bad addition.
+		$this->assertArrayHasKey( 'withscript', $placements_filtered );
+		$this->assertEquals( '&lt;span&gt;Script&lt;/span&gt;', $placements_filtered['withscript'] );
+	}
+
+	/**
 	 * Test button views option output.
 	 *
 	 * @since 1.0.0
@@ -79,6 +177,36 @@ class TestOptions extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'icon', $views );
 		$this->assertArrayHasKey( 'text', $views );
 		$this->assertArrayHasKey( 'icon-text', $views );
+
+		/**
+		 * Test the filter hook to add a new Social Media button view.
+		 *
+		 * @since 1.1.3
+		 */
+		add_filter('ninecodes_social_manager_options', function ( $value, $context ) {
+
+			if ( 'button_views' === $context ) {
+				$value['icon'] = 'Icon'; // Duplicate.
+				$value['transparent'] = 'Transparent'; // New.
+				$value['withscript'] = '<span>Script</span>'; // Just Bad.
+			}
+
+			return $value;
+		}, 10, 2);
+
+		$views_filtered = Options::button_views();
+
+		// Test a duplicate.
+		$this->assertArrayHasKey( 'icon', $views_filtered );
+		$this->assertEquals( $views_filtered, Options::button_views() );
+
+		// Test a valid new addition.
+		$this->assertArrayHasKey( 'transparent', $views_filtered );
+		$this->assertEquals( 'Transparent', $views_filtered['transparent'] );
+
+		// Test a bad addition.
+		$this->assertArrayHasKey( 'withscript', $views_filtered );
+		$this->assertEquals( '&lt;span&gt;Script&lt;/span&gt;', $views_filtered['withscript'] );
 	}
 
 	/**
@@ -93,7 +221,6 @@ class TestOptions extends WP_UnitTestCase {
 		$strings = array( '', 'xyz' ) ;
 
 		foreach ( $strings as $str ) {
-
 			$sites = Options::button_sites( $str );
 
 			$this->assertArrayHasKey( 'content', $sites );
@@ -120,6 +247,95 @@ class TestOptions extends WP_UnitTestCase {
 
 		$this->assertEquals( 1, count( $image ) );
 		$this->assertArrayHasKey( 'pinterest', $image );
+
+		/**
+		 * Test the filter hook to add new Social Media buttons.
+		 *
+		 * @since 1.1.3
+		 */
+		add_filter('ninecodes_social_manager_options', function ( $value, $context ) {
+
+			if ( 'button_sites' === $context ) {
+				$value['content'] = array(
+					'ello' => 'Ello',
+				);
+				$value['image'] = array(
+					'facebook' => 'Facebook',
+				);
+			}
+
+			return $value;
+		}, 10, 2);
+
+		$content = Options::button_sites( 'content' );
+		$image = Options::button_sites( 'image' );
+
+		$this->assertArrayHasKey( 'ello', $content );
+		$this->assertEquals( 'Ello', $content['ello'] );
+
+		$this->assertArrayHasKey( 'facebook', $image );
+		$this->assertEquals( 'Facebook', $image['facebook'] );
+
+		unset( $content['ello'] );
+		unset( $image['facebook'] );
+
+		/**
+		 * Test the filter hook for bad Social Media buttons (Bad Examples).
+		 *
+		 * @since 1.1.3
+		 */
+		add_filter('ninecodes_social_manager_options', function ( $value, $context ) {
+
+			if ( 'button_sites' === $context ) {
+				$value['content'] = array(
+					'ello' => '<script>Ello</script>',
+				);
+				$value['image'] = array(
+					'facebook' => '<script>Facebook</script>',
+				);
+			}
+
+			return $value;
+		}, 10, 2);
+
+		$content = Options::button_sites( 'content' );
+		$image = Options::button_sites( 'image' );
+
+		$this->assertArrayHasKey( 'ello', $content );
+		$this->assertEquals( '&lt;script&gt;Ello&lt;/script&gt;', $content['ello'] ); // The output must be sanitized.
+
+		$this->assertArrayHasKey( 'facebook', $image );
+		$this->assertEquals( '&lt;script&gt;Facebook&lt;/script&gt;', $image['facebook'] ); // The output must be sanitized.
+
+		unset( $content['ello'] );
+		unset( $image['facebook'] );
+
+		/**
+		 * Test the filter hook for duplicate Social Media buttons (Bad Examples).
+		 *
+		 * @since 1.1.3
+		 */
+		add_filter( 'ninecodes_social_manager_options', function ( $value, $context ) {
+
+			if ( 'button_sites' === $context ) {
+				$value['content'] = array(
+					'facebook' => 'Facebook', // Exactly the same.
+					'twitter' => 'Tweet', // Same key, different value.
+					'google+' => 'Google+', // Different key, same value.
+				);
+				$value['image'] = array(
+					'pinterest' => 'Pinterest',
+				);
+			}
+
+			return $value;
+		}, 10, 2 );
+
+		$content = Options::button_sites( 'content' );
+		$image = Options::button_sites( 'image' );
+
+		$this->assertEquals( Options::button_sites( 'content' ), $content );
+		$this->assertEquals( Options::button_sites( 'image' ), $image );
 	}
 
 	/**

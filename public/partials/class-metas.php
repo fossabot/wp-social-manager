@@ -67,70 +67,6 @@ class Metas {
 	}
 
 	/**
-	 * Utility method to check if the meta option is enabled.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return boolean True if meta is enabled, false if not.
-	 */
-	public function is_meta_enabled() {
-
-		return (bool) $this->get_site_meta( 'enabled' );
-	}
-
-	/**
-	 * Utility method to get the site meta data.
-	 *
-	 * This data is used for the homepage and sometimes
-	 * acts as the default value of if specific meta data
-	 * is not available for particular page.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param  string $which Meta array key.
-	 * @return mixed
-	 */
-	public function get_site_meta( $which ) {
-
-		if ( ! $which ) {
-			return;
-		}
-
-		return $this->plugin->get_option( 'metas_site', $which );
-	}
-
-	/**
-	 * Utility method to get the post meta data.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param  integer $post_id The post ID number.
-	 * @param  string  $which The the meta array key.
-	 * @return string|array
-	 */
-	public function get_post_meta( $post_id, $which ) {
-
-		if ( ! $post_id || ! $which ) {
-			return;
-		}
-
-		$post_meta = get_post_meta( $post_id, $this->option_slug, true );
-
-		/**
-		 * If the post_meta is empty it means the meta has not yet
-		 * been created. Let's return 'null' early.
-		 */
-		if ( empty( $post_meta ) ) {
-			return null;
-		}
-
-		return isset( $post_meta[ $which ] ) ? $post_meta[ $which ] : null;
-	}
-
-	/**
 	 * The method to get the website name / brand.
 	 *
 	 * @since 1.0.0
@@ -142,6 +78,18 @@ class Metas {
 
 		$name = $this->get_site_meta( 'name' );
 		$name = $name ? $name : get_bloginfo( 'name' );
+
+		/**
+		 * Filter the site name meta value.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta value to filter.
+		 * @param array  $args 	  An array of arguments.
+		 *
+		 * @var string
+		 */
+		$name = apply_filters( 'ninecodes_social_manager_meta', $name, 'site_name', array() );
 
 		return wp_kses( $name, array() );
 	}
@@ -159,6 +107,18 @@ class Metas {
 		$title = $this->get_site_meta( 'title' );
 		$title = $title ? $title : wp_get_document_title();
 
+		/**
+		 * Filter the site title meta value.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta value to filter.
+		 * @param array  $args 	  An array of arguments.
+		 *
+		 * @var string
+		 */
+		$title = apply_filters( 'ninecodes_social_manager_meta', $title, 'site_title', array() );
+
 		return wp_kses( $title, array() );
 	}
 
@@ -172,20 +132,32 @@ class Metas {
 	 */
 	public function get_site_description() {
 
-		$description = $this->get_site_meta( 'description' );
-		$description = $description ? $description : get_bloginfo( 'description' );
+		$desc = $this->get_site_meta( 'description' );
+		$desc = $desc ? $desc : get_bloginfo( 'description' );
 
 		if ( is_archive() ) {
 			$term_description = term_description();
-			$description = $term_description ? $term_description : $description;
+			$desc = $term_description ? $term_description : $desc;
 		}
 
 		if ( is_author() ) {
 			$author = get_queried_object();
-			$description = get_the_author_meta( 'description', (int) $author->ID );
+			$desc = get_the_author_meta( 'description', (int) $author->ID );
 		}
 
-		return wp_kses( trim( strip_shortcodes( $description ) ), array() );
+		/**
+		 * Filter the site description meta value.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta value to filter.
+		 * @param array  $args 	  An array of arguments.
+		 *
+		 * @var string
+		 */
+		$desc = apply_filters( 'ninecodes_social_manager_meta', $desc, 'site_description', array() );
+
+		return wp_kses( trim( strip_shortcodes( $desc ) ), array() );
 	}
 
 	/**
@@ -198,9 +170,7 @@ class Metas {
 	 */
 	public function get_site_url() {
 
-		$url = get_site_url();
-
-		return esc_url( $url );
+		return esc_url( get_site_url() );
 	}
 
 	/**
@@ -218,6 +188,59 @@ class Metas {
 	 * @return array An array of image data (src, width, and height)
 	 */
 	public function get_site_image() {
+
+		/**
+		 * An array of the `ninecodes_social_manager_meta` filter hook arguments.
+		 *
+		 * @var array
+		 */
+		$args = array();
+
+		if ( is_home() ) {
+			$args['home'] = array(
+				'paged' => get_query_var( 'paged', 1 ),
+			);
+		}
+
+		if ( is_archive() ) {
+
+			$object = get_queried_object();
+
+			$args['archive'] = array(
+				'paged' => get_query_var( 'paged', 1 ),
+				'taxonomy' => $object->taxonomy,
+				'term' => array(
+					'id' => $object->term_id,
+					'name' => $object->name,
+					'slug' => $object->slug,
+				),
+			);
+		}
+
+		/**
+		 * Filter the site URL meta value.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta value to filter.
+		 * @param array  $args 	  An array of arguments.
+		 *
+		 * @var array
+		 */
+		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), 'site_image', $args );
+
+		/*
+		 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
+		 * return the image immediately and don't proceed the codes that follow.
+		 */
+		if ( isset( $image_filter['src'] ) && ! empty( $image_filter['src'] ) ) {
+
+			return wp_parse_args( $image_filter, array(
+				'src' => '',
+				'width' => 0,
+				'height' => 0,
+			) );
+		}
 
 		if ( is_author() ) {
 
@@ -270,6 +293,20 @@ class Metas {
 			$title = $post ? apply_filters( 'the_title', $post->post_title ) : '';
 		}
 
+		/**
+		 * Filter the site title meta value.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta value to filter.
+		 * @param array  $args 	  An array of arguments.
+		 *
+		 * @var string
+		 */
+		$title = apply_filters( 'ninecodes_social_manager_meta', $title, 'post_title', array(
+			'post_id' => $post_id,
+		) );
+
 		return wp_kses( $title, array() );
 	}
 
@@ -285,15 +322,15 @@ class Metas {
 	public function get_post_description( $post_id ) {
 
 		$post_id = absint( $post_id );
-		$description = '';
+		$desc = '';
 
 		// If Meta Tags is enabled check the Post meta for the description.
 		if ( $this->is_meta_enabled() ) {
-			$description = $this->get_post_meta( $post_id, 'post_excerpt' );
+			$desc = $this->get_post_meta( $post_id, 'post_excerpt' );
 		}
 
 		// If the title is still empty get the Post excerpt.
-		if ( empty( $description ) ) {
+		if ( empty( $desc ) ) {
 
 			$post = get_post( $post_id );
 
@@ -302,13 +339,27 @@ class Metas {
 			}
 
 			if ( empty( $post->post_excerpt ) ) {
-				$description = wp_trim_words( $post->post_content, 30, '...' );
+				$desc = wp_trim_words( $post->post_content, 30, '...' );
 			} else {
-				$description = $post->post_excerpt;
+				$desc = $post->post_excerpt;
 			}
 		}
 
-		return wp_kses( strip_shortcodes( $description ), array() );
+		/**
+		 * Filter the site title meta value.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta value to filter.
+		 * @param array  $args 	  An array of arguments.
+		 *
+		 * @var string
+		 */
+		$title = apply_filters( 'ninecodes_social_manager_meta', $desc, 'post_description', array(
+			'post_id' => $post_id,
+		) );
+
+		return wp_kses( strip_shortcodes( $desc ), array() );
 	}
 
 	/**
@@ -331,16 +382,20 @@ class Metas {
 	public function get_post_image( $post_id ) {
 
 		$post_id = absint( $post_id );
-		$attachment_id = null;
 
-		if ( $this->is_meta_enabled() ) {
-			$attachment_id = $this->get_post_meta( $post_id, 'post_thumbnail' ); // Post Meta Image.
-		}
-
-		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), array(
+		/**
+		 * Filter the site image meta value.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta value to filter.
+		 * @param array  $args 	  An array of arguments.
+		 *
+		 * @var array
+		 */
+		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), 'post_image', array(
 			'post_id' => $post_id,
-			'attachment_id' => $attachment_id,
-		), 'PostImage' );
+		) );
 
 		/*
 		 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
@@ -348,13 +403,17 @@ class Metas {
 		 */
 		if ( isset( $image_filter['src'] ) && ! empty( $image_filter['src'] ) ) {
 
-			$image_filter = wp_parse_args( $image_filter, array(
+			return wp_parse_args( $image_filter, array(
 				'src' => '',
 				'width' => 0,
 				'height' => 0,
 			) );
+		}
 
-			return $image_filter;
+		$attachment_id = null;
+
+		if ( $this->is_meta_enabled() ) {
+			$attachment_id = $this->get_post_meta( $post_id, 'post_thumbnail' ); // Post Meta Image.
 		}
 
 		if ( ! $attachment_id ) {
@@ -623,5 +682,69 @@ class Metas {
 		}
 
 		return $tags;
+	}
+
+	/**
+	 * Utility method to check if the meta option is enabled.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 * @return boolean True if meta is enabled, false if not.
+	 */
+	public function is_meta_enabled() {
+
+		return (bool) $this->get_site_meta( 'enabled' );
+	}
+
+	/**
+	 * Utility method to get the site meta data.
+	 *
+	 * This data is used for the homepage and sometimes
+	 * acts as the default value of if specific meta data
+	 * is not available for particular page.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param  string $which Meta array key.
+	 * @return mixed
+	 */
+	public function get_site_meta( $which ) {
+
+		if ( ! $which ) {
+			return;
+		}
+
+		return $this->plugin->get_option( 'metas_site', $which );
+	}
+
+	/**
+	 * Utility method to get the post meta data.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param  integer $post_id The post ID number.
+	 * @param  string  $which The the meta array key.
+	 * @return string|array
+	 */
+	public function get_post_meta( $post_id, $which ) {
+
+		if ( ! $post_id || ! $which ) {
+			return;
+		}
+
+		$post_meta = get_post_meta( $post_id, $this->option_slug, true );
+
+		/**
+		 * If the post_meta is empty it means the meta has not yet
+		 * been created. Let's return 'null' early.
+		 */
+		if ( empty( $post_meta ) ) {
+			return null;
+		}
+
+		return isset( $post_meta[ $which ] ) ? $post_meta[ $which ] : null;
 	}
 }

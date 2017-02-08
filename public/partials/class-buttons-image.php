@@ -261,7 +261,7 @@ class ButtonsImage extends Buttons {
 			$list .= "<span class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsImage\">";
 
 			$prefix = $this->prefix;
-			$icons = $this->get_button_icons();
+			$icons = $this->get_buttons_icons();
 
 			foreach ( $includes as $site => $endpoint ) :
 
@@ -271,8 +271,8 @@ class ButtonsImage extends Buttons {
 					continue;
 				}
 
-				$label = $this->get_button_label( $site, 'image' );
-				$list .= $this->button_view( $this->view, 'image', array(
+				$label = $this->get_buttons_label( $site, 'image' );
+				$list .= $this->buttons_view( $this->view, 'image', array(
 					'attr_prefix' => $prefix,
 					'site' => $site,
 					'icon' => $icon,
@@ -318,18 +318,18 @@ class ButtonsImage extends Buttons {
 <span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsImage"><?php
 
 $prefix = $this->prefix;
-$icons = $this->get_button_icons();
+$icons = $this->get_buttons_icons();
 
 foreach ( $includes as $site ) :
 
-	$label = $this->get_button_label( $site, 'image' );
+	$label = $this->get_buttons_label( $site, 'image' );
 	$icon = isset( $icons[ $site ] ) ? $icons[ $site ] : null;
 
 	if ( ! $icon ) {
 		continue;
 	}
 
-	$list = $this->button_view($this->view, 'image', array(
+	$list = $this->buttons_view($this->view, 'image', array(
 		'attr_prefix' => $prefix,
 		'site' => $site,
 		'icon' => $icon,
@@ -351,14 +351,28 @@ endforeach; ?></span>
 	 * @since 1.1.0
 	 * @access public
 	 *
-	 * @return array
+	 * @param string $site The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
+	 * @return array The list of icon.
 	 */
-	public function get_button_icons() {
+	public function get_buttons_icons( $site = '' ) {
 
-		$icons = parent::get_button_icons();
-		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, array(
+		$icons = parent::get_buttons_icons();
+
+		/**
+		 * Filter the icons displayed in the social media buttons image.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta value to filter.
+		 * @param array  $args 	  An array of arguments.
+		 *
+		 * @var array
+		 */
+		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, 'buttons_image', array(
 			'attr_prefix' => $this->prefix,
-		), 'ButtonsImage' );
+		) );
+
+		$icons = isset( $icons[ $site ] ) ? kses_icon( $icons[ $site ] ) : array_map( __NAMESPACE__ . '\\kses_icon', $icons );
 
 		return $icons;
 	}

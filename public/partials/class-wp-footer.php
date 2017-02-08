@@ -109,8 +109,9 @@ final class WPFooter {
 				'codepen' => $symbol_codepen,
 				'email' => $symbol_email,
 			), array(
-			'attr_prefix' => $prefix,
-		) );
+				'attr_prefix' => $prefix,
+			)
+		);
 
 		return $symbols;
 	}

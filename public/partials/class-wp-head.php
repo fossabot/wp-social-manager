@@ -118,22 +118,51 @@ final class WPHead {
 			return;
 		}
 
+		/**
+		 * Filter social media meta tags generated in home and archive page.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context is `null`. Filter will affect all meta tags.
+		 *
+		 * @var array
+		 */
 		$meta_tags = apply_filters( 'ninecodes_social_manager_site_meta_tags', array(
 			'site_name' => $this->metas->get_site_name(),
 			'site_title' => $this->metas->get_site_title(),
 			'site_description' => $this->metas->get_site_description(),
 			'site_url' => $this->metas->get_site_url(),
 			'site_image' => $this->metas->get_site_image(),
-		) );
-		$meta_tags_og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'OpenGraph' ) );
-		$meta_tags_tc = $this->site_twitter_cards( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'TwitterCards' ) );
+		), null );
+
+		/**
+		 * Filter Open Graph meta tags generated in home and archive page.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta tags to filter.
+		 *
+		 * @var array
+		 */
+		$meta_tags_og = $this->site_open_graph( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'open_graph' ) );
+
+		/**
+		 * Filter Twitter Cards meta tags generated in home and archive page.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta tags to filter.
+		 *
+		 * @var array
+		 */
+		$meta_tags_tc = $this->site_twitter_cards( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'twitter_cards' ) );
 
 		echo "\n<!-- START: Social Media Meta Tags (Social Media Manager by NineCodes) -->\n";
 		echo wp_kses( "{$meta_tags_og}{$meta_tags_tc}", array(
 			'meta' => array(
-			'property' => array(),
-			'content' => array(),
-			'name' => array(),
+				'property' => array(),
+				'content' => array(),
+				'name' => array(),
 			),
 		) );
 		echo "<!-- END: Social Media Meta Tags -->\n\n";
@@ -158,6 +187,16 @@ final class WPHead {
 		}
 
 		$post_id = get_the_id();
+
+		/**
+		 * Filter social media meta tags in the single post.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context is `null`. Filter will affect all meta tags.
+		 *
+		 * @var array
+		 */
 		$meta_tags = apply_filters( 'ninecodes_social_manager_post_meta_tags', array(
 			'site_name' => $this->metas->get_site_name(),
 			'post_title' => $this->metas->get_post_title( $post_id ),
@@ -169,16 +208,36 @@ final class WPHead {
 			'post_tags' => $this->metas->get_post_tags( $post_id ),
 			'post_published_time' => get_post_time( 'c', true ),
 			'post_modified_time' => get_post_modified_time( 'c', true ),
-		), '' );
-		$meta_tags_og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'OpenGraph' ) );
-		$meta_tags_tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'TwitterCards' ) );
+		), null );
+
+		/**
+		 * Filter Open Graph meta tags in the single post.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta tags to filter.
+		 *
+		 * @var array
+		 */
+		$meta_tags_og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'open_graph' ) );
+
+		/**
+		 * Filter Twitter Cards meta tags in the single post.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $context The context; which meta tags to filter..
+		 *
+		 * @var array
+		 */
+		$meta_tags_tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'twitter_cards' ) );
 
 		echo "\n<!-- START: Social Media Meta Tags (Social Media Manager by NineCodes) -->\n";
 		echo wp_kses( "{$meta_tags_og}{$meta_tags_tc}", array(
 			'meta' => array(
-			'property' => array(),
-			'content' => array(),
-			'name' => array(),
+				'property' => array(),
+				'content' => array(),
+				'name' => array(),
 			),
 		) );
 		echo "<!-- END: Social Media Meta Tags -->\n\n";

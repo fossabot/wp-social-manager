@@ -24,21 +24,25 @@ function kses_icon( $data ) {
 			'id' => true,
 			'target' => true,
 			'rel' => true,
+			'role' => true,
 		),
 		'div' => array(
 			'class' => true,
 			'id' => true,
 			'style' => true,
+			'role' => true,
 		),
 		'span' => array(
 			'class' => true,
 			'id' => true,
 			'style' => true,
+			'role' => true,
 		),
 		'i' => array(
 			'class' => true,
 			'id' => true,
 			'style' => true,
+			'role' => true,
 		),
 		'img' => array(
 			'src' => true,
@@ -57,10 +61,11 @@ function kses_icon( $data ) {
 			'class' => true,
 			'id' => true,
 			'style' => true,
-			'fill-rule' => true,
+			'aria-hidden' => true,
 		),
 		'path' => array(
 			'd' => true,
+			'fill-rule' => true,
 		),
 		'use' => array(
 			'xlink:href' => true,

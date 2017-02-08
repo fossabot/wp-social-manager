@@ -112,11 +112,11 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 		$this->assertContains( 'https://github.com/tfirdaus', $href );
 
 		// Check the HTML markup. (Default: Icon).
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-facebook\" href=\"https://www.facebook.com/zuck\" target=\"_blank\"><svg><use xlink:href=\"#{$prefix}-icon-facebook\"/></svg></a>", $anchor_html );
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-twitter\" href=\"https://twitter.com/jack\" target=\"_blank\"><svg><use xlink:href=\"#{$prefix}-icon-twitter\"/></svg></a>", $anchor_html );
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-instagram\" href=\"https://instagram.com/jane\" target=\"_blank\"><svg><use xlink:href=\"#{$prefix}-icon-instagram\"/></svg></a>", $anchor_html );
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-googleplus\" href=\"https://plus.google.com/+john\" target=\"_blank\"><svg><use xlink:href=\"#{$prefix}-icon-googleplus\"/></svg></a>", $anchor_html );
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-github\" href=\"https://github.com/tfirdaus\" target=\"_blank\"><svg><use xlink:href=\"#{$prefix}-icon-github\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-facebook\" href=\"https://www.facebook.com/zuck\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-facebook\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-twitter\" href=\"https://twitter.com/jack\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-twitter\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-instagram\" href=\"https://instagram.com/jane\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-instagram\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-googleplus\" href=\"https://plus.google.com/+john\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-googleplus\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-github\" href=\"https://github.com/tfirdaus\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-github\"/></svg></a>", $anchor_html );
 
 		delete_option( 'ncsocman_profiles' );
 	}
@@ -176,6 +176,8 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 
 		update_option( 'ncsocman_profiles', array(
 			'facebook' => 'yo',
+			'twitter' => 'yeap',
+			'dribbble' => 'cool',
 		) );
 
 		$site_profiles = get_the_site_social_profiles( array( 'view' => 'icon-text' ) );
@@ -194,7 +196,11 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 		}
 
 		// Check the HTML markup. (Icon Text).
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-facebook\" href=\"https://www.facebook.com/yo\" target=\"_blank\"><span class=\"{$prefix}-profiles__item-icon\"><svg><use xlink:href=\"#{$prefix}-icon-facebook\"/></svg></span><span class=\"{$prefix}-profiles__item-text\">Facebook</span></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-facebook\" href=\"https://www.facebook.com/yo\" target=\"_blank\"><span class=\"{$prefix}-profiles__item-icon\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-facebook\"/></svg></span><span class=\"{$prefix}-profiles__item-text\">Facebook</span></a>", $anchor_html );
+
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-twitter\" href=\"https://twitter.com/yeap\" target=\"_blank\"><span class=\"{$prefix}-profiles__item-icon\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-twitter\"/></svg></span><span class=\"{$prefix}-profiles__item-text\">Twitter</span></a>", $anchor_html );
+
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-dribbble\" href=\"https://dribbble.com/cool\" target=\"_blank\"><span class=\"{$prefix}-profiles__item-icon\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-dribbble\"/></svg></span><span class=\"{$prefix}-profiles__item-text\">Dribbble</span></a>", $anchor_html );
 
 		delete_option( 'ncsocman_profiles' );
 	}
