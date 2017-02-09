@@ -123,12 +123,36 @@ class TestSettings extends WP_UnitTestCase {
 		add_filter( 'ninecodes_social_manager_setting_tabs', function( $tabs_extra ) {
 
 			// Valid (Good example).
-			$tabs_extra = array(
+			return array(
+
+				// With duplicates.
 				array(
-					'id' => 'new_tab_2',
-					'slug' => 'new-tab-2',
-					'title' => 'New Tab 2',
+					'id' => 'accounts', // Duplicate ID.
+					'slug' => 'accounts-2',
+					'title' => 'Accounts 2',
 				),
+				array(
+					'id' => 'buttons-2',
+					'slug' => 'buttons', // Duplicate slug.
+					'title' => 'Buttons 2',
+				),
+				array(
+					'id' => 'metas', // Duplicate ID.
+					'slug' => 'metas', // Duplicate slug.
+					'title' => 'Metas 2',
+				),
+				array(
+					'id' => 'advanced-2',
+					'slug' => 'advanced-2',
+					'title' => 'Advanced', // Duplicate title.
+				),
+				array(
+					'id' => 'advanced-2',  // Duplicate ID.
+					'slug' => 'advanced-3',
+					'title' => 'Advanced', // Duplicate title.
+				),
+
+				// Bad arrays.
 				array(
 					'id' => 'new_tab_3',
 					'slug' => 'new-tab-3',
@@ -141,9 +165,14 @@ class TestSettings extends WP_UnitTestCase {
 					'slug' => 'new-tab-5',
 					'title' => 'New Tab 5',
 				),
-			);
 
-			return $tabs_extra;
+				// Valid.
+				array(
+					'id' => 'new_tab_2',
+					'slug' => 'new-tab-2',
+					'title' => 'New Tab 2',
+				),
+			);
 		} );
 
 		$this->assertEquals( array_merge( $tabs, array(
