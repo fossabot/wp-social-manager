@@ -494,9 +494,7 @@ final class Settings {
 				'description' => '',
 			) );
 
-			if ( empty( $props['label'] ) &&
-				 empty( $props['url'] ) &&
-				 empty( $props['description'] ) ) {
+			if ( empty( $props['label'] ) || empty( $props['url'] ) || empty( $props['description'] ) ) {
 				continue;
 			}
 
