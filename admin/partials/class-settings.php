@@ -283,11 +283,11 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @return void
+	 * @return array List of tabs id, slug, and title.
 	 */
 	public function setting_tabs() {
 
-		$setting_tabs = array(
+		$tabs = array(
 			array(
 				'id' => 'accounts',
 				'slug' => 'accounts',
@@ -319,13 +319,52 @@ final class Settings {
 		 *
 		 * @var array
 		 */
-		$setting_tabs_extra = apply_filters( 'ninecodes_social_manager_setting_tabs', array() );
+		$tabs_extra = (array) apply_filters( 'ninecodes_social_manager_setting_tabs', array() );
 
-		if ( ! empty( $setting_tabs_extra ) ) {
-			$setting_tabs = array_push( $tabs, $setting_tabs_extra );
+		if ( ! empty( $tabs_extra ) ) {
+
+			if ( is_array_associative( $tabs_extra ) ) {
+
+				$tabs_extra = $this->sanitize_tabs( $tabs_extra ); // Validate and clean-up additional tabs.
+
+				if ( false === array_search( '', $tabs_extra, true ) ) {
+					$tabs_extra = array( $tabs_extra );
+				}
+			} else {
+
+				foreach ( $tabs_extra as $i => $v ) {
+
+					$t = $this->sanitize_tabs( $v ); // Validate and clean-up additional tabs.
+
+					if ( false !== array_search( '', $t, true ) ) {
+						unset( $tabs_extra[ $i ] );
+					}
+				}
+			}
+
+			$tabs = array_unique( array_merge( $tabs, $tabs_extra ), SORT_REGULAR );
 		}
 
-		$this->tabs = $this->settings->add_pages( $setting_tabs );
+		// Filter and remove duplicate ID, slug, and title. The tabs must be unique.
+		$tabs = $this->remove_duplicate_tabs( 'id', $tabs );
+		$tabs = $this->remove_duplicate_tabs( 'slug', $tabs );
+		$tabs = $this->remove_duplicate_tabs( 'title', $tabs );
+
+		/**
+		 * Rebase the tabs key.
+		 *
+		 * @var array
+		 */
+		$tabs = array_values( $tabs );
+
+		/**
+		 * Register new the tabs.
+		 *
+		 * @var array
+		 */
+		$this->tabs = $this->settings->add_pages( $tabs );
+
+		return $tabs;
 	}
 
 	/**
@@ -416,11 +455,13 @@ final class Settings {
 			 *
 			 * @var array
 			 */
-			$sections = apply_filters( 'ninecodes_social_manager_setting_sections', $sections, $tab_id );
+			$sections_extra = (array) apply_filters( 'ninecodes_social_manager_setting_sections', array(), $tab_id );
 
-			if ( ! empty( $sections ) ) {
-				$this->tabs = $this->settings->add_sections( $tab_id, $sections );
+			if ( ! empty( $sections_extra ) ) {
+				$sections = array_merge( $sections, array_map( array( $this, 'sanitize_sections' ), $sections_extra ) );
 			}
+
+			$this->tabs = $this->settings->add_sections( $tab_id, $sections );
 		}
 	}
 
@@ -453,9 +494,7 @@ final class Settings {
 				'description' => '',
 			) );
 
-			if ( empty( $props['label'] ) &&
-				 empty( $props['url'] ) &&
-				 empty( $props['description'] ) ) {
+			if ( empty( $props['label'] ) || empty( $props['url'] ) || empty( $props['description'] ) ) {
 				continue;
 			}
 
@@ -795,7 +834,7 @@ final class Settings {
 	 * @return void
 	 */
 	public function frontend_setups() {
-		$this->_wp_get_document_title();
+		$this->wp_get_document_title();
 	}
 
 	/**
@@ -809,7 +848,7 @@ final class Settings {
 	 *
 	 * @return void
 	 */
-	protected function _wp_get_document_title() {
+	protected function wp_get_document_title() {
 
 		$title['site'] = get_bloginfo( 'name', 'display' );
 		$title['tagline'] = get_bloginfo( 'description', 'display' );
@@ -827,5 +866,109 @@ final class Settings {
 		$title = capital_P_dangit( $title );
 
 		$this->document_title = $title;
+	}
+
+	/**
+	 * The function method to sanitize tabs array.
+	 *
+	 * @since 1.1.3
+	 * @access protected
+	 *
+	 * @param array $tab The tab ID, slug, and Title.
+	 * @return array
+	 */
+	protected function sanitize_tabs( array $tab ) {
+
+		$tab = wp_parse_args( $tab, array(
+			'id' => '',
+			'slug' => '',
+			'title' => '',
+		) );
+
+		$tab['id'] = sanitize_key( $tab['id'] );
+		$tab['slug'] = sanitize_key( $tab['slug'] );
+		$tab['title'] = esc_html( $tab['title'] );
+
+		return $tab;
+	}
+
+	/**
+	 * Sort out the tabs for possible duplicate values.
+	 *
+	 * @since 1.1.3
+	 * @access protected
+	 *
+	 * @param string $key  	The key in the array to search.
+	 * @param string $value The value in the array to compare.
+	 * @param array  $arr 	The array.
+	 * @return array
+	 */
+	protected function search_duplicate_tabs( $key = '', $value = '', array $arr ) {
+
+		$keys = array();
+
+		foreach ( $arr as $i => $v ) {
+			if ( $v[ $key ] === $value ) {
+				$keys[ $i ] = $value;
+			}
+		}
+
+		if ( 2 <= count( $keys ) ) {
+			return $keys;
+		}
+	}
+
+	/**
+	 * The utility function to remove duplicate tabs.
+	 *
+	 * @since 1.1.3
+	 * @access protected
+	 *
+	 * @param string $key The key in the array to search.
+	 * @param array  $arr The array.
+	 * @return array
+	 */
+	protected function remove_duplicate_tabs( $key = '', array $arr ) {
+
+		$remove_keys = array();
+
+		foreach ( $arr as $i => $v ) {
+
+			$duplicate_keys = $this->search_duplicate_tabs( $key, $v[ $key ], $arr ); // Find possible duplicates.
+
+			if ( is_array( $duplicate_keys ) && $duplicate_keys ) {
+				$remove_keys = array_slice( $duplicate_keys, 1, null, true ); // Exclude the first array.
+			}
+
+			if ( isset( $remove_keys[ $i ] ) && $remove_keys[ $i ] === $arr[ $i ][ $key ] ) {
+				unset( $arr[ $i ] );
+			}
+		}
+
+		return $arr;
+	}
+
+	/**
+	 * The function method to sanitize sections array.
+	 *
+	 * @since 1.1.3
+	 * @access protected
+	 *
+	 * @param array $section The section ID, title, etc.
+	 * @return array
+	 */
+	protected function sanitize_sections( array $section ) {
+
+		$section = wp_parse_args( $section, array(
+			'id' => '',
+			'title' => '',
+			'description' => '',
+		) );
+
+		$section['id'] = sanitize_key( $section['id'] );
+		$section['title'] = esc_html( $section['title'] );
+		$section['description'] = esc_html( $section['description'] );
+
+		return $section;
 	}
 }
