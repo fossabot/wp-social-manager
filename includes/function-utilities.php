@@ -81,6 +81,8 @@ function kses_icon( $data ) {
  *
  * @link http://stackoverflow.com/questions/173400/how-to-check-if-php-array-is-associative-or-sequential
  *
+ * @since 1.1.3
+ *
  * @param array $arr The array.
  * @return boolean
  */

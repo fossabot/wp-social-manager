@@ -346,9 +346,9 @@ final class Settings {
 		}
 
 		// Filter and remove duplicate ID, slug, and title. The tabs must be unique.
-		$tabs = $this->remove_duplicate_tabs( 'id', $tabs );
-		$tabs = $this->remove_duplicate_tabs( 'slug', $tabs );
-		$tabs = $this->remove_duplicate_tabs( 'title', $tabs );
+		$tabs = $this->remove_duplicate_values( 'id', $tabs );
+		$tabs = $this->remove_duplicate_values( 'slug', $tabs );
+		$tabs = $this->remove_duplicate_values( 'title', $tabs );
 
 		/**
 		 * Rebase the tabs key.
@@ -373,9 +373,11 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @return void
+	 * @return array
 	 */
 	public function setting_sections() {
+
+		$sections = array();
 
 		foreach ( $this->tabs as $key => $tab ) {
 
@@ -388,59 +390,53 @@ final class Settings {
 			switch ( $tab_id ) {
 
 				case 'accounts':
-					$sections = array(
-						array(
-							'id' => 'profiles',
-							'title' => esc_html__( 'Profiles', 'ninecodes-social-manager' ),
-							'description' => esc_html__( 'Add all social media profiles and pages for this website.', 'ninecodes-social-manager' ),
-							'validate_callback' => array( $this->validate, 'setting_profiles' ),
-						),
+					$sections[] = array(
+						'tab' => $tab_id,
+						'id' => 'profiles',
+						'title' => esc_html__( 'Profiles', 'ninecodes-social-manager' ),
+						'description' => esc_html__( 'Add all social media profiles and pages for this website.', 'ninecodes-social-manager' ),
+						'validate_callback' => array( $this->validate, 'setting_profiles' ),
 					);
 					break;
 
 				case 'buttons':
-					$sections = array(
-						array(
-							'id' => 'buttons_content',
-							'title' => esc_html__( 'Content', 'ninecodes-social-manager' ),
-							'description' => esc_html__( 'Configure how social media buttons display on your content pages.', 'ninecodes-social-manager' ),
-							'validate_callback' => array( $this->validate, 'setting_buttons_content' ),
-						),
-						array(
-							'id' => 'buttons_image',
-							'title' => esc_html__( 'Image', 'ninecodes-social-manager' ),
-							'description' => esc_html__( 'Options to configure the social media buttons shown on the content images.', 'ninecodes-social-manager' ),
-							'validate_callback' => array( $this->validate, 'setting_buttons_image' ),
-						),
+					$sections[] = array(
+						'tab' => $tab_id,
+						'id' => 'buttons_content',
+						'title' => esc_html__( 'Content', 'ninecodes-social-manager' ),
+						'description' => esc_html__( 'Configure how social media buttons display on your content pages.', 'ninecodes-social-manager' ),
+						'validate_callback' => array( $this->validate, 'setting_buttons_content' ),
+					);
+					$sections[] = array(
+						'tab' => $tab_id,
+						'id' => 'buttons_image',
+						'title' => esc_html__( 'Image', 'ninecodes-social-manager' ),
+						'description' => esc_html__( 'Options to configure the social media buttons shown on the content images.', 'ninecodes-social-manager' ),
+						'validate_callback' => array( $this->validate, 'setting_buttons_image' ),
 					);
 					break;
 
 				case 'metas':
-					$sections = array(
-						array(
-							'id' => 'metas_site',
-							'validate_callback' => array( $this->validate, 'setting_site_metas' ),
-						),
+					$sections[] = array(
+						'tab' => $tab_id,
+						'id' => 'metas_site',
+						'validate_callback' => array( $this->validate, 'setting_site_metas' ),
 					);
 					break;
 
 				case 'advanced':
-					$sections = array(
-						array(
-							'id' => 'enqueue',
-							'validate_callback' => array( $this->validate, 'setting_advanced' ),
-						),
-						array(
-							'id' => 'modes',
-							'title' => esc_html__( 'Modes', 'ninecodes-social-manager' ),
-							'description' => esc_html__( 'Configure the modes that work best for your website.', 'ninecodes-social-manager' ),
-							'validate_callback' => array( $this->validate, 'setting_modes' ),
-						),
+					$sections[] = array(
+						'tab' => $tab_id,
+						'id' => 'enqueue',
+						'validate_callback' => array( $this->validate, 'setting_advanced' ),
 					);
-					break;
-
-				default:
-					$sections = array();
+					$sections[] = array(
+						'tab' => $tab_id,
+						'id' => 'modes',
+						'title' => esc_html__( 'Modes', 'ninecodes-social-manager' ),
+						'description' => esc_html__( 'Configure the modes that work best for your website.', 'ninecodes-social-manager' ),
+						'validate_callback' => array( $this->validate, 'setting_modes' ),
+					);
 					break;
 			}
 
@@ -458,11 +454,39 @@ final class Settings {
 			$sections_extra = (array) apply_filters( 'ninecodes_social_manager_setting_sections', array(), $tab_id );
 
 			if ( ! empty( $sections_extra ) ) {
-				$sections = array_merge( $sections, array_map( array( $this, 'sanitize_sections' ), $sections_extra ) );
+
+				$_se = array();
+
+				if ( is_array_associative( $sections_extra ) ) {
+
+					$sections_extra = $this->sanitize_sections( $sections_extra );
+
+					if ( ! empty( $sections_extra['id'] ) ) {
+						$_se[] = array_merge( array( 'tab' => $tab_id ), $sections_extra );
+					}
+				} else {
+
+					foreach ( $sections_extra as $i => $s ) {
+						$s = $this->sanitize_sections( $s );
+						if ( ! empty( $s['id'] ) ) {
+							$_se[] = array_merge( array( 'tab' => $tab_id ), $s );
+						}
+					}
+				}
+
+				$sections_extra = $_se;
 			}
 
-			$this->tabs = $this->settings->add_sections( $tab_id, $sections );
+			$sections = array_unique( array_merge( $sections, $sections_extra ), SORT_REGULAR );
 		}
+
+		$sections = $this->remove_duplicate_values( 'id', $sections );
+
+		foreach ( $sections as $key => $section ) {
+			$this->tabs = $this->settings->add_section( $section['tab'], $section );
+		}
+
+		return $sections;
 	}
 
 	/**
@@ -893,62 +917,6 @@ final class Settings {
 	}
 
 	/**
-	 * Sort out the tabs for possible duplicate values.
-	 *
-	 * @since 1.1.3
-	 * @access protected
-	 *
-	 * @param string $key  	The key in the array to search.
-	 * @param string $value The value in the array to compare.
-	 * @param array  $arr 	The array.
-	 * @return array
-	 */
-	protected function search_duplicate_tabs( $key = '', $value = '', array $arr ) {
-
-		$keys = array();
-
-		foreach ( $arr as $i => $v ) {
-			if ( $v[ $key ] === $value ) {
-				$keys[ $i ] = $value;
-			}
-		}
-
-		if ( 2 <= count( $keys ) ) {
-			return $keys;
-		}
-	}
-
-	/**
-	 * The utility function to remove duplicate tabs.
-	 *
-	 * @since 1.1.3
-	 * @access protected
-	 *
-	 * @param string $key The key in the array to search.
-	 * @param array  $arr The array.
-	 * @return array
-	 */
-	protected function remove_duplicate_tabs( $key = '', array $arr ) {
-
-		$remove_keys = array();
-
-		foreach ( $arr as $i => $v ) {
-
-			$duplicate_keys = $this->search_duplicate_tabs( $key, $v[ $key ], $arr ); // Find possible duplicates.
-
-			if ( is_array( $duplicate_keys ) && $duplicate_keys ) {
-				$remove_keys = array_slice( $duplicate_keys, 1, null, true ); // Exclude the first array.
-			}
-
-			if ( isset( $remove_keys[ $i ] ) && $remove_keys[ $i ] === $arr[ $i ][ $key ] ) {
-				unset( $arr[ $i ] );
-			}
-		}
-
-		return $arr;
-	}
-
-	/**
 	 * The function method to sanitize sections array.
 	 *
 	 * @since 1.1.3
@@ -970,5 +938,63 @@ final class Settings {
 		$section['description'] = esc_html( $section['description'] );
 
 		return $section;
+	}
+
+	/**
+	 * Sort out the tabs for possible duplicate values in the Tabs and Sections.
+	 *
+	 * @since 1.1.3
+	 * @access protected
+	 *
+	 * @param string $key  	The key in the array to search.
+	 * @param string $value The value in the array to compare.
+	 * @param array  $arr 	The array.
+	 * @return array
+	 */
+	protected function search_duplicate_values( $key = '', $value = '', array $arr ) {
+
+		$keys = array();
+
+		foreach ( $arr as $i => $v ) {
+			if ( $v[ $key ] === $value ) {
+				$keys[ $i ] = $value;
+			}
+		}
+
+		if ( 2 <= count( $keys ) ) { // There should at least be two elements in the array.
+			return $keys;
+		}
+
+		return $keys;
+	}
+
+	/**
+	 * The utility function to remove duplicate keys in the Tabs and Sections.
+	 *
+	 * @since 1.1.3
+	 * @access protected
+	 *
+	 * @param string $key The key in the array to search.
+	 * @param array  $arr The array.
+	 * @return array
+	 */
+	protected function remove_duplicate_values( $key = '', array $arr ) {
+
+		$remove_keys = array();
+
+		foreach ( $arr as $i => $v ) {
+
+			$duplicate_keys = $this->search_duplicate_values( $key, $v[ $key ], $arr ); // Find possible duplicates.
+
+			if ( is_array( $duplicate_keys ) && $duplicate_keys ) {
+				$remove_keys = array_slice( $duplicate_keys, 1, null, true ); // Exclude the first array.
+			}
+
+			if ( isset( $remove_keys[ $i ] ) && $remove_keys[ $i ] === $arr[ $i ][ $key ] ) {
+				unset( $arr[ $i ] );
+			}
+		}
+
+		return array_values( $arr );
 	}
 }
