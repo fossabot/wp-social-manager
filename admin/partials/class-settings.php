@@ -524,13 +524,11 @@ final class Settings {
 
 			$profile_field = array(
 				'id' => sanitize_key( $slug ),
-				'type' => 'text',
+				'type' => 'text_profile',
 				'label' => $props['label'],
 				'description' => $props['description'],
 				'attr' => array(
-					'class' => 'account-profile-control code',
 					'data-url' => $props['url'],
-					'data-enqueue-script' => 'preview-profile',
 				),
 			);
 
@@ -599,10 +597,8 @@ final class Settings {
 				'id' => 'enabled',
 				'label' => esc_html__( 'Buttons Image Display', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Show the social media buttons on images in the content', 'ninecodes-social-manager' ),
-				'type' => 'checkbox',
+				'type' => 'checkbox_toggle',
 				'attr' => array(
-					'class' => 'toggle-control',
-					'data-enqueue-script' => 'toggle-control',
 					'data-toggle' => '.sharing-image-setting',
 				),
 			),
@@ -644,13 +640,11 @@ final class Settings {
 		$this->tabs = $this->settings->add_fields( 'metas', 'metas_site', array(
 			array(
 				'id' => 'enabled',
-				'type' => 'checkbox',
+				'type' => 'checkbox_toggle',
 				'label' => esc_html__( 'Enable Meta Tags', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Generate social media meta tags on this website', 'ninecodes-social-manager' ),
 				'default' => 'on',
 				'attr' => array(
-					'class' => 'toggle-control',
-					'data-enqueue-script' => 'toggle-control',
 					'data-toggle' => '.meta-site-setting',
 				),
 			),
@@ -814,11 +808,6 @@ final class Settings {
 		foreach ( $args as $key => $file ) {
 
 			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'scripts';
-
-			if ( 'image-upload' === $file ) {
-				wp_enqueue_media();
-			}
-
 			wp_enqueue_script( "{$this->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.min.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
 		}
 	}
