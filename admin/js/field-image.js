@@ -21,9 +21,9 @@ jQuery(function($) {
 	ImageUpload = MediaUpload.View.extend({
 
 		events: {
-			'click .add-media': 'selectMedia',
-			'click .change-media': 'selectMedia',
-			'click .remove-media': 'removeMedia'
+			'click .add-media-img': 'selectMedia',
+			'click .change-media-img': 'selectMedia',
+			'click .remove-media-img': 'removeMedia'
 		},
 
 		initialize: function() {
@@ -54,12 +54,12 @@ jQuery(function($) {
 
 			this.$input = $(inputId);
 
-			this.$inputWrap = $(inputId + '-wrap');
-			this.$inputImg = $(inputId + '-img');
+			this.$inputWrap = $(inputId + '-img-wrap');
+			this.$inputImg = $(inputId + '-img-elem');
 
-			this.$controlAdd = $(inputId + '-add');
-			this.$controlChange = $(inputId + '-change');
-			this.$controlRemove = $(inputId + '-remove');
+			this.$controlAdd = $(inputId + '-img-add');
+			this.$controlChange = $(inputId + '-img-change');
+			this.$controlRemove = $(inputId + '-img-remove');
 		},
 
 		controlState: function(imgId, imgUrl) {

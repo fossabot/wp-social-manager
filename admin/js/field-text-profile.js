@@ -13,7 +13,7 @@ jQuery(function($) {
 		previewProfiles;
 
 	InputProfiles.View = Backbone.View.extend({
-		el: '.account-profile-control'
+		el: '.field-text-profile'
 	});
 
 	PreviewProfiles = InputProfiles.View.extend({
