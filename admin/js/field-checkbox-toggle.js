@@ -12,7 +12,7 @@ jQuery(function($) {
 		toggleControls;
 
 	Toggle.View = Backbone.View.extend({
-		el: $('#ninecodes-social-manager-wrap').find('.toggle-control')
+		el: $('#ninecodes-social-manager-wrap').find('.field-checkbox-toggle')
 	});
 
 	ToggleControls = Toggle.View.extend({
