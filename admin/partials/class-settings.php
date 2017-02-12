@@ -295,26 +295,10 @@ final class Settings {
 	public function setting_tabs() {
 
 		$tabs = array(
-			array(
-				'id' => 'accounts',
-				'slug' => 'accounts',
-				'title' => esc_html__( 'Accounts', 'ninecodes-social-manager' ),
-			),
-			array(
-				'id' => 'buttons',
-				'slug' => 'buttons',
-				'title' => esc_html__( 'Buttons', 'ninecodes-social-manager' ),
-			),
-			array(
-				'id' => 'metas',
-				'slug' => 'metas',
-				'title' => esc_html__( 'Metas', 'ninecodes-social-manager' ),
-			),
-			array(
-				'id' => 'advanced',
-				'slug' => 'advanced',
-				'title' => esc_html__( 'Advanced', 'ninecodes-social-manager' ),
-			),
+			'accounts' => esc_html__( 'Accounts', 'ninecodes-social-manager' ),
+			'buttons' => esc_html__( 'Buttons', 'ninecodes-social-manager' ),
+			'metas' => esc_html__( 'Metas', 'ninecodes-social-manager' ),
+			'advanced' => esc_html__( 'Advanced', 'ninecodes-social-manager' ),
 		);
 
 		/**
@@ -324,45 +308,19 @@ final class Settings {
 		 *
 		 * @since 1.1.3
 		 *
+		 * @param array $tabs List of registered Tabs in the Setting page.
 		 * @var array
 		 */
-		$tabs_extra = (array) apply_filters( 'ninecodes_social_manager_setting_tabs', array() );
-
-		if ( ! empty( $tabs_extra ) ) {
-
-			if ( is_array_associative( $tabs_extra ) ) {
-
-				$tabs_extra = $this->sanitize_tabs( $tabs_extra ); // Validate and clean-up additional tabs.
-
-				if ( false === array_search( '', $tabs_extra, true ) ) {
-					$tabs_extra = array( $tabs_extra );
-				}
-			} else {
-
-				foreach ( $tabs_extra as $i => $v ) {
-
-					$t = $this->sanitize_tabs( $v ); // Validate and clean-up additional tabs.
-
-					if ( false !== array_search( '', $t, true ) ) {
-						unset( $tabs_extra[ $i ] );
-					}
-				}
-			}
-
-			$tabs = array_unique( array_merge( $tabs, $tabs_extra ), SORT_REGULAR );
-		}
-
-		// Filter and remove duplicate ID, slug, and title. The tabs must be unique.
-		$tabs = $this->remove_duplicate_values( 'id', $tabs );
-		$tabs = $this->remove_duplicate_values( 'slug', $tabs );
-		$tabs = $this->remove_duplicate_values( 'title', $tabs );
+		$tabs = (array) apply_filters( 'ninecodes_social_manager_setting_tabs', $tabs );
 
 		/**
-		 * Rebase the tabs key.
+		 * Eliminate empty title.
 		 *
 		 * @var array
 		 */
-		$tabs = array_values( $tabs );
+		$tabs = array_filter( array_unique( $tabs, SORT_REGULAR ), function( $value ) {
+			return is_string( $value ) && ! empty( $value );
+		} );
 
 		/**
 		 * Register new the tabs.

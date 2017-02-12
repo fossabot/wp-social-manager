@@ -100,246 +100,26 @@ class TestSettings extends WP_UnitTestCase {
 		 *
 		 * @since 1.1.3
 		 */
-		add_filter('ninecodes_social_manager_setting_tabs', function ( $tabs_extra ) {
+		add_filter('ninecodes_social_manager_setting_tabs', function ( $tabs ) {
 
 			// Valid (Good example).
-			$tabs_extra = array(
-				'id' => 'new_tab',
-				'slug' => 'new-tab',
-				'title' => 'New Tab',
-			);
+			$tabs['new_tab'] = 'New Tab';
 
-			return $tabs_extra;
+			// Invalid (Bad examples).
+			$tabs['new_tab2'] = '';
+			$tabs['new_tab3'] = null;
+			$tabs['new_tab4'] = false;
+			$tabs['new_tab5'] = -1;
+			$tabs['new_tab6'] = 10;
+			$tabs['new_tab7'] = array( 1,2,3,4,5 );
+			$tabs['new_tab8'] = 'New Tab'; // Duplicate.
+
+			return $tabs;
 		});
 
-		$this->assertEquals(array_merge($tabs, array(
-			array(
-				'id' => 'new_tab',
-				'slug' => 'new-tab',
-				'title' => 'New Tab',
-			),
-		)), $this->settings->setting_tabs());
-
-		/**
-		 * Test the filter hook to add a new Tabs in the setting page with some invalid values.
-		 *
-		 * NOTE The "id" is missing.
-		 *
-		 * @since 1.1.3
-		 */
-		add_filter('ninecodes_social_manager_setting_tabs', function ( $tabs_extra ) {
-
-			// Valid (Good example).
-			return array(
-
-				// With duplicates.
-				array(
-					'id' => 'accounts', // Duplicate ID.
-					'slug' => 'accounts-2',
-					'title' => 'Accounts 2',
-				),
-				array(
-					'id' => 'buttons-2',
-					'slug' => 'buttons', // Duplicate slug.
-					'title' => 'Buttons 2',
-				),
-				array(
-					'id' => 'metas', // Duplicate ID.
-					'slug' => 'metas', // Duplicate slug.
-					'title' => 'Metas 2',
-				),
-				array(
-					'id' => 'advanced-2',
-					'slug' => 'advanced-2',
-					'title' => 'Advanced', // Duplicate title.
-				),
-				array(
-					'id' => 'advanced-2',  // Duplicate ID.
-					'slug' => 'advanced-3',
-					'title' => 'Advanced', // Duplicate title.
-				),
-
-				// Bad arrays.
-				array(
-					'id' => 'new_tab_3',
-					'slug' => 'new-tab-3',
-				),
-				array(
-					'id' => 'new_tab_4',
-					'title' => 'New Tab 4',
-				),
-				array(
-					'slug' => 'new-tab-5',
-					'title' => 'New Tab 5',
-				),
-
-				// Valid.
-				array(
-					'id' => 'new_tab_2',
-					'slug' => 'new-tab-2',
-					'title' => 'New Tab 2',
-				),
-			);
-		});
-
-		$this->assertEquals(array_merge($tabs, array(
-			array(
-				'id' => 'new_tab_2',
-				'slug' => 'new-tab-2',
-				'title' => 'New Tab 2',
-			),
-		)), $this->settings->setting_tabs());
-	}
-
-	/**
-	 * Function to test the Setting Sections.
-	 *
-	 * @since 1.1.3
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function test_setting_sections() {
-
-		$tabs     = $this->settings->setting_tabs();
-		$sections = $this->settings->setting_sections();
-
-		/**
-		 * Test the filter hook to add a new Section in the setting page with valid value.
-		 *
-		 * @since 1.1.3
-		 */
-		add_filter('ninecodes_social_manager_setting_sections', function ( $sections_extra, $tab_id ) {
-
-			if ( 'accounts' === $tab_id ) {
-				// Valid (Good example).
-				$sections_extra = array(
-					'id' => 'new_section',
-					'title' => 'New Section', // Optional.
-				);
-			}
-
-			return $sections_extra;
-		}, 10, 2);
-
-		// Insert the new array on index 1, since the array key is reset.
-		array_splice($sections, 1, 0, array( array(
-				'tab' => 'accounts',
-				'id' => 'new_section',
-				'title' => 'New Section',
-				'description' => '',
-			),
-		));
-
-		$this->assertEquals( $sections, $this->settings->setting_sections() );
-
-		// Introduce a couple of new tabs.
-		add_filter( 'ninecodes_social_manager_setting_tabs', function( $tabs ) {
-
-		    $tabs = array(
-
-		        // Valid.
-		        array(
-		            'id' => 'integration',
-		            'slug' => 'integration',
-		            'title' => 'Integration',
-		        ),
-		        array(
-		            'id' => 'woo',
-		            'slug' => 'woocommerce',
-		            'title' => 'WooCommerce',
-		        ),
-		    );
-
-		    return $tabs;
-		}, 20 );
-
-		$this->settings->setting_tabs(); // Reload Tabs.
-
-		/**
-		 * Test the filter hook to add a new Section in the setting page with some invalid values.
-		 *
-		 * Sections ID must be unique.
-		 *
-		 * @since 1.1.3
-		 */
-		add_filter('ninecodes_social_manager_setting_sections', function ( $sections, $tab_id ) {
-
-			switch ( $tab_id ) {
-		        case 'woo':
-		            $sections = array(
-
-		                // With Duplicate IDs.
-		                array(
-		                    'id' => 'enqueue',
-		                    'title' => esc_html__( 'Enqueue', 'ninecodes-social-manager' ),
-		                ),
-		                array(
-		                    'id' => 'modes',
-		                    'title' => esc_html__( 'Modes', 'ninecodes-social-manager' ),
-		                    'description' => esc_html__( 'Configure the modes that work best for your website.', 'ninecodes-social-manager' ),
-		                ),
-
-		                // Valid.
-		                array(
-		                    'id' => 'woo_meta',
-		                    'title' => 'Meta Tags in WooCommerce',
-		                    'description' => 'Configure meta tags for your product pages.',
-		                ),
-		            );
-		            break;
-
-		        case 'integration':
-
-		            $sections = array(
-
-		                // With Duplicate IDs.
-		                array(
-		                    'id' => 'metas_site',
-		                    'title' => 'Metas Site',
-		                ),
-
-		                // Valid.
-		                array(
-		                    'id' => 'social_media_intergration',
-		                    'title' => 'Social Media',
-		                    'description' => 'Input the App ID to integrate with Social Media.',
-		                ),
-		            );
-		            break;
-		    }
-
-			return $sections;
-		}, 20, 2);
-
-		$this->assertEquals( array_merge( $sections, array(
-			array(
-				'tab' => 'integration',
-				'id' => 'social_media_intergration',
-				'title' => 'Social Media',
-				'description' => 'Input the App ID to integrate with Social Media.',
-			),
-			array(
-				'tab' => 'woo',
-				'id' => 'woo_meta',
-				'title' => 'Meta Tags in WooCommerce',
-				'description' => 'Configure meta tags for your product pages.',
-			),
-		) ), $this->settings->setting_sections() );
-	}
-
-	/**
-	 * Function to test the Setting Sections.
-	 *
-	 * @since 1.1.3
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function test_setting_fields_profiles() {
-
-		$tabs     = $this->settings->setting_tabs();
-		$sections = $this->settings->setting_sections();
-		$fields   = $this->settings->setting_fields_profiles(); // Original fields.
+		$this->assertArrayHasKey( 'new_tab', $this->settings->setting_tabs() );
+		$this->assertEquals( array_merge( $tabs, array(
+			'new_tab' => 'New Tab',
+		) ), $this->settings->setting_tabs() );
 	}
 }
