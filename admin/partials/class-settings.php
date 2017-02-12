@@ -223,7 +223,15 @@ final class Settings {
 		add_action( 'admin_init', array( $this, 'setting_setups' ) );
 		add_action( 'admin_init', array( $this, 'setting_tabs' ), 15 );
 		add_action( 'admin_init', array( $this, 'setting_sections' ), 20 );
-		add_action( 'admin_init', array( $this, 'setting_fields' ), 25 );
+
+		add_action( 'admin_init', array( $this, 'setting_fields_profiles' ), 25 );
+		add_action( 'admin_init', array( $this, 'setting_fields_buttons_content' ), 25 );
+		add_action( 'admin_init', array( $this, 'setting_fields_buttons_image' ), 25 );
+		add_action( 'admin_init', array( $this, 'setting_fields_metas_site' ), 25 );
+		add_action( 'admin_init', array( $this, 'setting_fields_enqueue' ), 25 );
+		add_action( 'admin_init', array( $this, 'setting_fields_buttons_mode' ), 25 );
+		add_action( 'admin_init', array( $this, 'setting_fields_link_mode' ), 25 );
+
 		add_action( 'admin_init', array( $this, 'setting_init' ), 30 );
 	}
 
@@ -261,7 +269,7 @@ final class Settings {
 		$page_title = esc_html__( 'Social Media Settings', 'ninecodes-social-manager' );
 
 		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $this->plugin_slug, function() {
-			echo wp_kses( "<div class='wrap' id='{$this->plugin_slug}-wrap'>", array(
+			echo wp_kses( "<div class='wrap' id='{$this->plugin_slug}-settings'>", array(
 					'div' => array(
 						'class' => array(),
 						'id' => array(),
@@ -490,25 +498,18 @@ final class Settings {
 	}
 
 	/**
-	 * Function method to register option input fields in the sections.
+	 * Fields: Profiles & Pages.
 	 *
-	 * @since 1.0.0
+	 * Add the social media profiles and pages related to this website.
+	 *
+	 * @since 1.1.3
 	 * @access public
 	 *
-	 * @see Options
-	 *
-	 * @return void
+	 * @return array The array of fields added in the Profiles section.
 	 */
-	public function setting_fields() {
+	public function setting_fields_profiles() {
 
-		/**
-		 * ================================================================
-		 * Fields: Profiles & Pages.
-		 * Add the social media profiles and pages related to this website.
-		 * ================================================================
-		 */
-
-		$profile_field = array();
+		$profile_fields = array();
 
 		foreach ( Options::social_profiles() as $slug => $props ) {
 
@@ -522,7 +523,7 @@ final class Settings {
 				continue;
 			}
 
-			$profile_field = array(
+			$profile_fields[] = array(
 				'id' => sanitize_key( $slug ),
 				'type' => 'text_profile',
 				'label' => $props['label'],
@@ -531,17 +532,45 @@ final class Settings {
 					'data-url' => $props['url'],
 				),
 			);
-
-			$this->tabs = $this->settings->add_field( 'accounts', 'profiles', $profile_field );
 		}
 
 		/**
-		 * ================================================================
-		 * Fields: Buttons Content.
-		 * The setting fields to configure the social media buttons that
-		 * allows people to share, like, or save content of this site.
-		 * ================================================================
+		 * The Filter hook to allow developer to add new field type in
+		 * the Profiles section in "Accounts" (tab) > "Profiles" (section).
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $tab_id 	 The tab id.
+		 * @param string $section_id The section id.
+		 * @var array
 		 */
+		$profile_fields_extra = (array) apply_filters( 'ninecodes_social_manager_setting_fields', array(), 'accounts', 'profiles' );
+
+		$profile_fields = array_unique( array_merge( $profile_fields, $profile_fields_extra ), SORT_REGULAR );
+		$profile_fields = $this->remove_duplicate_values( 'id', $profile_fields ); // The field id must be unique.
+
+		/**
+		 * Regiter the fields in "Accounts" > "Profiles".
+		 *
+		 * @var array
+		 */
+		$this->tabs = $this->settings->add_fields( 'accounts', 'profiles', $profile_fields );
+
+		return $profile_fields;
+	}
+
+	/**
+	 * Fields: Buttons Content.
+	 *
+	 * The setting fields to configure the social media buttons that
+	 * allows people to share, like, or save content of this site.
+	 *
+	 * @since 1.1.3
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function setting_fields_buttons_content() {
 
 		$this->tabs = $this->settings->add_fields( 'buttons', 'buttons_content', array(
 			array(
@@ -583,14 +612,20 @@ final class Settings {
 				'default' => esc_html__( 'Share on:', 'ninecodes-social-manager' ),
 			),
 		) );
+	}
 
-		/**
-		 * ================================================================
-		 * Fields: Buttons Image.
-		 * The setting fields to configure the social media buttons shown
-		 * on the content images.
-		 * ================================================================
-		 */
+	/**
+	 * Fields: Buttons Image.
+	 *
+	 * The setting fields to configure the social media buttons shown
+	 * on the content images.
+	 *
+	 * @since 1.1.3
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function setting_fields_buttons_image() {
 
 		$this->tabs = $this->settings->add_fields( 'buttons', 'buttons_image', array(
 			array(
@@ -629,13 +664,18 @@ final class Settings {
 				'class' => 'sharing-image-setting hide-if-js',
 			),
 		) );
+	}
 
-		/**
-		 * ================================================================
-		 * Fields: Metas Site.
-		 * The setting fields to configure the meta data and the meta tags.
-		 * ================================================================
-		 */
+	/**
+	 * Fields: Metas Site.
+	 * The setting fields to configure the meta data and the meta tags.
+	 *
+	 * @since 1.1.3
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function setting_fields_metas_site() {
 
 		$this->tabs = $this->settings->add_fields( 'metas', 'metas_site', array(
 			array(
@@ -690,6 +730,17 @@ final class Settings {
 				'description' => esc_html__( 'An image URL which should represent this website within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'ninecodes-social-manager' ),
 			),
 		) );
+	}
+
+	/**
+	 * Fields: Enqueue.
+	 *
+	 * @since 1.1.3
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function setting_fields_enqueue() {
 
 		if ( $this->theme_supports->is( 'stylesheet' ) ) :
 
@@ -711,6 +762,19 @@ final class Settings {
 		endif;
 
 		$this->tabs = $this->settings->add_field( 'advanced', 'enqueue', $stylesheet_fields );
+	}
+
+	/**
+	 * Fields: Buttons Mode
+	 *
+	 * @since 1.1.3
+	 * @access public
+	 *
+	 * @see Options
+	 *
+	 * @return void
+	 */
+	public function setting_fields_buttons_mode() {
 
 		if ( ! (bool) $this->theme_supports->is( 'buttons-mode' ) ) :
 
@@ -725,6 +789,19 @@ final class Settings {
 
 			$this->tabs = $this->settings->add_field( 'advanced', 'modes', $buttons_mode_fields );
 		endif;
+	}
+
+	/**
+	 * Fields: Link Mode
+	 *
+	 * @since 1.1.3
+	 * @access public
+	 *
+	 * @see Options
+	 *
+	 * @return void
+	 */
+	public function setting_fields_link_mode() {
 
 		$link_mode_fields = array(
 			'id' => 'link_mode',
