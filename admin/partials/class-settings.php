@@ -229,8 +229,7 @@ final class Settings {
 		add_action( 'admin_init', array( $this, 'setting_fields_buttons_image' ), 25 );
 		add_action( 'admin_init', array( $this, 'setting_fields_metas_site' ), 25 );
 		add_action( 'admin_init', array( $this, 'setting_fields_enqueue' ), 25 );
-		add_action( 'admin_init', array( $this, 'setting_fields_buttons_mode' ), 25 );
-		add_action( 'admin_init', array( $this, 'setting_fields_link_mode' ), 25 );
+		add_action( 'admin_init', array( $this, 'setting_fields_modes' ), 25 );
 
 		add_action( 'admin_init', array( $this, 'setting_init' ), 30 );
 	}
@@ -509,7 +508,7 @@ final class Settings {
 	 */
 	public function setting_fields_profiles() {
 
-		$profile_fields = array();
+		$fields = array();
 
 		foreach ( Options::social_profiles() as $slug => $props ) {
 
@@ -523,7 +522,7 @@ final class Settings {
 				continue;
 			}
 
-			$profile_fields[] = array(
+			$fields[] = array(
 				'id' => sanitize_key( $slug ),
 				'type' => 'text_profile',
 				'label' => $props['label'],
@@ -544,19 +543,23 @@ final class Settings {
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
-		$profile_fields_extra = (array) apply_filters( 'ninecodes_social_manager_setting_fields', array(), 'accounts', 'profiles' );
+		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'accounts', 'profiles' );
 
-		$profile_fields = array_unique( array_merge( $profile_fields, $profile_fields_extra ), SORT_REGULAR );
-		$profile_fields = $this->remove_duplicate_values( 'id', $profile_fields ); // The field id must be unique.
+		/**
+		 * Each field must have a unique ID.
+		 *
+		 * @var array
+		 */
+		$fields = $this->remove_duplicate_values( 'id', $fields );
 
 		/**
 		 * Regiter the fields in "Accounts" > "Profiles".
 		 *
 		 * @var array
 		 */
-		$this->tabs = $this->settings->add_fields( 'accounts', 'profiles', $profile_fields );
+		$this->tabs = $this->settings->add_fields( 'accounts', 'profiles', $fields );
 
-		return $profile_fields;
+		return $fields;
 	}
 
 	/**
@@ -572,7 +575,7 @@ final class Settings {
 	 */
 	public function setting_fields_buttons_content() {
 
-		$this->tabs = $this->settings->add_fields( 'buttons', 'buttons_content', array(
+		$fields = array(
 			array(
 				'id' => 'includes',
 				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
@@ -611,7 +614,33 @@ final class Settings {
 				'description' => sprintf( esc_html__( 'Set the heading shown before the buttons (e.g. %s).', 'ninecodes-social-manager' ), '<code>Share on:</code>' ),
 				'default' => esc_html__( 'Share on:', 'ninecodes-social-manager' ),
 			),
-		) );
+		);
+
+		/**
+		 * The Filter hook to allow developer adding new field type
+		 * in "Buttons" (tab) > "Buttons Content" (section).
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $tab_id 	 The tab id.
+		 * @param string $section_id The section id.
+		 * @var array
+		 */
+		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'buttons', 'buttons_content' );
+
+		/**
+		 * Each field must have a unique ID.
+		 *
+		 * @var array
+		 */
+		$fields = $this->remove_duplicate_values( 'id', $fields );
+
+		/**
+		 * Register the fields in "Buttons" > "Buttons Content".
+		 *
+		 * @var array
+		 */
+		$this->tabs = $this->settings->add_fields( 'buttons', 'buttons_content', $fields );
 	}
 
 	/**
@@ -627,7 +656,7 @@ final class Settings {
 	 */
 	public function setting_fields_buttons_image() {
 
-		$this->tabs = $this->settings->add_fields( 'buttons', 'buttons_image', array(
+		$fields = array(
 			array(
 				'id' => 'enabled',
 				'label' => esc_html__( 'Buttons Image Display', 'ninecodes-social-manager' ),
@@ -663,7 +692,33 @@ final class Settings {
 				'default' => 'icon',
 				'class' => 'sharing-image-setting hide-if-js',
 			),
-		) );
+		);
+
+		/**
+		 * The Filter hook to allow developer adding new field type
+		 * in "Buttons" (tab) > "Buttons Image" (section).
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $tab_id 	 The tab id.
+		 * @param string $section_id The section id.
+		 * @var array
+		 */
+		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'buttons', 'buttons_image' );
+
+		/**
+		 * Each field must have a unique ID.
+		 *
+		 * @var array
+		 */
+		$fields = $this->remove_duplicate_values( 'id', $fields );
+
+		/**
+		 * Register the fields in "Buttons" > "Buttons Image".
+		 *
+		 * @var array
+		 */
+		$this->tabs = $this->settings->add_fields( 'buttons', 'buttons_image', $fields );
 	}
 
 	/**
@@ -677,7 +732,7 @@ final class Settings {
 	 */
 	public function setting_fields_metas_site() {
 
-		$this->tabs = $this->settings->add_fields( 'metas', 'metas_site', array(
+		$fields = array(
 			array(
 				'id' => 'enabled',
 				'type' => 'checkbox_toggle',
@@ -729,7 +784,33 @@ final class Settings {
 				'label' => esc_html__( 'Site Image', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'An image URL which should represent this website within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'ninecodes-social-manager' ),
 			),
-		) );
+		);
+
+		/**
+		 * The Filter hook to allow developer adding new field type
+		 * in "Metas" (tab) > "Metas Site" (section).
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $tab_id 	 The tab id.
+		 * @param string $section_id The section id.
+		 * @var array
+		 */
+		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'metas', 'metas_site' );
+
+		/**
+		 * Each field must have a unique ID.
+		 *
+		 * @var array
+		 */
+		$fields = $this->remove_duplicate_values( 'id', $fields );
+
+		/**
+		 * Register the fields in "Metas" > "Metas Site".
+		 *
+		 * @var array
+		 */
+		$this->tabs = $this->settings->add_fields( 'metas', 'metas_site', $fields );
 	}
 
 	/**
@@ -742,9 +823,11 @@ final class Settings {
 	 */
 	public function setting_fields_enqueue() {
 
+		$fields = array();
+
 		if ( $this->theme_supports->is( 'stylesheet' ) ) :
 
-			$stylesheet_fields = array(
+			$fields[] = array(
 				'id' => 'enable_stylesheet',
 				'label' => esc_html__( 'Enable Stylesheet', 'ninecodes-social-manager' ),
 				'type' => 'content',
@@ -752,7 +835,7 @@ final class Settings {
 			);
 		else :
 
-			$stylesheet_fields = array(
+			$fields[] = array(
 				'id' => 'enable_stylesheet',
 				'label' => esc_html__( 'Enable Stylesheet', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Load the plugin stylesheet to apply essential styles.', 'ninecodes-social-manager' ),
@@ -761,7 +844,31 @@ final class Settings {
 			);
 		endif;
 
-		$this->tabs = $this->settings->add_field( 'advanced', 'enqueue', $stylesheet_fields );
+		/**
+		 * The Filter hook to allow developer adding new field type
+		 * in "Metas" (tab) > "Metas Site" (section).
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $tab_id 	 The tab id.
+		 * @param string $section_id The section id.
+		 * @var array
+		 */
+		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'advanced', 'enqueue' );
+
+		/**
+		 * Each field must have a unique ID.
+		 *
+		 * @var array
+		 */
+		$fields = $this->remove_duplicate_values( 'id', $fields );
+
+		/**
+		 * Register the fields in "Advanced" > "Enqueue".
+		 *
+		 * @var array
+		 */
+		$this->tabs = $this->settings->add_fields( 'advanced', 'enqueue', $fields );
 	}
 
 	/**
@@ -774,11 +881,13 @@ final class Settings {
 	 *
 	 * @return void
 	 */
-	public function setting_fields_buttons_mode() {
+	public function setting_fields_modes() {
 
-		if ( ! (bool) $this->theme_supports->is( 'buttons-mode' ) ) :
+		$fields = array();
 
-			$buttons_mode_fields = array(
+		if ( ! (bool) $this->theme_supports->is( 'buttons_mode' ) ) :
+
+			$fields[] = array(
 				'id' => 'buttons_mode',
 				'label' => esc_html__( 'Buttons Mode', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Select the mode to render the social media buttons.', 'ninecodes-social-manager' ),
@@ -787,23 +896,9 @@ final class Settings {
 				'default' => 'html',
 			);
 
-			$this->tabs = $this->settings->add_field( 'advanced', 'modes', $buttons_mode_fields );
 		endif;
-	}
 
-	/**
-	 * Fields: Link Mode
-	 *
-	 * @since 1.1.3
-	 * @access public
-	 *
-	 * @see Options
-	 *
-	 * @return void
-	 */
-	public function setting_fields_link_mode() {
-
-		$link_mode_fields = array(
+		$fields[] = array(
 			'id' => 'link_mode',
 			'label' => esc_html__( 'Link Mode', 'ninecodes-social-manager' ),
 			'description' => esc_html__( 'Select the link mode to append when the content or the image is shared.', 'ninecodes-social-manager' ),
@@ -812,7 +907,31 @@ final class Settings {
 			'default' => 'permalink',
 		);
 
-		$this->tabs = $this->settings->add_field( 'advanced', 'modes', $link_mode_fields );
+		/**
+		 * The Filter hook to allow developer adding new field type
+		 * in "Advanced" (tab) > "Modes" (section).
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $tab_id 	 The tab id.
+		 * @param string $section_id The section id.
+		 * @var array
+		 */
+		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'advanced', 'modes' );
+
+		/**
+		 * Each field must have a unique ID.
+		 *
+		 * @var array
+		 */
+		$fields = $this->remove_duplicate_values( 'id', $fields );
+
+		/**
+		 * Register the fields in "Advanced" > "Enqueue".
+		 *
+		 * @var array
+		 */
+		$this->tabs = $this->settings->add_fields( 'advanced', 'modes', $fields );
 	}
 
 	/**
