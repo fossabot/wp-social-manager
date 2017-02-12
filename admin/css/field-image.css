@@ -1,16 +1,16 @@
-.wrap .field-image-wrap {
+.field-image .field-image__wrap {
     max-width: 590px;
 }
 
-.wrap .field-image-wrap.is-set img {
+.field-image .field-image__wrap.is-set img {
     max-width: 100%;
     height: auto;
 }
 
-.wrap .field-image-wrap.is-set .field-image-placeholder {
+.field-image .field-image__wrap.is-set .field-image-placeholder {
     display: none;
 }
 
-.wrap .field-image-wrap + .field-image-buttons {
+.field-image .field-image__buttons {
 	margin-top: 1em;
 }

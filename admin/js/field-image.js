@@ -11,7 +11,7 @@ jQuery(function($) {
 		imageUpload;
 
 	MediaUpload.View = Backbone.View.extend({
-		el: '#ninecodes-social-manager-wrap'
+		el: '#ninecodes-social-manager-settings'
 	});
 
 	/**
