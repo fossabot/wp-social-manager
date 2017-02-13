@@ -327,9 +327,9 @@ final class Settings {
 		 *
 		 * @var array
 		 */
-		$this->tabs = $this->settings->add_pages( $tabs );
+		$tabs = $this->settings->add_pages( $tabs );
 
-		return $tabs;
+		return $this->tabs = $tabs;
 	}
 
 	/**
@@ -344,63 +344,57 @@ final class Settings {
 
 		$sections = array();
 
-		foreach ( $this->tabs as $key => $tab ) {
+		foreach ( $this->tabs as $slug => $title ) {
 
-			$tab_id = isset( $tab['id'] ) && ! empty( $tab['id'] ) ? $tab['id'] : '';
-
-			if ( empty( $tab_id ) ) {
+			if ( empty( $slug ) ) {
 				continue;
 			}
 
-			switch ( $tab_id ) {
+			switch ( $slug ) {
 
 				case 'accounts':
-					$sections[] = array(
-						'tab' => $tab_id,
-						'id' => 'profiles',
-						'title' => esc_html__( 'Profiles', 'ninecodes-social-manager' ),
-						'description' => esc_html__( 'Add all social media profiles and pages for this website.', 'ninecodes-social-manager' ),
-						'validate_callback' => array( $this->validate, 'setting_profiles' ),
+					$sections[ $slug ] = array(
+						'profiles' => array(
+							'title' => esc_html__( 'Profiles', 'ninecodes-social-manager' ),
+							'description' => esc_html__( 'Add all social media profiles and pages for this website.', 'ninecodes-social-manager' ),
+							'validate_callback' => array( $this->validate, 'setting_profiles' ),
+						),
 					);
 					break;
 
 				case 'buttons':
-					$sections[] = array(
-						'tab' => $tab_id,
-						'id' => 'buttons_content',
-						'title' => esc_html__( 'Content', 'ninecodes-social-manager' ),
-						'description' => esc_html__( 'Configure how social media buttons display on your content pages.', 'ninecodes-social-manager' ),
-						'validate_callback' => array( $this->validate, 'setting_buttons_content' ),
-					);
-					$sections[] = array(
-						'tab' => $tab_id,
-						'id' => 'buttons_image',
-						'title' => esc_html__( 'Image', 'ninecodes-social-manager' ),
-						'description' => esc_html__( 'Options to configure the social media buttons shown on the content images.', 'ninecodes-social-manager' ),
-						'validate_callback' => array( $this->validate, 'setting_buttons_image' ),
+					$sections[ $slug ] = array(
+						'buttons_content' => array(
+							'title' => esc_html__( 'Content', 'ninecodes-social-manager' ),
+							'description' => esc_html__( 'Configure how social media buttons display on your content pages.', 'ninecodes-social-manager' ),
+							'validate_callback' => array( $this->validate, 'setting_buttons_content' ),
+						),
+						'buttons_image' => array(
+							'title' => esc_html__( 'Image', 'ninecodes-social-manager' ),
+							'description' => esc_html__( 'Options to configure the social media buttons shown on the content images.', 'ninecodes-social-manager' ),
+							'validate_callback' => array( $this->validate, 'setting_buttons_image' ),
+						),
 					);
 					break;
 
 				case 'metas':
-					$sections[] = array(
-						'tab' => $tab_id,
-						'id' => 'metas_site',
-						'validate_callback' => array( $this->validate, 'setting_site_metas' ),
+					$sections[ $slug ] = array(
+						'metas_site' => array(
+							'validate_callback' => array( $this->validate, 'setting_site_metas' ),
+						),
 					);
 					break;
 
 				case 'advanced':
-					$sections[] = array(
-						'tab' => $tab_id,
-						'id' => 'enqueue',
-						'validate_callback' => array( $this->validate, 'setting_advanced' ),
-					);
-					$sections[] = array(
-						'tab' => $tab_id,
-						'id' => 'modes',
-						'title' => esc_html__( 'Modes', 'ninecodes-social-manager' ),
-						'description' => esc_html__( 'Configure the modes that work best for your website.', 'ninecodes-social-manager' ),
-						'validate_callback' => array( $this->validate, 'setting_modes' ),
+					$sections[ $slug ] = array(
+						'enqueue' => array(
+							'validate_callback' => array( $this->validate, 'setting_advanced' ),
+						),
+						'modes' => array(
+							'title' => esc_html__( 'Modes', 'ninecodes-social-manager' ),
+							'description' => esc_html__( 'Configure the modes that work best for your website.', 'ninecodes-social-manager' ),
+							'validate_callback' => array( $this->validate, 'setting_modes' ),
+						),
 					);
 					break;
 			}
@@ -412,44 +406,14 @@ final class Settings {
 			 *
 			 * @since 1.1.3
 			 *
-			 * @param string $tab_id The Tab ID.
+			 * @param string $slug The Tab ID.
 			 *
 			 * @var array
 			 */
-			$sections_extra = (array) apply_filters( 'ninecodes_social_manager_setting_sections', array(), $tab_id );
-
-			if ( ! empty( $sections_extra ) ) {
-
-				$_se = array();
-
-				if ( is_array_associative( $sections_extra ) ) {
-
-					$sections_extra = $this->sanitize_sections( $sections_extra );
-
-					if ( ! empty( $sections_extra['id'] ) ) {
-						$_se[] = array_merge( array( 'tab' => $tab_id ), $sections_extra );
-					}
-				} else {
-
-					foreach ( $sections_extra as $i => $s ) {
-						$s = $this->sanitize_sections( $s );
-						if ( ! empty( $s['id'] ) ) {
-							$_se[] = array_merge( array( 'tab' => $tab_id ), $s );
-						}
-					}
-				}
-
-				$sections_extra = $_se;
-			}
-
-			$sections = array_unique( array_merge( $sections, $sections_extra ), SORT_REGULAR );
+			$sections[ $slug ] = (array) apply_filters( 'ninecodes_social_manager_setting_sections', $sections, $slug );
 		}
 
-		$sections = $this->remove_duplicate_values( 'id', $sections );
-
-		foreach ( $sections as $key => $section ) {
-			$this->tabs = $this->settings->add_section( $section['tab'], $section );
-		}
+		$sections = $this->sanitize_sections( $sections );
 
 		return $sections;
 	}

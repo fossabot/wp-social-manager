@@ -113,6 +113,9 @@ class TestSettings extends WP_UnitTestCase {
 			$tabs['new_tab6'] = 10;
 			$tabs['new_tab7'] = array( 1,2,3,4,5 );
 			$tabs['new_tab8'] = 'New Tab'; // Duplicate.
+			$tabs['new tab9'] = 'New Tab 9'; // Bad Key.
+			$tabs['New Tab10'] = 'New Tab 10'; // Bad Key.
+			$tabs['new-tab11'] = 'New Tab 11'; // With dash, must be be an underscore.
 
 			return $tabs;
 		});
@@ -120,6 +123,9 @@ class TestSettings extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'new_tab', $this->settings->setting_tabs() );
 		$this->assertEquals( array_merge( $tabs, array(
 			'new_tab' => 'New Tab',
+			'newtab9' => 'New Tab 9',
+			'newtab10' => 'New Tab 10',
+			'new_tab11' => 'New Tab 11',
 		) ), $this->settings->setting_tabs() );
 	}
 }
