@@ -171,15 +171,4 @@ class TestValidation extends WP_UnitTestCase {
 		$this->assertEmpty( $this->validation->validate_checkbox( null ) );
 		$this->assertEmpty( $this->validation->validate_checkbox( '' ) );
 	}
-
-	/**
-	 * Test multi-checkbox validation
-	 *
-	 * @return void
-	 */
-	public function test_is_array_associative() {
-
-		$this->assertFalse( $this->validation->is_array_associative( array( 'foo', 'bar' ) ) ); // un-expected string.
-		$this->assertTrue( $this->validation->is_array_associative( array( 'foo' => 'Foo', 'bar' => 'Bar' ) ) ); // expected string.
-	}
 }
