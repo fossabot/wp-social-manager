@@ -128,4 +128,60 @@ class TestSettings extends WP_UnitTestCase {
 			'new_tab11' => 'New Tab 11',
 		) ), $this->settings->setting_tabs() );
 	}
+
+	/**
+	 * [test_remove_duplicate_sections description]
+	 *
+	 * @return void
+	 */
+	function test_remove_duplicate_sections() {
+
+		$sections = $this->settings->remove_duplicate_sections( array(
+			'tab1' => array(
+				'section1' => array(
+					'title' => 'Section 1 Title',
+					'description' => 'Section 1 Desc.',
+				),
+				'section2' => array(
+					'title' => 'Section 2 Title',
+					'description' => 'Section 2 Desc.',
+				),
+			),
+			'tab2' => array(
+				'section2' => array(
+					'title' => 'Yet Another Section 2 Title',
+					'description' => 'Yet Another Section 2 Desc.',
+				), // Duplicate.
+				'section3' => array(
+					'title' => 'Section 3 Title',
+					'description' => 'Section 3 Desc.',
+				),
+				'section4' => array(), // Bad.
+				'section5' => null,    // Bad.
+				'section6' => false,   // Bad.
+			),
+			'tab3' => array(), // Bad.
+			'tab4' => null,    // Bad.
+			'tab5' => false,   // Bad.
+		) );
+
+		$this->assertEquals( array(
+			'tab1' => array(
+				'section1' => array(
+					'title' => 'Section 1 Title',
+					'description' => 'Section 1 Desc.',
+				),
+				'section2' => array(
+					'title' => 'Section 2 Title',
+					'description' => 'Section 2 Desc.',
+				),
+			),
+			'tab2' => array(
+				'section3' => array(
+					'title' => 'Section 3 Title',
+					'description' => 'Section 3 Desc.',
+				),
+			),
+		), $sections );
+	}
 }

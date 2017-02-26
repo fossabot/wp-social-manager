@@ -344,16 +344,16 @@ final class Settings {
 
 		$sections = array();
 
-		foreach ( $this->tabs as $slug => $title ) {
+		foreach ( $this->tabs as $tab => $title ) {
 
-			if ( empty( $slug ) ) {
+			if ( empty( $tab ) ) {
 				continue;
 			}
 
-			switch ( $slug ) {
+			switch ( $tab ) {
 
 				case 'accounts':
-					$sections[ $slug ] = array(
+					$sections[ $tab ] = array(
 						'profiles' => array(
 							'title' => esc_html__( 'Profiles', 'ninecodes-social-manager' ),
 							'description' => esc_html__( 'Add all social media profiles and pages for this website.', 'ninecodes-social-manager' ),
@@ -363,7 +363,7 @@ final class Settings {
 					break;
 
 				case 'buttons':
-					$sections[ $slug ] = array(
+					$sections[ $tab ] = array(
 						'buttons_content' => array(
 							'title' => esc_html__( 'Content', 'ninecodes-social-manager' ),
 							'description' => esc_html__( 'Configure how social media buttons display on your content pages.', 'ninecodes-social-manager' ),
@@ -378,7 +378,7 @@ final class Settings {
 					break;
 
 				case 'metas':
-					$sections[ $slug ] = array(
+					$sections[ $tab ] = array(
 						'metas_site' => array(
 							'validate_callback' => array( $this->validate, 'setting_site_metas' ),
 						),
@@ -386,7 +386,7 @@ final class Settings {
 					break;
 
 				case 'advanced':
-					$sections[ $slug ] = array(
+					$sections[ $tab ] = array(
 						'enqueue' => array(
 							'validate_callback' => array( $this->validate, 'setting_advanced' ),
 						),
@@ -406,14 +406,16 @@ final class Settings {
 			 *
 			 * @since 1.1.3
 			 *
-			 * @param string $slug The Tab ID.
+			 * @param string $tab The Tab ID.
 			 *
 			 * @var array
 			 */
-			$sections[ $slug ] = (array) apply_filters( 'ninecodes_social_manager_setting_sections', $sections, $slug );
+			$sections = (array) apply_filters( 'ninecodes_social_manager_setting_sections', $sections, $tab );
 		}
 
-		$sections = $this->sanitize_sections( $sections );
+		foreach ( $sections as $tab => $section ) {
+			$this->tabs = $this->settings->add_sections( $tab, $section );
+		}
 
 		return $sections;
 	}
@@ -440,12 +442,16 @@ final class Settings {
 				'description' => '',
 			) );
 
-			if ( empty( $props['label'] ) || empty( $props['url'] ) || empty( $props['description'] ) ) {
+			if ( empty( $props['label'] ) ||
+				 empty( $props['url'] ) ||
+				 empty( $props['description'] ) ) {
 				continue;
 			}
 
-			$fields[] = array(
-				'id' => sanitize_key( $slug ),
+			// Field / input unique name.
+			$name = sanitize_key( $slug );
+
+			$fields[ $name ] = array(
 				'type' => 'text_profile',
 				'label' => $props['label'],
 				'description' => $props['description'],
@@ -468,11 +474,11 @@ final class Settings {
 		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'accounts', 'profiles' );
 
 		/**
-		 * Each field must have a unique ID.
+		 * Removes duplicate values from an array.
 		 *
 		 * @var array
 		 */
-		$fields = $this->remove_duplicate_values( 'id', $fields );
+		$fields = array_unique( $fields, SORT_REGULAR );
 
 		/**
 		 * Regiter the fields in "Accounts" > "Profiles".
@@ -498,39 +504,34 @@ final class Settings {
 	public function setting_fields_buttons_content() {
 
 		$fields = array(
-			array(
-				'id' => 'includes',
+			'includes' => array(
 				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
 				'type' => 'multicheckbox',
 				'options' => Options::button_sites( 'content' ),
 				'default' => array_keys( Options::button_sites( 'content' ) ),
 			),
-			array(
-				'id' => 'post_types',
+			'post_types' => array(
 				'type' => 'multicheckbox',
 				'label' => esc_html__( 'Buttons Visibility', 'ninecodes-social-manager' ),
 				'description' => wp_kses( sprintf( __( 'Select the %s that are allowed to show the social media buttons.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 				'options' => Options::post_types(),
 				'default' => array( 'post' ),
 			),
-			array(
-				'id' => 'view',
+			'view' => array(
 				'label' => esc_html__( 'Buttons Views', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Select the social media buttons appearance shown in the content.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
 				'options' => Options::button_views(),
 				'default' => 'icon',
 			),
-			array(
-				'id' => 'placement',
+			'placement' => array(
 				'type' => 'radio',
 				'label' => esc_html__( 'Buttons Placements', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Select the location to show the social media buttons in the content.', 'ninecodes-social-manager' ),
 				'options' => Options::button_placements(),
 				'default' => 'after',
 			),
-			array(
-				'id' => 'heading',
+			'heading' => array(
 				'type' => 'text',
 				'label' => esc_html__( 'Buttons Header', 'ninecodes-social-manager' ),
 				'description' => sprintf( esc_html__( 'Set the heading shown before the buttons (e.g. %s).', 'ninecodes-social-manager' ), '<code>Share on:</code>' ),
@@ -551,11 +552,11 @@ final class Settings {
 		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'buttons', 'buttons_content' );
 
 		/**
-		 * Each field must have a unique ID.
+		 * Removes duplicate values from an array.
 		 *
 		 * @var array
 		 */
-		$fields = $this->remove_duplicate_values( 'id', $fields );
+		$fields = array_unique( $fields, SORT_REGULAR );
 
 		/**
 		 * Register the fields in "Buttons" > "Buttons Content".
@@ -579,8 +580,7 @@ final class Settings {
 	public function setting_fields_buttons_image() {
 
 		$fields = array(
-			array(
-				'id' => 'enabled',
+			'enabled' => array(
 				'label' => esc_html__( 'Buttons Image Display', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Show the social media buttons on images in the content', 'ninecodes-social-manager' ),
 				'type' => 'checkbox_toggle',
@@ -588,16 +588,14 @@ final class Settings {
 					'data-toggle' => '.sharing-image-setting',
 				),
 			),
-			array(
-				'id' => 'includes',
+			'includes' => array(
 				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
 				'type' => 'multicheckbox',
 				'options' => Options::button_sites( 'image' ),
 				'default' => array_keys( Options::button_sites( 'image' ) ),
 				'class' => 'sharing-image-setting hide-if-js',
 			),
-			array(
-				'id' => 'post_types',
+			'post_types' => array(
 				'label' => esc_html__( 'Buttons Visibility', 'ninecodes-social-manager' ),
 				'description' => wp_kses( sprintf( __( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 				'type' => 'multicheckbox',
@@ -605,8 +603,7 @@ final class Settings {
 				'default' => array( 'post' ),
 				'class' => 'sharing-image-setting hide-if-js',
 			),
-			array(
-				'id' => 'view',
+			'view' => array(
 				'label' => esc_html__( 'Buttons Views', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Select the social media buttons appearance shown on the images of the content.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
@@ -629,11 +626,11 @@ final class Settings {
 		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'buttons', 'buttons_image' );
 
 		/**
-		 * Each field must have a unique ID.
+		 * Removes duplicate values from an array.
 		 *
 		 * @var array
 		 */
-		$fields = $this->remove_duplicate_values( 'id', $fields );
+		$fields = array_unique( $fields, SORT_REGULAR );
 
 		/**
 		 * Register the fields in "Buttons" > "Buttons Image".
@@ -655,8 +652,7 @@ final class Settings {
 	public function setting_fields_metas_site() {
 
 		$fields = array(
-			array(
-				'id' => 'enabled',
+			'enabled' => array(
 				'type' => 'checkbox_toggle',
 				'label' => esc_html__( 'Enable Meta Tags', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Generate social media meta tags on this website', 'ninecodes-social-manager' ),
@@ -665,8 +661,7 @@ final class Settings {
 					'data-toggle' => '.meta-site-setting',
 				),
 			),
-			array(
-				'id' => 'name',
+			'name' => array(
 				'type' => 'text',
 				'label' => esc_html__( 'Site Name', 'ninecodes-social-manager' ),
 				'legend' => esc_html__( 'Site Name', 'ninecodes-social-manager' ),
@@ -676,8 +671,7 @@ final class Settings {
 					'placeholder' => $this->site_title,
 				),
 			),
-			array(
-				'id' => 'title',
+			'title' => array(
 				'type' => 'text',
 				'label' => esc_html__( 'Site Title', 'ninecodes-social-manager' ),
 				'legend' => esc_html__( 'Site Title', 'ninecodes-social-manager' ),
@@ -687,8 +681,7 @@ final class Settings {
 					'placeholder' => $this->document_title,
 				),
 			),
-			array(
-				'id' => 'description',
+			'description' => array(
 				'type' => 'textarea',
 				'label' => esc_html__( 'Site Description', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'A one to two sentence describing this website that should appear within the social media meta tags.', 'ninecodes-social-manager' ),
@@ -699,8 +692,7 @@ final class Settings {
 					'placeholder' => $this->site_tagline,
 				),
 			),
-			array(
-				'id' => 'image',
+			'image' => array(
 				'type' => 'image',
 				'class' => 'meta-site-setting',
 				'label' => esc_html__( 'Site Image', 'ninecodes-social-manager' ),
@@ -721,11 +713,11 @@ final class Settings {
 		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'metas', 'metas_site' );
 
 		/**
-		 * Each field must have a unique ID.
+		 * Removes duplicate values from an array.
 		 *
 		 * @var array
 		 */
-		$fields = $this->remove_duplicate_values( 'id', $fields );
+		$fields = array_unique( $fields, SORT_REGULAR );
 
 		/**
 		 * Register the fields in "Metas" > "Metas Site".
@@ -749,16 +741,14 @@ final class Settings {
 
 		if ( $this->theme_supports->is( 'stylesheet' ) ) :
 
-			$fields[] = array(
-				'id' => 'enable_stylesheet',
+			$fields['enable_stylesheet'] = array(
 				'label' => esc_html__( 'Enable Stylesheet', 'ninecodes-social-manager' ),
 				'type' => 'content',
 				'content' => esc_html__( 'The Theme being used in this website has included the styles in its own stylesheet.', 'ninecodes-social-manager' ),
 			);
 		else :
 
-			$fields[] = array(
-				'id' => 'enable_stylesheet',
+			$fields['enable_stylesheet'] = array(
 				'label' => esc_html__( 'Enable Stylesheet', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Load the plugin stylesheet to apply essential styles.', 'ninecodes-social-manager' ),
 				'default' => 'on',
@@ -779,11 +769,11 @@ final class Settings {
 		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'advanced', 'enqueue' );
 
 		/**
-		 * Each field must have a unique ID.
+		 * Removes duplicate values from an array.
 		 *
 		 * @var array
 		 */
-		$fields = $this->remove_duplicate_values( 'id', $fields );
+		$fields = array_unique( $fields, SORT_REGULAR );
 
 		/**
 		 * Register the fields in "Advanced" > "Enqueue".
@@ -809,8 +799,7 @@ final class Settings {
 
 		if ( ! (bool) $this->theme_supports->is( 'buttons_mode' ) ) :
 
-			$fields[] = array(
-				'id' => 'buttons_mode',
+			$fields['buttons_mode'] = array(
 				'label' => esc_html__( 'Buttons Mode', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Select the mode to render the social media buttons.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
@@ -820,8 +809,7 @@ final class Settings {
 
 		endif;
 
-		$fields[] = array(
-			'id' => 'link_mode',
+		$fields['link_mode'] = array(
 			'label' => esc_html__( 'Link Mode', 'ninecodes-social-manager' ),
 			'description' => esc_html__( 'Select the link mode to append when the content or the image is shared.', 'ninecodes-social-manager' ),
 			'type' => 'radio',
@@ -842,11 +830,11 @@ final class Settings {
 		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'advanced', 'modes' );
 
 		/**
-		 * Each field must have a unique ID.
+		 * Removes duplicate values from an array.
 		 *
 		 * @var array
 		 */
-		$fields = $this->remove_duplicate_values( 'id', $fields );
+		$fields = array_unique( $fields, SORT_REGULAR );
 
 		/**
 		 * Register the fields in "Advanced" > "Enqueue".
@@ -1000,51 +988,51 @@ final class Settings {
 	}
 
 	/**
-	 * The function method to sanitize tabs array.
+	 * The utility function to remove duplicate keys in the Tabs and Sections.
 	 *
 	 * @since 1.1.3
-	 * @access protected
+	 * @access public
 	 *
-	 * @param array $tab The tab ID, slug, and Title.
+	 * @param array $sections The array.
 	 * @return array
 	 */
-	protected function sanitize_tabs( array $tab ) {
+	public function remove_duplicate_sections( array $sections ) {
 
-		$tab = wp_parse_args( $tab, array(
-			'id' => '',
-			'slug' => '',
-			'title' => '',
-		) );
+		$arr = array();
+		foreach ( $sections as $tab => $section ) {
 
-		$tab['id'] = sanitize_key( $tab['id'] );
-		$tab['slug'] = sanitize_key( $tab['slug'] );
-		$tab['title'] = esc_html( $tab['title'] );
+			if ( ! is_array( $section ) || empty( $section ) ) {
+				continue;
+			}
 
-		return $tab;
-	}
+			foreach ( $section as $id => $s ) { // $id: Section ID.
 
-	/**
-	 * The function method to sanitize sections array.
-	 *
-	 * @since 1.1.3
-	 * @access protected
-	 *
-	 * @param array $section The section ID, title, etc.
-	 * @return array
-	 */
-	protected function sanitize_sections( array $section ) {
+				if ( ! is_array( $s ) || empty( $s ) ) {
+					continue;
+				}
 
-		$section = wp_parse_args( $section, array(
-			'id' => '',
-			'title' => '',
-			'description' => '',
-		) );
+				$arr[] = array_merge( array(
+					'tab' => $tab,
+					'id' => $id,
+				), $s );
+			}
+		}
 
-		$section['id'] = sanitize_key( $section['id'] );
-		$section['title'] = esc_html( $section['title'] );
-		$section['description'] = esc_html( $section['description'] );
+		$arr = $this->remove_duplicate_values( 'id', $arr );
 
-		return $section;
+		$sections = array();
+		foreach ( $arr as $val ) {
+
+			$tab = $val['tab'];
+			$id  = $val['id'];
+
+			unset( $val['tab'] );
+			unset( $val['id'] );
+
+			$sections[ $tab ][ $id ] = $val;
+		}
+
+		return $sections;
 	}
 
 	/**
