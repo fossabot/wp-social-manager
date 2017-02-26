@@ -35,7 +35,7 @@ class Validation {
 		 * Return early, if the value is not an array or the value
 		 * is not an Associative array.
 		 */
-		if ( ! is_array( $input ) || ! $this->is_array_associative( $input ) ) {
+		if ( ! is_array( $input ) || ! is_array_associative( $input ) ) {
 			return array();
 		}
 
@@ -221,36 +221,12 @@ class Validation {
 
 		$selection = array();
 
-		if ( $this->is_array_associative( $inputs ) ) {
-			$inputs = array_keys( $inputs );
-		}
+		foreach ( $options as $site => $label ) {
 
-		foreach ( $inputs as $key => $value ) {
-
-			$value = sanitize_key( $value );
-			if ( array_key_exists( $value, $options ) ) {
-				$selection[] = $value;
-			}
+			$site = sanitize_key( $site );
+			$selection[ $site ] = array_key_exists( $site, $inputs ) ? 'on' : '';
 		}
 
 		return $selection;
-	}
-
-	/**
-	 * Function utility to check if the array is sequential or associative.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param array $arr The array to check.
-	 * @return boolean Return true if it is sequential, otherwise false.
-	 */
-	final public function is_array_associative( array $arr ) {
-
-		if ( ! is_array( $arr ) || empty( $arr ) ) {
-			return false;
-		};
-
-		return array_keys( $arr ) !== range( 0, count( $arr ) - 1 );
 	}
 }
