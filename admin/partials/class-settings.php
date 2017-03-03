@@ -1092,4 +1092,33 @@ final class Settings {
 
 		return array_values( $arr );
 	}
+
+	/**
+	 * Enable the 'get_option' to return default value along with the saved value in the database.
+	 *
+	 * @since 1.1.3
+	 * @access protected
+	 *
+	 * @param string $option_slug The option key.
+	 * @param array  $fields      The fields data.
+	 * @return void
+	 */
+	protected function option_defaults( $option_slug = '', array $fields ) {
+
+		$default = array();
+		foreach ( $fields as $key => $value ) {
+			$default[ $key ] = isset( $value['default'] ) ? $value['default'] : null;
+		}
+
+		$options = get_option( $option_slug );
+		$value   = $options ? wp_parse_args_recursive( $options, $default ) : $default;
+
+		add_filter( "default_option_{$option_slug}", function( $v, $o ) use ( $value ) {
+			return $value;
+		}, 10, 2 );
+
+		add_filter( "option_{$option_slug}", function( $v, $o ) use ( $value ) {
+			return $value;
+		}, 10, 2 );
+	}
 }
