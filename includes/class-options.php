@@ -27,6 +27,7 @@ final class Options {
 	 * Options: Social Profiles and Pages.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.3 - Remove 'reddit', 'dribbble', 'behance', 'github', 'codepen'.
 	 * @access public
 	 *
 	 * @param string $slug The social media slug (e.g. `facebook`, `twitter`, etc.).
@@ -72,31 +73,6 @@ final class Options {
 				'url' => 'https://www.youtube.com/user/',
 				'description' => sprintf( esc_html__( 'Youtube channel (e.g. %s)', 'ninecodes-social-manager' ), '<code>BuzzFeedVideo</code>' ),
 			),
-			'reddit' => array(
-				'label' => 'Reddit',
-				'url' => 'https://www.reddit.com/user/',
-				'description' => sprintf( esc_html__( 'Reddit profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>Unidan</code>' ),
-			),
-			'dribbble' => array(
-				'label' => 'Dribbble',
-				'url' => 'https://dribbble.com/',
-				'description' => sprintf( esc_html__( 'Dribbble portfolio (e.g. %s)', 'ninecodes-social-manager' ), '<code>simplebits</code>' ),
-			),
-			'behance' => array(
-				'label' => 'Behance',
-				'url' => 'https://www.behance.net/',
-				'description' => sprintf( esc_html__( 'Behance portfolio (e.g. %s)', 'ninecodes-social-manager' ), '<code>amocci</code>' ),
-			),
-			'github' => array(
-				'label' => 'Github',
-				'url' => 'https://github.com/',
-				'description' => sprintf( esc_html__( 'Github repository (e.g. %s)', 'ninecodes-social-manager' ), '<code>tfirdaus</code>' ),
-			),
-			'codepen' => array(
-				'label' => 'CodePen',
-				'url' => 'https://codepen.io/',
-				'description' => sprintf( esc_html__( 'CodePen profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>stacy</code>' ),
-			),
 		);
 
 		/**
@@ -110,7 +86,7 @@ final class Options {
 		 *
 		 * @var array
 		 */
-		$profiles = apply_filters( 'ninecodes_social_manager_options',  $profiles, 'profiles' );
+		$profiles = apply_filters( 'ninecodes_social_manager_options', $profiles, 'profiles' );
 
 		/**
 		 * Sanitize the Profiles

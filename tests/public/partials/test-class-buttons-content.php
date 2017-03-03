@@ -80,7 +80,6 @@ class TestButtonsContent extends WP_UnitTestCase {
 
 				unset( $icons['facebook'] );
 				unset( $icons['twitter'] );
-				unset( $icons['dribbble'] );
 			}
 
 			return $icons;
@@ -89,11 +88,9 @@ class TestButtonsContent extends WP_UnitTestCase {
 		// ButtonsImage should have not these removed keys.
 		$this->assertArrayNotHasKey( 'facebook', $this->buttons_content->get_buttons_icons() );
 		$this->assertArrayNotHasKey( 'twitter', $this->buttons_content->get_buttons_icons() );
-		$this->assertArrayNotHasKey( 'dribbble', $this->buttons_content->get_buttons_icons() );
 
 		// ButtonsImage should have theses removed keys.
 		$this->assertArrayHasKey( 'facebook', $this->buttons_image->get_buttons_icons() );
 		$this->assertArrayHasKey( 'twitter', $this->buttons_image->get_buttons_icons() );
-		$this->assertArrayHasKey( 'dribbble', $this->buttons_image->get_buttons_icons() );
 	}
 }
