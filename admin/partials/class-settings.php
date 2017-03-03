@@ -397,6 +397,10 @@ final class Settings {
 						),
 					);
 					break;
+
+				default:
+					$sections[ $tab ] = array();
+					break;
 			}
 
 			/**
@@ -471,7 +475,7 @@ final class Settings {
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
-		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'accounts', 'profiles' );
+		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'profiles', 'accounts' );
 
 		/**
 		 * Removes duplicate values from an array.
@@ -479,6 +483,13 @@ final class Settings {
 		 * @var array
 		 */
 		$fields = array_unique( $fields, SORT_REGULAR );
+
+		/**
+		 * Filter the option output.
+		 *
+		 * @since 1.1.3
+		 */
+		$this->option_defaults( "{$this->option_slug}_profiles", $fields );
 
 		/**
 		 * Regiter the fields in "Accounts" > "Profiles".
@@ -508,14 +519,16 @@ final class Settings {
 				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
 				'type' => 'multicheckbox',
 				'options' => Options::button_sites( 'content' ),
-				'default' => array_keys( Options::button_sites( 'content' ) ),
+				'default' => array_map( function( $value ) {
+					return 'on';
+				}, Options::button_sites( 'content' ) ),
 			),
 			'post_types' => array(
 				'type' => 'multicheckbox',
 				'label' => esc_html__( 'Buttons Visibility', 'ninecodes-social-manager' ),
 				'description' => wp_kses( sprintf( __( 'Select the %s that are allowed to show the social media buttons.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 				'options' => Options::post_types(),
-				'default' => array( 'post' ),
+				'default' => array( 'post' => 'on' ),
 			),
 			'view' => array(
 				'label' => esc_html__( 'Buttons Views', 'ninecodes-social-manager' ),
@@ -549,7 +562,7 @@ final class Settings {
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
-		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'buttons', 'buttons_content' );
+		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'buttons_content', 'buttons' );
 
 		/**
 		 * Removes duplicate values from an array.
@@ -557,6 +570,13 @@ final class Settings {
 		 * @var array
 		 */
 		$fields = array_unique( $fields, SORT_REGULAR );
+
+		/**
+		 * Filter the option output.
+		 *
+		 * @since 1.1.3
+		 */
+		$this->option_defaults( "{$this->option_slug}_buttons_content", $fields );
 
 		/**
 		 * Register the fields in "Buttons" > "Buttons Content".
@@ -592,7 +612,9 @@ final class Settings {
 				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
 				'type' => 'multicheckbox',
 				'options' => Options::button_sites( 'image' ),
-				'default' => array_keys( Options::button_sites( 'image' ) ),
+				'default' => array_map( function( $value ) {
+					return 'on';
+				}, Options::button_sites( 'image' ) ),
 				'class' => 'sharing-image-setting hide-if-js',
 			),
 			'post_types' => array(
@@ -600,7 +622,7 @@ final class Settings {
 				'description' => wp_kses( sprintf( __( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 				'type' => 'multicheckbox',
 				'options' => Options::post_types(),
-				'default' => array( 'post' ),
+				'default' => array( 'post' => 'on' ),
 				'class' => 'sharing-image-setting hide-if-js',
 			),
 			'view' => array(
@@ -623,7 +645,7 @@ final class Settings {
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
-		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'buttons', 'buttons_image' );
+		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'buttons_image', 'buttons' );
 
 		/**
 		 * Removes duplicate values from an array.
@@ -631,6 +653,13 @@ final class Settings {
 		 * @var array
 		 */
 		$fields = array_unique( $fields, SORT_REGULAR );
+
+		/**
+		 * Filter the option output.
+		 *
+		 * @since 1.1.3
+		 */
+		$this->option_defaults( "{$this->option_slug}_buttons_image", $fields );
 
 		/**
 		 * Register the fields in "Buttons" > "Buttons Image".
@@ -720,6 +749,13 @@ final class Settings {
 		$fields = array_unique( $fields, SORT_REGULAR );
 
 		/**
+		 * Filter the option output.
+		 *
+		 * @since 1.1.3
+		 */
+		$this->option_defaults( "{$this->option_slug}_metas", $fields );
+
+		/**
 		 * Register the fields in "Metas" > "Metas Site".
 		 *
 		 * @var array
@@ -766,7 +802,7 @@ final class Settings {
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
-		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'advanced', 'enqueue' );
+		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'enqueue', 'advanced' );
 
 		/**
 		 * Removes duplicate values from an array.
@@ -774,6 +810,13 @@ final class Settings {
 		 * @var array
 		 */
 		$fields = array_unique( $fields, SORT_REGULAR );
+
+		/**
+		 * Filter the option output.
+		 *
+		 * @since 1.1.3
+		 */
+		$this->option_defaults( "{$this->option_slug}_enqueue", $fields );
 
 		/**
 		 * Register the fields in "Advanced" > "Enqueue".
@@ -827,7 +870,7 @@ final class Settings {
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
-		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'advanced', 'modes' );
+		$fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $fields, 'modes', 'advanced' );
 
 		/**
 		 * Removes duplicate values from an array.
@@ -835,6 +878,13 @@ final class Settings {
 		 * @var array
 		 */
 		$fields = array_unique( $fields, SORT_REGULAR );
+
+		/**
+		 * Filter the option output.
+		 *
+		 * @since 1.1.3
+		 */
+		$this->option_defaults( "{$this->option_slug}_modes", $fields );
 
 		/**
 		 * Register the fields in "Advanced" > "Enqueue".
@@ -990,6 +1040,8 @@ final class Settings {
 	/**
 	 * The utility function to remove duplicate keys in the Tabs and Sections.
 	 *
+	 * NOTE This functionality should be merged to `wp-settings`.
+	 *
 	 * @since 1.1.3
 	 * @access public
 	 *
@@ -1018,6 +1070,11 @@ final class Settings {
 			}
 		}
 
+		/**
+		 * Section with the same id added later must be removed.
+		 *
+		 * @var array
+		 */
 		$arr = $this->remove_duplicate_values( 'id', $arr );
 
 		$sections = array();
@@ -1037,6 +1094,8 @@ final class Settings {
 
 	/**
 	 * Sort out the tabs for possible duplicate values in the Tabs and Sections.
+	 *
+	 * NOTE This functionality should be merged to `wp-settings`.
 	 *
 	 * @since 1.1.3
 	 * @access protected
@@ -1065,6 +1124,8 @@ final class Settings {
 
 	/**
 	 * The utility function to remove duplicate keys in the Tabs and Sections.
+	 *
+	 * NOTE This functionality should be merged to `wp-settings`.
 	 *
 	 * @since 1.1.3
 	 * @access protected
