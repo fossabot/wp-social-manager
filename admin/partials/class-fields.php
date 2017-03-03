@@ -206,6 +206,7 @@ final class Fields extends CustomFields {
 
 		$args['type'] = 'text'; // Revert the type back to 'text'.
 		$args['attr']['class'] = 'field-text-profile code';
+		$args['attr']['data-url'] = trailingslashit( $args['attr']['data-url'] );
 
 		$args  = $this->get_arguments( $args ); // Escapes all attributes.
 
