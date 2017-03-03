@@ -100,6 +100,10 @@ final class ViewPublic {
 	 */
 	function __construct( Plugin $plugin ) {
 
+		if ( is_admin() ) {
+			return;
+		}
+
 		$this->plugin = $plugin;
 		$this->plugin_slug = $plugin->get_slug();
 		$this->option_slug = $plugin->get_opts();
