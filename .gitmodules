@@ -10,3 +10,6 @@
 [submodule "includes/wp-settings"]
 	path = includes/wp-settings
 	url = https://tfirdaus@github.com/ninecodes/wp-settings
+[submodule "includes/bb-metabox-extend"]
+	path = includes/bb-metabox-extend
+	url = https://tfirdaus@github.com/tfirdaus/bb-extend
