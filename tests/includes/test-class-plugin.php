@@ -207,13 +207,13 @@ class TestPlugin extends WP_UnitTestCase {
 		// Count, in case we will add more in the future.
 		$this->assertEquals( 7, count( $buttons_content ) );
 
-		$this->assertTrue( in_array( 'facebook', $buttons_content, true ) );
-		$this->assertTrue( in_array( 'twitter', $buttons_content, true ) );
-		$this->assertTrue( in_array( 'googleplus', $buttons_content, true ) );
-		$this->assertTrue( in_array( 'pinterest', $buttons_content, true ) );
-		$this->assertTrue( in_array( 'linkedin', $buttons_content, true ) );
-		$this->assertTrue( in_array( 'reddit', $buttons_content, true ) );
-		$this->assertTrue( in_array( 'email', $buttons_content, true ) );
+		$this->assertTrue( key_exists( 'facebook', $buttons_content ) );
+		$this->assertTrue( key_exists( 'twitter', $buttons_content ) );
+		$this->assertTrue( key_exists( 'googleplus', $buttons_content ) );
+		$this->assertTrue( key_exists( 'pinterest', $buttons_content ) );
+		$this->assertTrue( key_exists( 'linkedin', $buttons_content ) );
+		$this->assertTrue( key_exists( 'reddit', $buttons_content ) );
+		$this->assertTrue( key_exists( 'email', $buttons_content ) );
 	}
 
 	/**
@@ -231,6 +231,6 @@ class TestPlugin extends WP_UnitTestCase {
 		// Count, in case we will add more in the future.
 		$this->assertEquals( 1, count( $buttons_image ) );
 
-		$this->assertTrue( in_array( 'pinterest', $buttons_image, true ) );
+		$this->assertTrue( key_exists( 'pinterest', $buttons_image ) );
 	}
 }

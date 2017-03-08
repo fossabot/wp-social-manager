@@ -242,7 +242,6 @@ class TestOptions extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'linkedin', $content );
 		$this->assertArrayHasKey( 'reddit', $content );
 		$this->assertArrayHasKey( 'email', $content );
-
 		$image = Options::button_sites( 'image' ); // Button image keys.
 
 		$this->assertEquals( 1, count( $image ) );

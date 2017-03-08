@@ -82,7 +82,7 @@ class Endpoints {
 		$buttons = Options::button_sites( 'content' );
 
 		foreach ( $buttons as $site => $label ) {
-			if ( ! in_array( $site, (array) $includes, true ) ) {
+			if ( ! key_exists( $site, (array) $includes ) ) {
 				unset( $buttons[ $site ] );
 			}
 		}

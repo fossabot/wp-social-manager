@@ -54,14 +54,7 @@ class TestSettings extends WP_UnitTestCase {
 		$this->assertEquals( 10, has_action( 'admin_init', array( $this->settings, 'setting_setups' ) ) );
 		$this->assertEquals( 15, has_action( 'admin_init', array( $this->settings, 'setting_tabs' ) ) );
 		$this->assertEquals( 20, has_action( 'admin_init', array( $this->settings, 'setting_sections' ) ) );
-
-		$this->assertEquals( 25, has_action( 'admin_init', array( $this->settings, 'setting_fields_profiles' ) ) );
-		$this->assertEquals( 25, has_action( 'admin_init', array( $this->settings, 'setting_fields_buttons_content' ) ) );
-		$this->assertEquals( 25, has_action( 'admin_init', array( $this->settings, 'setting_fields_buttons_image' ) ) );
-		$this->assertEquals( 25, has_action( 'admin_init', array( $this->settings, 'setting_fields_metas_site' ) ) );
-		$this->assertEquals( 25, has_action( 'admin_init', array( $this->settings, 'setting_fields_enqueue' ) ) );
-		$this->assertEquals( 25, has_action( 'admin_init', array( $this->settings, 'setting_fields_modes' ) ) );
-
+		$this->assertEquals( 25, has_action( 'admin_init', array( $this->settings, 'setting_fields' ) ) );
 		$this->assertEquals( 30, has_action( 'admin_init', array( $this->settings, 'setting_init' ) ) );
 	}
 

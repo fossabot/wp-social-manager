@@ -332,10 +332,11 @@ final class ViewPublic {
 
 			$post_types_content = $this->plugin->get_option( 'buttons_content', 'post_types' );
 			$post_types_image = isset( $buttons_image['enabled'] ) && 'on' === $buttons_image['enabled'] ? $buttons_image['post_types'] : array();
-			$post_types = array_unique( array_merge(
+
+			$post_types = array_merge(
 				$post_types_content,
 				$post_types_image
-			) );
+			);
 
 			if ( empty( $post_types ) || ! is_singular( $post_types ) ) {
 				$active = false;

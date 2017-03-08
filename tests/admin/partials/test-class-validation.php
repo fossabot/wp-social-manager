@@ -167,9 +167,9 @@ class TestValidation extends WP_UnitTestCase {
 		$this->assertEquals( 'on', $this->validation->validate_checkbox( true ) ); // bool.
 
 		// Falsy.
-		$this->assertEmpty( $this->validation->validate_checkbox( false ) );
-		$this->assertEmpty( $this->validation->validate_checkbox( null ) );
-		$this->assertEmpty( $this->validation->validate_checkbox( '' ) );
+		$this->assertEquals( 'off', $this->validation->validate_checkbox( false ) );
+		$this->assertEquals( 'off', $this->validation->validate_checkbox( null ) );
+		$this->assertEquals( 'off', $this->validation->validate_checkbox( '' ) );
 	}
 
 	/**

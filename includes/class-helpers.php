@@ -55,10 +55,6 @@ class Helpers {
 			'googleplus' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-googleplus'/></svg>",
 			'youtube' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-youtube'/></svg>",
 			'reddit' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-reddit'/></svg>",
-			'dribbble' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-dribbble'/></svg>",
-			'behance' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-behance'/></svg>",
-			'github' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-github'/></svg>",
-			'codepen' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-codepen'/></svg>",
 			'email' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-email'/></svg>",
 		);
 
