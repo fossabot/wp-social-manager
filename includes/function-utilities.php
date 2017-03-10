@@ -94,3 +94,29 @@ function is_array_associative( array $arr ) {
 
 	return array_keys( $arr ) !== range( 0, count( $arr ) - 1 );
 }
+
+/**
+ * Merge args recursively.
+ *
+ * @since 1.1.3
+ *
+ * @param array $a Value to merge with $defaults.
+ * @param array $b Array that serves as the defaults.
+ * @return array
+ */
+function wp_parse_args_recursive( &$a, $b ) {
+
+	$a = (array) $a;
+	$b = (array) $b;
+	$result = $b;
+
+	foreach ( $a as $k => &$v ) {
+		if ( is_array( $v ) && isset( $result[ $k ] ) ) {
+			$result[ $k ] = wp_parse_args_recursive( $v, $result[ $k ] );
+		} else {
+			$result[ $k ] = $v;
+		}
+	}
+
+	return $result;
+}
