@@ -36,3 +36,6 @@ script:
 
 after_script:
   - source $DEV_LIB_PATH/travis.after_script.sh
+
+notifications:
+  slack: hkdc:yVT7G0KeSo1iXax8lgxtjt8u
