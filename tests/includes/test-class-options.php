@@ -256,10 +256,18 @@ class TestOptions extends WP_UnitTestCase {
 
 			if ( 'button_sites' === $context ) {
 				$value['content'] = array(
-					'ello' => 'Ello',
+					'facebook' => 'Facebook', // Bad.
+					'twitter' => array(
+						'label' => 'Twitter',
+						'endpoint' => 'https://twitter.com/intent/tweet',
+					),
 				);
 				$value['image'] = array(
-					'facebook' => 'Facebook',
+					'ello' => 'Ello', // Bad.
+					'pinterest' => array(
+						'label' => 'Pinterest',
+						'endpoint' => 'https://www.pinterest.com/pin/create/bookmarklet/',
+					),
 				);
 			}
 
@@ -269,14 +277,18 @@ class TestOptions extends WP_UnitTestCase {
 		$content = Options::button_sites( 'content' );
 		$image = Options::button_sites( 'image' );
 
-		$this->assertArrayHasKey( 'ello', $content );
-		$this->assertEquals( 'Ello', $content['ello'] );
+		$this->assertArrayNotHasKey( 'facebok', $content );
+		$this->assertArrayHasKey( 'twitter', $content );
+		$this->assertEquals( 'Twitter', $content['twitter']['label'] );
+		$this->assertEquals( 'https://twitter.com/intent/tweet', $content['twitter']['endpoint'] );
 
-		$this->assertArrayHasKey( 'facebook', $image );
-		$this->assertEquals( 'Facebook', $image['facebook'] );
+		$this->assertArrayNotHasKey( 'ello', $image );
+		$this->assertArrayHasKey( 'pinterest', $image );
+		$this->assertEquals( 'Pinterest', $image['pinterest']['label'] );
+		$this->assertEquals( 'https://www.pinterest.com/pin/create/bookmarklet/', $image['pinterest']['endpoint'] );
 
-		unset( $content['ello'] );
-		unset( $image['facebook'] );
+		unset( $content['twitter'] );
+		unset( $image['pinterest'] );
 
 		/**
 		 * Test the filter hook for bad Social Media buttons (Bad Examples).
@@ -287,10 +299,16 @@ class TestOptions extends WP_UnitTestCase {
 
 			if ( 'button_sites' === $context ) {
 				$value['content'] = array(
-					'ello' => '<script>Ello</script>',
+					'twitter' => array(
+						'label' => '<script>Twitter</script>',
+						'endpoint' => 'https://twitter.com/intent/tweet',
+					),
 				);
 				$value['image'] = array(
-					'facebook' => '<script>Facebook</script>',
+					'pinterest' => array(
+						'label' => '<script>Pinterest</script>',
+						'endpoint' => 'https://www.pinterest.com/pin/create/bookmarklet/',
+					),
 				);
 			}
 
@@ -300,41 +318,14 @@ class TestOptions extends WP_UnitTestCase {
 		$content = Options::button_sites( 'content' );
 		$image = Options::button_sites( 'image' );
 
-		$this->assertArrayHasKey( 'ello', $content );
-		$this->assertEquals( '&lt;script&gt;Ello&lt;/script&gt;', $content['ello'] ); // The output must be sanitized.
+		$this->assertArrayHasKey( 'twitter', $content ); // Since it does not have label and endpoint.
+		$this->assertEquals( '&lt;script&gt;Twitter&lt;/script&gt;', $content['twitter']['label'] ); // The output must be sanitized.
 
-		$this->assertArrayHasKey( 'facebook', $image );
-		$this->assertEquals( '&lt;script&gt;Facebook&lt;/script&gt;', $image['facebook'] ); // The output must be sanitized.
+		$this->assertArrayHasKey( 'pinterest', $image );
+		$this->assertEquals( '&lt;script&gt;Pinterest&lt;/script&gt;', $image['pinterest']['label'] ); // The output must be sanitized.
 
-		unset( $content['ello'] );
-		unset( $image['facebook'] );
-
-		/**
-		 * Test the filter hook for duplicate Social Media buttons (Bad Examples).
-		 *
-		 * @since 1.1.3
-		 */
-		add_filter( 'ninecodes_social_manager_options', function ( $value, $context ) {
-
-			if ( 'button_sites' === $context ) {
-				$value['content'] = array(
-					'facebook' => 'Facebook', // Exactly the same.
-					'twitter' => 'Tweet', // Same key, different value.
-					'google+' => 'Google+', // Different key, same value.
-				);
-				$value['image'] = array(
-					'pinterest' => 'Pinterest',
-				);
-			}
-
-			return $value;
-		}, 10, 2 );
-
-		$content = Options::button_sites( 'content' );
-		$image = Options::button_sites( 'image' );
-
-		$this->assertEquals( Options::button_sites( 'content' ), $content );
-		$this->assertEquals( Options::button_sites( 'image' ), $image );
+		unset( $content['twitter'] );
+		unset( $image['pinterest'] );
 	}
 
 	/**

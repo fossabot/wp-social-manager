@@ -79,11 +79,10 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 	public function test_get_the_site_social_profile() {
 
 		update_option( 'ncsocman_profiles', array(
-			'facebook' => 'zuck',
-			'twitter' => 'jack',
-			'instagram' => 'jane',
-			'googleplus' => '+john',
-			'github' => 'tfirdaus',
+			'facebook' => 'foo',
+			'twitter' => 'foo',
+			'instagram' => 'foo',
+			'googleplus' => '+foo',
 		) );
 
 		$site_profiles = get_the_site_social_profiles();
@@ -99,24 +98,21 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 		$anchors = $doc->getElementsByTagName( 'a' );
 
 		foreach ( $anchors as $key => $anchor ) {
-
 			$href[] = $anchor->getAttribute( 'href' );
 			$anchor_html[] = $doc->saveXML( $anchor );
 		}
 
 		// Check if the href url pointing to the correct address.
-		$this->assertContains( 'https://www.facebook.com/zuck', $href );
-		$this->assertContains( 'https://twitter.com/jack', $href );
-		$this->assertContains( 'https://instagram.com/jane', $href );
-		$this->assertContains( 'https://plus.google.com/+john', $href );
-		$this->assertContains( 'https://github.com/tfirdaus', $href );
+		$this->assertContains( 'https://www.facebook.com/foo', $href );
+		$this->assertContains( 'https://twitter.com/foo', $href );
+		$this->assertContains( 'https://instagram.com/foo', $href );
+		$this->assertContains( 'https://plus.google.com/+foo', $href );
 
 		// Check the HTML markup. (Default: Icon).
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-facebook\" href=\"https://www.facebook.com/zuck\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-facebook\"/></svg></a>", $anchor_html );
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-twitter\" href=\"https://twitter.com/jack\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-twitter\"/></svg></a>", $anchor_html );
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-instagram\" href=\"https://instagram.com/jane\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-instagram\"/></svg></a>", $anchor_html );
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-googleplus\" href=\"https://plus.google.com/+john\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-googleplus\"/></svg></a>", $anchor_html );
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-github\" href=\"https://github.com/tfirdaus\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-github\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-facebook\" href=\"https://www.facebook.com/foo\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-facebook\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-twitter\" href=\"https://twitter.com/foo\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-twitter\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-instagram\" href=\"https://instagram.com/foo\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-instagram\"/></svg></a>", $anchor_html );
+		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-googleplus\" href=\"https://plus.google.com/+foo\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-googleplus\"/></svg></a>", $anchor_html );
 
 		delete_option( 'ncsocman_profiles' );
 	}
@@ -136,7 +132,6 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 			'twitter' => 'foo',
 			'instagram' => 'foo',
 			'googleplus' => '+foo',
-			'github' => 'foo',
 		) );
 
 		$site_profiles = get_the_site_social_profiles( array( 'view' => 'text' ) );
@@ -159,7 +154,6 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-twitter\" href=\"https://twitter.com/foo\" target=\"_blank\">Twitter</a>", $anchor_html );
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-instagram\" href=\"https://instagram.com/foo\" target=\"_blank\">Instagram</a>", $anchor_html );
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-googleplus\" href=\"https://plus.google.com/+foo\" target=\"_blank\">Google+</a>", $anchor_html );
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-github\" href=\"https://github.com/foo\" target=\"_blank\">Github</a>", $anchor_html );
 
 		delete_option( 'ncsocman_profiles' );
 	}
@@ -177,7 +171,6 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 		update_option( 'ncsocman_profiles', array(
 			'facebook' => 'yo',
 			'twitter' => 'yeap',
-			'dribbble' => 'cool',
 		) );
 
 		$site_profiles = get_the_site_social_profiles( array( 'view' => 'icon-text' ) );
@@ -199,8 +192,6 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-facebook\" href=\"https://www.facebook.com/yo\" target=\"_blank\"><span class=\"{$prefix}-profiles__item-icon\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-facebook\"/></svg></span><span class=\"{$prefix}-profiles__item-text\">Facebook</span></a>", $anchor_html );
 
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-twitter\" href=\"https://twitter.com/yeap\" target=\"_blank\"><span class=\"{$prefix}-profiles__item-icon\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-twitter\"/></svg></span><span class=\"{$prefix}-profiles__item-text\">Twitter</span></a>", $anchor_html );
-
-		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-dribbble\" href=\"https://dribbble.com/cool\" target=\"_blank\"><span class=\"{$prefix}-profiles__item-icon\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-dribbble\"/></svg></span><span class=\"{$prefix}-profiles__item-text\">Dribbble</span></a>", $anchor_html );
 
 		delete_option( 'ncsocman_profiles' );
 	}

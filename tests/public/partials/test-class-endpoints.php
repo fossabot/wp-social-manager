@@ -43,16 +43,6 @@ class TestEndpoints extends WP_UnitTestCase {
 
 		$metas = new Metas( $plugin );
 		$this->endpoints = new Endpoints( $plugin, $metas );
-
-		// Add the buttons content option value.
-		add_option( $plugin->get_opts() . '_buttons_content', array(
-			'includes' => array_keys( Options::button_sites( 'content' ) ),
-		) );
-
-		// Add the buttons image option value.
-		add_option( $plugin->get_opts() . '_buttons_image', array(
-			'includes' => array_keys( Options::button_sites( 'image' ) ),
-		) );
 	}
 
 	/**

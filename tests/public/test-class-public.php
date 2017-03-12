@@ -190,10 +190,16 @@ class TestPublic extends WP_UnitTestCase {
 		 */
 		update_option( $this->option_slug . '_buttons_image', array(
 			'enabled' => '',
-			'post_types' => array(),
+			'post_types' => array(
+				'post' => false,
+				'page' => false,
+			),
 		) );
 		update_option( $this->option_slug . '_buttons_content', array(
-			'post_types' => array(),
+			'post_types' => array(
+				'post' => false,
+				'page' => false,
+			),
 		) );
 
 		$this->go_to( '?p=' . $post_id );

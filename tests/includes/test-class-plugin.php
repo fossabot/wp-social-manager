@@ -57,13 +57,6 @@ class TestPlugin extends WP_UnitTestCase {
 
 		$this->plugin = new Plugin();
 		$this->plugin->initialize();
-
-		add_option( 'ncsocman_buttons_content', array(
-			'includes' => array_keys( Options::button_sites( 'content' ) ),
-		) );
-		add_option( 'ncsocman_buttons_image', array(
-			'includes' => array_keys( Options::button_sites( 'image' ) ),
-		) );
 	}
 
 	/**
