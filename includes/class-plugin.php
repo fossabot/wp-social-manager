@@ -49,7 +49,7 @@ final class Plugin {
 	 * @access protected
 	 * @var string
 	 */
-	protected $version = '1.1.2';
+	protected $version = '1.2.0-alpha';
 
 	/**
 	 * The path directory relative to the current file.
@@ -152,6 +152,15 @@ final class Plugin {
 		$this->requires();
 		$this->setups();
 		$this->hooks();
+
+		/**
+		 * Fires after the plugin has been initialized.
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param Plugin $this The Plugin class instance.
+		 */
+		do_action( 'ninecodes_social_manager_init', $this );
 	}
 
 	/**
