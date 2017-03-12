@@ -359,19 +359,16 @@ class Endpoints {
 	 */
 	protected static function get_endpoint_base( $of, $site ) {
 
-		$endpoints['content'] = array(
-			'facebook' => 'https://www.facebook.com/sharer/sharer.php',
-			'twitter' => 'https://twitter.com/intent/tweet',
-			'googleplus' => 'https://plus.google.com/share',
-			'pinterest' => 'https://www.pinterest.com/pin/create/bookmarklet/',
-			'linkedin' => 'https://www.linkedin.com/shareArticle',
-			'reddit' => 'https://www.reddit.com/submit',
-			'email' => 'mailto:',
-		);
+		if ( ! in_array( $of, array( 'content', 'image' ), true ) ) {
+			return;
+		}
 
-		$endpoints['image'] = array(
-			'pinterest' => 'https://www.pinterest.com/pin/create/bookmarklet/',
-		);
+		$button_sites = Options::button_sites( $of );
+		$endpoints = array();
+
+		foreach ( $button_sites as $key => $value ) {
+			$endpoints[ $of ][ $key ] = $value['endpoint'];
+		}
 
 		return isset( $endpoints[ $of ][ $site ] ) ? $endpoints[ $of ][ $site ] : null;
 	}
