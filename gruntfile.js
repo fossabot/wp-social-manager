@@ -258,9 +258,12 @@ module.exports = function(grunt) {
 					},{
 						pattern: /\protected \$version = (.*)/g,
 						replacement: 'protected $version = \'<%= pkg.version %>\';'
-					}, {
+					},{
 						pattern: /\Requires at least: (.*)/g,
 						replacement: 'Requires at least: <%= pkg.wordpress.requires_at_least %>'
+					},{
+						pattern: /\Description: (.*)/g,
+						replacement: 'Description: <%= pkg.description %>'
 					},{
 						pattern: /\'WordPress\' => \'(.*)\'/g,
 						replacement: '\'WordPress\' => \'<%= pkg.wordpress.requires_at_least %>\''
