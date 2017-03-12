@@ -1235,24 +1235,30 @@ final class Settings {
 	 * @since 1.1.3
 	 * @access protected
 	 *
-	 * @param string $option_slug The option key.
+	 * @param string $option_name The option name.
 	 * @param array  $fields      The fields data.
 	 * @return void
 	 */
-	protected function option_defaults( $option_slug = '', array $fields ) {
+	protected function option_defaults( $option_name = '', array $fields ) {
 
 		$default = array();
 		foreach ( $fields as $key => $value ) {
-			$default[ $key ] = isset( $value['default'] ) ? $value['default'] : null;
+			$default[ $key ] = isset( $value['default'] ) ? $value['default'] : '';
 		}
 
-		add_filter( "default_option_{$option_slug}", function( $option, $option_name ) use ( $default ) {
-			return $default;
-		}, 10, 2 );
+		/**
+		 * Create the option if it is not there yet.
+		 *
+		 * @var mixed
+		 */
+		$option = get_option( $option_name );
+		if ( false === $option ) {
+			add_option( $option_name, $default );
+		}
 
-		add_filter( "option_{$option_slug}", function( $option, $option_name ) use ( $default ) {
+		add_filter( "option_{$option_name}", function( $option ) use ( $default ) {
 			$value = $option ? wp_parse_args_recursive( $option, $default ) : $default;
 			return $value;
-		}, 10, 2 );
+		}, 10 );
 	}
 }
