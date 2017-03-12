@@ -4,7 +4,7 @@
   "version": "1.2.0-alpha",
   "wordpress": {
     "requires_at_least": "4.7",
-    "tested_up_to": "4.7"
+    "tested_up_to": "4.7.3"
   },
   "description": "Lightweight, clean and optimized social media plugin for WordPress.",
   "scripts": {
