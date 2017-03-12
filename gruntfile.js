@@ -261,6 +261,9 @@ module.exports = function(grunt) {
 					}, {
 						pattern: /\Requires at least: (.*)/g,
 						replacement: 'Requires at least: <%= pkg.wordpress.requires_at_least %>'
+					},{
+						pattern: /\'WordPress\' => \'(.*)\'/g,
+						replacement: '\'WordPress\' => \'<%= pkg.wordpress.requires_at_least %>\''
 					}, {
 						pattern: /\Tested up to: (.*)/g,
 						replacement: 'Tested up to: <%= pkg.wordpress.tested_up_to %>'
