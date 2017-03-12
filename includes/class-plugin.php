@@ -263,6 +263,31 @@ final class Plugin {
 		$this->admin = new ViewAdmin( $this );
 		$this->public = new ViewPublic( $this );
 		$this->widgets = new Widgets( $this );
+
+		add_action( 'admin_init', array( $this, 'updates' ) );
+	}
+
+	/**
+	 * Update the version in the database.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function updates() {
+
+		$regex = '/(-[alpha|beta|rc\.\d]+)/';
+		$current_version = preg_replace( $regex, '', $this->version );
+
+		$previous_version = get_option( 'ncsocman_version' );
+		$previous_version = preg_replace( $regex, '', $previous_version );
+
+		update_option( 'ncsocman_version', $current_version );
+
+		if ( version_compare( $previous_version, $current_version, '<' ) || ! get_option( 'ncsocman_previous_version' ) ) {
+			update_option( 'ncsocman_previous_version', $previous_version );
+		}
 	}
 
 	/**
