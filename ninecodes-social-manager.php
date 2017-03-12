@@ -10,7 +10,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Requires at least: 4.7
- * Tested up to: 4.7
+ * Tested up to: 4.7.3
  *
  * Text Domain: ninecodes-social-manager
  * Domain Path: /languages
