@@ -265,18 +265,42 @@ final class Options {
 	 */
 	public static function button_sites( $for = '' ) {
 
-		$sites['content'] = array(
-			'facebook' => 'Facebook',
-			'twitter' => 'Twitter',
-			'googleplus' => 'Google+',
-			'pinterest' => 'Pinterest',
-			'linkedin' => 'LinkedIn',
-			'reddit' => 'Reddit',
-			'email' => 'Email',
+		$button_sites['content'] = array(
+			'facebook' => array(
+				'label' => 'Facebook',
+				'endpoint' => 'https://www.facebook.com/sharer/sharer.php',
+			),
+			'twitter' => array(
+				'label' => 'Twitter',
+				'endpoint' => 'https://twitter.com/intent/tweet',
+			),
+			'googleplus' => array(
+				'label' => 'Google+',
+				'endpoint' => 'https://plus.google.com/share',
+			),
+			'pinterest' => array(
+				'label' => 'Pinterest',
+				'endpoint' => 'https://www.pinterest.com/pin/create/bookmarklet/',
+			),
+			'linkedin' => array(
+				'label' => 'LinkedIn',
+				'endpoint' => 'https://www.linkedin.com/shareArticle',
+			),
+			'reddit' => array(
+				'label' => 'Reddit',
+				'endpoint' => 'https://www.reddit.com/submit',
+			),
+			'email' => array(
+				'label' => 'Email',
+				'endpoint' => 'mailto:',
+			),
 		);
 
-		$sites['image'] = array(
-			'pinterest' => 'Pinterest',
+		$button_sites['image'] = array(
+			'pinterest' => array(
+				'label' => 'Pinterest',
+				'endpoint' => 'https://www.pinterest.com/pin/create/bookmarklet/',
+			),
 		);
 
 		/**
@@ -288,50 +312,28 @@ final class Options {
 		 *
 		 * @var array
 		 */
-		$sites_extra = (array) apply_filters( 'ninecodes_social_manager_options', array(), 'button_sites' );
+		$button_sites = (array) apply_filters( 'ninecodes_social_manager_options', $button_sites, 'button_sites' );
 
-		if ( ! empty( $sites_extra ) ) {
+		if ( isset( $button_sites[ $for ] ) && is_array( $button_sites[ $for ] ) ) {
 
-			$sites_extra = wp_parse_args( $sites_extra, array(
-				'content' => array(),
-				'image' => array(),
-			) );
+			$button_sites_content = $button_sites[ $for ];
 
-			// Remove keys beside 'content' and 'image'.
-			foreach ( $sites_extra as $key => $value ) {
-				if ( ! in_array( $key, array( 'content', 'image' ), true ) ) {
-					unset( $sites_extra[ $key ] );
-				}
-			}
+			foreach ( $button_sites_content as $site => $button ) {
 
-			if ( ! empty( $sites_extra['content'] ) ) {
-
-				// Remove duplicate keys from the Social Media buttons content.
-				foreach ( $sites_extra['content'] as $key => $value ) {
-					if ( in_array( $key, array_keys( $sites['content'] ), true ) ) {
-						unset( $sites_extra['content'][ $key ] );
-					}
+				if ( ! is_array( $button ) || ! isset( $button['label'] ) ||
+					 ! isset( $button['endpoint'] ) || empty( $button['label'] ) || empty( $button['endpoint'] ) ) {
+					unset( $button_sites[ $for ][ $site ] );
+					continue;
 				}
 
-				$extras = array_map( 'esc_html', $sites_extra['content'] );
-				$sites['content'] = array_unique( array_merge( $sites['content'], $extras ), SORT_REGULAR );
-			}
-
-			if ( ! empty( $sites_extra['image'] ) ) {
-
-				// Remove duplicate keys from the Social Media buttons image.
-				foreach ( $sites_extra['image'] as $key => $value ) {
-					if ( in_array( $key, array_keys( $sites['image'] ), true ) ) {
-						unset( $sites_extra['image'][ $key ] );
-					}
-				}
-
-				$extras = array_map( 'esc_html', $sites_extra['image'] );
-				$sites['image'] = array_unique( array_merge( $sites['image'], $extras ), SORT_REGULAR );
+				$button_sites[ $for ][ $site ] = array(
+					'label' => esc_html( $button['label'] ),
+					'endpoint' => esc_url( $button['endpoint'] ),
+				);
 			}
 		}
 
-		return isset( $sites[ $for ] ) ? $sites[ $for ] : $sites;
+		return isset( $button_sites[ $for ] ) ? $button_sites[ $for ] : $button_sites;
 	}
 
 	/**
