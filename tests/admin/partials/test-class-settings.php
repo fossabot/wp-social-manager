@@ -78,7 +78,7 @@ class TestSettings extends WP_UnitTestCase {
 	 * Function to test the Tabs.
 	 *
 	 * @since 1.0.0
-	 * @since 1.1.3 Add test for filter hook 'ninecodes_social_manager_setting_tabs'.
+	 * @since 1.2.0 Add test for filter hook 'ninecodes_social_manager_setting_tabs'.
 	 * @access public
 	 *
 	 * @return void
@@ -91,7 +91,7 @@ class TestSettings extends WP_UnitTestCase {
 		/**
 		 * Test the filter hook to add a new Tabs in the setting page with valid value.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 */
 		add_filter('ninecodes_social_manager_setting_tabs', function ( $tabs ) {
 

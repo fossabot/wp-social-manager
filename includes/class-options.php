@@ -27,7 +27,7 @@ final class Options {
 	 * Options: Social Profiles and Pages.
 	 *
 	 * @since 1.0.0
-	 * @since 1.1.3 - Remove 'reddit', 'dribbble', 'behance', 'github', 'codepen'.
+	 * @since 1.2.0 - Remove 'dribbble', 'behance', 'github', 'codepen'.
 	 * @access public
 	 *
 	 * @param string $slug The social media slug (e.g. `facebook`, `twitter`, etc.).
@@ -85,7 +85,7 @@ final class Options {
 		 *
 		 * This filter allows developer to add or remove Social Media profiles options and the input fields.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context Option context; which option to filter.
 		 *
@@ -98,7 +98,7 @@ final class Options {
 		 *
 		 * Ensure it has the required label, url, and description.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @var array
 		 */
@@ -188,7 +188,7 @@ final class Options {
 		 * This filter allows developer to add new view / style options
 		 * to render the social media buttons.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context Option context; which option to filter.
 		 *
@@ -231,7 +231,7 @@ final class Options {
 		 * This filter allows developer to add new placement options
 		 * to render the social media buttons.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context Option context; which option to filter.
 		 *
@@ -306,7 +306,7 @@ final class Options {
 		/**
 		 * Filter the buttons sites.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context Option context; which option to filter.
 		 *

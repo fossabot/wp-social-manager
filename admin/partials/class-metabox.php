@@ -496,7 +496,7 @@ final class Metabox {
 	/**
 	 * The function utility to get selected post types to display social media buttons.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access protected
 	 *
 	 * @return array

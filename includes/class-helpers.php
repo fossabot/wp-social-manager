@@ -61,7 +61,7 @@ class Helpers {
 		/**
 		 * Filter all icons.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
 		 * @param array  $args 	  An array of arguments.

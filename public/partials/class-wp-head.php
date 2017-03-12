@@ -121,7 +121,7 @@ final class WPHead {
 		/**
 		 * Filter social media meta tags generated in home and archive page.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context is `null`. Filter will affect all meta tags.
 		 *
@@ -138,7 +138,7 @@ final class WPHead {
 		/**
 		 * Filter Open Graph meta tags generated in home and archive page.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta tags to filter.
 		 *
@@ -149,7 +149,7 @@ final class WPHead {
 		/**
 		 * Filter Twitter Cards meta tags generated in home and archive page.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta tags to filter.
 		 *
@@ -191,7 +191,7 @@ final class WPHead {
 		/**
 		 * Filter social media meta tags in the single post.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context is `null`. Filter will affect all meta tags.
 		 *
@@ -213,7 +213,7 @@ final class WPHead {
 		/**
 		 * Filter Open Graph meta tags in the single post.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta tags to filter.
 		 *
@@ -224,7 +224,7 @@ final class WPHead {
 		/**
 		 * Filter Twitter Cards meta tags in the single post.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta tags to filter..
 		 *

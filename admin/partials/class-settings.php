@@ -163,7 +163,7 @@ final class Settings {
 	/**
 	 * List of setting fields to register.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 * @var array
 	 */
@@ -315,7 +315,7 @@ final class Settings {
 		 *
 		 * This filter allows developer to add new tabs on the setting page.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param array $tabs List of registered Tabs in the Setting page.
 		 * @var array
@@ -417,7 +417,7 @@ final class Settings {
 			 *
 			 * This filter allows developer to add or remove new sections on the registered Tabs.
 			 *
-			 * @since 1.1.3
+			 * @since 1.2.0
 			 *
 			 * @param string $tab The Tab ID.
 			 *
@@ -440,7 +440,7 @@ final class Settings {
 	 *
 	 * Add the social media profiles and pages related to this website.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @return array The array of fields added in the Profiles section.
@@ -480,7 +480,7 @@ final class Settings {
 		 * The Filter hook to allow developer to add new field type in
 		 * the Profiles section in "Accounts" (tab) > "Profiles" (section).
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $tab_id 	 The tab id.
 		 * @param string $section_id The section id.
@@ -498,7 +498,7 @@ final class Settings {
 		/**
 		 * Feed the fields default value to `get_option()`
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 */
 		$this->option_defaults( "{$this->option_slug}_profiles", $setting_fields );
 
@@ -522,7 +522,7 @@ final class Settings {
 	 * The setting fields to configure the social media buttons that
 	 * allows people to share, like, or save content of this site.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @return array
@@ -576,7 +576,7 @@ final class Settings {
 		 * The Filter hook to allow developer adding new field type
 		 * in "Buttons" (tab) > "Buttons Content" (section).
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $tab_id 	 The tab id.
 		 * @param string $section_id The section id.
@@ -594,7 +594,7 @@ final class Settings {
 		/**
 		 * Feed the fields default value to `get_option()`
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 */
 		$this->option_defaults( "{$this->option_slug}_buttons_content", $setting_fields );
 
@@ -618,7 +618,7 @@ final class Settings {
 	 * The setting fields to configure the social media buttons shown
 	 * on the content images.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @return array
@@ -670,7 +670,7 @@ final class Settings {
 		 * The Filter hook to allow developer adding new field type
 		 * in "Buttons" (tab) > "Buttons Image" (section).
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $tab_id 	 The tab id.
 		 * @param string $section_id The section id.
@@ -688,7 +688,7 @@ final class Settings {
 		/**
 		 * Feed the fields default value to `get_option()`
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 */
 		$this->option_defaults( "{$this->option_slug}_buttons_image", $setting_fields );
 
@@ -710,7 +710,7 @@ final class Settings {
 	 * Fields: Metas Site.
 	 * The setting fields to configure the meta data and the meta tags.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @return array
@@ -770,7 +770,7 @@ final class Settings {
 		 * The Filter hook to allow developer adding new field type
 		 * in "Metas" (tab) > "Metas Site" (section).
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $tab_id 	 The tab id.
 		 * @param string $section_id The section id.
@@ -788,7 +788,7 @@ final class Settings {
 		/**
 		 * Feed the fields default value to `get_option()`
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 */
 		$this->option_defaults( "{$this->option_slug}_metas", $setting_fields );
 
@@ -809,7 +809,7 @@ final class Settings {
 	/**
 	 * Fields: Enqueue.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @return array
@@ -839,7 +839,7 @@ final class Settings {
 		 * The Filter hook to allow developer adding new field type
 		 * in "Metas" (tab) > "Metas Site" (section).
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $tab_id 	 The tab id.
 		 * @param string $section_id The section id.
@@ -857,7 +857,7 @@ final class Settings {
 		/**
 		 * Feed the fields default value to `get_option()`
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 */
 		$this->option_defaults( "{$this->option_slug}_enqueue", $setting_fields );
 
@@ -878,7 +878,7 @@ final class Settings {
 	/**
 	 * Fields: Buttons Mode
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @see Options
@@ -913,7 +913,7 @@ final class Settings {
 		 * The Filter hook to allow developer adding new field type
 		 * in "Advanced" (tab) > "Modes" (section).
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $tab_id 	 The tab id.
 		 * @param string $section_id The section id.
@@ -931,7 +931,7 @@ final class Settings {
 		/**
 		 * Feed the fields default value to `get_option()`
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 */
 		$this->option_defaults( "{$this->option_slug}_modes", $setting_fields );
 
@@ -952,7 +952,7 @@ final class Settings {
 	/**
 	 * Register fields.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @return array
@@ -1117,7 +1117,7 @@ final class Settings {
 	 *
 	 * NOTE This functionality should be merged to `wp-settings`.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @param array $sections The array.
@@ -1172,7 +1172,7 @@ final class Settings {
 	 *
 	 * NOTE This functionality should be merged to `wp-settings`.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access protected
 	 *
 	 * @param string $key  	The key in the array to search.
@@ -1202,7 +1202,7 @@ final class Settings {
 	 *
 	 * NOTE This functionality should be merged to `wp-settings`.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access protected
 	 *
 	 * @param string $key The key in the array to search.
@@ -1232,7 +1232,7 @@ final class Settings {
 	/**
 	 * Enable the 'get_option' to return default value along with the saved value in the database.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access protected
 	 *
 	 * @param string $option_name The option name.

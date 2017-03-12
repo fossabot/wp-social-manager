@@ -132,7 +132,7 @@ final class Fields extends CustomFields {
 	/**
 	 * Register files (stylesheets or JavaScripts) to load when using the input.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @param array $styles An array of input type.
@@ -188,7 +188,7 @@ final class Fields extends CustomFields {
 	/**
 	 * The function callback to render the Input Profile field.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @param array $args Arguments (e.g. id, section, type, etc.) to render the new interface.
@@ -231,7 +231,7 @@ final class Fields extends CustomFields {
 	/**
 	 * The function callback to render the Text Checkbox field.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @param array $args Arguments (e.g. id, section, type, etc.) to render the new interface.

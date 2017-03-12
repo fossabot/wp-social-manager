@@ -175,7 +175,7 @@ abstract class Buttons {
 		/**
 		 * Filter all icons displayed in the social media buttons.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
 		 * @param array  $args 	  An array of arguments.
@@ -214,7 +214,7 @@ abstract class Buttons {
 	/**
 	 * The function utility to get the button endpoint.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access protected
 	 *
 	 * @param string $site The button site key.

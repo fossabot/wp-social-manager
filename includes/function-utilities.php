@@ -81,7 +81,7 @@ function kses_icon( $data ) {
  *
  * @link http://stackoverflow.com/questions/173400/how-to-check-if-php-array-is-associative-or-sequential
  *
- * @since 1.1.3
+ * @since 1.2.0
  *
  * @param array $arr The array.
  * @return boolean
@@ -98,7 +98,7 @@ function is_array_associative( array $arr ) {
 /**
  * Merge args recursively.
  *
- * @since 1.1.3
+ * @since 1.2.0
  *
  * @param array $a Value to merge with $defaults.
  * @param array $b Array that serves as the defaults.

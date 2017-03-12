@@ -47,7 +47,7 @@ class TestOptions extends WP_UnitTestCase {
 		/**
 		 * Test the filter hook to add a new Social Media profiles.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 */
 		add_filter( 'ninecodes_social_manager_options', function ( $value, $context ) {
 
@@ -111,7 +111,7 @@ class TestOptions extends WP_UnitTestCase {
 	/**
 	 * Test button placements option output.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 * @return void
 	 */
@@ -125,7 +125,7 @@ class TestOptions extends WP_UnitTestCase {
 		/**
 		 * Test the filter hook to add a new Social Media button placements.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 */
 		add_filter( 'ninecodes_social_manager_options', function ( $value, $context ) {
 
@@ -181,7 +181,7 @@ class TestOptions extends WP_UnitTestCase {
 		/**
 		 * Test the filter hook to add a new Social Media button view.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 */
 		add_filter('ninecodes_social_manager_options', function ( $value, $context ) {
 
@@ -250,7 +250,7 @@ class TestOptions extends WP_UnitTestCase {
 		/**
 		 * Test the filter hook to add new Social Media buttons.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 */
 		add_filter('ninecodes_social_manager_options', function ( $value, $context ) {
 
@@ -293,7 +293,7 @@ class TestOptions extends WP_UnitTestCase {
 		/**
 		 * Test the filter hook for bad Social Media buttons (Bad Examples).
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 */
 		add_filter('ninecodes_social_manager_options', function ( $value, $context ) {
 
