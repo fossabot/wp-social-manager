@@ -529,14 +529,19 @@ final class Settings {
 	 */
 	public function setting_fields_buttons_content() {
 
+		/**
+		 * The list of buttons sites registered in the Content.
+		 *
+		 * @var array
+		 */
+		$button_sites = Options::button_sites( 'content' );
+
 		$setting_fields = array(
 			'includes' => array(
 				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
 				'type' => 'multicheckbox',
-				'options' => Options::button_sites( 'content' ),
-				'default' => array_map( function( $value ) {
-					return 'on';
-				}, Options::button_sites( 'content' ) ),
+				'options' => array_map( function( $value ) { return $value['label']; }, $button_sites ), // Return the key => label.
+				'default' => array_map( function( $value ) { return 'on'; }, $button_sites ), // Return the key => 'on'.
 			),
 			'post_types' => array(
 				'type' => 'multicheckbox',
@@ -620,6 +625,13 @@ final class Settings {
 	 */
 	public function setting_fields_buttons_image() {
 
+		/**
+		 * The list of buttons sites registered in the Image.
+		 *
+		 * @var array
+		 */
+		$button_sites = Options::button_sites( 'image' );
+
 		$setting_fields = array(
 			'enabled' => array(
 				'label' => esc_html__( 'Buttons Image Display', 'ninecodes-social-manager' ),
@@ -632,10 +644,8 @@ final class Settings {
 			'includes' => array(
 				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
 				'type' => 'multicheckbox',
-				'options' => Options::button_sites( 'image' ),
-				'default' => array_map( function( $value ) {
-					return 'on';
-				}, Options::button_sites( 'image' ) ),
+				'options' => array_map( function( $value ) { return $value['label']; }, $button_sites ),
+				'default' => array_map( function( $value ) { return 'on'; }, $button_sites ),
 				'class' => 'sharing-image-setting hide-if-js',
 			),
 			'post_types' => array(
