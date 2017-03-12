@@ -202,7 +202,7 @@ class Validation {
 	 */
 	final public function validate_checkbox( $input ) {
 		$check = (bool) $input;
-		return $input ? 'on' : false;
+		return $check ? 'on' : false;
 	}
 
 	/**
@@ -221,7 +221,7 @@ class Validation {
 
 		$selection = array();
 
-		foreach ( $inputs as $key => $label ) {
+		foreach ( $options as $key => $label ) {
 			$key = sanitize_key( $key );
 			$selection[ $key ] = array_key_exists( $key, $inputs ) ? 'on' : false;
 		}
