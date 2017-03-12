@@ -1236,14 +1236,12 @@ final class Settings {
 			$default[ $key ] = isset( $value['default'] ) ? $value['default'] : null;
 		}
 
-		$options = get_option( $option_slug );
-		$value = $options ? wp_parse_args_recursive( $options, $default ) : $default;
-
-		add_filter( "default_option_{$option_slug}", function( $v, $o ) use ( $value ) {
-			return $value;
+		add_filter( "default_option_{$option_slug}", function( $option, $option_name ) use ( $default ) {
+			return $default;
 		}, 10, 2 );
 
-		add_filter( "option_{$option_slug}", function( $v, $o ) use ( $value ) {
+		add_filter( "option_{$option_slug}", function( $option, $option_name ) use ( $default ) {
+			$value = $option ? wp_parse_args_recursive( $option, $default ) : $default;
 			return $value;
 		}, 10, 2 );
 	}
