@@ -261,23 +261,21 @@ class ButtonsImage extends Buttons {
 			$list .= "<span class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsImage\">";
 
 			$prefix = $this->prefix;
-			$icons = $this->get_buttons_icons();
 
 			foreach ( $includes as $site => $endpoint ) :
 
-				$icon = isset( $icons[ $site ] ) ? $icons[ $site ] : null;
+				$icon = $this->get_buttons_icon( $site );
 
 				if ( ! $icon ) {
 					continue;
 				}
 
-				$label = $this->get_buttons_label( $site, 'image' );
 				$list .= $this->buttons_view( $this->view, 'image', array(
 					'attr_prefix' => $prefix,
 					'site' => $site,
 					'icon' => $icon,
-					'label' => $label,
-					'endpoint' => $endpoint,
+					'label' => $this->get_buttons_label( $site, 'image' ),
+					'endpoint' => $this->get_buttons_endpoint( $site, 'image' ),
 				));
 			endforeach;
 

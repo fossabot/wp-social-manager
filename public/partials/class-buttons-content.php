@@ -187,19 +187,19 @@ class ButtonsContent extends Buttons {
 			}
 
 			$prefix = $this->prefix;
-			$icons = $this->get_buttons_icons();
-
 			$list .= "<div class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsContent\">";
 
 			foreach ( $includes as $site => $endpoint ) :
 
-				$icon = isset( $icons[ $site ] ) ? $icons[ $site ] : null;
+				$icon = $this->get_buttons_icon( $site );
 
 				if ( ! $icon ) {
 					continue;
 				}
 
 				$label = $this->get_buttons_label( $site, 'content' );
+				$endpoint = $this->get_buttons_endpoint( $site, 'content' );
+
 				$list .= $this->buttons_view( $this->view, 'content', array(
 					'attr_prefix' => $prefix,
 					'site' => $site,

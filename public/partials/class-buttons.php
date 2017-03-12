@@ -205,7 +205,27 @@ abstract class Buttons {
 
 		if ( in_array( $context, array( 'content', 'image' ), true ) ) {
 			$buttons = Options::button_sites( $context );
-			return isset( $buttons[ $site ] ) ? $buttons[ $site ] : null;
+			return isset( $buttons[ $site ]['label'] ) ? $buttons[ $site ]['label'] : null;
+		}
+
+		return null;
+	}
+
+	/**
+	 * The function utility to get the button endpoint.
+	 *
+	 * @since 1.1.3
+	 * @access protected
+	 *
+	 * @param string $site The button site key.
+	 * @param string $context The button context, 'content' or 'image'.
+	 * @return null|string Return null, if the context is incorrect or the key is unset.
+	 */
+	protected function get_buttons_endpoint( $site, $context ) {
+
+		if ( in_array( $context, array( 'content', 'image' ), true ) ) {
+			$buttons = Options::button_sites( $context );
+			return isset( $buttons[ $site ]['endpoint'] ) ? $buttons[ $site ]['endpoint'] : null;
 		}
 
 		return null;
