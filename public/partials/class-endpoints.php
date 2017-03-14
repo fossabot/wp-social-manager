@@ -184,9 +184,12 @@ class Endpoints {
 					 * @since 1.2.0
 					 *
 					 * @param mixed  $value The value return from the filter.
-					 * @param string $contect The
+					 * @param string $site The site slug.
+					 * @param string $context Whether for 'content' or 'image'
+					 * @param array  $args The button arguments to construct the endpoint URLs.
 					 */
-					$endpoints[ $site ] = apply_filters( 'ninecodes_social_manager_button_endpoint', null, 'content', $site, array(
+					$endpoints[ $site ] = apply_filters( 'ninecodes_social_manager_button_endpoint', null, $site, 'content', array(
+						'base_url' => $endpoint,
 						'post_title' => $metas['post_title'],
 						'post_description' => $metas['post_description'],
 						'post_url' => $metas['post_url'],
