@@ -114,7 +114,7 @@ abstract class Buttons {
 	 * }
 	 * @return string The formatted HTML list element to display the button.
 	 */
-	public function buttons_view_html( $view, $context, array $args ) {
+	public function buttons_view( $view, $context, array $args ) {
 
 		if ( ! $view || ! $context || ! is_array( $args ) ) {
 			return '';
@@ -148,7 +148,7 @@ abstract class Buttons {
 		$site = $args['site'];
 		$icon = $args['icon'];
 		$label = $args['label'];
-		$endpoint = $args['endpoint'];
+		$endpoint = 'json' === $this->mode ? '{{' . $args['endpoint'] . '}}' : $args['endpoint'];
 
 		$templates = array(
 			'icon' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'>{$icon}</a>",
@@ -156,7 +156,9 @@ abstract class Buttons {
 			'icon-text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a>",
 		);
 
-		return isset( $templates[ $view ] ) ? kses_icon( $templates[ $view ] ) : '';
+		$buttons_view = isset( $templates[ $view ] ) ? kses_icon( $templates[ $view ] ) : '';
+
+		return 'json' === $this->mode ? "<# if ( {$args['endpoint']} ) { #>" . $buttons_view . '<# } #>' : $buttons_view;
 	}
 
 	/**
