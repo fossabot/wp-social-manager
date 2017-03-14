@@ -191,15 +191,13 @@ class ButtonsContent extends Buttons {
 
 			foreach ( $includes as $site => $endpoint ) :
 
-				$icon = $this->get_buttons_icon( $site );
+				$icon = $this->get_buttons_icons( $site );
 
-				if ( ! $icon ) {
+				if ( ! $icon || ! $endpoint ) {
 					continue;
 				}
 
 				$label = $this->get_buttons_label( $site, 'content' );
-				$endpoint = $this->get_buttons_endpoint( $site, 'content' );
-
 				$list .= $this->buttons_view( $this->view, 'content', array(
 					'attr_prefix' => $prefix,
 					'site' => $site,
@@ -244,26 +242,25 @@ class ButtonsContent extends Buttons {
 
 		} ?><div class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsContent"><?php
 
+		$view = $this->view;
 		$prefix = $this->prefix;
-		$icons = $this->get_buttons_icons();
-
 		$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
 
-foreach ( $includes as $site ) :
+foreach ( $includes as $site => $value ) :
 
-	$icon = isset( $icons[ $site ] ) ? $icons[ $site ] : null;
+	$icon = $this->get_buttons_icons( $site );
 
-	if ( ! $icon ) {
+	if ( ! $icon || ! $value ) {
 		continue;
 	}
 
 	$label = $this->get_buttons_label( $site, 'content' );
-	$list  = $this->buttons_view( $this->view, 'content', array(
+	$list  = $this->buttons_view( $view, 'content', array(
 		'attr_prefix' => $prefix,
 		'site' => $site,
 		'icon' => $icon,
 		'label' => $label,
-		'endpoint' => "{{ data.endpoints.{$site} }}",
+		'endpoint' => "data.endpoints.{$site}",
 	));
 
 	echo $list; // WPCS: XSS ok.
