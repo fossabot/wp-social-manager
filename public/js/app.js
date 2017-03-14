@@ -198,9 +198,20 @@
 		render: function(model) {
 
 			var resp = model.toJSON(),
+				endpoints = resp.content.endpoints,
 				$content = $('#' + nineCodesSocialManager.attrPrefix + '-buttons-' + resp.id);
 
 			try {
+
+				/**
+				 * Filter endpoint with falsy value.
+				 *
+				 * @type {Object}
+				 */
+				resp.content.endpoints = _.omit(endpoints, function(value) {
+					return ! value;
+				});
+
 				$content.append(this.template.buttonsContent(resp.content));
 			} catch ( err ) {
 				console.info(err.name, err.message);
