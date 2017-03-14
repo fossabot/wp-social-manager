@@ -135,16 +135,22 @@ class RESTButtonsController extends WP_REST_Controller {
 	 */
 	public function localize_scripts() {
 
-		$content = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
-		$image = array();
+		$post_types_content = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
+		$post_types_image = array();
 
-		if ( (bool) $this->plugin->get_option( 'buttons_image', 'enabled' ) ) {
-			$image = (array) $this->plugin->get_option( 'buttons_image', 'post_types' );
+		if ( 'on' === $this->plugin->get_option( 'buttons_image', 'enabled' ) ) {
+			$post_types_image = (array) $this->plugin->get_option( 'buttons_image', 'post_types' );
 		}
 
-		$post_types = array_unique( array_merge( $image, $content ), SORT_REGULAR );
+		$post_types = array_filter( array_unique(
+			array_merge(
+				$post_types_image,
+				$post_types_content
+			),
+			SORT_REGULAR
+		) );
 
-		if ( ! is_singular( $post_types ) ) {
+		if ( empty( $post_types ) || ! is_singular( array_keys( $post_types ) ) ) {
 			return;
 		}
 
