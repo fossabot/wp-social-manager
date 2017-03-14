@@ -78,25 +78,25 @@ class Endpoints {
 			return $endpoints;
 		}
 
-		$includes = $this->plugin->get_option( 'buttons_content', 'includes' );
+		$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
 		$buttons = Options::button_sites( 'content' );
 
 		foreach ( $buttons as $site => $label ) {
-			if ( ! key_exists( $site, (array) $includes ) ) {
+			if ( ! key_exists( $site, array_filter( $includes ) ) ) {
 				unset( $buttons[ $site ] );
 			}
 		}
 
-		foreach ( $buttons as $slug => $label ) {
-			$endpoint = self::get_endpoint_base( 'content', $slug );
+		foreach ( $buttons as $site => $label ) {
+			$endpoint = self::get_endpoint_base( 'content', $site );
 
 			if ( ! $endpoint ) {
-				unset( $sites[ $slug ] );
+				unset( $sites[ $site ] );
 			}
 
-			switch ( $slug ) {
+			switch ( $site ) {
 				case 'facebook':
-					$endpoints[ $slug ] = add_query_arg(
+					$endpoints[ $site ] = add_query_arg(
 						array( 'u' => $metas['post_url'] ),
 						$endpoint
 					);
@@ -115,12 +115,12 @@ class Endpoints {
 						$args['via'] = $profiles;
 					}
 
-					$endpoints[ $slug ] = add_query_arg( $args, $endpoint );
+					$endpoints[ $site ] = add_query_arg( $args, $endpoint );
 
 					break;
 
 				case 'googleplus':
-					$endpoints[ $slug ] = add_query_arg(
+					$endpoints[ $site ] = add_query_arg(
 						array( 'url' => $metas['post_url'] ),
 						$endpoint
 					);
@@ -128,7 +128,7 @@ class Endpoints {
 					break;
 
 				case 'linkedin':
-					$endpoints[ $slug ] = add_query_arg(
+					$endpoints[ $site ] = add_query_arg(
 						array(
 							'mini' => true,
 							'title' => $metas['post_title'],
@@ -142,7 +142,7 @@ class Endpoints {
 					break;
 
 				case 'pinterest':
-					$endpoints[ $slug ] = add_query_arg(
+					$endpoints[ $site ] = add_query_arg(
 						array(
 							'url' => $metas['post_url'],
 							'description' => $metas['post_title'],
@@ -155,7 +155,7 @@ class Endpoints {
 					break;
 
 				case 'reddit':
-					$endpoints[ $slug ] = add_query_arg(
+					$endpoints[ $site ] = add_query_arg(
 						array(
 							'url' => $metas['post_url'],
 							'post_title' => $metas['post_title'],
@@ -166,7 +166,7 @@ class Endpoints {
 					break;
 
 				case 'email':
-					$endpoints[ $slug ] = add_query_arg(
+					$endpoints[ $site ] = add_query_arg(
 						array(
 							'subject' => $metas['post_title'],
 							'body' => $metas['post_description'],
@@ -177,7 +177,21 @@ class Endpoints {
 					break;
 
 				default:
-					$endpoints[ $slug ] = false;
+
+					/**
+					 * Filter to add endpoint for custom site.
+					 *
+					 * @since 1.2.0
+					 *
+					 * @param mixed  $value The value return from the filter.
+					 * @param string $contect The
+					 */
+					$endpoints[ $site ] = apply_filters( 'ninecodes_social_manager_button_endpoint', null, 'content', $site, array(
+						'post_title' => $metas['post_title'],
+						'post_description' => $metas['post_description'],
+						'post_url' => $metas['post_url'],
+						'post_image' => $metas['post_image'],
+					) );
 					break;
 			} // End switch().
 		} // End foreach().
