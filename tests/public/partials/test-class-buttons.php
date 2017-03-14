@@ -12,8 +12,6 @@ namespace NineCodes\SocialManager;
  * Load Global classes;
  */
 use \WP_UnitTestCase;
-use \WP_REST_Server;
-use \WP_REST_Request;
 
 /**
  * The class to test the "Buttons" class instance.
@@ -84,7 +82,7 @@ class TestButtons extends WP_UnitTestCase {
 	public function test_buttons_methods() {
 
 		$this->assertTrue( method_exists( $this->buttons, 'buttons_tmpl' ),  'Class does not have method \'buttons_tmpl\'' );
-		$this->assertTrue( method_exists( $this->buttons, 'buttons_view_html' ),  'Class does not have method \'buttons_view_html\'' );
+		$this->assertTrue( method_exists( $this->buttons, 'buttons_view' ),  'Class does not have method \'buttons_view\'' );
 		$this->assertTrue( method_exists( $this->buttons, 'get_buttons_icons' ),  'Class does not have method \'get_buttons_icons\'' );
 		$this->assertTrue( method_exists( $this->buttons, 'get_buttons_label' ),  'Class does not have method \'get_buttons_label\'' );
 		$this->assertTrue( method_exists( $this->buttons, 'get_buttons_mode' ),  'Class does not have method \'get_buttons_mode\'' );
@@ -95,13 +93,13 @@ class TestButtons extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test `buttons_view_html` method.
+	 * Test `buttons_view` method.
 	 *
 	 * @since 1.2.0
 	 *
 	 * @return void
 	 */
-	public function test_buttons_view_html() {
+	public function test_buttons_view() {
 
 		$site = 'facebook';
 		$label = 'Facebook';
@@ -109,7 +107,7 @@ class TestButtons extends WP_UnitTestCase {
 		$endpoint = 'https://www.facebook.com/sharer/sharer.php';
 		$icon = $this->buttons->get_buttons_icons( $site );
 
-		$buttons_view = $this->buttons->buttons_view_html( 'icon', 'content', array(
+		$buttons_view = $this->buttons->buttons_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => $icon,
@@ -124,7 +122,7 @@ class TestButtons extends WP_UnitTestCase {
 		 *
 		 * @var string
 		 */
-		$buttons_view2 = $this->buttons->buttons_view_html( 'icon', 'content', array(
+		$buttons_view2 = $this->buttons->buttons_view( 'icon', 'content', array(
 			'attr_prefix' => '',
 			'site' => $site,
 			'icon' => $icon,
@@ -137,7 +135,7 @@ class TestButtons extends WP_UnitTestCase {
 		 *
 		 * @var string
 		 */
-		$buttons_view3 = $this->buttons->buttons_view_html( 'icon', 'content', array(
+		$buttons_view3 = $this->buttons->buttons_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => '',
 			'icon' => $icon,
@@ -152,7 +150,7 @@ class TestButtons extends WP_UnitTestCase {
 		 *
 		 * @var string
 		 */
-		$buttons_view4 = $this->buttons->buttons_view_html( 'icon', 'content', array(
+		$buttons_view4 = $this->buttons->buttons_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => '',
@@ -167,7 +165,7 @@ class TestButtons extends WP_UnitTestCase {
 		 *
 		 * @var string
 		 */
-		$buttons_view5 = $this->buttons->buttons_view_html( 'icon', 'content', array(
+		$buttons_view5 = $this->buttons->buttons_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => $icon,
@@ -182,7 +180,7 @@ class TestButtons extends WP_UnitTestCase {
 		 *
 		 * @var string
 		 */
-		$buttons_view6 = $this->buttons->buttons_view_html( 'icon', 'content', array(
+		$buttons_view6 = $this->buttons->buttons_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => $icon,
@@ -197,7 +195,7 @@ class TestButtons extends WP_UnitTestCase {
 		 *
 		 * @var
 		 */
-		$buttons_view7 = $this->buttons->buttons_view_html( 'icon', 'content', array(
+		$buttons_view7 = $this->buttons->buttons_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => $icon,
@@ -212,7 +210,7 @@ class TestButtons extends WP_UnitTestCase {
 		 *
 		 * @var
 		 */
-		$buttons_view8 = $this->buttons->buttons_view_html( 'icon', 'image-content', array(
+		$buttons_view8 = $this->buttons->buttons_view( 'icon', 'image-content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => $icon,
@@ -227,7 +225,7 @@ class TestButtons extends WP_UnitTestCase {
 		 *
 		 * @var string
 		 */
-		$buttons_view10 = $this->buttons->buttons_view_html( 'icon-me', 'content', array(
+		$buttons_view10 = $this->buttons->buttons_view( 'icon-me', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => $icon,
