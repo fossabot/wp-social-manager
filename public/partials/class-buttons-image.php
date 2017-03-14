@@ -264,18 +264,19 @@ class ButtonsImage extends Buttons {
 
 			foreach ( $includes as $site => $endpoint ) :
 
-				$icon = $this->get_buttons_icon( $site );
+				$icon = $this->get_buttons_icons( $site );
 
-				if ( ! $icon ) {
+				if ( ! $icon || ! $endpoint ) {
 					continue;
 				}
 
+				$label = $this->get_buttons_label( $site, 'image' );
 				$list .= $this->buttons_view( $this->view, 'image', array(
 					'attr_prefix' => $prefix,
 					'site' => $site,
 					'icon' => $icon,
-					'label' => $this->get_buttons_label( $site, 'image' ),
-					'endpoint' => $this->get_buttons_endpoint( $site, 'image' ),
+					'label' => $label,
+					'endpoint' => $endpoint,
 				));
 			endforeach;
 
@@ -316,12 +317,10 @@ class ButtonsImage extends Buttons {
 <span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsImage"><?php
 
 $prefix = $this->prefix;
-$icons = $this->get_buttons_icons();
-
-foreach ( $includes as $site ) :
+foreach ( $includes as $site => $value ) :
 
 	$label = $this->get_buttons_label( $site, 'image' );
-	$icon = isset( $icons[ $site ] ) ? $icons[ $site ] : null;
+	$icon  = $this->get_buttons_icons( $site );
 
 	if ( ! $icon ) {
 		continue;
@@ -332,7 +331,7 @@ foreach ( $includes as $site ) :
 		'site' => $site,
 		'icon' => $icon,
 		'label' => $label,
-		'endpoint' => "{{ data.endpoints.{$site} }}",
+		'endpoint' => "data.endpoints.{$site}",
 	));
 
 	echo $list; // WPCS: XSS ok.
