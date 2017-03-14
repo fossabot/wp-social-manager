@@ -100,7 +100,8 @@ abstract class Buttons {
 	 *
 	 * @since 1.0.0
 	 * @since 1.0.4 - Fix incorrect parameter description.
-	 * @access protected
+	 * @since 1.2.0 - Changed method name.
+	 * @access public
 	 *
 	 * @param string $view The button view key (`icon`, `icon-text`, `text`).
 	 * @param array  $context Whether the sharing button is for `content` or `image`.
@@ -113,9 +114,13 @@ abstract class Buttons {
 	 * }
 	 * @return string The formatted HTML list element to display the button.
 	 */
-	protected function buttons_view( $view, $context, array $args ) {
+	public function buttons_view_html( $view, $context, array $args ) {
 
-		if ( ! $view || ! $context || empty( $args ) ) {
+		if ( ! $view || ! $context || ! is_array( $args ) ) {
+			return '';
+		}
+
+		if ( ! in_array( $context, array( 'content', 'image' ), true ) ) { // Context value must only be 'content' and 'image'.
 			return '';
 		}
 
@@ -127,8 +132,16 @@ abstract class Buttons {
 			'endpoint' => '',
 		) );
 
-		if ( in_array( '', $args, true ) ) {
-			return;
+		/**
+		 * Check if the $args contain falsy value.
+		 *
+		 * Each element is required. If any of them contain is empty or contains falsy value,
+		 * then return empty string.
+		 */
+		if ( array_filter( $args, function( $value ) {
+			return false === (bool) $value || ! is_string( $value );
+		} ) ) {
+			return '';
 		}
 
 		$prefix = $args['attr_prefix'];
@@ -147,28 +160,15 @@ abstract class Buttons {
 	}
 
 	/**
-	 * The function utility to get a single button icon.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @param string $site The site key e.g. 'facebook', 'twitter', etc.
-	 * @return string The icon in SVG format.
-	 */
-	protected function get_buttons_icon( $site ) {
-		return self::get_buttons_icons( $site );
-	}
-
-	/**
 	 * The function utility to get all the icons.
 	 *
 	 * @since 1.1.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @param string $site The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
 	 * @return array The list of icon.
 	 */
-	protected function get_buttons_icons( $site = '' ) {
+	public function get_buttons_icons( $site = '' ) {
 
 		$icons = Helpers::get_social_icons();
 
@@ -195,13 +195,13 @@ abstract class Buttons {
 	 * The function utility to get the button label (text)
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @param string $site The button site key.
 	 * @param string $context The button context, 'content' or 'image'.
 	 * @return null|string Return null, if the context is incorrect or the key is unset.
 	 */
-	protected function get_buttons_label( $site, $context ) {
+	public function get_buttons_label( $site, $context ) {
 
 		if ( in_array( $context, array( 'content', 'image' ), true ) ) {
 			$buttons = Options::button_sites( $context );
@@ -212,34 +212,14 @@ abstract class Buttons {
 	}
 
 	/**
-	 * The function utility to get the button endpoint.
-	 *
-	 * @since 1.2.0
-	 * @access protected
-	 *
-	 * @param string $site The button site key.
-	 * @param string $context The button context, 'content' or 'image'.
-	 * @return null|string Return null, if the context is incorrect or the key is unset.
-	 */
-	protected function get_buttons_endpoint( $site, $context ) {
-
-		if ( in_array( $context, array( 'content', 'image' ), true ) ) {
-			$buttons = Options::button_sites( $context );
-			return isset( $buttons[ $site ]['endpoint'] ) ? $buttons[ $site ]['endpoint'] : null;
-		}
-
-		return null;
-	}
-
-	/**
 	 * The function utility to get the button mode.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @return string Whether JSON of HTML
 	 */
-	protected function get_buttons_mode() {
+	public function get_buttons_mode() {
 
 		$theme_supports = $this->plugin->get_theme_supports();
 		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
@@ -259,11 +239,11 @@ abstract class Buttons {
 	 * The function utility to get the attribute prefix
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @return string The attribute prefix.
 	 */
-	protected function get_attr_prefix() {
+	public function get_attr_prefix() {
 		return Helpers::get_attr_prefix();
 	}
 
@@ -271,11 +251,11 @@ abstract class Buttons {
 	 * The function utility to check if the content is rendered in AMP endpoint.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @return boolean
 	 */
-	protected function in_amp() {
+	public function in_amp() {
 		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ? true : false;
 	}
 
@@ -283,11 +263,11 @@ abstract class Buttons {
 	 * The function to get the post status.
 	 *
 	 * @since 1.0.6
-	 * @access protected
+	 * @access public
 	 *
 	 * @return boolean|string Returns false if ID is not exist, else the post status.
 	 */
-	protected function get_post_status() {
+	public function get_post_status() {
 
 		$post_id = get_the_id();
 
@@ -298,12 +278,12 @@ abstract class Buttons {
 	 * Save the DOM and remove the extranouse elements generated.
 	 *
 	 * @since 1.0.6
-	 * @access protected
+	 * @access public
 	 *
 	 * @param DOMDocument $dom [description].
 	 * @return string
 	 */
-	protected function to_html( DOMDocument $dom ) {
+	public function to_html( DOMDocument $dom ) {
 
 		return preg_replace('/^<!DOCTYPE.+?>/', '', str_replace(
 			array( '<html>', '</html>', '<body>', '</body>' ),
