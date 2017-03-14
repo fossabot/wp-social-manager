@@ -72,7 +72,7 @@ function kses_icon( $data ) {
 		),
 	);
 
-	return wp_kses( $data, $allowed_html, array( 'http', 'https' ) );
+	return wp_kses( $data, $allowed_html, wp_allowed_protocols() );
 }
 
 /**
