@@ -78,6 +78,11 @@ final class Options {
 				'url' => 'https://www.reddit.com/user/',
 				'description' => sprintf( esc_html__( 'Reddit profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>Unidan</code>' ),
 			),
+			'tumblr' => array(
+				'label' => 'Tumblr',
+				'url' => 'https://tumblr.com/',
+				'description' => sprintf( esc_html__( 'Tumblr blog (e.g. %s)', 'ninecodes-social-manager' ), '<code>crowloop</code>' ),
+			),
 		);
 
 		/**
@@ -289,6 +294,10 @@ final class Options {
 			'reddit' => array(
 				'label' => 'Reddit',
 				'endpoint' => 'https://www.reddit.com/submit',
+			),
+			'tumblr' => array(
+				'label' => 'Tumblr',
+				'endpoint' => 'http://www.tumblr.com/share/link',
 			),
 			'email' => array(
 				'label' => 'Email',

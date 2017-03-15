@@ -165,6 +165,19 @@ class Endpoints {
 
 					break;
 
+				case 'tumblr':
+
+					$endpoints[ $site ] = add_query_arg(
+						array(
+							'url' => $metas['post_url'],
+							'name' => $metas['post_title'],
+							'description' => substr( $metas['post_description'], 0, 30 ) . '...',
+						),
+						$endpoint
+					);
+
+					break;
+
 				case 'email':
 					$endpoints[ $site ] = add_query_arg(
 						array(

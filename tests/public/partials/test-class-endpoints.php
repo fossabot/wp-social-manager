@@ -92,7 +92,7 @@ class TestEndpoints extends WP_UnitTestCase {
 		$endpoints = $response['endpoints'];
 
 		// Count the number, in case we will add more in the future.
-		$this->assertEquals( 7, count( $endpoints ) );
+		$this->assertEquals( 8, count( $endpoints ) );
 
 		$this->assertArrayHasKey( 'facebook', $endpoints );
 		$this->assertNotFalse( filter_var( $endpoints['facebook'], FILTER_VALIDATE_URL ) );
@@ -117,6 +117,10 @@ class TestEndpoints extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'reddit', $endpoints );
 		$this->assertNotFalse( filter_var( $endpoints['reddit'], FILTER_VALIDATE_URL ) );
 		$this->assertEquals( 0, strpos( $endpoints['reddit'], 'https://www.reddit.com/submit' ) );
+
+		$this->assertArrayHasKey( 'tumblr', $endpoints );
+		$this->assertNotFalse( filter_var( $endpoints['tumblr'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoints['tumblr'], 'http://www.tumblr.com/share/link' ) );
 
 		$this->assertArrayHasKey( 'email', $endpoints );
 		$this->assertNotFalse( filter_var( $endpoints['email'], FILTER_VALIDATE_URL ) );

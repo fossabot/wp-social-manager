@@ -55,6 +55,7 @@ class Helpers {
 			'googleplus' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-googleplus'/></svg>",
 			'youtube' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-youtube'/></svg>",
 			'reddit' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-reddit'/></svg>",
+			'tumblr' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-tumblr'/></svg>",
 			'email' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-email'/></svg>",
 		);
 

@@ -198,7 +198,7 @@ class TestPlugin extends WP_UnitTestCase {
 		$buttons_content = $this->plugin->get_option( 'buttons_content', 'includes' );
 
 		// Count, in case we will add more in the future.
-		$this->assertEquals( 7, count( $buttons_content ) );
+		$this->assertEquals( 8, count( $buttons_content ) );
 
 		$this->assertTrue( key_exists( 'facebook', $buttons_content ) );
 		$this->assertTrue( key_exists( 'twitter', $buttons_content ) );
@@ -206,6 +206,7 @@ class TestPlugin extends WP_UnitTestCase {
 		$this->assertTrue( key_exists( 'pinterest', $buttons_content ) );
 		$this->assertTrue( key_exists( 'linkedin', $buttons_content ) );
 		$this->assertTrue( key_exists( 'reddit', $buttons_content ) );
+		$this->assertTrue( key_exists( 'tumblr', $buttons_content ) );
 		$this->assertTrue( key_exists( 'email', $buttons_content ) );
 	}
 

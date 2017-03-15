@@ -234,14 +234,16 @@ class TestOptions extends WP_UnitTestCase {
 
 		$content = Options::button_sites( 'content' ); // Button content keys.
 
-		$this->assertEquals( 7, count( $content ) );
+		$this->assertEquals( 8, count( $content ) );
 		$this->assertArrayHasKey( 'facebook', $content );
 		$this->assertArrayHasKey( 'twitter', $content );
 		$this->assertArrayHasKey( 'googleplus', $content );
 		$this->assertArrayHasKey( 'pinterest', $content );
 		$this->assertArrayHasKey( 'linkedin', $content );
 		$this->assertArrayHasKey( 'reddit', $content );
+		$this->assertArrayHasKey( 'tumblr', $content );
 		$this->assertArrayHasKey( 'email', $content );
+
 		$image = Options::button_sites( 'image' ); // Button image keys.
 
 		$this->assertEquals( 1, count( $image ) );
