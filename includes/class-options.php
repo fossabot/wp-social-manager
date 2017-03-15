@@ -41,46 +41,55 @@ final class Options {
 			'facebook' => array(
 				'label' => 'Facebook',
 				'url' => 'https://www.facebook.com/',
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'Facebook profile or page (e.g. %s)', 'ninecodes-social-manager' ), '<code>zuck</code>' ),
 			),
 			'twitter' => array(
 				'label' => 'Twitter',
 				'url' => 'https://twitter.com/',
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'Twitter profile without the %1$s (e.g. %2$s)', 'ninecodes-social-manager' ), '<code>@</code>', '<code>jack</code>' ),
 			),
 			'instagram' => array(
 				'label' => esc_html( 'Instagram' ),
 				'url' => esc_url( 'https://instagram.com/' ),
+				// translators: %s is an example of a username input.
 				'description'  => sprintf( esc_html__( 'Instagram profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>victoriabeckham</code>' ),
 			),
 			'pinterest' => array(
 				'label' => 'Pinterest',
 				'url' => esc_url( 'https://pinterest.com/' ),
+				// translators: %s is an example of a username input.
 				'description'  => sprintf( esc_html__( 'Pinterest profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>ohjoy</code>' ),
 			),
 			'linkedin' => array(
 				'label' => 'LinkedIn',
 				'url' => esc_url( 'https://www.linkedin.com/in/' ),
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'LinkedIn profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>williamhgates</code>' ),
 			),
 			'googleplus' => array(
 				'label' => 'Google+',
 				'url' => 'https://plus.google.com/',
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'Google+ profile or page. Include the %1$s sign if necessary (e.g. %2$s)', 'ninecodes-social-manager' ), '<code>+</code>', '<code>+hishekids</code>' ),
 			),
 			'youtube' => array(
 				'label' => 'Youtube',
 				'url' => 'https://www.youtube.com/user/',
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'Youtube channel (e.g. %s)', 'ninecodes-social-manager' ), '<code>BuzzFeedVideo</code>' ),
 			),
 			'reddit' => array(
 				'label' => 'Reddit',
 				'url' => 'https://www.reddit.com/user/',
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'Reddit profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>Unidan</code>' ),
 			),
 			'tumblr' => array(
 				'label' => 'Tumblr',
 				'url' => 'https://tumblr.com/',
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'Tumblr blog (e.g. %s)', 'ninecodes-social-manager' ), '<code>crowloop</code>' ),
 			),
 		);
