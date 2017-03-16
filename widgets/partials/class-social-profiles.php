@@ -112,6 +112,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 		parent::__construct($this->widget_id, esc_html__( 'Social Media Profiles', 'ninecodes-social-manager' ), array(
 			'classname' => $this->widget_id,
 			'description' => esc_html__( 'Display list of social media profile and page URLs connected to this website.', 'ninecodes-social-manager' ),
+			'customize_selective_refresh' => true,
 		));
 	}
 
