@@ -213,8 +213,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 					$state = isset( $instance['view'] ) && ! empty( $instance['view'] ) ? $instance['view'] : 'icon';
 					$state = checked( sanitize_key( $state ), $key, false );
 
-					echo "<input id='{$id}-{$key}' type='radio' name='{$name}' value='{$key}' {$state}>"; // WPCS: XSS ok.
-					echo "<label for='{$id}-{$key}'>" . esc_html( $label ) . '</label><br>'; // WPCS: XSS ok.
+					echo "<label><input type='radio' name='{$name}' value='{$key}' {$state}>" . esc_html( $label ) . '<br></label>'; // WPCS: XSS ok.
 				endforeach; ?>
 			</p>
 			<?php endif; ?>
