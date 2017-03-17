@@ -71,6 +71,7 @@ final class ViewAdmin {
 		require_once( $this->path_dir . 'partials/class-validation.php' );
 		require_once( $this->path_dir . 'partials/class-user.php' );
 		require_once( $this->path_dir . 'partials/class-metabox.php' );
+		require_once( $this->path_dir . 'partials/class-customizer.php' );
 	}
 
 	/**
@@ -88,6 +89,7 @@ final class ViewAdmin {
 
 		new Settings( $this->plugin );
 		new User( $this->plugin );
+		new Customizer( $this->plugin );
 
 		Metabox::get_instance( $this->plugin );
 	}
