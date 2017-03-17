@@ -28,8 +28,9 @@ if ( ! function_exists( 'get_the_site_social_profiles' ) ) {
 		) );
 
 		$site_profiles = get_option( 'ncsocman_profiles' );
+		$site_profiles = array_filter( $site_profiles );
 
-		if ( is_array( $site_profiles ) && ! empty( array_filter( $site_profiles ) ) ) :
+		if ( is_array( $site_profiles ) && ! empty( $site_profiles ) ) :
 
 			$profiles = Options::social_profiles();
 			$views    = Options::button_views();
