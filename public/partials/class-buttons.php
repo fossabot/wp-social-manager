@@ -83,6 +83,7 @@ abstract class Buttons {
 
 		$this->plugin = $plugin;
 		$this->plugin_slug = $plugin->get_slug();
+		$this->option_opts = $plugin->get_opts();
 
 		$this->prefix = $this->get_attr_prefix();
 		$this->mode = $this->get_buttons_mode();
@@ -150,10 +151,19 @@ abstract class Buttons {
 		$label = $args['label'];
 		$endpoint = 'json' === $this->mode ? '{{' . $args['endpoint'] . '}}' : $args['endpoint'];
 
+		/**
+		 * Get the button style from Customizer.
+		 *
+		 * @since 1.2.0
+		 *
+		 * @var string
+		 */
+		$style = get_theme_mod( "{$this->option_opts}_button_style", 'default' );
+
 		$templates = array(
-			'icon' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'>{$icon}</a>",
-			'text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'>{$label}</a>",
-			'icon-text' => "<a class='{$prefix}-buttons__item item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a>",
+			'icon' => "<a class='{$prefix}-buttons__item item-{$style} item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'>{$icon}</a>",
+			'text' => "<a class='{$prefix}-buttons__item item-{$style} item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'>{$label}</a>",
+			'icon_text' => "<a class='{$prefix}-buttons__item item-{$style} item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a>",
 		);
 
 		$buttons_view = isset( $templates[ $view ] ) ? kses_icon( $templates[ $view ] ) : '';
