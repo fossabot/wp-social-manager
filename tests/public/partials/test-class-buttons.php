@@ -14,15 +14,6 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * The class to test the "Buttons" class instance.
- *
- * "Buttons" is an abstract class.
- *
- * @since 1.2.0
- */
-class ButtonsTests extends Buttons {}
-
-/**
  * The class to test the "TestButtons" class instance.
  *
  * @since 1.2.0
@@ -69,7 +60,7 @@ class TestButtons extends WP_UnitTestCase {
 
 		$this->option_slug = $this->plugin->get_opts();
 
-		$this->buttons = new ButtonsTests( $this->plugin );
+		$this->buttons = new ButtonsContent( $this->plugin );
 	}
 
 	/**
