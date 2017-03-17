@@ -177,7 +177,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 				)); ?></p>
 			<?php else : ?>
 			<p>
-				<label><?php esc_html_e( 'Include these', 'ninecodes-social-manager' ); ?></label>
+				<label><?php esc_html_e( 'Includes:', 'ninecodes-social-manager' ); ?></label>
 				<br>
 			<?php
 			foreach ( $site_profiles as $key => $value ) :
