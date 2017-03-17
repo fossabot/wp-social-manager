@@ -199,6 +199,7 @@ final class Plugin {
 		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-fields.php' );
 
 		require_once( $this->path_dir . 'includes/ogp/open-graph-protocol.php' );
+		require_once( $this->path_dir . 'includes/customize/control-radio-image.php' );
 
 		add_action( 'plugins_loaded', array( $this, 'butterbean' ) );
 
