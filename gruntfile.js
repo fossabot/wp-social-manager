@@ -29,6 +29,16 @@ module.exports = function(grunt) {
 				'!*-rtl.css',
 			],
 			ext: '.min.css'
+		}, {
+			expand: true,
+			cwd: './includes/customize/css/',
+			dest: './includes/customize/css/',
+			src: [
+				'*.css',
+				'!*.min.css',
+				'!*-rtl.css'
+			],
+			ext: '.min.css'
 		}],
 
 		csssrcRTL = [{
@@ -72,6 +82,15 @@ module.exports = function(grunt) {
 				'!*.min.js'
 			],
 			ext: '.min.js'
+		},{
+			expand: true,
+			cwd: './includes/customize/js/',
+			dest: './includes/customize/js/',
+			src: [
+				'*.js',
+				'!*.min.js'
+			],
+			ext: '.min.js'
 		}];
 
 	grunt.initConfig({
@@ -98,8 +117,10 @@ module.exports = function(grunt) {
 				files: [
 					adminDirJS + '*.js',
 					publicDirJS + '*.js',
+					'./includes/customize/js/*.js',
 					'!' + adminDirJS + '*.min.js',
-					'!' + publicDirJS + '*.min.js'
+					'!' + publicDirJS + '*.min.js',
+					'!./includes/customize/js/*.min.js',
 				],
 				tasks: ['scripts:dev'],
 				options: {
@@ -110,10 +131,13 @@ module.exports = function(grunt) {
 				files: [
 					adminDirCSS + '*.css',
 					publicDirCSS + '*.css',
+					'./includes/customize/css/*.css',
 					'!' + adminDirCSS + '*.min.css',
 					'!' + adminDirCSS + '*.min-rtl.css',
 					'!' + publicDirCSS + '*.min.css',
-					'!' + publicDirCSS + '*.min-rtl.css'
+					'!' + publicDirCSS + '*.min-rtl.css',
+					'!./includes/customize/css/*.min.css',
+					'!./includes/customize/css/*.min-rtl.css',
 				],
 				tasks: ['styles:dev'],
 				options: {
