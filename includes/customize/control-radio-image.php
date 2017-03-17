@@ -2,13 +2,12 @@
 /**
  * Customizer Radio Image Control
  *
- * A class definition that includes attributes and functions used across both the
- * public-facing side of the site and the admin area.
+ * At some point this class should be merged to the wp-customize.
  *
  * @package SocialManager
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialManager\Customizer;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
@@ -23,12 +22,12 @@ add_action( 'customize_register', function() {
 	 *
 	 * @since 1.2.0
 	 */
-	class Customize_Control_Radio_Image extends WP_Customize_Control {
+	class Control_Radio_Image extends WP_Customize_Control {
 
 		/**
-		 * The unique identifier of this plugin.
+		 * The unique identifier of the plugin.
 		 *
-		 * @since 1.0.0
+		 * @since 1.2.0
 		 * @access protected
 		 * @var string
 		 */
@@ -37,31 +36,30 @@ add_action( 'customize_register', function() {
 		/**
 		 * The type of customize control being rendered.
 		 *
-		 * @since  1.0.0
+		 * @since 1.2.0
 		 * @access public
-		 * @var    string
+		 * @var string
 		 */
-		public $type = 'radio_image';
+		public $type = 'ncsocman-radio-image';
 
 		/**
 		 * Loads the jQuery UI Button script and custom scripts/styles.
 		 *
-		 * @since  1.0.0
+		 * @since 1.2.0
 		 * @access public
 		 * @return void
 		 */
 		public function enqueue() {
 
 			wp_enqueue_script( 'jquery-ui-button' );
-
-			wp_enqueue_script( "{$plugin_slug}-customize-controls", plugin_dir_url( __FILE__ ) . 'js/customize-controls.js', array( 'jquery' ) );
+			wp_enqueue_script( "{$plugin_slug}-customizr-controls", plugin_dir_url( __FILE__ ) . 'js/customize-controls.js', array( 'jquery' ), null, true );
 			wp_enqueue_style( "{$plugin_slug}-customize-controls", plugin_dir_url( __FILE__ ) . 'css/customize-controls.css' );
 		}
 
 		/**
 		 * Add custom JSON parameters to use in the JS template.
 		 *
-		 * @since  1.0.0
+		 * @since 1.2.0
 		 * @access public
 		 * @return void
 		 */
@@ -74,15 +72,15 @@ add_action( 'customize_register', function() {
 			}
 
 			$this->json['choices'] = $this->choices;
-			$this->json['link']    = $this->get_link();
-			$this->json['value']   = $this->value();
-			$this->json['id']      = $this->id;
+			$this->json['link'] = $this->get_link();
+			$this->json['value'] = $this->value();
+			$this->json['id'] = $this->id;
 		}
 
 		/**
 		 * Underscore JS template to handle the control's output.
 		 *
-		 * @since  1.0.0
+		 * @since 1.2.0
 		 * @access public
 		 * @return void
 		 */
@@ -102,15 +100,15 @@ add_action( 'customize_register', function() {
 
 			<div class="buttonset">
 
-				<# for ( key in data.choices ) { #>
+			<# for ( key in data.choices ) { #>
 
-					<input type="radio" value="{{ key }}" name="_customize-{{ data.type }}-{{ data.id }}" id="{{ data.id }}-{{ key }}" {{{ data.link }}} <# if ( key === data.value ) { #> checked="checked" <# } #> />
+				<input type="radio" value="{{ key }}" name="_customize-{{ data.type }}-{{ data.id }}" id="{{ data.id }}-{{ key }}" {{{ data.link }}} <# if ( key === data.value ) { #> checked="checked" <# } #> />
 
-					<label for="{{ data.id }}-{{ key }}">
-						<span class="screen-reader-text">{{ data.choices[ key ]['label'] }}</span>
-						<img src="{{ data.choices[ key ]['url'] }}" alt="{{ data.choices[ key ]['label'] }}" />
-					</label>
-				<# } #>
+				<label for="{{ data.id }}-{{ key }}">
+					<span class="screen-reader-text">{{ data.choices[ key ]['label'] }}</span>
+					<img src="{{ data.choices[ key ]['url'] }}" alt="{{ data.choices[ key ]['label'] }}" />
+				</label>
+			<# } #>
 
 			</div><!-- .buttonset -->
 		<?php }

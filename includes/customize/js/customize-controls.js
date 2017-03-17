@@ -2,20 +2,19 @@ jQuery(function( $ ) {
 
 	'use strict';
 
-	// Use buttonset() for radio images.
-	$( '.customize-control-radio-image .buttonset' ).buttonset();
+	/**
+	 * Control: Button Style.
+	 *
+	 * @see control-radio-image.php
+	 */
+	$( '.customize-control-ncsocman-radio-image .buttonset' ).buttonset(); // Use buttonset() for radio images.
+	$( '.customize-control-ncsocman-radio-image input' ).change( function() { // Handles setting the new value in the customizer.
 
-	// Handles setting the new value in the customizer.
-	$( '.customize-control-radio-image input:radio' ).change(
-		function() {
+		var setting = $( this ).attr( 'data-customize-setting-link' ), // Get the name of the setting.
+			image = $( this ).val(); // Get the value of the currently-checked radio input.
 
-			var setting = $( this ).attr( 'data-customize-setting-link' ), // Get the name of the setting.
-				image = $( this ).val(); // Get the value of the currently-checked radio input.
-
-			// Set the new value.
-			wp.customize( setting, function( obj ) {
-				obj.set( image );
-			} );
-		}
-	);
+		wp.customize( setting, function( obj ) { // Set the new value.
+			obj.set( image );
+		} );
+	});
 });

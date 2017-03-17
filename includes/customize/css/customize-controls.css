@@ -1,25 +1,22 @@
-.customize-control-radio_image .ui-button {
-    margin: 0;
-    border-radius: 0;
-    border: none;
-    background: transparent;
+.customize-control-ncsocman-radio-image .buttonset {
+	text-align: center;
+	margin-top: 15px;
 }
-
-.customize-control-radio_image .ui-button-text { padding: 0; }
-
-.customize-control-radio_image img {
+.customize-control-ncsocman-radio-image label {
+	display: block;
+	margin-bottom: 6px;
+}
+.customize-control-ncsocman-radio-image img {
     box-sizing: border-box;
     max-width: 100%;
     height: auto;
     padding: 1px;
-    border: 4px solid transparent;
+    border: 3px solid transparent;
 }
-
-.customize-control-radio_image img:hover,
-.customize-control-radio_image img:focus {
+.customize-control-ncsocman-radio-image img:hover,
+.customize-control-ncsocman-radio-image img:focus {
     border-color: #ddd;
 }
-
-.customize-control-radio_image .ui-state-active img {
-    border-color: #00a0d2;
+.customize-control-ncsocman-radio-image .ui-state-active img {
+    border-color: #0085ba;
 }

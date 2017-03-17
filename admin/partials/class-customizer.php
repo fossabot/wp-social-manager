@@ -3,7 +3,7 @@
  * Admin: Customizer class
  *
  * @package SocialManager
- * @subpackage Admin\Fields
+ * @subpackage Admin\Customizer
  */
 
 namespace NineCodes\SocialManager;
@@ -16,7 +16,6 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  * The class to register custom fields in the Customizer.
  */
 class Customizer {
-
 
 	/**
 	 * Initialize the class and set its properties.
@@ -55,58 +54,81 @@ class Customizer {
 	public function customize_social_manager( $wp_customize ) {
 
 		// Register the radio image control class as a JS control type.
-		$wp_customize->register_control_type( __NAMESPACE__ . '\\Customize_Control_Radio_Image' );
+		$wp_customize->register_control_type( __NAMESPACE__ . '\\Customizer\Control_Radio_Image' );
 
 		// Register Panel: Social Media.
 		$wp_customize->add_panel('ninecodes-social-manager', array(
 			'capability' => 'edit_theme_options',
 			'title' => esc_html__( 'Social Media', 'ninecodes-social-manager' ),
 			'priority' => 210,
+			'active_callback' => array( $this, 'panel_active_callback' ),
 		));
 
 		// Register Section in the Panel: Buttons.
-		$wp_customize->add_section('buttons', array(
+		$wp_customize->add_section('button', array(
 			'title' => esc_html__( 'Buttons', 'ninecodes-social-manager' ),
 			'panel' => 'ninecodes-social-manager',
 		));
 
 		// Register Setting: Button Styles.
-		$wp_customize->add_setting('buttons_style', array(
-			'default' => 'content-sidebar',
+		$wp_customize->add_setting("{$this->option_slug}_button_style", array(
+			'default' => 'default',
 		));
 
 		// Register Control: Button Styles.
 		$wp_customize->add_control(
-			new Customize_Control_Radio_Image(
+			new Customizer\Control_Radio_Image(
 				$wp_customize,
-				'buttons_style',
+				"{$this->option_slug}_button_style",
 				array(
-					'label' => esc_html__( 'Styles', 'ninecodes-social-manager' ),
-					'section' => 'buttons',
+					'label' => esc_html__( 'Style', 'ninecodes-social-manager' ),
+					'description' => esc_html__( 'Select one the following options to change the social media buttons style', 'ninecodes-social-manager' ),
+					'section' => 'button',
 					'choices' => apply_filters( 'ninecodes_social_manager_options', array(
+						'default' => array(
+							'label' => esc_html__( 'Default', 'ninecodes-social-manager' ),
+							'url'   => plugin_dir_url( __DIR__ ) . 'img/dummy.png',
+						),
 						'colored' => array(
 							'label' => esc_html__( 'Colored', 'ninecodes-social-manager' ),
-							'url'   => plugin_dir_url( __DIR__ ) . 'img/buttons-style-square.png',
+							'url'   => plugin_dir_url( __DIR__ ) . 'img/dummy.png',
 						),
 						'square' => array(
 							'label' => esc_html__( 'Square', 'ninecodes-social-manager' ),
-							'url'   => plugin_dir_url( __DIR__ ) . 'img/buttons-style-square.png',
+							'url'   => plugin_dir_url( __DIR__ ) . 'img/dummy.png',
 						),
 						'rounded' => array(
 							'label' => esc_html__( 'Rounded', 'ninecodes-social-manager' ),
-							'url' => plugin_dir_url( __DIR__ ) . 'img/buttons-style-rounded.png',
+							'url' => plugin_dir_url( __DIR__ ) . 'img/dummy.png',
 						),
 						'circular' => array(
 							'label' => esc_html__( 'Circular', 'ninecodes-social-manager' ),
-							'url' => plugin_dir_url( __DIR__ ) . 'img/buttons-style-rounded.png',
+							'url' => plugin_dir_url( __DIR__ ) . 'img/dummy.png',
 						),
 						'skeuomorphic' => array(
 							'label' => esc_html__( 'Skeuomorphic', 'ninecodes-social-manager' ),
-							'url' => plugin_dir_url( __DIR__ ) . 'img/buttons-style-skeuomorphic.png',
+							'url' => plugin_dir_url( __DIR__ ) . 'img/dummy.png',
 						),
 					), 'button_styles' ),
 				)
 			)
 		);
+	}
+
+	/**
+	 * Method to check where the Panel should be active.
+	 *
+	 * @return [type] [description]
+	 */
+	public function panel_active_callback() {
+
+		$buttons_image = $this->plugin->get_option( 'buttons_image' );
+
+		$post_types_content = $this->plugin->get_option( 'buttons_content', 'post_types' );
+		$post_types_image = isset( $buttons_image['enabled'] ) && 'on' === $buttons_image['enabled'] ? $buttons_image['post_types'] : array();
+
+		$post_types = array_merge( $post_types_content, $post_types_image );
+
+		return is_singular( array_keys( array_filter( $post_types ) ) );
 	}
 }
