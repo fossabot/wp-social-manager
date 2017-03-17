@@ -324,7 +324,7 @@ foreach ( $includes as $site => $value ) :
 		 * NOTE: The social media buttons currently do not support Home and Archive display.
 		 * But, we plan to have it in the future.
 		 */
-		if ( empty( $post_types ) || is_home() || is_archive() ) {
+		if ( ! is_singular( array_keys( array_filter( $post_types ) ) ) ) {
 			return false;
 		}
 
