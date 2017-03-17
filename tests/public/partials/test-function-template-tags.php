@@ -173,7 +173,7 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 			'twitter' => 'yeap',
 		) );
 
-		$site_profiles = get_the_site_social_profiles( array( 'view' => 'icon-text' ) );
+		$site_profiles = get_the_site_social_profiles( array( 'view' => 'icon_text' ) );
 
 		$doc = new \DOMDocument();
 		libxml_use_internal_errors( true );

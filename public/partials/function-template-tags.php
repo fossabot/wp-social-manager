@@ -56,7 +56,7 @@ if ( ! function_exists( 'get_the_site_social_profiles' ) ) {
 					case 'text':
 						$return .= sprintf( '<a class="%1$s-profiles__item item-%2$s" href="%3$s" target="_blank">%4$s</a>', $prefix, $site, $url, $label );
 						break;
-					case 'icon-text':
+					case 'icon_text':
 						$return .= sprintf( '<a class="%1$s-profiles__item item-%2$s" href="%3$s" target="_blank"><span class="%1$s-profiles__item-icon">%4$s</span><span class="%1$s-profiles__item-text">%5$s</span></a>', $prefix, $site, $url, $icon, $label );
 						break;
 					default:

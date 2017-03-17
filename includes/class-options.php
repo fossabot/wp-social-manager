@@ -193,7 +193,7 @@ final class Options {
 		$views = array(
 			'icon' => esc_html__( 'Icon Only', 'ninecodes-social-manager' ),
 			'text' => esc_html__( 'Text Only', 'ninecodes-social-manager' ),
-			'icon-text' => esc_html__( 'Icon and Text', 'ninecodes-social-manager' ),
+			'icon_text' => esc_html__( 'Icon and Text', 'ninecodes-social-manager' ),
 		);
 
 		/**

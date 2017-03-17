@@ -176,7 +176,7 @@ class TestOptions extends WP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'icon', $views );
 		$this->assertArrayHasKey( 'text', $views );
-		$this->assertArrayHasKey( 'icon-text', $views );
+		$this->assertArrayHasKey( 'icon_text', $views );
 
 		/**
 		 * Test the filter hook to add a new Social Media button view.

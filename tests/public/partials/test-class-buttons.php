@@ -115,7 +115,7 @@ class TestButtons extends WP_UnitTestCase {
 			'endpoint' => $endpoint,
 		) );
 
-		$this->assertEquals( "<a class='social-manager-buttons__item item-facebook' href='https://www.facebook.com/sharer/sharer.php' target='_blank' role='button' rel='nofollow'><svg aria-hidden='true'><use xlink:href='#social-manager-icon-facebook' /></svg></a>", $buttons_view );
+		$this->assertEquals( "<a class='social-manager-buttons__item item-default item-facebook' href='https://www.facebook.com/sharer/sharer.php' target='_blank' role='button' rel='nofollow'><svg aria-hidden='true'><use xlink:href='#social-manager-icon-facebook' /></svg></a>", $buttons_view );
 
 		/**
 		 * Test with an empty "prefix".
