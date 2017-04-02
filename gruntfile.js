@@ -79,7 +79,7 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 
 		config: {
-			plugin_path: '/srv/www/wordpress-default/wp-content/plugins/<%= pkg.name %>' // Plugins path in VVV.
+			plugin_path: '/srv/www/wordpress-default/public_html/wp-content/plugins/<%= pkg.name %>' // Plugins path in VVV.
 		},
 
 		// Shell actions.
