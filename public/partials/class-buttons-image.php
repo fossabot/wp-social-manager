@@ -161,7 +161,7 @@ class ButtonsImage extends Buttons {
 	 */
 	public function render_buttons( $content ) {
 
-		if ( empty( $content ) || ! $this->is_buttons_image() || 'publish' !== $this->get_post_status() ) {
+		if ( empty( $content ) || is_feed() || ! $this->is_buttons_image() || 'publish' !== $this->get_post_status() ) {
 			return $content;
 		}
 
