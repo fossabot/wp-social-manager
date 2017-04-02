@@ -1,9 +1,9 @@
 === Social Media Manager ===
 Contributors: ninecodes, tfirdaus, hongkiat
 Tags: widget, json, wp-api, social-media, sharing, facebook, twitter, pinterest, open-graph, twitter-cards
-Requires at least: 4.5
+Requires at least: 4.7
 Tested up to: 4.7
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,6 +116,11 @@ None, at the moment. Please ask. :)
 
 == Changelog ==
 
+= [1.1.3] - 2017-04-02 =
+* __Changed__: Do not generate the social media buttons in Feeds.
+* __Changed__: Bump up the min. Required Version to 4.7.
+
+
 = [1.1.2] - 2017-02-05 =
 * __Added__: `kses_icon` function to sanitize icon output.
 * __Changed__: The plugin screenshot showing the Profiles screen in the Social Media Setting page.
@@ -197,6 +202,9 @@ Read more at [Version 1.0.6 Release Note](https://github.com/ninecodes/social-ma
 
 == Upgrade Notice ==
 
+= 1.1.3 =
+* Prevent social buttons to be generated in Feed pages.
+
 = 1.1.2 =
 * Sanitize icon output, fixed namespace for backward compatibility, and update screenshot.
 
@@ -205,24 +213,3 @@ Read more at [Version 1.0.6 Release Note](https://github.com/ninecodes/social-ma
 
 = 1.1.0 =
 * Added template tag functions, additional Open Graph meta tags, improvement on the Filter hooks, and numerous bug fixes.
-
-= 1.0.6 =
-* Numerous bug fixes, and improvements in the REST API response as well as in the plugin code structure.
-
-= 1.0.5 =
-* Update translations and fixed bug with the stylesheet enqueue when the "Social Media Profiles" widget is active.
-
-= 1.0.4 =
-* A few minor bug fixes, and changes to retain consistency.
-
-= 1.0.3 =
-* A few minor changes in the generated meta tags.
-
-= 1.0.2 =
-* A few minor bug fixes, tweaks in Backbone application, and fixed `readme.txt` formatting issue.
-
-= 1.0.1 =
-* Added screenshot images, fixed a number of bugs and error formatting in `readme.txt` file, and a few improvements in the JavaScript.
-
-= 1.0.0 =
-* Initial release.
