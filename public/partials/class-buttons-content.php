@@ -128,6 +128,10 @@ class ButtonsContent extends Buttons {
 	 */
 	public function render_buttons( $content ) {
 
+		if ( is_feed() ) {
+			return $content;
+		}
+
 		$button = '';
 		$post_id = get_the_id();
 
