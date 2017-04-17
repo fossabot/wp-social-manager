@@ -305,16 +305,24 @@ module.exports = function(grunt) {
 					cwd: './',
 					type: 'wp-plugin',
 					domainPath: './languages',
+					updateTimestamp: false,
 					mainFile: '<%= pkg.name %>.php',
 					potFilename: '<%= pkg.name %>.pot',
 					potHeaders: {
 						'poedit': true, // Includes common Poedit headers.
 						'x-poedit-keywordslist': true // Include a list of all possible gettext functions.
 					},
-					include:[
-
+					include: [
+						'admin/.*',
+						'public/.*',
+						'includes/.*',
+						'widgets/.*',
+						'<%= pkg.name %>.php'
 					],
 					exclude: [
+						'.js',
+						'admin/js/.*',
+						'public/js/.*',
 						'node_modules/.*',
 						'build/.*',
 						'dev-lib/.*',
