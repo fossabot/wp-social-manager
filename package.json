@@ -8,14 +8,12 @@
   },
   "description": "Lightweight, clean and optimized social media plugin for WordPress.",
   "scripts": {
-    "test": "grunt test",
-    "version": "grunt version --verbose",
     "commitmsg": "validate-commit-msg",
     "precommit": "dev-lib/pre-commit"
   },
   "repository": {
     "type": "git",
-    "url": "github:ninecodes/social-manager"
+    "url": "git+https://github.com/ninecodes/social-manager.git"
   },
   "keywords": [
     "widget",
@@ -32,13 +30,16 @@
   "author": {
     "name": "NineCodes",
     "email": "admin@ninecodes.com",
-    "url": "https://profiles.wordpress.org/ninecodes"
+    "url": "https://github.com/ninecodes"
   },
   "contributors": [
     "Thoriq Firdaus <tfirdaus@outlook.com>",
     "Hongkiat Lim <me@hongkiat.com>"
   ],
   "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/ninecodes/social-manager/issues"
+  },
   "homepage": "http://wordpress.org/plugins/ninecodes-social-manager",
   "devDependencies": {
     "eslint": "^3.9.1",
