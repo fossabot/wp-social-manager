@@ -129,6 +129,11 @@ module.exports = function(grunt) {
 			}
 		},
 
+		// Run Qunit test.
+		qunit: {
+			all: [ './tests/qunit/**/*.html' ]
+		},
+
 		// Run tasks whenever watched files change.
 		watch: {
 
@@ -438,9 +443,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-eslint');
 	grunt.loadNpmTasks('grunt-rtlcss');
 	grunt.loadNpmTasks('grunt-string-replace');
-
 	grunt.loadNpmTasks('grunt-wp-i18n');
-
+	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-copy');
@@ -480,13 +484,10 @@ module.exports = function(grunt) {
 		'clean:build'
 	]);
 
-	/**
-	 * ==================================================
-	 * Register Test specific tasks
-	 * ==================================================
-	 */
+	// Run test unit.
 	grunt.registerTask('test', [
-		'shell:phpunit'
+		'shell:phpunit',
+		'qunit'
 	]);
 
 	/**
@@ -535,9 +536,9 @@ module.exports = function(grunt) {
 
 	// Check and compile WordPress files.
 	grunt.registerTask('wordpress', [
+		'shell:phpunit',
 		'addtextdomain',
 		'checktextdomain',
-		'makepot',
-		'shell:phpunit'
+		'makepot'
 	]);
 };
