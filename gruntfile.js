@@ -527,19 +527,21 @@ module.exports = function(grunt) {
 	// "Development" stage.
 	grunt.registerTask('scripts:dev', [
 		'eslint',
+		'qunit',
 		'uglify:dev'
 	]);
 
 	// "Production" stage.
 	grunt.registerTask('scripts:build', [
 		'eslint',
+		'qunit',
 		'uglify:build'
 	]);
 
 	/**
 	 * ==================================================
 	 * Register WordPress specific tasks
-	 * ==================================================
+	 * ==================================================e
 	 */
 
 	// Check and compile WordPress files.
