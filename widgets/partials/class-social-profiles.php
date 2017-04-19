@@ -2,17 +2,18 @@
 /**
  * Widget: WidgetSocialProfiles class
  *
- * @package SocialManager
- * @subpackage Widgets\SocialProfiles
+ * @package SocialManager\Widgets
  */
 
-namespace NineCodes\SocialManager;
+namespace NineCodes\SocialManager\Widget;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
 use \WP_Widget;
+use \NineCodes\SocialManager\Helpers;
+use \NineCodes\SocialManager\Options;
 
 /**
  * "Social Profiles" widget registration class.
@@ -21,7 +22,7 @@ use \WP_Widget;
  *
  * @since 1.0.0
  */
-final class WidgetSocialProfiles extends WP_Widget {
+class Social_Profiles extends WP_Widget {
 
 	/**
 	 * Base ID of the widget; it has to be lowercase and unique.
@@ -89,7 +90,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 	public function __construct() {
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 30 );
-		add_action( 'ninecodes_social_manager_widget_setups', array( $this, 'setups' ), 10, 2 );
+		add_action( 'ninecodes_social_manager_widget_init', array( $this, 'setups' ), 10, 2 );
 	}
 
 	/**

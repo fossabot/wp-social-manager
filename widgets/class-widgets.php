@@ -108,8 +108,15 @@ final class Widgets {
 	 */
 	public function setups() {
 
-		register_widget( __NAMESPACE__ . '\\WidgetSocialProfiles' );
+		register_widget( __NAMESPACE__ . '\\Widget\Social_Profiles' );
 
-		do_action( 'ninecodes_social_manager_widget_setups', $this );
+		/**
+	 	 * Fires along with `widgets_init` to register extra widget in the plugin.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param object $tag The `Widgets` class instance.
+		 */
+		do_action( 'ninecodes_social_manager_widget_init', $this );
 	}
 }
