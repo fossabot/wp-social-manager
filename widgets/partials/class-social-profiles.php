@@ -269,7 +269,7 @@ class Social_Profiles extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		echo $args['before_widget']; // WPCS : XSS ok.
+		echo wp_kses_post( $args['before_widget'] );
 
 		/*
 		 * If somehow the widget title is not saved,
