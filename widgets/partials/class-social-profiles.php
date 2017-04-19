@@ -168,6 +168,7 @@ final class WidgetSocialProfiles extends WP_Widget {
 			<?php if ( ! array_filter( $site_profiles ) ) :  ?>
 			<p>
 			<?php
+				/* translators: %s is replaced with the "setting page link" */
 				$message = esc_html__( 'Please add at least one social media profile of this website in the %s.', 'ninecodes-social-manager' );
 				$setting = '<a href="' . admin_url( 'options-general.php?page=ninecodes-social-manager' ) . '">' . esc_html__( 'setting page', 'ninecodes-social-manager' ) . '</a>';
 				echo wp_kses(sprintf( $message, $setting ), array(
