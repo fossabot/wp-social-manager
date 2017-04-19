@@ -82,7 +82,7 @@ final class Public_View {
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var ThemeSupports
+	 * @var Theme_Support
 	 */
 	protected $theme_supports;
 
@@ -108,7 +108,7 @@ final class Public_View {
 		$this->plugin_slug = $plugin->get_slug();
 		$this->option_slug = $plugin->get_opts();
 		$this->version = $plugin->get_version();
-		$this->theme_supports = $plugin->get_theme_supports();
+		$this->theme_supports = $plugin->get_theme_support();
 
 		$this->path_dir = plugin_dir_path( __FILE__ );
 		$this->path_url = plugin_dir_url( __FILE__ );

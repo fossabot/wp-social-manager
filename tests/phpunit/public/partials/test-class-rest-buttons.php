@@ -16,7 +16,7 @@ use \WP_REST_Server;
 use \WP_REST_Request;
 
 /**
- * The class to test the "ThemeSupports" class instance.
+ * The class to test the "Theme_Support" class instance.
  *
  * @since 1.0.0
  */

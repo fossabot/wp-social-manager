@@ -16,7 +16,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  * The Widget class is used for registering custom widgets of the plugin.
  *
  * @since 1.0.0
- * @since 1.0.5 - Remove unnecessary methods `get_slug()`, `get_opts()`, `get_theme_supports()`, and `get_option`
+ * @since 1.0.5 - Remove unnecessary methods `get_slug()`, `get_opts()`, `get_theme_support()`, and `get_option`
  */
 final class Widgets {
 

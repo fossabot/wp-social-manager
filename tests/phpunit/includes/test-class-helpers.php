@@ -29,9 +29,9 @@ class TestHelpers extends WP_UnitTestCase {
 	public $plugin;
 
 	/**
-	 * The ThemeSupports instance.
+	 * The Theme_Support instance.
 	 *
-	 * @var ThemeSupports
+	 * @var Theme_Support
 	 */
 	public $theme_supports;
 
@@ -45,7 +45,7 @@ class TestHelpers extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->plugin = new Plugin();
-		$this->theme_supports = new ThemeSupports();
+		$this->theme_supports = new Theme_Support();
 	}
 
 	/**

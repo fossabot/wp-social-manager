@@ -53,7 +53,7 @@ class TestPublic extends WP_UnitTestCase {
 
 		// Setup the plugin.
 		$this->plugin = new Plugin();
-		$this->theme_supports = new ThemeSupports();
+		$this->theme_supports = new Theme_Support();
 
 		$this->plugin->initialize();
 

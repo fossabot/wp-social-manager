@@ -1,9 +1,9 @@
 <?php
 /**
- * This file defines the ThemeSupports class.
+ * This file defines the Theme_Support class.
  *
  * @package SocialManager
- * @subpackage ThemeSupports
+ * @subpackage Theme_Support
  */
 
 namespace NineCodes\SocialManager;
@@ -13,16 +13,15 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 }
 
 /**
- * The ThemeSupports class to get the theme support arguments passed through
+ * The Theme_Support class to get the theme support arguments passed through
  * 'add_theme_support' function.
  *
- * The ThemeSupports class also contains a couple of utility method that
+ * The Theme_Support class also contains a couple of utility method that
  * will returns a `boolean` for which the theme supports the specified feature.
  *
  * @since 1.0.0
  */
-final class ThemeSupports {
-
+final class Theme_Support {
 
 	/**
 	 * The name to check the feature provided by the plugin.
@@ -67,7 +66,7 @@ final class ThemeSupports {
 	 * @return void
 	 */
 	protected function hooks() {
-		add_action( 'init', array( $this, 'theme_supports' ) );
+		add_action( 'init', array( $this, 'theme_support' ) );
 	}
 
 	/**
@@ -80,7 +79,7 @@ final class ThemeSupports {
 	 * @return array|boolean Return an array if the arguments are passed in
 	 *                       the `add_theme_support` function, otherwise a boolean.
 	 */
-	public function theme_supports() {
+	public function theme_support() {
 
 		if ( current_theme_supports( $this->feature ) ) {
 			$supports = get_theme_support( $this->feature );
@@ -116,9 +115,7 @@ final class ThemeSupports {
 
 		$supports = array(
 			'stylesheet' => $this->stylesheet(),
-			'attr-prefix' => $this->attr_prefix(),
 			'attr_prefix' => $this->attr_prefix(),
-			'buttons-mode' => $this->buttons_mode(),
 			'buttons_mode' => $this->buttons_mode(),
 		);
 
@@ -161,10 +158,6 @@ final class ThemeSupports {
 
 		$prefix = '';
 
-		if ( array_key_exists( 'attr-prefix', $supports ) ) {
-			$prefix = $this->supports['attr-prefix'];
-		}
-
 		if ( array_key_exists( 'attr_prefix', $supports ) ) {
 			$prefix = $this->supports['attr_prefix'];
 		}
@@ -191,10 +184,6 @@ final class ThemeSupports {
 		$haystack = (array) Options::buttons_modes();
 
 		$mode = '';
-
-		if ( array_key_exists( 'buttons-mode', $supports ) ) {
-			$mode = $this->supports['buttons-mode'];
-		}
 
 		if ( array_key_exists( 'buttons_mode', $supports ) ) {
 			$mode = $this->supports['buttons_mode'];

@@ -85,7 +85,7 @@ class Helpers {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @see ThemeSupports
+	 * @see Theme_Support
 	 *
 	 * @return string
 	 */
@@ -94,8 +94,8 @@ class Helpers {
 		$prefix = self::$prefix; // Default prefix.
 		$custom = null;
 
-		$support = new ThemeSupports();
-		$support = $support->theme_supports();
+		$support = new Theme_Support();
+		$support = $support->theme_support();
 
 		if ( isset( $support['attr-prefix'] ) ) {
 			$custom = $support['attr-prefix'];

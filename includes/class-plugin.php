@@ -70,11 +70,11 @@ final class Plugin {
 	protected $options;
 
 	/**
-	 * The ThemeSupports class instance.
+	 * The Theme_Support class instance.
 	 *
 	 * @since 1.0.0
 	 * @access public
-	 * @var ThemeSupports
+	 * @var Theme_Support
 	 */
 	protected $theme_supports;
 
@@ -190,10 +190,10 @@ final class Plugin {
 
 		require_once( $this->path_dir . 'includes/function-utilities.php' );
 
-		require_once( $this->path_dir . 'includes/class-i18n.php' );
+		require_once( $this->path_dir . 'includes/class-languages.php' );
 		require_once( $this->path_dir . 'includes/class-helpers.php' );
 		require_once( $this->path_dir . 'includes/class-options.php' );
-		require_once( $this->path_dir . 'includes/class-theme-supports.php' );
+		require_once( $this->path_dir . 'includes/class-theme-support.php' );
 
 		require_once( $this->path_dir . 'includes/wp-settings/wp-settings.php' );
 		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-fields.php' );
@@ -258,7 +258,7 @@ final class Plugin {
 	 */
 	protected function setups() {
 
-		$this->theme_supports = new ThemeSupports();
+		$this->theme_supports = new Theme_Support();
 		$this->languages = new Languages( $this->plugin_slug );
 
 		$this->admin = new ViewAdmin( $this );
@@ -361,9 +361,9 @@ final class Plugin {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @return ThemeSupports instance.
+	 * @return Theme_Support instance.
 	 */
-	public function get_theme_supports() {
+	public function get_theme_support() {
 		return $this->theme_supports;
 	}
 

@@ -96,20 +96,20 @@ class TestPlugin extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test the 'get_theme_supports()' method.
+	 * Test the 'get_theme_support()' method.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return void
 	 */
-	public function test_plugin_get_theme_supports() {
+	public function test_plugin_get_theme_support() {
 
 		// Make sure the method exist.
-		$this->assertTrue( method_exists( $this->plugin, 'get_theme_supports' ),  'Class does not have method \'get_theme_supports\'' );
+		$this->assertTrue( method_exists( $this->plugin, 'get_theme_support' ),  'Class does not have method \'get_theme_support\'' );
 
 		// Make sure the method returns correct instance.
-		$this->assertInstanceOf( '\NineCodes\SocialManager\ThemeSupports', $this->plugin->get_theme_supports() );
+		$this->assertInstanceOf( '\NineCodes\SocialManager\Theme_Support', $this->plugin->get_theme_support() );
 	}
 
 	/**
