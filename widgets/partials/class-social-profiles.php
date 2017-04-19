@@ -1,6 +1,6 @@
 <?php
 /**
- * Widget: WidgetSocialProfiles class
+ * Widget: Social Media Profile
  *
  * @package SocialManager\Widgets
  */
@@ -16,7 +16,7 @@ use \NineCodes\SocialManager\Helpers;
 use \NineCodes\SocialManager\Options;
 
 /**
- * "Social Profiles" widget registration class.
+ * "Social Media Profiles" widget registration class.
  *
  * @link https://developer.wordpress.org/reference/classes/wp_widget/
  *
@@ -95,6 +95,9 @@ class Social_Profiles extends WP_Widget {
 
 	/**
 	 * Function to setup the widget.
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 *
 	 * @param Widgets $widgets The Widgets class instance.
 	 * @return void
