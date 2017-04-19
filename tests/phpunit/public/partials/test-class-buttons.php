@@ -60,7 +60,7 @@ class TestButtons extends WP_UnitTestCase {
 
 		$this->option_slug = $this->plugin->get_opts();
 
-		$this->buttons = new ButtonsContent( $this->plugin );
+		$this->buttons = new Buttons_Content( $this->plugin );
 	}
 
 	/**

@@ -166,12 +166,12 @@ final class Public_View {
 	 */
 	public function setups() {
 
-		$wp_head = new WPHead( $this->plugin );
-		$wp_footer = new WPFooter();
+		$wp_head = new WP_Head( $this->plugin );
+		$wp_footer = new WP_Footer();
 
-		$buttons_content = new ButtonsContent( $this->plugin );
-		$buttons_image = new ButtonsImage( $this->plugin );
-		$rest_buttons = new RESTButtonsController( $this->plugin );
+		$buttons_content = new Buttons_Content( $this->plugin );
+		$buttons_image = new Buttons_Image( $this->plugin );
+		$rest_buttons = new REST_Buttons( $this->plugin );
 
 		$this->register_styles();
 		$this->register_scripts();

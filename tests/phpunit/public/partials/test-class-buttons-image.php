@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestButtonsImage
+ * Class TestButtons_Image
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -14,11 +14,11 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * The class to test the "TestButtonsImage" class instance.
+ * The class to test the "TestButtons_Image" class instance.
  *
  * @since 1.1.0
  */
-class TestButtonsImage extends WP_UnitTestCase {
+class TestButtons_Image extends WP_UnitTestCase {
 
 	/**
 	 * The Plugin class instance.
@@ -30,20 +30,20 @@ class TestButtonsImage extends WP_UnitTestCase {
 	protected $plugin;
 
 	/**
-	 * The ButtonsContent class instance.
+	 * The Buttons_Content class instance.
 	 *
 	 * @since 1.1.0
 	 * @access protected
-	 * @var ButtonsContent
+	 * @var Buttons_Content
 	 */
 	protected $buttons_content;
 
 	/**
-	 * The ButtonsImage class instance.
+	 * The Buttons_Image class instance.
 	 *
 	 * @since 1.1.0
 	 * @access protected
-	 * @var ButtonsImage
+	 * @var Buttons_Image
 	 */
 	protected $buttons_image;
 
@@ -57,8 +57,8 @@ class TestButtonsImage extends WP_UnitTestCase {
 		$this->plugin = new Plugin();
 		$this->plugin->initialize();
 
-		$this->buttons_content = new ButtonsContent( $this->plugin );
-		$this->buttons_image = new ButtonsImage( $this->plugin );
+		$this->buttons_content = new Buttons_Content( $this->plugin );
+		$this->buttons_image = new Buttons_Image( $this->plugin );
 	}
 
 	/**
@@ -85,11 +85,11 @@ class TestButtonsImage extends WP_UnitTestCase {
 			return $icons;
 		}, 10, 3 );
 
-		// ButtonsImage should have not theses removed keys.
+		// Buttons_Image should have not theses removed keys.
 		$this->assertArrayNotHasKey( 'facebook', $this->buttons_image->get_buttons_icons() );
 		$this->assertArrayNotHasKey( 'twitter', $this->buttons_image->get_buttons_icons() );
 
-		// ButtonsContent should have theses removed keys.
+		// Buttons_Content should have theses removed keys.
 		$this->assertArrayHasKey( 'facebook', $this->buttons_content->get_buttons_icons() );
 		$this->assertArrayHasKey( 'twitter', $this->buttons_content->get_buttons_icons() );
 	}

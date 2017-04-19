@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestWPFooter
+ * Class TestWP_Footer
  *
  * TODO: Add test for wp_kses.
  *
@@ -16,18 +16,18 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * The class to test the "TestWPFooter" class instance.
+ * The class to test the "TestWP_Footer" class instance.
  *
  * @since 1.0.4
  */
-class TestWPFooter extends WP_UnitTestCase {
+class TestWP_Footer extends WP_UnitTestCase {
 
 	/**
 	 * The Endpoints class instance.
 	 *
 	 * @since 1.0.4
 	 * @access protected
-	 * @var WPFooter
+	 * @var WP_Footer
 	 */
 	protected $wp_footer;
 
@@ -45,7 +45,7 @@ class TestWPFooter extends WP_UnitTestCase {
 		$plugin->initialize();
 
 		$public = new Public_View( $plugin );
-		$this->wp_footer = new WPFooter( $public );
+		$this->wp_footer = new WP_Footer( $public );
 	}
 
 	/**

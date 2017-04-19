@@ -1,6 +1,6 @@
 <?php
 /**
- * Public: RESTButtonsController class
+ * Public: REST_Buttons class
  *
  * @package SocialManager
  * @subpackage Public\REST
@@ -24,7 +24,7 @@ use \WP_REST_Controller;
  * @since 1.0.0
  * @since 1.0.6 - Extend WP_REST_Controller, and rename class.
  */
-class RESTButtonsController extends WP_REST_Controller {
+class REST_Buttons extends WP_REST_Controller {
 
 	/**
 	 * The Plugin class instance.

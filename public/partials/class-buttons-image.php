@@ -1,6 +1,6 @@
 <?php
 /**
- * Public: ButtonsImage Class
+ * Public: Buttons_Image Class
  *
  * @package SocialManager
  * @subpackage Public\Buttons
@@ -19,7 +19,7 @@ use \DOMDocument;
  *
  * @since 1.0.0
  */
-class ButtonsImage extends Buttons {
+class Buttons_Image extends Buttons {
 
 	/**
 	 * The response of `get_image_endpoints()` function
@@ -235,7 +235,7 @@ class ButtonsImage extends Buttons {
 
 			libxml_clear_errors();
 			libxml_use_internal_errors( $errors );
-		}
+		} // End if().
 
 		return $content;
 	}
@@ -258,7 +258,7 @@ class ButtonsImage extends Buttons {
 
 		if ( ! empty( $includes ) ) :
 
-			$list .= "<span class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsImage\">";
+			$list .= "<span class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"Buttons_Image\">";
 
 			$prefix = $this->prefix;
 
@@ -314,7 +314,7 @@ class ButtonsImage extends Buttons {
 			$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' );
 
 			if ( ! empty( $includes ) ) : ?><script type="text/html" id="tmpl-buttons-image">
-<span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsImage"><?php
+<span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="buttons-image"><?php
 
 $prefix = $this->prefix;
 foreach ( $includes as $site => $value ) :

@@ -1,9 +1,9 @@
 <?php
 /**
- * Public: WPHead class
+ * Public: WP_Head class
  *
  * @package SocialManager
- * @subpackage Public\WPHead
+ * @subpackage Public\WP_Head
  */
 
 namespace NineCodes\SocialManager;
@@ -22,7 +22,7 @@ use \OpenGraphProtocolArticle;
  * @since 1.0.0
  * @since 1.0.6 - Remove Metas class as the parent class.
  */
-final class WPHead {
+final class WP_Head {
 
 	/**
 	 * The Plugin class instance.

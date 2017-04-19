@@ -20,7 +20,7 @@ use \WP_REST_Request;
  *
  * @since 1.0.0
  */
-class TestRESTButtonsController extends WP_UnitTestCase {
+class TestREST_Buttons extends WP_UnitTestCase {
 
 	/**
 	 * The APIRoutes
@@ -46,7 +46,7 @@ class TestRESTButtonsController extends WP_UnitTestCase {
 		$plugin = new Plugin();
 
 		$this->server = $wp_rest_server = new WP_REST_Server;
-		$this->rest_buttons = new RESTButtonsController( $plugin );
+		$this->rest_buttons = new REST_Buttons( $plugin );
 
 		do_action( 'rest_api_init' );
 	}

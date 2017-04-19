@@ -1,9 +1,9 @@
 <?php
 /**
- * Public: WPFooter class
+ * Public: WP_Footer class
  *
  * @package SocialManager
- * @subpackage Public\WPFooter
+ * @subpackage Public\WP_Footer
  */
 
 namespace NineCodes\SocialManager;
@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-final class WPFooter {
+final class WP_Footer {
 
 	/**
 	 * The element prefix attribute.
