@@ -97,11 +97,11 @@ final class Plugin {
 	protected $admin;
 
 	/**
-	 * The ViewPublic class instance.
+	 * The Public_View class instance.
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var ViewPublic
+	 * @var Public_View
 	 */
 	protected $public;
 
@@ -204,7 +204,7 @@ final class Plugin {
 		add_action( 'plugins_loaded', array( $this, 'butterbean' ) );
 
 		require_once( $this->path_dir . 'admin/class-admin.php' );
-		require_once( $this->path_dir . 'public/class-public.php' );
+		require_once( $this->path_dir . 'public/class-public-view.php' );
 		require_once( $this->path_dir . 'widgets/class-widgets.php' );
 	}
 
@@ -262,7 +262,7 @@ final class Plugin {
 		$this->languages = new Languages( $this->plugin_slug );
 
 		$this->admin = new ViewAdmin( $this );
-		$this->public = new ViewPublic( $this );
+		$this->public = new Public_View( $this );
 		$this->widgets = new Widgets( $this );
 
 		add_action( 'admin_init', array( $this, 'updates' ) );
@@ -380,12 +380,12 @@ final class Plugin {
 	}
 
 	/**
-	 * Get the ViewPublic instance.
+	 * Get the Public_View instance.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @return ViewPublic instance.
+	 * @return Public_View instance.
 	 */
 	public function get_view_public() {
 		return $this->public;

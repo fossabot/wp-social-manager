@@ -143,7 +143,7 @@ class TestPlugin extends WP_UnitTestCase {
 		$this->assertTrue( method_exists( $this->plugin, 'get_view_public' ),  'Class does not have method \'get_view_public\'' );
 
 		// Make sure the method returns correct instance.
-		$this->assertInstanceOf( '\NineCodes\SocialManager\ViewPublic', $this->plugin->get_view_public() );
+		$this->assertInstanceOf( '\NineCodes\SocialManager\Public_View', $this->plugin->get_view_public() );
 	}
 
 	/**

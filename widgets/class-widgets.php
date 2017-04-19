@@ -31,11 +31,11 @@ final class Widgets {
 	public $plugin;
 
 	/**
-	 * The ViewPublic class instance.
+	 * The Public_View class instance.
 	 *
 	 * @since 1.0.5
 	 * @access public
-	 * @var ViewPublic
+	 * @var Public_View
 	 */
 	public $public;
 

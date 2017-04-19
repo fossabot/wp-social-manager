@@ -1,6 +1,6 @@
 <?php
 /**
- * Public: ViewPublic class
+ * Public: Public_View class
  *
  * @package SocialManager
  * @subpackage Public
@@ -20,7 +20,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-final class ViewPublic {
+final class Public_View {
 
 	/**
 	 * The Plugin class instance.

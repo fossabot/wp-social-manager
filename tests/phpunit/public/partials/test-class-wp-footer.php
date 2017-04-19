@@ -44,7 +44,7 @@ class TestWPFooter extends WP_UnitTestCase {
 		$plugin = new Plugin();
 		$plugin->initialize();
 
-		$public = new ViewPublic( $plugin );
+		$public = new Public_View( $plugin );
 		$this->wp_footer = new WPFooter( $public );
 	}
 
