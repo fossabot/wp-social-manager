@@ -126,7 +126,7 @@ class TestPlugin extends WP_UnitTestCase {
 		$this->assertTrue( method_exists( $this->plugin, 'get_view_admin' ),  'Class does not have method \'get_view_admin\'' );
 
 		// Make sure the method returns correct instance.
-		$this->assertInstanceOf( '\NineCodes\SocialManager\ViewAdmin', $this->plugin->get_view_admin() );
+		$this->assertInstanceOf( '\NineCodes\SocialManager\Admin_View', $this->plugin->get_view_admin() );
 	}
 
 	/**

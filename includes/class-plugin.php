@@ -88,11 +88,11 @@ final class Plugin {
 	public $languages;
 
 	/**
-	 * The ViewAdmin class instance.
+	 * The Admin_View class instance.
 	 *
 	 * @since 1.0.0
 	 * @access public
-	 * @var ViewAdmin
+	 * @var Admin_View
 	 */
 	protected $admin;
 
@@ -203,7 +203,7 @@ final class Plugin {
 
 		add_action( 'plugins_loaded', array( $this, 'butterbean' ) );
 
-		require_once( $this->path_dir . 'admin/class-admin.php' );
+		require_once( $this->path_dir . 'admin/class-admin-view.php' );
 		require_once( $this->path_dir . 'public/class-public-view.php' );
 		require_once( $this->path_dir . 'widgets/class-widgets.php' );
 	}
@@ -261,7 +261,7 @@ final class Plugin {
 		$this->theme_supports = new Theme_Support();
 		$this->languages = new Languages( $this->plugin_slug );
 
-		$this->admin = new ViewAdmin( $this );
+		$this->admin = new Admin_View( $this );
 		$this->public = new Public_View( $this );
 		$this->widgets = new Widgets( $this );
 
@@ -368,12 +368,12 @@ final class Plugin {
 	}
 
 	/**
-	 * Get the ViewAdmin instance.
+	 * Get the Admin_View instance.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @return ViewAdmin instance.
+	 * @return Admin_View instance.
 	 */
 	public function get_view_admin() {
 		return $this->admin;

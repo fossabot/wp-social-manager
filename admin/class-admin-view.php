@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the ViewAdmin class.
+ * This file defines the Admin_View class.
  *
  * @package 	SocialManager
  * @subpackage 	Admin
@@ -13,14 +13,14 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 }
 
 /**
- * The ViewAdmin class delivers admin-specific functionality of the plugin.
+ * The Admin_View class delivers admin-specific functionality of the plugin.
  *
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
  * @since 1.0.0
  */
-final class ViewAdmin {
+final class Admin_View {
 
 	/**
 	 * The Plugin class instance.
