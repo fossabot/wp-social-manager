@@ -339,7 +339,7 @@ class TestOptions extends WP_UnitTestCase {
 	 */
 	public function test_buttons_modes() {
 
-		$modes = Options::buttons_modes();
+		$modes = Options::button_modes();
 
 		$this->assertArrayHasKey( 'html', $modes );
 		$this->assertArrayHasKey( 'json', $modes );

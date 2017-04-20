@@ -895,7 +895,7 @@ final class Settings {
 				'label' => esc_html__( 'Buttons Mode', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Select the mode to render the social media buttons.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
-				'options' => Options::buttons_modes(),
+				'options' => Options::button_modes(),
 				'default' => 'html',
 			);
 

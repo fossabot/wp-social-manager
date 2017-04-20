@@ -116,7 +116,7 @@ final class Theme_Support {
 		$supports = array(
 			'stylesheet' => $this->stylesheet(),
 			'attr_prefix' => $this->attr_prefix(),
-			'buttons_mode' => $this->buttons_mode(),
+			'button_mode' => $this->button_mode(),
 		);
 
 		return isset( $supports[ $feature ] ) ? $supports[ $feature ] : false;
@@ -173,12 +173,12 @@ final class Theme_Support {
 	 *
 	 * @return boolean|string String is either 'html' or 'json', false if this feature is not defined.
 	 */
-	protected function buttons_mode() {
+	protected function button_mode() {
 
 		$supports = (array) $this->supports;
-		$haystack = (array) Options::buttons_modes();
+		$haystack = (array) Options::button_modes();
 
-		$mode = key_exists( 'buttons_mode', $supports ) ? $this->supports['buttons_mode'] : '';
+		$mode = key_exists( 'button_mode', $supports ) ? $this->supports['button_mode'] : '';
 
 		if ( $mode && key_exists( $mode, $haystack ) ) {
 			return $mode;

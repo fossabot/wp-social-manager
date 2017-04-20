@@ -116,30 +116,30 @@ class TestTheme_Support extends WP_UnitTestCase {
 	public function test_theme_supports_buttons_mode_html() {
 
 		add_theme_support($this->theme_support->get_feature_name(), array(
-			'buttons_mode' => 'html',
+			'button_mode' => 'html',
 		));
 
 		$supports = $this->theme_support->theme_support();
 
-		$this->assertArrayHasKey( 'buttons_mode', $supports );
-		$this->assertEquals( 'html', $supports['buttons_mode'] );
+		$this->assertArrayHasKey( 'button_mode', $supports );
+		$this->assertEquals( 'html', $supports['button_mode'] );
 
-		$is = $this->theme_support->is( 'buttons_mode' );
+		$is = $this->theme_support->is( 'button_mode' );
 		$this->assertEquals( 'html', $is );
 
 		/**
 		 * Feature name alias: `buttons-mode`.
 		 */
 		add_theme_support($this->theme_support->get_feature_name(), array(
-			'buttons-mode' => 'html',
+			'button-mode' => 'html',
 		));
 
 		$supports = $this->theme_support->theme_support();
 
-		$this->assertArrayHasKey( 'buttons-mode', $supports );
-		$this->assertEquals( 'html', $supports['buttons-mode'] );
+		$this->assertArrayHasKey( 'button-mode', $supports );
+		$this->assertEquals( 'html', $supports['button-mode'] );
 
-		$is = $this->theme_support->is( 'buttons-mode' );
+		$is = $this->theme_support->is( 'button-mode' );
 		$this->assertFalse( $is );
 	}
 
@@ -154,30 +154,30 @@ class TestTheme_Support extends WP_UnitTestCase {
 	public function test_theme_supports_buttons_mode_json() {
 
 		add_theme_support($this->theme_support->get_feature_name(), array(
-			'buttons_mode' => 'json',
+			'button_mode' => 'json',
 		));
 
 		$supports = $this->theme_support->theme_support();
 
-		$this->assertArrayHasKey( 'buttons_mode', $supports );
-		$this->assertEquals( 'json', $supports['buttons_mode'] );
+		$this->assertArrayHasKey( 'button_mode', $supports );
+		$this->assertEquals( 'json', $supports['button_mode'] );
 
-		$is = $this->theme_support->is( 'buttons_mode' );
+		$is = $this->theme_support->is( 'button_mode' );
 		$this->assertEquals( 'json', $is );
 
 		/**
 		 * Feature name alias: `buttons-mode` is deprecated as of 2.0.0.
 		 */
 		add_theme_support($this->theme_support->get_feature_name(), array(
-			'buttons-mode' => 'json',
+			'button-mode' => 'json',
 		));
 
 		$supports = $this->theme_support->theme_support();
 
-		$this->assertArrayHasKey( 'buttons-mode', $supports );
-		$this->assertEquals( 'json', $supports['buttons-mode'] );
+		$this->assertArrayHasKey( 'button-mode', $supports );
+		$this->assertEquals( 'json', $supports['button-mode'] );
 
-		$is = $this->theme_support->is( 'buttons-mode' );
+		$is = $this->theme_support->is( 'button-mode' );
 		$this->assertFalse( $is );
 	}
 

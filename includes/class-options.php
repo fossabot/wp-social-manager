@@ -362,7 +362,7 @@ final class Options {
 	 *
 	 * @return array An array of button modes; the labels and the keys
 	 */
-	public static function buttons_modes() {
+	public static function button_modes() {
 
 		return array(
 			'html' => 'HTML (HyperText Markup Language)',
