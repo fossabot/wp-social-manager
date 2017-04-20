@@ -156,11 +156,7 @@ final class Theme_Support {
 		$supports = (array) $this->supports;
 		$default = (string) Helpers::$prefix;
 
-		$prefix = '';
-
-		if ( array_key_exists( 'attr_prefix', $supports ) ) {
-			$prefix = $this->supports['attr_prefix'];
-		}
+		$prefix = key_exists( 'attr_prefix', $supports ) ? $this->supports['attr_prefix'] : '';
 
 		/**
 		 * If the prefix is the same as the attribute prefix,
@@ -173,7 +169,6 @@ final class Theme_Support {
 	 * Function to check if the theme support the 'buttons-mode' feature.
 	 *
 	 * @since 1.0.0
-	 * @since 1.1.0 Add alias: 'buttons-mode' || 'buttons_mode'.
 	 * @access protected
 	 *
 	 * @return boolean|string String is either 'html' or 'json', false if this feature is not defined.
@@ -183,13 +178,9 @@ final class Theme_Support {
 		$supports = (array) $this->supports;
 		$haystack = (array) Options::buttons_modes();
 
-		$mode = '';
+		$mode = key_exists( 'buttons_mode', $supports ) ? $this->supports['buttons_mode'] : '';
 
-		if ( array_key_exists( 'buttons_mode', $supports ) ) {
-			$mode = $this->supports['buttons_mode'];
-		}
-
-		if ( $mode && array_key_exists( $mode, $haystack ) ) {
+		if ( $mode && key_exists( $mode, $haystack ) ) {
 			return $mode;
 		}
 
