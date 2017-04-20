@@ -3,7 +3,7 @@ Contributors: ninecodes, tfirdaus, hongkiat
 Tags: widget, json, wp-api, social-media, sharing, facebook, twitter, pinterest, open-graph, twitter-cards
 Requires at least: 4.7
 Tested up to: 4.7.3
-Stable tag: 1.2.0-alpha
+Stable tag: 1.2.0-alpha.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

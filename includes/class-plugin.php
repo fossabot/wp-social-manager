@@ -49,7 +49,7 @@ final class Plugin {
 	 * @access protected
 	 * @var string
 	 */
-	protected $version = '1.2.0-alpha';
+	protected $version = '1.2.0-alpha.1';
 
 	/**
 	 * The path directory relative to the current file.
