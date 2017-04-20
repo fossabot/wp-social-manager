@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestMetas
+ * Class Test_Meta
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -16,11 +16,11 @@ use \WP_REST_Server;
 use \WP_REST_Request;
 
 /**
- * The class to test the "TestMetas" class instance.
+ * The class to test the "Test_Meta" class instance.
  *
  * @since 1.1.0
  */
-class TestMetas extends WP_UnitTestCase {
+class Test_Meta extends WP_UnitTestCase {
 
 	/**
 	 * The Plugin class instance.
@@ -140,7 +140,9 @@ class TestMetas extends WP_UnitTestCase {
 		$this->assertEquals( 'Category 3', $this->metas->get_post_section( $post_id ) );
 
 		// When `post_section` meta is set.
-		update_post_meta( $post_id, $this->option_slug, array( 'post_section' => "category-{$c5}" ) );
+		update_post_meta( $post_id, $this->option_slug, array(
+			'post_section' => "category-{$c5}",
+		) );
 		$this->assertEquals( 'Category 5', $this->metas->get_post_section( $post_id ) );
 	}
 }

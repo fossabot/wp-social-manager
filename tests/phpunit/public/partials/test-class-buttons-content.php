@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestButtons_Content
+ * Class Test_Buttons_Content
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -14,11 +14,11 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * The class to test the "TestButtons_Content" class instance.
+ * The class to test the "Test_Buttons_Content" class instance.
  *
  * @since 1.1.0
  */
-class TestButtons_Content extends WP_UnitTestCase {
+class Test_Buttons_Content extends WP_UnitTestCase {
 
 	/**
 	 * The Plugin class instance.

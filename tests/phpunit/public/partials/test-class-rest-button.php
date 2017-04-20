@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestPlugin
+ * Class Test_REST_Button
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -16,11 +16,11 @@ use \WP_REST_Server;
 use \WP_REST_Request;
 
 /**
- * The class to test the "Theme_Support" class instance.
+ * The class to test the "Test_REST_Button" class instance.
  *
  * @since 1.0.0
  */
-class TestREST_Buttons extends WP_UnitTestCase {
+class Test_REST_Button extends WP_UnitTestCase {
 
 	/**
 	 * The APIRoutes
@@ -44,8 +44,9 @@ class TestREST_Buttons extends WP_UnitTestCase {
 		global $wp_rest_server;
 
 		$plugin = new Plugin();
+		$wp_rest_server = new WP_REST_Server;
 
-		$this->server = $wp_rest_server = new WP_REST_Server;
+		$this->server = $wp_rest_server;
 		$this->rest_buttons = new REST_Buttons( $plugin );
 
 		do_action( 'rest_api_init' );

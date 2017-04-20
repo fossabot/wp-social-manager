@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestPlugin
+ * Class Test_Theme_Support
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -18,7 +18,7 @@ use \WP_UnitTestCase;
  *
  * @since 1.0.0
  */
-class TestTheme_Support extends WP_UnitTestCase {
+class Test_Theme_Support extends WP_UnitTestCase {
 
 
 	/**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestWP_Head
+ * Class Test_WP_Head
  *
  * TODO:
  * - Add tests for Image added in the Customizer Site Icons.
@@ -21,12 +21,12 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * The class to test the "TestWP_Head" class instance.
+ * The class to test the "Test_WP_Head" class instance.
  *
  * @since 1.0.6
  * @since 1.1.0 Add test meta tags filter hook.
  */
-class TestWP_Head extends WP_UnitTestCase {
+class Test_WP_Head extends WP_UnitTestCase {
 
 	/**
 	 * The unique identifier or prefix for database names.

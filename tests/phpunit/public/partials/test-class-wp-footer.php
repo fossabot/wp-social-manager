@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestWP_Footer
+ * Class Test_WP_Footer
  *
  * TODO: Add test for wp_kses.
  *
@@ -16,11 +16,11 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * The class to test the "TestWP_Footer" class instance.
+ * The class to test the "Test_WP_Footer" class instance.
  *
  * @since 1.0.4
  */
-class TestWP_Footer extends WP_UnitTestCase {
+class Test_WP_Footer extends WP_UnitTestCase {
 
 	/**
 	 * The Endpoints class instance.

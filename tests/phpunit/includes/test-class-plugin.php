@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestPlugin
+ * Class Test_Plugin
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -18,7 +18,7 @@ use \WP_UnitTestCase;
  *
  * @since 1.0.0
  */
-class TestPlugin extends WP_UnitTestCase {
+class Test_Plugin extends WP_UnitTestCase {
 
 	/**
 	 * Plugin instance.

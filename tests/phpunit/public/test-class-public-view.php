@@ -20,7 +20,7 @@ use \WP_UnitTestCase;
  *
  * @since 1.0.4
  */
-class TestPublic extends WP_UnitTestCase {
+class Test_Public_View extends WP_UnitTestCase {
 
 	/**
 	 * The Public
@@ -216,7 +216,9 @@ class TestPublic extends WP_UnitTestCase {
 		 */
 		update_option( $this->option_slug . '_buttons_image', array(
 			'enabled' => 'on',
-			'post_types' => array( 'post' => 'on' ),
+			'post_types' => array(
+				'post' => 'on',
+			),
 		) );
 
 		$this->go_to( '?p=' . $post_id );

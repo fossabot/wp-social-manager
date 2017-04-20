@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestSettings
+ * Class Test_Settings
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -20,7 +20,7 @@ use \WP_UnitTestCase;
  *
  * @since 1.0.0
  */
-class TestSettings extends WP_UnitTestCase {
+class Test_Settings extends WP_UnitTestCase {
 
 	/**
 	 * Setup.

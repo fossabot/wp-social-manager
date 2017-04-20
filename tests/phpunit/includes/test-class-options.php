@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestPlugin
+ * Class Test_Options
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -15,7 +15,7 @@ use \WP_UnitTestCase;
  *
  * @since 1.0.0
  */
-class TestOptions extends WP_UnitTestCase {
+class Test_Options extends WP_UnitTestCase {
 
 	/**
 	 * Test social profiles option output.

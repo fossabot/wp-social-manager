@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestTemplateTagFunctions
+ * Class Test_Function_Template_Tags
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -14,11 +14,11 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * The class to test the "TestTemplateTagFunctions" class instance.
+ * The class to test the "Test_Function_Template_Tags" class instance.
  *
  * @since 1.1.0
  */
-class TestTemplateTagFunctions extends WP_UnitTestCase {
+class Test_Function_Template_Tags extends WP_UnitTestCase {
 
 	/**
 	 * The Plugin class instance.
@@ -134,7 +134,9 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 			'googleplus' => '+foo',
 		) );
 
-		$site_profiles = get_the_site_social_profiles( array( 'view' => 'text' ) );
+		$site_profiles = get_the_site_social_profiles( array(
+			'view' => 'text',
+		) );
 
 		$doc = new \DOMDocument();
 		libxml_use_internal_errors( true );
@@ -173,7 +175,9 @@ class TestTemplateTagFunctions extends WP_UnitTestCase {
 			'twitter' => 'yeap',
 		) );
 
-		$site_profiles = get_the_site_social_profiles( array( 'view' => 'icon_text' ) );
+		$site_profiles = get_the_site_social_profiles( array(
+			'view' => 'icon_text',
+		) );
 
 		$doc = new \DOMDocument();
 		libxml_use_internal_errors( true );

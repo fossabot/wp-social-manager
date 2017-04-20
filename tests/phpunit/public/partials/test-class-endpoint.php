@@ -1,6 +1,6 @@
 <?php
 /**
- * Class TestEndpoints
+ * Class Test_Endpoint
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -14,20 +14,20 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * The class to test the "TestEndpoints" class instance.
+ * The class to test the "Test_Endpoint" class instance.
  *
  * @since 1.0.0
  */
-class TestEndpoints extends WP_UnitTestCase {
+class Test_Endpoint extends WP_UnitTestCase {
 
 	/**
-	 * The Endpoints class instance.
+	 * The Endpoint class instance.
 	 *
 	 * @since 1.0.0
 	 * @access protected
 	 * @var Endpoints
 	 */
-	protected $endpoints;
+	protected $endpoint;
 
 	/**
 	 * Setup.
@@ -42,7 +42,7 @@ class TestEndpoints extends WP_UnitTestCase {
 		$plugin->initialize();
 
 		$metas = new Metas( $plugin );
-		$this->endpoints = new Endpoints( $plugin, $metas );
+		$this->endpoint = new Endpoints( $plugin, $metas );
 	}
 
 	/**
@@ -51,7 +51,7 @@ class TestEndpoints extends WP_UnitTestCase {
 	function tearDown() {
 		$this->plugin = null;
 		$this->public = null;
-		$this->endpoints = null;
+		$this->endpoint = null;
 		parent::tearDown();
 	}
 
@@ -65,12 +65,12 @@ class TestEndpoints extends WP_UnitTestCase {
 	 */
 	public function test_methods() {
 
-		$this->assertTrue( method_exists( $this->endpoints, 'get_content_endpoints' ),  'Class does not have method \'get_content_endpoints\'' );
-		$this->assertTrue( method_exists( $this->endpoints, 'get_image_endpoints' ),  'Class does not have method \'get_image_endpoints\'' );
-		$this->assertTrue( method_exists( $this->endpoints, 'joint_image_endpoints' ),  'Class does not have method \'joint_image_endpoints\'' );
-		$this->assertTrue( method_exists( $this->endpoints, 'get_content_image_srcs' ),  'Class does not have method \'get_content_image_srcs\'' );
-		$this->assertTrue( method_exists( $this->endpoints, 'get_post_metas' ),  'Class does not have method \'get_post_metas\'' );
-		$this->assertTrue( method_exists( $this->endpoints, 'get_endpoint_base' ),  'Class does not have method \'get_endpoint_base\'' );
+		$this->assertTrue( method_exists( $this->endpoint, 'get_content_endpoints' ),  'Class does not have method \'get_content_endpoints\'' );
+		$this->assertTrue( method_exists( $this->endpoint, 'get_image_endpoints' ),  'Class does not have method \'get_image_endpoints\'' );
+		$this->assertTrue( method_exists( $this->endpoint, 'joint_image_endpoints' ),  'Class does not have method \'joint_image_endpoints\'' );
+		$this->assertTrue( method_exists( $this->endpoint, 'get_content_image_srcs' ),  'Class does not have method \'get_content_image_srcs\'' );
+		$this->assertTrue( method_exists( $this->endpoint, 'get_post_metas' ),  'Class does not have method \'get_post_metas\'' );
+		$this->assertTrue( method_exists( $this->endpoint, 'get_endpoint_base' ),  'Class does not have method \'get_endpoint_base\'' );
 	}
 
 	/**
@@ -85,7 +85,7 @@ class TestEndpoints extends WP_UnitTestCase {
 
 		// Create a post.
 		$post_id = $this->factory->post->create();
-		$response = $this->endpoints->get_content_endpoints( $post_id );
+		$response = $this->endpoint->get_content_endpoints( $post_id );
 
 		$this->assertArrayHasKey( 'endpoints', $response );
 
@@ -142,7 +142,7 @@ class TestEndpoints extends WP_UnitTestCase {
 		$post_id = $this->factory->post->create( array(
 			'post_content' => 'This is an image <img src="' . $image_src . '" width=350" height="150" >.',
 		) );
-		$response = $this->endpoints->get_image_endpoints( $post_id );
+		$response = $this->endpoint->get_image_endpoints( $post_id );
 
 		// We should only have 1 image.
 		$this->assertEquals( 1, count( $response ) );
