@@ -251,14 +251,14 @@ class Button_Image extends Button {
 
 			foreach ( $includes as $site => $endpoint ) :
 
-				$icon = $this->get_buttons_icons( $site );
+				$icon = $this->get_icons( $site );
 
 				if ( ! $icon || ! $endpoint ) {
 					continue;
 				}
 
-				$label = $this->get_buttons_label( $site, 'image' );
-				$list .= $this->buttons_view( $this->view, 'image', array(
+				$label = $this->get_label( $site, 'image' );
+				$list .= $this->render_view( $this->view, 'image', array(
 					'attr_prefix' => $prefix,
 					'site' => $site,
 					'icon' => $icon,
@@ -306,14 +306,14 @@ class Button_Image extends Button {
 $prefix = $this->attr_prefix;
 foreach ( $includes as $site => $value ) :
 
-	$label = $this->get_buttons_label( $site, 'image' );
-	$icon  = $this->get_buttons_icons( $site );
+	$label = $this->get_label( $site, 'image' );
+	$icon = $this->get_icons( $site );
 
 	if ( ! $icon ) {
 		continue;
 	}
 
-	$list = $this->buttons_view($this->view, 'image', array(
+	$list = $this->render_view($this->view, 'image', array(
 		'attr_prefix' => $prefix,
 		'site' => $site,
 		'icon' => $icon,
