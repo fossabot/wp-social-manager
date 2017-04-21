@@ -20,7 +20,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-class Helpers {
+final class Helpers {
 
 	/**
 	 * The default attribute prefix.
@@ -41,7 +41,7 @@ class Helpers {
 	 * @param string $site The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
 	 * @return string The icon of selected social media in SVG.
 	 */
-	final public static function get_social_icons( $site = '' ) {
+	public static function get_social_icons( $site = '' ) {
 
 		$path = plugin_dir_url( dirname( __FILE__ ) );
 		$prefix = esc_attr( self::get_attr_prefix() );
