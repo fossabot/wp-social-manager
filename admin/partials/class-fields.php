@@ -65,8 +65,8 @@ final class Fields extends WPSettings\Fields {
 		add_action( "{$this->screen}_field_checkbox_toggle", array( $this, 'field_checkbox_toggle' ) );
 
 		// Filters.
-		add_filter( "{$this->screen}_field_scripts", array( $this, 'register_field_scripts' ) );
-		add_filter( "{$this->screen}_field_styles", array( $this, 'register_field_styles' ) );
+		add_filter( "{$this->screen}_field_scripts", array( $this, 'register_scripts' ) );
+		add_filter( "{$this->screen}_field_styles", array( $this, 'register_styles' ) );
 	}
 
 	/**
@@ -78,7 +78,7 @@ final class Fields extends WPSettings\Fields {
 	 * @param array $scripts An array of input type.
 	 * @return array The input types with the image file name.
 	 */
-	public function register_field_scripts( array $scripts ) {
+	public function register_scripts( array $scripts ) {
 
 		$scripts['image'] = 'field-image';
 		$scripts['text_profile'] = 'field-text-profile';
@@ -96,7 +96,7 @@ final class Fields extends WPSettings\Fields {
 	 * @param array $styles An array of input type.
 	 * @return array The input types with the image file name.
 	 */
-	public function register_field_styles( array $styles ) {
+	public function register_styles( array $styles ) {
 
 		$styles['image'] = 'field-image';
 
