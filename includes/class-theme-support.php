@@ -166,7 +166,7 @@ final class Theme_Support {
 	}
 
 	/**
-	 * Function to check if the theme support the 'buttons-mode' feature.
+	 * Function to check if the theme support the 'button_mode' feature.
 	 *
 	 * @since 1.0.0
 	 * @access protected

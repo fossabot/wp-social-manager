@@ -102,7 +102,7 @@ class Test_Theme_Support extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test the Theme_Support HTML 'buttons-mode' feature.
+	 * Test the Theme_Support HTML 'button_mode' feature.
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -140,7 +140,7 @@ class Test_Theme_Support extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test the Theme_Support JSON 'buttons-mode' feature.
+	 * Test the Theme_Support JSON 'button_mode' feature.
 	 *
 	 * @since 1.0.0
 	 * @access public

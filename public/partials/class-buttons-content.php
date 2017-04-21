@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-class Buttons_Content extends Buttons {
+class Buttons_Content extends Button {
 
 	/**
 	 * The Buttons Content view set in the Settings.
@@ -80,7 +80,7 @@ class Buttons_Content extends Buttons {
 	protected function hooks() {
 
 		add_action( 'wp', array( $this, 'setups_html' ), -30 );
-		add_action( 'wp_footer', array( $this, 'buttons_tmpl' ), -30 );
+		add_action( 'wp_footer', array( $this, 'render_tmpl' ), -30 );
 	}
 
 	/**
@@ -139,7 +139,7 @@ class Buttons_Content extends Buttons {
 		$is_json = 'json' === $this->mode;
 
 		if ( $is_html || $is_json ) {
-			$button .= "<div class='{$this->prefix}-buttons {$this->prefix}-buttons--content {$this->prefix}-buttons--content-{$this->placement}' id='{$this->prefix}-buttons-{$post_id}'>";
+			$button .= "<div class='{$this->attr_prefix}-buttons {$this->attr_prefix}-buttons--content {$this->attr_prefix}-buttons--content-{$this->placement}' id='{$this->attr_prefix}-buttons-{$post_id}'>";
 		}
 
 		if ( $is_html ) {
@@ -183,22 +183,22 @@ class Buttons_Content extends Buttons {
 			$heading = esc_html( $heading );
 
 			if ( ! empty( $heading ) ) {
-				$list .= "<h4 class='{$this->prefix}-buttons__heading'>{$heading}</h4>";
+				$list .= "<h4 class='{$this->attr_prefix}-buttons__heading'>{$heading}</h4>";
 			}
 
-			$prefix = $this->prefix;
-			$list .= "<div class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsContent\">";
+			$prefix = $this->attr_prefix;
+			$list .= "<div class='{$this->attr_prefix}-buttons__list {$this->attr_prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsContent\">";
 
 			foreach ( $includes as $site => $endpoint ) :
 
-				$icon = $this->get_buttons_icons( $site );
+				$icon = $this->get_icons( $site );
 
 				if ( ! $icon || ! $endpoint ) {
 					continue;
 				}
 
-				$label = $this->get_buttons_label( $site, 'content' );
-				$list .= $this->buttons_view( $this->view, 'content', array(
+				$label = $this->get_label( $site, 'content' );
+				$list .= $this->render_view( $this->view, 'content', array(
 					'attr_prefix' => $prefix,
 					'site' => $site,
 					'icon' => $icon,
@@ -222,7 +222,7 @@ class Buttons_Content extends Buttons {
 	 *
 	 * @return void
 	 */
-	public function buttons_tmpl() {
+	public function render_tmpl() {
 
 		if ( $this->is_buttons_content() && 'json' === $this->mode ) :
 			if ( wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) : ?>
@@ -234,28 +234,27 @@ class Buttons_Content extends Buttons {
 
 		if ( ! empty( $heading ) ) {
 
-			echo wp_kses( "<h4 class='{$this->prefix}-buttons__heading'>{$heading}</h4>", array(
+			echo wp_kses( "<h4 class='{$this->attr_prefix}-buttons__heading'>{$heading}</h4>", array(
 				'h4' => array(
 					'class' => true,
 				),
 			) );
 
-		} ?><div class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsContent"><?php
+		} ?><div class="<?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list <?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsContent"><?php
 
-		$view = $this->view;
-		$prefix = $this->prefix;
+		$prefix = $this->attr_prefix;
 		$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
 
 foreach ( $includes as $site => $value ) :
 
-	$icon = $this->get_buttons_icons( $site );
+	$icon = $this->get_icons( $site );
 
 	if ( ! $icon || ! $value ) {
 		continue;
 	}
 
-	$label = $this->get_buttons_label( $site, 'content' );
-	$list  = $this->buttons_view( $view, 'content', array(
+	$label = $this->get_label( $site, 'content' );
+	$list  = $this->render_view( $this->view, 'content', array(
 		'attr_prefix' => $prefix,
 		'site' => $site,
 		'icon' => $icon,
@@ -278,9 +277,9 @@ foreach ( $includes as $site => $value ) :
 	 * @param string $site The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
 	 * @return array The list of icon.
 	 */
-	public function get_buttons_icons( $site = '' ) {
+	public function get_icons( $site = '' ) {
 
-		$icons = parent::get_buttons_icons();
+		$icons = parent::get_icons();
 
 		/**
 		 * Filter the icons displayed in the social media buttons content.
@@ -293,7 +292,7 @@ foreach ( $includes as $site => $value ) :
 		 * @var array
 		 */
 		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, 'buttons_content', array(
-			'attr_prefix' => $this->prefix,
+			'attr_prefix' => $this->attr_prefix,
 		) );
 
 		$icons = isset( $icons[ $site ] ) ? kses_icon( $icons[ $site ] ) : array_map( __NAMESPACE__ . '\\kses_icon', $icons );

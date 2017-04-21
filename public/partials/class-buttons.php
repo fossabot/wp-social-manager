@@ -20,7 +20,7 @@ use \DOMDocument;
  * @since 1.0.0
  * @since 1.0.6 - Remove Endpoint class as the parent class.
  */
-abstract class Buttons {
+abstract class Button {
 
 	/**
 	 * The Plugin class instance.
@@ -47,7 +47,7 @@ abstract class Buttons {
 	 * @access protected
 	 * @var string
 	 */
-	protected $prefix;
+	protected $attr_prefix;
 
 	/**
 	 * The button mode, 'json' or 'html'.
@@ -73,8 +73,8 @@ abstract class Buttons {
 
 		$this->plugin = $plugin;
 
-		$this->prefix = $this->get_attr_prefix();
-		$this->mode = $this->get_buttons_mode();
+		$this->attr_prefix = $this->get_attr_prefix();
+		$this->mode = $this->get_mode();
 	}
 
 	/**
@@ -82,7 +82,7 @@ abstract class Buttons {
 	 *
 	 * @return void
 	 */
-	public function buttons_tmpl() {}
+	public function render_tmpl() {}
 
 	/**
 	 * Determine and generate the buttons item view.
@@ -103,7 +103,7 @@ abstract class Buttons {
 	 * }
 	 * @return string The formatted HTML list element to display the button.
 	 */
-	public function buttons_view( $view, $context, array $args ) {
+	public function render_view( $view, $context, array $args ) {
 
 		if ( ! $view || ! $context || ! is_array( $args ) ) {
 			return '';
@@ -154,9 +154,9 @@ abstract class Buttons {
 			'icon_text' => "<a class='{$prefix}-buttons__item item-{$style} item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a>",
 		);
 
-		$buttons_view = isset( $templates[ $view ] ) ? kses_icon( $templates[ $view ] ) : '';
+		$button_view = isset( $templates[ $view ] ) ? kses_icon( $templates[ $view ] ) : '';
 
-		return 'json' === $this->mode ? "<# if ( {$args['endpoint']} ) { #>" . $buttons_view . '<# } #>' : $buttons_view;
+		return 'json' === $this->mode ? "<# if ( {$args['endpoint']} ) { #>" . $button_view . '<# } #>' : $button_view;
 	}
 
 	/**
@@ -168,7 +168,7 @@ abstract class Buttons {
 	 * @param string $site The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
 	 * @return array The list of icon.
 	 */
-	public function get_buttons_icons( $site = '' ) {
+	public function get_icons( $site = '' ) {
 
 		$icons = Helpers::get_social_icons();
 
@@ -183,7 +183,7 @@ abstract class Buttons {
 		 * @var array
 		 */
 		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, 'buttons', array(
-			'attr_prefix' => $this->prefix,
+			'attr_prefix' => $this->attr_prefix,
 		) );
 
 		$icons = isset( $icons[ $site ] ) ? kses_icon( $icons[ $site ] ) : array_map( __NAMESPACE__ . '\\kses_icon', $icons );
@@ -201,7 +201,7 @@ abstract class Buttons {
 	 * @param string $context The button context, 'content' or 'image'.
 	 * @return null|string Return null, if the context is incorrect or the key is unset.
 	 */
-	public function get_buttons_label( $site, $context ) {
+	public function get_label( $site = '', $context = '' ) {
 
 		if ( in_array( $context, array( 'content', 'image' ), true ) ) {
 			$buttons = Options::button_sites( $context );
@@ -219,16 +219,16 @@ abstract class Buttons {
 	 *
 	 * @return string Whether JSON of HTML
 	 */
-	public function get_buttons_mode() {
+	public function get_mode() {
 
-		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
-		$theme_support = $this->plugin->theme_support()->is( 'buttons-mode' );
+		$button_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
+		$theme_support = $this->plugin->theme_support()->is( 'button_mode' );
 
-		if ( 'json' === $theme_support || 'json' === $buttons_mode ) {
+		if ( 'json' === $theme_support || 'json' === $button_mode ) {
 			return 'json';
 		}
 
-		if ( 'html' === $theme_support || 'html' === $buttons_mode ) {
+		if ( 'html' === $theme_support || 'html' === $button_mode ) {
 			return 'html';
 		}
 	}

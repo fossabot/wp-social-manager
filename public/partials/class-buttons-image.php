@@ -19,7 +19,7 @@ use \DOMDocument;
  *
  * @since 1.0.0
  */
-class Buttons_Image extends Buttons {
+class Buttons_Image extends Button {
 
 	/**
 	 * The response of `get_image_endpoint()` function
@@ -190,7 +190,7 @@ class Buttons_Image extends Buttons {
 			if ( $is_html ) {
 
 				$wrap = $dom->createElement( 'span' );
-				$wrap->setAttribute( 'class', "{$this->prefix}-buttons {$this->prefix}-buttons--img {$this->prefix}-buttons--{$post_id}" );
+				$wrap->setAttribute( 'class', "{$this->attr_prefix}-buttons {$this->attr_prefix}-buttons--img {$this->attr_prefix}-buttons--{$post_id}" );
 			}
 
 			foreach ( $images as $index => $img ) :
@@ -210,7 +210,7 @@ class Buttons_Image extends Buttons {
 				if ( $is_html && in_array( $resp_src, $attributes, true ) && "ContentImage-{$post_id}" === $attributes['data-social-manager'] ) {
 
 					$wrap_clone = $wrap->cloneNode();
-					$wrap_clone->setAttribute( 'id', "{$this->prefix}-buttons-{$post_id}-img-{$wrap_id}" );
+					$wrap_clone->setAttribute( 'id', "{$this->attr_prefix}-buttons-{$post_id}-img-{$wrap_id}" );
 
 					if ( 'a' === $img->parentNode->nodeName ) {
 
@@ -258,9 +258,9 @@ class Buttons_Image extends Buttons {
 
 		if ( ! empty( $includes ) ) :
 
-			$list .= "<span class='{$this->prefix}-buttons__list {$this->prefix}-buttons__list--{$this->view}' data-social-manager=\"Buttons_Image\">";
+			$list .= "<span class='{$this->attr_prefix}-buttons__list {$this->attr_prefix}-buttons__list--{$this->view}' data-social-manager=\"Buttons_Image\">";
 
-			$prefix = $this->prefix;
+			$prefix = $this->attr_prefix;
 
 			foreach ( $includes as $site => $endpoint ) :
 
@@ -314,9 +314,9 @@ class Buttons_Image extends Buttons {
 			$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' );
 
 			if ( ! empty( $includes ) ) : ?><script type="text/html" id="tmpl-buttons-image">
-<span class="<?php echo esc_attr( $this->prefix ); ?>-buttons__list <?php echo esc_attr( $this->prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="buttons-image"><?php
+<span class="<?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list <?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="buttons-image"><?php
 
-$prefix = $this->prefix;
+$prefix = $this->attr_prefix;
 foreach ( $includes as $site => $value ) :
 
 	$label = $this->get_buttons_label( $site, 'image' );
@@ -351,9 +351,9 @@ endforeach; ?></span>
 	 * @param string $site The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
 	 * @return array The list of icon.
 	 */
-	public function get_buttons_icons( $site = '' ) {
+	public function get_icons( $site = '' ) {
 
-		$icons = parent::get_buttons_icons();
+		$icons = parent::get_icons();
 
 		/**
 		 * Filter the icons displayed in the social media buttons image.
@@ -366,7 +366,7 @@ endforeach; ?></span>
 		 * @var array
 		 */
 		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, 'buttons_image', array(
-			'attr_prefix' => $this->prefix,
+			'attr_prefix' => $this->attr_prefix,
 		) );
 
 		$icons = isset( $icons[ $site ] ) ? kses_icon( $icons[ $site ] ) : array_map( __NAMESPACE__ . '\\kses_icon', $icons );
