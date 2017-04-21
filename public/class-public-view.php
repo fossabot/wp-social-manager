@@ -92,9 +92,12 @@ final class Public_View {
 		require_once( $this->path_dir . 'partials/class-wp-footer.php' );
 		require_once( $this->path_dir . 'partials/class-endpoint.php' );
 		require_once( $this->path_dir . 'partials/class-rest-buttons.php' );
-		require_once( $this->path_dir . 'partials/class-button.php' );
-		require_once( $this->path_dir . 'partials/class-button-content.php' );
-		require_once( $this->path_dir . 'partials/class-button-image.php' );
+
+		require_once( $this->path_dir . 'partials/button/class-button-interface.php' );
+		require_once( $this->path_dir . 'partials/button/class-button.php' );
+		require_once( $this->path_dir . 'partials/button/class-button-content.php' );
+		require_once( $this->path_dir . 'partials/button/class-button-image.php' );
+
 		require_once( $this->path_dir . 'partials/function-template-tags.php' );
 	}
 
@@ -109,6 +112,7 @@ final class Public_View {
 	protected function hooks() {
 
 		add_action( 'init', array( $this, 'setups' ) );
+
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), -10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), -10 );
 	}

@@ -3,7 +3,7 @@
  * Public: Button_Image Class
  *
  * @package SocialManager
- * @subpackage Public\Buttons
+ * @subpackage Public\Button
  */
 
 namespace NineCodes\SocialManager;

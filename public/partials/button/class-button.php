@@ -3,7 +3,7 @@
  * Public: Buttons Class
  *
  * @package SocialManager
- * @subpackage Public\Buttons
+ * @subpackage Public\Button
  */
 
 namespace NineCodes\SocialManager;
@@ -20,7 +20,7 @@ use \DOMDocument;
  * @since 1.0.0
  * @since 1.0.6 - Remove Endpoint class as the parent class.
  */
-abstract class Button {
+abstract class Button implements Button_Interface {
 
 	/**
 	 * The Plugin class instance.
@@ -87,7 +87,7 @@ abstract class Button {
 	 *
 	 * @return void
 	 */
-	final protected function render() {
+	final public function render() {
 
 		add_filter( 'the_content', array( $this, 'render_button' ), 55 );
 	}

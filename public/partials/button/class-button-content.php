@@ -3,7 +3,7 @@
  * Public: Button_Content class
  *
  * @package SocialManager
- * @subpackage Public\Buttons
+ * @subpackage Public\Button
  */
 
 namespace NineCodes\SocialManager;
