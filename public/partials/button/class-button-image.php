@@ -120,7 +120,7 @@ class Button_Image extends Button {
 		$post_id = get_the_id();
 
 		foreach ( $images as $index => $img ) :
-			$img->setAttribute( 'data-social-manager', 'ContentImage-' . $post_id );
+			$img->setAttribute( 'data-social-manager', 'content-image-' . $post_id );
 		endforeach;
 
 		$content = $this->to_html( $dom );
@@ -194,7 +194,7 @@ class Button_Image extends Button {
 					continue;
 				}
 
-				if ( $is_html && in_array( $resp_src, $attributes, true ) && "ContentImage-{$post_id}" === $attributes['data-social-manager'] ) {
+				if ( $is_html && in_array( $resp_src, $attributes, true ) && "content-image-{$post_id}" === $attributes['data-social-manager'] ) {
 
 					$wrap_clone = $wrap->cloneNode();
 					$wrap_clone->setAttribute( 'id', "{$this->attr_prefix}-buttons-{$post_id}-img-{$wrap_id}" );
@@ -245,7 +245,7 @@ class Button_Image extends Button {
 
 		if ( ! empty( $includes ) ) :
 
-			$list .= "<span class='{$this->attr_prefix}-buttons__list {$this->attr_prefix}-buttons__list--{$this->view}' data-social-manager=\"Button_Image\">";
+			$list .= "<span class='{$this->attr_prefix}-buttons__list {$this->attr_prefix}-buttons__list--{$this->view}' data-social-manager=\"button-image\">";
 
 			$prefix = $this->attr_prefix;
 

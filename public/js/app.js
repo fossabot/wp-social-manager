@@ -1,13 +1,13 @@
-/*eslint no-unused-vars: ["error", { "vars": "local", "varsIgnorePattern": "^social" }]*/
+/*eslint no-unused-vars: ["error", { "vars": "local", "varsIgnorePattern": "^button" }]*/
 (function(window, $) {
 
 	'use strict';
 
 	var tmplButtonContent,
 		tmplButtonImage,
-		socialButtonsContent,
-		socialButtonsImage,
-		socialButtonsModel;
+		buttonContent,
+		buttonImage,
+		buttonModel;
 
 	if (_.isUndefined(window.nineCodesSocialManagerAPI) ||
 		_.isUndefined(window.nineCodesSocialManagerAPI.id)) {
@@ -76,14 +76,14 @@
 		};
 	});
 
-	nineCodesSocialManager.Buttons = nineCodesSocialManager.Buttons || {};
-	nineCodesSocialManager.Buttons = {
+	nineCodesSocialManager.Button = nineCodesSocialManager.Button || {};
+	nineCodesSocialManager.Button = {
 		Collection: {},
 		Model: {},
 		View: {}
 	};
 
-	nineCodesSocialManager.Buttons.Model = Backbone.Model.extend({
+	nineCodesSocialManager.Button.Model = Backbone.Model.extend({
 		sync: nineCodesSocialManager.app.sync,
 		defaults: {
 			id: null,
@@ -97,7 +97,7 @@
 	 *
 	 * @type {Backbone}
 	 */
-	nineCodesSocialManager.Buttons.View = Backbone.View.extend({
+	nineCodesSocialManager.Button.View = Backbone.View.extend({
 
 		el: 'body',
 
@@ -173,10 +173,10 @@
 	 *
 	 * @since 1.0.0
 	 * @since 1.0.6 - Change the click Event delegate element.
-	 *        		- Remove 'template' (merge with the `nineCodesSocialManager.Buttons.View`).
+	 *        		- Remove 'template' (merge with the `nineCodesSocialManager.Button.View`).
 	 * @type {nineCodesSocialManager}
 	 */
-	nineCodesSocialManager.Buttons.View.Content = nineCodesSocialManager.Buttons.View.extend({
+	nineCodesSocialManager.Button.View.Content = nineCodesSocialManager.Button.View.extend({
 
 		/**
 		 * DOM Events
@@ -186,14 +186,14 @@
 		 * @type {Object}
 		 */
 		events: {
-			'click [data-social-manager="ButtonsContent"] a': 'buttonDialog'
+			'click [data-social-manager="button-content"] a': 'buttonDialog'
 		},
 
 		/**
 		 * The function method to render the Buttons Image.
 		 *
-		 * @param {Object} model nineCodesSocialManager.Buttons.Model
-		 * @return {Object} nineCodesSocialManager.Buttons.View.Content
+		 * @param {Object} model nineCodesSocialManager.Button.Model
+		 * @return {Object} nineCodesSocialManager.Button.View.Content
 		 */
 		render: function(model) {
 
@@ -225,10 +225,10 @@
 	 * Social Buttons View for Images.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Remove 'template' (merge with the `nineCodesSocialManager.Buttons.View`).
+	 * @since 1.0.6 - Remove 'template' (merge with the `nineCodesSocialManager.Button.View`).
 	 * @type {nineCodesSocialManager}
 	 */
-	nineCodesSocialManager.Buttons.View.Images = nineCodesSocialManager.Buttons.View.extend({
+	nineCodesSocialManager.Button.View.Images = nineCodesSocialManager.Button.View.extend({
 
 		/**
 		 * DOM Events
@@ -238,14 +238,14 @@
 		 * @type {Object}
 		 */
 		events: {
-			'click [data-social-manager="ButtonsImage"] a': 'buttonDialog'
+			'click [data-social-manager="button-image"] a': 'buttonDialog'
 		},
 
 		/**
 		 * The function method to render the Buttons Image.
 		 *
-		 * @param {Object} model nineCodesSocialManager.Buttons.Model
-		 * @return {Object} nineCodesSocialManager.Buttons.View.Images
+		 * @param {Object} model nineCodesSocialManager.Button.Model
+		 * @return {Object} nineCodesSocialManager.Button.View.Images
 		 */
 		render: function(model) {
 
@@ -255,7 +255,7 @@
 					id: resp.id,
 					prefix: nineCodesSocialManager.attrPrefix
 				}),
-				$images = $('[data-social-manager="ContentImage-'+ resp.id +'"]');
+				$images = $('[data-social-manager="content-image-'+ resp.id +'"]');
 
 			$images.each(function(i, img) {
 
@@ -283,8 +283,8 @@
 	 *
 	 * @type {nineCodesSocialManager}
 	 */
-	socialButtonsModel = new nineCodesSocialManager.Buttons.Model();
-	socialButtonsModel.url = nineCodesSocialManager.id;
+	buttonModel = new nineCodesSocialManager.Button.Model();
+	buttonModel.url = nineCodesSocialManager.id;
 
 	if (tmplButtonContent) {
 
@@ -293,8 +293,8 @@
 		 *
 		 * @type {nineCodesSocialManager}
 		 */
-		socialButtonsContent = new nineCodesSocialManager.Buttons.View.Content({
-			model: socialButtonsModel
+		buttonContent = new nineCodesSocialManager.Button.View.Content({
+			model: buttonModel
 		});
 	}
 
@@ -305,12 +305,12 @@
 		 *
 		 * @type {nineCodesSocialManager}
 		 */
-		socialButtonsImage = new nineCodesSocialManager.Buttons.View.Images({
-			model: socialButtonsModel
+		buttonImage = new nineCodesSocialManager.Button.View.Images({
+			model: buttonModel
 		});
 	}
 
 	// Fetch data from the API.
-	socialButtonsModel.fetch();
+	buttonModel.fetch();
 
 })(window, jQuery);

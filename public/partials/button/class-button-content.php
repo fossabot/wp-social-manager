@@ -174,7 +174,7 @@ class Button_Content extends Button {
 			}
 
 			$prefix = $this->attr_prefix;
-			$list .= "<div class='{$this->attr_prefix}-buttons__list {$this->attr_prefix}-buttons__list--{$this->view}' data-social-manager=\"ButtonsContent\">";
+			$list .= "<div class='{$this->attr_prefix}-buttons__list {$this->attr_prefix}-buttons__list--{$this->view}' data-social-manager=\"button-content\">";
 
 			foreach ( $includes as $site => $endpoint ) :
 
@@ -227,7 +227,7 @@ class Button_Content extends Button {
 				),
 			) );
 
-		} ?><div class="<?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list <?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="ButtonsContent"><?php
+		} ?><div class="<?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list <?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="button-content"><?php
 
 		$prefix = $this->attr_prefix;
 		$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
