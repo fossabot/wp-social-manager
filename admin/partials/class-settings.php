@@ -953,7 +953,9 @@ final class Settings {
 			$setting_fields = $this->settings->add_fields( $tab, $section, $fields );
 		}
 
-		return $this->tabs = $setting_fields;
+		$this->tabs = $setting_fields;
+
+		return  $this->tabs;
 	}
 
 	/**
