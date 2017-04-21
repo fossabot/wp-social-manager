@@ -364,6 +364,7 @@ module.exports = function(grunt) {
 			version: {
 				files: {
 					'./readme.txt': './readme.txt',
+					'./composer.json': './composer.json',
 					'./<%= pkg.name %>.php': './<%= pkg.name %>.php',
 					'./includes/class-plugin.php': './includes/class-plugin.php'
 				},
@@ -390,6 +391,10 @@ module.exports = function(grunt) {
 						}, {
 							pattern: /\Tested up to: (.*)/g,
 							replacement: 'Tested up to: <%= pkg.wordpress.tested_up_to %>'
+						},
+						{
+							pattern: /\"version\": \"(.*)\"/g,
+							replacement: '"version": "<%= pkg.version %>"'
 						}
 					]
 				}
