@@ -236,13 +236,13 @@ final class Plugin {
 		$regex = '/(-[alpha|beta|rc\.\d]+)/';
 		$current_version = preg_replace( $regex, '', $this->version );
 
-		$previous_version = get_option( 'ncsocman_version' );
+		$previous_version = get_option( $this->option_slug . '_version' );
 		$previous_version = preg_replace( $regex, '', $previous_version );
 
-		update_option( 'ncsocman_version', $current_version );
+		update_option( $this->option_slug . '_version', $current_version );
 
-		if ( version_compare( $previous_version, $current_version, '<' ) || ! get_option( 'ncsocman_previous_version' ) ) {
-			update_option( 'ncsocman_previous_version', $previous_version );
+		if ( version_compare( $previous_version, $current_version, '<' ) || ! get_option( $this->option_slug . '_previous_version' ) ) {
+			update_option( $this->option_slug . '_previous_version', $previous_version );
 		}
 	}
 
