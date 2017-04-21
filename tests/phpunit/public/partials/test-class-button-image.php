@@ -62,6 +62,28 @@ class Test_Button_Image extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test the Button_Content class methods.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return void
+	 */
+	public function test_button_image_methods() {
+
+		$this->assertTrue( method_exists( $this->button_image, 'render_button' ), 'Class does not have method \'render_button\'' );
+		$this->assertTrue( method_exists( $this->button_image, 'render_html' ), 'Class does not have method \'render_html\'' );
+		$this->assertTrue( method_exists( $this->button_image, 'render_tmpl' ), 'Class does not have method \'render_tmpl\'' );
+		$this->assertTrue( method_exists( $this->button_image, 'render_view' ), 'Class does not have method \'render_view\'' );
+		$this->assertTrue( method_exists( $this->button_image, 'get_icons' ), 'Class does not have method \'get_icons\'' );
+		$this->assertTrue( method_exists( $this->button_image, 'get_label' ), 'Class does not have method \'get_label\'' );
+		$this->assertTrue( method_exists( $this->button_image, 'get_mode' ), 'Class does not have method \'get_mode\'' );
+		$this->assertTrue( method_exists( $this->button_image, 'get_attr_prefix' ), 'Class does not have method \'get_attr_prefix\'' );
+		$this->assertTrue( method_exists( $this->button_image, 'get_post_status' ), 'Class does not have method \'get_post_status\'' );
+		$this->assertTrue( method_exists( $this->button_image, 'in_amp' ), 'Class does not have method \'in_amp\'' );
+		$this->assertTrue( method_exists( $this->button_image, 'to_html' ), 'Class does not have method \'to_html\'' );
+	}
+
+	/**
 	 * Function to test the `get_icon`.
 	 *
 	 * @since 1.1.0

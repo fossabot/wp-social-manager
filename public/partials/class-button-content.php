@@ -64,9 +64,7 @@ class Button_Content extends Button {
 
 		$this->view = $this->plugin->get_option( 'buttons_content', 'view' );
 		$this->placement = $this->plugin->get_option( 'buttons_content', 'placement' );
-
 		$this->hooks();
-		$this->render();
 	}
 
 	/**
@@ -79,7 +77,7 @@ class Button_Content extends Button {
 	 */
 	protected function hooks() {
 
-		add_action( 'wp', array( $this, 'setups_html' ), -30 );
+		add_action( 'wp', array( $this, 'get_endpoint' ), -30 );
 		add_action( 'wp_footer', array( $this, 'render_tmpl' ), -30 );
 	}
 
@@ -90,28 +88,17 @@ class Button_Content extends Button {
 	 * @since 1.0.6 - Use $this->endpoint property to access the Endpoint class method.
 	 * @access public
 	 *
-	 * @return void
+	 * @return array
 	 */
-	public function setups_html() {
+	public function get_endpoint() {
 
 		if ( 'html' === $this->mode && is_singular() ) {
 
 			$response = $this->endpoint->get_content_endpoint( get_the_id() );
 			$this->response = $response['endpoint'];
 		}
-	}
 
-	/**
-	 * Function to render the buttons in the content.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return void
-	 */
-	protected function render() {
-
-		add_filter( 'the_content', array( $this, 'render_buttons' ), 50 );
+		return $this->response;
 	}
 
 	/**
@@ -126,12 +113,12 @@ class Button_Content extends Button {
 	 * 				  The wrapper may be added before or after the content, following
 	 * 				  the option selected.
 	 */
-	public function render_buttons( $content ) {
+	public function render_button( $content ) {
 
 		$button = '';
 		$post_id = get_the_id();
 
-		if ( ! $this->is_buttons_content() || 'publish' !== $this->get_post_status() ) {
+		if ( ! $this->is_button_content() || 'publish' !== $this->get_post_status() ) {
 			return $content;
 		}
 
@@ -143,7 +130,7 @@ class Button_Content extends Button {
 		}
 
 		if ( $is_html ) {
-			$button .= $this->buttons_html( $this->response );
+			$button .= $this->render_html( $this->response );
 		}
 
 		if ( $is_html || $is_json ) {
@@ -170,10 +157,10 @@ class Button_Content extends Button {
 	 * @since 1.0.6 - Renamed `data-social-buttons` to `data-social-manager` of the `span` (wrapper) element.
 	 * @access public
 	 *
-	 * @param object $includes Data to include in the button.
+	 * @param array $includes Data to include in the button.
 	 * @return string The formatted HTML of the buttons.
 	 */
-	public function buttons_html( $includes ) {
+	public function render_html( array $includes ) {
 
 		$list = '';
 
@@ -224,7 +211,7 @@ class Button_Content extends Button {
 	 */
 	public function render_tmpl() {
 
-		if ( $this->is_buttons_content() && 'json' === $this->mode ) :
+		if ( $this->is_button_content() && 'json' === $this->mode ) :
 			if ( wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) : ?>
 
 		<script type="text/html" id="tmpl-buttons-content"><?php
@@ -309,7 +296,7 @@ foreach ( $includes as $site => $value ) :
 	 *
 	 * @return boolean
 	 */
-	protected function is_buttons_content() {
+	protected function is_button_content() {
 
 		if ( $this->in_amp() ) {
 			return false;

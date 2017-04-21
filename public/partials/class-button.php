@@ -75,10 +75,52 @@ abstract class Button {
 
 		$this->attr_prefix = $this->get_attr_prefix();
 		$this->mode = $this->get_mode();
+
+		$this->render();
+	}
+
+	/**
+	 * Function method that the button.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	final protected function render() {
+
+		add_filter( 'the_content', array( $this, 'render_button' ), 55 );
+	}
+
+	/**
+	 * Render the button in the content.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param string $content The post content.
+	 * @return string
+	 */
+	public function render_button( $content ) {
+		return $content;
 	}
 
 	/**
 	 * The buttons template script to use in JSON mode.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param array $includes Data to include in the button.
+	 * @return void
+	 */
+	public function render_html( array $includes ) {}
+
+	/**
+	 * The buttons template script to use in JSON mode.
+	 *
+	 * @since 2.0.0
+	 * @access public
 	 *
 	 * @return void
 	 */

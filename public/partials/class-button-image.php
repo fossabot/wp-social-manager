@@ -47,9 +47,7 @@ class Button_Image extends Button {
 		parent::__construct( $plugin );
 
 		$this->view = $this->plugin->get_option( 'buttons_image', 'view' );
-
 		$this->hooks();
-		$this->render();
 	}
 
 	/**
@@ -62,8 +60,9 @@ class Button_Image extends Button {
 	 */
 	protected function hooks() {
 
-		add_action( 'wp', array( $this, 'setups_html' ), -30 );
-		add_action( 'wp_footer', array( $this, 'buttons_tmpl' ), -30 );
+		add_action( 'wp', array( $this, 'get_endpoint' ), -30 );
+		add_action( 'wp_footer', array( $this, 'render_tmpl' ), -30 );
+		add_filter( 'the_content', array( $this, 'pre_render_button' ), -55 );
 	}
 
 	/**
@@ -72,28 +71,16 @@ class Button_Image extends Button {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @return void
+	 * @return array
 	 */
-	public function setups_html() {
+	public function get_endpoint() {
 
 		if ( 'html' === $this->mode && is_singular() ) {
 
 			$this->response = $this->endpoint->get_image_endpoint( get_the_id() );
 		}
-	}
 
-	/**
-	 * Function to render the buttons in the content.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return void
-	 */
-	protected function render() {
-
-		add_filter( 'the_content', array( $this, 'pre_render_buttons' ), -55 );
-		add_filter( 'the_content', array( $this, 'render_buttons' ), 55 );
+		return $this->response;
 	}
 
 	/**
@@ -109,9 +96,9 @@ class Button_Image extends Button {
 	 * @return string The content with each image wrapped in an element to display
 	 *                the social buttons on the images.
 	 */
-	public function pre_render_buttons( $content ) {
+	public function pre_render_button( $content ) {
 
-		if ( empty( $content ) || ! $this->is_buttons_image() || 'publish' !== $this->get_post_status() ) {
+		if ( empty( $content ) || ! $this->is_button_image() || 'publish' !== $this->get_post_status() ) {
 			return $content;
 		}
 
@@ -159,9 +146,9 @@ class Button_Image extends Button {
 	 * @return string The content with each image wrapped in an element to display
 	 *                the social buttons on the images.
 	 */
-	public function render_buttons( $content ) {
+	public function render_button( $content ) {
 
-		if ( empty( $content ) || ! $this->is_buttons_image() || 'publish' !== $this->get_post_status() ) {
+		if ( empty( $content ) || ! $this->is_button_image() || 'publish' !== $this->get_post_status() ) {
 			return $content;
 		}
 
@@ -225,7 +212,7 @@ class Button_Image extends Button {
 					}
 
 					$fragment = $dom->createDocumentFragment();
-					$fragment->appendXML( $this->buttons_html( $this->response[ $index ]['endpoints'] ) );
+					$fragment->appendXML( $this->render_html( $this->response[ $index ]['endpoints'] ) );
 					$wrap_clone->appendChild( $fragment );
 				}
 
@@ -249,10 +236,10 @@ class Button_Image extends Button {
 	 * @since 1.0.6 - Renamed `data-social-buttons` to `data-social-manager` of the `span` (wrapper) element.
 	 * @access public
 	 *
-	 * @param object $includes Data to include in the button.
+	 * @param array $includes Data to include in the button.
 	 * @return string The formatted HTML of the buttons.
 	 */
-	public function buttons_html( $includes ) {
+	public function render_html( array $includes ) {
 
 		$list = '';
 
@@ -308,9 +295,9 @@ class Button_Image extends Button {
 	 *
 	 * @return void
 	 */
-	public function buttons_tmpl() {
+	public function render_tmpl() {
 
-		if ( $this->is_buttons_image() && 'json' === $this->mode && wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
+		if ( $this->is_button_image() && 'json' === $this->mode && wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
 			$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' );
 
 			if ( ! empty( $includes ) ) : ?><script type="text/html" id="tmpl-buttons-image">
@@ -382,7 +369,7 @@ endforeach; ?></span>
 	 *
 	 * @return boolean
 	 */
-	protected function is_buttons_image() {
+	protected function is_button_image() {
 
 		if ( $this->in_amp() ) {
 			return false;
