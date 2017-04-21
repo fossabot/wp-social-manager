@@ -47,7 +47,7 @@ class Test_REST_Button extends WP_UnitTestCase {
 		$wp_rest_server = new WP_REST_Server;
 
 		$this->server = $wp_rest_server;
-		$this->rest_buttons = new REST_Buttons( $plugin );
+		$this->rest_button = new REST_Button( $plugin );
 
 		do_action( 'rest_api_init' );
 	}
@@ -62,13 +62,13 @@ class Test_REST_Button extends WP_UnitTestCase {
 	 */
 	public function test_methods() {
 
-		$this->assertTrue( method_exists( $this->rest_buttons, 'hooks' ),  'Class does not have method \'hooks\'' );
-		$this->assertTrue( method_exists( $this->rest_buttons, 'localize_scripts' ),  'Class does not have method \'localize_scripts\'' );
-		$this->assertTrue( method_exists( $this->rest_buttons, 'register_routes' ),  'Class does not have method \'register_routes\'' );
-		$this->assertTrue( method_exists( $this->rest_buttons, 'get_plugin_info' ),  'Class does not have method \'get_item\'' );
-		$this->assertTrue( method_exists( $this->rest_buttons, 'get_item' ),  'Class does not have method \'get_item\'' );
-		$this->assertTrue( method_exists( $this->rest_buttons, 'prepare_item_for_response' ),  'Class does not have method \'prepare_item_for_response\'' );
-		$this->assertTrue( method_exists( $this->rest_buttons, 'get_namespace' ),  'Class does not have method \'get_namespace\'' );
+		$this->assertTrue( method_exists( $this->rest_button, 'hooks' ),  'Class does not have method \'hooks\'' );
+		$this->assertTrue( method_exists( $this->rest_button, 'localize_scripts' ),  'Class does not have method \'localize_scripts\'' );
+		$this->assertTrue( method_exists( $this->rest_button, 'register_routes' ),  'Class does not have method \'register_routes\'' );
+		$this->assertTrue( method_exists( $this->rest_button, 'get_plugin_info' ),  'Class does not have method \'get_item\'' );
+		$this->assertTrue( method_exists( $this->rest_button, 'get_item' ),  'Class does not have method \'get_item\'' );
+		$this->assertTrue( method_exists( $this->rest_button, 'prepare_item_for_response' ),  'Class does not have method \'prepare_item_for_response\'' );
+		$this->assertTrue( method_exists( $this->rest_button, 'get_namespace' ),  'Class does not have method \'get_namespace\'' );
 	}
 
 	/**
@@ -81,8 +81,8 @@ class Test_REST_Button extends WP_UnitTestCase {
 	 */
 	public function test_hooks() {
 
-		$this->assertEquals( 10, has_filter( 'rest_api_init', array( $this->rest_buttons, 'register_routes' ) ) );
-		$this->assertEquals( 10, has_filter( 'wp_enqueue_scripts', array( $this->rest_buttons, 'localize_scripts' ) ) );
+		$this->assertEquals( 10, has_filter( 'rest_api_init', array( $this->rest_button, 'register_routes' ) ) );
+		$this->assertEquals( 10, has_filter( 'wp_enqueue_scripts', array( $this->rest_button, 'localize_scripts' ) ) );
 	}
 
 	/**
@@ -98,7 +98,7 @@ class Test_REST_Button extends WP_UnitTestCase {
 	public function test_routes() {
 
 		// Test namespace name.
-		$this->assertEquals( 'ninecodes/v1/social-manager', $this->rest_buttons->get_namespace() . '/social-manager' );
+		$this->assertEquals( 'ninecodes/v1/social-manager', $this->rest_button->get_namespace() . '/social-manager' );
 
 		// Make sure we have the following routes registered.
 		$routes = $this->server->get_routes();
@@ -115,7 +115,7 @@ class Test_REST_Button extends WP_UnitTestCase {
 
 		global $wp_rest_server;
 		$wp_rest_server = null;
-		$this->rest_buttons = null;
+		$this->rest_button = null;
 
 		parent::tearDown();
 	}

@@ -91,7 +91,7 @@ final class Public_View {
 		require_once( $this->path_dir . 'partials/class-wp-head.php' );
 		require_once( $this->path_dir . 'partials/class-wp-footer.php' );
 		require_once( $this->path_dir . 'partials/class-endpoint.php' );
-		require_once( $this->path_dir . 'partials/class-rest-buttons.php' );
+		require_once( $this->path_dir . 'partials/class-rest-button.php' );
 
 		require_once( $this->path_dir . 'partials/button/class-button-interface.php' );
 		require_once( $this->path_dir . 'partials/button/class-button.php' );
@@ -135,7 +135,7 @@ final class Public_View {
 
 		$buttons_content = new Button_Content( $this->plugin );
 		$buttons_image = new Button_Image( $this->plugin );
-		$rest_buttons = new REST_Buttons( $this->plugin );
+		$rest_buttons = new REST_Button( $this->plugin );
 
 		$this->register_styles();
 		$this->register_scripts();
