@@ -234,8 +234,8 @@ final class Settings {
 		$menu_title = esc_html__( 'Social Media', 'ninecodes-social-manager' );
 		$page_title = esc_html__( 'Social Media Settings', 'ninecodes-social-manager' );
 
-		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $this->plugin_slug, function() {
-			echo wp_kses( "<div class='wrap' id='{$this->plugin_slug}-settings'>", array(
+		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $this->plugin->plugin_slug, function() {
+			echo wp_kses( "<div class='wrap' id='{$this->plugin->plugin_slug}-settings'>", array(
 					'div' => array(
 						'class' => array(),
 						'id' => array(),
@@ -982,7 +982,7 @@ final class Settings {
 	 */
 	public function print_setting_styles() {
 		?>
-		<style id="<?php echo esc_attr( "{$this->plugin_slug}-internal-styles" ); ?>">
+		<style id="<?php echo esc_attr( "{$this->plugin->plugin_slug}-internal-styles" ); ?>">
 			.wrap > form > h2 {
 				margin-bottom: 0.72em;
 				margin-top: 1.68em;
@@ -1028,7 +1028,7 @@ final class Settings {
 		foreach ( $args as $key => $file ) {
 
 			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'scripts';
-			wp_enqueue_script( "{$this->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.min.js", array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
+			wp_enqueue_script( "{$this->plugin->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.min.js", array( 'jquery', 'underscore', 'backbone' ), $this->plugin->version, true );
 		}
 	}
 
@@ -1047,10 +1047,10 @@ final class Settings {
 
 			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : 'styles';
 
-			wp_enqueue_style( "{$this->plugin_slug}-{$file}", "{$this->path_url}css/{$file}.min.css", array(), $this->version );
+			wp_enqueue_style( "{$this->plugin->plugin_slug}-{$file}", "{$this->path_url}css/{$file}.min.css", array(), $this->plugin->version );
 
 			if ( 'image-upload' === $file ) {
-				wp_style_add_data( "{$this->plugin_slug}-{$file}", 'rtl', 'replace' );
+				wp_style_add_data( "{$this->plugin->plugin_slug}-{$file}", 'rtl', 'replace' );
 			}
 		}
 	}
