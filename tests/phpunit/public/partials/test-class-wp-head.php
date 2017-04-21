@@ -571,14 +571,14 @@ class Test_WP_Head extends WP_UnitTestCase {
 
 		$this->assertTrue( is_single() ); // Make sure we are on single post.
 
-		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $metas, $context ) {
+		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $meta, $context ) {
 
 			if ( 'open_graph' === $context ) {
-				unset( $metas['post_description'] );
-				unset( $metas['post_url'] );
+				unset( $meta['post_description'] );
+				unset( $meta['post_url'] );
 			}
 
-			return $metas;
+			return $meta;
 		}, 10, 2 );
 
 		ob_start();
@@ -619,14 +619,14 @@ class Test_WP_Head extends WP_UnitTestCase {
 
 		$this->assertTrue( is_single() ); // Make sure we are on single post.
 
-		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $metas, $context ) {
+		add_filter( 'ninecodes_social_manager_post_meta_tags', function( $meta, $context ) {
 
 			if ( 'twitter_cards' === $context ) {
-				unset( $metas['post_description'] );
-				unset( $metas['post_url'] );
+				unset( $meta['post_description'] );
+				unset( $meta['post_url'] );
 			}
 
-			return $metas;
+			return $meta;
 		}, 10, 2 );
 
 		ob_start();

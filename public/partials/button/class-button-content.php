@@ -291,7 +291,7 @@ foreach ( $includes as $site => $value ) :
 	 * The Utility method to check if buttons content should be generated.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Use $this->metas property to access the Metas class method.
+	 * @since 1.0.6 - Use $this->metas property to access the Meta class method.
 	 * @access protected
 	 *
 	 * @return boolean

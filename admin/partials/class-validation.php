@@ -110,7 +110,7 @@ class Validation {
 	}
 
 	/**
-	 * Function to sanitize the inputs in the "Metas" section.
+	 * Function to sanitize the inputs in the "Meta" section.
 	 *
 	 * @since 1.0.0
 	 * @access public

@@ -87,7 +87,7 @@ final class Public_View {
 	 */
 	protected function requires() {
 
-		require_once( $this->path_dir . 'partials/class-metas.php' );
+		require_once( $this->path_dir . 'partials/class-meta.php' );
 		require_once( $this->path_dir . 'partials/class-wp-head.php' );
 		require_once( $this->path_dir . 'partials/class-wp-footer.php' );
 		require_once( $this->path_dir . 'partials/class-endpoint.php' );

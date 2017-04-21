@@ -262,7 +262,7 @@ final class Metabox {
 
 		$manager->register_section( 'meta_tags',
 			array(
-				'label' => esc_html__( 'Metas', 'ninecodes-social-manager' ),
+				'label' => esc_html__( 'Meta', 'ninecodes-social-manager' ),
 				'icon'  => 'dashicons-editor-code',
 			)
 		);

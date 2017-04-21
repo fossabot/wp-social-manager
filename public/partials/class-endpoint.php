@@ -33,11 +33,11 @@ class Endpoint {
 	protected $plugin;
 
 	/**
-	 * The Metas class instance.
+	 * The Meta class instance.
 	 *
 	 * @since 1.0.6
 	 * @access protected
-	 * @var Metas
+	 * @var Meta
 	 */
 	protected $meta;
 
@@ -48,9 +48,9 @@ class Endpoint {
 	 * @access public
 	 *
 	 * @param Plugin $plugin The Plugin class instance.
-	 * @param Metas  $meta The Metas class instance.
+	 * @param Meta   $meta The Meta class instance.
 	 */
-	function __construct( Plugin $plugin, Metas $meta ) {
+	function __construct( Plugin $plugin, Meta $meta ) {
 
 		$this->plugin = $plugin;
 		$this->meta = $meta;

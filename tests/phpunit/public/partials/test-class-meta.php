@@ -41,14 +41,14 @@ class Test_Meta extends WP_UnitTestCase {
 	protected $option_slug;
 
 	/**
-	 * The Metas
+	 * The Meta
 	 *
 	 * @since 1.1.0
 	 * @access protected
 	 *
-	 * @var Metas
+	 * @var Meta
 	 */
-	protected $metas;
+	protected $meta;
 
 
 	/**
@@ -64,11 +64,11 @@ class Test_Meta extends WP_UnitTestCase {
 		$this->plugin = new Plugin();
 		$this->plugin->init();
 
-		$this->metas = new Metas( $this->plugin );
+		$this->meta = new Meta( $this->plugin );
 	}
 
 	/**
-	 * Function method to test the `get_post_section` function method in Metas class.
+	 * Function method to test the `get_post_section` function method in Meta class.
 	 *
 	 * @since 1.1.0
 	 * @access public
@@ -131,16 +131,16 @@ class Test_Meta extends WP_UnitTestCase {
 
 		// Category parent.
 		wp_set_post_terms( $post_id, array( $c1, $c2 ), 'category' );
-		$this->assertEquals( 'Category 1', $this->metas->get_post_section( $post_id ) );
+		$this->assertEquals( 'Category 1', $this->meta->get_post_section( $post_id ) );
 
 		// Category Child (under a parent).
 		wp_set_post_terms( $post_id, array( $c5, $c3 ), 'category' );
-		$this->assertEquals( 'Category 3', $this->metas->get_post_section( $post_id ) );
+		$this->assertEquals( 'Category 3', $this->meta->get_post_section( $post_id ) );
 
 		// When `post_section` meta is set.
 		update_post_meta( $post_id, $this->plugin->option_slug, array(
 			'post_section' => "category-{$c5}",
 		) );
-		$this->assertEquals( 'Category 5', $this->metas->get_post_section( $post_id ) );
+		$this->assertEquals( 'Category 5', $this->meta->get_post_section( $post_id ) );
 	}
 }

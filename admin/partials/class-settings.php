@@ -266,7 +266,7 @@ final class Settings {
 		$tabs = array(
 			'accounts' => esc_html__( 'Accounts', 'ninecodes-social-manager' ),
 			'buttons' => esc_html__( 'Buttons', 'ninecodes-social-manager' ),
-			'metas' => esc_html__( 'Metas', 'ninecodes-social-manager' ),
+			'meta' => esc_html__( 'Meta', 'ninecodes-social-manager' ),
 			'advanced' => esc_html__( 'Advanced', 'ninecodes-social-manager' ),
 		);
 
@@ -346,7 +346,7 @@ final class Settings {
 					);
 					break;
 
-				case 'metas':
+				case 'meta':
 					$sections[ $tab ] = array(
 						'metas_site' => array(
 							'validate_callback' => array( $this->validate, 'setting_site_metas' ),
@@ -693,7 +693,7 @@ final class Settings {
 	}
 
 	/**
-	 * Fields: Metas Site.
+	 * Fields: Meta Site.
 	 * The setting fields to configure the meta data and the meta tags.
 	 *
 	 * @since 1.2.0
@@ -755,7 +755,7 @@ final class Settings {
 
 		/**
 		 * The Filter hook to allow developer adding new field type
-		 * in "Metas" (tab) > "Metas Site" (section).
+		 * in "Meta" (tab) > "Meta Site" (section).
 		 *
 		 * @since 1.2.0
 		 *
@@ -763,7 +763,7 @@ final class Settings {
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
-		$setting_fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $setting_fields, 'metas_site', 'metas' );
+		$setting_fields = (array) apply_filters( 'ninecodes_social_manager_setting_fields', $setting_fields, 'metas_site', 'meta' );
 
 		/**
 		 * Removes duplicate values from an array.
@@ -780,7 +780,7 @@ final class Settings {
 		$this->option_defaults( "{$this->plugin->option_slug}_metas", $setting_fields );
 
 		/**
-		 * Register the fields in "Metas" > "Metas Site".
+		 * Register the fields in "Meta" > "Meta Site".
 		 *
 		 * @var array {
 		 *		@type string $tab 	  		 The tab ID.
@@ -788,7 +788,7 @@ final class Settings {
 		 *		@type array  $setting_fields The fields data.
 		 * }
 		 */
-		$this->setting_fields[] = array( 'metas', 'metas_site', $setting_fields );
+		$this->setting_fields[] = array( 'meta', 'metas_site', $setting_fields );
 
 		return $setting_fields;
 	}
@@ -824,7 +824,7 @@ final class Settings {
 
 		/**
 		 * The Filter hook to allow developer adding new field type
-		 * in "Metas" (tab) > "Metas Site" (section).
+		 * in "Meta" (tab) > "Meta Site" (section).
 		 *
 		 * @since 1.2.0
 		 *

@@ -3,7 +3,7 @@
  * Public: Meta class
  *
  * @package SocialManager
- * @subpackage Public\Metas
+ * @subpackage Public\Meta
  */
 
 namespace NineCodes\SocialManager;
@@ -19,7 +19,7 @@ use \DOMDocument;
  *
  * @since 1.0.0
  */
-class Metas {
+class Meta {
 
 	/**
 	 * The Plugin class instance.
