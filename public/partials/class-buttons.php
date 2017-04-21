@@ -222,7 +222,7 @@ abstract class Buttons {
 	public function get_buttons_mode() {
 
 		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
-		$theme_support = $this->plugin->get_theme_support()->is( 'buttons-mode' );
+		$theme_support = $this->plugin->theme_support()->is( 'buttons-mode' );
 
 		if ( 'json' === $theme_support || 'json' === $buttons_mode ) {
 			return 'json';

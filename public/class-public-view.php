@@ -222,7 +222,7 @@ final class Public_View {
 		 * Don't load the plugin stylesheet, if the theme already loads its own stylesheet
 		 * via the 'add_theme_support()' function.
 		 */
-		if ( true === (bool) $this->plugin->get_theme_support()->is( 'stylesheet' ) ) {
+		if ( true === (bool) $this->plugin->theme_support()->is( 'stylesheet' ) ) {
 			return false;
 		}
 
@@ -264,7 +264,7 @@ final class Public_View {
 	public function is_json_mode() {
 
 		$button_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
-		$theme_support = $this->plugin->theme_support->is( 'buttons-mode' );
+		$theme_support = $this->plugin->theme_support()->is( 'buttons-mode' );
 
 		if ( 'json' === $theme_support || 'json' === $button_mode ) {
 			return true;

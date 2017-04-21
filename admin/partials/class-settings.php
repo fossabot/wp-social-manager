@@ -805,7 +805,7 @@ final class Settings {
 
 		$setting_fields = array();
 
-		if ( $this->plugin->get_theme_support()->is( 'stylesheet' ) ) :
+		if ( $this->plugin->theme_support()->is( 'stylesheet' ) ) :
 
 			$setting_fields['enable_stylesheet'] = array(
 				'label' => esc_html__( 'Enable Stylesheet', 'ninecodes-social-manager' ),
@@ -876,7 +876,7 @@ final class Settings {
 
 		$setting_fields = array();
 
-		if ( ! (bool) $this->plugin->get_theme_support()->is( 'buttons_mode' ) ) :
+		if ( ! (bool) $this->plugin->theme_support()->is( 'buttons_mode' ) ) :
 
 			$setting_fields['buttons_mode'] = array(
 				'label' => esc_html__( 'Buttons Mode', 'ninecodes-social-manager' ),

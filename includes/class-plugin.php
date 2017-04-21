@@ -293,14 +293,14 @@ final class Plugin {
 	}
 
 	/**
-	 * Get the theme support data.
+	 * Return the theme support data.
 	 *
 	 * @since 2.0.0
 	 * @access public
 	 *
 	 * @return Theme_Support
 	 */
-	public function get_theme_support() {
+	public function theme_support() {
 
 		static $theme_support;
 
