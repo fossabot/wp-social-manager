@@ -717,6 +717,7 @@ final class Settings {
 				'type' => 'text',
 				'label' => esc_html__( 'Site Name', 'ninecodes-social-manager' ),
 				'legend' => esc_html__( 'Site Name', 'ninecodes-social-manager' ),
+				// translators: the %s will be replaced with list of brand / site name examples.
 				'description' => sprintf( esc_html__( 'The website name or brand as it should appear within the social media meta tags (e.g. %s)', 'ninecodes-social-manager' ), '<code>iMDB</code>, <code>TNW</code>, <code>HKDC</code>' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
