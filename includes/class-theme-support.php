@@ -26,11 +26,10 @@ final class Theme_Support {
 	/**
 	 * The name to check the feature provided by the plugin.
 	 *
-	 * @since 1.0.0
-	 * @access protected
+	 * @since 2.0.0
 	 * @var string
 	 */
-	protected $feature = 'ninecodes-social-manager';
+	const FEATURE_NAME = 'ninecodes-social-manager';
 
 	/**
 	 * The theme supports arguments.
@@ -81,8 +80,8 @@ final class Theme_Support {
 	 */
 	public function theme_support() {
 
-		if ( current_theme_supports( $this->feature ) ) {
-			$supports = get_theme_support( $this->feature );
+		if ( current_theme_supports( self::FEATURE_NAME ) ) {
+			$supports = get_theme_support( self::FEATURE_NAME );
 
 			if ( is_array( $supports ) && ! empty( $supports ) ) {
 				$this->supports = $supports[0];
@@ -196,6 +195,6 @@ final class Theme_Support {
 	 * @return string The feature name of the plugin.
 	 */
 	public function get_feature_name() {
-		return $this->feature;
+		return self::FEATURE_NAME;
 	}
 }
