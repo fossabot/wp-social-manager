@@ -337,7 +337,7 @@ class Test_Options extends WP_UnitTestCase {
 	 * @access public
 	 * @return void
 	 */
-	public function test_buttons_modes() {
+	public function test_button_modes() {
 
 		$modes = Options::button_modes();
 

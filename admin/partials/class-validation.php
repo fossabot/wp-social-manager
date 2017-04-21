@@ -29,7 +29,7 @@ class Validation {
 	 * @param mixed $input Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_profiles( $input ) {
+	final public function setting_profile( $input ) {
 
 		/**
 		 * Return early, if the value is not an array or the value
@@ -63,7 +63,7 @@ class Validation {
 	 * @param array $inputs Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_buttons_content( array $inputs ) {
+	final public function setting_button_content( array $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
 			'view' => '',
@@ -92,16 +92,16 @@ class Validation {
 	 * @param array $inputs Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_buttons_image( array $inputs ) {
+	final public function setting_button_image( array $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'enabled' => '',
+			'enable' => '',
 			'view' => '',
 			'post_types' => array(),
 			'includes' => array(),
 		) );
 
-		$inputs['enabled'] = $this->validate_checkbox( $inputs['enabled'] );
+		$inputs['enable'] = $this->validate_checkbox( $inputs['enable'] );
 		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
 		$inputs['post_types'] = $this->validate_multicheckbox( $inputs['post_types'], Options::post_types() );
 		$inputs['includes'] = $this->validate_multicheckbox( $inputs['includes'], Options::button_sites( 'image' ) );
@@ -118,16 +118,16 @@ class Validation {
 	 * @param array $inputs Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_site_metas( array $inputs ) {
+	final public function setting_meta_site( array $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'enabled' => '',
+			'enable' => '',
 			'name' => '',
 			'description' => '',
 			'image' => null,
 		) );
 
-		$inputs['enabled'] = $this->validate_checkbox( $inputs['enabled'] );
+		$inputs['enable'] = $this->validate_checkbox( $inputs['enable'] );
 		$inputs['name'] = sanitize_text_field( $inputs['name'] );
 		$inputs['description'] = sanitize_text_field( $inputs['description'] );
 		$inputs['image'] = absint( $inputs['image'] );
@@ -164,9 +164,9 @@ class Validation {
 	 * @param array $inputs Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_modes( $inputs ) {
+	final public function setting_mode( $inputs ) {
 
-		$inputs['buttons_mode'] = $this->validate_radio( $inputs['buttons_mode'], Options::buttons_modes() );
+		$inputs['button_mode'] = $this->validate_radio( $inputs['button_mode'], Options::button_modes() );
 		$inputs['link_mode'] = $this->validate_radio( $inputs['link_mode'], Options::link_modes() );
 
 		return $inputs;

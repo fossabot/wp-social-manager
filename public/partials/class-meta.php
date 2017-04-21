@@ -675,7 +675,7 @@ class Meta {
 	 */
 	public function is_meta_enabled() {
 
-		return (bool) $this->get_site_meta( 'enabled' );
+		return (bool) $this->get_site_meta( 'enable' );
 	}
 
 	/**

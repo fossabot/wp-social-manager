@@ -116,7 +116,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	public function test_site_meta_tags_defaults() {
 
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => 'on',
+			'enable' => 'on',
 			'name' => '',
 			'description' => '',
 			'image' => '',
@@ -169,7 +169,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 		 * ============================================================
 		 */
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => 'on',
+			'enable' => 'on',
 			'name' => 'Hello World',
 			'description' => 'Lorem ipsum dolor sit amet',
 			'title' => 'Hello World - Lorem ipsum dolor sit amet',
@@ -217,7 +217,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 		 * yet we have the meta tags added.
 		 */
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => '',
+			'enable' => '',
 			'name' => 'Hello World',
 			'description' => 'Lorem ipsum dolor sit amet',
 			'title' => 'Hello World - Lorem ipsum dolor sit amet',
@@ -238,7 +238,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 
 		// Enable the metas site with the meta values added.
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => 'on',
+			'enable' => 'on',
 		 	'name' => 'Hello World',
 			'description' => 'Lorem ipsum dolor sit amet',
 			'title' => 'Hello World - Lorem ipsum dolor sit amet',
@@ -272,7 +272,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	public function test_post_meta_tags() {
 
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => 'on',
+			'enable' => 'on',
 		));
 
 		$post_id = $this->factory()->post->create(array(
@@ -332,7 +332,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	public function test_post_meta_tags_in_home() {
 
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => 'on',
+			'enable' => 'on',
 		));
 		$this->go_to( get_home_url() );
 
@@ -358,7 +358,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	public function test_post_meta_tags_with_excerpt() {
 
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => 'on',
+			'enable' => 'on',
 		));
 
 		$post_id = $this->factory()->post->create(array(
@@ -401,7 +401,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	public function test_post_meta_tags_with_post_section() {
 
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => 'on',
+			'enable' => 'on',
 		));
 
 		$cat_1 = $this->factory()->category->create(array(
@@ -443,7 +443,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	public function test_post_meta_tags_with_post_tags() {
 
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => 'on',
+			'enable' => 'on',
 		));
 
 		$tag_1 = $this->factory()->term->create(array(
@@ -495,7 +495,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	public function test_post_meta_tags_disabled() {
 
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => '',
+			'enable' => '',
 		));
 		$this->assertNull( $this->wp_head->post_meta_tags() );
 	}
@@ -511,7 +511,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	public function test_post_meta_tags_filter_hook() {
 
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => 'on',
+			'enable' => 'on',
 		));
 
 		$post_id = $this->factory()->post->create(array(
@@ -557,7 +557,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	public function test_post_meta_tags_filter_hook_open_graph() {
 
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => 'on',
+			'enable' => 'on',
 		));
 
 		$post_id = $this->factory()->post->create(array(
@@ -605,7 +605,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	public function test_post_meta_tags_filter_hook_twitter_cards() {
 
 		update_option($this->plugin->option_slug . '_metas_site', array(
-			'enabled' => 'on',
+			'enable' => 'on',
 		));
 
 		$post_id = $this->factory()->post->create(array(
