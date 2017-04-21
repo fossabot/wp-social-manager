@@ -37,14 +37,14 @@ class Test_Validation extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_setting_profiles() {
+	public function test_setting_profile() {
 
 		/**
 		 * Test Associative Array.
 		 *
 		 * @var array
 		 */
-		$assoc = $this->validation->setting_profiles( array(
+		$assoc = $this->validation->setting_profile( array(
 			'facebook' => 'zuck',
 			'twitter' => 'jack',
 			'googleplus' => 'page',
@@ -64,7 +64,7 @@ class Test_Validation extends WP_UnitTestCase {
 		 *
 		 * @var array
 		 */
-		$assoc_empty = $this->validation->setting_profiles( array(
+		$assoc_empty = $this->validation->setting_profile( array(
 			'facebook' => '',
 			'twitter' => '',
 			'googleplus' => '',
@@ -79,7 +79,7 @@ class Test_Validation extends WP_UnitTestCase {
 		 *
 		 * @var array
 		 */
-		$assoc_non_string = $this->validation->setting_profiles( array(
+		$assoc_non_string = $this->validation->setting_profile( array(
 			'facebook' => true,
 			'twitter' => null,
 			'googleplus' => 1,
@@ -94,7 +94,7 @@ class Test_Validation extends WP_UnitTestCase {
 		 *
 		 * @var array
 		 */
-		$assoc_non_registered = $this->validation->setting_profiles( array(
+		$assoc_non_registered = $this->validation->setting_profile( array(
 			'facebook' => '',
 			'twitter' => '',
 			'googleplus' => '',
@@ -114,7 +114,7 @@ class Test_Validation extends WP_UnitTestCase {
 		 *
 		 * @var array
 		 */
-		$numer = $this->validation->setting_profiles( array(
+		$numer = $this->validation->setting_profile( array(
 			'facebook',
 			'twitter',
 			'googleplus',
@@ -127,31 +127,31 @@ class Test_Validation extends WP_UnitTestCase {
 		 *
 		 * @var array
 		 */
-		$empty = $this->validation->setting_profiles( array() );
+		$empty = $this->validation->setting_profile( array() );
 		$this->assertEmpty( $empty );
 
 		/**
 		 * Test Non-array Value (null).
 		 */
-		$null = $this->validation->setting_profiles( null );
+		$null = $this->validation->setting_profile( null );
 		$this->assertEmpty( $null );
 
 		/**
 		 * Test Non-array Value (false).
 		 */
-		$false = $this->validation->setting_profiles( false );
+		$false = $this->validation->setting_profile( false );
 		$this->assertEmpty( $false );
 
 		/**
 		 * Test Non-array Value (string).
 		 */
-		$string = $this->validation->setting_profiles( 'false' );
+		$string = $this->validation->setting_profile( 'false' );
 		$this->assertEmpty( $string );
 
 		/**
 		 * Test Non-array Value (empty string).
 		 */
-		$string_empty = $this->validation->setting_profiles( '' );
+		$string_empty = $this->validation->setting_profile( '' );
 		$this->assertEmpty( $string_empty );
 	}
 

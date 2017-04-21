@@ -33,7 +33,7 @@ class Test_Settings extends WP_UnitTestCase {
 
 		$this->plugin = new Plugin();
 		$this->settings = new Settings( $this->plugin );
-		$this->settings->setting_setups();
+		$this->settings->setups();
 	}
 
 	/**
@@ -47,13 +47,20 @@ class Test_Settings extends WP_UnitTestCase {
 	public function test_settings_hooks() {
 
 		$this->assertEquals( 10, has_action( 'init', array( $this->settings, 'frontend_setups' ) ) );
-		$this->assertEquals( 10, has_action( 'admin_menu', array( $this->settings, 'setting_menu' ) ) );
 
-		$this->assertEquals( 10, has_action( 'admin_init', array( $this->settings, 'setting_setups' ) ) );
-		$this->assertEquals( 15, has_action( 'admin_init', array( $this->settings, 'setting_tabs' ) ) );
-		$this->assertEquals( 20, has_action( 'admin_init', array( $this->settings, 'setting_sections' ) ) );
-		$this->assertEquals( 25, has_action( 'admin_init', array( $this->settings, 'setting_fields' ) ) );
-		$this->assertEquals( 30, has_action( 'admin_init', array( $this->settings, 'setting_init' ) ) );
+		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_profiles' ) ) );
+		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_buttons_content' ) ) );
+		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_buttons_image' ) ) );
+		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_metas_site' ) ) );
+		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_enqueue' ) ) );
+		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_modes' ) ) );
+
+		$this->assertEquals( 10, has_action( 'admin_menu', array( $this->settings, 'menu' ) ) );
+		$this->assertEquals( 10, has_action( 'admin_init', array( $this->settings, 'setups' ) ) );
+		$this->assertEquals( 15, has_action( 'admin_init', array( $this->settings, 'tabs' ) ) );
+		$this->assertEquals( 20, has_action( 'admin_init', array( $this->settings, 'sections' ) ) );
+		$this->assertEquals( 25, has_action( 'admin_init', array( $this->settings, 'fields' ) ) );
+		$this->assertEquals( 30, has_action( 'admin_init', array( $this->settings, 'init' ) ) );
 	}
 
 	/**
@@ -68,8 +75,6 @@ class Test_Settings extends WP_UnitTestCase {
 
 		$this->assertInstanceOf( '\NineCodes\WPSettings\Settings', $this->settings->settings );
 		$this->assertInstanceOf( '\NineCodes\SocialManager\Validation', $this->settings->validate );
-		$this->assertInstanceOf( '\NineCodes\SocialManager\Fields', $this->settings->fields );
-		$this->assertInstanceOf( '\NineCodes\SocialManager\Helps', $this->settings->helps );
 	}
 
 	/**
@@ -81,10 +86,10 @@ class Test_Settings extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_setting_tabs() {
+	public function test_tabs() {
 
 		// Default Tabs.
-		$tabs = $this->settings->setting_tabs();
+		$tabs = $this->settings->tabs();
 
 		/**
 		 * Test the filter hook to add a new Tabs in the setting page with valid value.
@@ -111,13 +116,13 @@ class Test_Settings extends WP_UnitTestCase {
 			return $tabs;
 		});
 
-		$this->assertArrayHasKey( 'new_tab', $this->settings->setting_tabs() );
+		$this->assertArrayHasKey( 'new_tab', $this->settings->tabs() );
 		$this->assertEquals( array_merge( $tabs, array(
 			'new_tab' => 'New Tab',
 			'newtab9' => 'New Tab 9',
 			'newtab10' => 'New Tab 10',
 			'new_tab11' => 'New Tab 11',
-		) ), $this->settings->setting_tabs() );
+		) ), $this->settings->tabs() );
 	}
 
 	/**
