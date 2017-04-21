@@ -75,24 +75,9 @@
         "test",
         "chore",
         "revert",
-        "custom",
         "build",
         "release"
       ],
-      "scope": {
-        "required": false,
-        "allowed": [
-          "meta",
-          "buttons",
-          "add-on",
-          "wp-api",
-          "open-graph",
-          "twitter-cards",
-          "i18n"
-        ],
-        "validate": true,
-        "multiple": false
-      },
       "warnOnFail": false,
       "autoFix": false
     }
