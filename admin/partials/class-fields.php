@@ -17,53 +17,11 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 use \NineCodes\WPSettings;
 
 /**
- * The class to register custom fields in the Settings.
- */
-abstract class CustomFields extends WPSettings\Fields {
-
-	/**
-	 * The admin screen base / ID
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $screen;
-
-	/**
-	 * Constructor.
-	 *
-	 * Initialize the screen ID property, and run the hooks.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param string $screen The admin screen base / ID.
-	 */
-	public function __construct( $screen = '' ) {
-		if ( ! empty( $screen ) ) {
-			$this->screen = $screen;
-			$this->hooks();
-		}
-	}
-
-	/**
-	 * Run Filters and Actions required.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return void
-	 */
-	protected function hooks() {}
-}
-
-/**
  * The Fields class is used for registering the new setting field using PepperPlane.
  *
  * @since 1.0.0
  */
-final class Fields extends CustomFields {
+final class Fields extends WPSettings\Fields {
 
 	/**
 	 * The admin screen base / ID

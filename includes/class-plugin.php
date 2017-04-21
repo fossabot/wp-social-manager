@@ -159,8 +159,8 @@ final class Plugin {
 		require_once( $this->path_dir . 'includes/class-options.php' );
 		require_once( $this->path_dir . 'includes/class-theme-support.php' );
 
-		require_once( $this->path_dir . 'includes/wp-settings/wp-settings.php' );
-		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-fields.php' );
+		require_once( $this->path_dir . 'includes/wp-settings/class-settings.php' );
+		require_once( $this->path_dir . 'includes/wp-settings/class-fields.php' );
 
 		require_once( $this->path_dir . 'includes/ogp/open-graph-protocol.php' );
 		require_once( $this->path_dir . 'includes/customize/control-radio-image.php' );
