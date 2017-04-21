@@ -69,7 +69,7 @@ abstract class Buttons {
 	 */
 	function __construct( Plugin $plugin ) {
 
-		$this->endpoints = new Endpoints( $plugin, new Metas( $plugin ) );
+		$this->endpoint = new Endpoint( $plugin, new Metas( $plugin ) );
 
 		$this->plugin = $plugin;
 

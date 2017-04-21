@@ -42,16 +42,18 @@ class Test_Endpoint extends WP_UnitTestCase {
 		$plugin->init();
 
 		$metas = new Metas( $plugin );
-		$this->endpoint = new Endpoints( $plugin, $metas );
+		$this->endpoint = new Endpoint( $plugin, $metas );
 	}
 
 	/**
 	 * Tear down.
 	 */
 	function tearDown() {
+
 		$this->plugin = null;
 		$this->public = null;
 		$this->endpoint = null;
+
 		parent::tearDown();
 	}
 
@@ -65,31 +67,31 @@ class Test_Endpoint extends WP_UnitTestCase {
 	 */
 	public function test_methods() {
 
-		$this->assertTrue( method_exists( $this->endpoint, 'get_content_endpoints' ),  'Class does not have method \'get_content_endpoints\'' );
-		$this->assertTrue( method_exists( $this->endpoint, 'get_image_endpoints' ),  'Class does not have method \'get_image_endpoints\'' );
-		$this->assertTrue( method_exists( $this->endpoint, 'joint_image_endpoints' ),  'Class does not have method \'joint_image_endpoints\'' );
-		$this->assertTrue( method_exists( $this->endpoint, 'get_content_image_srcs' ),  'Class does not have method \'get_content_image_srcs\'' );
-		$this->assertTrue( method_exists( $this->endpoint, 'get_post_metas' ),  'Class does not have method \'get_post_metas\'' );
+		$this->assertTrue( method_exists( $this->endpoint, 'get_content_endpoint' ),  'Class does not have method \'get_content_endpoint\'' );
+		$this->assertTrue( method_exists( $this->endpoint, 'get_image_endpoint' ),  'Class does not have method \'get_image_endpoint\'' );
+		$this->assertTrue( method_exists( $this->endpoint, 'joint_image_endpoint' ),  'Class does not have method \'joint_image_endpoint\'' );
+		$this->assertTrue( method_exists( $this->endpoint, 'get_content_image_src' ),  'Class does not have method \'get_content_image_src\'' );
+		$this->assertTrue( method_exists( $this->endpoint, 'get_post_meta' ),  'Class does not have method \'get_post_meta\'' );
 		$this->assertTrue( method_exists( $this->endpoint, 'get_endpoint_base' ),  'Class does not have method \'get_endpoint_base\'' );
 	}
 
 	/**
-	 * Function to test 'get_content_endpoints()' function.
+	 * Function to test 'get_content_endpoint()' function.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return void
 	 */
-	public function test_get_content_endpoints() {
+	public function test_get_content_endpoint() {
 
 		// Create a post.
 		$post_id = $this->factory->post->create();
-		$response = $this->endpoint->get_content_endpoints( $post_id );
+		$response = $this->endpoint->get_content_endpoint( $post_id );
 
-		$this->assertArrayHasKey( 'endpoints', $response );
+		$this->assertArrayHasKey( 'endpoint', $response );
 
-		$endpoints = $response['endpoints'];
+		$endpoints = $response['endpoint'];
 
 		// Count the number, in case we will add more in the future.
 		$this->assertEquals( 8, count( $endpoints ) );
@@ -128,21 +130,21 @@ class Test_Endpoint extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Function to test 'get_image_endpoints()' function.
+	 * Function to test 'get_image_endpoint()' function.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return void
 	 */
-	public function test_get_image_endpoints() {
+	public function test_get_image_endpoint() {
 
 		$image_src = 'https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150';
 
 		$post_id = $this->factory->post->create( array(
 			'post_content' => 'This is an image <img src="' . $image_src . '" width=350" height="150" >.',
 		) );
-		$response = $this->endpoint->get_image_endpoints( $post_id );
+		$response = $this->endpoint->get_image_endpoint( $post_id );
 
 		// We should only have 1 image.
 		$this->assertEquals( 1, count( $response ) );
@@ -150,9 +152,9 @@ class Test_Endpoint extends WP_UnitTestCase {
 		foreach ( $response as $res ) {
 
 			$this->assertArrayHasKey( 'src', $res );
-			$this->assertArrayHasKey( 'endpoints', $res );
+			$this->assertArrayHasKey( 'endpoint', $res );
 
-			$endpoints = $res['endpoints'];
+			$endpoints = $res['endpoint'];
 
 			$this->assertEquals( 1, count( $endpoints ) ); // Count the number, in case we will add more in the future.
 			$this->assertArrayHasKey( 'pinterest', $endpoints );

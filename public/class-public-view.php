@@ -90,7 +90,7 @@ final class Public_View {
 		require_once( $this->path_dir . 'partials/class-metas.php' );
 		require_once( $this->path_dir . 'partials/class-wp-head.php' );
 		require_once( $this->path_dir . 'partials/class-wp-footer.php' );
-		require_once( $this->path_dir . 'partials/class-endpoints.php' );
+		require_once( $this->path_dir . 'partials/class-endpoint.php' );
 		require_once( $this->path_dir . 'partials/class-rest-buttons.php' );
 		require_once( $this->path_dir . 'partials/class-buttons.php' );
 		require_once( $this->path_dir . 'partials/class-buttons-content.php' );

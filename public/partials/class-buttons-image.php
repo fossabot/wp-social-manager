@@ -22,7 +22,7 @@ use \DOMDocument;
 class Buttons_Image extends Buttons {
 
 	/**
-	 * The response of `get_image_endpoints()` function
+	 * The response of `get_image_endpoint()` function
 	 * in HTML buttons modes.
 	 *
 	 * @since 1.0.0
@@ -78,7 +78,7 @@ class Buttons_Image extends Buttons {
 
 		if ( 'html' === $this->mode && is_singular() ) {
 
-			$this->response = $this->endpoints->get_image_endpoints( get_the_id() );
+			$this->response = $this->endpoint->get_image_endpoint( get_the_id() );
 		}
 	}
 

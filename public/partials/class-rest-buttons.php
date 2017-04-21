@@ -72,7 +72,7 @@ class REST_Buttons extends WP_REST_Controller {
 	 */
 	public function __construct( Plugin $plugin ) {
 
-		$this->endpoints = new Endpoints( $plugin, new Metas( $plugin ) );
+		$this->endpoint = new Endpoint( $plugin, new Metas( $plugin ) );
 
 		$this->plugin = $plugin;
 
@@ -294,17 +294,17 @@ class REST_Buttons extends WP_REST_Controller {
 		switch ( $select ) {
 
 			case 'content':
-				$data['content'] = $this->endpoints->get_content_endpoints( $object->id );
+				$data['content'] = $this->endpoint->get_content_endpoint( $object->id );
 				break;
 
 			case 'images':
-				$data['images'] = $this->endpoints->get_image_endpoints( $object->id );
+				$data['images'] = $this->endpoint->get_image_endpoint( $object->id );
 				break;
 
 			default:
 				$data = array_merge($data, array(
-					'content' => $this->endpoints->get_content_endpoints( $object->id ),
-					'images' => $this->endpoints->get_image_endpoints( $object->id ),
+					'content' => $this->endpoint->get_content_endpoint( $object->id ),
+					'images' => $this->endpoint->get_image_endpoint( $object->id ),
 				));
 				break;
 		}

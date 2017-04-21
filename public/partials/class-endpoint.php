@@ -21,7 +21,7 @@ use \DOMDocument;
  *
  * @since 1.0.0
  */
-class Endpoints {
+class Endpoint {
 
 	/**
 	 * The Plugin class instance.
@@ -39,7 +39,7 @@ class Endpoints {
 	 * @access protected
 	 * @var Metas
 	 */
-	protected $metas;
+	protected $meta;
 
 	/**
 	 * Constructor.
@@ -48,12 +48,12 @@ class Endpoints {
 	 * @access public
 	 *
 	 * @param Plugin $plugin The Plugin class instance.
-	 * @param Metas  $metas The Metas class instance.
+	 * @param Metas  $meta The Metas class instance.
 	 */
-	function __construct( Plugin $plugin, Metas $metas ) {
+	function __construct( Plugin $plugin, Metas $meta ) {
 
 		$this->plugin = $plugin;
-		$this->metas = $metas;
+		$this->meta = $meta;
 	}
 
 	/**
@@ -67,38 +67,41 @@ class Endpoints {
 	 *
 	 * TODO add inline docs referring to each site endpoint documentation page.
 	 */
-	public function get_content_endpoints( $post_id ) {
+	public function get_content_endpoint( $post_id ) {
 
 		$post_id = absint( $post_id );
-		$metas = $this->get_post_metas( $post_id );
+		$meta = $this->get_post_meta( $post_id );
 
-		$endpoints = array();
+		$output = array();
 
-		if ( ! $metas['post_url'] || ! $metas['post_title'] ) {
-			return $endpoints;
+		if ( ! $meta['post_url'] || ! $meta['post_title'] ) {
+			return $output;
 		}
 
 		$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
-		$buttons = Options::button_sites( 'content' );
+		$sites = Options::button_sites( 'content' );
 
-		foreach ( $buttons as $site => $label ) {
+		foreach ( $sites as $site => $label ) {
 			if ( ! key_exists( $site, array_filter( $includes ) ) ) {
-				unset( $buttons[ $site ] );
+				unset( $sites[ $site ] );
 			}
 		}
 
-		foreach ( $buttons as $site => $label ) {
-			$endpoint = self::get_endpoint_base( 'content', $site );
+		foreach ( $sites as $site => $label ) {
 
-			if ( ! $endpoint ) {
+			$base = self::get_endpoint_base( 'content', $site );
+
+			if ( ! $base ) {
 				unset( $sites[ $site ] );
 			}
 
 			switch ( $site ) {
 				case 'facebook':
-					$endpoints[ $site ] = add_query_arg(
-						array( 'u' => $metas['post_url'] ),
-						$endpoint
+					$output[ $site ] = add_query_arg(
+						array(
+							'u' => $meta['post_url'],
+						),
+						$base
 					);
 
 					break;
@@ -107,84 +110,86 @@ class Endpoints {
 					$profiles = $this->plugin->get_option( 'profiles', 'twitter' );
 
 					$args = array(
-						'text' => $metas['post_title'],
-						'url'  => $metas['post_url'],
+						'text' => $meta['post_title'],
+						'url'  => $meta['post_url'],
 					);
 
 					if ( isset( $profiles ) && ! empty( $profiles ) ) {
 						$args['via'] = $profiles;
 					}
 
-					$endpoints[ $site ] = add_query_arg( $args, $endpoint );
+					$output[ $site ] = add_query_arg( $args, $base );
 
 					break;
 
 				case 'googleplus':
-					$endpoints[ $site ] = add_query_arg(
-						array( 'url' => $metas['post_url'] ),
-						$endpoint
+					$output[ $site ] = add_query_arg(
+						array(
+							'url' => $meta['post_url'],
+						),
+						$base
 					);
 
 					break;
 
 				case 'linkedin':
-					$endpoints[ $site ] = add_query_arg(
+					$output[ $site ] = add_query_arg(
 						array(
 							'mini' => true,
-							'title' => $metas['post_title'],
-							'summary' => $metas['post_description'],
-							'url' => $metas['post_url'],
-							'source' => urlencode( get_site_url() ),
+							'title' => $meta['post_title'],
+							'summary' => $meta['post_description'],
+							'url' => $meta['post_url'],
+							'source' => rawurlencode( get_site_url() ),
 						),
-						$endpoint
+						$base
 					);
 
 					break;
 
 				case 'pinterest':
-					$endpoints[ $site ] = add_query_arg(
+					$output[ $site ] = add_query_arg(
 						array(
-							'url' => $metas['post_url'],
-							'description' => $metas['post_title'],
+							'url' => $meta['post_url'],
+							'description' => $meta['post_title'],
 							'is_video' => false,
-							'media' => $metas['post_image'],
+							'media' => $meta['post_image'],
 						),
-						$endpoint
+						$base
 					);
 
 					break;
 
 				case 'reddit':
-					$endpoints[ $site ] = add_query_arg(
+					$output[ $site ] = add_query_arg(
 						array(
-							'url' => $metas['post_url'],
-							'post_title' => $metas['post_title'],
+							'url' => $meta['post_url'],
+							'post_title' => $meta['post_title'],
 						),
-						$endpoint
+						$base
 					);
 
 					break;
 
 				case 'tumblr':
 
-					$endpoints[ $site ] = add_query_arg(
+					$output[ $site ] = add_query_arg(
 						array(
-							'url' => $metas['post_url'],
-							'name' => $metas['post_title'],
-							'description' => substr( $metas['post_description'], 0, 30 ) . '...',
+							'url' => $meta['post_url'],
+							'name' => $meta['post_title'],
+							'description' => substr( $meta['post_description'], 0, 30 ) . '...',
 						),
-						$endpoint
+						$base
 					);
 
 					break;
 
 				case 'email':
-					$endpoints[ $site ] = add_query_arg(
+					$output[ $site ] = add_query_arg(
 						array(
-							'subject' => $metas['post_title'],
-							'body' => $metas['post_description'],
+							'subject' => $meta['post_title'],
+							'body' => $meta['post_description'],
 						),
-						$endpoint
+						$base
 					);
 
 					break;
@@ -201,18 +206,20 @@ class Endpoints {
 					 * @param string $context Whether for 'content' or 'image'
 					 * @param array  $args The button arguments to construct the endpoint URLs.
 					 */
-					$endpoints[ $site ] = apply_filters( 'ninecodes_social_manager_button_endpoint', null, $site, 'content', array(
-						'base_url' => $endpoint,
-						'post_title' => $metas['post_title'],
-						'post_description' => $metas['post_description'],
-						'post_url' => $metas['post_url'],
-						'post_image' => $metas['post_image'],
+					$output[ $site ] = apply_filters( 'ninecodes_social_manager_button_endpoint', null, $site, 'content', array(
+						'endpoint' => $endpoint,
+						'post_title' => $meta['post_title'],
+						'post_description' => $meta['post_description'],
+						'post_url' => $meta['post_url'],
+						'post_image' => $meta['post_image'],
 					) );
 					break;
 			} // End switch().
 		} // End foreach().
 
-		return array( 'endpoints' => $endpoints );
+		return array(
+			'endpoint' => $output,
+		);
 	}
 
 	/**
@@ -226,42 +233,45 @@ class Endpoints {
 	 * @param integer $post_id The WordPress post ID.
 	 * @return array An array of sites with their label / name and button endpoint url.
 	 */
-	public function get_image_endpoints( $post_id ) {
+	public function get_image_endpoint( $post_id ) {
 
 		$post_id = absint( $post_id );
-		$metas = $this->get_post_metas( $post_id );
+		$meta = $this->get_post_meta( $post_id );
 
-		$endpoints = array();
+		$output = array();
 		$buttons = array();
 
-		if ( ! $metas['post_url'] || ! $metas['post_title'] ) {
-			return $endpoints;
+		if ( ! $meta['post_url'] || ! $meta['post_title'] ) {
+			return $output;
 		}
 
-		foreach ( Options::button_sites( 'image' ) as $site => $label ) {
-			$endpoint = self::get_endpoint_base( 'image', $site );
+		$sites = Options::button_sites( 'image' );
 
-			if ( ! $endpoint ) {
+		foreach ( $sites as $site => $label ) {
+
+			$base = self::get_endpoint_base( 'image', $site );
+
+			if ( ! $base ) {
 				unset( $sites[ $site ] );
 			}
 
 			$button['site'] = $site;
 			$button['label'] = $label;
-			$button['endpoint'] = $endpoint;
-			$button['post_url'] = $metas['post_url'];
-			$button['post_title'] = $metas['post_title'];
+			$button['endpoint'] = $base;
+			$button['post_url'] = $meta['post_url'];
+			$button['post_title'] = $meta['post_title'];
 
 			$buttons = array_merge( $buttons, array( $button ) );
 		}
 
 		$content = get_post_field( 'post_content', $post_id );
-		$image_srcs = $this->get_content_image_srcs( $content );
+		$image_src = $this->get_content_image_src( $content );
 
-		foreach ( $image_srcs as $key => $src ) {
-			$endpoints = array_merge( $endpoints, array_map( array( $this, 'joint_image_endpoints' ), $buttons, array( $src ) ) );
+		foreach ( $image_src as $src ) {
+			$output = array_merge( $output, array_map( array( $this, 'joint_image_endpoint' ), $buttons, array( $src ) ) );
 		}
 
-		return $endpoints;
+		return $output;
 	}
 
 	/**
@@ -281,7 +291,7 @@ class Endpoints {
 	 * @param string $src The image source URL.
 	 * @return array The button endpoint URL with the image src added.
 	 */
-	protected function joint_image_endpoints( $button, $src ) {
+	protected function joint_image_endpoint( $button, $src ) {
 
 		$urls = array();
 
@@ -308,7 +318,7 @@ class Endpoints {
 
 		return array(
 			'src' => $src,
-			'endpoints' => $urls,
+			'endpoint' => $urls,
 		);
 	}
 
@@ -321,7 +331,7 @@ class Endpoints {
 	 * @param integer $content The post content.
 	 * @return array List of image source URL.
 	 */
-	protected function get_content_image_srcs( $content ) {
+	protected function get_content_image_src( $content ) {
 
 		$dom = new DOMDocument();
 		$errors = libxml_use_internal_errors( true );
@@ -353,21 +363,21 @@ class Endpoints {
 	 * @param integer $post_id The WordPress post ID.
 	 * @return array An array of post meta.
 	 */
-	protected function get_post_metas( $post_id ) {
+	protected function get_post_meta( $post_id ) {
 
 		$charset = get_bloginfo( 'charset' );
 
 		$post_id = absint( $post_id );
-		$post_title = $this->metas->get_post_title( $post_id );
-		$post_description = $this->metas->get_post_description( $post_id );
+		$post_title = $this->meta->get_post_title( $post_id );
+		$post_description = $this->meta->get_post_description( $post_id );
 
 		if ( 'shortlink' === $this->plugin->get_option( 'modes', 'link_mode' ) ) {
 			$post_url = wp_get_shortlink( $post_id );
 		} else {
-			$post_url = $this->metas->get_post_url( $post_id );
+			$post_url = $this->meta->get_post_url( $post_id );
 		}
 
-		$post_image = $this->metas->get_post_image( $post_id );
+		$post_image = $this->meta->get_post_image( $post_id );
 
 		return array(
 			'post_title' => rawurlencode( html_entity_decode( $post_title, ENT_COMPAT, 'UTF-8' ) ),
@@ -393,13 +403,13 @@ class Endpoints {
 			return;
 		}
 
-		$button_sites = Options::button_sites( $of );
-		$endpoints = array();
+		$sites = Options::button_sites( $of );
+		$base = array();
 
-		foreach ( $button_sites as $key => $value ) {
-			$endpoints[ $of ][ $key ] = $value['endpoint'];
+		foreach ( $sites as $site => $value ) {
+			$base[ $of ][ $site ] = $value['endpoint'];
 		}
 
-		return isset( $endpoints[ $of ][ $site ] ) ? $endpoints[ $of ][ $site ] : null;
+		return isset( $base[ $of ][ $site ] ) ? $base[ $of ][ $site ] : null;
 	}
 }

@@ -38,7 +38,7 @@ class Buttons_Content extends Buttons {
 	protected $placement;
 
 	/**
-	 * The response of `get_content_endpoints()` function
+	 * The response of `get_content_endpoint()` function
 	 * in HTML buttons modes.
 	 *
 	 * @since 1.0.0
@@ -87,7 +87,7 @@ class Buttons_Content extends Buttons {
 	 * Function to setup the image buttons when it is in HTML mode.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Use $this->endpoints property to access the Endpoints class method.
+	 * @since 1.0.6 - Use $this->endpoint property to access the Endpoints class method.
 	 * @access public
 	 *
 	 * @return void
@@ -96,8 +96,8 @@ class Buttons_Content extends Buttons {
 
 		if ( 'html' === $this->mode && is_singular() ) {
 
-			$response = $this->endpoints->get_content_endpoints( get_the_id() );
-			$this->response = $response['endpoints'];
+			$response = $this->endpoint->get_content_endpoint( get_the_id() );
+			$this->response = $response['endpoint'];
 		}
 	}
 
