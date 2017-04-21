@@ -87,7 +87,7 @@ class Buttons_Content extends Buttons {
 	 * Function to setup the image buttons when it is in HTML mode.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Use $this->endpoint property to access the Endpoints class method.
+	 * @since 1.0.6 - Use $this->endpoint property to access the Endpoint class method.
 	 * @access public
 	 *
 	 * @return void

@@ -25,7 +25,7 @@ class Test_Endpoint extends WP_UnitTestCase {
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 * @var Endpoints
+	 * @var Endpoint
 	 */
 	protected $endpoint;
 
@@ -91,42 +91,42 @@ class Test_Endpoint extends WP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'endpoint', $response );
 
-		$endpoints = $response['endpoint'];
+		$endpoint = $response['endpoint'];
 
 		// Count the number, in case we will add more in the future.
-		$this->assertEquals( 8, count( $endpoints ) );
+		$this->assertEquals( 8, count( $endpoint ) );
 
-		$this->assertArrayHasKey( 'facebook', $endpoints );
-		$this->assertNotFalse( filter_var( $endpoints['facebook'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $endpoints['facebook'], 'https://www.facebook.com/sharer/sharer.php' ) );
+		$this->assertArrayHasKey( 'facebook', $endpoint );
+		$this->assertNotFalse( filter_var( $endpoint['facebook'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoint['facebook'], 'https://www.facebook.com/sharer/sharer.php' ) );
 
-		$this->assertArrayHasKey( 'twitter', $endpoints );
-		$this->assertNotFalse( filter_var( $endpoints['twitter'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $endpoints['twitter'], 'https://twitter.com/intent/tweet' ) );
+		$this->assertArrayHasKey( 'twitter', $endpoint );
+		$this->assertNotFalse( filter_var( $endpoint['twitter'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoint['twitter'], 'https://twitter.com/intent/tweet' ) );
 
-		$this->assertArrayHasKey( 'googleplus', $endpoints );
-		$this->assertNotFalse( filter_var( $endpoints['googleplus'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $endpoints['googleplus'], 'https://plus.google.com/share' ) );
+		$this->assertArrayHasKey( 'googleplus', $endpoint );
+		$this->assertNotFalse( filter_var( $endpoint['googleplus'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoint['googleplus'], 'https://plus.google.com/share' ) );
 
-		$this->assertArrayHasKey( 'pinterest', $endpoints );
-		$this->assertNotFalse( filter_var( $endpoints['pinterest'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $endpoints['pinterest'], 'https://www.pinterest.com/pin/create/bookmarklet/' ) );
+		$this->assertArrayHasKey( 'pinterest', $endpoint );
+		$this->assertNotFalse( filter_var( $endpoint['pinterest'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoint['pinterest'], 'https://www.pinterest.com/pin/create/bookmarklet/' ) );
 
-		$this->assertArrayHasKey( 'linkedin', $endpoints );
-		$this->assertNotFalse( filter_var( $endpoints['linkedin'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $endpoints['linkedin'], 'https://www.linkedin.com/shareArticle' ) );
+		$this->assertArrayHasKey( 'linkedin', $endpoint );
+		$this->assertNotFalse( filter_var( $endpoint['linkedin'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoint['linkedin'], 'https://www.linkedin.com/shareArticle' ) );
 
-		$this->assertArrayHasKey( 'reddit', $endpoints );
-		$this->assertNotFalse( filter_var( $endpoints['reddit'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $endpoints['reddit'], 'https://www.reddit.com/submit' ) );
+		$this->assertArrayHasKey( 'reddit', $endpoint );
+		$this->assertNotFalse( filter_var( $endpoint['reddit'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoint['reddit'], 'https://www.reddit.com/submit' ) );
 
-		$this->assertArrayHasKey( 'tumblr', $endpoints );
-		$this->assertNotFalse( filter_var( $endpoints['tumblr'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $endpoints['tumblr'], 'http://www.tumblr.com/share/link' ) );
+		$this->assertArrayHasKey( 'tumblr', $endpoint );
+		$this->assertNotFalse( filter_var( $endpoint['tumblr'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoint['tumblr'], 'http://www.tumblr.com/share/link' ) );
 
-		$this->assertArrayHasKey( 'email', $endpoints );
-		$this->assertNotFalse( filter_var( $endpoints['email'], FILTER_VALIDATE_URL ) );
-		$this->assertEquals( 0, strpos( $endpoints['email'], 'mailto:' ) );
+		$this->assertArrayHasKey( 'email', $endpoint );
+		$this->assertNotFalse( filter_var( $endpoint['email'], FILTER_VALIDATE_URL ) );
+		$this->assertEquals( 0, strpos( $endpoint['email'], 'mailto:' ) );
 	}
 
 	/**
@@ -154,12 +154,12 @@ class Test_Endpoint extends WP_UnitTestCase {
 			$this->assertArrayHasKey( 'src', $res );
 			$this->assertArrayHasKey( 'endpoint', $res );
 
-			$endpoints = $res['endpoint'];
+			$endpoint = $res['endpoint'];
 
-			$this->assertEquals( 1, count( $endpoints ) ); // Count the number, in case we will add more in the future.
-			$this->assertArrayHasKey( 'pinterest', $endpoints );
-			$this->assertNotFalse( filter_var( $endpoints['pinterest'], FILTER_VALIDATE_URL ) );
-			$this->assertEquals( 0, strpos( $endpoints['pinterest'], add_query_arg( 'url', rawurlencode( $image_src ), 'https://www.pinterest.com/pin/create/bookmarklet/' ) ) );
+			$this->assertEquals( 1, count( $endpoint ) ); // Count the number, in case we will add more in the future.
+			$this->assertArrayHasKey( 'pinterest', $endpoint );
+			$this->assertNotFalse( filter_var( $endpoint['pinterest'], FILTER_VALIDATE_URL ) );
+			$this->assertEquals( 0, strpos( $endpoint['pinterest'], add_query_arg( 'url', rawurlencode( $image_src ), 'https://www.pinterest.com/pin/create/bookmarklet/' ) ) );
 		}
 	}
 }

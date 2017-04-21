@@ -18,7 +18,7 @@ use \DOMDocument;
  * The Class that define the social buttons output.
  *
  * @since 1.0.0
- * @since 1.0.6 - Remove Endpoints class as the parent class.
+ * @since 1.0.6 - Remove Endpoint class as the parent class.
  */
 abstract class Buttons {
 
@@ -32,13 +32,13 @@ abstract class Buttons {
 	protected $plugin;
 
 	/**
-	 * The Endpoints instance.
+	 * The Endpoint instance.
 	 *
 	 * @since 1.0.6
 	 * @access protected
-	 * @var Endpoints
+	 * @var Endpoint
 	 */
-	protected $endpoints;
+	protected $endpoint;
 
 	/**
 	 * The button attribute prefix.
@@ -62,7 +62,7 @@ abstract class Buttons {
 	 * Constructor: Initialize the Buttons Class
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Add & instantiate Metas and Endpoints class in the Constructor.
+	 * @since 1.0.6 - Add & instantiate Metas and Endpoint class in the Constructor.
 	 * @access public
 	 *
 	 * @param Plugin $plugin The Plugin class instance.

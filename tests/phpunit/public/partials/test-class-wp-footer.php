@@ -23,7 +23,7 @@ use \WP_UnitTestCase;
 class Test_WP_Footer extends WP_UnitTestCase {
 
 	/**
-	 * The Endpoints class instance.
+	 * The Endpoint class instance.
 	 *
 	 * @since 1.0.4
 	 * @access protected

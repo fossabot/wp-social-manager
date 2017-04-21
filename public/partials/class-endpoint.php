@@ -300,7 +300,7 @@ class Endpoint {
 		}
 
 		$site = $button['site'];
-		$endpoints = array(
+		$endpoint = array(
 			'pinterest' => add_query_arg(
 				array(
 					'url' => $button['post_url'],
@@ -312,8 +312,8 @@ class Endpoint {
 			),
 		);
 
-		if ( isset( $endpoints[ $site ] ) ) {
-			$urls[ $site ] = $endpoints[ $site ];
+		if ( isset( $endpoint[ $site ] ) ) {
+			$urls[ $site ] = $endpoint[ $site ];
 		}
 
 		return array(
