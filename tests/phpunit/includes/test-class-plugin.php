@@ -55,7 +55,7 @@ class Test_Plugin extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->plugin = new Plugin();
-		$this->plugin->initialize();
+		$this->plugin->init();
 	}
 
 	/**

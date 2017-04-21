@@ -55,7 +55,7 @@ class Test_Buttons_Image extends WP_UnitTestCase {
 	public function setUp() {
 
 		$this->plugin = new Plugin();
-		$this->plugin->initialize();
+		$this->plugin->init();
 
 		$this->buttons_content = new Buttons_Content( $this->plugin );
 		$this->buttons_image = new Buttons_Image( $this->plugin );

@@ -56,7 +56,7 @@ class Test_Buttons extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->plugin = new Plugin();
-		$this->plugin->initialize();
+		$this->plugin->init();
 
 		$this->button = new Buttons_Content( $this->plugin );
 	}

@@ -87,7 +87,7 @@ function ninecodes_social_manager() {
 
 	if ( is_null( $plugin ) ) {
 		$plugin = new Plugin();
-		$plugin->initialize();
+		$plugin->init();
 	}
 
 	return $plugin;

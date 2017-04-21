@@ -39,7 +39,7 @@ class Test_Endpoint extends WP_UnitTestCase {
 
 		// Setup the plugin.
 		$plugin = new Plugin();
-		$plugin->initialize();
+		$plugin->init();
 
 		$metas = new Metas( $plugin );
 		$this->endpoint = new Endpoints( $plugin, $metas );

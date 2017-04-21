@@ -55,7 +55,7 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 	public function setUp() {
 
 		$this->plugin = new Plugin();
-		$this->plugin->initialize();
+		$this->plugin->init();
 
 		$this->user_id = $this->factory->user->create( array(
 			'role' => 'author',

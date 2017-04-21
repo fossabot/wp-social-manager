@@ -58,7 +58,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 
 		// Setup the plugin.
 		$plugin = new Plugin();
-		$plugin->initialize();
+		$plugin->init();
 
 		$this->plugin = $plugin;
 

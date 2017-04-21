@@ -52,7 +52,7 @@ class Test_Public_View extends WP_UnitTestCase {
 
 		// Setup the plugin.
 		$this->plugin = new Plugin();
-		$this->plugin->initialize();
+		$this->plugin->init();
 
 		$this->public = new Public_View( $this->plugin );
 	}

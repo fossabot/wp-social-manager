@@ -109,7 +109,7 @@ final class Plugin {
 	 *
 	 * @return void
 	 */
-	public function initialize() {
+	public function init() {
 
 		$this->path_dir = plugin_dir_path( dirname( __FILE__ ) );
 

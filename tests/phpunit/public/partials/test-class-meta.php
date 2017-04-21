@@ -62,7 +62,7 @@ class Test_Meta extends WP_UnitTestCase {
 		wp_cache_delete( 'last_changed', 'terms' );
 
 		$this->plugin = new Plugin();
-		$this->plugin->initialize();
+		$this->plugin->init();
 
 		$this->metas = new Metas( $this->plugin );
 	}
