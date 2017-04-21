@@ -1,6 +1,6 @@
 <?php
 /**
- * Public: Buttons_Image Class
+ * Public: Button_Image Class
  *
  * @package SocialManager
  * @subpackage Public\Buttons
@@ -19,7 +19,7 @@ use \DOMDocument;
  *
  * @since 1.0.0
  */
-class Buttons_Image extends Button {
+class Button_Image extends Button {
 
 	/**
 	 * The response of `get_image_endpoint()` function
@@ -258,7 +258,7 @@ class Buttons_Image extends Button {
 
 		if ( ! empty( $includes ) ) :
 
-			$list .= "<span class='{$this->attr_prefix}-buttons__list {$this->attr_prefix}-buttons__list--{$this->view}' data-social-manager=\"Buttons_Image\">";
+			$list .= "<span class='{$this->attr_prefix}-buttons__list {$this->attr_prefix}-buttons__list--{$this->view}' data-social-manager=\"Button_Image\">";
 
 			$prefix = $this->attr_prefix;
 

@@ -36,16 +36,7 @@ class Test_Button extends WP_UnitTestCase {
 	 * @access protected
 	 * @var string
 	 */
-	protected $buttons;
-
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since 1.2.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $option_slug;
+	protected $button_content;
 
 	/**
 	 * Setup.
@@ -58,7 +49,7 @@ class Test_Button extends WP_UnitTestCase {
 		$this->plugin = new Plugin();
 		$this->plugin->init();
 
-		$this->button = new Buttons_Content( $this->plugin );
+		$this->button_content = new Button_Content( $this->plugin );
 	}
 
 	/**
@@ -70,15 +61,15 @@ class Test_Button extends WP_UnitTestCase {
 	 */
 	public function test_buttons_methods() {
 
-		$this->assertTrue( method_exists( $this->button, 'render_tmpl' ), 'Class does not have method \'render_tmpl\'' );
-		$this->assertTrue( method_exists( $this->button, 'render_view' ), 'Class does not have method \'render_view\'' );
-		$this->assertTrue( method_exists( $this->button, 'get_icons' ), 'Class does not have method \'get_icons\'' );
-		$this->assertTrue( method_exists( $this->button, 'get_label' ), 'Class does not have method \'get_label\'' );
-		$this->assertTrue( method_exists( $this->button, 'get_mode' ), 'Class does not have method \'get_mode\'' );
-		$this->assertTrue( method_exists( $this->button, 'get_attr_prefix' ), 'Class does not have method \'get_attr_prefix\'' );
-		$this->assertTrue( method_exists( $this->button, 'get_post_status' ), 'Class does not have method \'get_post_status\'' );
-		$this->assertTrue( method_exists( $this->button, 'in_amp' ), 'Class does not have method \'in_amp\'' );
-		$this->assertTrue( method_exists( $this->button, 'to_html' ), 'Class does not have method \'to_html\'' );
+		$this->assertTrue( method_exists( $this->button_content, 'render_tmpl' ), 'Class does not have method \'render_tmpl\'' );
+		$this->assertTrue( method_exists( $this->button_content, 'render_view' ), 'Class does not have method \'render_view\'' );
+		$this->assertTrue( method_exists( $this->button_content, 'get_icons' ), 'Class does not have method \'get_icons\'' );
+		$this->assertTrue( method_exists( $this->button_content, 'get_label' ), 'Class does not have method \'get_label\'' );
+		$this->assertTrue( method_exists( $this->button_content, 'get_mode' ), 'Class does not have method \'get_mode\'' );
+		$this->assertTrue( method_exists( $this->button_content, 'get_attr_prefix' ), 'Class does not have method \'get_attr_prefix\'' );
+		$this->assertTrue( method_exists( $this->button_content, 'get_post_status' ), 'Class does not have method \'get_post_status\'' );
+		$this->assertTrue( method_exists( $this->button_content, 'in_amp' ), 'Class does not have method \'in_amp\'' );
+		$this->assertTrue( method_exists( $this->button_content, 'to_html' ), 'Class does not have method \'to_html\'' );
 	}
 
 	/**
@@ -94,9 +85,9 @@ class Test_Button extends WP_UnitTestCase {
 		$label = 'Facebook';
 		$prefix = Helpers::get_attr_prefix();
 		$endpoint = 'https://www.facebook.com/sharer/sharer.php';
-		$icon = $this->button->get_icons( $site );
+		$icon = $this->button_content->get_icons( $site );
 
-		$buttons_view = $this->button->render_view( 'icon', 'content', array(
+		$buttons_view = $this->button_content->render_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => $icon,
@@ -111,7 +102,7 @@ class Test_Button extends WP_UnitTestCase {
 		 *
 		 * @var string
 		 */
-		$buttons_view2 = $this->button->render_view( 'icon', 'content', array(
+		$buttons_view2 = $this->button_content->render_view( 'icon', 'content', array(
 			'attr_prefix' => '',
 			'site' => $site,
 			'icon' => $icon,
@@ -124,7 +115,7 @@ class Test_Button extends WP_UnitTestCase {
 		 *
 		 * @var string
 		 */
-		$buttons_view3 = $this->button->render_view( 'icon', 'content', array(
+		$buttons_view3 = $this->button_content->render_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => '',
 			'icon' => $icon,
@@ -139,7 +130,7 @@ class Test_Button extends WP_UnitTestCase {
 		 *
 		 * @var string
 		 */
-		$buttons_view4 = $this->button->render_view( 'icon', 'content', array(
+		$buttons_view4 = $this->button_content->render_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => '',
@@ -154,7 +145,7 @@ class Test_Button extends WP_UnitTestCase {
 		 *
 		 * @var string
 		 */
-		$buttons_view5 = $this->button->render_view( 'icon', 'content', array(
+		$buttons_view5 = $this->button_content->render_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => $icon,
@@ -169,7 +160,7 @@ class Test_Button extends WP_UnitTestCase {
 		 *
 		 * @var string
 		 */
-		$buttons_view6 = $this->button->render_view( 'icon', 'content', array(
+		$buttons_view6 = $this->button_content->render_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => $icon,
@@ -184,7 +175,7 @@ class Test_Button extends WP_UnitTestCase {
 		 *
 		 * @var
 		 */
-		$buttons_view7 = $this->button->render_view( 'icon', 'content', array(
+		$buttons_view7 = $this->button_content->render_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => $icon,
@@ -199,7 +190,7 @@ class Test_Button extends WP_UnitTestCase {
 		 *
 		 * @var
 		 */
-		$buttons_view8 = $this->button->render_view( 'icon', 'image-content', array(
+		$buttons_view8 = $this->button_content->render_view( 'icon', 'image-content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => $icon,
@@ -214,7 +205,7 @@ class Test_Button extends WP_UnitTestCase {
 		 *
 		 * @var string
 		 */
-		$buttons_view10 = $this->button->render_view( 'icon-me', 'content', array(
+		$buttons_view10 = $this->button_content->render_view( 'icon-me', 'content', array(
 			'attr_prefix' => $prefix,
 			'site' => $site,
 			'icon' => $icon,

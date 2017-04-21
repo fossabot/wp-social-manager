@@ -92,9 +92,9 @@ final class Public_View {
 		require_once( $this->path_dir . 'partials/class-wp-footer.php' );
 		require_once( $this->path_dir . 'partials/class-endpoint.php' );
 		require_once( $this->path_dir . 'partials/class-rest-buttons.php' );
-		require_once( $this->path_dir . 'partials/class-buttons.php' );
-		require_once( $this->path_dir . 'partials/class-buttons-content.php' );
-		require_once( $this->path_dir . 'partials/class-buttons-image.php' );
+		require_once( $this->path_dir . 'partials/class-button.php' );
+		require_once( $this->path_dir . 'partials/class-button-content.php' );
+		require_once( $this->path_dir . 'partials/class-button-image.php' );
 		require_once( $this->path_dir . 'partials/function-template-tags.php' );
 	}
 
@@ -129,8 +129,8 @@ final class Public_View {
 		$wp_head = new WP_Head( $this->plugin );
 		$wp_footer = new WP_Footer();
 
-		$buttons_content = new Buttons_Content( $this->plugin );
-		$buttons_image = new Buttons_Image( $this->plugin );
+		$buttons_content = new Button_Content( $this->plugin );
+		$buttons_image = new Button_Image( $this->plugin );
 		$rest_buttons = new REST_Buttons( $this->plugin );
 
 		$this->register_styles();

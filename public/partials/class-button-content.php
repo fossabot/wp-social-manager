@@ -1,6 +1,6 @@
 <?php
 /**
- * Public: Buttons_Content class
+ * Public: Button_Content class
  *
  * @package SocialManager
  * @subpackage Public\Buttons
@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-class Buttons_Content extends Button {
+class Button_Content extends Button {
 
 	/**
 	 * The Buttons Content view set in the Settings.

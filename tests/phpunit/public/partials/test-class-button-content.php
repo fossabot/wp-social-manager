@@ -1,6 +1,6 @@
 <?php
 /**
- * Class Test_Buttons_Content
+ * Class Test_Button_Content
  *
  * @package NineCodes\SocialManager;
  * @subpackage Tests
@@ -14,11 +14,11 @@ namespace NineCodes\SocialManager;
 use \WP_UnitTestCase;
 
 /**
- * The class to test the "Test_Buttons_Content" class instance.
+ * The class to test the "Test_Button_Content" class instance.
  *
  * @since 1.1.0
  */
-class Test_Buttons_Content extends WP_UnitTestCase {
+class Test_Button_Content extends WP_UnitTestCase {
 
 	/**
 	 * The Plugin class instance.
@@ -30,22 +30,22 @@ class Test_Buttons_Content extends WP_UnitTestCase {
 	protected $plugin;
 
 	/**
-	 * The Buttons_Content class instance.
+	 * The Button_Content class instance.
 	 *
 	 * @since 1.1.0
 	 * @access protected
-	 * @var Buttons_Content
+	 * @var Button_Content
 	 */
-	protected $buttons_content;
+	protected $button_content;
 
 	/**
-	 * The Buttons_Image class instance.
+	 * The Button_Image class instance.
 	 *
 	 * @since 1.1.0
 	 * @access protected
-	 * @var Buttons_Image
+	 * @var Button_Image
 	 */
-	protected $buttons_image;
+	protected $button_image;
 
 	/**
 	 * Setup.
@@ -57,8 +57,8 @@ class Test_Buttons_Content extends WP_UnitTestCase {
 		$this->plugin = new Plugin();
 		$this->plugin->init();
 
-		$this->buttons_content = new Buttons_Content( $this->plugin );
-		$this->buttons_image = new Buttons_Image( $this->plugin );
+		$this->button_content = new Button_Content( $this->plugin );
+		$this->button_image = new Button_Image( $this->plugin );
 	}
 
 	/**
@@ -72,7 +72,7 @@ class Test_Buttons_Content extends WP_UnitTestCase {
 	public function test_get_icons() {
 
 		$icons = Helpers::get_social_icons();
-		$this->assertEquals( $icons, $this->buttons_content->get_icons() );
+		$this->assertEquals( $icons, $this->button_content->get_icons() );
 
 		add_filter( 'ninecodes_social_manager_icons', function( $icons, $context, $args ) {
 
@@ -85,12 +85,12 @@ class Test_Buttons_Content extends WP_UnitTestCase {
 			return $icons;
 		}, 10, 3 );
 
-		// Buttons_Image should have not these removed keys.
-		$this->assertArrayNotHasKey( 'facebook', $this->buttons_content->get_icons() );
-		$this->assertArrayNotHasKey( 'twitter', $this->buttons_content->get_icons() );
+		// Button_Image should have not these removed keys.
+		$this->assertArrayNotHasKey( 'facebook', $this->button_content->get_icons() );
+		$this->assertArrayNotHasKey( 'twitter', $this->button_content->get_icons() );
 
-		// Buttons_Image should have theses removed keys.
-		$this->assertArrayHasKey( 'facebook', $this->buttons_image->get_icons() );
-		$this->assertArrayHasKey( 'twitter', $this->buttons_image->get_icons() );
+		// Button_Image should have theses removed keys.
+		$this->assertArrayHasKey( 'facebook', $this->button_image->get_icons() );
+		$this->assertArrayHasKey( 'twitter', $this->button_image->get_icons() );
 	}
 }
