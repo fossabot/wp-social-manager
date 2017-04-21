@@ -11,7 +11,7 @@ Lightweight, clean and optimized social media plugin for WordPress.
 **Stable tag:** 1.2.0-alpha.1  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 
-[![Build Status](https://travis-ci.org/ninecodes/social-manager.svg?branch=master)](https://travis-ci.org/ninecodes/social-manager) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com) 
+[![Build Status](https://travis-ci.org/ninecodes/social-manager.svg?branch=master)](https://travis-ci.org/ninecodes/social-manager) [![Coverage Status](https://coveralls.io/repos/ninecodes/social-manager/badge.svg?branch=master)](https://coveralls.io/github/ninecodes/social-manager) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com) 
 
 ## Description ##
 
