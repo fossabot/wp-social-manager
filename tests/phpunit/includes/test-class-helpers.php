@@ -20,7 +20,6 @@ use \WP_UnitTestCase;
  */
 class Test_Helpers extends WP_UnitTestCase {
 
-
 	/**
 	 * Plugin instance.
 	 *
@@ -45,7 +44,7 @@ class Test_Helpers extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->plugin = new Plugin();
-		$this->theme_support = new Theme_Support();
+		$this->plugin->init();
 	}
 
 	/**
@@ -72,16 +71,8 @@ class Test_Helpers extends WP_UnitTestCase {
 	 */
 	public function test_get_attr_prefix_theme_support() {
 
-		add_theme_support($this->theme_support->get_feature_name(), array(
+		add_theme_support($this->plugin->theme_support()->get_feature_name(), array(
 			'attr_prefix' => 'social',
-		));
-
-		$prefix = Helpers::get_attr_prefix();
-		$this->assertEquals( 'social', $prefix );
-
-		// Test feature name alias: 'attr-prefix'.
-		add_theme_support($this->theme_support->get_feature_name(), array(
-			'attr-prefix' => 'social',
 		));
 
 		$prefix = Helpers::get_attr_prefix();
@@ -99,16 +90,8 @@ class Test_Helpers extends WP_UnitTestCase {
 	 */
 	public function test_get_attr_prefix_theme_support_empty() {
 
-		add_theme_support($this->theme_support->get_feature_name(), array(
+		add_theme_support($this->plugin->theme_support()->get_feature_name(), array(
 			'attr_prefix' => '',
-		));
-
-		$prefix = Helpers::get_attr_prefix();
-		$this->assertEquals( 'social-manager', $prefix );
-
-		// Test feature name alias: 'attr-prefix'.
-		add_theme_support($this->theme_support->get_feature_name(), array(
-			'attr-prefix' => '',
 		));
 
 		$prefix = Helpers::get_attr_prefix();
@@ -126,15 +109,8 @@ class Test_Helpers extends WP_UnitTestCase {
 	 */
 	public function test_get_attr_prefix_theme_support_false() {
 
-		add_theme_support($this->theme_support->get_feature_name(), array(
+		add_theme_support($this->plugin->theme_support()->get_feature_name(), array(
 			'attr_prefix' => false,
-		));
-		$prefix = Helpers::get_attr_prefix();
-		$this->assertEquals( 'social-manager', $prefix );
-
-		// Test feature name alias: 'attr-prefix'.
-		add_theme_support($this->theme_support->get_feature_name(), array(
-			'attr-prefix' => false,
 		));
 
 		$prefix = Helpers::get_attr_prefix();
@@ -152,16 +128,8 @@ class Test_Helpers extends WP_UnitTestCase {
 	 */
 	public function test_get_attr_prefix_theme_support_integer() {
 
-		add_theme_support($this->theme_support->get_feature_name(), array(
+		add_theme_support($this->plugin->theme_support()->get_feature_name(), array(
 			'attr_prefix' => 1,
-		));
-
-		$prefix = Helpers::get_attr_prefix();
-		$this->assertEquals( 'social-manager', $prefix );
-
-		// Test feature name alias: 'attr-prefix'.
-		add_theme_support($this->theme_support->get_feature_name(), array(
-			'attr-prefix' => 1,
 		));
 
 		$prefix = Helpers::get_attr_prefix();

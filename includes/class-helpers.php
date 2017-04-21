@@ -97,10 +97,6 @@ final class Helpers {
 		$support = new Theme_Support();
 		$support = $support->theme_support();
 
-		if ( isset( $support['attr-prefix'] ) ) {
-			$custom = $support['attr-prefix'];
-		}
-
 		if ( isset( $support['attr_prefix'] ) ) { // Alias.
 			$custom = $support['attr_prefix'];
 		}
