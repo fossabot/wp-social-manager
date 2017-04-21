@@ -30,7 +30,6 @@ class Test_User extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->plugin = new Plugin();
-		$this->plugin_slug = $this->plugin->get_slug();
 
 		$this->user = new User( $this->plugin );
 	}
@@ -81,6 +80,6 @@ class Test_User extends WP_UnitTestCase {
 
 		$this->user->enqueue_scripts();
 
-		$this->assertTrue( wp_script_is( $this->plugin_slug . '-preview-profile' ) );
+		$this->assertTrue( wp_script_is( $this->plugin->plugin_slug . '-preview-profile' ) );
 	}
 }

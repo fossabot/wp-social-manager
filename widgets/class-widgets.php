@@ -62,7 +62,6 @@ final class Widgets {
 	function __construct( Plugin $plugin ) {
 
 		$this->plugin = $plugin;
-		$this->public = $plugin->get_view_public();
 		$this->path_dir = plugin_dir_path( __FILE__ );
 
 		$this->requires();
@@ -117,6 +116,6 @@ final class Widgets {
 		 *
 		 * @param object $tag The `Widgets` class instance.
 		 */
-		do_action( 'ninecodes_social_manager_widget_init', $this );
+		do_action( 'ninecodes_social_manager_widget_init', $this->plugin );
 	}
 }

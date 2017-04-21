@@ -72,13 +72,10 @@ class REST_Buttons extends WP_REST_Controller {
 	 */
 	public function __construct( Plugin $plugin ) {
 
-		$this->metas = new Metas( $plugin );
-		$this->endpoints = new Endpoints( $plugin, $this->metas );
+		$this->endpoints = new Endpoints( $plugin, new Metas( $plugin ) );
 
 		$this->plugin = $plugin;
 
-		$this->plugin_slug = $plugin->get_slug();
-		$this->version = $plugin->get_version();
 		$this->namespace = $this->get_namespace();
 		$this->rest_base = $this->get_rest_base();
 
@@ -166,7 +163,7 @@ class REST_Buttons extends WP_REST_Controller {
 			$args['id'] = absint( $post_id );
 		}
 
-		wp_localize_script( $this->plugin_slug . '-app', 'nineCodesSocialManagerAPI', $args );
+		wp_localize_script( $this->plugin->plugin_slug . '-app', 'nineCodesSocialManagerAPI', $args );
 	}
 
 	/**
@@ -239,7 +236,7 @@ class REST_Buttons extends WP_REST_Controller {
 		$response = array(
 			'plugin_name' => 'Social Media Manager',
 			'plugin_url' => 'http://wordpress.org/plugins/ninecodes-social-manager',
-			'version' => $this->version,
+			'version' => $this->plugin->version,
 			'contributors' => array(
 				'Thoriq Firdaus',
 				'Hongkiat Lim',

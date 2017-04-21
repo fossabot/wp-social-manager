@@ -32,42 +32,6 @@ final class Settings {
 	protected $plugin;
 
 	/**
-	 * The plugin slug (unique identifier).
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $plugin_slug;
-
-	/**
-	 * The plugin option name or meta key prefix.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $option_slug;
-
-	/**
-	 * The plugin version.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $version;
-
-	/**
-	 * The Theme_Support class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Theme_Support
-	 */
-	protected $theme_supports;
-
-	/**
 	 * The plugin directory path relative to the current file.
 	 *
 	 * @since 1.0.0
@@ -189,12 +153,6 @@ final class Settings {
 	function __construct( Plugin $plugin ) {
 
 		$this->plugin = $plugin;
-
-		$this->plugin_slug = $plugin->get_slug();
-		$this->option_slug = $plugin->get_opts();
-		$this->version = $plugin->get_version();
-		$this->theme_supports = $plugin->get_theme_support();
-
 		$this->path_dir = plugin_dir_path( dirname( __FILE__ ) );
 		$this->path_url = plugin_dir_url( dirname( __FILE__ ) );
 
@@ -256,7 +214,7 @@ final class Settings {
 	 */
 	public function setting_setups() {
 
-		$this->settings = new WPSettings\Settings( $this->option_slug );
+		$this->settings = new WPSettings\Settings( $this->plugin->option_slug );
 		$this->validate = new Validation();
 
 		$this->fields = new Fields( $this->screen );
@@ -283,7 +241,9 @@ final class Settings {
 						'id' => array(),
 					),
 			) );
-			$this->settings->render_header( array( 'title' => true ) );
+			$this->settings->render_header( array(
+				'title' => true,
+			) );
 			$this->settings->render_form();
 			echo '</div>';
 		} );
@@ -336,9 +296,9 @@ final class Settings {
 		 *
 		 * @var array
 		 */
-		$tabs = $this->settings->add_pages( $tabs );
+		$this->tabs = $this->settings->add_pages( $tabs );
 
-		return $this->tabs = $tabs;
+		return $this->tabs;
 	}
 
 	/**
@@ -410,7 +370,7 @@ final class Settings {
 				default:
 					$sections[ $tab ] = array();
 					break;
-			}
+			}// End switch().
 
 			/**
 			 * Filter the setting sections.
@@ -424,7 +384,7 @@ final class Settings {
 			 * @var array
 			 */
 			$sections = (array) apply_filters( 'ninecodes_social_manager_setting_sections', $sections, $tab );
-		}
+		}// End foreach().
 
 		$sections = $this->remove_duplicate_sections( $sections );
 
@@ -500,7 +460,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_defaults( "{$this->option_slug}_profiles", $setting_fields );
+		$this->option_defaults( "{$this->plugin->option_slug}_profiles", $setting_fields );
 
 		/**
 		 * Regiter the fields in "Accounts" > "Profiles".
@@ -540,15 +500,27 @@ final class Settings {
 			'includes' => array(
 				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
 				'type' => 'multicheckbox',
-				'options' => array_map( function( $value ) { return $value['label']; }, $button_sites ), // Return the key => label.
-				'default' => array_map( function( $value ) { return 'on'; }, $button_sites ), // Return the key => 'on'.
+				'options' => array_map( function( $value ) {
+					return $value['label'];
+				}, $button_sites ), // Return the key => label.
+				'default' => array_map( function( $value ) {
+					return 'on';
+				}, $button_sites ),  // Return the key => 'on'.
 			),
 			'post_types' => array(
 				'type' => 'multicheckbox',
 				'label' => esc_html__( 'Buttons Visibility', 'ninecodes-social-manager' ),
-				'description' => wp_kses( sprintf( __( 'Select the %s that are allowed to show the social media buttons.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
+				// translators: %s will be replaced with "Post Types" pointing to https://codex.wordpress.org/Post_Types.
+				'description' => wp_kses( sprintf( __( 'Select the %s that are allowed to show the social media buttons.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array(
+					'a' => array(
+						'href' => array(),
+						'target' => array(),
+					),
+				) ),
 				'options' => Options::post_types(),
-				'default' => array( 'post' => 'on' ),
+				'default' => array(
+					'post' => 'on',
+				),
 			),
 			'view' => array(
 				'label' => esc_html__( 'Buttons Views', 'ninecodes-social-manager' ),
@@ -567,6 +539,7 @@ final class Settings {
 			'heading' => array(
 				'type' => 'text',
 				'label' => esc_html__( 'Buttons Header', 'ninecodes-social-manager' ),
+				// translators: %s will be replaced with "<code>Share on:</code>".
 				'description' => sprintf( esc_html__( 'Set the heading shown before the buttons (e.g. %s).', 'ninecodes-social-manager' ), '<code>Share on:</code>' ),
 				'default' => esc_html__( 'Share on:', 'ninecodes-social-manager' ),
 			),
@@ -596,7 +569,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_defaults( "{$this->option_slug}_buttons_content", $setting_fields );
+		$this->option_defaults( "{$this->plugin->option_slug}_buttons_content", $setting_fields );
 
 		/**
 		 * Register the fields in "Buttons" > "Buttons Content".
@@ -644,16 +617,29 @@ final class Settings {
 			'includes' => array(
 				'label' => esc_html__( 'Buttons to include', 'ninecodes-social-manager' ),
 				'type' => 'multicheckbox',
-				'options' => array_map( function( $value ) { return $value['label']; }, $button_sites ),
-				'default' => array_map( function( $value ) { return 'on'; }, $button_sites ),
+				'options' => array_map( function( $value ) {
+					return $value['label'];
+				}, $button_sites ),
+				'default' => array_map( function( $value ) {
+					return 'on';
+				}, $button_sites ),
 				'class' => 'sharing-image-setting hide-if-js',
 			),
 			'post_types' => array(
 				'label' => esc_html__( 'Buttons Visibility', 'ninecodes-social-manager' ),
-				'description' => wp_kses( sprintf( __( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
+
+				// translators: %s will be replaced with a link pointing to https://codex.wordpress.org/Post_Types.
+				'description' => wp_kses( sprintf( __( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array(
+					'a' => array(
+						'href' => array(),
+						'target' => array(),
+					),
+				) ),
 				'type' => 'multicheckbox',
 				'options' => Options::post_types(),
-				'default' => array( 'post' => 'on' ),
+				'default' => array(
+					'post' => 'on',
+				),
 				'class' => 'sharing-image-setting hide-if-js',
 			),
 			'view' => array(
@@ -690,7 +676,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_defaults( "{$this->option_slug}_buttons_image", $setting_fields );
+		$this->option_defaults( "{$this->plugin->option_slug}_buttons_image", $setting_fields );
 
 		/**
 		 * Register the fields in "Buttons" > "Buttons Image".
@@ -790,7 +776,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_defaults( "{$this->option_slug}_metas", $setting_fields );
+		$this->option_defaults( "{$this->plugin->option_slug}_metas", $setting_fields );
 
 		/**
 		 * Register the fields in "Metas" > "Metas Site".
@@ -818,7 +804,7 @@ final class Settings {
 
 		$setting_fields = array();
 
-		if ( $this->theme_supports->is( 'stylesheet' ) ) :
+		if ( $this->plugin->get_theme_support()->is( 'stylesheet' ) ) :
 
 			$setting_fields['enable_stylesheet'] = array(
 				'label' => esc_html__( 'Enable Stylesheet', 'ninecodes-social-manager' ),
@@ -859,7 +845,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_defaults( "{$this->option_slug}_enqueue", $setting_fields );
+		$this->option_defaults( "{$this->plugin->option_slug}_enqueue", $setting_fields );
 
 		/**
 		 * Register the fields in "Advanced" > "Enqueue".
@@ -889,7 +875,7 @@ final class Settings {
 
 		$setting_fields = array();
 
-		if ( ! (bool) $this->theme_supports->is( 'buttons_mode' ) ) :
+		if ( ! (bool) $this->plugin->get_theme_support()->is( 'buttons_mode' ) ) :
 
 			$setting_fields['buttons_mode'] = array(
 				'label' => esc_html__( 'Buttons Mode', 'ninecodes-social-manager' ),
@@ -933,7 +919,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_defaults( "{$this->option_slug}_modes", $setting_fields );
+		$this->option_defaults( "{$this->plugin->option_slug}_modes", $setting_fields );
 
 		/**
 		 * Register the fields in "Advanced" > "Enqueue".

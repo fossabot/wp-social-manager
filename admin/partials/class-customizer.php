@@ -27,11 +27,8 @@ class Customizer {
 	 */
 	public function __construct( Plugin $plugin ) {
 
-		$this->path_dir = plugin_dir_path( __FILE__ );
-
 		$this->plugin = $plugin;
-		$this->plugin_slug = $plugin->get_slug();
-		$this->option_slug = $plugin->get_opts();
+		$this->path_dir = plugin_dir_path( __FILE__ );
 
 		add_action( 'customize_register', array( $this, 'customize_social_manager' ), 20 );
 	}
@@ -71,7 +68,7 @@ class Customizer {
 		));
 
 		// Register Setting: Button Styles.
-		$wp_customize->add_setting("{$this->option_slug}_button_style", array(
+		$wp_customize->add_setting("{$this->plugin->option_slug}_button_style", array(
 			'default' => 'default',
 		));
 
@@ -79,7 +76,7 @@ class Customizer {
 		$wp_customize->add_control(
 			new Customizer\Control_Radio_Image(
 				$wp_customize,
-				"{$this->option_slug}_button_style",
+				"{$this->plugin->option_slug}_button_style",
 				array(
 					'label' => esc_html__( 'Style', 'ninecodes-social-manager' ),
 					'description' => esc_html__( 'Select one the following options to change the social media buttons style', 'ninecodes-social-manager' ),

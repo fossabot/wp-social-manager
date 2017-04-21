@@ -28,28 +28,37 @@ final class Plugin {
 	 * The unique identifier of this plugin.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 * @var string
 	 */
-	protected $plugin_slug = 'ninecodes-social-manager';
+	public $plugin_slug = 'ninecodes-social-manager';
 
 	/**
 	 * The unique identifier or prefix for database names.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 * @var string
 	 */
-	protected $option_slug = 'ncsocman';
+	public $option_slug = 'ncsocman';
 
 	/**
 	 * The current version of the plugin.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 * @var string
 	 */
-	protected $version = '1.2.0-alpha.1';
+	public $version = '1.2.0-alpha.1';
+
+	/**
+	 * The Theme_Support class instance.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @var Theme_Support
+	 */
+	public $theme_support;
 
 	/**
 	 * The path directory relative to the current file.
@@ -68,51 +77,6 @@ final class Plugin {
 	 * @var array
 	 */
 	protected $options;
-
-	/**
-	 * The Theme_Support class instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @var Theme_Support
-	 */
-	protected $theme_supports;
-
-	/**
-	 * The Languages class instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @var Languages
-	 */
-	public $languages;
-
-	/**
-	 * The Admin_View class instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @var Admin_View
-	 */
-	protected $admin;
-
-	/**
-	 * The Public_View class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Public_View
-	 */
-	protected $public;
-
-	/**
-	 * The Widgets class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Widgets
-	 */
-	protected $widgets;
 
 	/**
 	 * Constructor.
@@ -201,25 +165,15 @@ final class Plugin {
 		require_once( $this->path_dir . 'includes/ogp/open-graph-protocol.php' );
 		require_once( $this->path_dir . 'includes/customize/control-radio-image.php' );
 
-		add_action( 'plugins_loaded', array( $this, 'butterbean' ) );
-
 		require_once( $this->path_dir . 'admin/class-admin-view.php' );
 		require_once( $this->path_dir . 'public/class-public-view.php' );
 		require_once( $this->path_dir . 'widgets/class-widgets.php' );
-	}
 
-	/**
-	 * Load the Butterbean
-	 *
-	 * @since 1.0.1
-	 * @access protected
-	 *
-	 * @return void
-	 */
-	public function butterbean() {
+		add_action( 'plugins_loaded', function() {
 
-		require_once( $this->path_dir . 'includes/bb-metabox/butterbean.php' );
-		require_once( $this->path_dir . 'includes/bb-metabox-extend/butterbean-extend.php' );
+			require_once( $this->path_dir . 'includes/bb-metabox/butterbean.php' );
+			require_once( $this->path_dir . 'includes/bb-metabox-extend/butterbean-extend.php' );
+		} );
 	}
 
 	/**
@@ -242,6 +196,7 @@ final class Plugin {
 		 * @see https://developer.wordpress.org/reference/hooks/prefixplugin_action_links_plugin_file/
 		 */
 		add_filter( 'plugin_action_links_' . plugin_basename( "{$this->path_dir}{$this->plugin_slug}.php" ), array( $this, 'plugin_action_links' ) );
+
 		add_action( 'init', array( $this->languages, 'load_plugin_textdomain' ) );
 	}
 
@@ -258,12 +213,12 @@ final class Plugin {
 	 */
 	protected function setups() {
 
-		$this->theme_supports = new Theme_Support();
 		$this->languages = new Languages( $this->plugin_slug );
 
-		$this->admin = new Admin_View( $this );
-		$this->public = new Public_View( $this );
-		$this->widgets = new Widgets( $this );
+		new Admin_View( $this );
+		new Public_View( $this );
+
+		new Widgets( $this );
 
 		add_action( 'admin_init', array( $this, 'updates' ) );
 	}
@@ -311,99 +266,6 @@ final class Plugin {
 	}
 
 	/**
-	 * Get the plugin version.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string The plugin version number.
-	 */
-	public function get_version() {
-
-		/**
-		 * Filter useful to prepend query during development to flush cache.
-		 */
-		return $this->version;
-	}
-
-	/**
-	 * Get the plugin slug.
-	 *
-	 * Slug is a unique identifier of the plugin.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string The plugin slug.
-	 */
-	public function get_slug() {
-		return $this->plugin_slug;
-	}
-
-	/**
-	 * Get the plugin opts.
-	 *
-	 * Opts herein is the unique identifier of the plugin option name.
-	 * It may be used for prefixing the option name or meta key.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string The plugin opts.
-	 */
-	public function get_opts() {
-		return $this->option_slug;
-	}
-
-	/**
-	 * Get the theme supports.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return Theme_Support instance.
-	 */
-	public function get_theme_support() {
-		return $this->theme_supports;
-	}
-
-	/**
-	 * Get the Admin_View instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return Admin_View instance.
-	 */
-	public function get_view_admin() {
-		return $this->admin;
-	}
-
-	/**
-	 * Get the Public_View instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return Public_View instance.
-	 */
-	public function get_view_public() {
-		return $this->public;
-	}
-
-	/**
-	 * Get the Widgets instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return Widgets instance.
-	 */
-	public function get_widgets() {
-		return $this->widgets;
-	}
-
-	/**
 	 * Get the options saved in the database `wp_options`.
 	 *
 	 * @since 1.0.0
@@ -428,5 +290,24 @@ final class Plugin {
 		}
 
 		return $option ? $option : null;
+	}
+
+	/**
+	 * Get the theme support data.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return Theme_Support
+	 */
+	public function get_theme_support() {
+
+		static $theme_support;
+
+		if ( is_null( $theme_support ) ) {
+			$theme_support = new Theme_Support();
+		}
+
+		return $theme_support;
 	}
 }

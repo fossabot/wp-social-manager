@@ -43,24 +43,6 @@ class Social_Profiles extends WP_Widget {
 	protected $widget_title;
 
 	/**
-	 * The ID of this plugin.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $plugin_slug;
-
-	/**
-	 * The unique identifier or prefix for database names.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $option_slug;
-
-	/**
 	 * Profile and Page usernames saved in the option.
 	 *
 	 * @since 1.0.0
@@ -99,18 +81,15 @@ class Social_Profiles extends WP_Widget {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param Widgets $widgets The Widgets class instance.
+	 * @param Plugin $plugin The Plugin class instance.
 	 * @return void
 	 */
-	public function setups( $widgets ) {
+	public function setups( $plugin ) {
 
+		$this->plugin = $plugin;
 		$this->profiles = Options::social_profiles();
 
-		$this->widgets = $widgets;
-		$this->plugin_slug = $widgets->plugin->get_slug();
-		$this->option_slug = $widgets->plugin->get_opts();
-
-		$this->widget_id = "{$this->plugin_slug}-profiles";
+		$this->widget_id = "{$this->plugin->plugin_slug}-profiles";
 		$this->widget_title = esc_html__( 'Follow Us', 'ninecodes-social-manager' );
 
 		parent::__construct($this->widget_id, esc_html__( 'Social Media Profiles', 'ninecodes-social-manager' ), array(
@@ -135,10 +114,10 @@ class Social_Profiles extends WP_Widget {
 			return;
 		}
 
-		$script_enqueue = $this->widgets->plugin->get_option( 'enqueue' );
+		$script_enqueue = $this->plugin->get_option( 'enqueue' );
 
 		if ( isset( $script_enqueue['enable_stylesheet'] ) && 'on' === $script_enqueue['enable_stylesheet'] ) {
-			wp_enqueue_style( $this->plugin_slug );
+			wp_enqueue_style( $this->plugin->plugin_slug );
 		}
 	}
 
@@ -161,7 +140,7 @@ class Social_Profiles extends WP_Widget {
 		 *
 		 * @var array
 		 */
-		$site_profiles = $this->widgets->plugin->get_option( 'profiles' ); ?>
+		$site_profiles = $this->plugin->get_option( 'profiles' ); ?>
 
 		<div class="<?php echo esc_attr( $this->widget_id ); ?>">
 			<p>
@@ -247,7 +226,7 @@ class Social_Profiles extends WP_Widget {
 		 *
 		 * @var array
 		 */
-		$site_profiles = (array) $this->widgets->plugin->get_option( 'profiles' );
+		$site_profiles = (array) $this->plugin->get_option( 'profiles' );
 
 		foreach ( $site_profiles as $key => $value ) {
 			if ( empty( $value ) ) {
@@ -285,7 +264,7 @@ class Social_Profiles extends WP_Widget {
 		 *
 		 * @var array
 		 */
-		$site_profiles = (array) $this->widgets->plugin->get_option( 'profiles' );
+		$site_profiles = (array) $this->plugin->get_option( 'profiles' );
 
 		if ( ! empty( $widget_title ) ) {
 			$widget_title = apply_filters( 'widget_title', $widget_title );

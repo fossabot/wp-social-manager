@@ -23,6 +23,15 @@ use \WP_UnitTestCase;
 class Test_Public_View extends WP_UnitTestCase {
 
 	/**
+	 * Plugin instance.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @var Plugin
+	 */
+	protected $plugin;
+
+	/**
 	 * The Public
 	 *
 	 * @since 1.0.4
@@ -31,16 +40,6 @@ class Test_Public_View extends WP_UnitTestCase {
 	 * @var Public
 	 */
 	protected $public;
-
-	/**
-	 * The plugin slug.
-	 *
-	 * @since 1.0.4
-	 * @access protected
-	 *
-	 * @var string
-	 */
-	protected $plugin_slug;
 
 	/**
 	 * Setup.
@@ -53,14 +52,9 @@ class Test_Public_View extends WP_UnitTestCase {
 
 		// Setup the plugin.
 		$this->plugin = new Plugin();
-		$this->theme_supports = new Theme_Support();
-
 		$this->plugin->initialize();
 
-		$this->plugin_slug = $this->plugin->get_slug();
-		$this->option_slug = $this->plugin->get_opts();
-
-		$this->public = $this->plugin->get_view_public();
+		$this->public = new Public_View( $this->plugin );
 	}
 
 	/**
@@ -112,7 +106,7 @@ class Test_Public_View extends WP_UnitTestCase {
 	public function test_register_styles() {
 
 		$this->public->register_styles();
-		$this->assertTrue( wp_style_is( $this->plugin_slug, 'registered' ) );
+		$this->assertTrue( wp_style_is( $this->plugin->plugin_slug, 'registered' ) );
 	}
 
 	/**
@@ -127,8 +121,8 @@ class Test_Public_View extends WP_UnitTestCase {
 
 		$this->public->register_scripts();
 
-		$this->assertTrue( wp_script_is( $this->plugin_slug . '-app', 'registered' ) );
-		$this->assertTrue( wp_script_is( $this->plugin_slug, 'registered' ) );
+		$this->assertTrue( wp_script_is( $this->plugin->plugin_slug . '-app', 'registered' ) );
+		$this->assertTrue( wp_script_is( $this->plugin->plugin_slug, 'registered' ) );
 	}
 
 	/**
@@ -141,7 +135,7 @@ class Test_Public_View extends WP_UnitTestCase {
 	 */
 	public function test_enqueue_styles() {
 
-		$this->assertFalse( wp_style_is( $this->plugin_slug, 'enqueued' ) );
+		$this->assertFalse( wp_style_is( $this->plugin->plugin_slug, 'enqueued' ) );
 	}
 
 	/**
@@ -158,7 +152,7 @@ class Test_Public_View extends WP_UnitTestCase {
 		$post_id = $this->factory()->post->create();
 
 		// Set the default value.
-		update_option( $this->option_slug . '_enqueue', array(
+		update_option( $this->plugin->option_slug . '_enqueue', array(
 			'enable_stylesheet' => 'on',
 		) );
 
@@ -188,14 +182,14 @@ class Test_Public_View extends WP_UnitTestCase {
 		 * - Social Buttons Image is disabled.
 		 * ============================================================
 		 */
-		update_option( $this->option_slug . '_buttons_image', array(
+		update_option( $this->plugin->option_slug . '_buttons_image', array(
 			'enabled' => '',
 			'post_types' => array(
 				'post' => false,
 				'page' => false,
 			),
 		) );
-		update_option( $this->option_slug . '_buttons_content', array(
+		update_option( $this->plugin->option_slug . '_buttons_content', array(
 			'post_types' => array(
 				'post' => false,
 				'page' => false,
@@ -214,7 +208,7 @@ class Test_Public_View extends WP_UnitTestCase {
 		 * should be shown in 'post'.
 		 * ============================================================
 		 */
-		update_option( $this->option_slug . '_buttons_image', array(
+		update_option( $this->plugin->option_slug . '_buttons_image', array(
 			'enabled' => 'on',
 			'post_types' => array(
 				'post' => 'on',
@@ -235,7 +229,7 @@ class Test_Public_View extends WP_UnitTestCase {
 		$this->assertTrue( $this->public->is_load_stylesheet() );
 
 		// Disable Stylesheet.
-		update_option( $this->option_slug . '_enqueue', array(
+		update_option( $this->plugin->option_slug . '_enqueue', array(
 			'enable_stylesheet' => 'on',
 		) );
 		$this->assertTrue( $this->public->is_load_stylesheet() );

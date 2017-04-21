@@ -31,15 +31,6 @@ final class Metabox {
 	protected $plugin;
 
 	/**
-	 * The plugin unique option slug.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $option_slug;
-
-	/**
 	 * The plugin directory path relative to the current file.
 	 *
 	 * @since 1.0.0
@@ -135,7 +126,6 @@ final class Metabox {
 	public function setups( Plugin $plugin ) {
 
 		$this->plugin = $plugin;
-		$this->option_slug = $plugin->get_opts();
 	}
 
 	/**
@@ -163,12 +153,12 @@ final class Metabox {
 		add_action( 'admin_head-post-new.php', array( $this, 'admin_head_enqueues' ), 10 );
 
 		// Register our custom manager.
-		$butterbean->register_manager( $this->option_slug,
+		$butterbean->register_manager( $this->plugin->option_slug,
 			array(
-				'label'      => esc_html__( 'Social Media', 'ninecodes-social-manager' ),
+				'label' => esc_html__( 'Social Media', 'ninecodes-social-manager' ),
 				'post_type'  => array_unique( $post_types ),
-				'context'    => 'normal',
-				'priority'   => 'low',
+				'context' => 'normal',
+				'priority' => 'low',
 				'capability' => 'publish_posts',
 			)
 		);
@@ -190,7 +180,7 @@ final class Metabox {
 		$post_types = $this->post_types_enabled();
 
 		// Get our custom manager object.
-		$manager = $butterbean->get_manager( $this->option_slug );
+		$manager = $butterbean->get_manager( $this->plugin->option_slug );
 
 		// Register a section.
 		$manager->register_section( 'buttons',
@@ -268,7 +258,7 @@ final class Metabox {
 		}
 
 		// Get our custom manager object.
-		$manager = $butterbean->get_manager( $this->option_slug );
+		$manager = $butterbean->get_manager( $this->plugin->option_slug );
 
 		$manager->register_section( 'meta_tags',
 			array(

@@ -32,8 +32,6 @@ class Test_Settings extends WP_UnitTestCase {
 		parent::setUp();
 
 		$this->plugin = new Plugin();
-		$this->plugin_slug = $this->plugin->get_slug();
-
 		$this->settings = new Settings( $this->plugin );
 		$this->settings->setting_setups();
 	}

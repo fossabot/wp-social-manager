@@ -33,10 +33,9 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * The plugin slug.
 	 *
 	 * @since 1.0.0
-	 * @access public
 	 * @var string
 	 */
-	public $plugin_slug = 'ninecodes-social-manager';
+	const PLUGIN_SLUG = 'ninecodes-social-manager';
 
 	/**
 	 * The plugin option prefix.
@@ -45,7 +44,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @access public
 	 * @var string
 	 */
-	public $option_slug = 'ncsocman';
+	const OPTION_SLUG = 'ncsocman';
 
 	/**
 	 * Setup.
@@ -78,7 +77,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_plugin_get_slug() {
-		$this->assertEquals( $this->plugin_slug, $this->plugin->get_slug() );
+		$this->assertEquals( self::PLUGIN_SLUG, $this->plugin->plugin_slug );
 	}
 
 	/**
@@ -90,77 +89,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_plugin_get_opts() {
-
-		$this->assertTrue( method_exists( $this->plugin, 'get_opts' ),  'Class does not have method \'get_opts\'' );
-		$this->assertEquals( $this->option_slug, $this->plugin->get_opts() );
-	}
-
-	/**
-	 * Test the 'get_theme_support()' method.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function test_plugin_get_theme_support() {
-
-		// Make sure the method exist.
-		$this->assertTrue( method_exists( $this->plugin, 'get_theme_support' ),  'Class does not have method \'get_theme_support\'' );
-
-		// Make sure the method returns correct instance.
-		$this->assertInstanceOf( '\NineCodes\SocialManager\Theme_Support', $this->plugin->get_theme_support() );
-	}
-
-	/**
-	 * Test the 'get_view_admin()' method.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function test_plugin_get_view_admin() {
-
-		// Make sure the method exist.
-		$this->assertTrue( method_exists( $this->plugin, 'get_view_admin' ),  'Class does not have method \'get_view_admin\'' );
-
-		// Make sure the method returns correct instance.
-		$this->assertInstanceOf( '\NineCodes\SocialManager\Admin_View', $this->plugin->get_view_admin() );
-	}
-
-	/**
-	 * Test the 'get_view_public()' method.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function test_plugin_get_view_public() {
-
-		// Make sure the method exist.
-		$this->assertTrue( method_exists( $this->plugin, 'get_view_public' ),  'Class does not have method \'get_view_public\'' );
-
-		// Make sure the method returns correct instance.
-		$this->assertInstanceOf( '\NineCodes\SocialManager\Public_View', $this->plugin->get_view_public() );
-	}
-
-	/**
-	 * Test the 'get_widgets()' method.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function test_plugin_get_widgets() {
-
-		// Make sure the method exist.
-		$this->assertTrue( method_exists( $this->plugin, 'get_widgets' ),  'Class does not have method \'get_widgets\'' );
-
-		// Make sure the method returns correct instance.
-		$this->assertInstanceOf( '\NineCodes\SocialManager\Widgets', $this->plugin->get_widgets() );
+		$this->assertEquals( self::OPTION_SLUG, $this->plugin->option_slug );
 	}
 
 	/**

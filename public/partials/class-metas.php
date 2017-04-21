@@ -31,24 +31,6 @@ class Metas {
 	protected $plugin;
 
 	/**
-	 * The ID of this plugin.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $plugin_slug;
-
-	/**
-	 * The unique identifier or prefix for database names.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $option_slug;
-
-	/**
 	 * Constructor.
 	 *
 	 * Run the WordPress Hooks, add meta tags in the 'head' tag.
@@ -60,10 +42,7 @@ class Metas {
 	 * @param Plugin $plugin The Plugin class instance.
 	 */
 	function __construct( Plugin $plugin ) {
-
 		$this->plugin = $plugin;
-		$this->plugin_slug = $plugin->get_slug();
-		$this->option_slug = $plugin->get_opts();
 	}
 
 	/**
@@ -245,7 +224,9 @@ class Metas {
 		if ( is_author() ) {
 
 			$author = get_queried_object();
-			$avatar = get_avatar_url( $author->ID, array( 'size' => 180 ) );
+			$avatar = get_avatar_url( $author->ID, array(
+				'size' => 180,
+			) );
 			return array(
 				'src' => $avatar,
 				'width' => 180,
@@ -524,7 +505,7 @@ class Metas {
 
 		$post = get_post( $post_id );
 		$name = $post ? get_the_author_meta( 'display_name', $post->post_author ) : '';
-		$profiles = $post ? get_the_author_meta( $this->option_slug, $post->post_author ) : array();
+		$profiles = $post ? get_the_author_meta( $this->plugin->option_slug, $post->post_author ) : array();
 
 		return array(
 			'display_name' => $name,
@@ -735,7 +716,7 @@ class Metas {
 			return;
 		}
 
-		$post_meta = get_post_meta( $post_id, $this->option_slug, true );
+		$post_meta = get_post_meta( $post_id, $this->plugin->option_slug, true );
 
 		/**
 		 * If the post_meta is empty it means the meta has not yet

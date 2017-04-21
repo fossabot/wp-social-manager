@@ -33,24 +33,6 @@ final class Public_View {
 	protected $plugin;
 
 	/**
-	 * The ID of this plugin.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $plugin_slug;
-
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since 1.0.6
-	 * @access protected
-	 * @var string
-	 */
-	protected $option_slug;
-
-	/**
 	 * The aboslute path directory to the .
 	 *
 	 * @since 1.0.0
@@ -67,24 +49,6 @@ final class Public_View {
 	 * @var string
 	 */
 	protected $path_url;
-
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $version;
-
-	/**
-	 * Theme support features.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Theme_Support
-	 */
-	protected $theme_supports;
 
 	/**
 	 * Constructor.
@@ -105,10 +69,6 @@ final class Public_View {
 		}
 
 		$this->plugin = $plugin;
-		$this->plugin_slug = $plugin->get_slug();
-		$this->option_slug = $plugin->get_opts();
-		$this->version = $plugin->get_version();
-		$this->theme_supports = $plugin->get_theme_support();
 
 		$this->path_dir = plugin_dir_path( __FILE__ );
 		$this->path_url = plugin_dir_url( __FILE__ );
@@ -187,8 +147,8 @@ final class Public_View {
 	 */
 	public function register_styles() {
 
-		wp_register_style( $this->plugin_slug, $this->path_url . 'css/styles.min.css', array(), $this->version, 'all' );
-		wp_style_add_data( $this->plugin_slug, 'rtl', 'replace' );
+		wp_register_style( $this->plugin->plugin_slug, $this->path_url . 'css/styles.min.css', array(), $this->plugin->version, 'all' );
+		wp_style_add_data( $this->plugin->plugin_slug, 'rtl', 'replace' );
 	}
 
 	/**
@@ -207,8 +167,8 @@ final class Public_View {
 	 */
 	public function register_scripts() {
 
-		wp_register_script( $this->plugin_slug . '-app', $this->path_url . 'js/app.min.js', array( 'jquery', 'underscore', 'backbone' ), $this->version, true );
-		wp_register_script( $this->plugin_slug, $this->path_url . 'js/scripts.min.js', array( 'jquery' ), $this->version, true );
+		wp_register_script( "{$this->plugin->plugin_slug}-app", "{$this->path_url}js/app.min.js", array( 'jquery', 'underscore', 'backbone' ), $this->plugin->version, true );
+		wp_register_script( $this->plugin->plugin_slug, "{$this->path_url}js/scripts.min.js", array( 'jquery' ), $this->plugin->version, true );
 	}
 
 	/**
@@ -222,7 +182,7 @@ final class Public_View {
 	public function enqueue_styles() {
 
 		if ( $this->is_load_stylesheet() ) {
-			wp_enqueue_style( $this->plugin_slug );
+			wp_enqueue_style( $this->plugin->plugin_slug );
 		}
 	}
 
@@ -241,9 +201,9 @@ final class Public_View {
 		}
 
 		if ( $this->is_json_mode() ) {
-			wp_enqueue_script( $this->plugin_slug . '-app' );
+			wp_enqueue_script( $this->plugin->plugin_slug . '-app' );
 		} else {
-			wp_enqueue_script( $this->plugin_slug );
+			wp_enqueue_script( $this->plugin->plugin_slug );
 		}
 	}
 
@@ -262,7 +222,7 @@ final class Public_View {
 		 * Don't load the plugin stylesheet, if the theme already loads its own stylesheet
 		 * via the 'add_theme_support()' function.
 		 */
-		if ( true === (bool) $this->theme_supports->is( 'stylesheet' ) ) {
+		if ( true === (bool) $this->plugin->get_theme_support()->is( 'stylesheet' ) ) {
 			return false;
 		}
 
@@ -303,10 +263,10 @@ final class Public_View {
 	 */
 	public function is_json_mode() {
 
-		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
+		$button_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
+		$theme_support = $this->plugin->theme_support->is( 'buttons-mode' );
 
-		if ( 'json' === $this->theme_supports->is( 'buttons-mode' ) ||
-			 'json' === $buttons_mode ) {
+		if ( 'json' === $theme_support || 'json' === $button_mode ) {
 			return true;
 		}
 

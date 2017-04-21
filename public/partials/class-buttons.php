@@ -32,15 +32,6 @@ abstract class Buttons {
 	protected $plugin;
 
 	/**
-	 * The ID of this plugin.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $plugin_slug;
-
-	/**
 	 * The Endpoints instance.
 	 *
 	 * @since 1.0.6
@@ -78,12 +69,9 @@ abstract class Buttons {
 	 */
 	function __construct( Plugin $plugin ) {
 
-		$this->metas = new Metas( $plugin );
-		$this->endpoints = new Endpoints( $plugin, $this->metas );
+		$this->endpoints = new Endpoints( $plugin, new Metas( $plugin ) );
 
 		$this->plugin = $plugin;
-		$this->plugin_slug = $plugin->get_slug();
-		$this->option_opts = $plugin->get_opts();
 
 		$this->prefix = $this->get_attr_prefix();
 		$this->mode = $this->get_buttons_mode();
@@ -158,7 +146,7 @@ abstract class Buttons {
 		 *
 		 * @var string
 		 */
-		$style = get_theme_mod( "{$this->option_opts}_button_style", 'default' );
+		$style = get_theme_mod( "{$this->plugin->option_slug}_button_style", 'default' );
 
 		$templates = array(
 			'icon' => "<a class='{$prefix}-buttons__item item-{$style} item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'>{$icon}</a>",
@@ -233,16 +221,14 @@ abstract class Buttons {
 	 */
 	public function get_buttons_mode() {
 
-		$theme_supports = $this->plugin->get_theme_support();
 		$buttons_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
+		$theme_support = $this->plugin->get_theme_support()->is( 'buttons-mode' );
 
-		if ( 'json' === $theme_supports->is( 'buttons-mode' ) ||
-			 'json' === $buttons_mode ) {
+		if ( 'json' === $theme_support || 'json' === $buttons_mode ) {
 			return 'json';
 		}
 
-		if ( 'html' === $theme_supports->is( 'buttons-mode' ) ||
-			 'html' === $buttons_mode ) {
+		if ( 'html' === $theme_support || 'html' === $buttons_mode ) {
 			return 'html';
 		}
 	}

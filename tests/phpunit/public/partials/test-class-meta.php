@@ -64,8 +64,6 @@ class Test_Meta extends WP_UnitTestCase {
 		$this->plugin = new Plugin();
 		$this->plugin->initialize();
 
-		$this->option_slug = $this->plugin->get_opts();
-
 		$this->metas = new Metas( $this->plugin );
 	}
 
@@ -140,7 +138,7 @@ class Test_Meta extends WP_UnitTestCase {
 		$this->assertEquals( 'Category 3', $this->metas->get_post_section( $post_id ) );
 
 		// When `post_section` meta is set.
-		update_post_meta( $post_id, $this->option_slug, array(
+		update_post_meta( $post_id, $this->plugin->option_slug, array(
 			'post_section' => "category-{$c5}",
 		) );
 		$this->assertEquals( 'Category 5', $this->metas->get_post_section( $post_id ) );

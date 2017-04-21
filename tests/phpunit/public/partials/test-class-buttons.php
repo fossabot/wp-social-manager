@@ -58,8 +58,6 @@ class Test_Buttons extends WP_UnitTestCase {
 		$this->plugin = new Plugin();
 		$this->plugin->initialize();
 
-		$this->option_slug = $this->plugin->get_opts();
-
 		$this->button = new Buttons_Content( $this->plugin );
 	}
 
