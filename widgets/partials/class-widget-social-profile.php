@@ -2,16 +2,15 @@
 /**
  * Widget: Social Media Profile
  *
- * @package SocialManager\Widgets
+ * @package SocialManager\Widget
  */
 
-namespace NineCodes\SocialManager\Widget;
+namespace NineCodes\SocialManager;
 
 if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use \WP_Widget;
 use \NineCodes\SocialManager\Helpers;
 use \NineCodes\SocialManager\Options;
 
@@ -20,14 +19,14 @@ use \NineCodes\SocialManager\Options;
  *
  * @link https://developer.wordpress.org/reference/classes/wp_widget/
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
-class Social_Profiles extends WP_Widget {
+class Widget_Social_Profile extends Widget {
 
 	/**
 	 * Base ID of the widget; it has to be lowercase and unique.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @access protected
 	 * @var string
 	 */
@@ -36,29 +35,11 @@ class Social_Profiles extends WP_Widget {
 	/**
 	 * Name for the widget displayed on the configuration page.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @access protected
 	 * @var string
 	 */
 	protected $widget_title;
-
-	/**
-	 * Profile and Page usernames saved in the option.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var array
-	 */
-	protected $options = array();
-
-	/**
-	 * Social properties, such as the URLs and labels.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var array
-	 */
-	protected $properties = array();
 
 	/**
 	 * Initialize the class.
@@ -66,51 +47,44 @@ class Social_Profiles extends WP_Widget {
 	 * Retrieve the required option, define the widget id, title and description,
 	 * and register the widget to WordPress.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @access public
 	 */
 	public function __construct() {
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 30 );
-		add_action( 'ninecodes_social_manager_widget_init', array( $this, 'setups' ), 10, 2 );
+		parent::__construct( array(
+			'id' => 'profile',
+			'name' => esc_html__( 'Social Media Profile', 'ninecodes-social-manager' ),
+			'description' => esc_html__( 'Display list of social media profile and page URLs connected to this website.', 'ninecodes-social-manager' ),
+		) );
+
+		$this->profiles = Options::social_profiles();
+		$this->widget_title = esc_html__( 'Follow Us', 'ninecodes-social-manager' );
 	}
 
 	/**
-	 * Function to setup the widget.
+	 * Run Action and Filter hooks.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @access public
 	 *
-	 * @param Plugin $plugin The Plugin class instance.
 	 * @return void
 	 */
-	public function setups( $plugin ) {
-
-		$this->plugin = $plugin;
-		$this->profiles = Options::social_profiles();
-
-		$this->widget_id = "{$this->plugin->plugin_slug}-profiles";
-		$this->widget_title = esc_html__( 'Follow Us', 'ninecodes-social-manager' );
-
-		parent::__construct($this->widget_id, esc_html__( 'Social Media Profiles', 'ninecodes-social-manager' ), array(
-			'classname' => $this->widget_id,
-			'description' => esc_html__( 'Display list of social media profile and page URLs connected to this website.', 'ninecodes-social-manager' ),
-			'customize_selective_refresh' => true,
-		));
+	public function hooks() {
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 30 );
 	}
 
 	/**
 	 * Load the stylesheets for the public-facing side.
 	 *
-	 * @since 1.0.0
-	 * @since 1.0.5 - Do not enqueue the stylesheet when the stylesheet is disabled.
+	 * @since 2.0.0
 	 * @access public
 	 *
 	 * @return void
 	 */
 	public function enqueue_styles() {
 
-		if ( ! is_active_widget( false, false, $this->widget_id, true ) ) {
+		if ( ! is_active_widget( false, false, $this->id_base, true ) ) {
 			return;
 		}
 
@@ -124,7 +98,7 @@ class Social_Profiles extends WP_Widget {
 	/**
 	 * Outputs the settings update form.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @access public
 	 *
 	 * @param array $instance Current settings.
@@ -142,7 +116,7 @@ class Social_Profiles extends WP_Widget {
 		 */
 		$site_profiles = $this->plugin->get_option( 'profile' ); ?>
 
-		<div class="<?php echo esc_attr( $this->widget_id ); ?>">
+		<div class="<?php echo esc_attr( $this->id_base ); ?>">
 			<p>
 				<label for="<?php echo esc_attr( $id ); ?>"><?php esc_html_e( 'Title:', 'ninecodes-social-manager' ); ?></label>
 				<input class="widefat" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
@@ -209,7 +183,7 @@ class Social_Profiles extends WP_Widget {
 	/**
 	 * Updates a particular instance of a widget.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @access public
 	 *
 	 * @param array $input    New settings for this instance as input by the user via WP_Widget::form().
@@ -242,7 +216,7 @@ class Social_Profiles extends WP_Widget {
 	/**
 	 * Echoes the widget content.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @access public
 	 *
 	 * @param array $args     Display arguments including 'before_title', 'after_title',
@@ -340,7 +314,7 @@ class Social_Profiles extends WP_Widget {
 	/**
 	 * Select and generate the widget list view.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @access protected
 	 *
 	 * @param string $view The name of the list view to generate.
@@ -370,3 +344,7 @@ class Social_Profiles extends WP_Widget {
 		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';
 	}
 }
+
+add_action( 'widgets_init', function() {
+	register_widget( __NAMESPACE__ . '\\Widget_Social_Profile' );
+});

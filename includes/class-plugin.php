@@ -158,7 +158,7 @@ final class Plugin {
 
 		require_once( $this->path_dir . 'admin/class-admin-view.php' );
 		require_once( $this->path_dir . 'public/class-public-view.php' );
-		require_once( $this->path_dir . 'widgets/class-widgets.php' );
+		require_once( $this->path_dir . 'widgets/class-widget.php' );
 
 		add_action( 'plugins_loaded', function() {
 
@@ -208,8 +208,6 @@ final class Plugin {
 
 		new Admin_View( $this );
 		new Public_View( $this );
-
-		new Widgets( $this );
 
 		add_action( 'admin_init', array( $this, 'updates' ) );
 	}
