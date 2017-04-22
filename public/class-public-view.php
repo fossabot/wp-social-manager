@@ -229,7 +229,7 @@ final class Public_View {
 			return false;
 		}
 
-		if ( ! $this->is_buttons_active() ) {
+		if ( ! $this->is_button_active() ) {
 			return false;
 		}
 
@@ -248,7 +248,7 @@ final class Public_View {
 
 		$load = true;
 
-		if ( ! $this->is_buttons_active() || ! is_singular() ) {
+		if ( ! $this->is_button_active() || ! is_singular() ) {
 			$load = false;
 		}
 
@@ -289,7 +289,7 @@ final class Public_View {
 	 *
 	 * @return boolean True or false depending on the above conditions.
 	 */
-	public function is_buttons_active() {
+	public function is_button_active() {
 
 		$active = true;
 

@@ -77,7 +77,7 @@ class Test_Public_View extends WP_UnitTestCase {
 		$this->assertTrue( method_exists( $this->public, 'is_load_stylesheet' ),  'Class does not have method \'is_load_stylesheet\'' );
 		$this->assertTrue( method_exists( $this->public, 'is_load_scripts' ),  'Class does not have method \'is_load_scripts\'' );
 		$this->assertTrue( method_exists( $this->public, 'is_json_mode' ),  'Class does not have method \'is_json_mode\'' );
-		$this->assertTrue( method_exists( $this->public, 'is_buttons_active' ),  'Class does not have method \'is_buttons_active\'' );
+		$this->assertTrue( method_exists( $this->public, 'is_button_active' ),  'Class does not have method \'is_button_active\'' );
 	}
 
 	/**
@@ -358,5 +358,47 @@ class Test_Public_View extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_is_buttons_active() {}
+	public function test_is_button_active() {
+
+		// Default: button is active.
+		$this->assertTrue( $this->public->is_button_active() );
+
+		// Test if button contentn is disabled.
+		update_option( $this->plugin->options['button_content'], array(
+			'post_type' => array(
+				'post' => '',
+			),
+		) );
+		update_option( $this->plugin->options['button_image'], array(
+			'enable' => 'on',
+			'post_type' => array(
+				'post' => 'on',
+			),
+		) );
+
+		$post_id = $this->factory()->post->create();
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		$this->assertTrue( $this->public->is_button_active() );
+
+		// Test if both button content and button image are disabled..
+		update_option( $this->plugin->options['button_content'], array(
+			'post_type' => array(
+				'post' => '',
+			),
+		) );
+		update_option( $this->plugin->options['button_image'], array(
+			'enable' => '',
+			'post_type' => array(
+				'post' => '',
+			),
+		) );
+
+		$post_id = $this->factory()->post->create();
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		$this->assertFalse( $this->public->is_button_active() );
+	}
 }
