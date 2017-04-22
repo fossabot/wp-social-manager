@@ -31,11 +31,25 @@ install:
   - if [ ! -e "$DEV_LIB_PATH" ]; then git clone https://github.com/xwp/wp-dev-lib.git $DEV_LIB_PATH; fi
   - source $DEV_LIB_PATH/travis.install.sh
 
+before_script:
+  - |
+    # Remove Xdebug for a huge performance increase:
+    stable='^[0-9\.]+$'
+    if [[ "$TRAVIS_PHP_VERSION" =~ $stable ]]; then
+      phpenv config-rm xdebug.ini
+    fi
+
 script:
   - source $DEV_LIB_PATH/travis.script.sh
 
 after_script:
-  - source $DEV_LIB_PATH/travis.after_script.sh
+    # Push coverage off to Codecov
+  - |
+    if [[ "$WP_TRAVISCI" == "codecoverage" ]] && [ -e "/tmp/wordpress/src/wp-content/plugins/GlotPress-WP/build/logs/clover.xml" ] ; then
+      bash <(curl -s https://codecov.io/bash) -f /tmp/wordpress/src/wp-content/plugins/GlotPress-WP/build/logs/clover.xml
+    fi
+  - |
+    source $DEV_LIB_PATH/travis.after_script.sh
 
 notifications:
   slack: hkdc:yVT7G0KeSo1iXax8lgxtjt8u
