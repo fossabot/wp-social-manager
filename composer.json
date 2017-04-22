@@ -1,7 +1,7 @@
 {
   "name": "ninecodes/social-manager",
   "description": "Lightweight, clean and optimized social media plugin for WordPress.",
-  "version": "1.2.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "type": "wordpress-plugin",
   "keywords": [
     "widget",

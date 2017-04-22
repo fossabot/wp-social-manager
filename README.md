@@ -8,7 +8,7 @@ Lightweight, clean and optimized social media plugin for WordPress.
 **Tags:** [widget](https://wordpress.org/plugins/tags/widget), [json](https://wordpress.org/plugins/tags/json), [wp-api](https://wordpress.org/plugins/tags/wp-api), [social-media](https://wordpress.org/plugins/tags/social-media), [sharing](https://wordpress.org/plugins/tags/sharing), [facebook](https://wordpress.org/plugins/tags/facebook), [twitter](https://wordpress.org/plugins/tags/twitter), [pinterest](https://wordpress.org/plugins/tags/pinterest), [open-graph](https://wordpress.org/plugins/tags/open-graph), [twitter-cards](https://wordpress.org/plugins/tags/twitter-cards)  
 **Requires at least:** 4.7  
 **Tested up to:** 4.7.3  
-**Stable tag:** 1.2.0-alpha.1  
+**Stable tag:** 2.0.0-alpha.2  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 
 [![Build Status](https://travis-ci.org/ninecodes/social-manager.svg?branch=master)](https://travis-ci.org/ninecodes/social-manager) [![Coverage Status](https://coveralls.io/repos/ninecodes/social-manager/badge.svg?branch=master)](https://coveralls.io/github/ninecodes/social-manager) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com) 
