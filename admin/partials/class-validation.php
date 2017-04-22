@@ -223,7 +223,7 @@ class Validation {
 
 		foreach ( $options as $key => $label ) {
 			$key = sanitize_key( $key );
-			$selection[ $key ] = array_key_exists( $key, $inputs ) ? 'on' : false;
+			$selection[ $key ] = key_exists( $key, $inputs ) ? 'on' : false;
 		}
 
 		return $selection;

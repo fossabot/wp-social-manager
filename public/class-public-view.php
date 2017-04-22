@@ -295,10 +295,10 @@ final class Public_View {
 
 		if ( is_singular() ) {
 
-			$buttons_image = $this->plugin->get_option( 'button_image' ); // Get "Buttons Image" options.
+			$button_image = $this->plugin->get_option( 'button_image' ); // Get "Buttons Image" options.
 
 			$post_types_content = $this->plugin->get_option( 'button_content', 'post_type' );
-			$post_types_image = isset( $buttons_image['enable'] ) && 'on' === $buttons_image['enable'] ? $buttons_image['post_type'] : array();
+			$post_types_image = isset( $button_image['enable'] ) && 'on' === $button_image['enable'] ? $button_image['post_type'] : array();
 
 			$post_types = array_keys( array_unique(
 				array_merge(

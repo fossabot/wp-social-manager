@@ -130,11 +130,6 @@ class Test_Theme_Support extends WP_UnitTestCase {
 			'button-mode' => 'html',
 		));
 
-		$supports = $this->theme_support->theme_support();
-
-		$this->assertArrayHasKey( 'button-mode', $supports );
-		$this->assertEquals( 'html', $supports['button-mode'] );
-
 		$is = $this->theme_support->is( 'button-mode' );
 		$this->assertFalse( $is );
 	}
@@ -167,11 +162,6 @@ class Test_Theme_Support extends WP_UnitTestCase {
 		add_theme_support($this->theme_support->get_feature_name(), array(
 			'button-mode' => 'json',
 		));
-
-		$supports = $this->theme_support->theme_support();
-
-		$this->assertArrayHasKey( 'button-mode', $supports );
-		$this->assertEquals( 'json', $supports['button-mode'] );
 
 		$is = $this->theme_support->is( 'button-mode' );
 		$this->assertFalse( $is );
@@ -213,11 +203,8 @@ class Test_Theme_Support extends WP_UnitTestCase {
 
 		$supports = $this->theme_support->theme_support();
 
-		$this->assertArrayHasKey( 'attr-prefix', $supports );
-		$this->assertEquals( 'social', $supports['attr-prefix'] );
-
 		$this->assertFalse( $this->theme_support->is( 'attr-prefix' ) );
-		$this->assertFalse( $this->theme_support->is( 'stylesheet' ) ); // The `stylesheet` support should turn to true.
+		$this->assertFalse( $this->theme_support->is( 'stylesheet' ) );
 
 		add_theme_support($this->theme_support->get_feature_name(), array(
 			'attr_prefix' => '',

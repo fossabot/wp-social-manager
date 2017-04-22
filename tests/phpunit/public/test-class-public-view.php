@@ -228,11 +228,11 @@ class Test_Public_View extends WP_UnitTestCase {
 		// Stylesheet is enabled.
 		$this->assertTrue( $this->public->is_load_stylesheet() );
 
-		// Disable Stylesheet.
+		// Enable Stylesheet.
 		update_option( $this->plugin->options['enqueue'], array(
-			'enable_stylesheet' => 'on',
+			'enable_stylesheet' => '',
 		) );
-		$this->assertTrue( $this->public->is_load_stylesheet() );
+		$this->assertFalse( $this->public->is_load_stylesheet() );
 	}
 
 	/**
@@ -243,7 +243,75 @@ class Test_Public_View extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_is_load_scripts() {}
+	public function test_is_load_scripts() {
+
+		// The Home / Archive Page should not load the sripts (at least, for the time being).
+		$this->assertFalse( $this->public->is_load_scripts() );
+
+		/**
+		 * Test if the function is loaded in a single post.
+		 *
+		 * Function should return 'false' when loaded in a single
+		 * post.
+		 */
+		$post_id = $this->factory()->post->create();
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		$this->assertTrue( $this->public->is_load_scripts() );
+
+		/**
+		 * Test if the function is loaded in a single post,
+		 * but both button content and button image are disable.
+		 *
+		 * Function should return 'false' when loaded in a single
+		 * post.
+		 */
+		$post_id = $this->factory()->post->create();
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		update_option( $this->plugin->options['button_content'], array(
+			'post_type' => array(
+				'post' => '',
+			),
+		) );
+		update_option( $this->plugin->options['button_image'], array(
+			'enable' => '',
+			'post_type' => array(
+				'post' => 'on',
+			),
+		) );
+
+		$this->assertFalse( $this->public->is_load_scripts() );
+
+		/**
+		 * Test if the function is loaded in a single post,
+		 * but both button content and button image are disable.
+		 *
+		 * !Button image is disabled by not selecting any post_type.
+		 *
+		 * Function should return 'false' when loaded in a single
+		 * post.
+		 */
+		$post_id = $this->factory()->post->create();
+		$this->go_to( '?p=' . $post_id );
+		setup_postdata( get_post( $post_id ) );
+
+		update_option( $this->plugin->options['button_content'], array(
+			'post_type' => array(
+				'post' => '',
+			),
+		) );
+		update_option( $this->plugin->options['button_image'], array(
+			'enable' => 'on',
+			'post_type' => array(
+				'post' => '',
+			),
+		) );
+
+		$this->assertFalse( $this->public->is_load_scripts() );
+	}
 
 	/**
 	 * Function to test 'is_json_mode' method.
@@ -253,7 +321,34 @@ class Test_Public_View extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_is_json_mode() {}
+	public function test_is_json_mode() {
+
+		// Default mode is HTML.
+		$this->assertFalse( $this->public->is_json_mode() );
+
+		/**
+		 * Test if the button_mode in theme_support is set to `json`
+		 * Function should return 'true' for the mode has been switched to 'json'.
+		 */
+		add_theme_support( $this->plugin->theme_support()->get_feature_name(), array(
+			'button_mode' => 'json',
+		));
+		$this->plugin->theme_support()->theme_support(); // Init Theme_Support.
+		$this->assertTrue( $this->public->is_json_mode() );
+
+		// Reset `button_mode` to `html`.
+		add_theme_support( $this->plugin->theme_support()->get_feature_name(), array(
+			'button_mode' => 'html',
+		));
+		$this->plugin->theme_support()->theme_support(); // Init Theme_Support.
+		$this->assertFalse( $this->public->is_json_mode() );
+
+		// Test if the Mode setting is set to `json`.
+		update_option( $this->plugin->options['mode'], array(
+			'button_mode' => 'json',
+		) );
+		$this->assertTrue( $this->public->is_json_mode() );
+	}
 
 	/**
 	 * Function to test 'is_json_mode' method.
