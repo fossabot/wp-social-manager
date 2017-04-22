@@ -298,8 +298,8 @@ final class Public_View {
 
 			$buttons_image = $this->plugin->get_option( 'buttons_image' ); // Get "Buttons Image" options.
 
-			$post_types_content = $this->plugin->get_option( 'buttons_content', 'post_types' );
-			$post_types_image = isset( $buttons_image['enabled'] ) && 'on' === $buttons_image['enabled'] ? $buttons_image['post_types'] : array();
+			$post_types_content = $this->plugin->get_option( 'buttons_content', 'post_type' );
+			$post_types_image = isset( $buttons_image['enable'] ) && 'on' === $buttons_image['enable'] ? $buttons_image['post_type'] : array();
 
 			$post_types = array_keys( array_unique(
 				array_merge(

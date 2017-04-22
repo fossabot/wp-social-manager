@@ -132,11 +132,11 @@ class REST_Button extends WP_REST_Controller {
 	 */
 	public function localize_scripts() {
 
-		$post_types_content = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
+		$post_types_content = (array) $this->plugin->get_option( 'buttons_content', 'post_type' );
 		$post_types_image = array();
 
-		if ( 'on' === $this->plugin->get_option( 'buttons_image', 'enabled' ) ) {
-			$post_types_image = (array) $this->plugin->get_option( 'buttons_image', 'post_types' );
+		if ( 'on' === $this->plugin->get_option( 'buttons_image', 'enable' ) ) {
+			$post_types_image = (array) $this->plugin->get_option( 'buttons_image', 'post_type' );
 		}
 
 		$post_types = array_filter( array_unique(

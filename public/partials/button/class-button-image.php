@@ -298,7 +298,7 @@ class Button_Image extends Button {
 	public function render_tmpl() {
 
 		if ( $this->is_button_image() && 'json' === $this->mode && wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
-			$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' );
+			$includes = (array) $this->plugin->get_option( 'buttons_image', 'include' );
 
 			if ( ! empty( $includes ) ) : ?><script type="text/html" id="tmpl-buttons-image">
 <span class="<?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list <?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="buttons-image"><?php
@@ -375,13 +375,13 @@ endforeach; ?></span>
 			return false;
 		}
 
-		$enable = (bool) $this->plugin->get_option( 'buttons_image', 'enabled' );
+		$enable = (bool) $this->plugin->get_option( 'buttons_image', 'enable' );
 
 		if ( ! $enable ) {
 			return false;
 		}
 
-		$post_types = (array) $this->plugin->get_option( 'buttons_image', 'post_types' );
+		$post_types = (array) $this->plugin->get_option( 'buttons_image', 'post_type' );
 
 		/**
 		 * NOTE: The social media buttons currently do not support Home and Archive display.
@@ -391,7 +391,7 @@ endforeach; ?></span>
 			return false;
 		}
 
-		$includes = (array) $this->plugin->get_option( 'buttons_image', 'includes' );
+		$includes = (array) $this->plugin->get_option( 'buttons_image', 'include' );
 
 		if ( empty( $includes ) ) {
 			return false;

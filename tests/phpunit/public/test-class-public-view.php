@@ -183,14 +183,14 @@ class Test_Public_View extends WP_UnitTestCase {
 		 * ============================================================
 		 */
 		update_option( $this->plugin->option_slug . '_buttons_image', array(
-			'enabled' => '',
-			'post_types' => array(
+			'enable' => '',
+			'post_type' => array(
 				'post' => false,
 				'page' => false,
 			),
 		) );
 		update_option( $this->plugin->option_slug . '_buttons_content', array(
-			'post_types' => array(
+			'post_type' => array(
 				'post' => false,
 				'page' => false,
 			),
@@ -209,8 +209,8 @@ class Test_Public_View extends WP_UnitTestCase {
 		 * ============================================================
 		 */
 		update_option( $this->plugin->option_slug . '_buttons_image', array(
-			'enabled' => 'on',
-			'post_types' => array(
+			'enable' => 'on',
+			'post_type' => array(
 				'post' => 'on',
 			),
 		) );

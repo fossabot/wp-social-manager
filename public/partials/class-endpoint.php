@@ -78,7 +78,7 @@ class Endpoint {
 			return $output;
 		}
 
-		$includes = (array) $this->plugin->get_option( 'buttons_content', 'includes' );
+		$includes = (array) $this->plugin->get_option( 'buttons_content', 'include' );
 		$sites = Options::button_sites( 'content' );
 
 		foreach ( $sites as $site => $label ) {

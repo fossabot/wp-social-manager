@@ -251,9 +251,9 @@ final class Metabox {
 	 */
 	public function register_section_meta( $butterbean, $post_type ) {
 
-		$meta_enabled = (bool) $this->plugin->get_option( 'metas_site', 'enabled' );
+		$meta_enable = (bool) $this->plugin->get_option( 'metas_site', 'enable' );
 
-		if ( ! $meta_enabled ) {
+		if ( ! $meta_enable ) {
 			return;
 		}
 
@@ -493,13 +493,13 @@ final class Metabox {
 	 */
 	protected function post_types_enabled() {
 
-		$buttons_content_post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_types' );
+		$buttons_content_post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_type' );
 
 		$buttons_image_post_types = array();
-		$buttons_image_enabled = (bool) $this->plugin->get_option( 'buttons_image', 'enabled' );
+		$buttons_image_enabled = (bool) $this->plugin->get_option( 'buttons_image', 'enable' );
 
 		if ( true === $buttons_image_enabled ) {
-			$buttons_image_post_types = (array) $this->plugin->get_option( 'buttons_image', 'post_types' );
+			$buttons_image_post_types = (array) $this->plugin->get_option( 'buttons_image', 'post_type' );
 		}
 
 		return array(

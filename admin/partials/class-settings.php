@@ -497,7 +497,7 @@ final class Settings {
 		$button_sites = Options::button_sites( 'content' );
 
 		$setting_fields = array(
-			'includes' => array(
+			'include' => array(
 				'label' => esc_html__( 'Button to include', 'ninecodes-social-manager' ),
 				'type' => 'multicheckbox',
 				'options' => array_map( function( $value ) {
@@ -507,7 +507,7 @@ final class Settings {
 					return 'on';
 				}, $button_sites ),  // Return the key => 'on'.
 			),
-			'post_types' => array(
+			'post_type' => array(
 				'type' => 'multicheckbox',
 				'label' => esc_html__( 'Button Visibility', 'ninecodes-social-manager' ),
 				// translators: %s will be replaced with "Post Types" pointing to https://codex.wordpress.org/Post_Types.
@@ -614,7 +614,7 @@ final class Settings {
 					'data-toggle' => '.sharing-image-setting',
 				),
 			),
-			'includes' => array(
+			'include' => array(
 				'label' => esc_html__( 'Button to include', 'ninecodes-social-manager' ),
 				'type' => 'multicheckbox',
 				'options' => array_map( function( $value ) {
@@ -625,7 +625,7 @@ final class Settings {
 				}, $button_sites ),
 				'class' => 'sharing-image-setting hide-if-js',
 			),
-			'post_types' => array(
+			'post_type' => array(
 				'label' => esc_html__( 'Button Visibility', 'ninecodes-social-manager' ),
 
 				// translators: %s will be replaced with a link pointing to https://codex.wordpress.org/Post_Types.

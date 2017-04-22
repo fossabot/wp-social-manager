@@ -69,16 +69,16 @@ class Validation {
 			'view' => '',
 			'placement' => '',
 			'heading' => '',
-			'includes' => array(),
-			'post_types' => array(),
+			'include' => array(),
+			'post_type' => array(),
 		) );
 
 		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
 		$inputs['placement'] = $this->validate_radio( $inputs['placement'], Options::button_placements() );
 		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
 
-		$inputs['includes'] = $this->validate_multicheckbox( $inputs['includes'], Options::button_sites( 'content' ) );
-		$inputs['post_types'] = $this->validate_multicheckbox( $inputs['post_types'], Options::post_types() );
+		$inputs['include'] = $this->validate_multicheckbox( $inputs['include'], Options::button_sites( 'content' ) );
+		$inputs['post_type'] = $this->validate_multicheckbox( $inputs['post_type'], Options::post_types() );
 
 		return $inputs;
 	}
@@ -97,14 +97,14 @@ class Validation {
 		$inputs = wp_parse_args( $inputs, array(
 			'enable' => '',
 			'view' => '',
-			'post_types' => array(),
-			'includes' => array(),
+			'post_type' => array(),
+			'include' => array(),
 		) );
 
 		$inputs['enable'] = $this->validate_checkbox( $inputs['enable'] );
 		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
-		$inputs['post_types'] = $this->validate_multicheckbox( $inputs['post_types'], Options::post_types() );
-		$inputs['includes'] = $this->validate_multicheckbox( $inputs['includes'], Options::button_sites( 'image' ) );
+		$inputs['post_type'] = $this->validate_multicheckbox( $inputs['post_type'], Options::post_types() );
+		$inputs['include'] = $this->validate_multicheckbox( $inputs['include'], Options::button_sites( 'image' ) );
 
 		return $inputs;
 	}
