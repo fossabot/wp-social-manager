@@ -400,10 +400,10 @@ endforeach; ?></span>
 		/**
 		 * Get the post meta value whether the Social Buttons Image is enabled or not.
 		 *
-		 * @since 1.0.6 - Use the $this->metas property to utilitze the Meta instance methods.
+		 * @since 1.0.6 - Use the $this->meta property to utilitze the Meta instance methods.
 		 * @var boolean
 		 */
-		$post_meta = $this->metas->get_post_meta( get_the_id(), 'buttons_image' );
+		$post_meta = $this->meta->get_post_meta( get_the_id(), 'button_image' );
 
 		/**
 		 * If it is 'null' we assume that the meta post either not yet created or

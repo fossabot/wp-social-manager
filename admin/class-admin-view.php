@@ -53,7 +53,8 @@ final class Admin_View {
 		$this->plugin = $plugin;
 		$this->path_dir = plugin_dir_path( __FILE__ );
 
-		$this->requires();
+		spl_autoload_register( array( $this, 'requires' ) );
+
 		$this->setups();
 	}
 
@@ -61,17 +62,20 @@ final class Admin_View {
 	 * Load dependencies.
 	 *
 	 * @since 1.0.0
+	 * @since 2.0.0 - Use autoloader
 	 * @access protected
 	 *
+	 * @param string $class_name Loaded class name in the "admin-view.php".
 	 * @return void
 	 */
-	protected function requires() {
+	protected function requires( $class_name ) {
 
-		require_once( $this->path_dir . 'partials/class-settings.php' );
-		require_once( $this->path_dir . 'partials/class-validation.php' );
-		require_once( $this->path_dir . 'partials/class-user.php' );
-		require_once( $this->path_dir . 'partials/class-metabox.php' );
-		require_once( $this->path_dir . 'partials/class-customizer.php' );
+		$class_name = str_replace( __NAMESPACE__ . '\\', '', $class_name );
+		$class_path = $this->path_dir . 'partials/class-' . strtolower( str_replace( '_', '-', $class_name ) ) . '.php';
+
+		if ( file_exists( $class_path ) ) {
+			require_once( $class_path );
+		}
 	}
 
 	/**

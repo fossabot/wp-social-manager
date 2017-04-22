@@ -73,30 +73,29 @@ final class Public_View {
 		$this->path_dir = plugin_dir_path( __FILE__ );
 		$this->path_url = plugin_dir_url( __FILE__ );
 
-		$this->requires();
+		spl_autoload_register( array( $this, 'requires' ) );
+
 		$this->hooks();
 	}
 
 	/**
-	 * Load the required dependencies.
+	 * Load dependencies.
 	 *
 	 * @since 1.0.0
+	 * @since 2.0.0 - Use autoloader
 	 * @access protected
 	 *
+	 * @param string $class_name Loaded class name in the "admin-view.php".
 	 * @return void
 	 */
-	protected function requires() {
+	protected function requires( $class_name ) {
 
-		require_once( $this->path_dir . 'partials/class-meta.php' );
-		require_once( $this->path_dir . 'partials/class-wp-head.php' );
-		require_once( $this->path_dir . 'partials/class-wp-footer.php' );
-		require_once( $this->path_dir . 'partials/class-endpoint.php' );
-		require_once( $this->path_dir . 'partials/class-rest-button.php' );
+		$class_name = str_replace( __NAMESPACE__ . '\\', '', $class_name );
+		$class_path = $this->path_dir . 'partials/class-' . strtolower( str_replace( '_', '-', $class_name ) ) . '.php';
 
-		require_once( $this->path_dir . 'partials/button/class-button-interface.php' );
-		require_once( $this->path_dir . 'partials/button/class-button.php' );
-		require_once( $this->path_dir . 'partials/button/class-button-content.php' );
-		require_once( $this->path_dir . 'partials/button/class-button-image.php' );
+		if ( file_exists( $class_path ) ) {
+			require_once( $class_path );
+		}
 
 		require_once( $this->path_dir . 'partials/function-template-tags.php' );
 	}

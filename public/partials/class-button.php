@@ -69,7 +69,8 @@ abstract class Button implements Button_Interface {
 	 */
 	function __construct( Plugin $plugin ) {
 
-		$this->endpoint = new Endpoint( $plugin, new Meta( $plugin ) );
+		$this->meta = new Meta( $plugin );
+		$this->endpoint = new Endpoint( $plugin, $this->meta );
 
 		$this->plugin = $plugin;
 

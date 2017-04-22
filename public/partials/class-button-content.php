@@ -330,7 +330,7 @@ foreach ( $includes as $site => $value ) :
 			return false;
 		}
 
-		$post_meta = $this->metas->get_post_meta( get_the_id(), 'buttons_content' );
+		$post_meta = $this->meta->get_post_meta( get_the_id(), 'button_content' );
 
 		/**
 		 * If it is 'null' we assume that the meta post either not yet created or
