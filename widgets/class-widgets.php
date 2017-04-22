@@ -16,7 +16,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  * The Widget class is used for registering custom widgets of the plugin.
  *
  * @since 1.0.0
- * @since 1.0.5 - Remove unnecessary methods `get_slug()`, `get_opts()`, `get_theme_supports()`, and `get_option`
+ * @since 1.0.5 - Remove unnecessary methods `get_slug()`, `get_opts()`, `get_theme_support()`, and `get_option`
  */
 final class Widgets {
 
@@ -31,11 +31,11 @@ final class Widgets {
 	public $plugin;
 
 	/**
-	 * The ViewPublic class instance.
+	 * The Public_View class instance.
 	 *
 	 * @since 1.0.5
 	 * @access public
-	 * @var ViewPublic
+	 * @var Public_View
 	 */
 	public $public;
 
@@ -62,7 +62,6 @@ final class Widgets {
 	function __construct( Plugin $plugin ) {
 
 		$this->plugin = $plugin;
-		$this->public = $plugin->get_view_public();
 		$this->path_dir = plugin_dir_path( __FILE__ );
 
 		$this->requires();
@@ -108,8 +107,15 @@ final class Widgets {
 	 */
 	public function setups() {
 
-		register_widget( __NAMESPACE__ . '\\WidgetSocialProfiles' );
+		register_widget( __NAMESPACE__ . '\\Widget\Social_Profiles' );
 
-		do_action( 'ninecodes_social_manager_widget_setups', $this );
+		/**
+	 	 * Fires along with `widgets_init` to register extra widget in the plugin.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param object $tag The `Widgets` class instance.
+		 */
+		do_action( 'ninecodes_social_manager_widget_init', $this->plugin );
 	}
 }

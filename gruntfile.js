@@ -2,77 +2,114 @@
 module.exports = function(grunt) {
 
 	'use strict';
-	var stage = grunt.option('stage') || 'release',
 
-		adminDirCSS = './admin/css/',
+	var adminDirCSS = './admin/css/',
 		adminDirJS = './admin/js/',
 		publicDirCSS = './public/css/',
 		publicDirJS = './public/js/',
 
-		csssrc = [{
-			expand: true,
-			cwd: adminDirCSS,
-			dest: adminDirCSS,
-			src: [
-				'*.css',
-				'!*.min.css',
-				'!*-rtl.css'
-			],
-			ext: '.min.css'
-		}, {
-			expand: true,
-			cwd: publicDirCSS,
-			dest: publicDirCSS,
-			src: [
-				'*.css',
-				'!*.min.css',
-				'!*-rtl.css',
-			],
-			ext: '.min.css'
-		}],
+		csssrc = [
+			{
+				expand: true,
+				cwd: adminDirCSS,
+				dest: adminDirCSS,
+				src: [
+					'*.css',
+					'!*.min.css',
+					'!*-rtl.css'
+				],
+				ext: '.min.css'
+			}, {
+				expand: true,
+				cwd: publicDirCSS,
+				dest: publicDirCSS,
+				src: [
+					'*.css',
+					'!*.min.css',
+					'!*-rtl.css'
+				],
+				ext: '.min.css'
+			}, {
+				expand: true,
+				cwd: './includes/customize/css/',
+				dest: './includes/customize/css/',
+				src: [
+					'*.css',
+					'!*.min.css',
+					'!*-rtl.css'
+				],
+				ext: '.min.css'
+			}
+		],
 
-		csssrcRTL = [{
-			expand: true,
-			cwd: adminDirCSS,
-			dest: adminDirCSS,
-			src: [
-				'*.css',
-				'*.min.css',
-				'!*-rtl.css'
-			],
-			ext: '.min-rtl.css'
-		}, {
-			expand: true,
-			cwd: publicDirCSS,
-			dest: publicDirCSS,
-			src: [
-				'*.css',
-				'*.min.css',
-				'!*-rtl.css'
-			],
-			ext: '.min-rtl.css'
-		}],
+		csssrcRTL = [
+			{
+				expand: true,
+				cwd: adminDirCSS,
+				dest: adminDirCSS,
+				src: [
+					'*.css',
+					'*.min.css',
+					'!*-rtl.css'
+				],
+				ext: '.min-rtl.css'
+			}, {
+				expand: true,
+				cwd: publicDirCSS,
+				dest: publicDirCSS,
+				src: [
+					'*.css',
+					'*.min.css',
+					'!*-rtl.css'
+				],
+				ext: '.min-rtl.css'
+			}
+		],
 
+		jssrc = [
+			{
+				expand: true,
+				cwd: adminDirJS,
+				dest: adminDirJS,
+				src: [
+					'*.js',
+					'!*.min.js'
+				],
+				ext: '.min.js'
+			}, {
+				expand: true,
+				cwd: publicDirJS,
+				dest: publicDirJS,
+				src: [
+					'*.js',
+					'!*.min.js'
+				],
+				ext: '.min.js'
+			}, {
+				expand: true,
+				cwd: './includes/customize/js/',
+				dest: './includes/customize/js/',
+				src: [
+					'*.js',
+					'!*.min.js'
+				],
+				ext: '.min.js'
+			}
+		],
 
-		jssrc = [{
-			expand: true,
-			cwd: adminDirJS,
-			dest: adminDirJS,
-			src: [
-				'*.js',
-				'!*.min.js'
-			],
-			ext: '.min.js'
-		}, {
-			expand: true,
-			cwd: publicDirJS,
-			dest: publicDirJS,
-			src: [
-				'*.js',
-				'!*.min.js'
-			],
-			ext: '.min.js'
-		}];
+		phpsrc = [
+			'*.php',
+			'**/*.php',
+			'!docs/**',
+			'!includes/ogp/**',
+			'!includes/bb-metabox/**',
+			'!includes/bb-metabox-extend/**',
+			'!includes/wp-settings/**',
+			'!<%= pkg.name %>/**',
+			'!build/**',
+			'!node_modules/**',
+			'!tests/**'
+		];
 
 	grunt.initConfig({
 
@@ -92,40 +129,64 @@ module.exports = function(grunt) {
 			}
 		},
 
+		// Run Qunit test.
+		qunit: {
+			all: [ './tests/qunit/**/*.html' ]
+		},
+
 		// Run tasks whenever watched files change.
 		watch: {
+
 			scripts: {
 				files: [
 					adminDirJS + '*.js',
 					publicDirJS + '*.js',
+					'./includes/customize/js/*.js',
 					'!' + adminDirJS + '*.min.js',
-					'!' + publicDirJS + '*.min.js'
+					'!' + publicDirJS + '*.min.js',
+					'!./includes/customize/js/*.min.js'
 				],
 				tasks: ['scripts:dev'],
 				options: {
-					interrupt: true,
-				},
+					interrupt: true
+				}
 			},
+
 			styles: {
 				files: [
 					adminDirCSS + '*.css',
 					publicDirCSS + '*.css',
+					'./includes/customize/css/*.css',
 					'!' + adminDirCSS + '*.min.css',
 					'!' + adminDirCSS + '*.min-rtl.css',
 					'!' + publicDirCSS + '*.min.css',
-					'!' + publicDirCSS + '*.min-rtl.css'
+					'!' + publicDirCSS + '*.min-rtl.css',
+					'!./includes/customize/css/*.min.css',
+					'!./includes/customize/css/*.min-rtl.css'
 				],
 				tasks: ['styles:dev'],
 				options: {
-					interrupt: true,
-				},
+					interrupt: true
+				}
 			},
+
 			readme: {
 				files: ['readme.txt'],
 				tasks: ['shell:readme'],
 				options: {
-					interrupt: true,
-				},
+					interrupt: true
+				}
+			},
+
+			textDomain: {
+				files: phpsrc,
+				tasks: [
+					'checktextdomain',
+					'makepot'
+				],
+				options: {
+					interrupt: true
+				}
 			}
 		},
 
@@ -179,30 +240,36 @@ module.exports = function(grunt) {
 				map: false,
 				saveUnmodified: false
 			},
-			reg: {
-				files: [{
-					expand: true,
-					cwd: adminDirCSS,
-					dest: adminDirCSS,
-					ext: '-rtl.css',
-					src: [
-						'*.css',
-						'!*-rtl.css',
-						'!*.min.css'
-					]
-				}, {
-					expand: true,
-					cwd: publicDirCSS,
-					dest: publicDirCSS,
-					ext: '-rtl.css',
-					src: [
-						'*.css',
-						'!*-rtl.css',
-						'!*.min.css'
-					]
-				}]
+			target: {
+				files: [
+					{
+						expand: true,
+						cwd: adminDirCSS,
+						dest: adminDirCSS,
+						ext: '-rtl.css',
+						src: ['*.css', '!*-rtl.css', '!*.min.css']
+					}, {
+						expand: true,
+						cwd: publicDirCSS,
+						dest: publicDirCSS,
+						ext: '-rtl.css',
+						src: ['*.css', '!*-rtl.css', '!*.min.css']
+					}
+				]
 			}
 		},
+
+		// Add text domain to PHP files.
+		addtextdomain: {
+			target: {
+				options: {
+					textdomain: '<%= pkg.name %>', // Project text domain.
+				},
+				files: {
+					src: phpsrc
+	            }
+	        }
+	    },
 
 		// Check textdomain errors.
 		checktextdomain: {
@@ -226,18 +293,70 @@ module.exports = function(grunt) {
 				]
 			},
 			files: {
-				src: [
-					'*.php', // Include all files
-					'**/*.php', // Include all files
-					'!includes/bb-metabox/**', // Exclude sub-modules/
-					'!includes/bb-metabox-extend/**', // Exclude sub-modules/
-					'!includes/wp-settings/**', // Exclude sub-modules/
-					'!<%= pkg.name %>/**', // Exclude build/
-					'!build/**', // Exclude build/
-					'!node_modules/**', // Exclude node_modules/
-					'!tests/**' // Exclude tests/
-				],
+				src: phpsrc,
 				expand: true
+			}
+		},
+
+		// Create .pot files for i18n.
+		makepot: {
+			target: {
+				options: {
+					cwd: './',
+					type: 'wp-plugin',
+					domainPath: './languages',
+					updateTimestamp: false,
+					mainFile: '<%= pkg.name %>.php',
+					potFilename: '<%= pkg.name %>.pot',
+					potHeaders: {
+						'poedit': true, // Includes common Poedit headers.
+						'x-poedit-keywordslist': true // Include a list of all possible gettext functions.
+					},
+					include: [
+						'admin/.*',
+						'public/.*',
+						'includes/.*',
+						'widgets/.*',
+						'<%= pkg.name %>.php'
+					],
+					exclude: [
+						'.js',
+						'admin/js/.*',
+						'public/js/.*',
+						'node_modules/.*',
+						'build/.*',
+						'dev-lib/.*',
+						'includes/ogp/.*',
+						'includes/bb-metabox/.*',
+						'includes/bb-metabox-extend/.*',
+						'includes/includes/wp-settings/.*'
+					],
+					processPot: function(pot) {
+
+						var translation,
+							excluded_meta = [
+								'Plugin Name of the plugin/theme',
+								'Plugin URI of the plugin/theme',
+								'Author of the plugin/theme',
+								'Author URI of the plugin/theme'
+							];
+
+						for ( translation in pot.translations[''] ) {
+							if ( 'undefined' !== typeof pot.translations[''][ translation ].comments.extracted ) {
+								if ( excluded_meta.indexOf( pot.translations[''][ translation ].comments.extracted ) >= 0 ) {
+									console.log( 'Excluded meta: ' + pot.translations[''][ translation ].comments.extracted );
+									delete pot.translations[''][ translation ];
+								}
+							}
+						}
+
+						pot.headers['report-msgid-bugs-to'] = 'https://github.com/ninecodes/social-manager/issues';
+						pot.headers['last-translator'] = 'NineCodes <admin@ninecodes.com>';
+						pot.headers['language-team'] = 'NineCodes <admin@ninecodes.com>';
+
+						return pot;
+					}
+				}
 			}
 		},
 
@@ -245,26 +364,39 @@ module.exports = function(grunt) {
 			version: {
 				files: {
 					'./readme.txt': './readme.txt',
+					'./composer.json': './composer.json',
 					'./<%= pkg.name %>.php': './<%= pkg.name %>.php',
 					'./includes/class-plugin.php': './includes/class-plugin.php'
 				},
 				options: {
-					replacements: [{
-						pattern: /\Stable tag: (.*)/g,
-						replacement: 'Stable tag: <%= pkg.version %>'
-					}, {
-						pattern: /\Version: (.*)/g,
-						replacement: 'Version: <%= pkg.version %>'
-					},{
-						pattern: /\protected \$version = (.*)/g,
-						replacement: 'protected $version = \'<%= pkg.version %>\';'
-					}, {
-						pattern: /\Requires at least: (.*)/g,
-						replacement: 'Requires at least: <%= pkg.wordpress.requires_at_least %>'
-					}, {
-						pattern: /\Tested up to: (.*)/g,
-						replacement: 'Tested up to: <%= pkg.wordpress.tested_up_to %>'
-					}]
+					replacements: [
+						{
+							pattern: /\Stable tag: (.*)/g,
+							replacement: 'Stable tag: <%= pkg.version %>'
+						}, {
+							pattern: /\Version: (.*)/g,
+							replacement: 'Version: <%= pkg.version %>'
+						}, {
+							pattern: /\protected \$version = (.*)/g,
+							replacement: 'protected $version = \'<%= pkg.version %>\';'
+						}, {
+							pattern: /\Requires at least: (.*)/g,
+							replacement: 'Requires at least: <%= pkg.wordpress.requires_at_least %>'
+						}, {
+							pattern: /\Description: (.*)/g,
+							replacement: 'Description: <%= pkg.description %>'
+						}, {
+							pattern: /\'WordPress\' => \'(.*)\'/g,
+							replacement: '\'WordPress\' => \'<%= pkg.wordpress.requires_at_least %>\''
+						}, {
+							pattern: /\Tested up to: (.*)/g,
+							replacement: 'Tested up to: <%= pkg.wordpress.tested_up_to %>'
+						},
+						{
+							pattern: /\"version\": \"(.*)\"/g,
+							replacement: '"version": "<%= pkg.version %>"'
+						}
+					]
 				}
 			}
 		},
@@ -298,53 +430,23 @@ module.exports = function(grunt) {
 				options: {
 					archive: '<%= pkg.name %>.<%= pkg.version %>.zip'
 				},
-				files: [{
-					expand: true,
-					cwd: './build/',
-					src: ['**'],
+				files: [
+					{
+						expand: true,
+						cwd: './build/',
+						src: ['**'],
 
-					// When the .zip file is uncompressed (e.g. 'ninecodes-social-media').
-					dest: './<%= pkg.name %>/'
-				}, ]
-			},
+						// When the .zip file is uncompressed (e.g. 'ninecodes-social-media').
+						dest: './<%= pkg.name %>/'
+					}
+				]
+			}
 		},
 
 		// Clean files and folders.
 		clean: {
 			build: ['./build/'],
 			zip: ['./<%= pkg.name %>*.zip']
-		},
-
-		// Deploys a build directory to the WordPress SVN repo.
-		wp_deploy: {
-			release: {
-				options: {
-					plugin_slug: '<%= pkg.name %>',
-					build_dir: 'build',
-					assets_dir: 'wp-assets'
-				}
-			},
-
-			// Only commit the assets directory.
-			assets: {
-				options: {
-					plugin_slug: '<%= pkg.name %>',
-					build_dir: 'build',
-					assets_dir: 'wp-assets',
-					deploy_trunk: false
-
-				}
-			},
-
-			// Only deploy to trunk (e.g. when only updating the 'Tested up to' value and not deploying a release).
-			trunk: {
-				options: {
-					plugin_slug: '<%= pkg.name %>',
-					build_dir: 'build',
-					assets_dir: 'wp-assets',
-					deploy_tag: false
-				}
-			}
 		}
 	});
 
@@ -354,8 +456,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-eslint');
 	grunt.loadNpmTasks('grunt-rtlcss');
 	grunt.loadNpmTasks('grunt-string-replace');
-	grunt.loadNpmTasks('grunt-wp-deploy');
-
+	grunt.loadNpmTasks('grunt-wp-i18n');
+	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-copy');
@@ -365,35 +467,40 @@ module.exports = function(grunt) {
 
 	// Register grunt default tasks.
 	grunt.registerTask('default', [
-		'wordpress',
 		'styles:dev',
 		'scripts:dev',
+		'wordpress',
 		'watch'
+	]);
+
+	// Version bump.
+	grunt.registerTask('version', [
+		'string-replace:version',
+		'shell:readme'
 	]);
 
 	// Build the plugin.
 	grunt.registerTask('build', [
+		'clean:build',
 		'clean:zip',
+		'styles:build',
+		'scripts:build',
 		'wordpress',
-		'styles:prod',
-		'scripts:prod',
+		'version',
 		'copy:build'
 	]);
 
 	// Build and package the plugin.
-	grunt.registerTask('package', [
+	grunt.registerTask('build:package', [
 		'build',
 		'compress:build',
 		'clean:build'
 	]);
 
-	/**
-	 * ==================================================
-	 * Register Test specific tasks
-	 * ==================================================
-	 */
+	// Run test unit.
 	grunt.registerTask('test', [
-		'shell:phpunit'
+		'shell:phpunit',
+		'qunit'
 	]);
 
 	/**
@@ -410,7 +517,7 @@ module.exports = function(grunt) {
 	]);
 
 	// "Production" stage.
-	grunt.registerTask('styles:prod', [
+	grunt.registerTask('styles:build', [
 		'rtlcss',
 		'cssmin:build',
 		'cssmin:rtl'
@@ -425,39 +532,28 @@ module.exports = function(grunt) {
 	// "Development" stage.
 	grunt.registerTask('scripts:dev', [
 		'eslint',
+		'qunit',
 		'uglify:dev'
 	]);
 
 	// "Production" stage.
-	grunt.registerTask('scripts:prod', [
+	grunt.registerTask('scripts:build', [
 		'eslint',
+		'qunit',
 		'uglify:build'
 	]);
 
 	/**
 	 * ==================================================
 	 * Register WordPress specific tasks
-	 * ==================================================
+	 * ==================================================e
 	 */
 
 	// Check and compile WordPress files.
 	grunt.registerTask('wordpress', [
-		'version',
-		'shell:readme',
 		'shell:phpunit',
-		'checktextdomain'
-	]);
-
-	// Check and compile WordPress files.
-	grunt.registerTask('version', [
-		'string-replace:version',
-		'shell:readme'
-	]);
-
-	// Deploy to WordPress.org repository.
-	grunt.registerTask('deploy', [
-		'build',
-		'wp_deploy:' + stage,
-		'clean:build'
+		'addtextdomain',
+		'checktextdomain',
+		'makepot'
 	]);
 };

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Social Media Manager QUnit Suite</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qunit/2.3.1/qunit.css">
+</head>
+
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/qunit/2.3.1/qunit.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
+
+	<script type='text/javascript'>
+	/* <![CDATA[ */
+	var nineCodesSocialManagerAPI = {"root":"http:\/\/local.wordpress.dev\/wp-json\/","namespace":"ninecodes\/v1","attrPrefix":"social-manager","id":"1241"};
+	/* ]]> */
+	</script>
+	<script type="text/html" id="tmpl-buttons-content">
+		<h4 class='social-manager-buttons__heading'>Share on:</h4>
+		<div class="social-manager-buttons__list social-manager-buttons__list--icon" data-social-manager="ButtonsContent">
+			<# if ( data.endpoints.facebook ) { #>
+			<a class='social-manager-buttons__item item-colored item-facebook' href='{{data.endpoints.facebook}}' target='_blank' role='button' rel='nofollow'><svg aria-hidden='true'><use xlink:href='#social-manager-icon-facebook' /></svg></a>
+			<# } #>
+			<# if ( data.endpoints.twitter ) { #>
+			<a class='social-manager-buttons__item item-colored item-twitter' href='{{data.endpoints.twitter}}' target='_blank' role='button' rel='nofollow'><svg aria-hidden='true'><use xlink:href='#social-manager-icon-twitter' /></svg></a>
+			<# } #>
+			<# if ( data.endpoints.googleplus ) { #>
+			<a class='social-manager-buttons__item item-colored item-googleplus' href='{{data.endpoints.googleplus}}' target='_blank' role='button' rel='nofollow'><svg aria-hidden='true'><use xlink:href='#social-manager-icon-googleplus' /></svg></a>
+			<# } #>
+			<# if ( data.endpoints.pinterest ) { #>
+			<a class='social-manager-buttons__item item-colored item-pinterest' href='{{data.endpoints.pinterest}}' target='_blank' role='button' rel='nofollow'><svg aria-hidden='true'><use xlink:href='#social-manager-icon-pinterest' /></svg></a>
+			<# } #>
+			<# if ( data.endpoints.linkedin ) { #>
+			<a class='social-manager-buttons__item item-colored item-linkedin' href='{{data.endpoints.linkedin}}' target='_blank' role='button' rel='nofollow'><svg aria-hidden='true'><use xlink:href='#social-manager-icon-linkedin' /></svg></a>
+			<# } #>
+			<# if ( data.endpoints.reddit ) { #>
+			<a class='social-manager-buttons__item item-colored item-reddit' href='{{data.endpoints.reddit}}' target='_blank' role='button' rel='nofollow'><svg aria-hidden='true'><use xlink:href='#social-manager-icon-reddit' /></svg></a>
+			<# } #>
+			<# if ( data.endpoints.tumblr ) { #>
+			<a class='social-manager-buttons__item item-colored item-tumblr' href='{{data.endpoints.tumblr}}' target='_blank' role='button' rel='nofollow'><svg aria-hidden='true'><use xlink:href='#social-manager-icon-tumblr' /></svg></a>
+			<# } #>
+			<# if ( data.endpoints.email ) { #>
+			<a class='social-manager-buttons__item item-colored item-email' href='{{data.endpoints.email}}' target='_blank' role='button' rel='nofollow'><svg aria-hidden='true'><use xlink:href='#social-manager-icon-email' /></svg></a>
+			<# } #>
+		</div>
+	</script>
+
+	<!-- Source -->
+	<script src="../../public/js/app.js"></script>
+
+	<!-- Test Suite -->
+	<script src="app.js"></script>
+</body>
+
+</html>

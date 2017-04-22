@@ -28,28 +28,28 @@ final class Plugin {
 	 * The unique identifier of this plugin.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 * @var string
 	 */
-	protected $plugin_slug = 'ninecodes-social-manager';
+	public $plugin_slug = 'ninecodes-social-manager';
 
 	/**
 	 * The unique identifier or prefix for database names.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 * @var string
 	 */
-	protected $option_slug = 'ncsocman';
+	public $option_slug = 'ncsocman';
 
 	/**
 	 * The current version of the plugin.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 * @var string
 	 */
-	protected $version = '1.1.3';
+	public $version = '1.2.0-alpha.1';
 
 	/**
 	 * The path directory relative to the current file.
@@ -68,51 +68,6 @@ final class Plugin {
 	 * @var array
 	 */
 	protected $options;
-
-	/**
-	 * The ThemeSupports class instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @var ThemeSupports
-	 */
-	protected $theme_supports;
-
-	/**
-	 * The Languages class instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @var Languages
-	 */
-	public $languages;
-
-	/**
-	 * The ViewAdmin class instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @var ViewAdmin
-	 */
-	protected $admin;
-
-	/**
-	 * The ViewPublic class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var ViewPublic
-	 */
-	protected $public;
-
-	/**
-	 * The Widgets class instance.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var Widgets
-	 */
-	protected $widgets;
 
 	/**
 	 * Constructor.
@@ -145,13 +100,22 @@ final class Plugin {
 	 *
 	 * @return void
 	 */
-	public function initialize() {
+	public function init() {
 
 		$this->path_dir = plugin_dir_path( dirname( __FILE__ ) );
 
 		$this->requires();
 		$this->setups();
 		$this->hooks();
+
+		/**
+		 * Fires after the plugin has been initialized.
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param Plugin $this The Plugin class instance.
+		 */
+		do_action( 'ninecodes_social_manager_init', $this );
 	}
 
 	/**
@@ -181,35 +145,26 @@ final class Plugin {
 
 		require_once( $this->path_dir . 'includes/function-utilities.php' );
 
-		require_once( $this->path_dir . 'includes/class-i18n.php' );
+		require_once( $this->path_dir . 'includes/class-languages.php' );
 		require_once( $this->path_dir . 'includes/class-helpers.php' );
 		require_once( $this->path_dir . 'includes/class-options.php' );
-		require_once( $this->path_dir . 'includes/class-theme-supports.php' );
+		require_once( $this->path_dir . 'includes/class-theme-support.php' );
 
-		require_once( $this->path_dir . 'includes/wp-settings/wp-settings.php' );
-		require_once( $this->path_dir . 'includes/wp-settings/wp-settings-fields.php' );
+		require_once( $this->path_dir . 'includes/wp-settings/class-settings.php' );
+		require_once( $this->path_dir . 'includes/wp-settings/class-fields.php' );
 
 		require_once( $this->path_dir . 'includes/ogp/open-graph-protocol.php' );
+		require_once( $this->path_dir . 'includes/customize/class-control-radio-image.php' );
 
-		add_action( 'plugins_loaded', array( $this, 'butterbean' ) );
-
-		require_once( $this->path_dir . 'admin/class-admin.php' );
-		require_once( $this->path_dir . 'public/class-public.php' );
+		require_once( $this->path_dir . 'admin/class-admin-view.php' );
+		require_once( $this->path_dir . 'public/class-public-view.php' );
 		require_once( $this->path_dir . 'widgets/class-widgets.php' );
-	}
 
-	/**
-	 * Load the Butterbean
-	 *
-	 * @since 1.0.1
-	 * @access protected
-	 *
-	 * @return void
-	 */
-	public function butterbean() {
+		add_action( 'plugins_loaded', function() {
 
-		require_once( $this->path_dir . 'includes/bb-metabox/butterbean.php' );
-		require_once( $this->path_dir . 'includes/bb-metabox-extend/butterbean-extend.php' );
+			require_once( $this->path_dir . 'includes/bb-metabox/butterbean.php' );
+			require_once( $this->path_dir . 'includes/bb-metabox-extend/butterbean-extend.php' );
+		} );
 	}
 
 	/**
@@ -232,6 +187,7 @@ final class Plugin {
 		 * @see https://developer.wordpress.org/reference/hooks/prefixplugin_action_links_plugin_file/
 		 */
 		add_filter( 'plugin_action_links_' . plugin_basename( "{$this->path_dir}{$this->plugin_slug}.php" ), array( $this, 'plugin_action_links' ) );
+
 		add_action( 'init', array( $this->languages, 'load_plugin_textdomain' ) );
 	}
 
@@ -248,12 +204,37 @@ final class Plugin {
 	 */
 	protected function setups() {
 
-		$this->theme_supports = new ThemeSupports();
 		$this->languages = new Languages( $this->plugin_slug );
 
-		$this->admin = new ViewAdmin( $this );
-		$this->public = new ViewPublic( $this );
-		$this->widgets = new Widgets( $this );
+		new Admin_View( $this );
+		new Public_View( $this );
+
+		new Widgets( $this );
+
+		add_action( 'admin_init', array( $this, 'updates' ) );
+	}
+
+	/**
+	 * Update the version in the database.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function updates() {
+
+		$regex = '/(-[alpha|beta|rc\.\d]+)/';
+		$current_version = preg_replace( $regex, '', $this->version );
+
+		$previous_version = get_option( $this->option_slug . '_version' );
+		$previous_version = preg_replace( $regex, '', $previous_version );
+
+		update_option( $this->option_slug . '_version', $current_version );
+
+		if ( version_compare( $previous_version, $current_version, '<' ) || ! get_option( $this->option_slug . '_previous_version' ) ) {
+			update_option( $this->option_slug . '_previous_version', $previous_version );
+		}
 	}
 
 	/**
@@ -273,99 +254,6 @@ final class Plugin {
 		);
 
 		return array_merge( $settings, $links );
-	}
-
-	/**
-	 * Get the plugin version.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string The plugin version number.
-	 */
-	public function get_version() {
-
-		/**
-		 * Filter useful to prepend query during development to flush cache.
-		 */
-		return $this->version;
-	}
-
-	/**
-	 * Get the plugin slug.
-	 *
-	 * Slug is a unique identifier of the plugin.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string The plugin slug.
-	 */
-	public function get_slug() {
-		return $this->plugin_slug;
-	}
-
-	/**
-	 * Get the plugin opts.
-	 *
-	 * Opts herein is the unique identifier of the plugin option name.
-	 * It may be used for prefixing the option name or meta key.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string The plugin opts.
-	 */
-	public function get_opts() {
-		return $this->option_slug;
-	}
-
-	/**
-	 * Get the theme supports.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return ThemeSupports instance.
-	 */
-	public function get_theme_supports() {
-		return $this->theme_supports;
-	}
-
-	/**
-	 * Get the ViewAdmin instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return ViewAdmin instance.
-	 */
-	public function get_view_admin() {
-		return $this->admin;
-	}
-
-	/**
-	 * Get the ViewPublic instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return ViewPublic instance.
-	 */
-	public function get_view_public() {
-		return $this->public;
-	}
-
-	/**
-	 * Get the Widgets instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return Widgets instance.
-	 */
-	public function get_widgets() {
-		return $this->widgets;
 	}
 
 	/**
@@ -393,5 +281,24 @@ final class Plugin {
 		}
 
 		return $option ? $option : null;
+	}
+
+	/**
+	 * Return the theme support data.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return Theme_Support
+	 */
+	public function theme_support() {
+
+		static $theme_support;
+
+		if ( is_null( $theme_support ) ) {
+			$theme_support = new Theme_Support();
+		}
+
+		return $theme_support;
 	}
 }

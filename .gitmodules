@@ -4,12 +4,12 @@
 [submodule "includes/bb-metabox"]
 	path = includes/bb-metabox
 	url = https://tfirdaus@github.com/justintadlock/butterbean
-[submodule "includes/bb-metabox-extend"]
-	path = includes/bb-metabox-extend
-	url = https://tfirdaus@github.com/ninecodes/bb-extend
 [submodule "includes/ogp"]
 	path = includes/ogp
 	url = https://tfirdaus@github.com/niallkennedy/open-graph-protocol-tools
 [submodule "includes/wp-settings"]
 	path = includes/wp-settings
 	url = https://tfirdaus@github.com/ninecodes/wp-settings
+[submodule "includes/bb-metabox-extend"]
+	path = includes/bb-metabox-extend
+	url = https://tfirdaus@github.com/tfirdaus/bb-extend

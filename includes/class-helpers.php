@@ -20,7 +20,7 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-class Helpers {
+final class Helpers {
 
 	/**
 	 * The default attribute prefix.
@@ -41,7 +41,7 @@ class Helpers {
 	 * @param string $site The name of social media in lowercase (e.g. 'facebook', 'twitter', 'googleples', etc.).
 	 * @return string The icon of selected social media in SVG.
 	 */
-	final public static function get_social_icons( $site = '' ) {
+	public static function get_social_icons( $site = '' ) {
 
 		$path = plugin_dir_url( dirname( __FILE__ ) );
 		$prefix = esc_attr( self::get_attr_prefix() );
@@ -55,17 +55,14 @@ class Helpers {
 			'googleplus' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-googleplus'/></svg>",
 			'youtube' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-youtube'/></svg>",
 			'reddit' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-reddit'/></svg>",
-			'dribbble' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-dribbble'/></svg>",
-			'behance' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-behance'/></svg>",
-			'github' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-github'/></svg>",
-			'codepen' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-codepen'/></svg>",
+			'tumblr' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-tumblr'/></svg>",
 			'email' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-email'/></svg>",
 		);
 
 		/**
 		 * Filter all icons.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
 		 * @param array  $args 	  An array of arguments.
@@ -88,7 +85,7 @@ class Helpers {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @see ThemeSupports
+	 * @see Theme_Support
 	 *
 	 * @return string
 	 */
@@ -97,12 +94,8 @@ class Helpers {
 		$prefix = self::$prefix; // Default prefix.
 		$custom = null;
 
-		$support = new ThemeSupports();
-		$support = $support->theme_supports();
-
-		if ( isset( $support['attr-prefix'] ) ) {
-			$custom = $support['attr-prefix'];
-		}
+		$support = new Theme_Support();
+		$support = $support->theme_support();
 
 		if ( isset( $support['attr_prefix'] ) ) { // Alias.
 			$custom = $support['attr_prefix'];

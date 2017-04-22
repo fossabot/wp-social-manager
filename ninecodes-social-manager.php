@@ -2,15 +2,15 @@
 /**
  * Plugin Name: Social Media Manager
  * Plugin URI: http://wordpress.org/plugins/ninecodes-social-manager
- * Description: Optimize your website presence in social media.
- * Version: 1.1.3
+ * Description: Lightweight, clean and optimized social media plugin for WordPress.
+ * Version: 1.2.0-alpha.1
  * Author: NineCodes
  * Author URI: https://profiles.wordpress.org/ninecodes
  * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Requires at least: 4.7
- * Tested up to: 4.7
+ * Tested up to: 4.7.3
  *
  * Text Domain: ninecodes-social-manager
  * Domain Path: /languages
@@ -87,7 +87,7 @@ function ninecodes_social_manager() {
 
 	if ( is_null( $plugin ) ) {
 		$plugin = new Plugin();
-		$plugin->initialize();
+		$plugin->init();
 	}
 
 	return $plugin;

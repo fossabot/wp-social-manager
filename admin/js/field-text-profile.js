@@ -67,11 +67,12 @@ jQuery(function($) {
 		 */
 		render: function(target) {
 
-			var attrID, inputValue, inputUrl = target.getAttribute('data-url');
+			var attrID, isTumblr, inputValue, inputUrl = target.getAttribute('data-url');
 
 			if (inputUrl && '' !== inputUrl) {
 
 				attrID = target.getAttribute('id');
+				isTumblr = attrID.indexOf( 'tumblr' );
 				inputValue = this.getValue(target);
 
 				$('#' + attrID + '-preview').html(function() {
@@ -80,6 +81,12 @@ jQuery(function($) {
 						$siblings = $this.siblings().not('input');
 
 					$siblings.toggleClass('hide-if-js', '' !== inputValue);
+
+
+					// Tumblr: the username is included after ://.
+					if ( isTumblr !== -1 ) {
+						return '' !== inputValue ? '<code>' + inputUrl.replace('://', '://' + inputValue + '.' ) + '</code>' : '';
+					}
 
 					return '' !== inputValue ? '<code>' + inputUrl + inputValue + '</code>' : '';
 				});

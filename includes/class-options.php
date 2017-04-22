@@ -27,6 +27,7 @@ final class Options {
 	 * Options: Social Profiles and Pages.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 - Remove 'dribbble', 'behance', 'github', 'codepen'.
 	 * @access public
 	 *
 	 * @param string $slug The social media slug (e.g. `facebook`, `twitter`, etc.).
@@ -40,62 +41,56 @@ final class Options {
 			'facebook' => array(
 				'label' => 'Facebook',
 				'url' => 'https://www.facebook.com/',
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'Facebook profile or page (e.g. %s)', 'ninecodes-social-manager' ), '<code>zuck</code>' ),
 			),
 			'twitter' => array(
 				'label' => 'Twitter',
 				'url' => 'https://twitter.com/',
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'Twitter profile without the %1$s (e.g. %2$s)', 'ninecodes-social-manager' ), '<code>@</code>', '<code>jack</code>' ),
 			),
 			'instagram' => array(
 				'label' => esc_html( 'Instagram' ),
 				'url' => esc_url( 'https://instagram.com/' ),
+				// translators: %s is an example of a username input.
 				'description'  => sprintf( esc_html__( 'Instagram profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>victoriabeckham</code>' ),
 			),
 			'pinterest' => array(
 				'label' => 'Pinterest',
 				'url' => esc_url( 'https://pinterest.com/' ),
+				// translators: %s is an example of a username input.
 				'description'  => sprintf( esc_html__( 'Pinterest profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>ohjoy</code>' ),
 			),
 			'linkedin' => array(
 				'label' => 'LinkedIn',
 				'url' => esc_url( 'https://www.linkedin.com/in/' ),
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'LinkedIn profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>williamhgates</code>' ),
 			),
 			'googleplus' => array(
 				'label' => 'Google+',
 				'url' => 'https://plus.google.com/',
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'Google+ profile or page. Include the %1$s sign if necessary (e.g. %2$s)', 'ninecodes-social-manager' ), '<code>+</code>', '<code>+hishekids</code>' ),
 			),
 			'youtube' => array(
 				'label' => 'Youtube',
 				'url' => 'https://www.youtube.com/user/',
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'Youtube channel (e.g. %s)', 'ninecodes-social-manager' ), '<code>BuzzFeedVideo</code>' ),
 			),
 			'reddit' => array(
 				'label' => 'Reddit',
 				'url' => 'https://www.reddit.com/user/',
+				// translators: %s is an example of a username input.
 				'description' => sprintf( esc_html__( 'Reddit profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>Unidan</code>' ),
 			),
-			'dribbble' => array(
-				'label' => 'Dribbble',
-				'url' => 'https://dribbble.com/',
-				'description' => sprintf( esc_html__( 'Dribbble portfolio (e.g. %s)', 'ninecodes-social-manager' ), '<code>simplebits</code>' ),
-			),
-			'behance' => array(
-				'label' => 'Behance',
-				'url' => 'https://www.behance.net/',
-				'description' => sprintf( esc_html__( 'Behance portfolio (e.g. %s)', 'ninecodes-social-manager' ), '<code>amocci</code>' ),
-			),
-			'github' => array(
-				'label' => 'Github',
-				'url' => 'https://github.com/',
-				'description' => sprintf( esc_html__( 'Github repository (e.g. %s)', 'ninecodes-social-manager' ), '<code>tfirdaus</code>' ),
-			),
-			'codepen' => array(
-				'label' => 'CodePen',
-				'url' => 'https://codepen.io/',
-				'description' => sprintf( esc_html__( 'CodePen profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>stacy</code>' ),
+			'tumblr' => array(
+				'label' => 'Tumblr',
+				'url' => 'https://tumblr.com/',
+				// translators: %s is an example of a username input.
+				'description' => sprintf( esc_html__( 'Tumblr blog (e.g. %s)', 'ninecodes-social-manager' ), '<code>crowloop</code>' ),
 			),
 		);
 
@@ -104,20 +99,20 @@ final class Options {
 		 *
 		 * This filter allows developer to add or remove Social Media profiles options and the input fields.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context Option context; which option to filter.
 		 *
 		 * @var array
 		 */
-		$profiles = apply_filters( 'ninecodes_social_manager_options',  $profiles, 'profiles' );
+		$profiles = apply_filters( 'ninecodes_social_manager_options', $profiles, 'profiles' );
 
 		/**
 		 * Sanitize the Profiles
 		 *
 		 * Ensure it has the required label, url, and description.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @var array
 		 */
@@ -198,7 +193,7 @@ final class Options {
 		$views = array(
 			'icon' => esc_html__( 'Icon Only', 'ninecodes-social-manager' ),
 			'text' => esc_html__( 'Text Only', 'ninecodes-social-manager' ),
-			'icon-text' => esc_html__( 'Icon and Text', 'ninecodes-social-manager' ),
+			'icon_text' => esc_html__( 'Icon and Text', 'ninecodes-social-manager' ),
 		);
 
 		/**
@@ -207,7 +202,7 @@ final class Options {
 		 * This filter allows developer to add new view / style options
 		 * to render the social media buttons.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context Option context; which option to filter.
 		 *
@@ -250,7 +245,7 @@ final class Options {
 		 * This filter allows developer to add new placement options
 		 * to render the social media buttons.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context Option context; which option to filter.
 		 *
@@ -284,73 +279,79 @@ final class Options {
 	 */
 	public static function button_sites( $for = '' ) {
 
-		$sites['content'] = array(
-			'facebook' => 'Facebook',
-			'twitter' => 'Twitter',
-			'googleplus' => 'Google+',
-			'pinterest' => 'Pinterest',
-			'linkedin' => 'LinkedIn',
-			'reddit' => 'Reddit',
-			'email' => 'Email',
+		$button_sites['content'] = array(
+			'facebook' => array(
+				'label' => 'Facebook',
+				'endpoint' => 'https://www.facebook.com/sharer/sharer.php',
+			),
+			'twitter' => array(
+				'label' => 'Twitter',
+				'endpoint' => 'https://twitter.com/intent/tweet',
+			),
+			'googleplus' => array(
+				'label' => 'Google+',
+				'endpoint' => 'https://plus.google.com/share',
+			),
+			'pinterest' => array(
+				'label' => 'Pinterest',
+				'endpoint' => 'https://www.pinterest.com/pin/create/bookmarklet/',
+			),
+			'linkedin' => array(
+				'label' => 'LinkedIn',
+				'endpoint' => 'https://www.linkedin.com/shareArticle',
+			),
+			'reddit' => array(
+				'label' => 'Reddit',
+				'endpoint' => 'https://www.reddit.com/submit',
+			),
+			'tumblr' => array(
+				'label' => 'Tumblr',
+				'endpoint' => 'http://www.tumblr.com/share/link',
+			),
+			'email' => array(
+				'label' => 'Email',
+				'endpoint' => 'mailto:',
+			),
 		);
 
-		$sites['image'] = array(
-			'pinterest' => 'Pinterest',
+		$button_sites['image'] = array(
+			'pinterest' => array(
+				'label' => 'Pinterest',
+				'endpoint' => 'https://www.pinterest.com/pin/create/bookmarklet/',
+			),
 		);
 
 		/**
 		 * Filter the buttons sites.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context Option context; which option to filter.
 		 *
 		 * @var array
 		 */
-		$sites_extra = (array) apply_filters( 'ninecodes_social_manager_options', array(), 'button_sites' );
+		$button_sites = (array) apply_filters( 'ninecodes_social_manager_options', $button_sites, 'button_sites' );
 
-		if ( ! empty( $sites_extra ) ) {
+		if ( isset( $button_sites[ $for ] ) && is_array( $button_sites[ $for ] ) ) {
 
-			$sites_extra = wp_parse_args( $sites_extra, array(
-				'content' => array(),
-				'image' => array(),
-			) );
+			$button_sites_content = $button_sites[ $for ];
 
-			// Remove keys beside 'content' and 'image'.
-			foreach ( $sites_extra as $key => $value ) {
-				if ( ! in_array( $key, array( 'content', 'image' ), true ) ) {
-					unset( $sites_extra[ $key ] );
-				}
-			}
+			foreach ( $button_sites_content as $site => $button ) {
 
-			if ( ! empty( $sites_extra['content'] ) ) {
-
-				// Remove duplicate keys from the Social Media buttons content.
-				foreach ( $sites_extra['content'] as $key => $value ) {
-					if ( in_array( $key, array_keys( $sites['content'] ), true ) ) {
-						unset( $sites_extra['content'][ $key ] );
-					}
+				if ( ! is_array( $button ) || ! isset( $button['label'] ) ||
+					 ! isset( $button['endpoint'] ) || empty( $button['label'] ) || empty( $button['endpoint'] ) ) {
+					unset( $button_sites[ $for ][ $site ] );
+					continue;
 				}
 
-				$extras = array_map( 'esc_html', $sites_extra['content'] );
-				$sites['content'] = array_unique( array_merge( $sites['content'], $extras ), SORT_REGULAR );
-			}
-
-			if ( ! empty( $sites_extra['image'] ) ) {
-
-				// Remove duplicate keys from the Social Media buttons image.
-				foreach ( $sites_extra['image'] as $key => $value ) {
-					if ( in_array( $key, array_keys( $sites['image'] ), true ) ) {
-						unset( $sites_extra['image'][ $key ] );
-					}
-				}
-
-				$extras = array_map( 'esc_html', $sites_extra['image'] );
-				$sites['image'] = array_unique( array_merge( $sites['image'], $extras ), SORT_REGULAR );
+				$button_sites[ $for ][ $site ] = array(
+					'label' => esc_html( $button['label'] ),
+					'endpoint' => esc_url( $button['endpoint'] ),
+				);
 			}
 		}
 
-		return isset( $sites[ $for ] ) ? $sites[ $for ] : $sites;
+		return isset( $button_sites[ $for ] ) ? $button_sites[ $for ] : $button_sites;
 	}
 
 	/**
@@ -361,7 +362,7 @@ final class Options {
 	 *
 	 * @return array An array of button modes; the labels and the keys
 	 */
-	public static function buttons_modes() {
+	public static function button_modes() {
 
 		return array(
 			'html' => 'HTML (HyperText Markup Language)',

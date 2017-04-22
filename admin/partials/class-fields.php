@@ -17,53 +17,11 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 use \NineCodes\WPSettings;
 
 /**
- * The class to register custom fields in the Settings.
- */
-abstract class CustomFields extends WPSettings\Fields {
-
-	/**
-	 * The admin screen base / ID
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $screen;
-
-	/**
-	 * Constructor.
-	 *
-	 * Initialize the screen ID property, and run the hooks.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param string $screen The admin screen base / ID.
-	 */
-	public function __construct( $screen = '' ) {
-		if ( ! empty( $screen ) ) {
-			$this->screen = $screen;
-			$this->hooks();
-		}
-	}
-
-	/**
-	 * Run Filters and Actions required.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 * @return void
-	 */
-	protected function hooks() {}
-}
-
-/**
  * The Fields class is used for registering the new setting field using PepperPlane.
  *
  * @since 1.0.0
  */
-final class Fields extends CustomFields {
+final class Fields extends WPSettings\Fields {
 
 	/**
 	 * The admin screen base / ID
@@ -107,8 +65,8 @@ final class Fields extends CustomFields {
 		add_action( "{$this->screen}_field_checkbox_toggle", array( $this, 'field_checkbox_toggle' ) );
 
 		// Filters.
-		add_filter( "{$this->screen}_field_scripts", array( $this, 'register_field_scripts' ) );
-		add_filter( "{$this->screen}_field_styles", array( $this, 'register_field_styles' ) );
+		add_filter( "{$this->screen}_field_scripts", array( $this, 'register_scripts' ) );
+		add_filter( "{$this->screen}_field_styles", array( $this, 'register_styles' ) );
 	}
 
 	/**
@@ -120,7 +78,7 @@ final class Fields extends CustomFields {
 	 * @param array $scripts An array of input type.
 	 * @return array The input types with the image file name.
 	 */
-	public function register_field_scripts( array $scripts ) {
+	public function register_scripts( array $scripts ) {
 
 		$scripts['image'] = 'field-image';
 		$scripts['text_profile'] = 'field-text-profile';
@@ -132,13 +90,13 @@ final class Fields extends CustomFields {
 	/**
 	 * Register files (stylesheets or JavaScripts) to load when using the input.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @param array $styles An array of input type.
 	 * @return array The input types with the image file name.
 	 */
-	public function register_field_styles( array $styles ) {
+	public function register_styles( array $styles ) {
 
 		$styles['image'] = 'field-image';
 
@@ -188,7 +146,7 @@ final class Fields extends CustomFields {
 	/**
 	 * The function callback to render the Input Profile field.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @param array $args Arguments (e.g. id, section, type, etc.) to render the new interface.
@@ -206,6 +164,7 @@ final class Fields extends CustomFields {
 
 		$args['type'] = 'text'; // Revert the type back to 'text'.
 		$args['attr']['class'] = 'field-text-profile code';
+		$args['attr']['data-url'] = trailingslashit( $args['attr']['data-url'] );
 
 		$args  = $this->get_arguments( $args ); // Escapes all attributes.
 
@@ -230,7 +189,7 @@ final class Fields extends CustomFields {
 	/**
 	 * The function callback to render the Text Checkbox field.
 	 *
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 * @access public
 	 *
 	 * @param array $args Arguments (e.g. id, section, type, etc.) to render the new interface.

@@ -1,9 +1,9 @@
 <?php
 /**
- * Public: WPHead class
+ * Public: WP_Head class
  *
  * @package SocialManager
- * @subpackage Public\WPHead
+ * @subpackage Public\WP_Head
  */
 
 namespace NineCodes\SocialManager;
@@ -20,9 +20,9 @@ use \OpenGraphProtocolArticle;
  * The class to generate social meta tags within the 'head' tag of the website.
  *
  * @since 1.0.0
- * @since 1.0.6 - Remove Metas class as the parent class.
+ * @since 1.0.6 - Remove Meta class as the parent class.
  */
-final class WPHead {
+final class WP_Head {
 
 	/**
 	 * The Plugin class instance.
@@ -34,13 +34,13 @@ final class WPHead {
 	protected $plugin;
 
 	/**
-	 * The Metas class instance.
+	 * The Meta class instance.
 	 *
 	 * @since 1.0.6
 	 * @access protected
 	 * @var string
 	 */
-	protected $metas;
+	protected $meta;
 
 	/**
 	 * The current website language.
@@ -55,14 +55,14 @@ final class WPHead {
 	 * Constructor.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Add & instantiate Metas class in the Constructor.
+	 * @since 1.0.6 - Add & instantiate Meta class in the Constructor.
 	 * @access public
 	 *
 	 * @param Plugin $plugin The Plugin class instance.
 	 */
 	function __construct( Plugin $plugin ) {
 
-		$this->metas = new Metas( $plugin );
+		$this->meta = new Meta( $plugin );
 
 		$this->plugin = $plugin;
 
@@ -107,38 +107,38 @@ final class WPHead {
 	 * archive pages (e.g. Categories, Tags, and Custom Taxonomy Terms).
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Use $this->metas property to access the Metas class method.
+	 * @since 1.0.6 - Use $this->meta property to access the Meta class method.
 	 * @access public
 	 *
 	 * @return void
 	 */
 	public function site_meta_tags() {
 
-		if ( is_singular() || is_attachment() || ! $this->metas->is_meta_enabled() ) {
+		if ( is_singular() || is_attachment() || ! $this->meta->is_meta_enabled() ) {
 			return;
 		}
 
 		/**
 		 * Filter social media meta tags generated in home and archive page.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context is `null`. Filter will affect all meta tags.
 		 *
 		 * @var array
 		 */
 		$meta_tags = apply_filters( 'ninecodes_social_manager_site_meta_tags', array(
-			'site_name' => $this->metas->get_site_name(),
-			'site_title' => $this->metas->get_site_title(),
-			'site_description' => $this->metas->get_site_description(),
-			'site_url' => $this->metas->get_site_url(),
-			'site_image' => $this->metas->get_site_image(),
+			'site_name' => $this->meta->get_site_name(),
+			'site_title' => $this->meta->get_site_title(),
+			'site_description' => $this->meta->get_site_description(),
+			'site_url' => $this->meta->get_site_url(),
+			'site_image' => $this->meta->get_site_image(),
 		), null );
 
 		/**
 		 * Filter Open Graph meta tags generated in home and archive page.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta tags to filter.
 		 *
@@ -149,7 +149,7 @@ final class WPHead {
 		/**
 		 * Filter Twitter Cards meta tags generated in home and archive page.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta tags to filter.
 		 *
@@ -175,14 +175,14 @@ final class WPHead {
 	 * of any Post Types.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Use $this->metas property to access the Metas class method.
+	 * @since 1.0.6 - Use $this->meta property to access the Meta class method.
 	 * @access public
 	 *
 	 * @return void
 	 */
 	public function post_meta_tags() {
 
-		if ( ! is_singular() || is_attachment() || ! $this->metas->is_meta_enabled() ) {
+		if ( ! is_singular() || is_attachment() || ! $this->meta->is_meta_enabled() ) {
 			return;
 		}
 
@@ -191,21 +191,21 @@ final class WPHead {
 		/**
 		 * Filter social media meta tags in the single post.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context is `null`. Filter will affect all meta tags.
 		 *
 		 * @var array
 		 */
 		$meta_tags = apply_filters( 'ninecodes_social_manager_post_meta_tags', array(
-			'site_name' => $this->metas->get_site_name(),
-			'post_title' => $this->metas->get_post_title( $post_id ),
-			'post_description' => $this->metas->get_post_description( $post_id ),
-			'post_url' => $this->metas->get_post_url( $post_id ),
-			'post_image' => $this->metas->get_post_image( $post_id ),
-			'post_author' => $this->metas->get_post_author( $post_id ),
-			'post_section' => $this->metas->get_post_section( $post_id ),
-			'post_tags' => $this->metas->get_post_tags( $post_id ),
+			'site_name' => $this->meta->get_site_name(),
+			'post_title' => $this->meta->get_post_title( $post_id ),
+			'post_description' => $this->meta->get_post_description( $post_id ),
+			'post_url' => $this->meta->get_post_url( $post_id ),
+			'post_image' => $this->meta->get_post_image( $post_id ),
+			'post_author' => $this->meta->get_post_author( $post_id ),
+			'post_section' => $this->meta->get_post_section( $post_id ),
+			'post_tags' => $this->meta->get_post_tags( $post_id ),
 			'post_published_time' => get_post_time( 'c', true ),
 			'post_modified_time' => get_post_modified_time( 'c', true ),
 		), null );
@@ -213,7 +213,7 @@ final class WPHead {
 		/**
 		 * Filter Open Graph meta tags in the single post.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta tags to filter.
 		 *
@@ -224,7 +224,7 @@ final class WPHead {
 		/**
 		 * Filter Twitter Cards meta tags in the single post.
 		 *
-		 * @since 1.1.3
+		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta tags to filter..
 		 *

@@ -110,7 +110,7 @@ final class Helps {
 		);
 
 		$this->screen->add_help_tab( array(
-			'title'    => esc_html__( 'Metas', 'ninecodes-social-manager' ),
+			'title'    => esc_html__( 'Meta', 'ninecodes-social-manager' ),
 			'id'       => 'metas',
 			'callback' => array( $this, 'help_content' ),
 			)
@@ -149,6 +149,8 @@ final class Helps {
 
 		if ( 'accounts' === $tab['id'] ) {
 			$content .= '<p>' . esc_html__( 'You might have registered one or more accounts (e.g. Facebook page, a Twitter profile, a Google+ page, etc.) to represent this website presence in the some social media sites.', 'ninecodes-social-manager' ) . '</p>';
+
+			// translators: %s will be replaced with "Widget" and the widget admin URL.
 			$content .= '<p>' . sprintf( esc_html__( 'You can add username of these profiles and pages in the Account tab input fields. The added profiles and pages can be displayed through the "Social Profiles" widget which you can find in the %s admin page.', 'ninecodes-social-manager' ), '<a href="' . esc_url( get_admin_url() ) . 'widgets.php">Widgets</a>' ) . '</p>';
 			$content .= '<p>' . esc_html__( 'You must click the Save Changes button at the bottom of the screen for the new settings to take effect.', 'ninecodes-social-manager' ) . '</p>';
 		}
@@ -160,7 +162,9 @@ final class Helps {
 		}
 
 		if ( 'metas' === $tab['id'] ) {
-			$content .= '<p>' . sprintf( esc_html__( 'In the Metas setting tab, you can configure the social meta tags such as Open Graph and Twitter Cards added in this website %s tag.', 'ninecodes-social-manager' ), '<code>head</code>' ) . '</p>';
+
+			// translators: %s will be replaced with `<code>head</code>`.
+			$content .= '<p>' . sprintf( esc_html__( 'In the Meta setting tab, you can configure the social meta tags such as Open Graph and Twitter Cards added in this website %s tag.', 'ninecodes-social-manager' ), '<code>head</code>' ) . '</p>';
 			$content .= '<p>' . esc_html__( ' These meta tags may be used to serve customized title, description, image and other things that will represent this website in the social network sites with a more compelling presentation format.', 'ninecodes-social-manager' ) . '</p>';
 			$content .= '<p>' . sprintf( esc_html__( 'If this functionality has been served through a 3rd-party plugin, you may disable it to avoid conflicts with the plugin by unticking the "Enable Meta Tags" option.', 'ninecodes-social-manager' ), '<code>head</code>' ) . '</p>';
 			$content .= '<p>' . esc_html__( 'You must click the Save Changes button at the bottom of the screen for the new settings to take effect.', 'ninecodes-social-manager' ) . '</p>';

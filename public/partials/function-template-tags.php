@@ -27,7 +27,8 @@ if ( ! function_exists( 'get_the_site_social_profiles' ) ) {
 			'view' => 'icon',
 		) );
 
-		$site_profiles = get_option( 'ncsocman_profiles', array() );
+		$site_profiles = get_option( 'ncsocman_profiles' );
+		$site_profiles = array_filter( $site_profiles );
 
 		if ( is_array( $site_profiles ) && ! empty( $site_profiles ) ) :
 
@@ -42,7 +43,7 @@ if ( ! function_exists( 'get_the_site_social_profiles' ) ) {
 
 				$username = esc_attr( $value );
 
-				if ( empty( $username ) ) {
+				if ( ! $username ) {
 					continue;
 				}
 
@@ -56,7 +57,7 @@ if ( ! function_exists( 'get_the_site_social_profiles' ) ) {
 					case 'text':
 						$return .= sprintf( '<a class="%1$s-profiles__item item-%2$s" href="%3$s" target="_blank">%4$s</a>', $prefix, $site, $url, $label );
 						break;
-					case 'icon-text':
+					case 'icon_text':
 						$return .= sprintf( '<a class="%1$s-profiles__item item-%2$s" href="%3$s" target="_blank"><span class="%1$s-profiles__item-icon">%4$s</span><span class="%1$s-profiles__item-text">%5$s</span></a>', $prefix, $site, $url, $icon, $label );
 						break;
 					default:

@@ -21,33 +21,6 @@ if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
 final class User {
 
 	/**
-	 * The plugin slug (unique identifier).
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $plugin_slug;
-
-	/**
-	 * The plugin option name or meta key prefix.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $option_slug;
-
-	/**
-	 * The plugin version.
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 * @var string
-	 */
-	protected $version;
-
-	/**
 	 * The plugin url path relative to the current file.
 	 *
 	 * @since 1.0.0
@@ -68,10 +41,7 @@ final class User {
 	 */
 	public function __construct( Plugin $plugin ) {
 
-		$this->plugin_slug = $plugin->get_slug();
-		$this->option_slug = $plugin->get_opts();
-		$this->version = $plugin->get_version();
-
+		$this->plugin = $plugin;
 		$this->path_url = plugin_dir_url( dirname( __FILE__ ) );
 
 		$this->hooks();
@@ -110,7 +80,7 @@ final class User {
 	 */
 	public function add_social_profiles( $user ) {
 
-		$meta = get_the_author_meta( $this->option_slug, $user->ID );
+		$meta = get_the_author_meta( $this->plugin->option_slug, $user->ID );
 		$profiles = Options::social_profiles();
 		?>
 
@@ -130,7 +100,7 @@ final class User {
 			<tr>
 				<th><label for="<?php echo esc_attr( "field-user-{$key}" ); ?>"><?php echo esc_html( $label ); ?></label></th>
 				<td>
-					<input type="text" name="<?php echo esc_attr( "{$this->option_slug}[{$key}]" ); ?>" id="<?php echo esc_attr( "field-user-{$key}" ); ?>" value="<?php echo esc_attr( $value ); ?>" class="regular-text account-profile-control code" data-url="<?php echo esc_attr( $props['url'] ); ?>">
+					<input type="text" name="<?php echo esc_attr( "{$this->plugin->option_slug}[{$key}]" ); ?>" id="<?php echo esc_attr( "field-user-{$key}" ); ?>" value="<?php echo esc_attr( $value ); ?>" class="regular-text account-profile-control code" data-url="<?php echo esc_attr( $props['url'] ); ?>">
 					<?php if ( isset( $data['description'] ) && ! empty( $data['description'] ) ) : ?>
 					<p class="description"><?php echo wp_kses_post( $data['description'] ); ?></p>
 					<?php endif; ?>
@@ -159,7 +129,7 @@ final class User {
 			wp_die( esc_html__( 'Bummer! you do not have the authority to save this inputs.', 'ninecodes-social-manager' ) );
 		}
 
-		$profiles = (array) $_POST[ $this->option_slug ];
+		$profiles = (array) $_POST[ $this->plugin->option_slug ];
 
 		foreach ( $profiles as $key => $value ) {
 			$key = sanitize_key( $key );
@@ -167,7 +137,7 @@ final class User {
 		}
 
 		if ( current_user_can( 'edit_user', $user_id ) ) {
-			update_user_meta( $user_id, $this->option_slug, $profiles );
+			update_user_meta( $user_id, $this->plugin->option_slug, $profiles );
 		}
 	}
 
@@ -197,6 +167,6 @@ final class User {
 	 */
 	public function enqueue_scripts() {
 		$file = 'preview-profile';
-		wp_enqueue_script( "{$this->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.min.js", array( 'backbone' ), $this->version, true );
+		wp_enqueue_script( "{$this->plugin->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.min.js", array( 'backbone' ), $this->plugin->version, true );
 	}
 }

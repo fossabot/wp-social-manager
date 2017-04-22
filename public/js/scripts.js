@@ -49,6 +49,6 @@ jQuery(function( $ ) {
 		}
 	}
 
-	$( 'body' ).on( 'click', '[data-social-manager="ButtonsContent"] a', buttonDialog );
-	$( 'body' ).on( 'click', '[data-social-manager="ButtonsImage"] a', buttonDialog );
+	$( 'body' ).on( 'click', '[data-social-manager="button-content"] a', buttonDialog );
+	$( 'body' ).on( 'click', '[data-social-manager="button-image"] a', buttonDialog );
 });
