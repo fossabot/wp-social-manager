@@ -554,6 +554,7 @@ module.exports = function(grunt) {
 		'shell:phpunit',
 		'addtextdomain',
 		'checktextdomain',
+		'version',
 		'makepot'
 	]);
 };

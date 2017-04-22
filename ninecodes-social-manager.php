@@ -3,7 +3,7 @@
  * Plugin Name: Social Media Manager
  * Plugin URI: http://wordpress.org/plugins/ninecodes-social-manager
  * Description: Lightweight, clean and optimized social media plugin for WordPress.
- * Version: 1.2.0-alpha.1
+ * Version: 2.0.0-alpha.2
  * Author: NineCodes
  * Author URI: https://profiles.wordpress.org/ninecodes
  * License: GPL-2.0+
