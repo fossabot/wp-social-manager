@@ -301,12 +301,14 @@ final class Public_View {
 			$post_types_content = $this->plugin->get_option( 'buttons_content', 'post_types' );
 			$post_types_image = isset( $buttons_image['enabled'] ) && 'on' === $buttons_image['enabled'] ? $buttons_image['post_types'] : array();
 
-			$post_types = array_unique( array_merge(
-				array_filter( $post_types_content ),
-				array_filter( $post_types_image )
+			$post_types = array_keys( array_unique(
+				array_merge(
+					array_filter( $post_types_content ),
+					array_filter( $post_types_image )
+				)
 			) );
 
-			if ( empty( array_keys( $post_types ) ) ) {
+			if ( empty( $post_types ) ) {
 				$active = false;
 			}
 		}
