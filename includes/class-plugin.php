@@ -52,15 +52,6 @@ final class Plugin {
 	public $version = '1.2.0-alpha.1';
 
 	/**
-	 * The Theme_Support class instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @var Theme_Support
-	 */
-	public $theme_support;
-
-	/**
 	 * The path directory relative to the current file.
 	 *
 	 * @since 1.0.0
