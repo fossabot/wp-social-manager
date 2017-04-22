@@ -266,7 +266,7 @@ final class Public_View {
 	 */
 	public function is_json_mode() {
 
-		$button_mode = $this->plugin->get_option( 'mode', 'buttons_mode' );
+		$button_mode = $this->plugin->get_option( 'mode', 'button_mode' );
 		$theme_support = $this->plugin->theme_support()->is( 'button_mode' );
 
 		if ( 'json' === $theme_support || 'json' === $button_mode ) {
