@@ -17,12 +17,6 @@
   ],
   "homepage": "https://wordpress.org/plugins/ninecodes-social-manager/",
   "license": "GPL-2.0+",
-  "repositories": [
-		{
-			"type": "git",
-			"url": "https://github.com/ninecodes/social-manager.git"
-		}
-	],
   "dist": {
     "url": "https://downloads.wordpress.org/plugin/ninecodes-social-manager.1.1.3.zip",
     "type": "zip"
@@ -37,5 +31,8 @@
   {
     "name": "Thoriq Firdaus",
     "homepage": "https://github.com/tfirdaus"
-  }]
+  }],
+  "require-dev": {
+    "satooshi/php-coveralls": "dev-master"
+  }
 }
