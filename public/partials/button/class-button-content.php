@@ -62,8 +62,8 @@ class Button_Content extends Button {
 	function __construct( Plugin $plugin ) {
 		parent::__construct( $plugin );
 
-		$this->view = $this->plugin->get_option( 'buttons_content', 'view' );
-		$this->placement = $this->plugin->get_option( 'buttons_content', 'placement' );
+		$this->view = $this->plugin->get_option( 'button_content', 'view' );
+		$this->placement = $this->plugin->get_option( 'button_content', 'placement' );
 		$this->hooks();
 	}
 
@@ -170,7 +170,7 @@ class Button_Content extends Button {
 
 		if ( ! empty( $includes ) ) :
 
-			$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
+			$heading = $this->plugin->get_option( 'button_content', 'heading' );
 			$heading = esc_html( $heading );
 
 			if ( ! empty( $heading ) ) {
@@ -220,7 +220,7 @@ class Button_Content extends Button {
 
 		<script type="text/html" id="tmpl-buttons-content"><?php
 
-		$heading = $this->plugin->get_option( 'buttons_content', 'heading' );
+		$heading = $this->plugin->get_option( 'button_content', 'heading' );
 		$heading = wp_kses( $heading, array() );
 
 		if ( ! empty( $heading ) ) {
@@ -234,7 +234,7 @@ class Button_Content extends Button {
 		} ?><div class="<?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list <?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="button-content"><?php
 
 		$prefix = $this->attr_prefix;
-		$includes = (array) $this->plugin->get_option( 'buttons_content', 'include' );
+		$includes = (array) $this->plugin->get_option( 'button_content', 'include' );
 
 foreach ( $includes as $site => $value ) :
 
@@ -306,7 +306,7 @@ foreach ( $includes as $site => $value ) :
 			return false;
 		}
 
-		$post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_type' );
+		$post_types = (array) $this->plugin->get_option( 'button_content', 'post_type' );
 
 		/**
 		 * If post types are not selected.
@@ -318,13 +318,13 @@ foreach ( $includes as $site => $value ) :
 			return false;
 		}
 
-		$includes = (array) $this->plugin->get_option( 'buttons_content', 'include' );
+		$includes = (array) $this->plugin->get_option( 'button_content', 'include' );
 
 		if ( empty( $includes ) ) {
 			return false;
 		}
 
-		$placement = $this->plugin->get_option( 'buttons_content', 'placement' );
+		$placement = $this->plugin->get_option( 'button_content', 'placement' );
 
 		if ( ! in_array( $placement, array_keys( Options::button_placements() ), true ) ) {
 			return false;

@@ -267,7 +267,7 @@ final class Public_View {
 	 */
 	public function is_json_mode() {
 
-		$button_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
+		$button_mode = $this->plugin->get_option( 'mode', 'buttons_mode' );
 		$theme_support = $this->plugin->theme_support()->is( 'button_mode' );
 
 		if ( 'json' === $theme_support || 'json' === $button_mode ) {
@@ -296,9 +296,9 @@ final class Public_View {
 
 		if ( is_singular() ) {
 
-			$buttons_image = $this->plugin->get_option( 'buttons_image' ); // Get "Buttons Image" options.
+			$buttons_image = $this->plugin->get_option( 'button_image' ); // Get "Buttons Image" options.
 
-			$post_types_content = $this->plugin->get_option( 'buttons_content', 'post_type' );
+			$post_types_content = $this->plugin->get_option( 'button_content', 'post_type' );
 			$post_types_image = isset( $buttons_image['enable'] ) && 'on' === $buttons_image['enable'] ? $buttons_image['post_type'] : array();
 
 			$post_types = array_keys( array_unique(

@@ -78,7 +78,7 @@ class Endpoint {
 			return $output;
 		}
 
-		$includes = (array) $this->plugin->get_option( 'buttons_content', 'include' );
+		$includes = (array) $this->plugin->get_option( 'button_content', 'include' );
 		$sites = Options::button_sites( 'content' );
 
 		foreach ( $sites as $site => $label ) {
@@ -107,7 +107,7 @@ class Endpoint {
 					break;
 
 				case 'twitter':
-					$profiles = $this->plugin->get_option( 'profiles', 'twitter' );
+					$profiles = $this->plugin->get_option( 'profile', 'twitter' );
 
 					$args = array(
 						'text' => $meta['post_title'],
@@ -371,7 +371,7 @@ class Endpoint {
 		$post_title = $this->meta->get_post_title( $post_id );
 		$post_description = $this->meta->get_post_description( $post_id );
 
-		if ( 'shortlink' === $this->plugin->get_option( 'modes', 'link_mode' ) ) {
+		if ( 'shortlink' === $this->plugin->get_option( 'mode', 'link_mode' ) ) {
 			$post_url = wp_get_shortlink( $post_id );
 		} else {
 			$post_url = $this->meta->get_post_url( $post_id );

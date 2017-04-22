@@ -10,7 +10,7 @@ use \NineCodes\SocialManager;
 use \NineCodes\SocialManager\Options as Options;
 use \NineCodes\SocialManager\Helpers as Helpers;
 
-if ( ! function_exists( 'get_the_site_social_profiles' ) ) {
+if ( ! function_exists( 'get_the_site_social_profile' ) ) {
 
 	/**
 	 * Function to retrieve the author social media profile links.
@@ -20,17 +20,17 @@ if ( ! function_exists( 'get_the_site_social_profiles' ) ) {
 	 * @param array $args The social profiles arguments.
 	 * @return string Formatted HTML of the author social profile links.
 	 */
-	function get_the_site_social_profiles( $args = array() ) {
+	function get_the_site_social_profile( $args = array() ) {
 
 		$return = '';
 		$args = wp_parse_args( $args, array(
 			'view' => 'icon',
 		) );
 
-		$site_profiles = get_option( 'ncsocman_profiles' );
-		$site_profiles = array_filter( $site_profiles );
+		$site_profile = get_option( 'ncsocman_profile' );
+		$site_profile = array_filter( $site_profile );
 
-		if ( is_array( $site_profiles ) && ! empty( $site_profiles ) ) :
+		if ( is_array( $site_profile ) && ! empty( $site_profile ) ) :
 
 			$profiles = Options::social_profiles();
 			$views    = Options::button_views();
@@ -39,7 +39,7 @@ if ( ! function_exists( 'get_the_site_social_profiles' ) ) {
 			$view = array_key_exists( $args['view'], $views ) ? $args['view'] : 'icon';
 
 			$return .= "<div class=\"{$prefix}-profiles social-manager-profiles--{$view}\">";
-			foreach ( $site_profiles as $key => $value ) {
+			foreach ( $site_profile as $key => $value ) {
 
 				$username = esc_attr( $value );
 
@@ -72,7 +72,7 @@ if ( ! function_exists( 'get_the_site_social_profiles' ) ) {
 	}
 } // End if().
 
-if ( ! function_exists( 'the_site_social_profiles' ) ) {
+if ( ! function_exists( 'the_site_social_profile' ) ) {
 
 	/**
 	 * Function to retrieve the author social media profile links.
@@ -82,15 +82,15 @@ if ( ! function_exists( 'the_site_social_profiles' ) ) {
 	 * @param array $args The social profiles arguments.
 	 * @return void
 	 */
-	function the_site_social_profiles( $args = array() ) {
+	function the_site_social_profile( $args = array() ) {
 
-		$profiles = get_the_site_social_profiles( $args );
+		$profiles = get_the_site_social_profile( $args );
 
 		echo SocialManager\kses_icon( $profiles ); // WPCS: XSS ok.
 	}
 }
 
-if ( ! function_exists( 'get_the_author_social_profiles' ) ) {
+if ( ! function_exists( 'get_the_author_social_profile' ) ) {
 
 	/**
 	 * Function to retrieve the author social media profile links.
@@ -100,7 +100,7 @@ if ( ! function_exists( 'get_the_author_social_profiles' ) ) {
 	 * @param integer $user_id The Author ID.
 	 * @return string Formatted HTML of the author social profile links.
 	 */
-	function get_the_author_social_profiles( $user_id = null ) {
+	function get_the_author_social_profile( $user_id = null ) {
 
 		$return = '';
 
@@ -141,7 +141,7 @@ if ( ! function_exists( 'get_the_author_social_profiles' ) ) {
 	}
 } // End if().
 
-if ( ! function_exists( 'the_author_social_profiles' ) ) {
+if ( ! function_exists( 'the_author_social_profile' ) ) {
 
 	/**
 	 * Function to print the author social media profile links.
@@ -151,9 +151,9 @@ if ( ! function_exists( 'the_author_social_profiles' ) ) {
 	 * @param integer $user_id The Author ID.
 	 * @return void
 	 */
-	function the_author_social_profiles( $user_id = null ) {
+	function the_author_social_profile( $user_id = null ) {
 
-		$profiles = get_the_author_social_profiles( $user_id );
+		$profiles = get_the_author_social_profile( $user_id );
 
 		echo SocialManager\kses_icon( $profiles ); // WPCS: XSS ok.
 	}

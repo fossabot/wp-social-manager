@@ -64,10 +64,10 @@ final class Plugin {
 	 * An array of option added by the plugin.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 * @var array
 	 */
-	protected $options;
+	public $options;
 
 	/**
 	 * Constructor.
@@ -80,12 +80,12 @@ final class Plugin {
 	function __construct() {
 
 		$this->options = array(
-			'profiles' => "{$this->option_slug}_profiles",
-			'buttons_content' => "{$this->option_slug}_buttons_content",
-			'buttons_image' => "{$this->option_slug}_buttons_image",
-			'metas_site' => "{$this->option_slug}_metas_site",
+			'profile' => "{$this->option_slug}_profile",
+			'button_content' => "{$this->option_slug}_button_content",
+			'button_image' => "{$this->option_slug}_button_image",
+			'meta_site' => "{$this->option_slug}_meta_site",
 			'enqueue' => "{$this->option_slug}_enqueue",
-			'modes' => "{$this->option_slug}_modes",
+			'mode' => "{$this->option_slug}_mode",
 		);
 	}
 

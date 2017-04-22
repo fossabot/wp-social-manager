@@ -152,7 +152,7 @@ class Test_Public_View extends WP_UnitTestCase {
 		$post_id = $this->factory()->post->create();
 
 		// Set the default value.
-		update_option( $this->plugin->option_slug . '_enqueue', array(
+		update_option( $this->plugin->options['enqueue'], array(
 			'enable_stylesheet' => 'on',
 		) );
 
@@ -182,14 +182,14 @@ class Test_Public_View extends WP_UnitTestCase {
 		 * - Social Buttons Image is disabled.
 		 * ============================================================
 		 */
-		update_option( $this->plugin->option_slug . '_buttons_image', array(
+		update_option( $this->plugin->options['button_image'], array(
 			'enable' => '',
 			'post_type' => array(
 				'post' => false,
 				'page' => false,
 			),
 		) );
-		update_option( $this->plugin->option_slug . '_buttons_content', array(
+		update_option( $this->plugin->options['button_content'], array(
 			'post_type' => array(
 				'post' => false,
 				'page' => false,
@@ -208,7 +208,7 @@ class Test_Public_View extends WP_UnitTestCase {
 		 * should be shown in 'post'.
 		 * ============================================================
 		 */
-		update_option( $this->plugin->option_slug . '_buttons_image', array(
+		update_option( $this->plugin->options['button_image'], array(
 			'enable' => 'on',
 			'post_type' => array(
 				'post' => 'on',
@@ -229,7 +229,7 @@ class Test_Public_View extends WP_UnitTestCase {
 		$this->assertTrue( $this->public->is_load_stylesheet() );
 
 		// Disable Stylesheet.
-		update_option( $this->plugin->option_slug . '_enqueue', array(
+		update_option( $this->plugin->options['enqueue'], array(
 			'enable_stylesheet' => 'on',
 		) );
 		$this->assertTrue( $this->public->is_load_stylesheet() );

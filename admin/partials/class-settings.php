@@ -186,12 +186,12 @@ final class Settings {
 
 		add_action( 'init', array( $this, 'frontend_setups' ) );
 
-		add_action( 'init', array( $this, 'fields_profiles' ), 15 );
-		add_action( 'init', array( $this, 'fields_buttons_content' ), 15 );
-		add_action( 'init', array( $this, 'fields_buttons_image' ), 15 );
-		add_action( 'init', array( $this, 'fields_metas_site' ), 15 );
+		add_action( 'init', array( $this, 'fields_profile' ), 15 );
+		add_action( 'init', array( $this, 'fields_button_content' ), 15 );
+		add_action( 'init', array( $this, 'fields_button_image' ), 15 );
+		add_action( 'init', array( $this, 'fields_meta_site' ), 15 );
 		add_action( 'init', array( $this, 'fields_enqueue' ), 15 );
-		add_action( 'init', array( $this, 'fields_modes' ), 15 );
+		add_action( 'init', array( $this, 'fields_mode' ), 15 );
 
 		add_action( 'admin_menu', array( $this, 'menu' ) );
 		add_action( 'admin_init', array( $this, 'setups' ) );
@@ -359,7 +359,7 @@ final class Settings {
 						'enqueue' => array(
 							'validate_callback' => array( $this->validate, 'setting_advanced' ),
 						),
-						'mode' => array(
+						'modes' => array(
 							'title' => esc_html__( 'Mode', 'ninecodes-social-manager' ),
 							'description' => esc_html__( 'Configure the modes that work best for your website.', 'ninecodes-social-manager' ),
 							'validate_callback' => array( $this->validate, 'setting_mode' ),
@@ -405,7 +405,7 @@ final class Settings {
 	 *
 	 * @return array The array of fields added in the Profiles section.
 	 */
-	public function fields_profiles() {
+	public function fields_profile() {
 
 		$setting_fields = array();
 
@@ -460,7 +460,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_default( "{$this->plugin->option_slug}_profiles", $setting_fields );
+		$this->option_default( $this->plugin->options['profile'], $setting_fields );
 
 		/**
 		 * Regiter the fields in "Accounts" > "Profiles".
@@ -487,7 +487,7 @@ final class Settings {
 	 *
 	 * @return array
 	 */
-	public function fields_buttons_content() {
+	public function fields_button_content() {
 
 		/**
 		 * The list of buttons sites registered in the Content.
@@ -569,7 +569,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_default( "{$this->plugin->option_slug}_buttons_content", $setting_fields );
+		$this->option_default( $this->plugin->options['button_content'], $setting_fields );
 
 		/**
 		 * Register the fields in "Buttons" > "Buttons Content".
@@ -596,7 +596,7 @@ final class Settings {
 	 *
 	 * @return array
 	 */
-	public function fields_buttons_image() {
+	public function fields_button_image() {
 
 		/**
 		 * The list of buttons sites registered in the Image.
@@ -676,7 +676,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_default( "{$this->plugin->option_slug}_buttons_image", $setting_fields );
+		$this->option_default( $this->plugin->options['button_image'], $setting_fields );
 
 		/**
 		 * Register the fields in "Buttons" > "Buttons Image".
@@ -701,7 +701,7 @@ final class Settings {
 	 *
 	 * @return array
 	 */
-	public function fields_metas_site() {
+	public function fields_meta_site() {
 
 		$setting_fields = array(
 			'enable' => array(
@@ -777,7 +777,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_default( "{$this->plugin->option_slug}_metas", $setting_fields );
+		$this->option_default( $this->plugin->options['meta_site'], $setting_fields );
 
 		/**
 		 * Register the fields in "Meta" > "Meta Site".
@@ -846,7 +846,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_default( "{$this->plugin->option_slug}_enqueue", $setting_fields );
+		$this->option_default( $this->plugin->options['enqueue'], $setting_fields );
 
 		/**
 		 * Register the fields in "Advanced" > "Enqueue".
@@ -872,7 +872,7 @@ final class Settings {
 	 *
 	 * @return array
 	 */
-	public function fields_modes() {
+	public function fields_mode() {
 
 		$setting_fields = array();
 
@@ -920,7 +920,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_default( "{$this->plugin->option_slug}_modes", $setting_fields );
+		$this->option_default( $this->plugin->options['mode'], $setting_fields );
 
 		/**
 		 * Register the fields in "Advanced" > "Enqueue".

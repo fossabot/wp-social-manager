@@ -67,7 +67,7 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Function to test the 'get_the_author_social_profiles'.
+	 * Function to test the 'get_the_author_social_profile'.
 	 *
 	 * @since 1.1.0
 	 * @access public
@@ -76,14 +76,14 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 	 */
 	public function test_get_the_site_social_profile() {
 
-		update_option( 'ncsocman_profiles', array(
+		update_option( $this->plugin->options['profile'], array(
 			'facebook' => 'foo',
 			'twitter' => 'foo',
 			'instagram' => 'foo',
 			'googleplus' => '+foo',
 		) );
 
-		$site_profiles = get_the_site_social_profiles();
+		$site_profiles = get_the_site_social_profile();
 
 		$doc = new \DOMDocument();
 		libxml_use_internal_errors( true );
@@ -112,11 +112,11 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-instagram\" href=\"https://instagram.com/foo\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-instagram\"/></svg></a>", $anchor_html );
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-googleplus\" href=\"https://plus.google.com/+foo\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-googleplus\"/></svg></a>", $anchor_html );
 
-		delete_option( 'ncsocman_profiles' );
+		delete_option( $this->plugin->options['profile'] );
 	}
 
 	/**
-	 * Function to test the 'get_the_author_social_profiles' set with 'text' view.
+	 * Function to test the 'get_the_author_social_profile' set with 'text' view.
 	 *
 	 * @since 1.1.0
 	 * @access public
@@ -125,14 +125,14 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 	 */
 	public function test_get_the_site_social_profile_view_text() {
 
-		update_option( 'ncsocman_profiles', array(
+		update_option( $this->plugin->options['profile'], array(
 			'facebook' => 'foo',
 			'twitter' => 'foo',
 			'instagram' => 'foo',
 			'googleplus' => '+foo',
 		) );
 
-		$site_profiles = get_the_site_social_profiles( array(
+		$site_profiles = get_the_site_social_profile( array(
 			'view' => 'text',
 		) );
 
@@ -155,11 +155,11 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-instagram\" href=\"https://instagram.com/foo\" target=\"_blank\">Instagram</a>", $anchor_html );
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-googleplus\" href=\"https://plus.google.com/+foo\" target=\"_blank\">Google+</a>", $anchor_html );
 
-		delete_option( 'ncsocman_profiles' );
+		delete_option( $this->plugin->options['profile'] );
 	}
 
 	/**
-	 * Function to test the 'get_the_author_social_profiles' set with 'icon-text' view.
+	 * Function to test the 'get_the_author_social_profile' set with 'icon-text' view.
 	 *
 	 * @since 1.1.0
 	 * @access public
@@ -168,12 +168,12 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 	 */
 	public function test_get_the_site_social_profile_view_text_icon() {
 
-		update_option( 'ncsocman_profiles', array(
+		update_option( $this->plugin->options['profile'], array(
 			'facebook' => 'yo',
 			'twitter' => 'yeap',
 		) );
 
-		$site_profiles = get_the_site_social_profiles( array(
+		$site_profiles = get_the_site_social_profile( array(
 			'view' => 'icon_text',
 		) );
 
@@ -195,6 +195,6 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-twitter\" href=\"https://twitter.com/yeap\" target=\"_blank\"><span class=\"{$prefix}-profiles__item-icon\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-twitter\"/></svg></span><span class=\"{$prefix}-profiles__item-text\">Twitter</span></a>", $anchor_html );
 
-		delete_option( 'ncsocman_profiles' );
+		delete_option( $this->plugin->options['profile'] );
 	}
 }

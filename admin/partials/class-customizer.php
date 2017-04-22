@@ -119,9 +119,9 @@ class Customizer {
 	 */
 	public function panel_active_callback() {
 
-		$buttons_image = $this->plugin->get_option( 'buttons_image' );
+		$buttons_image = $this->plugin->get_option( 'button_image' );
 
-		$post_types_content = $this->plugin->get_option( 'buttons_content', 'post_type' );
+		$post_types_content = $this->plugin->get_option( 'button_content', 'post_type' );
 		$post_types_image = isset( $buttons_image['enable'] ) && 'on' === $buttons_image['enable'] ? $buttons_image['post_type'] : array();
 
 		$post_types = array_merge( $post_types_content, $post_types_image );

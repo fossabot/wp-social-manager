@@ -697,7 +697,7 @@ class Meta {
 			return;
 		}
 
-		return $this->plugin->get_option( 'metas_site', $which );
+		return $this->plugin->get_option( 'meta_site', $which );
 	}
 
 	/**

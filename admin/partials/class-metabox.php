@@ -107,7 +107,7 @@ final class Metabox {
 		add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
 
 		// Register sections, settings, and controls.
-		add_action( 'butterbean_register', array( $this, 'register_section_buttons' ), -90, 2 );
+		add_action( 'butterbean_register', array( $this, 'register_section_button' ), -90, 2 );
 		add_action( 'butterbean_register', array( $this, 'register_section_meta' ), -90, 2 );
 	}
 
@@ -141,8 +141,8 @@ final class Metabox {
 	public function register_manager( $butterbean, $post_type ) {
 
 		// List of post types enabled.
-		$post_types = $this->post_types_enabled();
-		$post_types = array_merge( array_values( $post_types['buttons_content'] ), array_values( $post_types['buttons_image'] ) );
+		$enable = $this->post_type_enable();
+		$enable = array_merge( array_values( $enable['button_content'] ), array_values( $enable['button_image'] ) );
 
 		// Load internal post and post type objects.
 		$this->post_data();
@@ -156,7 +156,7 @@ final class Metabox {
 		$butterbean->register_manager( $this->plugin->option_slug,
 			array(
 				'label' => esc_html__( 'Social Media', 'ninecodes-social-manager' ),
-				'post_type'  => array_unique( $post_types ),
+				'post_type'  => array_unique( array_keys( $enable ) ),
 				'context' => 'normal',
 				'priority' => 'low',
 				'capability' => 'publish_posts',
@@ -174,30 +174,30 @@ final class Metabox {
 	 * @param string $post_type  The current Post Type slug.
 	 * @return void
 	 */
-	public function register_section_buttons( $butterbean, $post_type ) {
+	public function register_section_button( $butterbean, $post_type ) {
 
 		// List of post types enabled.
-		$post_types = $this->post_types_enabled();
+		$enable = $this->post_type_enable();
 
 		// Get our custom manager object.
 		$manager = $butterbean->get_manager( $this->plugin->option_slug );
 
 		// Register a section.
-		$manager->register_section( 'buttons',
+		$manager->register_section( 'button',
 			array(
-				'label' => esc_html__( 'Buttons', 'ninecodes-social-manager' ),
+				'label' => esc_html__( 'Button', 'ninecodes-social-manager' ),
 				'icon'  => 'dashicons-thumbs-up',
 			)
 		);
 
-		if ( in_array( $post_type, $post_types['buttons_content'], true ) ) {
+		if ( key_exists( $post_type, $enable['button_content'] ) ) {
 
 			// Register a setting.
-			$manager->register_control( 'buttons_content',
+			$manager->register_control( 'button_content',
 				array(
 					'type' => 'checkbox',
-					'section' => 'buttons',
-					'label' => esc_html__( 'Content Social Media Buttons', 'ninecodes-social-manager' ),
+					'section' => 'button',
+					'label' => esc_html__( 'Social Media Button on the Content', 'ninecodes-social-manager' ),
 					'description' => sprintf(
 						/* translators: %s - the post type label i.e. Post, Page, etc. */
 						esc_html__( 'Display the buttons that allow people to share, like, or save this %s in social media', 'ninecodes-social-manager' ),
@@ -205,7 +205,7 @@ final class Metabox {
 				)
 			);
 
-			$manager->register_setting( 'buttons_content',
+			$manager->register_setting( 'button_content',
 				array(
 					'type' => 'serialize',
 					'default' => 1,
@@ -214,14 +214,14 @@ final class Metabox {
 			);
 		}
 
-		if ( in_array( $post_type, $post_types['buttons_image'], true ) ) {
+		if ( key_exists( $post_type, $enable['button_image'] ) ) {
 
 			// Register a setting.
-			$manager->register_control( 'buttons_image',
+			$manager->register_control( 'button_image',
 				array(
 					'type' => 'checkbox',
-					'section' => 'buttons',
-					'label' => esc_html__( 'Image Social Media Buttons', 'ninecodes-social-manager' ),
+					'section' => 'button',
+					'label' => esc_html__( 'Social Media Button on the Image', 'ninecodes-social-manager' ),
 					'description' => sprintf(
 						/* translators: %s - the post type label i.e. Post, Page, etc. */
 						esc_html__( 'Display the social media buttons that allow people to share, like, or save images of this %s in social media', 'ninecodes-social-manager' ),
@@ -229,7 +229,7 @@ final class Metabox {
 				)
 			);
 
-			$manager->register_setting( 'buttons_image',
+			$manager->register_setting( 'button_image',
 				array(
 					'type' => 'serialize',
 					'default' => 1,
@@ -251,7 +251,7 @@ final class Metabox {
 	 */
 	public function register_section_meta( $butterbean, $post_type ) {
 
-		$meta_enable = (bool) $this->plugin->get_option( 'metas_site', 'enable' );
+		$meta_enable = (bool) $this->plugin->get_option( 'meta_site', 'enable' );
 
 		if ( ! $meta_enable ) {
 			return;
@@ -260,10 +260,10 @@ final class Metabox {
 		// Get our custom manager object.
 		$manager = $butterbean->get_manager( $this->plugin->option_slug );
 
-		$manager->register_section( 'meta_tags',
+		$manager->register_section( 'meta',
 			array(
 				'label' => esc_html__( 'Meta', 'ninecodes-social-manager' ),
-				'icon'  => 'dashicons-editor-code',
+				'icon' => 'dashicons-editor-code',
 			)
 		);
 
@@ -271,7 +271,7 @@ final class Metabox {
 		$manager->register_control( 'post_title',
 			array(
 				'type' => 'text',
-				'section' => 'meta_tags',
+				'section' => 'meta',
 				'label' => esc_html__( 'Title', 'ninecodes-social-manager' ),
 				'description' => sprintf(
 					/* translators: %s - the post type label i.e. Post, Page, etc. */
@@ -295,7 +295,7 @@ final class Metabox {
 		$manager->register_control( 'post_excerpt',
 			array(
 				'type' => 'textarea',
-				'section' => 'meta_tags',
+				'section' => 'meta',
 				'label' => esc_html__( 'Description', 'ninecodes-social-manager' ),
 				'description' => sprintf(
 					/* translators: %s - the post type label i.e. Post, Page, etc. */
@@ -319,7 +319,7 @@ final class Metabox {
 		$manager->register_control( 'post_thumbnail',
 			array(
 				'type' => 'image',
-				'section' => 'meta_tags',
+				'section' => 'meta',
 				'label' => esc_html__( 'Image', 'ninecodes-social-manager' ),
 				'description' => sprintf(
 					/* translators: %s - the post type label i.e. Post, Page, etc. */
@@ -369,7 +369,7 @@ final class Metabox {
 			$manager->register_control( 'post_section',
 				array(
 					'type' => 'select-group',
-					'section' => 'meta_tags',
+					'section' => 'meta',
 					'label' => esc_html__( 'Section', 'ninecodes-social-manager' ),
 					'description' => sprintf(
 						/* translators: %s - the post type label i.e. Post, Page, etc. */
@@ -392,7 +392,7 @@ final class Metabox {
 			$manager->register_control( 'post_tag',
 				array(
 					'type' => 'select',
-					'section' => 'meta_tags',
+					'section' => 'meta',
 					'label' => esc_html__( 'Tags', 'ninecodes-social-manager' ),
 					'description' => sprintf(
 						/* translators: %s - the post type label i.e. Post, Page, etc. */
@@ -491,20 +491,18 @@ final class Metabox {
 	 *
 	 * @return array
 	 */
-	protected function post_types_enabled() {
+	protected function post_type_enable() {
 
-		$buttons_content_post_types = (array) $this->plugin->get_option( 'buttons_content', 'post_type' );
+		$button_content_post_type = (array) $this->plugin->get_option( 'button_content', 'post_type' );
+		$button_image_post_type = array();
 
-		$buttons_image_post_types = array();
-		$buttons_image_enabled = (bool) $this->plugin->get_option( 'buttons_image', 'enable' );
-
-		if ( true === $buttons_image_enabled ) {
-			$buttons_image_post_types = (array) $this->plugin->get_option( 'buttons_image', 'post_type' );
+		if ( (bool) $this->plugin->get_option( 'button_image', 'enable' ) ) {
+			$button_image_post_type = (array) $this->plugin->get_option( 'button_image', 'post_type' );
 		}
 
 		return array(
-			'buttons_content' => $buttons_content_post_types,
-			'buttons_image' => $buttons_image_post_types,
+			'button_content' => $button_content_post_type,
+			'button_image' => $button_image_post_type,
 		);
 	}
 

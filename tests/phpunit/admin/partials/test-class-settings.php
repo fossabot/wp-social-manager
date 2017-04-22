@@ -48,12 +48,12 @@ class Test_Settings extends WP_UnitTestCase {
 
 		$this->assertEquals( 10, has_action( 'init', array( $this->settings, 'frontend_setups' ) ) );
 
-		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_profiles' ) ) );
-		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_buttons_content' ) ) );
-		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_buttons_image' ) ) );
-		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_metas_site' ) ) );
+		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_profile' ) ) );
+		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_button_content' ) ) );
+		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_button_image' ) ) );
+		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_meta_site' ) ) );
 		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_enqueue' ) ) );
-		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_modes' ) ) );
+		$this->assertEquals( 15, has_action( 'init', array( $this->settings, 'fields_mode' ) ) );
 
 		$this->assertEquals( 10, has_action( 'admin_menu', array( $this->settings, 'menu' ) ) );
 		$this->assertEquals( 10, has_action( 'admin_init', array( $this->settings, 'setups' ) ) );

@@ -140,7 +140,7 @@ class Social_Profiles extends WP_Widget {
 		 *
 		 * @var array
 		 */
-		$site_profiles = $this->plugin->get_option( 'profiles' ); ?>
+		$site_profiles = $this->plugin->get_option( 'profile' ); ?>
 
 		<div class="<?php echo esc_attr( $this->widget_id ); ?>">
 			<p>
@@ -226,7 +226,7 @@ class Social_Profiles extends WP_Widget {
 		 *
 		 * @var array
 		 */
-		$site_profiles = (array) $this->plugin->get_option( 'profiles' );
+		$site_profiles = (array) $this->plugin->get_option( 'profile' );
 
 		foreach ( $site_profiles as $key => $value ) {
 			if ( empty( $value ) ) {
@@ -264,7 +264,7 @@ class Social_Profiles extends WP_Widget {
 		 *
 		 * @var array
 		 */
-		$site_profiles = (array) $this->plugin->get_option( 'profiles' );
+		$site_profiles = (array) $this->plugin->get_option( 'profile' );
 
 		if ( ! empty( $widget_title ) ) {
 			$widget_title = apply_filters( 'widget_title', $widget_title );

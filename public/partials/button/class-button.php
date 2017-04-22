@@ -263,7 +263,7 @@ abstract class Button implements Button_Interface {
 	 */
 	public function get_mode() {
 
-		$button_mode = $this->plugin->get_option( 'modes', 'buttons_mode' );
+		$button_mode = $this->plugin->get_option( 'mode', 'buttons_mode' );
 		$theme_support = $this->plugin->theme_support()->is( 'button_mode' );
 
 		if ( 'json' === $theme_support || 'json' === $button_mode ) {

@@ -124,7 +124,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 */
 	public function test_plugin_get_option_buttons_content() {
 
-		$buttons_content = $this->plugin->get_option( 'buttons_content', 'include' );
+		$buttons_content = $this->plugin->get_option( 'button_content', 'include' );
 
 		// Count, in case we will add more in the future.
 		$this->assertEquals( 8, count( $buttons_content ) );
@@ -149,7 +149,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 */
 	public function test_plugin_get_option_buttons_image() {
 
-		$buttons_image = $this->plugin->get_option( 'buttons_image', 'include' );
+		$buttons_image = $this->plugin->get_option( 'button_image', 'include' );
 
 		// Count, in case we will add more in the future.
 		$this->assertEquals( 1, count( $buttons_image ) );
