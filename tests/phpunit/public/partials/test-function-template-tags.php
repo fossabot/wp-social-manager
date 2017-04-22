@@ -159,7 +159,7 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Function to test the 'get_the_author_social_profile' set with 'icon-text' view.
+	 * Function to test the 'get_the_author_social_profile' set with 'icon_text' view.
 	 *
 	 * @since 1.1.0
 	 * @access public

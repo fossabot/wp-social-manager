@@ -364,7 +364,7 @@ class Social_Profiles extends WP_Widget {
 		$templates = array(
 			'icon' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'>{$args['icon']}</a>",
 			'text' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'>{$args['label']}</a>",
-			'icon-text' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'><span class='{$prefix}-profiles__item-icon'>{$args['icon']}</span><span class='{$prefix}-profiles__item-text'>{$args['label']}</span></a>",
+			'icon_text' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'><span class='{$prefix}-profiles__item-icon'>{$args['icon']}</span><span class='{$prefix}-profiles__item-text'>{$args['label']}</span></a>",
 		);
 
 		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';
