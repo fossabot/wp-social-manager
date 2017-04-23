@@ -10,7 +10,7 @@
 
 namespace NineCodes\SocialManager;
 
-if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
@@ -63,6 +63,7 @@ final class Fields extends WPSettings\Fields {
 		add_action( "{$this->screen}_field_image", array( $this, 'field_image' ) );
 		add_action( "{$this->screen}_field_text_profile", array( $this, 'field_text_profile' ) );
 		add_action( "{$this->screen}_field_checkbox_toggle", array( $this, 'field_checkbox_toggle' ) );
+		add_action( "{$this->screen}_field_include_sites", array( $this, 'field_include_sites' ) );
 
 		// Filters.
 		add_filter( "{$this->screen}_field_scripts", array( $this, 'register_scripts' ) );
@@ -99,6 +100,7 @@ final class Fields extends WPSettings\Fields {
 	public function register_styles( array $styles ) {
 
 		$styles['image'] = 'field-image';
+		$styles['include_sites'] = 'field-include-sites';
 
 		return $styles;
 	}
@@ -229,4 +231,108 @@ final class Fields extends WPSettings\Fields {
 
 		echo $elem; // XSS ok.
 	}
+
+	/**
+	 * [field_multicheckbox_button_sites description]
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param array $args Arguments (e.g. id, section, type, etc.) to render the new interface.
+	 * @return void
+	 */
+	public function field_include_sites( array $args ) {
+
+		$args = $this->get_arguments( $args ); // Escapes all attributes.
+
+		$id = esc_attr( $args['id'] );
+		$section = esc_attr( $args['section'] );
+		$value = (array) $this->get_option( $args );
+
+		$count = count( $args['options'] );
+
+		if ( 0 === $count ) {
+			return;
+		} ?>
+		<table class="field-include-sites widefat striped">
+			<thead>
+				<tr>
+					<th class="manage-column column-cb check-column" scope="col"><input type="checkbox" class="check-all"></label></th>
+					<th class="manage-column column-site" scope="col"><?php esc_html_e( 'Site', 'ninecodes-social-manager' ); ?></th>
+					<th class="manage-column column-label" scope="col"><?php esc_html_e( 'Label', 'ninecodes-social-manager' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( (array) $args['options'] as $site => $opt ) :
+
+					if ( ! isset( $opt['label'] ) || ! isset( $opt['name'] ) ) {
+						continue;
+					}
+
+					$site = sanitize_key( $site );
+
+					$checked = isset( $value[ $site ]['enable'] ) && 'on' === $value[ $site ]['enable'] ? ' checked="checked" ' : '';
+					$label   = isset( $value[ $site ]['label'] ) && ! empty( $value[ $site ]['label'] ) ? $value[ $site ]['label'] : $opt['name'];
+
+					/**
+					 * Build the checkbox element.
+					 *
+					 * @var string
+					 */
+					$checkbox = sprintf( '<input type="checkbox" id="%1$s-%2$s-%3$s-cb" name="%1$s[%2$s][%3$s][enable]" value="on"%4$s%5$s />',
+						$section,
+						$id,
+						$site,
+						$checked,
+						$args['attr']
+					);
+
+					/**
+					 * Build the option <label> to select the checkbox.
+					 *
+					 * @var sting
+					 */
+					$name = sprintf( '<label for="%1$s-%2$s-%3$s-cb">%4$s</label>', $section, $id, $site, esc_html( $opt['name'] ) );
+
+					/**
+					 * Build the option <input> to change the button label.
+					 *
+					 * @var sting
+					 */
+					$input = sprintf( '<input type="text" id="%1$s-%2$s-%3$s-input" name="%1$s[%2$s][%3$s][label]" value="%4$s" class="widefat" />',
+						$section,
+						$id,
+						$site,
+						esc_attr( $label )
+					); ?>
+				<tr>
+					<th scope="row" class="check-column"><?php echo wp_kses( $checkbox, array(
+						'input' => array(
+							'id' => true,
+							'name' => true,
+							'value' => true,
+							'type' => true,
+							'checked' => true,
+							'class' => true,
+						),
+					) ); ?></th>
+					<th><?php echo wp_kses( $name, array(
+						'label' => array(
+							'for' => true,
+						),
+					) ); ?></th>
+					<td><?php echo wp_kses( $input, array(
+						'input' => array(
+							'id' => true,
+							'name' => true,
+							'value' => true,
+							'type' => true,
+							'class' => true,
+						),
+					) ); ?></td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	<?php }
 }

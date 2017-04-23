@@ -20,7 +20,6 @@ use \WP_UnitTestCase;
  */
 class Test_Theme_Support extends WP_UnitTestCase {
 
-
 	/**
 	 * The Plugin instance.
 	 *
@@ -45,10 +44,9 @@ class Test_Theme_Support extends WP_UnitTestCase {
 	 * @inheritdoc
 	 */
 	public function setUp() {
-
 		parent::setUp();
 
-		$this->plugin = new Plugin();
+		$this->plugin = ninecodes_social_manager();
 		$this->theme_support = new Theme_Support();
 	}
 

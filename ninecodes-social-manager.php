@@ -30,10 +30,6 @@
  * @package SocialManager
  */
 
-if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die; // Abort.
-}
-
 use NineCodes\SocialManager\Plugin;
 use NineCodes\SocialManager\Requirements;
 

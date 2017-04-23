@@ -8,7 +8,7 @@
 
 namespace NineCodes\SocialManager;
 
-if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
@@ -499,12 +499,18 @@ final class Settings {
 		$setting_fields = array(
 			'include' => array(
 				'label' => esc_html__( 'Button to include', 'ninecodes-social-manager' ),
-				'type' => 'multicheckbox',
+				'type' => 'include_sites',
 				'options' => array_map( function( $value ) {
-					return $value['label'];
+					return array(
+						'name' => $value['name'],
+						'label' => $value['label'],
+					);
 				}, $button_sites ), // Return the key => label.
 				'default' => array_map( function( $value ) {
-					return 'on';
+					return array(
+						'enable' => 'on',
+						'label' => $value['label'],
+					);
 				}, $button_sites ),  // Return the key => 'on'.
 			),
 			'post_type' => array(
@@ -616,12 +622,18 @@ final class Settings {
 			),
 			'include' => array(
 				'label' => esc_html__( 'Button to include', 'ninecodes-social-manager' ),
-				'type' => 'multicheckbox',
+				'type' => 'include_sites',
 				'options' => array_map( function( $value ) {
-					return $value['label'];
+					return array(
+						'name' => $value['name'],
+						'label' => $value['label'],
+					);
 				}, $button_sites ),
 				'default' => array_map( function( $value ) {
-					return 'on';
+					return array(
+						'enable' => 'on', // Default selected.
+						'label' => $value['label'],
+					);
 				}, $button_sites ),
 				'class' => 'sharing-image-setting hide-if-js',
 			),
@@ -629,12 +641,7 @@ final class Settings {
 				'label' => esc_html__( 'Button Visibility', 'ninecodes-social-manager' ),
 
 				// translators: %s will be replaced with a link pointing to https://codex.wordpress.org/Post_Types.
-				'description' => wp_kses( sprintf( __( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array(
-					'a' => array(
-						'href' => array(),
-						'target' => array(),
-					),
-				) ),
+				'description' => sprintf( esc_html__( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ),
 				'type' => 'multicheckbox',
 				'options' => Options::post_types(),
 				'default' => array(
@@ -643,7 +650,7 @@ final class Settings {
 				'class' => 'sharing-image-setting hide-if-js',
 			),
 			'view' => array(
-				'label' => esc_html__( 'Button Views', 'ninecodes-social-manager' ),
+				'label' => esc_html__( 'Button View', 'ninecodes-social-manager' ),
 				'description' => esc_html__( 'Select the social media buttons appearance shown on the images of the content.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
 				'options' => Options::button_views(),
@@ -996,19 +1003,6 @@ final class Settings {
 				padding-top: 9px;
 				padding-bottom: 0;
 				line-height: inherit;
-			}
-			.wrap .field-image-control {
-				margin-top: 0.867em;
-			}
-			.wrap .field-image-placeholder {
-				width: 100%;
-				max-width: 590px;
-				position: relative;
-				text-align: center;
-				padding: 2em 0;
-				line-height: 1.3;
-				border: 1px dashed #b4b9be;
-				box-sizing: border-box;
 			}
 		</style>
 	<?php }

@@ -47,11 +47,10 @@ class Test_Public_View extends WP_UnitTestCase {
 	 * @inheritdoc
 	 */
 	public function setUp() {
-
 		parent::setUp();
 
 		// Setup the plugin.
-		$this->plugin = new Plugin();
+		$this->plugin = ninecodes_social_manager();
 		$this->plugin->init();
 
 		$this->public = new Public_View( $this->plugin );

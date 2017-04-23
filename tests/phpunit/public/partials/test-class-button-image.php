@@ -54,7 +54,7 @@ class Test_Button_Image extends WP_UnitTestCase {
 	 */
 	public function setUp() {
 
-		$this->plugin = new Plugin();
+		$this->plugin = ninecodes_social_manager();
 		$this->plugin->init();
 
 		$this->button_content = new Button_Content( $this->plugin );

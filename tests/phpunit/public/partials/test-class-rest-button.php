@@ -43,7 +43,9 @@ class Test_REST_Button extends WP_UnitTestCase {
 
 		global $wp_rest_server;
 
-		$plugin = new Plugin();
+		$plugin = ninecodes_social_manager();
+		$plugin->init();
+
 		$wp_rest_server = new WP_REST_Server;
 
 		$this->server = $wp_rest_server;

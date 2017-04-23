@@ -54,18 +54,8 @@ class Test_Plugin extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->plugin = new Plugin();
+		$this->plugin = ninecodes_social_manager();
 		$this->plugin->init();
-	}
-
-	/**
-	 * Tear down.
-	 *
-	 * @inheritdoc
-	 */
-	function tearDown() {
-		$this->plugin = null;
-		parent::tearDown();
 	}
 
 	/**

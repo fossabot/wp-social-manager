@@ -40,10 +40,9 @@ class Test_Helpers extends WP_UnitTestCase {
 	 * @inheritdoc
 	 */
 	public function setUp() {
-
 		parent::setUp();
 
-		$this->plugin = new Plugin();
+		$this->plugin = ninecodes_social_manager();
 		$this->plugin->init();
 	}
 

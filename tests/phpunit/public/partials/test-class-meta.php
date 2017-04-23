@@ -61,7 +61,7 @@ class Test_Meta extends WP_UnitTestCase {
 		_clean_term_filters();
 		wp_cache_delete( 'last_changed', 'terms' );
 
-		$this->plugin = new Plugin();
+		$this->plugin = ninecodes_social_manager();
 		$this->plugin->init();
 
 		$this->meta = new Meta( $this->plugin );

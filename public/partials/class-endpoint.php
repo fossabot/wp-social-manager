@@ -10,7 +10,7 @@
 
 namespace NineCodes\SocialManager;
 
-if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 

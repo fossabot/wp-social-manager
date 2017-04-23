@@ -119,7 +119,7 @@ if ( ! function_exists( 'get_the_author_social_profile' ) ) {
 			$icons    = Helpers::get_social_icons();
 			$prefix   = Helpers::get_attr_prefix();
 
-			$return = "<div class=\"{$prefix}-profiles-author\">";
+			$return = "<div class=\"{$prefix}-profile-author\">";
 			foreach ( $author_profiles as $site => $username ) :
 
 				if ( empty( $username ) ) {
@@ -132,7 +132,7 @@ if ( ! function_exists( 'get_the_author_social_profile' ) ) {
 				/* translators: 1. The author name. 2. The social media label. */
 				$title = sprintf( esc_html__( 'Follow %1$s on %2$s', 'ninecodes-social-manager' ), $author_name, $profiles[ $site ]['label'] );
 
-				$return .= "<a class=\"{$prefix}-profiles-author__item item-{$site}\" href=\"{$url}\" target=\"_blank\" rel=\"nofollow\" title=\"{$title}\">{$icon}</a>";
+				$return .= "<a class=\"{$prefix}-profile-author__item item-{$site}\" href=\"{$url}\" target=\"_blank\" rel=\"nofollow\" title=\"{$title}\">{$icon}</a>";
 		 	endforeach;
 			$return .= '</div>';
 		endif;

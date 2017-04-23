@@ -8,7 +8,7 @@
 
 namespace NineCodes\SocialManager;
 
-if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
@@ -281,34 +281,42 @@ final class Options {
 
 		$button_sites['content'] = array(
 			'facebook' => array(
-				'label' => 'Facebook',
+				'name' => 'Facebook',
+				'label' => 'Share',
 				'endpoint' => 'https://www.facebook.com/sharer/sharer.php',
 			),
 			'twitter' => array(
-				'label' => 'Twitter',
+				'name' => 'Twitter',
+				'label' => 'Tweet',
 				'endpoint' => 'https://twitter.com/intent/tweet',
 			),
 			'googleplus' => array(
-				'label' => 'Google+',
+				'name' => 'Google+',
+				'label' => '+1',
 				'endpoint' => 'https://plus.google.com/share',
 			),
 			'pinterest' => array(
-				'label' => 'Pinterest',
+				'name' => 'Pinterest',
+				'label' => 'Pin It',
 				'endpoint' => 'https://www.pinterest.com/pin/create/bookmarklet/',
 			),
 			'linkedin' => array(
+				'name' => 'LinkedIn',
 				'label' => 'LinkedIn',
 				'endpoint' => 'https://www.linkedin.com/shareArticle',
 			),
 			'reddit' => array(
+				'name' => 'Reddit',
 				'label' => 'Reddit',
 				'endpoint' => 'https://www.reddit.com/submit',
 			),
 			'tumblr' => array(
+				'name' => 'Tumblr',
 				'label' => 'Tumblr',
 				'endpoint' => 'http://www.tumblr.com/share/link',
 			),
 			'email' => array(
+				'name' => 'Email',
 				'label' => 'Email',
 				'endpoint' => 'mailto:',
 			),
@@ -316,7 +324,8 @@ final class Options {
 
 		$button_sites['image'] = array(
 			'pinterest' => array(
-				'label' => 'Pinterest',
+				'name' => 'Pinterest',
+				'label' => 'Pin It',
 				'endpoint' => 'https://www.pinterest.com/pin/create/bookmarklet/',
 			),
 		);
@@ -332,19 +341,30 @@ final class Options {
 		 */
 		$button_sites = (array) apply_filters( 'ninecodes_social_manager_options', $button_sites, 'button_sites' );
 
-		if ( isset( $button_sites[ $for ] ) && is_array( $button_sites[ $for ] ) ) {
+		foreach ( $button_sites as $key => $buttons ) {
 
-			$button_sites_content = $button_sites[ $for ];
+			if ( ! is_array( $buttons ) || ! in_array( $key, array( 'content', 'image' ), true ) ) {
+				unset( $button_sites[ $key ] );
+				continue;
+			}
 
-			foreach ( $button_sites_content as $site => $button ) {
+			foreach ( $buttons as $site => $button ) {
 
-				if ( ! is_array( $button ) || ! isset( $button['label'] ) ||
-					 ! isset( $button['endpoint'] ) || empty( $button['label'] ) || empty( $button['endpoint'] ) ) {
-					unset( $button_sites[ $for ][ $site ] );
+				if ( ! is_array( $button ) ) {
+					unset( $button_sites[ $key ][ $site ] );
 					continue;
 				}
 
-				$button_sites[ $for ][ $site ] = array(
+				$is_set = ! isset( $button['name'] ) || ! isset( $button['label'] ) || ! isset( $button['endpoint'] );
+				$is_empty = empty( $button['name'] ) || empty( $button['label'] ) || empty( $button['endpoint'] );
+
+				if ( $is_set || $is_empty ) {
+					unset( $button_sites[ $key ][ $site ] );
+					continue;
+				}
+
+				$button_sites[ $key ][ $site ] = array(
+					'name' => esc_html( $button['name'] ),
 					'label' => esc_html( $button['label'] ),
 					'endpoint' => esc_url( $button['endpoint'] ),
 				);

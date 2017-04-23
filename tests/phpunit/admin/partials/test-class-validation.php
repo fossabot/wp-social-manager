@@ -26,7 +26,6 @@ class Test_Validation extends WP_UnitTestCase {
 	 * @inheritdoc
 	 */
 	public function setUp() {
-
 		parent::setUp();
 
 		$this->validation = new Validation();
@@ -170,5 +169,58 @@ class Test_Validation extends WP_UnitTestCase {
 		$this->assertEquals( false, $this->validation->validate_checkbox( false ) );
 		$this->assertEquals( false, $this->validation->validate_checkbox( null ) );
 		$this->assertEquals( false, $this->validation->validate_checkbox( '' ) );
+	}
+
+	/**
+	 * Function to test button sites validation.
+	 *
+	 * @return void
+	 */
+	public function test_validate_include_sites_for_button_content() {
+
+		$options = Options::button_sites( 'content' );
+		$sites = array();
+
+		foreach ( $options as $site => $data ) {
+			$sites[ $site ] = array(
+				'enable' => 'on',
+				'label' => $data['label'],
+			);
+		}
+
+		/**
+		 * If all empty sites in the options must be enabled.
+		 * The empty array assumes that there isn't data installed in the database yet.
+		 */
+		$this->assertEquals( $sites, $this->validation->validate_include_sites( array(), $options ) );
+
+		/**
+		 * Test a falsy value; non-array value.
+		 *
+		 * @var array
+		 */
+		$falsy = $this->validation->validate_include_sites( array(
+			'facebook' => false,
+		), $options );
+
+		$this->assertArrayHasKey( 'facebook', $falsy );
+		$this->assertEquals( array(
+			'enable' => false,
+			'label' => 'Share',
+		), $falsy['facebook'] );
+
+		/**
+		 * Test value that is not yet registered in the options.
+		 *
+		 * @var array
+		 */
+		$non_exists = $this->validation->validate_include_sites( array(
+			'ello' => array(
+				'enable' => 'on',
+				'label' => 'Send to Ello',
+			),
+		), $options );
+
+		$this->assertArrayNotHasKey( 'ello', $non_exists );
 	}
 }

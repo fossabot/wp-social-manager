@@ -53,8 +53,9 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 	 * @inheritdoc
 	 */
 	public function setUp() {
+		parent::setUp();
 
-		$this->plugin = new Plugin();
+		$this->plugin = ninecodes_social_manager();
 		$this->plugin->init();
 
 		$this->user_id = $this->factory->user->create( array(
@@ -196,5 +197,30 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-twitter\" href=\"https://twitter.com/yeap\" target=\"_blank\"><span class=\"{$prefix}-profiles__item-icon\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-twitter\"/></svg></span><span class=\"{$prefix}-profiles__item-text\">Twitter</span></a>", $anchor_html );
 
 		delete_option( $this->plugin->options['profile'] );
+	}
+
+	/**
+	 * Function to test the 'get_the_author_social_profile'.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_get_the_author_social_profile() {
+
+		$prefix = Helpers::get_attr_prefix();
+		$user_id = $this->factory()->user->create( array(
+			'display_name' => 'Foo',
+			'role' => 'administrator',
+		) );
+
+		update_user_meta( $user_id, $this->plugin->option_slug, array(
+			'facebook' => 'zuck',
+		) );
+
+		$output = "<div class=\"{$prefix}-profile-author\"><a class=\"{$prefix}-profile-author__item item-facebook\" href=\"https://www.facebook.com/zuck\" target=\"_blank\" rel=\"nofollow\" title=\"Follow Foo on Facebook\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-facebook\" /></svg></a></div>";
+
+		$this->assertContains( $output, (string) get_the_author_social_profile( $user_id ) );
 	}
 }

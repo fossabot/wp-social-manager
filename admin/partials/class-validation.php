@@ -8,7 +8,7 @@
 
 namespace NineCodes\SocialManager;
 
-if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
@@ -77,7 +77,7 @@ class Validation {
 		$inputs['placement'] = $this->validate_radio( $inputs['placement'], Options::button_placements() );
 		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
 
-		$inputs['include'] = $this->validate_multicheckbox( $inputs['include'], Options::button_sites( 'content' ) );
+		$inputs['include'] = $this->validate_include_sites( $inputs['include'], Options::button_sites( 'content' ) );
 		$inputs['post_type'] = $this->validate_multicheckbox( $inputs['post_type'], Options::post_types() );
 
 		return $inputs;
@@ -104,7 +104,7 @@ class Validation {
 		$inputs['enable'] = $this->validate_checkbox( $inputs['enable'] );
 		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
 		$inputs['post_type'] = $this->validate_multicheckbox( $inputs['post_type'], Options::post_types() );
-		$inputs['include'] = $this->validate_multicheckbox( $inputs['include'], Options::button_sites( 'image' ) );
+		$inputs['include'] = $this->validate_include_sites( $inputs['include'], Options::button_sites( 'image' ) );
 
 		return $inputs;
 	}
@@ -224,6 +224,43 @@ class Validation {
 		foreach ( $options as $key => $label ) {
 			$key = sanitize_key( $key );
 			$selection[ $key ] = key_exists( $key, $inputs ) ? 'on' : false;
+		}
+
+		return $selection;
+	}
+
+	/**
+	 * Utility function to sanitize multiple selection inputs for "Button to include" option.
+	 *
+	 * "Button to include" option has two inputs namely the checkbox and the label text input.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param array  $inputs Unsanitized inputs being saved.
+	 * @param string $options Options reference to check against the incoming input.
+	 * @return array Sanitized inputs.
+	 */
+	final public function validate_include_sites( array $inputs, $options ) {
+
+		$selection = array();
+
+		foreach ( $options as $key => $data ) {
+
+			$site = sanitize_key( $key );
+
+			if ( ! key_exists( $site, $inputs ) ) {
+				$selection[ $site ]['enable'] = 'on';
+				$selection[ $site ]['label'] = $data['label'];
+			} else {
+				$selection[ $site ]['enable'] = isset( $inputs[ $site ]['enable'] ) ? 'on' : false;
+
+				if ( isset( $inputs[ $site ]['label'] ) && ! empty( $inputs[ $site ]['label'] ) ) {
+					$selection[ $site ]['label'] = sanitize_text_field( $inputs[ $site ]['label'] );
+				} else {
+					$selection[ $site ]['label'] = sanitize_text_field( $data['label'] );
+				}
+			}
 		}
 
 		return $selection;

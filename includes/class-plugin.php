@@ -10,10 +10,6 @@
 
 namespace NineCodes\SocialManager;
 
-if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
-	die; // Abort.
-}
-
 /**
  * The core plugin class.
  *
@@ -160,11 +156,21 @@ final class Plugin {
 		require_once( $this->path_dir . 'public/class-public-view.php' );
 		require_once( $this->path_dir . 'widgets/class-widget.php' );
 
-		add_action( 'plugins_loaded', function() {
+		add_action( 'plugins_loaded', array( $this, 'requires_when_plugins_loaded' ) );
+	}
 
-			require_once( $this->path_dir . 'includes/bb-metabox/butterbean.php' );
-			require_once( $this->path_dir . 'includes/bb-metabox-extend/butterbean-extend.php' );
-		} );
+	/**
+	 * Load the required dependencies when plugins are already loaded.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function requires_when_plugins_loaded() {
+
+		require_once( $this->path_dir . 'includes/bb-metabox/butterbean.php' );
+		require_once( $this->path_dir . 'includes/bb-metabox-extend/butterbean-extend.php' );
 	}
 
 	/**

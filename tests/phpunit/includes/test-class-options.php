@@ -257,17 +257,23 @@ class Test_Options extends WP_UnitTestCase {
 		add_filter('ninecodes_social_manager_options', function ( $value, $context ) {
 
 			if ( 'button_sites' === $context ) {
+				$value['bad'] = array( // Bad.
+					'friendster' => 'Friendster',
+					'myspace' => 'MySpace',
+				);
 				$value['content'] = array(
 					'facebook' => 'Facebook', // Bad.
 					'twitter' => array(
-						'label' => 'Twitter',
+						'name' => 'Twitter',
+						'label' => 'Tweet',
 						'endpoint' => 'https://twitter.com/intent/tweet',
 					),
 				);
 				$value['image'] = array(
 					'ello' => 'Ello', // Bad.
 					'pinterest' => array(
-						'label' => 'Pinterest',
+						'name' => 'Pinterest',
+						'label' => 'Pin It',
 						'endpoint' => 'https://www.pinterest.com/pin/create/bookmarklet/',
 					),
 				);
@@ -276,17 +282,36 @@ class Test_Options extends WP_UnitTestCase {
 			return $value;
 		}, 10, 2);
 
+		$button = Options::button_sites();
+
+		$this->assertArrayNotHasKey( 'bad', $button );
+
+		$this->assertArrayNotHasKey( 'facebok', $button['content'] );
+		$this->assertArrayHasKey( 'twitter', $button['content'] );
+		$this->assertEquals( 'Twitter', $button['content']['twitter']['name'] );
+		$this->assertEquals( 'Tweet', $button['content']['twitter']['label'] );
+		$this->assertEquals( 'https://twitter.com/intent/tweet', $button['content']['twitter']['endpoint'] );
+
+		$this->assertArrayNotHasKey( 'ello', $button['image'] );
+		$this->assertArrayHasKey( 'pinterest', $button['image'] );
+		$this->assertEquals( 'Pinterest', $button['image']['pinterest']['name'] );
+		$this->assertEquals( 'Pin It', $button['image']['pinterest']['label'] );
+		$this->assertEquals( 'https://www.pinterest.com/pin/create/bookmarklet/', $button['image']['pinterest']['endpoint'] );
+
 		$content = Options::button_sites( 'content' );
-		$image = Options::button_sites( 'image' );
 
 		$this->assertArrayNotHasKey( 'facebok', $content );
 		$this->assertArrayHasKey( 'twitter', $content );
-		$this->assertEquals( 'Twitter', $content['twitter']['label'] );
+		$this->assertEquals( 'Twitter', $button['content']['twitter']['name'] );
+		$this->assertEquals( 'Tweet', $button['content']['twitter']['label'] );
 		$this->assertEquals( 'https://twitter.com/intent/tweet', $content['twitter']['endpoint'] );
+
+		$image = Options::button_sites( 'image' );
 
 		$this->assertArrayNotHasKey( 'ello', $image );
 		$this->assertArrayHasKey( 'pinterest', $image );
-		$this->assertEquals( 'Pinterest', $image['pinterest']['label'] );
+		$this->assertEquals( 'Pinterest', $image['pinterest']['name'] );
+		$this->assertEquals( 'Pin It', $image['pinterest']['label'] );
 		$this->assertEquals( 'https://www.pinterest.com/pin/create/bookmarklet/', $image['pinterest']['endpoint'] );
 
 		unset( $content['twitter'] );
@@ -302,13 +327,15 @@ class Test_Options extends WP_UnitTestCase {
 			if ( 'button_sites' === $context ) {
 				$value['content'] = array(
 					'twitter' => array(
-						'label' => '<script>Twitter</script>',
+						'name' => 'Twitter',
+						'label' => '<script>Tweet</script>',
 						'endpoint' => 'https://twitter.com/intent/tweet',
 					),
 				);
 				$value['image'] = array(
 					'pinterest' => array(
-						'label' => '<script>Pinterest</script>',
+						'name' => 'Pinterest',
+						'label' => '<script>Pin It</script>',
 						'endpoint' => 'https://www.pinterest.com/pin/create/bookmarklet/',
 					),
 				);
@@ -317,14 +344,22 @@ class Test_Options extends WP_UnitTestCase {
 			return $value;
 		}, 10, 2);
 
+		$button = Options::button_sites();
+
+		$this->assertArrayHasKey( 'twitter', $button['content'] ); // Since it does not have label and endpoint.
+		$this->assertEquals( '&lt;script&gt;Tweet&lt;/script&gt;', $button['content']['twitter']['label'] ); // The output must be sanitized.
+		$this->assertArrayHasKey( 'pinterest', $button['image'] );
+		$this->assertEquals( '&lt;script&gt;Pin It&lt;/script&gt;', $button['image']['pinterest']['label'] ); // The output must be sanitized.
+
 		$content = Options::button_sites( 'content' );
-		$image = Options::button_sites( 'image' );
 
 		$this->assertArrayHasKey( 'twitter', $content ); // Since it does not have label and endpoint.
-		$this->assertEquals( '&lt;script&gt;Twitter&lt;/script&gt;', $content['twitter']['label'] ); // The output must be sanitized.
+		$this->assertEquals( '&lt;script&gt;Tweet&lt;/script&gt;', $content['twitter']['label'] ); // The output must be sanitized.
+
+		$image = Options::button_sites( 'image' );
 
 		$this->assertArrayHasKey( 'pinterest', $image );
-		$this->assertEquals( '&lt;script&gt;Pinterest&lt;/script&gt;', $image['pinterest']['label'] ); // The output must be sanitized.
+		$this->assertEquals( '&lt;script&gt;Pin It&lt;/script&gt;', $image['pinterest']['label'] ); // The output must be sanitized.
 
 		unset( $content['twitter'] );
 		unset( $image['pinterest'] );

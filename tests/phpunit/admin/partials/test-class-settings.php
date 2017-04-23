@@ -29,11 +29,13 @@ class Test_Settings extends WP_UnitTestCase {
 	 */
 	public function setUp() {
 
-		parent::setUp();
-
 		$this->plugin = new Plugin();
+		$this->plugin->init();
+
 		$this->settings = new Settings( $this->plugin );
 		$this->settings->setups();
+
+		parent::setUp();
 	}
 
 	/**

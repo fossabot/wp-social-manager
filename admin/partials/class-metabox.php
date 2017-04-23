@@ -8,7 +8,7 @@
 
 namespace NineCodes\SocialManager;
 
-if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
@@ -455,7 +455,7 @@ final class Metabox {
 	 */
 	protected function post_data() {
 
-		$this->post_id = isset( $_GET['post'] ) ? $this->sanitize_absint( $_GET['post'] ) : 0;
+		$this->post_id = isset( $_GET['post'] ) ? $this->sanitize_absint( $_GET['post'] ) : 0; // WPCS: CSRF ok.
 
 		$this->post_title = get_post_field( 'post_title', $this->post_id );
 		$this->post_content = get_post_field( 'post_content', $this->post_id );

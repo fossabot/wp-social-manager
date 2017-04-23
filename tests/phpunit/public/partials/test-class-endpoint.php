@@ -38,22 +38,10 @@ class Test_Endpoint extends WP_UnitTestCase {
 		parent::setUp();
 
 		// Setup the plugin.
-		$plugin = new Plugin();
-		$plugin->init();
+		$this->plugin = ninecodes_social_manager();
+		$this->plugin->init();
 
-		$this->endpoint = new Endpoint( $plugin, new Meta( $plugin ) );
-	}
-
-	/**
-	 * Tear down.
-	 */
-	function tearDown() {
-
-		$this->plugin = null;
-		$this->public = null;
-		$this->endpoint = null;
-
-		parent::tearDown();
+		$this->endpoint = new Endpoint( $this->plugin, new Meta( $this->plugin ) );
 	}
 
 	/**

@@ -8,7 +8,7 @@
 
 namespace NineCodes\SocialManager;
 
-if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
@@ -47,16 +47,16 @@ final class Helpers {
 		$prefix = esc_attr( self::get_attr_prefix() );
 
 		$icons = array(
-			'facebook'  => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-facebook'/></svg>",
-			'twitter'   => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-twitter'/></svg>",
-			'instagram' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-instagram'/></svg>",
-			'pinterest' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-pinterest'/></svg>",
-			'linkedin'  => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-linkedin'/></svg>",
-			'googleplus' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-googleplus'/></svg>",
-			'youtube' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-youtube'/></svg>",
-			'reddit' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-reddit'/></svg>",
-			'tumblr' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-tumblr'/></svg>",
-			'email' => "<svg aria-hidden='true'><use xlink:href='#{$prefix}-icon-email'/></svg>",
+			'facebook'  => "<svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-facebook\"/></svg>",
+			'twitter'   => "<svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-twitter\"/></svg>",
+			'instagram' => "<svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-instagram\"/></svg>",
+			'pinterest' => "<svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-pinterest\"/></svg>",
+			'linkedin'  => "<svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-linkedin\"/></svg>",
+			'googleplus' => "<svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-googleplus\"/></svg>",
+			'youtube' => "<svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-youtube\"/></svg>",
+			'reddit' => "<svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-reddit\"/></svg>",
+			'tumblr' => "<svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-tumblr\"/></svg>",
+			'email' => "<svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-email\"/></svg>",
 		);
 
 		/**

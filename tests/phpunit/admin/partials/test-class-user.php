@@ -26,10 +26,10 @@ class Test_User extends WP_UnitTestCase {
 	 * @inheritdoc
 	 */
 	public function setUp() {
-
 		parent::setUp();
 
-		$this->plugin = new Plugin();
+		$this->plugin = ninecodes_social_manager();
+		$this->plugin->init();
 
 		$this->user = new User( $this->plugin );
 	}

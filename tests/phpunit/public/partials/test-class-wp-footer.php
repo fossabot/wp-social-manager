@@ -41,10 +41,10 @@ class Test_WP_Footer extends WP_UnitTestCase {
 		parent::setUp();
 
 		// Setup the plugin.
-		$plugin = new Plugin();
-		$plugin->init();
+		$this->plugin = ninecodes_social_manager();
+		$this->plugin->init();
 
-		$public = new Public_View( $plugin );
+		$public = new Public_View( $this->plugin );
 		$this->wp_footer = new WP_Footer( $public );
 	}
 

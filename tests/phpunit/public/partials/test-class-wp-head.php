@@ -57,13 +57,11 @@ class Test_WP_Head extends WP_UnitTestCase {
 		wp_cache_delete( 'last_changed', 'terms' );
 
 		// Setup the plugin.
-		$plugin = new Plugin();
-		$plugin->init();
-
-		$this->plugin = $plugin;
+		$this->plugin = ninecodes_social_manager();
+		$this->plugin->init();
 
 		// The Class instance to test.
-		$this->wp_head = new WP_Head( $plugin );
+		$this->wp_head = new WP_Head( $this->plugin );
 		$this->wp_head->setups();
 	}
 

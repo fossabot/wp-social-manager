@@ -8,7 +8,7 @@
 
 namespace NineCodes\SocialManager;
 
-if ( ! defined( 'WPINC' ) ) { // If this file is called directly.
+if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
@@ -192,9 +192,9 @@ abstract class Button implements Button_Interface {
 		$style = get_theme_mod( "{$this->plugin->option_slug}_button_style", 'default' );
 
 		$templates = array(
-			'icon' => "<a class='{$prefix}-buttons__item item-{$style} item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'>{$icon}</a>",
-			'text' => "<a class='{$prefix}-buttons__item item-{$style} item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'>{$label}</a>",
-			'icon_text' => "<a class='{$prefix}-buttons__item item-{$style} item-{$site}' href='{$endpoint}' target='_blank' role='button' rel='nofollow'><span class='{$prefix}-buttons__item-icon'>{$icon}</span><span class='{$prefix}-buttons__item-text'>{$label}</span></a>",
+			'icon' => "<a class=\"{$prefix}-buttons__item item-{$style} item-{$site}\" href=\"{$endpoint}\" target=\"_blank\" role=\"button\" rel=\"nofollow\">{$icon}</a>",
+			'text' => "<a class=\"{$prefix}-buttons__item item-{$style} item-{$site}\" href=\"{$endpoint}\" target=\"_blank\" role=\"button\" rel=\"nofollow\">{$label}</a>",
+			'icon_text' => "<a class=\"{$prefix}-buttons__item item-{$style} item-{$site}\" href=\"{$endpoint}\" target=\"_blank\" role=\"button\" rel=\"nofollow\"><span class=\"{$prefix}-buttons__item-icon\">{$icon}</span><span class=\"{$prefix}-buttons__item-text\">{$label}</span></a>",
 		);
 
 		$button_view = isset( $templates[ $view ] ) ? kses_icon( $templates[ $view ] ) : '';
