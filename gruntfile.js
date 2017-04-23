@@ -497,9 +497,19 @@ module.exports = function(grunt) {
 		'clean:build'
 	]);
 
+	/**
+	 * ==================================================
+	 * Register Test specific tasks
+	 * ==================================================
+	 */
+
+	grunt.registerTask('phpunit', [
+		'shell:phpunit',
+	]);
+
 	// Run test unit.
 	grunt.registerTask('test', [
-		'shell:phpunit',
+		'phpunit',
 		'qunit'
 	]);
 
@@ -551,7 +561,7 @@ module.exports = function(grunt) {
 
 	// Check and compile WordPress files.
 	grunt.registerTask('wordpress', [
-		'shell:phpunit',
+		'phpunit',
 		'addtextdomain',
 		'checktextdomain',
 		'version',
