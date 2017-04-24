@@ -50,7 +50,7 @@ class Test_Button extends WP_UnitTestCase {
 	 */
 	public function test_get_label_method() {
 
-		$button = $this->getMockForAbstractClass( Button::class, array( $this->plugin ) );
+		$button = $this->getMockForAbstractClass( __NAMESPACE__ . '\\Buttons', array( $this->plugin ) );
 
 		// Bad: The site should be registered in the `Options::button_sites()`.
 		$this->assertEquals( '', $button->get_label( 'ello', 'content' ) );
