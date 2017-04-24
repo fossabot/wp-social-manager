@@ -231,8 +231,8 @@ final class Settings {
 	 */
 	public function menu() {
 
-		$menu_title = esc_html__( 'Social Media', 'ninecodes-social-manager' );
-		$page_title = esc_html__( 'Social Media Settings', 'ninecodes-social-manager' );
+		$menu_title = __( 'Social Media', 'ninecodes-social-manager' );
+		$page_title = __( 'Social Media Settings', 'ninecodes-social-manager' );
 
 		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $this->plugin->plugin_slug, function() {
 			echo wp_kses( "<div class='wrap' id='{$this->plugin->plugin_slug}-settings'>", array(
@@ -264,10 +264,10 @@ final class Settings {
 	public function tabs() {
 
 		$tabs = array(
-			'account' => esc_html__( 'Accounts', 'ninecodes-social-manager' ),
-			'button' => esc_html__( 'Buttons', 'ninecodes-social-manager' ),
-			'meta' => esc_html__( 'Meta', 'ninecodes-social-manager' ),
-			'advanced' => esc_html__( 'Advanced', 'ninecodes-social-manager' ),
+			'account' => __( 'Accounts', 'ninecodes-social-manager' ),
+			'button' => __( 'Buttons', 'ninecodes-social-manager' ),
+			'meta' => __( 'Meta', 'ninecodes-social-manager' ),
+			'advanced' => __( 'Advanced', 'ninecodes-social-manager' ),
 		);
 
 		/**
@@ -324,8 +324,8 @@ final class Settings {
 				case 'account':
 					$sections[ $tab ] = array(
 						'profile' => array(
-							'title' => esc_html__( 'Profile', 'ninecodes-social-manager' ),
-							'description' => esc_html__( 'Add all social media profiles and pages for this website.', 'ninecodes-social-manager' ),
+							'title' => __( 'Profile', 'ninecodes-social-manager' ),
+							'description' => __( 'Add all social media profiles and pages for this website.', 'ninecodes-social-manager' ),
 							'validate_callback' => array( $this->validate, 'setting_profile' ),
 						),
 					);
@@ -334,13 +334,13 @@ final class Settings {
 				case 'button':
 					$sections[ $tab ] = array(
 						'button_content' => array(
-							'title' => esc_html__( 'Content', 'ninecodes-social-manager' ),
-							'description' => esc_html__( 'Configure how social media buttons display on your content pages.', 'ninecodes-social-manager' ),
+							'title' => __( 'Content', 'ninecodes-social-manager' ),
+							'description' => __( 'Configure how social media buttons display on your content pages.', 'ninecodes-social-manager' ),
 							'validate_callback' => array( $this->validate, 'setting_button_content' ),
 						),
 						'button_image' => array(
-							'title' => esc_html__( 'Image', 'ninecodes-social-manager' ),
-							'description' => esc_html__( 'Options to configure the social media buttons shown on the content images.', 'ninecodes-social-manager' ),
+							'title' => __( 'Image', 'ninecodes-social-manager' ),
+							'description' => __( 'Options to configure the social media buttons shown on the content images.', 'ninecodes-social-manager' ),
 							'validate_callback' => array( $this->validate, 'setting_button_image' ),
 						),
 					);
@@ -360,8 +360,8 @@ final class Settings {
 							'validate_callback' => array( $this->validate, 'setting_advanced' ),
 						),
 						'modes' => array(
-							'title' => esc_html__( 'Mode', 'ninecodes-social-manager' ),
-							'description' => esc_html__( 'Configure the modes that work best for your website.', 'ninecodes-social-manager' ),
+							'title' => __( 'Mode', 'ninecodes-social-manager' ),
+							'description' => __( 'Configure the modes that work best for your website.', 'ninecodes-social-manager' ),
 							'validate_callback' => array( $this->validate, 'setting_mode' ),
 						),
 					);
@@ -498,7 +498,7 @@ final class Settings {
 
 		$setting_fields = array(
 			'include' => array(
-				'label' => esc_html__( 'Button to include', 'ninecodes-social-manager' ),
+				'label' => __( 'Button to include', 'ninecodes-social-manager' ),
 				'type' => 'include_sites',
 				'options' => array_map( function( $value ) {
 					return array(
@@ -515,9 +515,9 @@ final class Settings {
 			),
 			'post_type' => array(
 				'type' => 'multicheckbox',
-				'label' => esc_html__( 'Button Visibility', 'ninecodes-social-manager' ),
+				'label' => __( 'Button Visibility', 'ninecodes-social-manager' ),
 				// translators: %s will be replaced with "Post Types" pointing to https://codex.wordpress.org/Post_Types.
-				'description' => wp_kses( sprintf( __( 'Select the %s that are allowed to show the social media buttons.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array(
+				'description' => wp_kses( sprintf( __( 'Select the %s that are allowed to show the social media buttons.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . __( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ), array(
 					'a' => array(
 						'href' => array(),
 						'target' => array(),
@@ -529,25 +529,25 @@ final class Settings {
 				),
 			),
 			'view' => array(
-				'label' => esc_html__( 'Button View', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Select the social media buttons appearance shown in the content.', 'ninecodes-social-manager' ),
+				'label' => __( 'Button View', 'ninecodes-social-manager' ),
+				'description' => __( 'Select the social media buttons appearance shown in the content.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
 				'options' => Options::button_views(),
 				'default' => 'icon',
 			),
 			'placement' => array(
 				'type' => 'radio',
-				'label' => esc_html__( 'Button Placement', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Select the location to show the social media buttons in the content.', 'ninecodes-social-manager' ),
+				'label' => __( 'Button Placement', 'ninecodes-social-manager' ),
+				'description' => __( 'Select the location to show the social media buttons in the content.', 'ninecodes-social-manager' ),
 				'options' => Options::button_placements(),
 				'default' => 'after',
 			),
 			'heading' => array(
 				'type' => 'text',
-				'label' => esc_html__( 'Button Header', 'ninecodes-social-manager' ),
+				'label' => __( 'Button Header', 'ninecodes-social-manager' ),
 				// translators: %s will be replaced with "<code>Share on:</code>".
-				'description' => sprintf( esc_html__( 'Set the heading shown before the buttons (e.g. %s).', 'ninecodes-social-manager' ), '<code>Share on:</code>' ),
-				'default' => esc_html__( 'Share on:', 'ninecodes-social-manager' ),
+				'description' => sprintf( __( 'Set the heading shown before the buttons (e.g. %s).', 'ninecodes-social-manager' ), '<code>Share on:</code>' ),
+				'default' => __( 'Share on:', 'ninecodes-social-manager' ),
 			),
 		);
 
@@ -613,15 +613,15 @@ final class Settings {
 
 		$setting_fields = array(
 			'enable' => array(
-				'label' => esc_html__( 'Button Image Display', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Show the social media buttons on images in the content', 'ninecodes-social-manager' ),
+				'label' => __( 'Button Image Display', 'ninecodes-social-manager' ),
+				'description' => __( 'Show the social media buttons on images in the content', 'ninecodes-social-manager' ),
 				'type' => 'checkbox_toggle',
 				'attr' => array(
 					'data-toggle' => '.sharing-image-setting',
 				),
 			),
 			'include' => array(
-				'label' => esc_html__( 'Button to include', 'ninecodes-social-manager' ),
+				'label' => __( 'Button to include', 'ninecodes-social-manager' ),
 				'type' => 'include_sites',
 				'options' => array_map( function( $value ) {
 					return array(
@@ -638,10 +638,10 @@ final class Settings {
 				'class' => 'sharing-image-setting hide-if-js',
 			),
 			'post_type' => array(
-				'label' => esc_html__( 'Button Visibility', 'ninecodes-social-manager' ),
+				'label' => __( 'Button Visibility', 'ninecodes-social-manager' ),
 
 				// translators: %s will be replaced with a link pointing to https://codex.wordpress.org/Post_Types.
-				'description' => sprintf( esc_html__( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . esc_html__( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ),
+				'description' => sprintf( __( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . __( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ),
 				'type' => 'multicheckbox',
 				'options' => Options::post_types(),
 				'default' => array(
@@ -650,8 +650,8 @@ final class Settings {
 				'class' => 'sharing-image-setting hide-if-js',
 			),
 			'view' => array(
-				'label' => esc_html__( 'Button View', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Select the social media buttons appearance shown on the images of the content.', 'ninecodes-social-manager' ),
+				'label' => __( 'Button View', 'ninecodes-social-manager' ),
+				'description' => __( 'Select the social media buttons appearance shown on the images of the content.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
 				'options' => Options::button_views(),
 				'default' => 'icon',
@@ -713,8 +713,8 @@ final class Settings {
 		$setting_fields = array(
 			'enable' => array(
 				'type' => 'checkbox_toggle',
-				'label' => esc_html__( 'Enable Meta Tags', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Generate social media meta tags on this website', 'ninecodes-social-manager' ),
+				'label' => __( 'Enable Meta Tags', 'ninecodes-social-manager' ),
+				'description' => __( 'Generate social media meta tags on this website', 'ninecodes-social-manager' ),
 				'default' => 'on',
 				'attr' => array(
 					'data-toggle' => '.meta-site-setting',
@@ -722,10 +722,10 @@ final class Settings {
 			),
 			'name' => array(
 				'type' => 'text',
-				'label' => esc_html__( 'Site Name', 'ninecodes-social-manager' ),
-				'legend' => esc_html__( 'Site Name', 'ninecodes-social-manager' ),
+				'label' => __( 'Site Name', 'ninecodes-social-manager' ),
+				'legend' => __( 'Site Name', 'ninecodes-social-manager' ),
 				// translators: the %s will be replaced with list of brand / site name examples.
-				'description' => sprintf( esc_html__( 'The website name or brand as it should appear within the social media meta tags (e.g. %s)', 'ninecodes-social-manager' ), '<code>iMDB</code>, <code>TNW</code>, <code>HKDC</code>' ),
+				'description' => sprintf( __( 'The website name or brand as it should appear within the social media meta tags (e.g. %s)', 'ninecodes-social-manager' ), '<code>iMDB</code>, <code>TNW</code>, <code>HKDC</code>' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
 					'placeholder' => $this->site_title,
@@ -733,9 +733,9 @@ final class Settings {
 			),
 			'title' => array(
 				'type' => 'text',
-				'label' => esc_html__( 'Site Title', 'ninecodes-social-manager' ),
-				'legend' => esc_html__( 'Site Title', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'The title of this website as it should appear within the social media meta tags.', 'ninecodes-social-manager' ),
+				'label' => __( 'Site Title', 'ninecodes-social-manager' ),
+				'legend' => __( 'Site Title', 'ninecodes-social-manager' ),
+				'description' => __( 'The title of this website as it should appear within the social media meta tags.', 'ninecodes-social-manager' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
 					'placeholder' => $this->document_title,
@@ -743,8 +743,8 @@ final class Settings {
 			),
 			'description' => array(
 				'type' => 'textarea',
-				'label' => esc_html__( 'Site Description', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'A one to two sentence describing this website that should appear within the social media meta tags.', 'ninecodes-social-manager' ),
+				'label' => __( 'Site Description', 'ninecodes-social-manager' ),
+				'description' => __( 'A one to two sentence describing this website that should appear within the social media meta tags.', 'ninecodes-social-manager' ),
 				'class' => 'meta-site-setting',
 				'attr' => array(
 					'rows' => '4',
@@ -755,8 +755,8 @@ final class Settings {
 			'image' => array(
 				'type' => 'image',
 				'class' => 'meta-site-setting',
-				'label' => esc_html__( 'Site Image', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'An image URL which should represent this website within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'ninecodes-social-manager' ),
+				'label' => __( 'Site Image', 'ninecodes-social-manager' ),
+				'description' => __( 'An image URL which should represent this website within the social media meta tags (e.g. Open Graph, Twitter Cards, etc.)', 'ninecodes-social-manager' ),
 			),
 		);
 
@@ -815,15 +815,15 @@ final class Settings {
 		if ( $this->plugin->theme_support()->is( 'stylesheet' ) ) :
 
 			$setting_fields['enable_stylesheet'] = array(
-				'label' => esc_html__( 'Enable Stylesheet', 'ninecodes-social-manager' ),
+				'label' => __( 'Enable Stylesheet', 'ninecodes-social-manager' ),
 				'type' => 'content',
-				'content' => esc_html__( 'The Theme being used in this website has included the styles in its own stylesheet.', 'ninecodes-social-manager' ),
+				'content' => __( 'The Theme being used in this website has included the styles in its own stylesheet.', 'ninecodes-social-manager' ),
 			);
 		else :
 
 			$setting_fields['enable_stylesheet'] = array(
-				'label' => esc_html__( 'Enable Stylesheet', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Load the plugin stylesheet to apply essential styles.', 'ninecodes-social-manager' ),
+				'label' => __( 'Enable Stylesheet', 'ninecodes-social-manager' ),
+				'description' => __( 'Load the plugin stylesheet to apply essential styles.', 'ninecodes-social-manager' ),
 				'default' => 'on',
 				'type' => 'checkbox',
 			);
@@ -886,8 +886,8 @@ final class Settings {
 		if ( ! (bool) $this->plugin->theme_support()->is( 'button_mode' ) ) :
 
 			$setting_fields['button_mode'] = array(
-				'label' => esc_html__( 'Button Mode', 'ninecodes-social-manager' ),
-				'description' => esc_html__( 'Select the mode to render the social media buttons.', 'ninecodes-social-manager' ),
+				'label' => __( 'Button Mode', 'ninecodes-social-manager' ),
+				'description' => __( 'Select the mode to render the social media buttons.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
 				'options' => Options::button_modes(),
 				'default' => 'html',
@@ -896,8 +896,8 @@ final class Settings {
 		endif;
 
 		$setting_fields['link_mode'] = array(
-			'label' => esc_html__( 'Link Mode', 'ninecodes-social-manager' ),
-			'description' => esc_html__( 'Select the link mode to append when the content or the image is shared.', 'ninecodes-social-manager' ),
+			'label' => __( 'Link Mode', 'ninecodes-social-manager' ),
+			'description' => __( 'Select the link mode to append when the content or the image is shared.', 'ninecodes-social-manager' ),
 			'type' => 'radio',
 			'options' => Options::link_modes(),
 			'default' => 'permalink',

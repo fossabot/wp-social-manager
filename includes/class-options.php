@@ -42,55 +42,55 @@ final class Options {
 				'label' => 'Facebook',
 				'url' => 'https://www.facebook.com/',
 				// translators: %s is an example of a username input.
-				'description' => sprintf( esc_html__( 'Facebook profile or page (e.g. %s)', 'ninecodes-social-manager' ), '<code>zuck</code>' ),
+				'description' => sprintf( __( 'Facebook profile or page (e.g. %s)', 'ninecodes-social-manager' ), '<code>zuck</code>' ),
 			),
 			'twitter' => array(
 				'label' => 'Twitter',
 				'url' => 'https://twitter.com/',
 				// translators: %s is an example of a username input.
-				'description' => sprintf( esc_html__( 'Twitter profile without the %1$s (e.g. %2$s)', 'ninecodes-social-manager' ), '<code>@</code>', '<code>jack</code>' ),
+				'description' => sprintf( __( 'Twitter profile without the %1$s (e.g. %2$s)', 'ninecodes-social-manager' ), '<code>@</code>', '<code>jack</code>' ),
 			),
 			'instagram' => array(
 				'label' => esc_html( 'Instagram' ),
 				'url' => esc_url( 'https://instagram.com/' ),
 				// translators: %s is an example of a username input.
-				'description'  => sprintf( esc_html__( 'Instagram profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>victoriabeckham</code>' ),
+				'description'  => sprintf( __( 'Instagram profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>victoriabeckham</code>' ),
 			),
 			'pinterest' => array(
 				'label' => 'Pinterest',
 				'url' => esc_url( 'https://pinterest.com/' ),
 				// translators: %s is an example of a username input.
-				'description'  => sprintf( esc_html__( 'Pinterest profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>ohjoy</code>' ),
+				'description'  => sprintf( __( 'Pinterest profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>ohjoy</code>' ),
 			),
 			'linkedin' => array(
 				'label' => 'LinkedIn',
 				'url' => esc_url( 'https://www.linkedin.com/in/' ),
 				// translators: %s is an example of a username input.
-				'description' => sprintf( esc_html__( 'LinkedIn profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>williamhgates</code>' ),
+				'description' => sprintf( __( 'LinkedIn profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>williamhgates</code>' ),
 			),
 			'googleplus' => array(
 				'label' => 'Google+',
 				'url' => 'https://plus.google.com/',
 				// translators: %s is an example of a username input.
-				'description' => sprintf( esc_html__( 'Google+ profile or page. Include the %1$s sign if necessary (e.g. %2$s)', 'ninecodes-social-manager' ), '<code>+</code>', '<code>+hishekids</code>' ),
+				'description' => sprintf( __( 'Google+ profile or page. Include the %1$s sign if necessary (e.g. %2$s)', 'ninecodes-social-manager' ), '<code>+</code>', '<code>+hishekids</code>' ),
 			),
 			'youtube' => array(
 				'label' => 'Youtube',
 				'url' => 'https://www.youtube.com/user/',
 				// translators: %s is an example of a username input.
-				'description' => sprintf( esc_html__( 'Youtube channel (e.g. %s)', 'ninecodes-social-manager' ), '<code>BuzzFeedVideo</code>' ),
+				'description' => sprintf( __( 'Youtube channel (e.g. %s)', 'ninecodes-social-manager' ), '<code>BuzzFeedVideo</code>' ),
 			),
 			'reddit' => array(
 				'label' => 'Reddit',
 				'url' => 'https://www.reddit.com/user/',
 				// translators: %s is an example of a username input.
-				'description' => sprintf( esc_html__( 'Reddit profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>Unidan</code>' ),
+				'description' => sprintf( __( 'Reddit profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>Unidan</code>' ),
 			),
 			'tumblr' => array(
 				'label' => 'Tumblr',
 				'url' => 'https://tumblr.com/',
 				// translators: %s is an example of a username input.
-				'description' => sprintf( esc_html__( 'Tumblr blog (e.g. %s)', 'ninecodes-social-manager' ), '<code>crowloop</code>' ),
+				'description' => sprintf( __( 'Tumblr blog (e.g. %s)', 'ninecodes-social-manager' ), '<code>crowloop</code>' ),
 			),
 		);
 
@@ -191,9 +191,9 @@ final class Options {
 	public static function button_views() {
 
 		$views = array(
-			'icon' => esc_html__( 'Icon Only', 'ninecodes-social-manager' ),
-			'text' => esc_html__( 'Text Only', 'ninecodes-social-manager' ),
-			'icon_text' => esc_html__( 'Icon and Text', 'ninecodes-social-manager' ),
+			'icon' => __( 'Icon Only', 'ninecodes-social-manager' ),
+			'text' => __( 'Text Only', 'ninecodes-social-manager' ),
+			'icon_text' => __( 'Icon and Text', 'ninecodes-social-manager' ),
 		);
 
 		/**
@@ -235,8 +235,8 @@ final class Options {
 	public static function button_placements() {
 
 		$placements = array(
-			'before' => esc_html__( 'Before the content', 'ninecodes-social-manager' ),
-			'after'  => esc_html__( 'After the content', 'ninecodes-social-manager' ),
+			'before' => __( 'Before the content', 'ninecodes-social-manager' ),
+			'after'  => __( 'After the content', 'ninecodes-social-manager' ),
 		);
 
 		/**

@@ -56,14 +56,14 @@ class Customizer {
 		// Register Panel: Social Media.
 		$wp_customize->add_panel('ninecodes-social-manager', array(
 			'capability' => 'edit_theme_options',
-			'title' => esc_html__( 'Social Media', 'ninecodes-social-manager' ),
+			'title' => __( 'Social Media', 'ninecodes-social-manager' ),
 			'priority' => 210,
 			'active_callback' => array( $this, 'panel_active_callback' ),
 		));
 
 		// Register Section in the Panel: Buttons.
 		$wp_customize->add_section('button', array(
-			'title' => esc_html__( 'Buttons', 'ninecodes-social-manager' ),
+			'title' => __( 'Buttons', 'ninecodes-social-manager' ),
 			'panel' => 'ninecodes-social-manager',
 		));
 
@@ -78,32 +78,32 @@ class Customizer {
 				$wp_customize,
 				"{$this->plugin->option_slug}_button_style",
 				array(
-					'label' => esc_html__( 'Style', 'ninecodes-social-manager' ),
-					'description' => esc_html__( 'Select one the following options to change the social media buttons style', 'ninecodes-social-manager' ),
+					'label' => __( 'Style', 'ninecodes-social-manager' ),
+					'description' => __( 'Select one the following options to change the social media buttons style', 'ninecodes-social-manager' ),
 					'section' => 'button',
 					'choices' => apply_filters( 'ninecodes_social_manager_options', array(
 						'default' => array(
-							'label' => esc_html__( 'Default', 'ninecodes-social-manager' ),
+							'label' => __( 'Default', 'ninecodes-social-manager' ),
 							'url'   => plugin_dir_url( __DIR__ ) . 'img/dummy.png',
 						),
 						'colored' => array(
-							'label' => esc_html__( 'Colored', 'ninecodes-social-manager' ),
+							'label' => __( 'Colored', 'ninecodes-social-manager' ),
 							'url'   => plugin_dir_url( __DIR__ ) . 'img/dummy.png',
 						),
 						'square' => array(
-							'label' => esc_html__( 'Square', 'ninecodes-social-manager' ),
+							'label' => __( 'Square', 'ninecodes-social-manager' ),
 							'url'   => plugin_dir_url( __DIR__ ) . 'img/dummy.png',
 						),
 						'rounded' => array(
-							'label' => esc_html__( 'Rounded', 'ninecodes-social-manager' ),
+							'label' => __( 'Rounded', 'ninecodes-social-manager' ),
 							'url' => plugin_dir_url( __DIR__ ) . 'img/dummy.png',
 						),
 						'circular' => array(
-							'label' => esc_html__( 'Circular', 'ninecodes-social-manager' ),
+							'label' => __( 'Circular', 'ninecodes-social-manager' ),
 							'url' => plugin_dir_url( __DIR__ ) . 'img/dummy.png',
 						),
 						'skeuomorphic' => array(
-							'label' => esc_html__( 'Skeuomorphic', 'ninecodes-social-manager' ),
+							'label' => __( 'Skeuomorphic', 'ninecodes-social-manager' ),
 							'url' => plugin_dir_url( __DIR__ ) . 'img/dummy.png',
 						),
 					), 'button_styles' ),

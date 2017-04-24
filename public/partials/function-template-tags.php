@@ -130,7 +130,7 @@ if ( ! function_exists( 'get_the_author_social_profile' ) ) {
 				$url = esc_url( trailingslashit( $profiles[ $site ]['url'] ) . $username );
 
 				/* translators: 1. The author name. 2. The social media label. */
-				$title = sprintf( esc_html__( 'Follow %1$s on %2$s', 'ninecodes-social-manager' ), $author_name, $profiles[ $site ]['label'] );
+				$title = sprintf( __( 'Follow %1$s on %2$s', 'ninecodes-social-manager' ), $author_name, $profiles[ $site ]['label'] );
 
 				$return .= "<a class=\"{$prefix}-profile-author__item item-{$site}\" href=\"{$url}\" target=\"_blank\" rel=\"nofollow\" title=\"{$title}\">{$icon}</a>";
 		 	endforeach;

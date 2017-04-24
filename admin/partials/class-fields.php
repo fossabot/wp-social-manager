@@ -135,12 +135,12 @@ final class Fields extends WPSettings\Fields {
 		$html = "<div class='field-image'><input type='hidden' id='{$id}' name='{$name}' value='{$value}'/>
 			<div id='{$id}-img-wrap' class='field-image__wrap{$set}'>
 				<div id='{$id}-img-elem'>{$img}</div>
-				<div id='{$id}-img-placeholder' class='field-image-placeholder'>" . esc_html__( 'No Image Selected', 'ninecodes-social-manager' ) . "</div>
+				<div id='{$id}-img-placeholder' class='field-image-placeholder'>" . __( 'No Image Selected', 'ninecodes-social-manager' ) . "</div>
 			</div>
 			<div id='{$id}-img-buttons' class='field-image__buttons'>
-				<button type='button' id='{$id}-img-add' class='button add-media-img{$show}' data-input='#{$id}'>" . esc_html__( 'Add image', 'ninecodes-social-manager' ) . "</button>
-				<button type='button' id='{$id}-img-change' class='button change-media-img{$hide}' data-input='#{$id}'>" . esc_html__( 'Change image', 'ninecodes-social-manager' ) . "</button>
-				<button type='button' id='{$id}-img-remove' class='button remove-media-img{$hide}' data-input='#{$id}'>" . esc_html__( 'Remove image', 'ninecodes-social-manager' ) . '</button>
+				<button type='button' id='{$id}-img-add' class='button add-media-img{$show}' data-input='#{$id}'>" . __( 'Add image', 'ninecodes-social-manager' ) . "</button>
+				<button type='button' id='{$id}-img-change' class='button change-media-img{$hide}' data-input='#{$id}'>" . __( 'Change image', 'ninecodes-social-manager' ) . "</button>
+				<button type='button' id='{$id}-img-remove' class='button remove-media-img{$hide}' data-input='#{$id}'>" . __( 'Remove image', 'ninecodes-social-manager' ) . '</button>
             </div>';
 		echo $html; // WPCS: XSS ok. ?>
 	<?php }

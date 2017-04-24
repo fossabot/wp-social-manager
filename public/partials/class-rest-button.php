@@ -208,7 +208,7 @@ class REST_Button extends WP_REST_Controller {
 						)
 					),
 					'select' => array(
-						'description' => esc_html__( 'Limit response to a particular social buttons set.', 'ninecodes-social-manager' ),
+						'description' => __( 'Limit response to a particular social buttons set.', 'ninecodes-social-manager' ),
 						'type' => 'string',
 						'enum' => array( 'content', 'images' ),
 						'sanitize_callback' => 'sanitize_key',
@@ -261,7 +261,7 @@ class REST_Button extends WP_REST_Controller {
 		$post_status = get_post_status( $post_id );
 
 		if ( 'publish' !== $post_status ) {
-			return new WP_Error( 'rest_social_buttons_invalid_id', esc_html__( 'Invalid buttons ID.', 'ninecodes-social-manager' ), array(
+			return new WP_Error( 'rest_social_buttons_invalid_id', __( 'Invalid buttons ID.', 'ninecodes-social-manager' ), array(
 				'status' => 404,
 			) );
 		}

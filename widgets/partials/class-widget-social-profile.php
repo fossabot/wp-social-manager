@@ -54,12 +54,12 @@ class Widget_Social_Profile extends Widget {
 
 		parent::__construct( array(
 			'id' => 'profile',
-			'name' => esc_html__( 'Social Media Profile', 'ninecodes-social-manager' ),
-			'description' => esc_html__( 'Display list of social media profile and page URLs connected to this website.', 'ninecodes-social-manager' ),
+			'name' => __( 'Social Media Profile', 'ninecodes-social-manager' ),
+			'description' => __( 'Display list of social media profile and page URLs connected to this website.', 'ninecodes-social-manager' ),
 		) );
 
 		$this->profiles = Options::social_profiles();
-		$this->widget_title = esc_html__( 'Follow Us', 'ninecodes-social-manager' );
+		$this->widget_title = __( 'Follow Us', 'ninecodes-social-manager' );
 	}
 
 	/**
@@ -126,8 +126,8 @@ class Widget_Social_Profile extends Widget {
 			<p>
 			<?php
 				/* translators: %s is replaced with the "setting page link" */
-				$message = esc_html__( 'Please add at least one social media profile of this website in the %s.', 'ninecodes-social-manager' );
-				$setting = '<a href="' . admin_url( 'options-general.php?page=ninecodes-social-manager' ) . '">' . esc_html__( 'setting page', 'ninecodes-social-manager' ) . '</a>';
+				$message = __( 'Please add at least one social media profile of this website in the %s.', 'ninecodes-social-manager' );
+				$setting = '<a href="' . admin_url( 'options-general.php?page=ninecodes-social-manager' ) . '">' . __( 'setting page', 'ninecodes-social-manager' ) . '</a>';
 				echo wp_kses(sprintf( $message, $setting ), array(
 					'a' => array(
 						'href' => true,

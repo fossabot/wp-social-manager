@@ -254,7 +254,7 @@ final class Plugin {
 
 		$markup = '<a href="' . esc_url( get_admin_url( null, 'options-general.php?page=%2$s' ) ) . '">%1$s</a>';
 		$settings = array(
-			'settings' => sprintf( $markup, esc_html__( 'Settings', 'ninecodes-social-manager' ), $this->plugin_slug ),
+			'settings' => sprintf( $markup, __( 'Settings', 'ninecodes-social-manager' ), $this->plugin_slug ),
 		);
 
 		return array_merge( $settings, $links );
