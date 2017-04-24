@@ -246,12 +246,18 @@ abstract class Button implements Button_Interface {
 	 */
 	public function get_label( $site = '', $context = '' ) {
 
-		if ( in_array( $context, array( 'content', 'image' ), true ) ) {
-			$buttons = Options::button_sites( $context );
-			return isset( $buttons[ $site ]['label'] ) ? $buttons[ $site ]['label'] : null;
+		if ( empty( $site ) || ! in_array( $context, array( 'content', 'image' ), true ) ) {
+			return '';
 		}
 
-		return null;
+		$button = $this->plugin->get_option( "button_{$context}", 'include' );
+		$default = Options::button_sites( $context );
+
+		if ( isset( $button[ $site ]['label'] ) && ! empty( $button[ $site ]['label'] ) ) {
+			return $button[ $site ]['label'];
+		} else {
+			return isset( $default[ $site ]['label'] ) ? $default[ $site ]['label'] : '';
+		}
 	}
 
 	/**

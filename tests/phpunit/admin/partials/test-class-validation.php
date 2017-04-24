@@ -206,7 +206,7 @@ class Test_Validation extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'facebook', $falsy );
 		$this->assertEquals( array(
 			'enable' => false,
-			'label' => 'Share',
+			'label' => 'Facebook',
 		), $falsy['facebook'] );
 
 		/**
