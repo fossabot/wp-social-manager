@@ -20,10 +20,11 @@
 				<directory suffix=".php">./node_modules</directory>
 				<directory suffix=".php">./tests</directory>
 				<directory suffix=".php">./vendor</directory>
+				<directory suffix=".php">./includes/bb-metabox</directory>
+				<directory suffix=".php">./includes/bb-metabox-extend</directory>
+				<directory suffix=".php">./includes/ogp</directory>
+				<directory suffix=".php">./includes/wp-settings</directory>
 			</exclude>
 		</whitelist>
 	</filter>
-	<logging>
-		<log type="coverage-clover" target="build/logs/clover.xml"/>
-	</logging>
 </phpunit>
