@@ -282,22 +282,22 @@ final class Options {
 		$button_sites['content'] = array(
 			'facebook' => array(
 				'name' => 'Facebook',
-				'label' => 'Share',
+				'label' => 'Facebook',
 				'endpoint' => 'https://www.facebook.com/sharer/sharer.php',
 			),
 			'twitter' => array(
 				'name' => 'Twitter',
-				'label' => 'Tweet',
+				'label' => 'Twitter',
 				'endpoint' => 'https://twitter.com/intent/tweet',
 			),
 			'googleplus' => array(
 				'name' => 'Google+',
-				'label' => '+1',
+				'label' => 'Google+',
 				'endpoint' => 'https://plus.google.com/share',
 			),
 			'pinterest' => array(
 				'name' => 'Pinterest',
-				'label' => 'Pin It',
+				'label' => 'Pinterest',
 				'endpoint' => 'https://www.pinterest.com/pin/create/bookmarklet/',
 			),
 			'linkedin' => array(
@@ -325,7 +325,7 @@ final class Options {
 		$button_sites['image'] = array(
 			'pinterest' => array(
 				'name' => 'Pinterest',
-				'label' => 'Pin It',
+				'label' => 'Pinterest',
 				'endpoint' => 'https://www.pinterest.com/pin/create/bookmarklet/',
 			),
 		);
