@@ -359,7 +359,7 @@ final class Settings {
 						'enqueue' => array(
 							'validate_callback' => array( $this->validate, 'setting_advanced' ),
 						),
-						'modes' => array(
+						'mode' => array(
 							'title' => __( 'Mode', 'ninecodes-social-manager' ),
 							'description' => __( 'Configure the modes that work best for your website.', 'ninecodes-social-manager' ),
 							'validate_callback' => array( $this->validate, 'setting_mode' ),
