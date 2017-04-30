@@ -81,8 +81,12 @@ class Endpoint {
 		$includes = (array) $this->plugin->get_option( 'button_content', 'include' );
 		$sites = Options::button_sites( 'content' );
 
-		foreach ( $sites as $site => $label ) {
-			if ( ! key_exists( $site, array_filter( $includes ) ) ) {
+		foreach ( $sites as $site => $label ) {  // Exclude site which is not enabled.
+
+			if ( ! key_exists( $site, array_filter( $includes ) ) ||
+				 ! isset( $includes[ $site ]['enable'] ) ||
+				 'on' !== $includes[ $site ]['enable'] ) {
+
 				unset( $sites[ $site ] );
 			}
 		}
@@ -245,13 +249,34 @@ class Endpoint {
 			return $output;
 		}
 
+		/**
+		 * Get the sites enabled in the "Settings > Social Media".
+		 *
+		 * @var array
+		 */
+		$includes = (array) $this->plugin->get_option( 'button_image', 'include' );
 		$sites = Options::button_sites( 'image' );
+
+		foreach ( $sites as $site => $label ) { // Exclude site which is not enabled.
+
+			if ( ! key_exists( $site, array_filter( $includes ) ) ||
+				 ! isset( $includes[ $site ]['enable'] ) ||
+				 'on' !== $includes[ $site ]['enable'] ) {
+
+				unset( $sites[ $site ] );
+			}
+		}
 
 		foreach ( $sites as $site => $label ) {
 
+			/**
+			 * Get the site endpoint base URL.
+			 *
+			 * @var string
+			 */
 			$base = self::get_endpoint_base( 'image', $site );
 
-			if ( ! $base ) {
+			if ( ! $base ) { // Exclude site which does not have endpoint base URL.
 				unset( $sites[ $site ] );
 			}
 
