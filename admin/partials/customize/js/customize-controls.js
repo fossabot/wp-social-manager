@@ -2,6 +2,8 @@ jQuery(function( $ ) {
 
 	'use strict';
 
+	console.log( $( '.customize-control-ncsocman-radio-image .buttonset' ) );
+
 	/**
 	 * Control: Button Style.
 	 *

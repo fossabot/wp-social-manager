@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use \NineCodes\WPSettings;
+use \NineCodes\WPSettings as WP_Settings;
 
 /**
  * The Settings class is used to register the option menu, the option page,
@@ -214,7 +214,7 @@ final class Settings {
 	 */
 	public function setups() {
 
-		$this->settings = new WPSettings\Settings( $this->plugin->option_slug );
+		$this->settings = new WP_Settings\Settings( $this->plugin->option_slug );
 		$this->validate = new Validation();
 
 		new Fields( $this->screen );
@@ -499,7 +499,7 @@ final class Settings {
 		$setting_fields = array(
 			'include' => array(
 				'label' => __( 'Button to include', 'ninecodes-social-manager' ),
-				'type' => 'include_sites',
+				'type' => 'checkbox_sites',
 				'options' => array_map( function( $value ) {
 					return array(
 						'name' => $value['name'],
@@ -548,6 +548,15 @@ final class Settings {
 				// translators: %s will be replaced with "<code>Share on:</code>".
 				'description' => sprintf( __( 'Set the heading shown before the buttons (e.g. %s).', 'ninecodes-social-manager' ), '<code>Share on:</code>' ),
 				'default' => __( 'Share on:', 'ninecodes-social-manager' ),
+			),
+			'style' => array(
+				'type' => 'button',
+				'label' => __( 'Button Style', 'ninecodes-social-manager' ),
+				'text' => __( 'Customize and Live Preview', 'ninecodes-social-manager' ),
+				'icon' => 'dashicons-art',
+				'attr' => array(
+					'href' => add_query_arg( 'return', rawurlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), 'customize.php' ),
+				),
 			),
 		);
 
@@ -622,7 +631,7 @@ final class Settings {
 			),
 			'include' => array(
 				'label' => __( 'Button to include', 'ninecodes-social-manager' ),
-				'type' => 'include_sites',
+				'type' => 'checkbox_sites',
 				'options' => array_map( function( $value ) {
 					return array(
 						'name' => $value['name'],

@@ -14,14 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use \NineCodes\WPSettings;
+use \NineCodes\WPSettings as WP_Settings;
 
 /**
  * The Fields class is used for registering the new setting field using PepperPlane.
  *
  * @since 1.0.0
  */
-final class Fields extends WPSettings\Fields {
+final class Fields extends WP_Settings\Fields {
 
 	/**
 	 * The admin screen base / ID
@@ -63,7 +63,8 @@ final class Fields extends WPSettings\Fields {
 		add_action( "{$this->screen}_field_image", array( $this, 'field_image' ) );
 		add_action( "{$this->screen}_field_text_profile", array( $this, 'field_text_profile' ) );
 		add_action( "{$this->screen}_field_checkbox_toggle", array( $this, 'field_checkbox_toggle' ) );
-		add_action( "{$this->screen}_field_include_sites", array( $this, 'field_include_sites' ) );
+		add_action( "{$this->screen}_field_checkbox_sites", array( $this, 'field_checkbox_sites' ) );
+		add_action( "{$this->screen}_field_button", array( $this, 'field_button' ) );
 
 		// Filters.
 		add_filter( "{$this->screen}_field_scripts", array( $this, 'register_scripts' ) );
@@ -100,7 +101,7 @@ final class Fields extends WPSettings\Fields {
 	public function register_styles( array $styles ) {
 
 		$styles['image'] = 'field-image';
-		$styles['include_sites'] = 'field-include-sites';
+		$styles['checkbox_sites'] = 'field-include-sites';
 
 		return $styles;
 	}
@@ -233,7 +234,7 @@ final class Fields extends WPSettings\Fields {
 	}
 
 	/**
-	 * [field_multicheckbox_button_sites description]
+	 * The function callback to render the button to include field.
 	 *
 	 * @since 2.0.0
 	 * @access public
@@ -241,7 +242,7 @@ final class Fields extends WPSettings\Fields {
 	 * @param array $args Arguments (e.g. id, section, type, etc.) to render the new interface.
 	 * @return void
 	 */
-	public function field_include_sites( array $args ) {
+	public function field_checkbox_sites( array $args ) {
 
 		$args = $this->get_arguments( $args ); // Escapes all attributes.
 
@@ -334,5 +335,40 @@ final class Fields extends WPSettings\Fields {
 				<?php endforeach; ?>
 			</tbody>
 		</table>
+	<?php }
+
+	/**
+	 * The function callback to render the button to include field.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param array $args Arguments (e.g. id, section, type, etc.) to render the new interface.
+	 * @return void
+	 */
+	public function field_button( array $args ) {
+
+		if ( ! isset( $args['text'] ) || empty( $args['text'] ) ) {
+			return;
+		}
+
+		$args['attr']['class'] = 'button';
+		$args = $this->get_arguments( $args ); // Escapes all attributes.
+
+		$section = esc_attr( $args['section'] );
+		$id = esc_attr( $args['id'] );
+		$text = esc_attr( $args['text'] );
+		$icon = esc_attr( $args['icon'] );
+
+		$is_dashicon = strpos( $icon, 'dashicons-' ) !== false; ?>
+
+		<a id="<?php echo esc_attr( $section . '_' . $id ); ?>" <?php echo $args['attr']; // WPCS: XSS ok.  ?>>
+			<?php if ( $icon && $is_dashicon ) : ?>
+			<span class="dashicons <?php echo esc_attr( $icon ); ?>"></span>
+			<?php else : ?>
+			<span class="<?php echo esc_attr( $icon ); ?>"></span>
+			<?php endif; ?>
+			<?php echo esc_html( $args['text'] ); ?>
+		</a>
 	<?php }
 }

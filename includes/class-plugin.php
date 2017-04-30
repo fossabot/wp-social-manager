@@ -150,7 +150,6 @@ final class Plugin {
 		require_once( $this->path_dir . 'includes/wp-settings/class-fields.php' );
 
 		require_once( $this->path_dir . 'includes/ogp/open-graph-protocol.php' );
-		require_once( $this->path_dir . 'includes/customize/class-control-radio-image.php' );
 
 		require_once( $this->path_dir . 'admin/class-admin-view.php' );
 		require_once( $this->path_dir . 'public/class-public-view.php' );
