@@ -46,7 +46,22 @@ class Test_Button extends WP_UnitTestCase {
 	}
 
 	/**
-	 * T
+	 * Test `render_button` method.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_render_button() {
+		$this->assertEquals( '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id nostrum obcaecati, temporibus, odit et fuga labore debitis animi dicta omnis facilis vitae in perspiciatis eaque unde veritatis voluptates voluptas modi.</p>', $this->button->render_button( '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id nostrum obcaecati, temporibus, odit et fuga labore debitis animi dicta omnis facilis vitae in perspiciatis eaque unde veritatis voluptates voluptas modi.</p>' ) );
+	}
+
+	/**
+	 * Test `get_label` method.
+	 *
+	 * @since 2.0.0
+	 * @access public
 	 *
 	 * @return void
 	 */
@@ -75,6 +90,7 @@ class Test_Button extends WP_UnitTestCase {
 	 * Test `render_view` method.
 	 *
 	 * @since 1.2.0
+	 * @access public
 	 *
 	 * @return void
 	 */
@@ -106,6 +122,7 @@ class Test_Button extends WP_UnitTestCase {
 	 * All return value must be empty.
 	 *
 	 * @since 2.0.0
+	 * @access public
 	 *
 	 * @return void
 	 */
@@ -239,6 +256,15 @@ class Test_Button extends WP_UnitTestCase {
 		) );
 
 		$this->assertEmpty( $buttons_view10 );
+
+		/**
+		 * Test with empty array arguments.
+		 *
+		 * @var string
+		 */
+		$buttons_view11 = $this->button->render_view( 'icon', 'content', array() );
+
+		$this->assertEmpty( $buttons_view11 );
 	}
 
 	/**

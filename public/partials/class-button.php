@@ -156,7 +156,7 @@ abstract class Button implements Button_Interface {
 	 */
 	public function render_view( $view, $context, array $args ) {
 
-		if ( ! $view || ! $context || ! is_array( $args ) ) {
+		if ( ! $view || ! $context || empty( $args ) ) {
 			return '';
 		}
 
