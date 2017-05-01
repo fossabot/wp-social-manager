@@ -59,3 +59,4 @@ npm-debug.log
 *.min.js
 *.min.css
 *.min-rtl.css
+*.css

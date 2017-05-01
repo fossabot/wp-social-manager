@@ -154,8 +154,8 @@ module.exports = function(grunt) {
 
 			styles: {
 				files: [
-					adminDirCSS + '*.css',
-					publicDirCSS + '*.css',
+					adminDirCSS + 'less/*.less',
+					publicDirCSS + 'less/*.less',
 					'./includes/customize/css/*.css',
 					'!' + adminDirCSS + '*.min.css',
 					'!' + adminDirCSS + '*.min-rtl.css',
@@ -218,20 +218,52 @@ module.exports = function(grunt) {
 			}
 		},
 
-		// Minify .css files.
-		cssmin: {
+		// Compile LESS files.
+		less: {
+			options: {
+				compress: false,
+				plugins: [
+					require('less-plugin-group-css-media-queries'), // eslint-disable-line global-require
+					new(require('less-plugin-clean-css'))({ // eslint-disable-line global-require
+						compatibility: 'ie9'
+					}),
+					new(require('less-plugin-autoprefix'))({ // eslint-disable-line global-require
+						browsers: [
+							'last 2 version',
+							'> 1%',
+							'ie >= 9',
+							'ie_mob >= 10',
+							'ff >= 30',
+							'chrome >= 34',
+							'safari >= 7',
+							'opera >= 23',
+							'ios >= 7',
+							'android >= 4',
+							'bb >= 10'
+						]
+					}),
+				]
+			},
+
+			/**
+			 * Configurations to compile LESS file in the development / staging stage.
+			 * - Don't compress the file.
+			 * - Generate sourceMap.
+			 * @type {Object}
+			 */
 			dev: {
 				options: {
-					sourceMap: true
+					sourceMap: true,
 				},
-				files: csssrc
+				files: [{
+					expand: true,
+					cwd: publicDirCSS + 'less/',
+					src: ['*.less'],
+					dest: publicDirCSS,
+					ext: '.css',
+					extDot: 'last',
+				}]
 			},
-			rtl: {
-				files: csssrcRTL
-			},
-			build: {
-				files: csssrc
-			}
 		},
 
 		// Transforming CSS LTR to RTL.
@@ -247,13 +279,13 @@ module.exports = function(grunt) {
 						cwd: adminDirCSS,
 						dest: adminDirCSS,
 						ext: '-rtl.css',
-						src: ['*.css', '!*-rtl.css', '!*.min.css']
+						src: ['*.css', '!*-rtl.css']
 					}, {
 						expand: true,
 						cwd: publicDirCSS,
 						dest: publicDirCSS,
 						ext: '-rtl.css',
-						src: ['*.css', '!*-rtl.css', '!*.min.css']
+						src: ['*.css', '!*-rtl.css']
 					}
 				]
 			}
@@ -458,8 +490,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-wp-i18n');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
+	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-contrib-clean');
@@ -521,16 +553,14 @@ module.exports = function(grunt) {
 
 	// "Development" stage.
 	grunt.registerTask('styles:dev', [
+		'less',
 		'rtlcss',
-		'cssmin:dev',
-		'cssmin:rtl'
 	]);
 
 	// "Production" stage.
 	grunt.registerTask('styles:build', [
+		'less',
 		'rtlcss',
-		'cssmin:build',
-		'cssmin:rtl'
 	]);
 
 	/**

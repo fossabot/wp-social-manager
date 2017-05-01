@@ -1,0 +1,168 @@
+@color-facebook :   #3b5998;
+@color-twitter :    #00acee;
+@color-googleplus : #dd4b39;
+@color-pinterest :  #cc2127;
+@color-linkedin :   #0976b4;
+@color-tumblr :     #35465c;
+@color-reddit :     #5f99cf;
+@color-youtube :    #b31217;
+@color-instagram :  #833ab4;
+
+/**
+ * Select styles which class started with "social-manager"
+ * The "social-manager" is the default class which
+ */
+.social-manager-button {
+	svg {
+		width: 1.6em;
+	    height: 1.6em;
+	    display: block;
+	}
+	a {
+		display: inline-block;
+		text-decoration: none;
+		box-shadow: none !important;
+		border: 0 !important; /** override TwentySixteen default styles **/
+	}
+
+	&__item svg {
+		fill: #fff;
+	}
+	&__item {
+		color: #fff;
+		background-color: #000;
+		margin-bottom: 0.6em;
+		margin-right: 0.6em;
+		font-weight: 400;
+		font-size: 0.8em;
+		&:hover,
+		&:focus,
+		&:active {
+			color: #fff !important;
+		}
+	}
+
+	.site-facebook {
+		background-color: @color-facebook;
+		&:hover {
+			background-color: darken(@color-facebook, 5%);
+		}
+	}
+	.site-twitter {
+		background-color: @color-twitter;
+		&:hover {
+			background-color: darken(@color-twitter, 5%);
+		}
+	}
+	.site-googleplus {
+		background-color: @color-googleplus;
+		&:hover {
+			background-color: darken(@color-googleplus, 5%);
+		}
+	}
+	.site-pinterest {
+		background-color: @color-pinterest;
+		&:hover {
+			background-color: darken(@color-pinterest, 5%);
+		}
+	}
+	.site-linkedin {
+		background-color: @color-linkedin;
+		&:hover {
+			background-color: darken(@color-linkedin, 5%);
+		}
+	}
+	.site-tumblr {
+		background-color: @color-tumblr;
+		&:hover {
+			background-color: darken(@color-tumblr, 5%);
+		}
+	}
+	.site-reddit {
+		background-color: @color-reddit;
+		&:hover {
+			background-color: darken(@color-reddit, 5%);
+		}
+	}
+	.site-youtube {
+		background-color: @color-youtube;
+		&:hover {
+			background-color: darken(@color-youtube, 5%);
+		}
+	}
+	.site-email {
+		background-color: #555;
+		&:hover {
+			background-color: darken(#555, 5%);
+		}
+	}
+
+	&__list--icon  {
+		svg {
+			width: 1.28em;
+		    height: 1.28em;
+		}
+		.social-manager-button__item {
+			padding: 0.46em;
+			margin-right: 0.3em;
+		}
+	}
+
+	&__list--text  {
+		.social-manager-button__item {
+			padding: 0.3em 0.86em;
+		}
+	}
+
+	&__list--icon_text {
+		display: flex;
+		flex-wrap: wrap;
+
+		.social-manager-button__item {
+			display: flex;
+			align-items: center;
+			padding: 0.36em 0.8em;
+			font-size: 0.8em;
+		}
+		.social-manager-button__item-text {
+			margin-top: 1px;
+		}
+		.social-manager-button__item-icon {
+			margin-right: 0.4em;
+		}
+	}
+
+	&--rounded {
+		.social-manager-button__item {
+			border-radius: 3px;
+		}
+	}
+	&--circular {
+		.social-manager-button__item {
+			border-radius: 30px;
+		}
+	}
+}
+
+.social-manager-button--img {
+	position: relative;
+	display: inline-block;
+	&:hover {
+		.social-manager-button__list {
+			visibility: visible;
+		}
+	}
+	.social-manager-button {
+		&__list {
+			visibility: hidden;
+			position: absolute;
+			top: .68em;
+			left: .68em;
+			display: block;
+		}
+		&__item {
+			font-style: normal;
+			font-size: 13px; // Font size in the image should better be a fixed width.
+		}
+	}
+}
