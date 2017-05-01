@@ -47,6 +47,8 @@ class Button_Image extends Button {
 		parent::__construct( $plugin );
 
 		$this->view = $this->plugin->get_option( 'button_image', 'view' );
+		$this->style = get_theme_mod( "{$this->plugin->option_slug}_style_button_image", 'rounded' );
+
 		$this->hooks();
 	}
 
@@ -120,7 +122,7 @@ class Button_Image extends Button {
 		$post_id = get_the_id();
 
 		foreach ( $images as $index => $img ) :
-			$img->setAttribute( 'data-social-manager', 'content-image-' . $post_id );
+			$img->setAttribute( 'data-social-manager', 'image-' . $post_id );
 		endforeach;
 
 		$content = $this->to_html( $dom );
@@ -135,9 +137,9 @@ class Button_Image extends Button {
 	 * Add social wrapper element into the images in the content.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Add `data-social-manager` attribute when the img src match with the src in the endpoints response.
+	 * @since 1.0.6 - Add `data-social-manager` attribute when the img src match with the src in the endpoint response.
 	 * 				- Wrap the image with `<span>` only on HTML Mode.
-	 * 				- (HTML Mode) Only wrap the image with `<span>` element when the img src match with the src in the endpoints response.
+	 * 				- (HTML Mode) Only wrap the image with `<span>` element when the img src match with the src in the endpoint response.
 	 * 				- Use the new method `to_html()` from the parent class to return the content.
 	 * 				- Prevent appending the social buttons when the post is not yet published.
 	 * @access public
@@ -177,7 +179,7 @@ class Button_Image extends Button {
 			if ( $is_html ) {
 
 				$wrap = $dom->createElement( 'span' );
-				$wrap->setAttribute( 'class', "{$this->attr_prefix}-buttons {$this->attr_prefix}-buttons--img {$this->attr_prefix}-buttons--{$post_id}" );
+				$wrap->setAttribute( 'class', "{$this->attr_prefix}-button {$this->attr_prefix}-button--img {$this->attr_prefix}-button--{$this->style}" );
 			}
 
 			foreach ( $images as $index => $img ) :
@@ -194,10 +196,11 @@ class Button_Image extends Button {
 					continue;
 				}
 
-				if ( $is_html && in_array( $resp_src, $attributes, true ) && "content-image-{$post_id}" === $attributes['data-social-manager'] ) {
+				if ( $is_html && in_array( $resp_src, $attributes, true ) && "image-{$post_id}" === $attributes['data-social-manager'] ) {
 
 					$wrap_clone = $wrap->cloneNode();
-					$wrap_clone->setAttribute( 'id', "{$this->attr_prefix}-buttons-{$post_id}-img-{$wrap_id}" );
+					$wrap_clone->setAttribute( 'id', "{$this->attr_prefix}-button-{$post_id}-img-{$wrap_id}" );
+					$wrap_clone->setAttribute( 'data-social-manager', 'button-image' );
 
 					if ( 'a' === $img->parentNode->nodeName ) {
 
@@ -212,7 +215,7 @@ class Button_Image extends Button {
 					}
 
 					$fragment = $dom->createDocumentFragment();
-					$fragment->appendXML( $this->render_html( $this->response[ $index ]['endpoints'] ) );
+					$fragment->appendXML( $this->render_html( $this->response[ $index ]['endpoint'] ) );
 					$wrap_clone->appendChild( $fragment );
 				}
 
@@ -233,7 +236,7 @@ class Button_Image extends Button {
 	 * Used when the "Buttons Mode" is set to 'HTML'.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Renamed `data-social-buttons` to `data-social-manager` of the `span` (wrapper) element.
+	 * @since 1.0.6 - Renamed `data-social-button` to `data-social-manager` of the `span` (wrapper) element.
 	 * @access public
 	 *
 	 * @param array $includes Data to include in the button.
@@ -245,7 +248,7 @@ class Button_Image extends Button {
 
 		if ( ! empty( $includes ) ) :
 
-			$list .= "<span class='{$this->attr_prefix}-buttons__list {$this->attr_prefix}-buttons__list--{$this->view}' data-social-manager=\"button-image\">";
+			$list .= "<span class=\"{$this->attr_prefix}-button__list {$this->attr_prefix}-button__list--{$this->view}\">";
 
 			$prefix = $this->attr_prefix;
 
@@ -290,7 +293,7 @@ class Button_Image extends Button {
 	 * Add the Underscore.js template of the social media buttons.
 	 *
 	 * @since   1.0.0
-	 * @since 	1.0.6 - Renamed `data-social-buttons` to `data-social-manager` of the `span` (wrapper) element.
+	 * @since 	1.0.6 - Renamed `data-social-button` to `data-social-manager` of the `span` (wrapper) element.
 	 * @access  public
 	 *
 	 * @return void
@@ -318,7 +321,7 @@ foreach ( $includes as $site => $value ) :
 		'site' => $site,
 		'icon' => $icon,
 		'label' => $label,
-		'endpoint' => "data.endpoints.{$site}",
+		'endpoint' => "data.endpoint.{$site}",
 	));
 
 	echo $list; // WPCS: XSS ok.
@@ -352,7 +355,7 @@ endforeach; ?></span>
 		 *
 		 * @var array
 		 */
-		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, 'buttons_image', array(
+		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, 'button_image', array(
 			'attr_prefix' => $this->attr_prefix,
 		) );
 
@@ -365,11 +368,11 @@ endforeach; ?></span>
 	 * The Utility method to check if buttons content should be generated.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @return boolean
 	 */
-	protected function is_button_image() {
+	public function is_button_image() {
 
 		if ( $this->in_amp() ) {
 			return false;
@@ -407,7 +410,7 @@ endforeach; ?></span>
 
 		/**
 		 * If it is 'null' we assume that the meta post either not yet created or
-		 * the associated key, 'buttons_image', in the meta is not set. So, we
+		 * the associated key, 'button_image', in the meta is not set. So, we
 		 * return to the default 'true'.
 		 */
 		return ( null === $post_meta ) ? true : $post_meta;

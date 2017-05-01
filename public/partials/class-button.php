@@ -26,37 +26,46 @@ abstract class Button implements Button_Interface {
 	 * The Plugin class instance.
 	 *
 	 * @since 1.0.6
-	 * @access protected
-	 * @var string
+	 * @access public
+	 * @var Plugin
 	 */
-	protected $plugin;
+	public $plugin;
+
+	/**
+	 * The Meta class instance.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 * @var Meta
+	 */
+	public $meta;
 
 	/**
 	 * The Endpoint instance.
 	 *
 	 * @since 1.0.6
-	 * @access protected
+	 * @access public
 	 * @var Endpoint
 	 */
-	protected $endpoint;
+	public $endpoint;
 
 	/**
 	 * The button attribute prefix.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 * @var string
 	 */
-	protected $attr_prefix;
+	public $attr_prefix;
 
 	/**
 	 * The button mode, 'json' or 'html'.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 * @var string
 	 */
-	protected $mode;
+	public $mode;
 
 	/**
 	 * Constructor: Initialize the Buttons Class
@@ -69,12 +78,11 @@ abstract class Button implements Button_Interface {
 	 */
 	function __construct( Plugin $plugin ) {
 
-		$this->meta = new Meta( $plugin );
-		$this->endpoint = new Endpoint( $plugin, $this->meta );
-
 		$this->plugin = $plugin;
 
-		$this->attr_prefix = $this->get_attr_prefix();
+		$this->meta = new Meta( $this->plugin );
+		$this->endpoint = new Endpoint( $this->plugin, $this->meta );
+		$this->attr_prefix = Helpers::get_attr_prefix();
 		$this->mode = $this->get_mode();
 
 		$this->render();
@@ -182,19 +190,10 @@ abstract class Button implements Button_Interface {
 		$label = $args['label'];
 		$endpoint = 'json' === $this->mode ? '{{' . $args['endpoint'] . '}}' : $args['endpoint'];
 
-		/**
-		 * Get the button style from Customizer.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @var string
-		 */
-		$style = get_theme_mod( "{$this->plugin->option_slug}_button_style", 'default' );
-
 		$templates = array(
-			'icon' => "<a class=\"{$prefix}-buttons__item item-{$style} item-{$site}\" href=\"{$endpoint}\" target=\"_blank\" role=\"button\" rel=\"nofollow\">{$icon}</a>",
-			'text' => "<a class=\"{$prefix}-buttons__item item-{$style} item-{$site}\" href=\"{$endpoint}\" target=\"_blank\" role=\"button\" rel=\"nofollow\">{$label}</a>",
-			'icon_text' => "<a class=\"{$prefix}-buttons__item item-{$style} item-{$site}\" href=\"{$endpoint}\" target=\"_blank\" role=\"button\" rel=\"nofollow\"><span class=\"{$prefix}-buttons__item-icon\">{$icon}</span><span class=\"{$prefix}-buttons__item-text\">{$label}</span></a>",
+			'icon' => "<a class=\"{$prefix}-button__item site-{$site}\" href=\"{$endpoint}\" target=\"_blank\" role=\"button\" rel=\"nofollow\">{$icon}</a>",
+			'text' => "<a class=\"{$prefix}-button__item site-{$site}\" href=\"{$endpoint}\" target=\"_blank\" role=\"button\" rel=\"nofollow\">{$label}</a>",
+			'icon_text' => "<a class=\"{$prefix}-button__item site-{$site}\" href=\"{$endpoint}\" target=\"_blank\" role=\"button\" rel=\"nofollow\"><span class=\"{$prefix}-button__item-icon\">{$icon}</span><span class=\"{$prefix}-button__item-text\">{$label}</span></a>",
 		);
 
 		$button_view = isset( $templates[ $view ] ) ? kses_icon( $templates[ $view ] ) : '';
@@ -225,7 +224,7 @@ abstract class Button implements Button_Interface {
 		 *
 		 * @var array
 		 */
-		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, 'buttons', array(
+		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, 'button', array(
 			'attr_prefix' => $this->attr_prefix,
 		) );
 
@@ -280,18 +279,6 @@ abstract class Button implements Button_Interface {
 		if ( 'html' === $theme_support || 'html' === $button_mode ) {
 			return 'html';
 		}
-	}
-
-	/**
-	 * The function utility to get the attribute prefix
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string The attribute prefix.
-	 */
-	public function get_attr_prefix() {
-		return Helpers::get_attr_prefix();
 	}
 
 	/**

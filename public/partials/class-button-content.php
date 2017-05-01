@@ -64,6 +64,8 @@ class Button_Content extends Button {
 
 		$this->view = $this->plugin->get_option( 'button_content', 'view' );
 		$this->placement = $this->plugin->get_option( 'button_content', 'placement' );
+		$this->style = get_theme_mod( "{$this->plugin->option_slug}_style_button_content", 'rounded' );
+
 		$this->hooks();
 	}
 
@@ -130,7 +132,8 @@ class Button_Content extends Button {
 		$is_json = 'json' === $this->mode;
 
 		if ( $is_html || $is_json ) {
-			$button .= "<div class='{$this->attr_prefix}-buttons {$this->attr_prefix}-buttons--content {$this->attr_prefix}-buttons--content-{$this->placement}' id='{$this->attr_prefix}-buttons-{$post_id}'>";
+
+			$button .= "<div class=\"{$this->attr_prefix}-button {$this->attr_prefix}-button--content {$this->attr_prefix}-button--{$this->placement} {$this->attr_prefix}-button--{$this->style}\" id=\"{$this->attr_prefix}-button-{$post_id}\" data-social-manager=\"button-content\">";
 		}
 
 		if ( $is_html ) {
@@ -158,7 +161,7 @@ class Button_Content extends Button {
 	 * Used when the "Buttons Mode" is set to 'HTML'.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Renamed `data-social-buttons` to `data-social-manager` of the `span` (wrapper) element.
+	 * @since 1.0.6 - Renamed `data-social-button` to `data-social-manager` of the `span` (wrapper) element.
 	 * @access public
 	 *
 	 * @param array $includes Data to include in the button.
@@ -174,11 +177,11 @@ class Button_Content extends Button {
 			$heading = esc_html( $heading );
 
 			if ( ! empty( $heading ) ) {
-				$list .= "<h4 class='{$this->attr_prefix}-buttons__heading'>{$heading}</h4>";
+				$list .= "<h4 class=\"{$this->attr_prefix}-button__heading\">{$heading}</h4>";
 			}
 
 			$prefix = $this->attr_prefix;
-			$list .= "<div class='{$this->attr_prefix}-buttons__list {$this->attr_prefix}-buttons__list--{$this->view}' data-social-manager=\"button-content\">";
+			$list .= "<div class=\"{$this->attr_prefix}-button__list {$this->attr_prefix}-button__list--{$this->view}\">";
 
 			foreach ( $includes as $site => $endpoint ) :
 
@@ -208,7 +211,7 @@ class Button_Content extends Button {
 	 * Add the Underscore.js template of the social media buttons.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Renamed `data-social-buttons` to `data-social-manager` of the `span` (wrapper) element.
+	 * @since 1.0.6 - Renamed `data-social-button` to `data-social-manager` of the `span` (wrapper) element.
 	 * @access public
 	 *
 	 * @return void
@@ -218,20 +221,20 @@ class Button_Content extends Button {
 		if ( $this->is_button_content() && 'json' === $this->mode ) :
 			if ( wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) : ?>
 
-		<script type="text/html" id="tmpl-buttons-content"><?php
+		<script type="text/html" id="tmpl-button-content"><?php
 
 		$heading = $this->plugin->get_option( 'button_content', 'heading' );
 		$heading = wp_kses( $heading, array() );
 
 		if ( ! empty( $heading ) ) {
 
-			echo wp_kses( "<h4 class='{$this->attr_prefix}-buttons__heading'>{$heading}</h4>", array(
+			echo wp_kses( "<h4 class=\"{$this->attr_prefix}-button__heading\">{$heading}</h4>", array(
 				'h4' => array(
 					'class' => true,
 				),
 			) );
 
-		} ?><div class="<?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list <?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="button-content"><?php
+		} ?><div class="<?php echo esc_attr( $this->attr_prefix ); ?>-button__list <?php echo esc_attr( $this->attr_prefix ); ?>-button__list--<?php echo esc_attr( $this->view ); ?>"><?php
 
 		$prefix = $this->attr_prefix;
 		$includes = (array) $this->plugin->get_option( 'button_content', 'include' );
@@ -282,7 +285,7 @@ foreach ( $includes as $site => $value ) :
 		 *
 		 * @var array
 		 */
-		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, 'buttons_content', array(
+		$icons = apply_filters( 'ninecodes_social_manager_icons', $icons, 'button_content', array(
 			'attr_prefix' => $this->attr_prefix,
 		) );
 

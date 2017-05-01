@@ -76,7 +76,7 @@ class Test_Button_Content extends WP_UnitTestCase {
 
 		add_filter( 'ninecodes_social_manager_icons', function( $icons, $context, $args ) {
 
-			if ( 'buttons_content' === $context ) {
+			if ( 'button_content' === $context ) {
 
 				unset( $icons['facebook'] );
 				unset( $icons['twitter'] );
@@ -110,153 +110,8 @@ class Test_Button_Content extends WP_UnitTestCase {
 		$this->assertTrue( method_exists( $this->button_content, 'get_icons' ), 'Class does not have method \'get_icons\'' );
 		$this->assertTrue( method_exists( $this->button_content, 'get_label' ), 'Class does not have method \'get_label\'' );
 		$this->assertTrue( method_exists( $this->button_content, 'get_mode' ), 'Class does not have method \'get_mode\'' );
-		$this->assertTrue( method_exists( $this->button_content, 'get_attr_prefix' ), 'Class does not have method \'get_attr_prefix\'' );
 		$this->assertTrue( method_exists( $this->button_content, 'get_post_status' ), 'Class does not have method \'get_post_status\'' );
 		$this->assertTrue( method_exists( $this->button_content, 'in_amp' ), 'Class does not have method \'in_amp\'' );
 		$this->assertTrue( method_exists( $this->button_content, 'to_html' ), 'Class does not have method \'to_html\'' );
-	}
-
-	/**
-	 * Test `render_view` method.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @return void
-	 */
-	public function test_render_view() {
-
-		$site = 'facebook';
-		$label = 'Facebook';
-		$prefix = Helpers::get_attr_prefix();
-		$endpoint = 'https://www.facebook.com/sharer/sharer.php';
-		$icon = $this->button_content->get_icons( $site );
-
-		$buttons_view = $this->button_content->render_view( 'icon', 'content', array(
-			'attr_prefix' => $prefix,
-			'site' => $site,
-			'icon' => $icon,
-			'label' => $label,
-			'endpoint' => $endpoint,
-		) );
-
-		$this->assertEquals( "<a class=\"{$prefix}-buttons__item item-default item-facebook\" href=\"https://www.facebook.com/sharer/sharer.php\" target=\"_blank\" role=\"button\" rel=\"nofollow\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-facebook\" /></svg></a>", $buttons_view );
-
-		/**
-		 * Test with an empty "prefix".
-		 *
-		 * @var string
-		 */
-		$buttons_view2 = $this->button_content->render_view( 'icon', 'content', array(
-			'attr_prefix' => '',
-			'site' => $site,
-			'icon' => $icon,
-			'label' => $label,
-			'endpoint' => $endpoint,
-		) );
-
-		/**
-		 * Test with an empty "site".
-		 *
-		 * @var string
-		 */
-		$buttons_view3 = $this->button_content->render_view( 'icon', 'content', array(
-			'attr_prefix' => $prefix,
-			'site' => '',
-			'icon' => $icon,
-			'label' => $label,
-			'endpoint' => $endpoint,
-		) );
-
-		$this->assertEmpty( $buttons_view3 );
-
-		/**
-		 * Test with an empty "icon".
-		 *
-		 * @var string
-		 */
-		$buttons_view4 = $this->button_content->render_view( 'icon', 'content', array(
-			'attr_prefix' => $prefix,
-			'site' => $site,
-			'icon' => '',
-			'label' => $label,
-			'endpoint' => $endpoint,
-		) );
-
-		$this->assertEmpty( $buttons_view4 );
-
-		/**
-		 * Test with an empty "label".
-		 *
-		 * @var string
-		 */
-		$buttons_view5 = $this->button_content->render_view( 'icon', 'content', array(
-			'attr_prefix' => $prefix,
-			'site' => $site,
-			'icon' => $icon,
-			'label' => '',
-			'endpoint' => $endpoint,
-		) );
-
-		$this->assertEmpty( $buttons_view5 );
-
-		/**
-		 * Test with an empty "endpoint".
-		 *
-		 * @var string
-		 */
-		$buttons_view6 = $this->button_content->render_view( 'icon', 'content', array(
-			'attr_prefix' => $prefix,
-			'site' => $site,
-			'icon' => $icon,
-			'label' => $label,
-			'endpoint' => '',
-		) );
-
-		$this->assertEmpty( $buttons_view6 );
-
-		/**
-		 * Test falsy value.
-		 *
-		 * @var
-		 */
-		$buttons_view7 = $this->button_content->render_view( 'icon', 'content', array(
-			'attr_prefix' => $prefix,
-			'site' => $site,
-			'icon' => $icon,
-			'label' => $label,
-			'endpoint' => false,
-		) );
-
-		$this->assertEmpty( $buttons_view7 );
-
-		/**
-		 * Test context.
-		 *
-		 * @var
-		 */
-		$buttons_view8 = $this->button_content->render_view( 'icon', 'image-content', array(
-			'attr_prefix' => $prefix,
-			'site' => $site,
-			'icon' => $icon,
-			'label' => $label,
-			'endpoint' => $endpoint,
-		) );
-
-		$this->assertEmpty( $buttons_view8 );
-
-		/**
-		 * Test bad view type.
-		 *
-		 * @var string
-		 */
-		$buttons_view10 = $this->button_content->render_view( 'icon-me', 'content', array(
-			'attr_prefix' => $prefix,
-			'site' => $site,
-			'icon' => $icon,
-			'label' => $label,
-			'endpoint' => $endpoint,
-		) );
-
-		$this->assertEmpty( $buttons_view10 );
 	}
 }

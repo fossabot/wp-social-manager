@@ -41,7 +41,8 @@ class Test_Endpoint extends WP_UnitTestCase {
 		$this->plugin = ninecodes_social_manager();
 		$this->plugin->init();
 
-		$this->endpoint = new Endpoint( $this->plugin, new Meta( $this->plugin ) );
+		$this->meta = new Meta( $this->plugin );
+		$this->endpoint = new Endpoint( $this->plugin, $this->meta );
 	}
 
 	/**
@@ -59,7 +60,6 @@ class Test_Endpoint extends WP_UnitTestCase {
 		$this->assertTrue( method_exists( $this->endpoint, 'joint_image_endpoint' ),  'Class does not have method \'joint_image_endpoint\'' );
 		$this->assertTrue( method_exists( $this->endpoint, 'get_content_image_src' ),  'Class does not have method \'get_content_image_src\'' );
 		$this->assertTrue( method_exists( $this->endpoint, 'get_post_meta' ),  'Class does not have method \'get_post_meta\'' );
-		$this->assertTrue( method_exists( $this->endpoint, 'get_endpoint_base' ),  'Class does not have method \'get_endpoint_base\'' );
 	}
 
 	/**
@@ -71,6 +71,12 @@ class Test_Endpoint extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_get_content_endpoint() {
+
+		// Bad Example.
+		$response = $this->endpoint->get_content_endpoint( -1 ); // Bad.
+
+		$this->assertTrue( is_array( $response ) );
+		$this->assertEmpty( $response );
 
 		// Create a post.
 		$post_id = $this->factory->post->create();
@@ -148,5 +154,56 @@ class Test_Endpoint extends WP_UnitTestCase {
 			$this->assertNotFalse( filter_var( $endpoint['pinterest'], FILTER_VALIDATE_URL ) );
 			$this->assertEquals( 0, strpos( $endpoint['pinterest'], add_query_arg( 'url', rawurlencode( $image_src ), 'https://www.pinterest.com/pin/create/bookmarklet/' ) ) );
 		}
+	}
+
+	/**
+	 * Function to test 'get_post_meta()' method with bad value.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_get_post_meta_bad() {
+
+		$meta = self::callMethod( $this->endpoint, 'get_post_meta', array( -1 ) );
+
+		// $meta = $this->endpoint->get_post_meta( -1 ); // Bad.
+		$this->assertArrayHasKey( 'post_title', $meta );
+		$this->assertTrue( is_string( $meta['post_title'] ) );
+		$this->assertEmpty( $meta['post_title'] );
+
+		$this->assertArrayHasKey( 'post_description', $meta );
+		$this->assertTrue( is_string( $meta['post_description'] ) );
+		$this->assertEmpty( $meta['post_description'] );
+
+		$this->assertArrayHasKey( 'post_url', $meta );
+		$this->assertTrue( is_string( $meta['post_url'] ) );
+		$this->assertEmpty( $meta['post_url'] );
+
+		$this->assertArrayHasKey( 'post_image', $meta );
+		$this->assertTrue( is_string( $meta['post_image'] ) );
+		$this->assertEmpty( $meta['post_image'] );
+	}
+
+	/**
+	 * Utility method to test protected methods.
+	 *
+	 * @param object $obj  The Object that holds the method.
+	 * @param string $name The name of the method.
+	 * @param array  $args Arguments to pass on the method.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return mixed The method output.
+	 */
+	public static function callMethod( $obj, $name, array $args ) {
+
+		$class = new \ReflectionClass( $obj );
+		$method = $class->getMethod( $name );
+		$method->setAccessible( true );
+
+		return $method->invokeArgs( $obj, $args );
 	}
 }

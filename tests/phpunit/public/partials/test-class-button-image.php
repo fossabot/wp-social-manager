@@ -77,14 +77,13 @@ class Test_Button_Image extends WP_UnitTestCase {
 		$this->assertTrue( method_exists( $this->button_image, 'get_icons' ), 'Class does not have method \'get_icons\'' );
 		$this->assertTrue( method_exists( $this->button_image, 'get_label' ), 'Class does not have method \'get_label\'' );
 		$this->assertTrue( method_exists( $this->button_image, 'get_mode' ), 'Class does not have method \'get_mode\'' );
-		$this->assertTrue( method_exists( $this->button_image, 'get_attr_prefix' ), 'Class does not have method \'get_attr_prefix\'' );
 		$this->assertTrue( method_exists( $this->button_image, 'get_post_status' ), 'Class does not have method \'get_post_status\'' );
 		$this->assertTrue( method_exists( $this->button_image, 'in_amp' ), 'Class does not have method \'in_amp\'' );
 		$this->assertTrue( method_exists( $this->button_image, 'to_html' ), 'Class does not have method \'to_html\'' );
 	}
 
 	/**
-	 * Function to test the `get_icon`.
+	 * Function to test the 'get_icon'.
 	 *
 	 * @since 1.1.0
 	 * @access public
@@ -94,11 +93,11 @@ class Test_Button_Image extends WP_UnitTestCase {
 	public function test_get_icons() {
 
 		$icons = Helpers::get_social_icons();
-		$this->assertEquals( $icons, $this->button_image->get_icons() );
+		$this->assertEquals( $icons, $this->button_content->get_icons() );
 
 		add_filter( 'ninecodes_social_manager_icons', function( $icons, $context, $args ) {
 
-			if ( 'buttons_image' === $context ) {
+			if ( 'button_image' === $context ) {
 
 				unset( $icons['facebook'] );
 				unset( $icons['twitter'] );
@@ -107,11 +106,11 @@ class Test_Button_Image extends WP_UnitTestCase {
 			return $icons;
 		}, 10, 3 );
 
-		// Button_Image should have not theses removed keys.
+		// Button_Image should have not these removed keys.
 		$this->assertArrayNotHasKey( 'facebook', $this->button_image->get_icons() );
 		$this->assertArrayNotHasKey( 'twitter', $this->button_image->get_icons() );
 
-		// Button_Content should have theses removed keys.
+		// Button_Image should have theses removed keys.
 		$this->assertArrayHasKey( 'facebook', $this->button_content->get_icons() );
 		$this->assertArrayHasKey( 'twitter', $this->button_content->get_icons() );
 	}

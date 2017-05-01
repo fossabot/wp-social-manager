@@ -83,7 +83,7 @@ class Endpoint {
 
 		foreach ( $sites as $site => $label ) {  // Exclude site which is not enabled.
 
-			if ( ! key_exists( $site, array_filter( $includes ) ) ||
+			if ( ! in_array( $site, array_keys( $includes ), true ) ||
 				 ! isset( $includes[ $site ]['enable'] ) ||
 				 'on' !== $includes[ $site ]['enable'] ) {
 
@@ -91,13 +91,13 @@ class Endpoint {
 			}
 		}
 
-		foreach ( $sites as $site => $label ) {
+		foreach ( $sites as $site => $value ) {
 
-			$base = self::get_endpoint_base( 'content', $site );
-
-			if ( ! $base ) {
-				unset( $sites[ $site ] );
+			if ( ! isset( $value['endpoint'] ) || empty( $value['endpoint'] ) ) {
+				continue;
 			}
+
+			$endpoint = $value['endpoint'];
 
 			switch ( $site ) {
 				case 'facebook':
@@ -105,7 +105,7 @@ class Endpoint {
 						array(
 							'u' => $meta['post_url'],
 						),
-						$base
+						$endpoint
 					);
 
 					break;
@@ -122,7 +122,7 @@ class Endpoint {
 						$args['via'] = $profiles;
 					}
 
-					$output[ $site ] = add_query_arg( $args, $base );
+					$output[ $site ] = add_query_arg( $args, $endpoint );
 
 					break;
 
@@ -131,7 +131,7 @@ class Endpoint {
 						array(
 							'url' => $meta['post_url'],
 						),
-						$base
+						$endpoint
 					);
 
 					break;
@@ -145,7 +145,7 @@ class Endpoint {
 							'url' => $meta['post_url'],
 							'source' => rawurlencode( get_site_url() ),
 						),
-						$base
+						$endpoint
 					);
 
 					break;
@@ -158,7 +158,7 @@ class Endpoint {
 							'is_video' => false,
 							'media' => $meta['post_image'],
 						),
-						$base
+						$endpoint
 					);
 
 					break;
@@ -169,7 +169,7 @@ class Endpoint {
 							'url' => $meta['post_url'],
 							'post_title' => $meta['post_title'],
 						),
-						$base
+						$endpoint
 					);
 
 					break;
@@ -182,7 +182,7 @@ class Endpoint {
 							'name' => $meta['post_title'],
 							'description' => substr( $meta['post_description'], 0, 30 ) . '...',
 						),
-						$base
+						$endpoint
 					);
 
 					break;
@@ -193,7 +193,7 @@ class Endpoint {
 							'subject' => $meta['post_title'],
 							'body' => $meta['post_description'],
 						),
-						$base
+						$endpoint
 					);
 
 					break;
@@ -259,7 +259,7 @@ class Endpoint {
 
 		foreach ( $sites as $site => $label ) { // Exclude site which is not enabled.
 
-			if ( ! key_exists( $site, array_filter( $includes ) ) ||
+			if ( ! in_array( $site, array_keys( $includes ), true ) ||
 				 ! isset( $includes[ $site ]['enable'] ) ||
 				 'on' !== $includes[ $site ]['enable'] ) {
 
@@ -267,22 +267,14 @@ class Endpoint {
 			}
 		}
 
-		foreach ( $sites as $site => $label ) {
+		foreach ( $sites as $site => $value ) {
 
-			/**
-			 * Get the site endpoint base URL.
-			 *
-			 * @var string
-			 */
-			$base = self::get_endpoint_base( 'image', $site );
-
-			if ( ! $base ) { // Exclude site which does not have endpoint base URL.
-				unset( $sites[ $site ] );
-			}
+			$label = $value['label'];
+			$endpoint = $value['endpoint'];
 
 			$button['site'] = $site;
 			$button['label'] = $label;
-			$button['endpoint'] = $base;
+			$button['endpoint'] = $endpoint;
 			$button['post_url'] = $meta['post_url'];
 			$button['post_title'] = $meta['post_title'];
 
@@ -395,46 +387,18 @@ class Endpoint {
 		$post_id = absint( $post_id );
 		$post_title = $this->meta->get_post_title( $post_id );
 		$post_description = $this->meta->get_post_description( $post_id );
+		$post_image = $this->meta->get_post_image( $post_id );
+		$post_url = $this->meta->get_post_url( $post_id );
 
 		if ( 'shortlink' === $this->plugin->get_option( 'mode', 'link_mode' ) ) {
 			$post_url = wp_get_shortlink( $post_id );
-		} else {
-			$post_url = $this->meta->get_post_url( $post_id );
 		}
 
-		$post_image = $this->meta->get_post_image( $post_id );
-
 		return array(
-			'post_title' => rawurlencode( html_entity_decode( $post_title, ENT_COMPAT, 'UTF-8' ) ),
-			'post_description' => rawurlencode( html_entity_decode( $post_description, ENT_COMPAT, 'UTF-8' ) ),
+			'post_title' => rawurlencode( html_entity_decode( $post_title, ENT_COMPAT, $charset ) ),
+			'post_description' => rawurlencode( html_entity_decode( $post_description, ENT_COMPAT, $charset ) ),
 			'post_url' => rawurlencode( $post_url ),
 			'post_image' => isset( $post_image['src'] ) ? rawurlencode( $post_image['src'] ) : '',
 		);
-	}
-
-	/**
-	 * Get the buttons endpoint base URLs.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param string $of The buttons group to retrieve.
-	 * @param string $site The site slug.
-	 * @return array Selected list of button the buttons endpoints or all if $of is not specified.
-	 */
-	protected static function get_endpoint_base( $of, $site ) {
-
-		if ( ! in_array( $of, array( 'content', 'image' ), true ) ) {
-			return;
-		}
-
-		$sites = Options::button_sites( $of );
-		$base = array();
-
-		foreach ( $sites as $site => $value ) {
-			$base[ $of ][ $site ] = $value['endpoint'];
-		}
-
-		return isset( $base[ $of ][ $site ] ) ? $base[ $of ][ $site ] : null;
 	}
 }
