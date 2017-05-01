@@ -150,7 +150,7 @@ final class Public_View {
 	 */
 	public function register_styles() {
 
-		wp_register_style( $this->plugin->plugin_slug, $this->path_url . 'css/styles.min.css', array(), $this->plugin->version, 'all' );
+		wp_register_style( $this->plugin->plugin_slug, $this->path_url . 'css/style.css', array(), $this->plugin->version, 'all' );
 		wp_style_add_data( $this->plugin->plugin_slug, 'rtl', 'replace' );
 	}
 
