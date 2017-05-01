@@ -24,6 +24,8 @@
 				<directory suffix=".php">./includes/bb-metabox-extend</directory>
 				<directory suffix=".php">./includes/ogp</directory>
 				<directory suffix=".php">./includes/wp-settings</directory>
+				<directory suffix=".php">./includes/class-requirements.php</directory>
+				<directory suffix=".php">./admin/partials/customize/</directory>
 			</exclude>
 		</whitelist>
 	</filter>
