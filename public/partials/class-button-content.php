@@ -64,7 +64,6 @@ class Button_Content extends Button {
 
 		$this->view = $this->plugin->get_option( 'button_content', 'view' );
 		$this->placement = $this->plugin->get_option( 'button_content', 'placement' );
-		$this->style = get_theme_mod( "{$this->plugin->option_slug}_style_button_content", 'rounded' );
 
 		$this->hooks();
 	}
@@ -133,7 +132,9 @@ class Button_Content extends Button {
 
 		if ( $is_html || $is_json ) {
 
-			$button .= "<div class=\"{$this->attr_prefix}-button {$this->attr_prefix}-button--content {$this->attr_prefix}-button--{$this->placement} {$this->attr_prefix}-button--{$this->style}\" id=\"{$this->attr_prefix}-button-{$post_id}\" data-social-manager=\"button-content\">";
+			$style = get_theme_mod( "{$this->plugin->option_slug}_style_button_content", 'rounded' );
+
+			$button .= "<div class=\"{$this->attr_prefix}-button {$this->attr_prefix}-button--content {$this->attr_prefix}-button--{$this->placement} {$this->attr_prefix}-button--{$style}\" id=\"{$this->attr_prefix}-button-{$post_id}\" data-social-manager=\"button-content\">";
 		}
 
 		if ( $is_html ) {

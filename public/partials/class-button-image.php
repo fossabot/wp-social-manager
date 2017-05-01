@@ -47,7 +47,6 @@ class Button_Image extends Button {
 		parent::__construct( $plugin );
 
 		$this->view = $this->plugin->get_option( 'button_image', 'view' );
-		$this->style = get_theme_mod( "{$this->plugin->option_slug}_style_button_image", 'rounded' );
 
 		$this->hooks();
 	}
@@ -178,8 +177,10 @@ class Button_Image extends Button {
 
 			if ( $is_html ) {
 
+				$style = get_theme_mod( "{$this->plugin->option_slug}_style_button_image", 'rounded' );
+
 				$wrap = $dom->createElement( 'span' );
-				$wrap->setAttribute( 'class', "{$this->attr_prefix}-button {$this->attr_prefix}-button--img {$this->attr_prefix}-button--{$this->style}" );
+				$wrap->setAttribute( 'class', "{$this->attr_prefix}-button {$this->attr_prefix}-button--img {$this->attr_prefix}-button--{$style}" );
 			}
 
 			foreach ( $images as $index => $img ) :
