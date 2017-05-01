@@ -8,64 +8,6 @@ module.exports = function(grunt) {
 		publicDirCSS = './public/css/',
 		publicDirJS = './public/js/',
 
-		csssrc = [
-			{
-				expand: true,
-				cwd: adminDirCSS,
-				dest: adminDirCSS,
-				src: [
-					'*.css',
-					'!*.min.css',
-					'!*-rtl.css'
-				],
-				ext: '.min.css'
-			}, {
-				expand: true,
-				cwd: publicDirCSS,
-				dest: publicDirCSS,
-				src: [
-					'*.css',
-					'!*.min.css',
-					'!*-rtl.css'
-				],
-				ext: '.min.css'
-			}, {
-				expand: true,
-				cwd: './includes/customize/css/',
-				dest: './includes/customize/css/',
-				src: [
-					'*.css',
-					'!*.min.css',
-					'!*-rtl.css'
-				],
-				ext: '.min.css'
-			}
-		],
-
-		csssrcRTL = [
-			{
-				expand: true,
-				cwd: adminDirCSS,
-				dest: adminDirCSS,
-				src: [
-					'*.css',
-					'*.min.css',
-					'!*-rtl.css'
-				],
-				ext: '.min-rtl.css'
-			}, {
-				expand: true,
-				cwd: publicDirCSS,
-				dest: publicDirCSS,
-				src: [
-					'*.css',
-					'*.min.css',
-					'!*-rtl.css'
-				],
-				ext: '.min-rtl.css'
-			}
-		],
-
 		jssrc = [
 			{
 				expand: true,
