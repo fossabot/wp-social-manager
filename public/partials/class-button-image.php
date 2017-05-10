@@ -46,7 +46,7 @@ class Button_Image extends Button {
 	function __construct( Plugin $plugin ) {
 		parent::__construct( $plugin );
 
-		$this->view = $this->plugin->get_option( 'button_image', 'view' );
+		$this->view = $this->plugin->option()->get( 'button_image', 'view' );
 
 		$this->hooks();
 	}
@@ -76,7 +76,7 @@ class Button_Image extends Button {
 	 */
 	public function get_endpoint() {
 
-		if ( 'html' === $this->mode && is_singular() ) {
+		if ( 'html' === $this->mode && $this->is_active() ) {
 
 			$this->response = $this->endpoint->get_image_endpoint( get_the_id() );
 		}
@@ -99,7 +99,7 @@ class Button_Image extends Button {
 	 */
 	public function pre_render_button( $content ) {
 
-		if ( empty( $content ) || ! $this->is_button_image() || 'publish' !== $this->get_post_status() ) {
+		if ( empty( $content ) || ! $this->is_active() || 'publish' !== $this->get_post_status() ) {
 			return $content;
 		}
 
@@ -149,11 +149,11 @@ class Button_Image extends Button {
 	 */
 	public function render_button( $content ) {
 
-		if ( empty( $content ) || ! $this->is_button_image() || 'publish' !== $this->get_post_status() ) {
+		if ( is_feed() || empty( $content ) || ! $this->is_active() ) {
 			return $content;
 		}
 
-		$is_html = 'html' === $this->mode && $this->response && is_singular();
+		$is_html = 'html' === $this->mode && $this->response;
 		$is_json = 'json' === $this->mode;
 
 		if ( $is_html || $is_json ) {
@@ -177,7 +177,7 @@ class Button_Image extends Button {
 
 			if ( $is_html ) {
 
-				$style = get_theme_mod( "{$this->plugin->option_slug}_style_button_image", 'rounded' );
+				$style = $this->plugin->option()->get( 'button_image', 'style' );
 
 				$wrap = $dom->createElement( 'span' );
 				$wrap->setAttribute( 'class', "{$this->attr_prefix}-button {$this->attr_prefix}-button--img {$this->attr_prefix}-button--{$style}" );
@@ -301,8 +301,8 @@ class Button_Image extends Button {
 	 */
 	public function render_tmpl() {
 
-		if ( $this->is_button_image() && 'json' === $this->mode && wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
-			$includes = (array) $this->plugin->get_option( 'button_image', 'include' );
+		if ( $this->is_active() && 'json' === $this->mode && wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
+			$includes = (array) $this->plugin->option()->get( 'button_image', 'include' );
 
 			if ( ! empty( $includes ) ) : ?><script type="text/html" id="tmpl-buttons-image">
 <span class="<?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list <?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="buttons-image"><?php
@@ -373,39 +373,34 @@ endforeach; ?></span>
 	 *
 	 * @return boolean
 	 */
-	public function is_button_image() {
-
-		if ( $this->in_amp() ) {
-			return false;
-		}
-
-		$enable = (bool) $this->plugin->get_option( 'button_image', 'enable' );
-
-		if ( ! $enable ) {
-			return false;
-		}
-
-		$post_types = (array) $this->plugin->get_option( 'button_image', 'post_type' );
+	public function is_active() {
 
 		/**
-		 * NOTE: The social media buttons currently do not support Home and Archive display.
-		 * But, we plan to have it in the future.
-		 */
-		if ( ! is_singular( array_keys( array_filter( $post_types ) ) ) ) {
-			return false;
-		}
-
-		$includes = (array) $this->plugin->get_option( 'button_image', 'include' );
-
-		if ( empty( $includes ) ) {
-			return false;
-		}
-
-		/**
-		 * Get the post meta value whether the Social Buttons Image is enabled or not.
+		 * Check whether the button is active on the setting level.
 		 *
-		 * @since 1.0.6 - Use the $this->meta property to utilitze the Meta instance methods.
-		 * @var boolean
+		 * @var bool
+		 */
+		$status = $this->plugin->helper()->get_button_image_status();
+
+		if ( ! $status ) {
+			return false;
+		}
+
+		/**
+		 * Ok, so it appears that the button is active on the upper level,
+		 * let's check if it is loaded in the appropriate single page.
+		 *
+		 * @var bool
+		 */
+		if ( ! is_singular( $status['post_type'] ) || is_feed() || 'publish' !== $this->get_post_status() || $this->in_amp() ) {
+			return false;
+		}
+
+		/**
+		 * Ok, so it appears that the button is active on the upper level,
+		 * let's check if it is enabled in the individual post.
+		 *
+		 * @var bool
 		 */
 		$post_meta = $this->meta->get_post_meta( get_the_id(), 'button_image' );
 
@@ -414,6 +409,6 @@ endforeach; ?></span>
 		 * the associated key, 'button_image', in the meta is not set. So, we
 		 * return to the default 'true'.
 		 */
-		return ( null === $post_meta ) ? true : $post_meta;
+		return null === $post_meta;
 	}
 }

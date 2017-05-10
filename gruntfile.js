@@ -3,43 +3,35 @@ module.exports = function(grunt) {
 
 	'use strict';
 
-	var adminDirCSS = './admin/css/',
-		adminDirJS = './admin/js/',
-		publicDirCSS = './public/css/',
-		publicDirJS = './public/js/',
+	grunt.initConfig({
 
-		jssrc = [
-			{
-				expand: true,
-				cwd: adminDirJS,
-				dest: adminDirJS,
-				src: [
-					'*.js',
-					'!*.min.js'
-				],
-				ext: '.min.js'
-			}, {
-				expand: true,
-				cwd: publicDirJS,
-				dest: publicDirJS,
-				src: [
-					'*.js',
-					'!*.min.js'
-				],
-				ext: '.min.js'
-			}, {
-				expand: true,
-				cwd: './includes/customize/js/',
-				dest: './includes/customize/js/',
-				src: [
-					'*.js',
-					'!*.min.js'
-				],
-				ext: '.min.js'
-			}
-		],
+		/**
+		 * Extract the package.json,
+		 *
+		 * @see {@link https://gruntjs.com/api/grunt.file#grunt.file.readjson|grunt.file Tutorial}
+		 * @type {Object}
+		 */
+		pkg: grunt.file.readJSON('package.json'),
 
-		phpsrc = [
+		/**
+		 * Defines the project working directories
+		 *
+		 * @type {Object}
+		 */
+		dir: {
+			pluginPath: '/srv/www/wordpress-develop/public_html/src/wp-content/plugins/<%= pkg.name %>',
+			adminCSS: 'admin/css/',
+			adminJS: 'admin/js/',
+			publicCSS: 'public/css/',
+			publicJS: 'public/js/',
+		},
+
+		/**
+		 * Define PHP source files
+		 *
+		 * @type {Array}
+		 */
+		php: [
 			'*.php',
 			'**/*.php',
 			'!docs/**',
@@ -51,119 +43,132 @@ module.exports = function(grunt) {
 			'!build/**',
 			'!node_modules/**',
 			'!tests/**'
-		];
+		],
 
-	grunt.initConfig({
-
-		pkg: grunt.file.readJSON('package.json'),
-
-		config: {
-			plugin_path: '/srv/www/wordpress-develop/public_html/src/wp-content/plugins/<%= pkg.name %>' // Plugins path in VVV.
-		},
-
-		// Shell actions.
+		/**
+		 * Run command line on shell
+		 *
+		 * @type {Object}
+		 */
 		shell: {
 			readme: {
 				command: 'cd ./dev-lib && ./generate-markdown-readme' // Generate the readme.md
 			},
 			phpunit: {
-				command: 'vagrant ssh -c "cd <%= config.plugin_path %> && phpunit"'
+				command: 'vagrant ssh -c "cd <%= dir.pluginPath %> && phpunit"'
 			}
 		},
 
-		// Run Qunit test.
+		/**
+		 * Run QUnit test
+		 *
+		 * @see {@link https://github.com/gruntjs/grunt-contrib-qunit}
+		 * @type {Object}
+		 */
 		qunit: {
 			all: [ './tests/qunit/**/*.html' ]
 		},
 
-		// Run tasks whenever watched files change.
+		/**
+		 * Run tasks when files has changed
+		 *
+		 * @see {@link https://github.com/gruntjs/grunt-contrib-watch}
+		 * @type {Object}
+		 */
 		watch: {
-
+			options: {
+				interrupt: true
+			},
 			scripts: {
 				files: [
-					adminDirJS + '*.js',
-					publicDirJS + '*.js',
-					'./includes/customize/js/*.js',
-					'!' + adminDirJS + '*.min.js',
-					'!' + publicDirJS + '*.min.js',
-					'!./includes/customize/js/*.min.js'
+					'<%= dir.publicJS %>**/*.js',
+					'<%= dir.adminJS %>**/*.js',
+					'!**/*.min.js',
 				],
 				tasks: ['scripts:dev'],
-				options: {
-					interrupt: true
-				}
 			},
-
 			styles: {
 				files: [
-					adminDirCSS + 'less/*.less',
-					publicDirCSS + 'less/*.less',
-					'./includes/customize/css/*.css',
-					'!' + adminDirCSS + '*.min.css',
-					'!' + adminDirCSS + '*.min-rtl.css',
-					'!' + publicDirCSS + '*.min.css',
-					'!' + publicDirCSS + '*.min-rtl.css',
-					'!./includes/customize/css/*.min.css',
-					'!./includes/customize/css/*.min-rtl.css'
+					'<%= dir.publicCSS %>**/*.less',
+					'<%= dir.adminCSS %>**/*.less',
 				],
 				tasks: ['styles:dev'],
-				options: {
-					interrupt: true
-				}
 			},
-
 			readme: {
 				files: ['readme.txt'],
 				tasks: ['shell:readme'],
-				options: {
-					interrupt: true
-				}
 			},
-
 			textDomain: {
-				files: phpsrc,
+				files: '<%= php %>',
 				tasks: [
 					'checktextdomain',
 					'makepot'
 				],
-				options: {
-					interrupt: true
-				}
 			}
 		},
 
-		// JavaScript linting with ESLint.
+		/**
+		 * JavaScript linting with ESLint.
+		 *
+		 * @see {@link https://github.com/sindresorhus/grunt-eslint}
+		 * @type {Object}
+		 */
 		eslint: {
 			options: {
 				fix: true
 			},
 			target: [
-				adminDirJS + '*.js',
-				publicDirJS + '*.js'
+				'<%= dir.publicJS %>**/*.js',
+				'<%= dir.adminJS %>**/*.js',
+				'!<%= dir.publicJS %>**/*.min.js',
+				'!<%= dir.adminJS %>**/*.min.js',
 			]
 		},
 
-		// Minify .js files.
+		/**
+		 * Minify JavaScript files files
+		 *
+		 * @see {@link https://github.com/gruntjs/grunt-contrib-uglify}
+		 * @type {Object}
+		 */
 		uglify: {
+			options: {
+				preserveComments: false,
+			},
+			files: [{
+				'<%= dir.adminJS %>scripts.min.js': [
+					'<%= dir.adminJS %>*.js',
+					'!<%= dir.adminJS %>*.min.js',
+				],
+				'<%= dir.publicJS %>app.min.js': [
+					'<%= dir.publicJS %>*.js',
+					'!<%= dir.publicJS %>*.min.js',
+				],
+				'<%= dir.publicJS %>scripts.min.js': [
+					'<%= dir.publicJS %>*.js',
+					'!<%= dir.publicJS %>*.min.js',
+				],
+			}],
+
 			dev: {
 				options: {
-					preserveComments: false,
 					sourceMap: true
 				},
-				files: jssrc
+				files: '<%= uglify.files %>'
 			},
 			build: {
-				options: {
-					preserveComments: false
-				},
-				files: jssrc
+				files: '<%= uglify.files %>'
 			}
 		},
 
-		// Compile LESS files.
+		/**
+		 * Compile LESS files
+		 *
+		 * @see {@link https://github.com/gruntjs/grunt-contrib-less}
+		 * @type {Object}
+		 */
 		less: {
 			options: {
-				compress: false,
 				plugins: [
 					require('less-plugin-group-css-media-queries'), // eslint-disable-line global-require
 					new(require('less-plugin-clean-css'))({ // eslint-disable-line global-require
@@ -187,65 +192,73 @@ module.exports = function(grunt) {
 				]
 			},
 
-			/**
-			 * Configurations to compile LESS file in the development / staging stage.
-			 * - Don't compress the file.
-			 * - Generate sourceMap.
-			 * @type {Object}
-			 */
 			dev: {
 				options: {
+					compress: false,
 					sourceMap: true,
 				},
 				files: [{
-					expand: true,
-					cwd: publicDirCSS + 'less/',
-					src: ['*.less'],
-					dest: publicDirCSS,
-					ext: '.css',
-					extDot: 'last',
-				}]
+					'<%= dir.publicCSS %>style.css': [
+						'<%= dir.publicCSS %>*.less'
+					],
+					'<%= dir.adminCSS %>style.css': [
+						'<%= dir.adminCSS %>*.less'
+					]}
+				]
 			},
 		},
 
-		// Transforming CSS LTR to RTL.
+		/**
+		 * Transforming CSS LTR to RTL.
+		 *
+		 * @see {@link https://github.com/MohammadYounes/grunt-rtlcss}
+		 * @type {Object}
+		 */
 		rtlcss: {
 			options: {
 				map: false,
 				saveUnmodified: false
 			},
 			target: {
-				files: [
-					{
-						expand: true,
-						cwd: adminDirCSS,
-						dest: adminDirCSS,
-						ext: '-rtl.css',
-						src: ['*.css', '!*-rtl.css']
-					}, {
-						expand: true,
-						cwd: publicDirCSS,
-						dest: publicDirCSS,
-						ext: '-rtl.css',
-						src: ['*.css', '!*-rtl.css']
-					}
-				]
+				files: [{
+					expand: true,
+					cwd: '<%= dir.adminCSS %>',
+					dest: '<%= dir.adminCSS %>',
+					ext: '-rtl.css',
+					src: ['*.css', '!*-rtl.css']
+				}, {
+					expand: true,
+					cwd: '<%= dir.publicCSS %>',
+					dest: '<%= dir.publicCSS %>',
+					ext: '-rtl.css',
+					src: ['*.css', '!*-rtl.css']
+				}]
 			}
 		},
 
-		// Add text domain to PHP files.
+		/**
+		 * Add text domain to PHP files.
+		 *
+		 * @see {@link https://github.com/cedaro/grunt-wp-i18n}
+		 * @type {Object}
+		 */
 		addtextdomain: {
 			target: {
 				options: {
 					textdomain: '<%= pkg.name %>', // Project text domain.
 				},
 				files: {
-					src: phpsrc
+					src: '<%= php %>'
 	            }
 	        }
 	    },
 
-		// Check textdomain errors.
+		/**
+		 * Check textdomain errors.
+		 *
+		 * @see {@link https://github.com/stephenharris/grunt-checktextdomain}
+		 * @type {Object}
+		 */
 		checktextdomain: {
 			options: {
 				text_domain: '<%= pkg.name %>',
@@ -267,12 +280,17 @@ module.exports = function(grunt) {
 				]
 			},
 			files: {
-				src: phpsrc,
+				src: '<%= php %>',
 				expand: true
 			}
 		},
 
-		// Create .pot files for i18n.
+		/**
+		 * Create .pot files for i18n.
+		 *
+		 * @see {@link https://github.com/cedaro/grunt-wp-i18n}
+		 * @type {Object}
+		 */
 		makepot: {
 			target: {
 				options: {
@@ -334,48 +352,61 @@ module.exports = function(grunt) {
 			}
 		},
 
-		'string-replace': {
+		/**
+		 * Replace string in the file.
+		 *
+		 * @type {Object}
+		 */
+		replace: {
 			version: {
-				files: {
-					'./readme.txt': './readme.txt',
-					'./composer.json': './composer.json',
-					'./<%= pkg.name %>.php': './<%= pkg.name %>.php',
-					'./includes/class-plugin.php': './includes/class-plugin.php'
-				},
-				options: {
-					replacements: [
-						{
-							pattern: /\Stable tag: (.*)/g,
-							replacement: 'Stable tag: <%= pkg.version %>'
-						}, {
-							pattern: /\Version: (.*)/g,
-							replacement: 'Version: <%= pkg.version %>'
-						}, {
-							pattern: /\protected \$version = (.*)/g,
-							replacement: 'protected $version = \'<%= pkg.version %>\';'
-						}, {
-							pattern: /\Requires at least: (.*)/g,
-							replacement: 'Requires at least: <%= pkg.wordpress.requires_at_least %>'
-						}, {
-							pattern: /\Description: (.*)/g,
-							replacement: 'Description: <%= pkg.description %>'
-						}, {
-							pattern: /\'WordPress\' => \'(.*)\'/g,
-							replacement: '\'WordPress\' => \'<%= pkg.wordpress.requires_at_least %>\''
-						}, {
-							pattern: /\Tested up to: (.*)/g,
-							replacement: 'Tested up to: <%= pkg.wordpress.tested_up_to %>'
-						},
-						{
-							pattern: /\"version\": \"(.*)\"/g,
-							replacement: '"version": "<%= pkg.version %>"'
-						}
-					]
-				}
+				src: [
+					'./readme.txt',
+					'./composer.json',
+					'./<%= pkg.name %>.php',
+					'./includes/class-plugin.php',
+				],
+				overwrite: true,
+				replacements: [
+					{
+						from: /Stable tag: (.*)/g,
+						to: 'Stable tag: <%= pkg.version %>'
+					}, {
+						from: /Version: (.*)/g,
+						to: 'Version: <%= pkg.version %>'
+					}, {
+						from: /protected \$version = (.*)/g,
+						to: 'protected $version = \'<%= pkg.version %>\';'
+					}, {
+						from: /Requires at least: (.*)/g,
+						to: 'Requires at least: <%= pkg.wordpress.requires_at_least %>'
+					}, {
+						from: /Description: (.*)/g,
+						to: 'Description: <%= pkg.description %>'
+					}, {
+						from: /\'WordPress\' => \'(.*)\'/g,
+						to: '\'WordPress\' => \'<%= pkg.wordpress.requires_at_least %>\''
+					}, {
+						from: /Tested up to: (.*)/g,
+						to: 'Tested up to: <%= pkg.wordpress.tested_up_to %>'
+					},
+					{
+						from: /\"version\": \"(.*)\"/g,
+						to: '"version": "<%= pkg.version %>"'
+					},
+					{
+						from: /public \$version\s=\s\'(.*)\'/g,
+						to: 'public \$version = \'<%= pkg.version %>\''
+					}
+				]
 			}
 		},
 
-		// Build a deploy-able plugin.
+		/**
+		 * Build a deploy-able plugin.
+		 *
+		 * @see {@link https://github.com/gruntjs/grunt-contrib-copy}
+		 * @type {Object}
+		 */
 		copy: {
 			build: {
 				src: [
@@ -386,6 +417,7 @@ module.exports = function(grunt) {
 					'includes/**',
 					'languages/**',
 					'readme.txt',
+					'!**/*.less',
 					'!**/*.map',
 					'!**/changelog.md',
 					'!**/readme.md',
@@ -398,7 +430,12 @@ module.exports = function(grunt) {
 			}
 		},
 
-		// Compress files and folders.
+		/**
+		 * Compress files and folders into a .zip file.
+		 *
+		 * @see {@link https://github.com/gruntjs/grunt-contrib-compress}
+		 * @type {Object}
+		 */
 		compress: {
 			build: {
 				options: {
@@ -417,7 +454,12 @@ module.exports = function(grunt) {
 			}
 		},
 
-		// Clean files and folders.
+		/**
+		 * Remove files and folders
+		 *
+		 * @see {@link https://github.com/gruntjs/grunt-contrib-clean}
+		 * @type {Object}
+		 */
 		clean: {
 			build: ['./build/'],
 			zip: ['./<%= pkg.name %>*.zip']
@@ -429,7 +471,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-checktextdomain');
 	grunt.loadNpmTasks('grunt-eslint');
 	grunt.loadNpmTasks('grunt-rtlcss');
-	grunt.loadNpmTasks('grunt-string-replace');
+	grunt.loadNpmTasks('grunt-text-replace');
 	grunt.loadNpmTasks('grunt-wp-i18n');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-less');
@@ -449,7 +491,7 @@ module.exports = function(grunt) {
 
 	// Version bump.
 	grunt.registerTask('version', [
-		'string-replace:version',
+		'replace:version',
 		'shell:readme'
 	]);
 
@@ -457,14 +499,14 @@ module.exports = function(grunt) {
 	grunt.registerTask('build', [
 		'clean:build',
 		'clean:zip',
-		'styles:build',
-		'scripts:build',
+		'styles',
+		'scripts',
 		'wordpress',
 		'version',
 		'copy:build'
 	]);
 
-	// Build and package the plugin.
+	// Build and package the plugin into a .zip file.
 	grunt.registerTask('build:package', [
 		'build',
 		'compress:build',
@@ -477,14 +519,20 @@ module.exports = function(grunt) {
 	 * ==================================================
 	 */
 
+	// Run "phpunit" in Vagrant container.
 	grunt.registerTask('phpunit', [
 		'shell:phpunit',
 	]);
 
-	// Run test unit.
+	// Run Unit Test.
 	grunt.registerTask('test', [
 		'phpunit',
 		'qunit'
+	]);
+
+	// Run Lint.
+	grunt.registerTask('lint', [
+		'eslint'
 	]);
 
 	/**
@@ -495,12 +543,12 @@ module.exports = function(grunt) {
 
 	// "Development" stage.
 	grunt.registerTask('styles:dev', [
-		'less',
+		'less:dev',
 		'rtlcss',
 	]);
 
-	// "Production" stage.
-	grunt.registerTask('styles:build', [
+	// "Build/Production" stage.
+	grunt.registerTask('styles', [
 		'less',
 		'rtlcss',
 	]);
@@ -518,8 +566,8 @@ module.exports = function(grunt) {
 		'uglify:dev'
 	]);
 
-	// "Production" stage.
-	grunt.registerTask('scripts:build', [
+	// "Build/Production" stage.
+	grunt.registerTask('scripts', [
 		'eslint',
 		'qunit',
 		'uglify:build'

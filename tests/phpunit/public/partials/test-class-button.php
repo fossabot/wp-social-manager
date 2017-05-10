@@ -322,26 +322,4 @@ class Test_Button extends WP_UnitTestCase {
 		$this->assertEquals( '<img src="image/pinterest.png" />', $this->button->get_icons( 'pinterest' ) );
 		$this->assertEquals( '<img src="image/linkedin.png" />', $this->button->get_icons( 'linkedin' ) );
 	}
-
-	/**
-	 * Test `get_mode` method.
-	 *
-	 * @since 2.0.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function test_get_mode() {
-
-		$this->assertTrue( property_exists( $this->button, 'mode' ) );
-
-		$this->assertEquals( 'html', $this->button->mode ); // Default value.
-		$this->assertEquals( 'html', $this->button->get_mode() ); // Default value.
-
-		update_option($this->plugin->options['mode'], array(
-			'button_mode' => 'json',
-		));
-
-		$this->assertEquals( 'json', $this->button->get_mode() ); // Default value.
-	}
 }

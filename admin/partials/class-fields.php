@@ -81,11 +81,6 @@ final class Fields extends WP_Settings\Fields {
 	 * @return array The input types with the image file name.
 	 */
 	public function register_scripts( array $scripts ) {
-
-		$scripts['image'] = 'field-image';
-		$scripts['text_profile'] = 'field-text-profile';
-		$scripts['checkbox_toggle'] = 'field-checkbox-toggle';
-
 		return $scripts;
 	}
 
@@ -99,10 +94,6 @@ final class Fields extends WP_Settings\Fields {
 	 * @return array The input types with the image file name.
 	 */
 	public function register_styles( array $styles ) {
-
-		$styles['image'] = 'field-image';
-		$styles['checkbox_sites'] = 'field-include-sites';
-
 		return $styles;
 	}
 

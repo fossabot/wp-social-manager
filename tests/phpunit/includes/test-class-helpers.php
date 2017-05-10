@@ -70,7 +70,7 @@ class Test_Helpers extends WP_UnitTestCase {
 	 */
 	public function test_get_attr_prefix_theme_support() {
 
-		add_theme_support($this->plugin->theme_support()->get_feature_name(), array(
+		add_theme_support($this->plugin->helper()->theme_support()->get_feature_name(), array(
 			'attr_prefix' => 'social',
 		));
 
@@ -89,7 +89,7 @@ class Test_Helpers extends WP_UnitTestCase {
 	 */
 	public function test_get_attr_prefix_theme_support_empty() {
 
-		add_theme_support($this->plugin->theme_support()->get_feature_name(), array(
+		add_theme_support($this->plugin->helper()->theme_support()->get_feature_name(), array(
 			'attr_prefix' => '',
 		));
 
@@ -108,7 +108,7 @@ class Test_Helpers extends WP_UnitTestCase {
 	 */
 	public function test_get_attr_prefix_theme_support_false() {
 
-		add_theme_support($this->plugin->theme_support()->get_feature_name(), array(
+		add_theme_support($this->plugin->helper()->theme_support()->get_feature_name(), array(
 			'attr_prefix' => false,
 		));
 
@@ -127,7 +127,7 @@ class Test_Helpers extends WP_UnitTestCase {
 	 */
 	public function test_get_attr_prefix_theme_support_integer() {
 
-		add_theme_support($this->plugin->theme_support()->get_feature_name(), array(
+		add_theme_support($this->plugin->helper()->theme_support()->get_feature_name(), array(
 			'attr_prefix' => 1,
 		));
 

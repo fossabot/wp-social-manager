@@ -3,7 +3,7 @@
  * Plugin Name: Social Media Manager
  * Plugin URI: http://wordpress.org/plugins/ninecodes-social-manager
  * Description: Lightweight, clean and optimized social media plugin for WordPress.
- * Version: 2.0.0-alpha.2
+ * Version: 2.0.0-alpha.3
  * Author: NineCodes
  * Author URI: https://profiles.wordpress.org/ninecodes
  * License: GPL-2.0+
@@ -65,11 +65,12 @@ if ( false === $require->pass() ) { // If the requirements are not meet.
 	return;
 }
 
-/*
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
- */
 require_once $path_dir . 'includes/class-plugin.php';
+require_once $path_dir . 'includes/class-helpers.php';
+require_once $path_dir . 'includes/class-languages.php';
+require_once $path_dir . 'includes/class-options.php';
+require_once $path_dir . 'includes/class-theme-support.php';
+require_once $path_dir . 'includes/function-utilities.php';
 
 /**
  * Begins execution of the plugin.

@@ -82,8 +82,9 @@ abstract class Button implements Button_Interface {
 
 		$this->meta = new Meta( $this->plugin );
 		$this->endpoint = new Endpoint( $this->plugin, $this->meta );
-		$this->attr_prefix = Helpers::get_attr_prefix();
-		$this->mode = $this->get_mode();
+
+		$this->attr_prefix = $this->plugin->helper()->get_attr_prefix();
+		$this->mode = $this->plugin->helper()->get_button_mode();
 
 		$this->render();
 	}
@@ -212,7 +213,7 @@ abstract class Button implements Button_Interface {
 	 */
 	public function get_icons( $site = '' ) {
 
-		$icons = Helpers::get_social_icons();
+		$icons = $this->plugin->helper()->get_social_icons();
 
 		/**
 		 * Filter all icons displayed in the social media buttons.
@@ -249,35 +250,13 @@ abstract class Button implements Button_Interface {
 			return '';
 		}
 
-		$button = $this->plugin->get_option( "button_{$context}", 'include' );
+		$button = $this->plugin->option()->get( "button_{$context}", 'include' );
 		$default = Options::button_sites( $context );
 
 		if ( isset( $button[ $site ]['label'] ) && ! empty( $button[ $site ]['label'] ) ) {
 			return $button[ $site ]['label'];
 		} else {
 			return isset( $default[ $site ]['label'] ) ? $default[ $site ]['label'] : '';
-		}
-	}
-
-	/**
-	 * The function utility to get the button mode.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string Whether JSON of HTML
-	 */
-	public function get_mode() {
-
-		$button_mode = $this->plugin->get_option( 'mode', 'button_mode' );
-		$theme_support = $this->plugin->theme_support()->is( 'button_mode' );
-
-		if ( 'json' === $theme_support || 'json' === $button_mode ) {
-			return 'json';
-		}
-
-		if ( 'html' === $theme_support || 'html' === $button_mode ) {
-			return 'html';
 		}
 	}
 
@@ -290,7 +269,7 @@ abstract class Button implements Button_Interface {
 	 * @return boolean
 	 */
 	public function in_amp() {
-		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ? true : false;
+		return $this->plugin->helper()->in_amp();
 	}
 
 	/**

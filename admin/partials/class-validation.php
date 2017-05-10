@@ -73,8 +73,10 @@ class Validation {
 			'post_type' => array(),
 		) );
 
-		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
-		$inputs['placement'] = $this->validate_radio( $inputs['placement'], Options::button_placements() );
+		$inputs['view'] = $this->validate_selection( $inputs['view'], Options::button_views() );
+		$inputs['placement'] = $this->validate_selection( $inputs['placement'], Options::button_placements() );
+		$inputs['style'] = $this->validate_selection( $inputs['style'], Options::button_styles( 'content' ) );
+
 		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
 
 		$inputs['include'] = $this->validate_include_sites( $inputs['include'], Options::button_sites( 'content' ) );
@@ -102,7 +104,9 @@ class Validation {
 		) );
 
 		$inputs['enable'] = $this->validate_checkbox( $inputs['enable'] );
-		$inputs['view'] = $this->validate_radio( $inputs['view'], Options::button_views() );
+		$inputs['view'] = $this->validate_selection( $inputs['view'], Options::button_views() );
+		$inputs['style'] = $this->validate_selection( $inputs['style'], Options::button_styles( 'image' ) );
+
 		$inputs['post_type'] = $this->validate_multicheckbox( $inputs['post_type'], Options::post_types() );
 		$inputs['include'] = $this->validate_include_sites( $inputs['include'], Options::button_sites( 'image' ) );
 
@@ -166,8 +170,8 @@ class Validation {
 	 */
 	final public function setting_mode( $inputs ) {
 
-		$inputs['button_mode'] = $this->validate_radio( $inputs['button_mode'], Options::button_modes() );
-		$inputs['link_mode'] = $this->validate_radio( $inputs['link_mode'], Options::link_modes() );
+		$inputs['button_mode'] = $this->validate_selection( $inputs['button_mode'], Options::button_modes() );
+		$inputs['link_mode'] = $this->validate_selection( $inputs['link_mode'], Options::link_modes() );
 
 		return $inputs;
 	}
@@ -182,7 +186,7 @@ class Validation {
 	 * @param array  $options The list of options set in the setting.
 	 * @return string Sanitized input.
 	 */
-	final public function validate_radio( $input, $options ) {
+	final public function validate_selection( $input, $options ) {
 
 		if ( array_key_exists( $input, $options ) ) {
 			return sanitize_key( $input );

@@ -28,6 +28,10 @@ jQuery(function($) {
 
 		initialize: function() {
 
+			if ( _.isUndefined( wp.media ) ) {
+				return;
+			}
+
 			this.wpMediaUploader = null;
 			this.wpMedia();
 		},

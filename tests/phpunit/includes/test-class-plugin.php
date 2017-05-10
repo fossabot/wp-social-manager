@@ -94,13 +94,13 @@ class Test_Plugin extends WP_UnitTestCase {
 	 */
 	public function test_plugin_get_option() {
 
-		$opt = $this->plugin->get_option();
+		$opt = $this->plugin->option()->get();
 		$this->assertNull( $opt );
 
-		$xyz = $this->plugin->get_option( 'xyz' ); // non-existent name.
+		$xyz = $this->plugin->option()->get( 'xyz' ); // non-existent name.
 		$this->assertNull( $xyz );
 
-		$int = $this->plugin->get_option( 123 ); // integer name.
+		$int = $this->plugin->option()->get( 123 ); // integer name.
 		$this->assertNull( $int );
 	}
 
@@ -114,7 +114,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 */
 	public function test_plugin_get_option_buttons_content() {
 
-		$buttons_content = $this->plugin->get_option( 'button_content', 'include' );
+		$buttons_content = $this->plugin->option()->get( 'button_content', 'include' );
 
 		// Count, in case we will add more in the future.
 		$this->assertEquals( 8, count( $buttons_content ) );
@@ -139,11 +139,126 @@ class Test_Plugin extends WP_UnitTestCase {
 	 */
 	public function test_plugin_get_option_buttons_image() {
 
-		$buttons_image = $this->plugin->get_option( 'button_image', 'include' );
+		$buttons_image = $this->plugin->option()->get( 'button_image', 'include' );
 
 		// Count, in case we will add more in the future.
 		$this->assertEquals( 1, count( $buttons_image ) );
 
 		$this->assertTrue( key_exists( 'pinterest', $buttons_image ) );
+	}
+
+	/**
+	 * Test adding action link to the plugin table.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_plugin_action_links() {
+
+		$links = $this->plugin->plugin_action_links( array() );
+
+		$this->assertArrayHasKey( 'settings', $links );
+		$this->assertEquals( '<a href="http://example.org/wp-admin/options-general.php?page=ninecodes-social-manager">Settings</a>', $links['settings'] );
+	}
+
+	/**
+	 * Test the 'updates()' method.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_updates_init() {
+
+		$version = get_option( $this->plugin->option_slug . '_version' );
+		$this->assertFalse( $version ); // The method have to be instantiated in the admin hence should False.
+
+		$this->plugin->updates();
+
+		$version = get_option( $this->plugin->option_slug . '_version' );
+		$this->assertEquals( $this->plugin->version, $version );
+
+		$prev_version = get_option( $this->plugin->option_slug . '_previous_version' );
+		$this->assertEquals( $this->plugin->version, $prev_version );
+
+		// Reset the option.
+		delete_option( $this->plugin->option_slug . '_version' );
+		delete_option( $this->plugin->option_slug . '_previous_version' );
+	}
+
+	/**
+	 * Test the 'updates()' with updated value.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_updates_updated() {
+
+		// Current state.
+		add_option( $this->plugin->option_slug . '_version', '2.0.0' );
+		add_option( $this->plugin->option_slug . '_previous_version', '1.5.0' );
+
+		// Plugin updated.
+		$this->plugin->version = '3.0.0';
+		$this->plugin->updates();
+
+		$version = get_option( $this->plugin->option_slug . '_version' );
+		$this->assertEquals( '3.0.0', $version );
+
+		$prev_version = get_option( $this->plugin->option_slug . '_previous_version' );
+		$this->assertEquals( '2.0.0', $prev_version );
+
+		// Reset the option.
+		delete_option( $this->plugin->option_slug . '_version' );
+		delete_option( $this->plugin->option_slug . '_previous_version' );
+	}
+
+
+	/**
+	 * Test the 'updates()' with beta value.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_updates_alpha_beta() {
+
+		// Current state.
+		add_option( $this->plugin->option_slug . '_version', '2.0.0-beta.2' );
+		add_option( $this->plugin->option_slug . '_previous_version', '2.0.0-alpha.1' );
+
+		// Plugin updated.
+		$this->plugin->version = '3.0.0-alpha.1';
+		$this->plugin->updates();
+
+		$version = get_option( $this->plugin->option_slug . '_version' );
+		$this->assertEquals( '3.0.0-alpha.1', $version );
+
+		$prev_version = get_option( $this->plugin->option_slug . '_previous_version' );
+		$this->assertEquals( '2.0.0-beta.2', $prev_version );
+
+		// Reset the option.
+		delete_option( $this->plugin->option_slug . '_version' );
+		delete_option( $this->plugin->option_slug . '_previous_version' );
+	}
+
+	/**
+	 * Test the 'theme_support()' method.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_theme_support() {
+
+		$theme_support = $this->plugin->helper()->theme_support();
+		$this->assertInstanceOf( __NAMESPACE__ . '\\Theme_Support', $theme_support );
 	}
 }

@@ -78,8 +78,8 @@ class Endpoint {
 			return $output;
 		}
 
-		$includes = (array) $this->plugin->get_option( 'button_content', 'include' );
-		$sites = Options::button_sites( 'content' );
+		$includes = (array) $this->plugin->option()->get( 'button_content', 'include' );
+		$sites = $this->plugin->option()->button_sites( 'content' );
 
 		foreach ( $sites as $site => $label ) {  // Exclude site which is not enabled.
 
@@ -111,7 +111,7 @@ class Endpoint {
 					break;
 
 				case 'twitter':
-					$profiles = $this->plugin->get_option( 'profile', 'twitter' );
+					$profiles = $this->plugin->option()->get( 'profile', 'twitter' );
 
 					$args = array(
 						'text' => $meta['post_title'],
@@ -254,8 +254,8 @@ class Endpoint {
 		 *
 		 * @var array
 		 */
-		$includes = (array) $this->plugin->get_option( 'button_image', 'include' );
-		$sites = Options::button_sites( 'image' );
+		$includes = (array) $this->plugin->option()->get( 'button_image', 'include' );
+		$sites = $this->plugin->option()->button_sites( 'image' );
 
 		foreach ( $sites as $site => $label ) { // Exclude site which is not enabled.
 
@@ -390,7 +390,7 @@ class Endpoint {
 		$post_image = $this->meta->get_post_image( $post_id );
 		$post_url = $this->meta->get_post_url( $post_id );
 
-		if ( 'shortlink' === $this->plugin->get_option( 'mode', 'link_mode' ) ) {
+		if ( 'shortlink' === $this->plugin->option()->get( 'mode', 'link_mode' ) ) {
 			$post_url = wp_get_shortlink( $post_id );
 		}
 

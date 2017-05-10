@@ -62,8 +62,8 @@ class Button_Content extends Button {
 	function __construct( Plugin $plugin ) {
 		parent::__construct( $plugin );
 
-		$this->view = $this->plugin->get_option( 'button_content', 'view' );
-		$this->placement = $this->plugin->get_option( 'button_content', 'placement' );
+		$this->view = $this->plugin->option()->get( 'button_content', 'view' );
+		$this->placement = $this->plugin->option()->get( 'button_content', 'placement' );
 
 		$this->hooks();
 	}
@@ -93,7 +93,7 @@ class Button_Content extends Button {
 	 */
 	public function get_endpoint() {
 
-		if ( 'html' === $this->mode && is_singular() ) {
+		if ( $this->is_active() && 'html' === $this->mode ) {
 
 			$response = $this->endpoint->get_content_endpoint( get_the_id() );
 			$this->response = $response['endpoint'];
@@ -116,23 +116,19 @@ class Button_Content extends Button {
 	 */
 	public function render_button( $content ) {
 
-		if ( is_feed() ) {
+		if ( empty( $content ) || ! $this->is_active() ) {
 			return $content;
 		}
 
 		$button = '';
 		$post_id = get_the_id();
 
-		if ( ! $this->is_button_content() || 'publish' !== $this->get_post_status() ) {
-			return $content;
-		}
-
-		$is_html = 'html' === $this->mode && $this->response && is_singular();
+		$is_html = 'html' === $this->mode && $this->response;
 		$is_json = 'json' === $this->mode;
 
 		if ( $is_html || $is_json ) {
 
-			$style = get_theme_mod( "{$this->plugin->option_slug}_style_button_content", 'rounded' );
+			$style = $this->plugin->option()->get( 'button_content', 'style' );
 
 			$button .= "<div class=\"{$this->attr_prefix}-button {$this->attr_prefix}-button--content {$this->attr_prefix}-button--{$this->placement} {$this->attr_prefix}-button--{$style}\" id=\"{$this->attr_prefix}-button-{$post_id}\" data-social-manager=\"button-content\">";
 		}
@@ -174,7 +170,7 @@ class Button_Content extends Button {
 
 		if ( ! empty( $includes ) ) :
 
-			$heading = $this->plugin->get_option( 'button_content', 'heading' );
+			$heading = $this->plugin->option()->get( 'button_content', 'heading' );
 			$heading = esc_html( $heading );
 
 			if ( ! empty( $heading ) ) {
@@ -219,12 +215,12 @@ class Button_Content extends Button {
 	 */
 	public function render_tmpl() {
 
-		if ( $this->is_button_content() && 'json' === $this->mode ) :
+		if ( $this->is_active() && 'json' === $this->mode ) :
 			if ( wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) : ?>
 
 		<script type="text/html" id="tmpl-button-content"><?php
 
-		$heading = $this->plugin->get_option( 'button_content', 'heading' );
+		$heading = $this->plugin->option()->get( 'button_content', 'heading' );
 		$heading = wp_kses( $heading, array() );
 
 		if ( ! empty( $heading ) ) {
@@ -238,7 +234,7 @@ class Button_Content extends Button {
 		} ?><div class="<?php echo esc_attr( $this->attr_prefix ); ?>-button__list <?php echo esc_attr( $this->attr_prefix ); ?>-button__list--<?php echo esc_attr( $this->view ); ?>"><?php
 
 		$prefix = $this->attr_prefix;
-		$includes = (array) $this->plugin->get_option( 'button_content', 'include' );
+		$includes = (array) $this->plugin->option()->get( 'button_content', 'include' );
 
 foreach ( $includes as $site => $value ) :
 
@@ -304,36 +300,39 @@ foreach ( $includes as $site => $value ) :
 	 *
 	 * @return boolean
 	 */
-	protected function is_button_content() {
-
-		if ( $this->in_amp() ) {
-			return false;
-		}
-
-		$post_types = (array) $this->plugin->get_option( 'button_content', 'post_type' );
+	protected function is_active() {
 
 		/**
-		 * If post types are not selected.
+		 * Check whether the button is active on the Setting level.
 		 *
-		 * NOTE: The social media buttons currently do not support Home and Archive display.
-		 * But, we plan to have it in the future.
+		 * @var bool
 		 */
-		if ( ! is_singular( array_keys( array_filter( $post_types ) ) ) ) {
+		$status = $this->plugin->helper()->get_button_content_status();
+
+		if ( ! $status ) {
 			return false;
 		}
 
-		$includes = (array) $this->plugin->get_option( 'button_content', 'include' );
-
-		if ( empty( $includes ) ) {
+		/**
+		 * Ok, so it appears that the button is active on the upper level,
+		 * let's check if it is loaded in the appropriate single page.
+		 *
+		 * @var bool
+		 */
+		if ( ! is_singular( $status['post_type'] ) || is_feed() || $this->in_amp() ) {
 			return false;
 		}
 
-		$placement = $this->plugin->get_option( 'button_content', 'placement' );
-
-		if ( ! in_array( $placement, array_keys( Options::button_placements() ), true ) ) {
+		if ( is_singular() && 'publish' !== $this->get_post_status() ) {
 			return false;
 		}
 
+		/**
+		 * Ok, we have come to this far.
+		 * Let's check if it is enabled in the individual post.
+		 *
+		 * @var bool
+		 */
 		$post_meta = $this->meta->get_post_meta( get_the_id(), 'button_content' );
 
 		/**
@@ -341,6 +340,6 @@ foreach ( $includes as $site => $value ) :
 		 * the associated key, 'buttons_image', in the meta is not set. So, we
 		 * return to the default 'true'.
 		 */
-		return ( null === $post_meta ) ? true : $post_meta;
+		return null === $post_meta;
 	}
 }

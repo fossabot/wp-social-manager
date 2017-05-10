@@ -93,7 +93,6 @@ final class Admin_View {
 
 		new Settings( $this->plugin );
 		new User( $this->plugin );
-		new Customize( $this->plugin );
 
 		Metabox::get_instance( $this->plugin );
 	}

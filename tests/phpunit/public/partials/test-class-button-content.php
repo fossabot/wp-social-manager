@@ -109,7 +109,6 @@ class Test_Button_Content extends WP_UnitTestCase {
 		$this->assertTrue( method_exists( $this->button_content, 'render_view' ), 'Class does not have method \'render_view\'' );
 		$this->assertTrue( method_exists( $this->button_content, 'get_icons' ), 'Class does not have method \'get_icons\'' );
 		$this->assertTrue( method_exists( $this->button_content, 'get_label' ), 'Class does not have method \'get_label\'' );
-		$this->assertTrue( method_exists( $this->button_content, 'get_mode' ), 'Class does not have method \'get_mode\'' );
 		$this->assertTrue( method_exists( $this->button_content, 'get_post_status' ), 'Class does not have method \'get_post_status\'' );
 		$this->assertTrue( method_exists( $this->button_content, 'in_amp' ), 'Class does not have method \'in_amp\'' );
 		$this->assertTrue( method_exists( $this->button_content, 'to_html' ), 'Class does not have method \'to_html\'' );

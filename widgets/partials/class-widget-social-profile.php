@@ -88,7 +88,7 @@ class Widget_Social_Profile extends Widget {
 			return;
 		}
 
-		$script_enqueue = $this->plugin->get_option( 'enqueue' );
+		$script_enqueue = $this->plugin->option()->get( 'enqueue' );
 
 		if ( isset( $script_enqueue['enable_stylesheet'] ) && 'on' === $script_enqueue['enable_stylesheet'] ) {
 			wp_enqueue_style( $this->plugin->plugin_slug );
@@ -114,7 +114,7 @@ class Widget_Social_Profile extends Widget {
 		 *
 		 * @var array
 		 */
-		$site_profiles = $this->plugin->get_option( 'profile' ); ?>
+		$site_profiles = $this->plugin->option()->get( 'profile' ); ?>
 
 		<div class="<?php echo esc_attr( $this->id_base ); ?>">
 			<p>
@@ -200,7 +200,7 @@ class Widget_Social_Profile extends Widget {
 		 *
 		 * @var array
 		 */
-		$site_profiles = (array) $this->plugin->get_option( 'profile' );
+		$site_profiles = (array) $this->plugin->option()->get( 'profile' );
 
 		foreach ( $site_profiles as $key => $value ) {
 			if ( empty( $value ) ) {
@@ -238,7 +238,7 @@ class Widget_Social_Profile extends Widget {
 		 *
 		 * @var array
 		 */
-		$site_profiles = (array) $this->plugin->get_option( 'profile' );
+		$site_profiles = (array) $this->plugin->option()->get( 'profile' );
 
 		if ( ! empty( $widget_title ) ) {
 			$widget_title = apply_filters( 'widget_title', $widget_title );

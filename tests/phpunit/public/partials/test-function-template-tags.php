@@ -77,7 +77,7 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 	 */
 	public function test_get_the_site_social_profile() {
 
-		update_option( $this->plugin->options['profile'], array(
+		update_option( $this->plugin->option_names['profile'], array(
 			'facebook' => 'foo',
 			'twitter' => 'foo',
 			'instagram' => 'foo',
@@ -113,7 +113,7 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-instagram\" href=\"https://instagram.com/foo\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-instagram\"/></svg></a>", $anchor_html );
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-googleplus\" href=\"https://plus.google.com/+foo\" target=\"_blank\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-googleplus\"/></svg></a>", $anchor_html );
 
-		delete_option( $this->plugin->options['profile'] );
+		delete_option( $this->plugin->option_names['profile'] );
 	}
 
 	/**
@@ -126,7 +126,7 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 	 */
 	public function test_get_the_site_social_profile_view_text() {
 
-		update_option( $this->plugin->options['profile'], array(
+		update_option( $this->plugin->option_names['profile'], array(
 			'facebook' => 'foo',
 			'twitter' => 'foo',
 			'instagram' => 'foo',
@@ -156,7 +156,7 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-instagram\" href=\"https://instagram.com/foo\" target=\"_blank\">Instagram</a>", $anchor_html );
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-googleplus\" href=\"https://plus.google.com/+foo\" target=\"_blank\">Google+</a>", $anchor_html );
 
-		delete_option( $this->plugin->options['profile'] );
+		delete_option( $this->plugin->option_names['profile'] );
 	}
 
 	/**
@@ -169,7 +169,7 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 	 */
 	public function test_get_the_site_social_profile_view_text_icon() {
 
-		update_option( $this->plugin->options['profile'], array(
+		update_option( $this->plugin->option_names['profile'], array(
 			'facebook' => 'yo',
 			'twitter' => 'yeap',
 		) );
@@ -196,7 +196,7 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 
 		$this->assertContains( "<a class=\"{$prefix}-profiles__item item-twitter\" href=\"https://twitter.com/yeap\" target=\"_blank\"><span class=\"{$prefix}-profiles__item-icon\"><svg aria-hidden=\"true\"><use xlink:href=\"#{$prefix}-icon-twitter\"/></svg></span><span class=\"{$prefix}-profiles__item-text\">Twitter</span></a>", $anchor_html );
 
-		delete_option( $this->plugin->options['profile'] );
+		delete_option( $this->plugin->option_names['profile'] );
 	}
 
 	/**

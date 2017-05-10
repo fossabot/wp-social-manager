@@ -108,4 +108,163 @@ final class Helpers {
 
 		return esc_attr( $prefix );
 	}
+
+	/**
+	 * Get the options saved in the database `wp_options`.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return bool
+	 */
+	public static function get_button_content_status() {
+
+		$include = Options::get( 'button_content', 'include' );
+		$include = array_filter( $include, function( $arr ) {
+
+			if ( 'on' !== $arr['enable'] ) {
+				return false;
+			}
+
+			return $arr;
+		} );
+
+		if ( empty( array_keys( $include ) ) ) {
+			return false;
+		}
+
+		$post_type = Options::get( 'button_content', 'post_type' );
+		$post_type = array_keys( array_filter( $post_type ) );
+
+		if ( empty( array_keys( $post_type ) ) ) {
+			return false;
+		}
+
+		return array(
+			'include' => $include,
+			'post_type' => $post_type,
+		);
+	}
+
+	/**
+	 * Check if the social media button image is active
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return bool|array
+	 */
+	public static function get_button_image_status() {
+
+		$enable = (bool) Options::get( 'button_image', 'enable' );
+
+		if ( ! $enable ) {
+			return false;
+		}
+
+		$include = Options::get( 'button_image', 'include' );
+		$include = array_filter( $include, function( $arr ) {
+
+			if ( 'on' !== $arr['enable'] ) {
+				return false;
+			}
+
+			return $arr;
+		} );
+
+		if ( empty( array_keys( $include ) ) ) {
+			return false;
+		}
+
+		$post_type = Options::get( 'button_image', 'post_type' );
+		$post_type = array_keys( array_filter( $post_type ) );
+
+		if ( empty( $post_type ) ) {
+			return false;
+		}
+
+		return array(
+			'include' => $include,
+			'post_type' => $post_type,
+		);
+	}
+
+	/**
+	 * Check if the meta tags is enabled
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return boolean
+	 */
+	public static function is_meta_tags_enabled() {
+
+		$meta_site = Options::get( 'meta_site', 'enable' );
+
+		return (bool) $meta_site;
+	}
+
+	/**
+	 * Return the theme support data.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param string $feature The feature name.
+	 * @return Theme_Support
+	 */
+	public static function theme_support( $feature = '' ) {
+
+		static $theme_support;
+
+		if ( is_null( $theme_support ) ) {
+			$theme_support = new Theme_Support();
+		}
+
+		return $theme_support;
+	}
+
+	/**
+	 * Check if the theme support the given feature.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param string $feature The feature name.
+	 * @return bool
+	 */
+	public static function is_theme_support( $feature = '' ) {
+		return self::theme_support()->is( $feature );
+	}
+
+	/**
+	 * Method to check whether the page is an AMP page.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return bool
+	 */
+	public static function in_amp() {
+		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
+	}
+
+	/**
+	 * Method to get the button
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return string Whether html or json.
+	 */
+	public static function get_button_mode() {
+
+		$button_mode = Options::get( 'mode', 'button_mode' );
+		$theme_support = self::is_theme_support( 'button_mode' );
+
+		if ( 'json' === $theme_support || 'json' === $button_mode ) {
+			return 'json';
+		}
+
+		return 'html';
+	}
 }

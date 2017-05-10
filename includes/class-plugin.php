@@ -36,7 +36,7 @@ final class Plugin {
 	 * @access public
 	 * @var string
 	 */
-	public $option_slug = 'ncsocman';
+	public $option_slug;
 
 	/**
 	 * The current version of the plugin.
@@ -45,7 +45,7 @@ final class Plugin {
 	 * @access public
 	 * @var string
 	 */
-	public $version = '1.2.0-alpha.1';
+	public $version = '2.0.0-alpha.3';
 
 	/**
 	 * The path directory relative to the current file.
@@ -63,7 +63,7 @@ final class Plugin {
 	 * @access public
 	 * @var array
 	 */
-	public $options;
+	public $option_names;
 
 	/**
 	 * Constructor.
@@ -75,14 +75,8 @@ final class Plugin {
 	 */
 	function __construct() {
 
-		$this->options = array(
-			'profile' => "{$this->option_slug}_profile",
-			'button_content' => "{$this->option_slug}_button_content",
-			'button_image' => "{$this->option_slug}_button_image",
-			'meta_site' => "{$this->option_slug}_meta_site",
-			'enqueue' => "{$this->option_slug}_enqueue",
-			'mode' => "{$this->option_slug}_mode",
-		);
+		$this->option_slug = Options::$slug;
+		$this->option_names = Options::names();
 	}
 
 	/**
@@ -124,7 +118,7 @@ final class Plugin {
 	 */
 	public function uninstall() {
 
-		foreach ( $this->options as $key => $option_name ) {
+		foreach ( $this->option_names as $key => $option_name ) {
 			delete_option( $option_name );
 		}
 	}
@@ -138,13 +132,6 @@ final class Plugin {
 	 * @return void
 	 */
 	protected function requires() {
-
-		require_once( $this->path_dir . 'includes/function-utilities.php' );
-
-		require_once( $this->path_dir . 'includes/class-languages.php' );
-		require_once( $this->path_dir . 'includes/class-helpers.php' );
-		require_once( $this->path_dir . 'includes/class-options.php' );
-		require_once( $this->path_dir . 'includes/class-theme-support.php' );
 
 		require_once( $this->path_dir . 'includes/wp-settings/class-settings.php' );
 		require_once( $this->path_dir . 'includes/wp-settings/class-fields.php' );
@@ -227,16 +214,19 @@ final class Plugin {
 	 */
 	public function updates() {
 
-		$regex = '/(-[alpha|beta|rc\.\d]+)/';
-		$current_version = preg_replace( $regex, '', $this->version );
+		$updated_version = $this->version;
+		$installed_version = get_option( $this->option_slug . '_version' );
+		$previous_version = get_option( $this->option_slug . '_previous_version' );
 
-		$previous_version = get_option( $this->option_slug . '_version' );
-		$previous_version = preg_replace( $regex, '', $previous_version );
+		update_option( $this->option_slug . '_version', $updated_version ); // Update installed version.
 
-		update_option( $this->option_slug . '_version', $current_version );
+		if ( ! $previous_version ) {
+			update_option( $this->option_slug . '_previous_version', $updated_version );
+			return;
+		}
 
-		if ( version_compare( $previous_version, $current_version, '<' ) || ! get_option( $this->option_slug . '_previous_version' ) ) {
-			update_option( $this->option_slug . '_previous_version', $previous_version );
+		if ( version_compare( $installed_version, $updated_version, '<' ) ) {
+			update_option( $this->option_slug . '_previous_version', $installed_version );
 		}
 	}
 
@@ -249,7 +239,7 @@ final class Plugin {
 	 * @param  array $links WordPress built-in links (e.g. Activate, Deactivate, and Edit).
 	 * @return array        Action links with the new one added.
 	 */
-	public function plugin_action_links( $links ) {
+	public function plugin_action_links( array $links ) {
 
 		$markup = '<a href="' . esc_url( get_admin_url( null, 'options-general.php?page=%2$s' ) ) . '">%1$s</a>';
 		$settings = array(
@@ -265,43 +255,21 @@ final class Plugin {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param string $name The option name.
-	 * @param string $key  The array key to retrieve from the option.
 	 * @return mixed The option value or null if option is not available.
 	 */
-	public function get_option( $name = '', $key = '' ) {
-		/*
-		 * The $name parameter is required. If the $name is not set, simply return `null`.
-		 */
-		if ( empty( $name ) ) {
-			return null;
-		}
-
-		$option = isset( $this->options[ $name ] ) ? get_option( $this->options[ $name ] ) : null;
-
-		if ( $name && $key ) {
-			return isset( $option[ $key ] ) ? $option[ $key ] : null;
-		}
-
-		return $option ? $option : null;
+	public function option() {
+		return new Options;
 	}
 
 	/**
-	 * Return the theme support data.
+	 * Serve the Helpers methods
 	 *
 	 * @since 2.0.0
 	 * @access public
 	 *
-	 * @return Theme_Support
+	 * @return Helpers
 	 */
-	public function theme_support() {
-
-		static $theme_support;
-
-		if ( is_null( $theme_support ) ) {
-			$theme_support = new Theme_Support();
-		}
-
-		return $theme_support;
+	public function helper() {
+		return new Helpers;
 	}
 }

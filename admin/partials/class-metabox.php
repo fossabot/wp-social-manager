@@ -142,7 +142,7 @@ final class Metabox {
 
 		// List of post types enabled.
 		$enable = $this->post_type_enable();
-		$enable = array_merge( array_values( $enable['button_content'] ), array_values( $enable['button_image'] ) );
+		$enable = array_merge( $enable['button_content'], $enable['button_image'] );
 
 		// Load internal post and post type objects.
 		$this->post_data();
@@ -251,7 +251,7 @@ final class Metabox {
 	 */
 	public function register_section_meta( $butterbean, $post_type ) {
 
-		$meta_enable = (bool) $this->plugin->get_option( 'meta_site', 'enable' );
+		$meta_enable = (bool) $this->plugin->option()->get( 'meta_site', 'enable' );
 
 		if ( ! $meta_enable ) {
 			return;
@@ -493,16 +493,16 @@ final class Metabox {
 	 */
 	protected function post_type_enable() {
 
-		$button_content_post_type = (array) $this->plugin->get_option( 'button_content', 'post_type' );
+		$button_content_post_type = (array) $this->plugin->option()->get( 'button_content', 'post_type' );
 		$button_image_post_type = array();
 
-		if ( (bool) $this->plugin->get_option( 'button_image', 'enable' ) ) {
-			$button_image_post_type = (array) $this->plugin->get_option( 'button_image', 'post_type' );
+		if ( (bool) $this->plugin->option()->get( 'button_image', 'enable' ) ) {
+			$button_image_post_type = (array) $this->plugin->option()->get( 'button_image', 'post_type' );
 		}
 
 		return array(
-			'button_content' => $button_content_post_type,
-			'button_image' => $button_image_post_type,
+			'button_content' => array_keys( $button_content_post_type ),
+			'button_image' => array_keys( $button_image_post_type ),
 		);
 	}
 

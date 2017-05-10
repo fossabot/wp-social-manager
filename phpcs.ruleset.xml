@@ -1,30 +1,31 @@
 <?xml version="1.0"?>
-<ruleset name="Social Media Manager Coding Standards">
-	<description>Customized Code Sniffs for Social Media Manager Plugin</description>
+<ruleset name="WordPress-Plugin-SocialManager">
+	<description>Social Manager Plugin Coding Standard</description>
 
 	<rule ref="WordPress-Core"/>
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" value="ninecodes-social-manager" />
+			<property name="text_domain" value="ninecodes-social-manager"/>
 		</properties>
 	</rule>
+
 	<!-- Allow the use of camelCase variable name since the plugin is employing DOMDocument object. -->
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
 		<properties>
-            <property name="customPropertiesWhitelist" value="parentNode,nodeValue,nodeName" type="array"/>
-        </properties>
+			<property name="customPropertiesWhitelist" value="parentNode,nodeValue,nodeName" type="array"/>
+		</properties>
 	</rule>
 	<!-- <link:>https://github.com/squizlabs/PHP_CodeSniffer/issues/870</link:> -->
 	<rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing">
-  		<severity>0</severity>
+		<severity>0</severity>
 	</rule>
 
 	<exclude-pattern>*/index.php</exclude-pattern>
-	<exclude-pattern>*/includes/class-requirements.php</exclude-pattern>
 	<exclude-pattern>*/tests/*</exclude-pattern>
 	<exclude-pattern>*/dev-lib/*</exclude-pattern>
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>includes/class-requirements.php</exclude-pattern>
 </ruleset>

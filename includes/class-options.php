@@ -24,6 +24,64 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 final class Options {
 
 	/**
+	 * The unique identifier or prefix for database names.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 * @var string
+	 */
+	public static $slug = 'ncsocman';
+
+	/**
+	 * Get the option names.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 * @var string
+	 *
+	 * @return array
+	 */
+	public static function names() {
+
+		$slug = self::$slug;
+
+		return array(
+			'profile' => "{$slug}_profile",
+			'button_content' => "{$slug}_button_content",
+			'button_image' => "{$slug}_button_image",
+			'meta_site' => "{$slug}_meta_site",
+			'enqueue' => "{$slug}_enqueue",
+			'mode' => "{$slug}_mode",
+		);
+	}
+
+	/**
+	 * Get the options saved in the database `wp_options`.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param string $name The option name.
+	 * @param string $key  The array key to retrieve from the option.
+	 * @return mixed The option value or null if option is not available.
+	 */
+	public static function get( $name = '', $key = '' ) {
+
+		if ( empty( $name ) ) {
+			return null;
+		}
+
+		$option_names = self::names();
+		$option = isset( $option_names[ $name ] ) ? get_option( $option_names[ $name ] ) : null;
+
+		if ( $name && $key ) {
+			return isset( $option[ $key ] ) ? $option[ $key ] : null;
+		}
+
+		return $option ? $option : null;
+	}
+
+	/**
 	 * Options: Social Profiles and Pages.
 	 *
 	 * @since 1.0.0
@@ -372,6 +430,39 @@ final class Options {
 		}
 
 		return isset( $button_sites[ $for ] ) ? $button_sites[ $for ] : $button_sites;
+	}
+
+	/**
+	 * Get style options of button content.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param string $for Which button style to retrieve.
+	 * @return array
+	 */
+	public static function button_styles( $for = '' ) {
+
+		$button_styles = array(
+			'content' => array(
+				'plain' => __( 'Plain', 'ninecodes-social-manager' ),
+				'rounded' => __( 'Rounded', 'ninecodes-social-manager' ),
+				'circle' => __( 'Circle', 'ninecodes-social-manager' ),
+				'square' => __( 'Square', 'ninecodes-social-manager' ),
+				'skeumorphic' => __( 'Skeumorphic', 'ninecodes-social-manager' ),
+			),
+			'image' => array(
+				'rounded' => __( 'Rounded', 'ninecodes-social-manager' ),
+				'circle' => __( 'Circle', 'ninecodes-social-manager' ),
+			),
+		);
+
+		$button_styles = (array) apply_filters( 'ninecodes_social_manager_options', $button_styles, 'button_styles' );
+
+		$button_styles['content'] = array_map( 'esc_html', $button_styles['content'] );
+		$button_styles['image'] = array_map( 'esc_html', $button_styles['image'] );
+
+		return isset( $button_styles[ $for ] ) ? $button_styles[ $for ] : $button_styles;
 	}
 
 	/**

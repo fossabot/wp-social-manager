@@ -225,7 +225,7 @@ final class Public_View {
 		 * Don't load the plugin stylesheet, if the theme already loads its own stylesheet
 		 * via the 'add_theme_support()' function.
 		 */
-		if ( true === (bool) $this->plugin->theme_support()->is( 'stylesheet' ) ) {
+		if ( true === (bool) $this->plugin->helper()->is_theme_support( 'stylesheet' ) ) {
 			return false;
 		}
 
@@ -233,7 +233,7 @@ final class Public_View {
 			return false;
 		}
 
-		return 'on' === $this->plugin->get_option( 'enqueue', 'enable_stylesheet' );
+		return 'on' === $this->plugin->option()->get( 'enqueue', 'enable_stylesheet' );
 	}
 
 	/**
@@ -266,14 +266,9 @@ final class Public_View {
 	 */
 	public function is_json_mode() {
 
-		$button_mode = $this->plugin->get_option( 'mode', 'button_mode' );
-		$theme_support = $this->plugin->theme_support()->is( 'button_mode' );
+		$mode = $this->plugin->helper()->get_button_mode( 'button_mode' );
 
-		if ( 'json' === $theme_support || 'json' === $button_mode ) {
-			return true;
-		}
-
-		return false;
+		return 'json' === $mode;
 	}
 
 	/**
@@ -295,15 +290,16 @@ final class Public_View {
 
 		if ( is_singular() ) {
 
-			$button_image = $this->plugin->get_option( 'button_image' ); // Get "Buttons Image" options.
+			$button_image = $this->plugin->helper()->get_button_image_status();
+			$button_content = $this->plugin->helper()->get_button_content_status();
 
-			$post_types_content = $this->plugin->get_option( 'button_content', 'post_type' );
-			$post_types_image = isset( $button_image['enable'] ) && 'on' === $button_image['enable'] ? $button_image['post_type'] : array();
+			$button_content_post_types = isset( $button_content['post_type'] ) ? $button_content['post_type'] : array();
+			$button_image_post_types = isset( $button_image['post_type'] ) ? $button_image['post_type'] : array();
 
 			$post_types = array_keys( array_unique(
 				array_merge(
-					array_filter( $post_types_content ),
-					array_filter( $post_types_image )
+					array_filter( $button_content_post_types ),
+					array_filter( $button_image_post_types )
 				)
 			) );
 
