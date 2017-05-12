@@ -146,12 +146,12 @@ abstract class Button implements Button_Interface {
 	 *
 	 * @param string $view The button view key (`icon`, `icon-text`, `text`).
 	 * @param array  $context Whether the sharing button is for `content` or `image`.
-	 * @param array  $args 	{
+	 * @param array  $args {
 	 *     The button attributes.
 	 *
-	 *     @type string $site 	The site unique key (e.g. `facebook`, `twitter`, etc.).
-	 *     @type string $icon 	The respective site icon.
-	 *     @type string $label 	The site label / text.
+	 *     @type string $site The site unique key (e.g. `facebook`, `twitter`, etc.).
+	 *     @type string $icon The respective site icon.
+	 *     @type string $label The site label / text.
 	 * }
 	 * @return string The formatted HTML list element to display the button.
 	 */
@@ -221,7 +221,7 @@ abstract class Button implements Button_Interface {
 		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
-		 * @param array  $args 	  An array of arguments.
+		 * @param array  $args An array of arguments.
 		 *
 		 * @var array
 		 */

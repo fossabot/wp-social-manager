@@ -46,7 +46,7 @@ final class Helps {
 
 		if ( is_string( $screen ) && ! empty( $screen ) ) {
 			$this->setups( $screen );
-	    	$this->hooks();
+			$this->hooks();
 		}
 	}
 
@@ -92,36 +92,31 @@ final class Helps {
 			'title'    => __( 'Overview', 'ninecodes-social-manager' ),
 			'id'       => 'overview',
 			'callback' => array( $this, 'help_content' ),
-			)
-		);
+		) );
 
 		$this->screen->add_help_tab( array(
 			'title'    => __( 'Accounts', 'ninecodes-social-manager' ),
 			'id'       => 'accounts',
 			'callback' => array( $this, 'help_content' ),
-			)
-		);
+		) );
 
 		$this->screen->add_help_tab( array(
 			'title'    => __( 'Buttons', 'ninecodes-social-manager' ),
 			'id'       => 'buttons',
 			'callback' => array( $this, 'help_content' ),
-			)
-		);
+		) );
 
 		$this->screen->add_help_tab( array(
 			'title'    => __( 'Meta', 'ninecodes-social-manager' ),
 			'id'       => 'metas',
 			'callback' => array( $this, 'help_content' ),
-			)
-		);
+		) );
 
 		$this->screen->add_help_tab( array(
 			'title'    => __( 'Advanced', 'ninecodes-social-manager' ),
 			'id'       => 'advanced',
 			'callback' => array( $this, 'help_content' ),
-			)
-		);
+		) );
 
 		$this->screen->set_help_sidebar( $this->help_sidebar() );
 	}

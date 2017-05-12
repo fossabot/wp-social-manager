@@ -190,8 +190,8 @@ class REST_Button extends WP_REST_Controller {
 		 * the post ID.
 		 *
 		 * @since 1.0.6 - Add 'enum', 'type' and 'description' to the 'select' parameter.
-		 * 				- Add 'context' arguments.
-		 * 				- Remove 'id' from the args list.
+		 *              - Add 'context' arguments.
+		 *              - Remove 'id' from the args list.
 		 * @example http://local.wordpress.dev/wp-json/ninecodes/v1/social-manager/buttons/79
 		 *
 		 * @uses WP_REST_Server

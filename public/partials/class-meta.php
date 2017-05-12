@@ -64,7 +64,7 @@ class Meta {
 		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
-		 * @param array  $args 	  An array of arguments.
+		 * @param array  $args An array of arguments.
 		 *
 		 * @var string
 		 */
@@ -92,7 +92,7 @@ class Meta {
 		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
-		 * @param array  $args 	  An array of arguments.
+		 * @param array  $args An array of arguments.
 		 *
 		 * @var string
 		 */
@@ -130,7 +130,7 @@ class Meta {
 		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
-		 * @param array  $args 	  An array of arguments.
+		 * @param array  $args An array of arguments.
 		 *
 		 * @var string
 		 */
@@ -202,7 +202,7 @@ class Meta {
 		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
-		 * @param array  $args 	  An array of arguments.
+		 * @param array  $args An array of arguments.
 		 *
 		 * @var array
 		 */
@@ -280,7 +280,7 @@ class Meta {
 		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
-		 * @param array  $args 	  An array of arguments.
+		 * @param array  $args An array of arguments.
 		 *
 		 * @var string
 		 */
@@ -332,7 +332,7 @@ class Meta {
 		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
-		 * @param array  $args 	  An array of arguments.
+		 * @param array  $args An array of arguments.
 		 *
 		 * @var string
 		 */
@@ -370,7 +370,7 @@ class Meta {
 		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
-		 * @param array  $args 	  An array of arguments.
+		 * @param array  $args An array of arguments.
 		 *
 		 * @var array
 		 */
@@ -494,9 +494,8 @@ class Meta {
 	 *
 	 * @param  integer $post_id The post ID.
 	 * @return array {
-	 *     @type string $display_name 	The author name.
-	 *     @type string $profiles 		An array of social media profiles associated
-	 *           						with the author.
+	 *     @type string $display_name The author name.
+	 *     @type string $profiles An array of social media profiles associated with the author.
 	 * }
 	 */
 	public function get_post_author( $post_id ) {

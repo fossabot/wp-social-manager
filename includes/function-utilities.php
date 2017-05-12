@@ -126,10 +126,10 @@ function wp_parse_args_recursive( &$a, $b ) {
  *
  * @since 1.2.0
  *
- * @param array  $array 	The initial array.
- * @param array  $pairs 	The array to insert.
- * @param string $key 		The certain key.
- * @param string $position 	Wether to insert the array before or after the key.
+ * @param array  $array The initial array.
+ * @param array  $pairs The array to insert.
+ * @param string $key The certain key.
+ * @param string $position Wether to insert the array before or after the key.
  * @return array
  */
 function array_insert( $array, $pairs, $key, $position = 'after' ) {

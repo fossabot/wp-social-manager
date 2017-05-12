@@ -85,12 +85,11 @@ final class Options {
 	 * Options: Social Profiles and Pages.
 	 *
 	 * @since 1.0.0
-	 * @since 1.2.0 - Remove 'dribbble', 'behance', 'github', 'codepen'.
+	 * @since 1.2.0 - Remove dribbble, behance, github, codepen.
 	 * @access public
 	 *
-	 * @param string $slug The social media slug (e.g. `facebook`, `twitter`, etc.).
-	 * @return mixed     	 Return an array if the profiles with the specified $slug
-	 * 						 is present, otherwise return an empty string.
+	 * @param string $slug The social media slug (e.g. facebook, twitter, etc.).
+	 * @return mixed Return an array if the profiles with the specified "$slug" is present, otherwise return an empty string.
 	 */
 	public static function social_profiles( $slug = '' ) {
 

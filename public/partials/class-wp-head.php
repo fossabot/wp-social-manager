@@ -254,11 +254,11 @@ final class WP_Head {
 	 * @param array $args {
 	 *     An array of website meta data to add in the social meta tags.
 	 *
-	 *     @type string $site_name 			The website name or brand.
-	 *     @type string $site_title 		The website title.
-	 *     @type string $site_description 	The website description.
-	 *     @type string $site_url 			The website url.
-	 *     @type string $site_image 		The website image / icon / logo.
+	 *     @type string $site_name The website name or brand.
+	 *     @type string $site_title The website title.
+	 *     @type string $site_description The website description.
+	 *     @type string $site_url The website url.
+	 *     @type string $site_image The website image / icon / logo.
 	 * }
 	 * @return string The Open Graph meta tags.
 	 */
@@ -308,11 +308,11 @@ final class WP_Head {
 	 * @param array $args {
 	 *     An array of website meta data to add in the social meta tags.
 	 *
-	 *     @type string $site_name 			The website name or brand.
-	 *     @type string $site_title 		The website title.
-	 *     @type string $site_description 	The website description.
-	 *     @type string $site_url 			The website url.
-	 *     @type string $site_image 		The website image / icon / logo.
+	 *     @type string $site_name The website name or brand.
+	 *     @type string $site_title The website title.
+	 *     @type string $site_description The website description.
+	 *     @type string $site_url The website url.
+	 *     @type string $site_image The website image / icon / logo.
 	 * }
 	 * @return string The Twitter Cards meta tags.
 	 */
@@ -372,11 +372,11 @@ final class WP_Head {
 	 * @param array $args {
 	 *     An array of website meta data to add in the social meta tags.
 	 *
-	 *     @type string $site_name 			The website name or brand.
-	 *     @type string $site_title 		The website title.
-	 *     @type string $site_description 	The website description.
-	 *     @type string $site_url 			The website url.
-	 *     @type string $site_image 		The website image / icon / logo.
+	 *     @type string $site_name The website name or brand.
+	 *     @type string $site_title The website title.
+	 *     @type string $site_description The website description.
+	 *     @type string $site_url The website url.
+	 *     @type string $site_image The website image / icon / logo.
 	 * }
 	 * @return string The Open Graph meta tags.
 	 */
@@ -420,8 +420,8 @@ final class WP_Head {
 		 * The author data.
 		 *
 		 * @var array {
-		 * 		@type string $profiles The the user social media profiles username (facebook, twitter, etc.).
-		 * 		@type string $display_name The set display name.
+		 *  @type string $profiles The the user social media profiles username (facebook, twitter, etc.).
+		 *  @type string $display_name The set display name.
 		 * }
 		 */
 		$author = (array) $args['post_author'];
@@ -485,11 +485,11 @@ final class WP_Head {
 	 * @param array $args {
 	 *     An array of website meta data to add in the social meta tags.
 	 *
-	 *     @type string $site_name 			The website name or brand.
-	 *     @type string $site_title 		The website title.
-	 *     @type string $site_description 	The website description.
-	 *     @type string $site_url 			The website url.
-	 *     @type string $site_image 		The website image / icon / logo.
+	 *     @type string $site_name The website name or brand.
+	 *     @type string $site_title The website title.
+	 *     @type string $site_description The website description.
+	 *     @type string $site_url The website url.
+	 *     @type string $site_image The website image / icon / logo.
 	 * }
 	 * @return string The Twitter Cards meta tags.
 	 */
@@ -524,11 +524,11 @@ final class WP_Head {
 	 * @param array $args {
 	 *     An array of website meta data to add in the social meta tags.
 	 *
-	 *     @type string $site_name 			The website name or brand.
-	 *     @type string $site_title 		The website title.
-	 *     @type string $site_description 	The website description.
-	 *     @type string $site_url 			The website url.
-	 *     @type string $site_image 		The website image / icon / logo.
+	 *     @type string $site_name The website name or brand.
+	 *     @type string $site_title The website title.
+	 *     @type string $site_description The website description.
+	 *     @type string $site_url The website url.
+	 *     @type string $site_image The website image / icon / logo.
 	 * }
 	 * @return string The Twitter Cards meta tags.
 	 */

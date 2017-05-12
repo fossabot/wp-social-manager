@@ -46,7 +46,7 @@ final class WP_Footer {
 	 *
 	 * @since 1.0.0
 	 * @since 1.0.4 - Set the 'icon_reference_svg' priority higher (-30) to render the before anything else,
-	 *				  which should allow the icons to rendere ASAP without being blocked by slow JavaScript files.
+	 *                which should allow the icons to rendere ASAP without being blocked by slow JavaScript files.
 	 * @access protected
 	 *
 	 * @return void
@@ -88,7 +88,8 @@ final class WP_Footer {
 
 		$symbol_email = '<symbol id="' . $attr_prefix . '-icon-email" viewBox="0 0 24 24"><title>Email</title><path fill-rule="evenodd" d="M13.235 12.565c-.425.326-.99.505-1.59.505s-1.168-.18-1.593-.505L2.008 6.402v11.665c0 .59.48 1.07 1.07 1.07h17.844c.59 0 1.07-.48 1.07-1.07V5.933c0-.025-.005-.048-.006-.072l-8.75 6.705zm-1.16-.89l8.886-6.808c-.012 0-.025-.004-.038-.004H3.078c-.203 0-.39.06-.552.157l8.686 6.656c.23.176.632.177.863 0z"/></symbol>';
 
-		$symbols = apply_filters( 'ninecodes_social_manager_svg_symbols', array(
+		$symbols = apply_filters( 'ninecodes_social_manager_svg_symbols',
+			array(
 				'facebook' => $symbol_facebook,
 				'twitter' => $symbol_twitter,
 				'instagram' => $symbol_instagram,

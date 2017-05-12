@@ -22,7 +22,7 @@ use \DOMDocument;
 class Button_Image extends Button {
 
 	/**
-	 * The response of `get_image_endpoint()` function
+	 * The response of 'get_image_endpoint()' function
 	 * in HTML buttons modes.
 	 *
 	 * @since 1.0.0
@@ -136,11 +136,11 @@ class Button_Image extends Button {
 	 * Add social wrapper element into the images in the content.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Add `data-social-manager` attribute when the img src match with the src in the endpoint response.
-	 * 				- Wrap the image with `<span>` only on HTML Mode.
-	 * 				- (HTML Mode) Only wrap the image with `<span>` element when the img src match with the src in the endpoint response.
-	 * 				- Use the new method `to_html()` from the parent class to return the content.
-	 * 				- Prevent appending the social buttons when the post is not yet published.
+	 * @since 1.0.6 - Add 'data-social-manager' attribute when the img src match with the src in the endpoint response.
+	 *              - Wrap the image with '<span>' only on HTML Mode.
+	 *              - (HTML Mode) Only wrap the image with '<span>' element when the img src match with the src in the endpoint response.
+	 *              - Use the new method 'to_html()' from the parent class to return the content.
+	 *              - Prevent appending the social buttons when the post is not yet published.
 	 * @access public
 	 *
 	 * @param string $content The post content.
@@ -237,7 +237,7 @@ class Button_Image extends Button {
 	 * Used when the "Buttons Mode" is set to 'HTML'.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.6 - Renamed `data-social-button` to `data-social-manager` of the `span` (wrapper) element.
+	 * @since 1.0.6 - Renamed 'data-social-button' to 'data-social-manager' of the 'span' (wrapper) element.
 	 * @access public
 	 *
 	 * @param array $includes Data to include in the button.
@@ -293,9 +293,9 @@ class Button_Image extends Button {
 	/**
 	 * Add the Underscore.js template of the social media buttons.
 	 *
-	 * @since   1.0.0
-	 * @since 	1.0.6 - Renamed `data-social-button` to `data-social-manager` of the `span` (wrapper) element.
-	 * @access  public
+	 * @since 1.0.0
+	 * @since 1.0.6 - Renamed 'data-social-button' to 'data-social-manager' of the 'span' (wrapper) element.
+	 * @access public
 	 *
 	 * @return void
 	 */
@@ -352,7 +352,7 @@ endforeach; ?></span>
 		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
-		 * @param array  $args 	  An array of arguments.
+		 * @param array  $args An array of arguments.
 		 *
 		 * @var array
 		 */

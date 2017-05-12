@@ -133,7 +133,7 @@ if ( ! function_exists( 'get_the_author_social_profile' ) ) {
 				$title = sprintf( __( 'Follow %1$s on %2$s', 'ninecodes-social-manager' ), $author_name, $profiles[ $site ]['label'] );
 
 				$return .= "<a class=\"{$prefix}-profile-author__item item-{$site}\" href=\"{$url}\" target=\"_blank\" rel=\"nofollow\" title=\"{$title}\">{$icon}</a>";
-		 	endforeach;
+			endforeach;
 			$return .= '</div>';
 		endif;
 

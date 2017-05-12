@@ -65,7 +65,7 @@ final class Helpers {
 		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
-		 * @param array  $args 	  An array of arguments.
+		 * @param array  $args An array of arguments.
 		 *
 		 * @var array
 		 */

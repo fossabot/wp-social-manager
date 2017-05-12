@@ -216,9 +216,9 @@ final class Public_View {
 	 * @since 1.0.0
 	 * @access protected
 	 *
-	 * @return boolean 	Return 'false' if the Theme being set the 'stylesheet' to 'true',
-	 * 					via the 'add_theme_support' function.
-	 * 					It will also return 'false' if the 'Enable Stylesheet' is unchecked.
+	 * @return boolean Return false if the Theme being set the stylesheet to true,
+	 *                 via the add_theme_support function. It will also return false
+	 *                 if the Enable Stylesheet is unchecked.
 	 */
 	public function is_load_stylesheet() {
 		/*
@@ -261,8 +261,7 @@ final class Public_View {
 	 * @since 1.0.0
 	 * @access protected
 	 *
-	 * @return boolean 	Return 'true' if the Buttons Mode is 'json',
-	 * 					and 'false' if the Buttons Mode is 'html'.
+	 * @return boolean Return true if the Buttons Mode is json, and false if the Buttons Mode is html.
 	 */
 	public function is_json_mode() {
 

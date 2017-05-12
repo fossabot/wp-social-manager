@@ -2,8 +2,8 @@
 /**
  * This file defines the Admin_View class.
  *
- * @package 	SocialManager
- * @subpackage 	Admin
+ * @package SocialManager
+ * @subpackage Admin
  */
 
 namespace NineCodes\SocialManager;

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use \NineCodes\WPSettings as WP_Settings;
+use \NineCodes\WPSettings as SettingsAPI;
 
 /**
  * The Settings class is used to register the option menu, the option page,
@@ -41,7 +41,7 @@ final class Settings {
 	protected $path_dir;
 
 	/**
-	 * The plugin url path relative to the current file.
+	 * The plugin url path relative to the current file
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -50,7 +50,7 @@ final class Settings {
 	protected $path_url;
 
 	/**
-	 * The admin screen base name.
+	 * The admin screen base name
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -59,7 +59,7 @@ final class Settings {
 	protected $screen;
 
 	/**
-	 * The setting pages (tabs).
+	 * The setting pages (tabs)
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -68,7 +68,7 @@ final class Settings {
 	public $pages;
 
 	/**
-	 * The site title.
+	 * The site title
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -77,7 +77,7 @@ final class Settings {
 	protected $site_title;
 
 	/**
-	 * The site tagline.
+	 * The site tagline
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -86,7 +86,7 @@ final class Settings {
 	protected $site_tagline;
 
 	/**
-	 * The document title printed in the <title> tag.
+	 * The document title printed in the <title> tag
 	 *
 	 * Typically document title consists of the $site_title and $site_tagline
 	 * seperated with a notation like dash, mdash, or bullet.
@@ -98,7 +98,7 @@ final class Settings {
 	protected $document_title;
 
 	/**
-	 * WPSettings\Settings class instance.
+	 * WPSettings\Settings class instance
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -107,7 +107,7 @@ final class Settings {
 	public $settings;
 
 	/**
-	 * Validation class instance.
+	 * Validation class instance
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -116,7 +116,7 @@ final class Settings {
 	public $validate;
 
 	/**
-	 * Fields class instance.
+	 * Fields class instance
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -125,7 +125,7 @@ final class Settings {
 	public $fields;
 
 	/**
-	 * List of setting fields to register.
+	 * List of setting fields to register
 	 *
 	 * @since 1.2.0
 	 * @access public
@@ -134,7 +134,7 @@ final class Settings {
 	public $setting_fields = array();
 
 	/**
-	 * Helps class instance.
+	 * Helps class instance
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -143,7 +143,7 @@ final class Settings {
 	public $helps;
 
 	/**
-	 * Initialize the class and set its properties.
+	 * Initialize the class and set its properties
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -161,7 +161,7 @@ final class Settings {
 	}
 
 	/**
-	 * Load dependencies.
+	 * Load dependencies
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -175,7 +175,7 @@ final class Settings {
 	}
 
 	/**
-	 * Run Filters and Actions required.
+	 * Run Filters and Actions required
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -202,7 +202,7 @@ final class Settings {
 	}
 
 	/**
-	 * Run the setups for the setting page.
+	 * Run the setups for the setting page
 	 *
 	 * The setups may involve running some Classes, Functions and sometimes WordPress Hooks,
 	 * and defining the Class properties value.
@@ -214,7 +214,7 @@ final class Settings {
 	 */
 	public function setups() {
 
-		$this->settings = new WP_Settings\Settings( $this->plugin->option_slug );
+		$this->settings = new SettingsAPI\Settings( $this->plugin->option_slug );
 		$this->validate = new Validation();
 
 		new Fields( $this->screen );
@@ -222,7 +222,7 @@ final class Settings {
 	}
 
 	/**
-	 * Function method that adds a new option page for the plugin.
+	 * Add the Settings menu in the Dashboard
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -236,10 +236,10 @@ final class Settings {
 
 		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $this->plugin->plugin_slug, function() {
 			echo wp_kses( "<div class='wrap' id='{$this->plugin->plugin_slug}-settings'>", array(
-					'div' => array(
-						'class' => array(),
-						'id' => array(),
-					),
+				'div' => array(
+					'class' => array(),
+					'id' => array(),
+				),
 			) );
 			$this->settings->render_header( array(
 				'title' => true,
@@ -254,7 +254,7 @@ final class Settings {
 	}
 
 	/**
-	 * Function method to register the setting page pages or tabs.
+	 * Register the Setting tabs
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -271,7 +271,7 @@ final class Settings {
 		);
 
 		/**
-		 * Filter the setting tabs.
+		 * Filter the setting tabs
 		 *
 		 * This filter allows developer to add new tabs on the setting page.
 		 *
@@ -283,7 +283,7 @@ final class Settings {
 		$tabs = (array) apply_filters( 'ninecodes_social_manager_setting_tabs', $tabs );
 
 		/**
-		 * Eliminate empty title.
+		 * Eliminate empty title
 		 *
 		 * @var array
 		 */
@@ -296,13 +296,13 @@ final class Settings {
 		 *
 		 * @var array
 		 */
-		$this->tabs = $this->settings->add_pages( $tabs );
+		$this->pages = $this->settings->add_pages( $tabs );
 
-		return $this->tabs;
+		return $this->pages;
 	}
 
 	/**
-	 * Function method to register sections within the setting pages (tabs).
+	 * Register the Settings sections
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -313,9 +313,9 @@ final class Settings {
 
 		$sections = array();
 
-		foreach ( $this->tabs as $tab => $title ) {
+		foreach ( $this->pages as $tab => $title ) {
 
-			if ( empty( $tab ) ) {
+			if ( ! $tab ) {
 				continue;
 			}
 
@@ -370,7 +370,8 @@ final class Settings {
 				default:
 					$sections[ $tab ] = array();
 					break;
-			}// End switch().
+
+			} // End switch().
 
 			/**
 			 * Filter the setting sections.
@@ -384,19 +385,20 @@ final class Settings {
 			 * @var array
 			 */
 			$sections = (array) apply_filters( 'ninecodes_social_manager_setting_sections', $sections, $tab );
-		}// End foreach().
+
+		} // End foreach().
 
 		$sections = $this->remove_duplicate_sections( $sections );
 
 		foreach ( $sections as $tab => $section ) {
-			$this->tabs = $this->settings->add_sections( $tab, $section );
+			$this->pages = $this->settings->add_sections( $tab, $section );
 		}
 
 		return $sections;
 	}
 
 	/**
-	 * Fields: Profiles & Pages.
+	 * Fields of Profiles and Pages
 	 *
 	 * Add the social media profiles and pages related to this website.
 	 *
@@ -436,11 +438,11 @@ final class Settings {
 
 		/**
 		 * The Filter hook to allow developer to add new field type in
-		 * the Profiles section in "Accounts" (tab) > "Profiles" (section).
+		 * the Profiles section in Accounts (tab) > Profiles (section).
 		 *
 		 * @since 1.2.0
 		 *
-		 * @param string $tab_id 	 The tab id.
+		 * @param string $tab_id The tab id.
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
@@ -454,19 +456,19 @@ final class Settings {
 		$setting_fields = array_unique( $setting_fields, SORT_REGULAR );
 
 		/**
-		 * Feed the fields default value to `get_option()`
+		 * Feed the fields default value to get_option()
 		 *
 		 * @since 1.2.0
 		 */
 		$this->option_default( $this->plugin->option_names['profile'], $setting_fields );
 
 		/**
-		 * Regiter the fields in "Accounts" > "Profiles".
+		 * Regiter the fields in Accounts > Profiles.
 		 *
 		 * @var array {
-		 *		@type string $tab 	  		 The tab ID.
-		 * 		@type string $section 		 The section ID.
-		 *		@type array  $setting_fields The fields data.
+		 *  @type string $tab The tab ID.
+		 *  @type string $section The section ID.
+		 *  @type array  $setting_fields The fields data.
 		 * }
 		 */
 		$this->setting_fields[] = array( 'account', 'profile', $setting_fields );
@@ -475,7 +477,7 @@ final class Settings {
 	}
 
 	/**
-	 * Fields: Buttons Content.
+	 * Buttons Content Fields
 	 *
 	 * The setting fields to configure the social media buttons that
 	 * allows people to share, like, or save content of this site.
@@ -559,11 +561,11 @@ final class Settings {
 
 		/**
 		 * The Filter hook to allow developer adding new field type
-		 * in "Buttons" (tab) > "Buttons Content" (section).
+		 * in Buttons (tab) > Buttons Content (section).
 		 *
 		 * @since 1.2.0
 		 *
-		 * @param string $tab_id 	 The tab id.
+		 * @param string $tab_id The tab id.
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
@@ -577,19 +579,19 @@ final class Settings {
 		$setting_fields = array_unique( $setting_fields, SORT_REGULAR );
 
 		/**
-		 * Feed the fields default value to `get_option()`
+		 * Feed the fields default value to get_option()
 		 *
 		 * @since 1.2.0
 		 */
 		$this->option_default( $this->plugin->option_names['button_content'], $setting_fields );
 
 		/**
-		 * Register the fields in "Buttons" > "Buttons Content".
+		 * Register the fields in Buttons > Buttons Content.
 		 *
 		 * @var array {
-		 *		@type string $tab 	  		 The tab ID.
-		 * 		@type string $section 		 The section ID.
-		 *		@type array  $setting_fields The fields data.
+		 *  @type string $tab The tab ID.
+		 *  @type string $section The section ID.
+		 *  @type array  $setting_fields The fields data.
 		 * }
 		 */
 		$this->setting_fields[] = array( 'button', 'button_content', $setting_fields );
@@ -598,7 +600,7 @@ final class Settings {
 	}
 
 	/**
-	 * Fields: Buttons Image.
+	 * Buttons Image Fields
 	 *
 	 * The setting fields to configure the social media buttons shown
 	 * on the content images.
@@ -676,11 +678,11 @@ final class Settings {
 
 		/**
 		 * The Filter hook to allow developer adding new field type
-		 * in "Buttons" (tab) > "Buttons Image" (section).
+		 * in Buttons (tab) > Buttons Image (section).
 		 *
 		 * @since 1.2.0
 		 *
-		 * @param string $tab_id 	 The tab id.
+		 * @param string $tab_id The tab id.
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
@@ -694,7 +696,7 @@ final class Settings {
 		$setting_fields = array_unique( $setting_fields, SORT_REGULAR );
 
 		/**
-		 * Feed the fields default value to `get_option()`
+		 * Feed the fields default value to get_option()
 		 *
 		 * @since 1.2.0
 		 */
@@ -704,9 +706,9 @@ final class Settings {
 		 * Register the fields in "Buttons" > "Buttons Image".
 		 *
 		 * @var array {
-		 *		@type string $tab 	  		 The tab ID.
-		 * 		@type string $section 		 The section ID.
-		 *		@type array  $setting_fields The fields data.
+		 *  @type string $tab The tab ID.
+		 *  @type string $section The section ID.
+		 *  @type array  $setting_fields The fields data.
 		 * }
 		 */
 		$this->setting_fields[] = array( 'button', 'button_image', $setting_fields );
@@ -715,7 +717,8 @@ final class Settings {
 	}
 
 	/**
-	 * Fields: Meta Site.
+	 * Meta Site Fields
+	 *
 	 * The setting fields to configure the meta data and the meta tags.
 	 *
 	 * @since 1.2.0
@@ -777,11 +780,11 @@ final class Settings {
 
 		/**
 		 * The Filter hook to allow developer adding new field type
-		 * in "Meta" (tab) > "Meta Site" (section).
+		 * in Meta (tab) > Meta Site (section).
 		 *
 		 * @since 1.2.0
 		 *
-		 * @param string $tab_id 	 The tab id.
+		 * @param string $tab_id The tab id.
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
@@ -795,7 +798,7 @@ final class Settings {
 		$setting_fields = array_unique( $setting_fields, SORT_REGULAR );
 
 		/**
-		 * Feed the fields default value to `get_option()`
+		 * Feed the fields default value to get_option()
 		 *
 		 * @since 1.2.0
 		 */
@@ -805,9 +808,9 @@ final class Settings {
 		 * Register the fields in "Meta" > "Meta Site".
 		 *
 		 * @var array {
-		 *		@type string $tab 	  		 The tab ID.
-		 * 		@type string $section 		 The section ID.
-		 *		@type array  $setting_fields The fields data.
+		 *  @type string $tab The tab ID.
+		 *  @type string $section The section ID.
+		 *  @type array  $setting_fields The fields data.
 		 * }
 		 */
 		$this->setting_fields[] = array( 'meta', 'meta_site', $setting_fields );
@@ -816,7 +819,7 @@ final class Settings {
 	}
 
 	/**
-	 * Fields: Enqueue.
+	 * Enqueue Fields
 	 *
 	 * @since 1.2.0
 	 * @access public
@@ -846,11 +849,11 @@ final class Settings {
 
 		/**
 		 * The Filter hook to allow developer adding new field type
-		 * in "Meta" (tab) > "Meta Site" (section).
+		 * in Meta (tab) > Meta Site (section).
 		 *
 		 * @since 1.2.0
 		 *
-		 * @param string $tab_id 	 The tab id.
+		 * @param string $tab_id The tab id.
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
@@ -864,19 +867,19 @@ final class Settings {
 		$setting_fields = array_unique( $setting_fields, SORT_REGULAR );
 
 		/**
-		 * Feed the fields default value to `get_option()`
+		 * Feed the fields default value to get_option()
 		 *
 		 * @since 1.2.0
 		 */
 		$this->option_default( $this->plugin->option_names['enqueue'], $setting_fields );
 
 		/**
-		 * Register the fields in "Advanced" > "Enqueue".
+		 * Register the fields in Advanced > Enqueue.
 		 *
 		 * @var array {
-		 *		@type string $tab 	  		 The tab ID.
-		 * 		@type string $section 		 The section ID.
-		 *		@type array  $setting_fields The fields data.
+		 *  @type string $tab The tab ID.
+		 *  @type string $section The section ID.
+		 *  @type array  $setting_fields The fields data.
 		 * }
 		 */
 		$this->setting_fields[] = array( 'advanced', 'enqueue', $setting_fields );
@@ -885,7 +888,7 @@ final class Settings {
 	}
 
 	/**
-	 * Fields: Buttons Mode
+	 * Button Mode Fields
 	 *
 	 * @since 1.2.0
 	 * @access public
@@ -920,11 +923,11 @@ final class Settings {
 
 		/**
 		 * The Filter hook to allow developer adding new field type
-		 * in "Advanced" (tab) > "Modes" (section).
+		 * in Advanced (tab) > Modes (section).
 		 *
 		 * @since 1.2.0
 		 *
-		 * @param string $tab_id 	 The tab id.
+		 * @param string $tab_id The tab id.
 		 * @param string $section_id The section id.
 		 * @var array
 		 */
@@ -938,19 +941,19 @@ final class Settings {
 		$setting_fields = array_unique( $setting_fields, SORT_REGULAR );
 
 		/**
-		 * Feed the fields default value to `get_option()`
+		 * Feed the fields default value to get_option()
 		 *
 		 * @since 1.2.0
 		 */
 		$this->option_default( $this->plugin->option_names['mode'], $setting_fields );
 
 		/**
-		 * Register the fields in "Advanced" > "Enqueue".
+		 * Register the fields in Advanced > Enqueue.
 		 *
 		 * @var array {
-		 *		@type string $tab 	  		 The tab ID.
-		 * 		@type string $section 		 The section ID.
-		 *		@type array  $setting_fields The fields data.
+		 *  @type string $tab The tab ID.
+		 *  @type string $section The section ID.
+		 *  @type array  $setting_fields The fields data.
 		 * }
 		 */
 		$this->setting_fields[] = array( 'advanced', 'mode', $setting_fields );
@@ -959,7 +962,7 @@ final class Settings {
 	}
 
 	/**
-	 * Register fields.
+	 * Register Fields
 	 *
 	 * @since 1.2.0
 	 * @access public
@@ -974,14 +977,13 @@ final class Settings {
 			$setting_fields = $this->settings->add_fields( $tab, $section, $fields );
 		}
 
-		$this->tabs = $setting_fields;
+		$this->pages = $setting_fields;
 
 		return $setting_fields;
 	}
 
 	/**
-	 * Initialize and render the setting screen with the registered
-	 * tabs, sections, and fields.
+	 * Initialize and render the setting screen with the registered tabs, sections, and fields
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -990,11 +992,11 @@ final class Settings {
 	 */
 	public function init() {
 
-		$this->settings->init( $this->screen, $this->tabs );
+		$this->settings->init( $this->screen, $this->pages );
 	}
 
 	/**
-	 * Function to internal styles in the setting page.
+	 * Function to internal styles in the setting page
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -1023,7 +1025,7 @@ final class Settings {
 	<?php }
 
 	/**
-	 * Function to enqueue JavaScripts in the setting page.
+	 * Function to enqueue JavaScripts in the setting page
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -1054,7 +1056,7 @@ final class Settings {
 	}
 
 	/**
-	 * Function to enqueue stylesheets in the setting page.
+	 * Function to enqueue stylesheets in the setting page
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -1079,10 +1081,10 @@ final class Settings {
 	}
 
 	/**
-	 * Setups the front ends.
+	 * Setups the front ends
 	 *
 	 * This function method run functions that will otherwise won't be
-	 * accessible if they are run via the 'admin_init' Action Hook.
+	 * accessible if they are run via the admin_init Action Hook.
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -1094,9 +1096,9 @@ final class Settings {
 	}
 
 	/**
-	 * The function method to construct the document title.
+	 * The function method to construct the document title
 	 *
-	 * The 'wp_get_document_title' function does not return a proper value
+	 * The wp_get_document_title function does not return a proper value
 	 * when run inside the setting pages hence this function.
 	 *
 	 * @since 1.0.0
@@ -1125,9 +1127,9 @@ final class Settings {
 	}
 
 	/**
-	 * The utility function to remove duplicate keys in the Tabs and Sections.
+	 * The utility function to remove duplicate keys in the Tabs and Sections
 	 *
-	 * NOTE This functionality should be merged to `wp-settings`.
+	 * NOTE This functionality should be merged to wp-settings.
 	 *
 	 * @since 1.2.0
 	 * @access public
@@ -1180,16 +1182,16 @@ final class Settings {
 	}
 
 	/**
-	 * Sort out the tabs for possible duplicate values in the Tabs and Sections.
+	 * Sort out the tabs for possible duplicate values in the Tabs and Sections
 	 *
-	 * NOTE This functionality should be merged to `wp-settings`.
+	 * NOTE This functionality should be merged to wp-settings.
 	 *
 	 * @since 1.2.0
 	 * @access protected
 	 *
-	 * @param string $key  	The key in the array to search.
+	 * @param string $key The key in the array to search.
 	 * @param string $value The value in the array to compare.
-	 * @param array  $arr 	The array.
+	 * @param array  $arr The array.
 	 * @return array
 	 */
 	protected function search_duplicate_values( $key = '', $value = '', array $arr ) {
@@ -1210,9 +1212,9 @@ final class Settings {
 	}
 
 	/**
-	 * The utility function to remove duplicate keys in the Tabs and Sections.
+	 * The utility function to remove duplicate keys in the Tabs and Sections
 	 *
-	 * NOTE This functionality should be merged to `wp-settings`.
+	 * NOTE This functionality should be merged to wp-settings.
 	 *
 	 * @since 1.2.0
 	 * @access protected
@@ -1242,13 +1244,13 @@ final class Settings {
 	}
 
 	/**
-	 * Enable the 'get_option' to return default value along with the saved value in the database.
+	 * Enable the get_option() to return default value along with the saved value in the database
 	 *
 	 * @since 1.2.0
 	 * @access protected
 	 *
 	 * @param string $option_name The option name.
-	 * @param array  $fields      The fields data.
+	 * @param array  $fields The fields data.
 	 * @return void
 	 */
 	protected function option_default( $option_name = '', array $fields ) {

@@ -111,8 +111,7 @@ class Button_Content extends Button {
 	 *
 	 * @param string $content The post content.
 	 * @return string The post content added with the social buttons wrapper element.
-	 * 				  The wrapper may be added before or after the content, following
-	 * 				  the option selected.
+	 *                The wrapper may be added before or after the content, following the option selected.
 	 */
 	public function render_button( $content ) {
 
@@ -278,7 +277,7 @@ foreach ( $includes as $site => $value ) :
 		 * @since 1.2.0
 		 *
 		 * @param string $context The context; which meta value to filter.
-		 * @param array  $args 	  An array of arguments.
+		 * @param array  $args An array of arguments.
 		 *
 		 * @var array
 		 */

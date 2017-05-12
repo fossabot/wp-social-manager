@@ -14,14 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use \NineCodes\WPSettings as WP_Settings;
+use \NineCodes\WPSettings as SettingsAPI;
 
 /**
  * The Fields class is used for registering the new setting field using PepperPlane.
  *
  * @since 1.0.0
  */
-final class Fields extends WP_Settings\Fields {
+final class Fields extends SettingsAPI\Fields {
 
 	/**
 	 * The admin screen base / ID
@@ -298,7 +298,8 @@ final class Fields extends WP_Settings\Fields {
 						esc_attr( $label )
 					); ?>
 				<tr>
-					<th scope="row" class="check-column"><?php echo wp_kses( $checkbox, array(
+					<th scope="row" class="check-column"><?php
+					echo wp_kses( $checkbox, array(
 						'input' => array(
 							'id' => true,
 							'name' => true,
@@ -308,12 +309,14 @@ final class Fields extends WP_Settings\Fields {
 							'class' => true,
 						),
 					) ); ?></th>
-					<th><?php echo wp_kses( $name, array(
+					<th><?php
+					echo wp_kses( $name, array(
 						'label' => array(
 							'for' => true,
 						),
 					) ); ?></th>
-					<td><?php echo wp_kses( $input, array(
+					<td><?php
+					echo wp_kses( $input, array(
 						'input' => array(
 							'id' => true,
 							'name' => true,
