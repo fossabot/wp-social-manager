@@ -564,7 +564,7 @@ class Meta {
 		/**
 		 * The taxonomy slug of the Tag.
 		 *
-		 * @var string.
+		 * @var string
 		 */
 		$post_tag = $this->get_post_meta( $post_id, 'post_tag' );
 
