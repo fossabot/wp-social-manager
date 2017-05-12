@@ -119,23 +119,23 @@ final class Helpers {
 	public static function get_button_content_status() {
 
 		$include = Options::get( 'button_content', 'include' );
-		$include = array_filter( $include, function( $arr ) {
+		$include = array_keys( array_filter( $include, function( $arr ) {
 
 			if ( 'on' !== $arr['enable'] ) {
 				return false;
 			}
 
 			return $arr;
-		} );
+		} ) );
 
-		if ( empty( array_keys( $include ) ) ) {
+		if ( empty( $include ) ) {
 			return false;
 		}
 
 		$post_type = Options::get( 'button_content', 'post_type' );
 		$post_type = array_keys( array_filter( $post_type ) );
 
-		if ( empty( array_keys( $post_type ) ) ) {
+		if ( empty( $post_type ) ) {
 			return false;
 		}
 
@@ -162,16 +162,16 @@ final class Helpers {
 		}
 
 		$include = Options::get( 'button_image', 'include' );
-		$include = array_filter( $include, function( $arr ) {
+		$include = array_keys( array_filter( $include, function( $arr ) {
 
 			if ( 'on' !== $arr['enable'] ) {
 				return false;
 			}
 
 			return $arr;
-		} );
+		} ) );
 
-		if ( empty( array_keys( $include ) ) ) {
+		if ( empty( $include ) ) {
 			return false;
 		}
 
