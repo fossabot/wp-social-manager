@@ -159,23 +159,42 @@ class Widget_Social_Profile extends Widget {
 
 			<p>
 				<label><?php esc_html_e( 'View:', 'ninecodes-social-manager' ); ?></label>
-				<br>
+				<br />
 				<?php
-
 					$id = esc_attr( $this->get_field_id( 'view' ) );
 					$name = esc_attr( $this->get_field_name( 'view' ) );
 					$views = $this->plugin->option()->button_views(); ?>
 
-				foreach ( $views as $key => $label ) :
+				<select name="<?php echo esc_attr( $name ); ?>" class="widefat">
+			<?php foreach ( $views as $key => $label ) :
+				$key = sanitize_key( $key );
+
+				$state = isset( $instance['view'] ) && ! empty( $instance['view'] ) ? $instance['view'] : 'icon';
+				$state = selected( sanitize_key( $state ), $key, false );
+
+				echo "<option value=\"{$key}\" {$state}>" . esc_html( $label ) . '</option>'; // WPCS: XSS ok.
+			endforeach; ?>
+				</select>
+			</p>
+			<p>
+				<label><?php esc_html_e( 'Style:', 'ninecodes-social-manager' ); ?></label>
+				<br />
+				<?php
+					$name = $this->get_field_name( 'style' );
+					$styles = $this->plugin->option()->button_styles( 'widget_social_profile' ); ?>
+
+				<select name="<?php echo esc_attr( $name ); ?>" class="widefat">
+				<?php foreach ( $styles as $key => $label ) :
 					$key = sanitize_key( $key );
 
-					$state = isset( $instance['view'] ) && ! empty( $instance['view'] ) ? $instance['view'] : 'icon';
-					$state = checked( sanitize_key( $state ), $key, false );
+					$state = isset( $instance['style'] ) && ! empty( $instance['style'] ) ? $instance['style'] : 'rounded';
+					$state = selected( sanitize_key( $state ), $key, false );
 
-					echo "<label><input type='radio' name='{$name}' value='{$key}' {$state}>" . esc_html( $label ) . '<br></label>'; // WPCS: XSS ok.
+					echo "<option value=\"{$key}\" {$state}>" . esc_html( $label ) . '</option>'; // WPCS: XSS ok.
 				endforeach; ?>
+				</select>
 			</p>
-			<?php endif; ?>
+			<?php endif; // array_filter( $site_profiles ). ?>
 		</div>
 		<?php
 	}
@@ -186,7 +205,7 @@ class Widget_Social_Profile extends Widget {
 	 * @since 2.0.0
 	 * @access public
 	 *
-	 * @param array $input    New settings for this instance as input by the user via WP_Widget::form().
+	 * @param array $input New settings for this instance as input by the user via WP_Widget::form().
 	 * @param array $instance Old settings for this instance.
 	 * @return array Settings to save or bool false to cancel saving.
 	 */
@@ -194,6 +213,7 @@ class Widget_Social_Profile extends Widget {
 
 		$instance['title'] = sanitize_text_field( $input['title'] );
 		$instance['view'] = sanitize_key( $input['view'] ? $input['view'] : 'icon' );
+		$instance['style'] = sanitize_key( $input['style'] ? $input['style'] : 'rounded' );
 
 		/**
 		 * The site profile inputs in the Settings from the user.
@@ -245,10 +265,11 @@ class Widget_Social_Profile extends Widget {
 			echo wp_kses_post( $args['before_title'] . $widget_title . $args['after_title'] );
 		}
 
-		$prefix = Helpers::get_attr_prefix();
+		$prefix = $this->plugin->helper()->get_attr_prefix();
 		$view = isset( $instance['view'] ) ? $instance['view'] : 'icon';
+		$style = isset( $instance['style'] ) ? $instance['style'] : 'rounded';
 
-		echo wp_kses("<div class='{$prefix}-profiles {$prefix}-profiles--{$view}'>", array(
+		echo wp_kses("<div class=\"{$prefix}-profiles {$prefix}-profiles--{$view} {$prefix}-profiles--{$style}\">", array(
 			'div' => array(
 				'class' => true,
 			),
