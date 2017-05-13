@@ -233,7 +233,7 @@ final class Public_View {
 			return false;
 		}
 
-		return 'on' === $this->plugin->option()->get( 'enqueue', 'enable_stylesheet' );
+		return 'on' === $this->plugin->option()->get( 'enqueue', 'stylesheet' );
 	}
 
 	/**

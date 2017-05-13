@@ -239,7 +239,6 @@ final class Settings {
 			echo '</div>';
 		} );
 
-		add_action( "admin_print_styles-{$this->screen}", array( $this, 'print_setting_styles' ), 20, 1 );
 		add_action( "{$this->screen}_enqueue_scripts", array( $this, 'enqueue_scripts' ), 10 );
 		add_action( "{$this->screen}_enqueue_styles", array( $this, 'enqueue_styles' ), 10 );
 	}
@@ -525,7 +524,7 @@ final class Settings {
 		$setting_fields = array(
 			'include' => array(
 				'label' => __( 'Button to include', 'ninecodes-social-manager' ),
-				'type' => 'checkbox_sites',
+				'type' => 'checkboxtable',
 				'options' => array_map( function( $value ) {
 					return array(
 						'name' => $value['name'],
@@ -574,7 +573,7 @@ final class Settings {
 				// translators: %s will be replaced with "<code>Share on:</code>".
 				'description' => sprintf( __( 'Change the style of the social media button of the content.', 'ninecodes-social-manager' ), '<code>Share on:</code>' ),
 				'options' => $this->plugin->option()->button_styles( 'content' ),
-				'default' => 'plain',
+				'default' => 'rounded',
 			),
 			'heading' => array(
 				'type' => 'text',
@@ -649,14 +648,14 @@ final class Settings {
 			'enable' => array(
 				'label' => __( 'Enable Button Image', 'ninecodes-social-manager' ),
 				'description' => __( 'Show the social media buttons on images in the content', 'ninecodes-social-manager' ),
-				'type' => 'checkbox_toggle',
+				'type' => 'checkbox',
 				'attr' => array(
-					'data-toggle' => '.sharing-image-setting',
+					'data-selector-toggle' => '.sharing-image-setting',
 				),
 			),
 			'include' => array(
 				'label' => __( 'Button to include', 'ninecodes-social-manager' ),
-				'type' => 'checkbox_sites',
+				'type' => 'checkboxtable',
 				'options' => array_map( function( $value ) {
 					return array(
 						'name' => $value['name'],
@@ -756,12 +755,12 @@ final class Settings {
 
 		$setting_fields = array(
 			'enable' => array(
-				'type' => 'checkbox_toggle',
-				'label' => __( 'Enable Meta Tags', 'ninecodes-social-manager' ),
+				'type' => 'checkbox',
+				'label' => __( 'Generate Meta Tags', 'ninecodes-social-manager' ),
 				'description' => __( 'Generate social media meta tags on this website', 'ninecodes-social-manager' ),
 				'default' => 'on',
 				'attr' => array(
-					'data-toggle' => '.meta-site-setting',
+					'data-selector-toggle' => '.meta-site-setting',
 				),
 			),
 			'name' => array(
@@ -858,15 +857,15 @@ final class Settings {
 
 		if ( $this->plugin->helper()->is_theme_support( 'stylesheet' ) ) :
 
-			$setting_fields['enable_stylesheet'] = array(
-				'label' => __( 'Enable Stylesheet', 'ninecodes-social-manager' ),
+			$setting_fields['stylesheet'] = array(
+				'label' => __( 'Load Stylesheet', 'ninecodes-social-manager' ),
 				'type' => 'content',
 				'content' => __( 'The Theme being used in this website has included the styles in its own stylesheet.', 'ninecodes-social-manager' ),
 			);
 		else :
 
-			$setting_fields['enable_stylesheet'] = array(
-				'label' => __( 'Enable Stylesheet', 'ninecodes-social-manager' ),
+			$setting_fields['stylesheet'] = array(
+				'label' => __( 'Load Stylesheet', 'ninecodes-social-manager' ),
 				'description' => __( 'Load the plugin stylesheet to apply essential styles.', 'ninecodes-social-manager' ),
 				'default' => 'on',
 				'type' => 'checkbox',
@@ -1022,35 +1021,6 @@ final class Settings {
 
 		$this->settings->init( $this->screen, $this->pages );
 	}
-
-	/**
-	 * Function to internal styles in the setting page
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function print_setting_styles() {
-		?>
-		<style id="<?php echo esc_attr( "{$this->plugin->plugin_slug}-internal-styles" ); ?>">
-			.wrap > form > h2 {
-				margin-bottom: 0.72em;
-				margin-top: 1.68em;
-			}
-			.wrap > form > div.notice {
-				margin-top: 1.68em;
-			}
-			.branch-4-5 .wrap > .nav-tab-wrapper,
-			.branch-4-6 .wrap > .nav-tab-wrapper {
-				border-bottom: 1px solid #ccc;
-				margin: 0;
-				padding-top: 9px;
-				padding-bottom: 0;
-				line-height: inherit;
-			}
-		</style>
-	<?php }
 
 	/**
 	 * Function to enqueue JavaScripts in the setting page

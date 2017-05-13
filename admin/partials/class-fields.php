@@ -63,7 +63,7 @@ final class Fields extends SettingsAPI\Fields {
 		add_action( "{$this->screen}_field_image", array( $this, 'field_image' ) );
 		add_action( "{$this->screen}_field_text_profile", array( $this, 'field_text_profile' ) );
 		add_action( "{$this->screen}_field_checkbox_toggle", array( $this, 'field_checkbox_toggle' ) );
-		add_action( "{$this->screen}_field_checkbox_sites", array( $this, 'field_checkbox_sites' ) );
+		add_action( "{$this->screen}_field_checkboxtable", array( $this, 'field_checkboxtable' ) );
 		add_action( "{$this->screen}_field_button", array( $this, 'field_button' ) );
 
 		// Filters.
@@ -124,7 +124,8 @@ final class Fields extends SettingsAPI\Fields {
 		$show = ! empty( $source ) ? ' hide-if-js' : '';
 		$hide = ! empty( $source ) ? '' : ' hide-if-js';
 
-		$html = "<div class='field-image'><input type='hidden' id='{$id}' name='{$name}' value='{$value}'/>
+		$html = "<div {$args['attr']}>
+			<input type='hidden' id='{$id}' name='{$name}' value='{$value}'/>
 			<div id='{$id}-img-wrap' class='field-image__wrap{$set}'>
 				<div id='{$id}-img-elem'>{$img}</div>
 				<div id='{$id}-img-placeholder' class='field-image-placeholder'>" . __( 'No Image Selected', 'ninecodes-social-manager' ) . "</div>
@@ -156,9 +157,13 @@ final class Fields extends SettingsAPI\Fields {
 			return;
 		}
 
+		$class = isset( $args['attr']['class'] ) ? $args['attr']['class'] : '';
+
 		$args['type'] = 'text'; // Revert the type back to 'text'.
-		$args['attr']['class'] = 'field-text-profile code';
-		$args['attr']['data-url'] = trailingslashit( $args['attr']['data-url'] );
+		$args['attr'] = array(
+			'class' => "field-text-profile code {$class}",
+			'data-url' => trailingslashit( $args['attr']['data-url'] ),
+		);
 
 		$args  = $this->get_arguments( $args ); // Escapes all attributes.
 
@@ -181,50 +186,6 @@ final class Fields extends SettingsAPI\Fields {
 	}
 
 	/**
-	 * The function callback to render the Text Checkbox field.
-	 *
-	 * @since 1.2.0
-	 * @access public
-	 *
-	 * @param array $args Arguments (e.g. id, section, type, etc.) to render the new interface.
-	 * @return void
-	 */
-	public function field_checkbox_toggle( array $args ) {
-
-		if ( ! isset( $args['attr']['data-toggle'] ) || empty( $args['attr']['data-toggle'] ) ) {
-			return;
-		}
-
-		if ( '.' !== substr( $args['attr']['data-toggle'], 0, 1 ) ) { // `data-toggle` must be a class selector.
-			return;
-		}
-
-		$args['type'] = 'checkbox';
-		$args['attr']['class'] = 'field-checkbox-toggle';
-
-		$args = $this->get_arguments( $args ); // Escapes all attributes.
-
-		$id = esc_attr( $args['id'] );
-		$section = esc_attr( $args['section'] );
-		$value = esc_attr( $this->get_option( $args ) );
-
-		$checkbox = sprintf( '<input type="checkbox" id="%1$s_%2$s" name="%1$s[%2$s]" value="on"%4$s%5$s />',
-			$section,
-			$id,
-			$value,
-			checked( $value, 'on', false ),
-			$args['attr']
-		);
-
-		$error = $this->get_setting_error( $id, ' style="border: 1px solid red; padding: 2px 1em 2px 0; "' );
-		$description = wp_kses_post( $args['description'] );
-
-		$elem = sprintf( '<label for="%1$s_%2$s"%5$s>%3$s %4$s</label>', $section, $id, $checkbox, $description, $error );
-
-		echo $elem; // XSS ok.
-	}
-
-	/**
 	 * The function callback to render the button to include field.
 	 *
 	 * @since 2.0.0
@@ -233,7 +194,7 @@ final class Fields extends SettingsAPI\Fields {
 	 * @param array $args Arguments (e.g. id, section, type, etc.) to render the new interface.
 	 * @return void
 	 */
-	public function field_checkbox_sites( array $args ) {
+	public function field_checkboxtable( array $args ) {
 
 		$args = $this->get_arguments( $args ); // Escapes all attributes.
 

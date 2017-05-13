@@ -578,14 +578,12 @@ module.exports = function (grunt) {
 	// "Development" stage.
 	grunt.registerTask('scripts:dev', [
 		'newer:eslint',
-		'newer:qunit',
 		'newer:uglify:dev'
 	]);
 
 	// "Build/Production" stage.
 	grunt.registerTask('scripts', [
 		'newer:eslint',
-		'newer:qunit',
 		'newer:uglify:build'
 	]);
 

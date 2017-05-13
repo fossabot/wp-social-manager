@@ -118,7 +118,7 @@ final class Helpers {
 	 */
 	public static function get_button_content_status() {
 
-		$include = Options::get( 'button_content', 'include' );
+		$include = (array) Options::get( 'button_content', 'include' );
 		$include = array_keys( array_filter( $include, function( $arr ) {
 
 			if ( 'on' !== $arr['enable'] ) {
@@ -132,7 +132,7 @@ final class Helpers {
 			return false;
 		}
 
-		$post_type = Options::get( 'button_content', 'post_type' );
+		$post_type = (array) Options::get( 'button_content', 'post_type' );
 		$post_type = array_keys( array_filter( $post_type ) );
 
 		if ( empty( $post_type ) ) {
@@ -161,7 +161,7 @@ final class Helpers {
 			return false;
 		}
 
-		$include = Options::get( 'button_image', 'include' );
+		$include = (array) Options::get( 'button_image', 'include' );
 		$include = array_keys( array_filter( $include, function( $arr ) {
 
 			if ( 'on' !== $arr['enable'] ) {
@@ -175,7 +175,7 @@ final class Helpers {
 			return false;
 		}
 
-		$post_type = Options::get( 'button_image', 'post_type' );
+		$post_type = (array) Options::get( 'button_image', 'post_type' );
 		$post_type = array_keys( array_filter( $post_type ) );
 
 		if ( empty( $post_type ) ) {

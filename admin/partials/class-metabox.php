@@ -104,26 +104,8 @@ final class Metabox {
 	 */
 	public function __construct( Plugin $plugin ) {
 
-		$this->setups( $plugin );
-		$this->hooks();
-	}
-
-	/**
-	 * Run WordPress and ButterBean Hooks.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 *
-	 * @return void
-	 */
-	private function hooks() {
-
-		// Register managers.
-		add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
-
-		// Register sections, settings, and controls.
-		add_action( 'butterbean_register', array( $this, 'register_section_button' ), -90, 2 );
-		add_action( 'butterbean_register', array( $this, 'register_section_meta' ), -90, 2 );
+		$this->plugin = $plugin;
+		$this->setups();
 	}
 
 	/**
@@ -135,12 +117,19 @@ final class Metabox {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param Plugin $plugin The Plugin class instance.
 	 * @return void
 	 */
-	public function setups( Plugin $plugin ) {
+	public function setups() {
 
-		$this->plugin = $plugin;
+		if ( $this->is_active() ) {
+
+			// Register managers.
+			add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
+
+			// Register sections, settings, and controls.
+			add_action( 'butterbean_register', array( $this, 'register_section_button' ), -90, 2 );
+			add_action( 'butterbean_register', array( $this, 'register_section_meta' ), -90, 2 );
+		}
 	}
 
 	/**
@@ -155,10 +144,6 @@ final class Metabox {
 	 */
 	public function register_manager( $butterbean, $post_type ) {
 
-		// List of post types enabled.
-		$enable = $this->post_type_enable();
-		$enable = array_merge( $enable['button_content'], $enable['button_image'] );
-
 		// Load internal post and post type objects.
 		$this->post_data();
 		$this->post_type_label( $post_type );
@@ -171,7 +156,7 @@ final class Metabox {
 		$butterbean->register_manager( $this->plugin->option_slug,
 			array(
 				'label' => __( 'Social Media', 'ninecodes-social-manager' ),
-				'post_type'  => array_unique( array_keys( $enable ) ),
+				'post_type' => array_keys( $this->plugin->option()->post_types() ),
 				'context' => 'normal',
 				'priority' => 'low',
 				'capability' => 'publish_posts',
@@ -191,11 +176,9 @@ final class Metabox {
 	 */
 	public function register_section_button( $butterbean, $post_type ) {
 
-		// List of post types enabled.
-		$enable = $this->post_type_enable();
+		$post_types = $this->get_button_post_types(); // List of post types enabled.
 
-		// Get our custom manager object.
-		$manager = $butterbean->get_manager( $this->plugin->option_slug );
+		$manager = $butterbean->get_manager( $this->plugin->option_slug ); // Get our custom manager object.
 
 		// Register a section.
 		$manager->register_section( 'button',
@@ -205,7 +188,7 @@ final class Metabox {
 			)
 		);
 
-		if ( key_exists( $post_type, $enable['button_content'] ) ) {
+		if ( in_array( $post_type, $post_types['button_content'], true ) ) {
 
 			// Register a setting.
 			$manager->register_control( 'button_content',
@@ -229,7 +212,7 @@ final class Metabox {
 			);
 		}
 
-		if ( key_exists( $post_type, $enable['button_image'] ) ) {
+		if ( in_array( $post_type, $post_types['button_image'], true ) ) {
 
 			// Register a setting.
 			$manager->register_control( 'button_image',
@@ -266,9 +249,7 @@ final class Metabox {
 	 */
 	public function register_section_meta( $butterbean, $post_type ) {
 
-		$meta_enable = (bool) $this->plugin->option()->get( 'meta_site', 'enable' );
-
-		if ( ! $meta_enable ) {
+		if ( ! $this->is_meta_tags_enabled() ) {
 			return;
 		}
 
@@ -502,23 +483,51 @@ final class Metabox {
 	 * The function utility to get selected post types to display social media buttons.
 	 *
 	 * @since 1.2.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @return array
 	 */
-	protected function post_type_enable() {
+	public function get_button_post_types() {
 
-		$button_content_post_type = (array) $this->plugin->option()->get( 'button_content', 'post_type' );
-		$button_image_post_type = array();
-
-		if ( (bool) $this->plugin->option()->get( 'button_image', 'enable' ) ) {
-			$button_image_post_type = (array) $this->plugin->option()->get( 'button_image', 'post_type' );
-		}
+		$button_content = (array) $this->plugin->helper()->get_button_content_status();
+		$button_image = (array) $this->plugin->helper()->get_button_image_status();
 
 		return array(
-			'button_content' => array_keys( $button_content_post_type ),
-			'button_image' => array_keys( $button_image_post_type ),
+			'button_content' => isset( $button_content['post_type'] ) ? $button_content['post_type'] : array(),
+			'button_image' => isset( $button_image['post_type'] ) ? $button_image['post_type'] : array(),
 		);
+	}
+
+	/**
+	 * The function utility to check if meta site is enabled
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return boolean
+	 */
+	public function is_meta_tags_enabled() {
+		return $this->plugin->helper()->is_meta_tags_enabled();
+	}
+
+	/**
+	 * The function utility to check if the meta box should be rendered
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return boolean
+	 */
+	public function is_active() {
+
+		$post_types = $this->get_button_post_types();
+		$post_types = array_merge( $post_types['button_content'], $post_types['button_image'] );
+
+		if ( empty( $post_types ) && ! $this->is_meta_tags_enabled() ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

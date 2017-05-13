@@ -152,7 +152,7 @@ class Test_Public_View extends WP_UnitTestCase {
 
 		// Set the default value.
 		update_option( $this->plugin->option_names['enqueue'], array(
-			'enable_stylesheet' => 'on',
+			'stylesheet' => 'on',
 		) );
 
 		/**
@@ -229,7 +229,7 @@ class Test_Public_View extends WP_UnitTestCase {
 
 		// Enable Stylesheet.
 		update_option( $this->plugin->option_names['enqueue'], array(
-			'enable_stylesheet' => '',
+			'stylesheet' => '',
 		) );
 		$this->assertFalse( $this->public->is_load_stylesheet() );
 	}

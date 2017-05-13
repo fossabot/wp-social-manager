@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
  *
  * @since 1.0.0
  */
-class Validation {
+final class Validation {
 
 	/**
 	 * Function to sanitize the username inputs in "Profiles" section.
@@ -29,7 +29,7 @@ class Validation {
 	 * @param mixed $input Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_profile( $input ) {
+	public function setting_profile( $input ) {
 
 		/**
 		 * Return early, if the value is not an array or the value
@@ -63,7 +63,7 @@ class Validation {
 	 * @param array $inputs Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_button_content( array $inputs ) {
+	public function setting_button_content( $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
 			'view' => '',
@@ -94,7 +94,7 @@ class Validation {
 	 * @param array $inputs Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_button_image( array $inputs ) {
+	public function setting_button_image( $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
 			'enable' => '',
@@ -122,7 +122,7 @@ class Validation {
 	 * @param array $inputs Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_meta_site( array $inputs ) {
+	public function setting_meta_site( $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
 			'enable' => '',
@@ -148,13 +148,13 @@ class Validation {
 	 * @param array $inputs Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_advanced( $inputs ) {
+	public function setting_advanced( $inputs ) {
 
 		$inputs = wp_parse_args( $inputs, array(
-			'enable_stylesheet' => '',
+			'stylesheet' => '',
 		) );
 
-		$inputs['enable_stylesheet'] = $this->validate_checkbox( $inputs['enable_stylesheet'] );
+		$inputs['stylesheet'] = $this->validate_checkbox( $inputs['stylesheet'] );
 
 		return $inputs;
 	}
@@ -168,7 +168,7 @@ class Validation {
 	 * @param array $inputs Unsanitized inputs being saved.
 	 * @return array Sanitized inputs.
 	 */
-	final public function setting_mode( $inputs ) {
+	public function setting_mode( $inputs ) {
 
 		$inputs['button_mode'] = $this->validate_selection( $inputs['button_mode'], Options::button_modes() );
 		$inputs['link_mode'] = $this->validate_selection( $inputs['link_mode'], Options::link_modes() );
@@ -186,7 +186,7 @@ class Validation {
 	 * @param array  $options The list of options set in the setting.
 	 * @return string Sanitized input.
 	 */
-	final public function validate_selection( $input, $options ) {
+	public function validate_selection( $input, $options ) {
 
 		if ( array_key_exists( $input, $options ) ) {
 			return sanitize_key( $input );
@@ -204,7 +204,7 @@ class Validation {
 	 * @param mixed $input Ideally it should an empty string or 'on'.
 	 * @return string Return 'on' if the input is checked, otherwise an empty string.
 	 */
-	final public function validate_checkbox( $input ) {
+	public function validate_checkbox( $input ) {
 		$check = (bool) $input;
 		return $check ? 'on' : false;
 	}
@@ -221,7 +221,7 @@ class Validation {
 	 * @param string $options Options reference to check against the incoming input.
 	 * @return array Sanitized inputs.
 	 */
-	final public function validate_multicheckbox( array $inputs, $options ) {
+	public function validate_multicheckbox( $inputs, $options ) {
 
 		$selection = array();
 
@@ -245,7 +245,7 @@ class Validation {
 	 * @param string $options Options reference to check against the incoming input.
 	 * @return array Sanitized inputs.
 	 */
-	final public function validate_include_sites( array $inputs, $options ) {
+	public function validate_include_sites( $inputs, $options ) {
 
 		$selection = array();
 

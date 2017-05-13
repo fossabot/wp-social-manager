@@ -119,7 +119,7 @@ class Test_Settings extends WP_UnitTestCase {
 	}
 
 	/**
-	 * [test_remove_duplicate_sections description]
+	 * Test the function that removes duplicate sections
 	 *
 	 * @return void
 	 */
