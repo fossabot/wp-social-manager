@@ -60,3 +60,7 @@ npm-debug.log
 *.min.css
 *.min-rtl.css
 *.css
+
+# Code Editor #
+######################
+/.vscode
