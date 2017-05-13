@@ -94,6 +94,21 @@ final class Metabox {
 	protected $post_type;
 
 	/**
+	 * Constructor method.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param Plugin $plugin The Plugin class instance.
+	 * @return void
+	 */
+	public function __construct( Plugin $plugin ) {
+
+		$this->setups( $plugin );
+		$this->hooks();
+	}
+
+	/**
 	 * Run WordPress and ButterBean Hooks.
 	 *
 	 * @since 1.0.0
@@ -529,35 +544,4 @@ final class Metabox {
 			.butterbean-manager .butterbean-control-select select { min-width: 35% }
 		</style>
 	<?php }
-
-	/**
-	 * Returns the instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param Plugin $plugin The Plugin class instance.
-	 * @return object
-	 */
-	public static function get_instance( Plugin $plugin ) {
-
-		static $instance = null;
-
-		if ( is_null( $instance ) ) {
-			$instance = new self;
-			$instance->setups( $plugin );
-			$instance->hooks();
-		}
-
-		return $instance;
-	}
-
-	/**
-	 * Constructor method.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 * @return void
-	 */
-	private function __construct() {}
 }

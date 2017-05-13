@@ -91,9 +91,12 @@ final class Admin_View {
 	 */
 	protected function setups() {
 
-		new Settings( $this->plugin );
-		new User( $this->plugin );
+		$settings = new Settings( $this->plugin );
+		$user = new User( $this->plugin );
 
-		Metabox::get_instance( $this->plugin );
+		static $metabox;
+		if ( is_null( $metabox ) ) {
+			$metabox = new Metabox( $this->plugin );
+		}
 	}
 }
