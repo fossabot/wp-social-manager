@@ -322,10 +322,12 @@ final class Settings {
 			switch ( $tab ) {
 
 				case 'account':
+
 					$sections[ $tab ] = array(
 						'profile' => array(
 							'title' => __( 'Profile', 'ninecodes-social-manager' ),
-							'description' => __( 'Add all social media profiles and pages for this website.', 'ninecodes-social-manager' ),
+							// translators: %s will be replaced with "Widget" and the link to the Widget admin page.
+							'description' => sprintf( __( 'Add all social media profiles and pages for this website. You can then show your social profile on a %s', 'ninecodes-social-manager' ), '<a href=' . admin_url( 'widgets.php' ) . ' target="_blank">Widget</a>' ),
 							'validate_callback' => array( $this->validate, 'setting_profile' ),
 						),
 					);
