@@ -167,9 +167,9 @@ class REST_Button extends WP_REST_Controller {
 	}
 
 	/**
-	 * Registers a REST API route.
+	 * Registers a REST API route
 	 *
-	 * @see https://developer.wordpress.org/reference/functions/register_rest_route/
+	 * @link https://developer.wordpress.org/reference/functions/register_rest_route/
 	 *
 	 * @since 1.0.0
 	 * @access public

@@ -176,7 +176,7 @@ final class Plugin {
 		 * !important that the plugin file name is always referring to the plugin main file
 		 * in the plugin's root folder instead of the sub-folders in order for the function to work.
 		 *
-		 * @see https://developer.wordpress.org/reference/hooks/prefixplugin_action_links_plugin_file/
+		 * @link https://developer.wordpress.org/reference/hooks/prefixplugin_action_links_plugin_file/
 		 */
 		add_filter( 'plugin_action_links_' . plugin_basename( "{$this->path_dir}{$this->plugin_slug}.php" ), array( $this, 'plugin_action_links' ) );
 

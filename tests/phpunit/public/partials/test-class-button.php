@@ -215,7 +215,7 @@ class Test_Button extends WP_UnitTestCase {
 		/**
 		 * Test falsy value.
 		 *
-		 * @var
+		 * @var string 
 		 */
 		$buttons_view7 = $this->button->render_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,
@@ -230,7 +230,7 @@ class Test_Button extends WP_UnitTestCase {
 		/**
 		 * Test context.
 		 *
-		 * @var
+		 * @var string
 		 */
 		$buttons_view8 = $this->button->render_view( 'icon', 'image-content', array(
 			'attr_prefix' => $prefix,

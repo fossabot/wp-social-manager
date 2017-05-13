@@ -444,22 +444,32 @@ final class Options {
 
 		$button_styles = array(
 			'content' => array(
-				'plain' => __( 'Plain', 'ninecodes-social-manager' ),
-				'rounded' => __( 'Rounded', 'ninecodes-social-manager' ),
+				'mono' => __( 'Mono', 'ninecodes-social-manager' ),
+				'color' => __( 'Color', 'ninecodes-social-manager' ),
 				'circle' => __( 'Circle', 'ninecodes-social-manager' ),
+				'rounded' => __( 'Rounded', 'ninecodes-social-manager' ),
 				'square' => __( 'Square', 'ninecodes-social-manager' ),
 				'skeumorphic' => __( 'Skeumorphic', 'ninecodes-social-manager' ),
 			),
 			'image' => array(
 				'rounded' => __( 'Rounded', 'ninecodes-social-manager' ),
 				'circle' => __( 'Circle', 'ninecodes-social-manager' ),
+				'square' => __( 'Square', 'ninecodes-social-manager' ),
+			),
+			'widget_social_profile' => array(
+				'mono' => __( 'Mono', 'ninecodes-social-manager' ),
+				'color' => __( 'Color', 'ninecodes-social-manager' ),
+				'circle' => __( 'Circle', 'ninecodes-social-manager' ),
+				'rounded' => __( 'Rounded', 'ninecodes-social-manager' ),
+				'square' => __( 'Square', 'ninecodes-social-manager' ),
 			),
 		);
 
 		$button_styles = (array) apply_filters( 'ninecodes_social_manager_options', $button_styles, 'button_styles' );
 
-		$button_styles['content'] = array_map( 'esc_html', $button_styles['content'] );
-		$button_styles['image'] = array_map( 'esc_html', $button_styles['image'] );
+		foreach ( $button_styles as $key => $styles ) {
+			$button_styles[ $key ] = array_map( 'esc_html', $button_styles[ $key ] );
+		}
 
 		return isset( $button_styles[ $for ] ) ? $button_styles[ $for ] : $button_styles;
 	}

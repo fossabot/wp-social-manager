@@ -1,5 +1,5 @@
 /* eslint-env node */
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
 	'use strict';
 
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
 		 * @type {Object}
 		 */
 		qunit: {
-			all: [ './tests/qunit/**/*.html' ]
+			all: ['./tests/qunit/**/*.html']
 		},
 
 		/**
@@ -101,7 +101,7 @@ module.exports = function(grunt) {
 			textDomain: {
 				files: '<%= php %>',
 				tasks: [
-					'checktextdomain',
+					'newer:checktextdomain',
 					'makepot'
 				],
 			}
@@ -203,8 +203,8 @@ module.exports = function(grunt) {
 					],
 					'<%= dir.adminCSS %>style.css': [
 						'<%= dir.adminCSS %>*.less'
-					]}
-				]
+					]
+				}]
 			},
 		},
 
@@ -249,9 +249,9 @@ module.exports = function(grunt) {
 				},
 				files: {
 					src: '<%= php %>'
-	            }
-	        }
-	    },
+				}
+			}
+		},
 
 		/**
 		 * Check textdomain errors.
@@ -323,7 +323,7 @@ module.exports = function(grunt) {
 						'includes/bb-metabox-extend/.*',
 						'includes/includes/wp-settings/.*'
 					],
-					processPot: function(pot) {
+					processPot: function (pot) {
 
 						var translation,
 							excluded_meta = [
@@ -333,11 +333,11 @@ module.exports = function(grunt) {
 								'Author URI of the plugin/theme'
 							];
 
-						for ( translation in pot.translations[''] ) {
-							if ( 'undefined' !== typeof pot.translations[''][ translation ].comments.extracted ) {
-								if ( excluded_meta.indexOf( pot.translations[''][ translation ].comments.extracted ) >= 0 ) {
-									console.log( 'Excluded meta: ' + pot.translations[''][ translation ].comments.extracted );
-									delete pot.translations[''][ translation ];
+						for (translation in pot.translations['']) {
+							if ('undefined' !== typeof pot.translations[''][translation].comments.extracted) {
+								if (excluded_meta.indexOf(pot.translations[''][translation].comments.extracted) >= 0) {
+									console.log('Excluded meta: ' + pot.translations[''][translation].comments.extracted);
+									delete pot.translations[''][translation];
 								}
 							}
 						}
@@ -366,38 +366,36 @@ module.exports = function(grunt) {
 					'./includes/class-plugin.php',
 				],
 				overwrite: true,
-				replacements: [
-					{
-						from: /Stable tag: (.*)/g,
-						to: 'Stable tag: <%= pkg.version %>'
-					}, {
-						from: /Version: (.*)/g,
-						to: 'Version: <%= pkg.version %>'
-					}, {
-						from: /protected \$version = (.*)/g,
-						to: 'protected $version = \'<%= pkg.version %>\';'
-					}, {
-						from: /Requires at least: (.*)/g,
-						to: 'Requires at least: <%= pkg.wordpress.requires_at_least %>'
-					}, {
-						from: /Description: (.*)/g,
-						to: 'Description: <%= pkg.description %>'
-					}, {
-						from: /\'WordPress\' => \'(.*)\'/g,
-						to: '\'WordPress\' => \'<%= pkg.wordpress.requires_at_least %>\''
-					}, {
-						from: /Tested up to: (.*)/g,
-						to: 'Tested up to: <%= pkg.wordpress.tested_up_to %>'
-					},
-					{
-						from: /\"version\": \"(.*)\"/g,
-						to: '"version": "<%= pkg.version %>"'
-					},
-					{
-						from: /public \$version\s=\s\'(.*)\'/g,
-						to: 'public \$version = \'<%= pkg.version %>\''
-					}
-				]
+				replacements: [{
+					from: /Stable tag: (.*)/g,
+					to: 'Stable tag: <%= pkg.version %>'
+				}, {
+					from: /Version: (.*)/g,
+					to: 'Version: <%= pkg.version %>'
+				}, {
+					from: /protected \$version = (.*)/g,
+					to: 'protected $version = \'<%= pkg.version %>\';'
+				}, {
+					from: /Requires at least: (.*)/g,
+					to: 'Requires at least: <%= pkg.wordpress.requires_at_least %>'
+				}, {
+					from: /Description: (.*)/g,
+					to: 'Description: <%= pkg.description %>'
+				}, {
+					from: /\'WordPress\' => \'(.*)\'/g,
+					to: '\'WordPress\' => \'<%= pkg.wordpress.requires_at_least %>\''
+				}, {
+					from: /Tested up to: (.*)/g,
+					to: 'Tested up to: <%= pkg.wordpress.tested_up_to %>'
+				},
+				{
+					from: /\"version\": \"(.*)\"/g,
+					to: '"version": "<%= pkg.version %>"'
+				},
+				{
+					from: /public \$version\s=\s\'(.*)\'/g,
+					to: 'public \$version = \'<%= pkg.version %>\''
+				}]
 			}
 		},
 
@@ -441,16 +439,14 @@ module.exports = function(grunt) {
 				options: {
 					archive: '<%= pkg.name %>.<%= pkg.version %>.zip'
 				},
-				files: [
-					{
-						expand: true,
-						cwd: './build/',
-						src: ['**'],
+				files: [{
+					expand: true,
+					cwd: './build/',
+					src: ['**'],
 
-						// When the .zip file is uncompressed (e.g. 'ninecodes-social-media').
-						dest: './<%= pkg.name %>/'
-					}
-				]
+					// When the .zip file is uncompressed (e.g. 'ninecodes-social-media').
+					dest: './<%= pkg.name %>/'
+				}]
 			}
 		},
 
@@ -463,6 +459,22 @@ module.exports = function(grunt) {
 		clean: {
 			build: ['./build/'],
 			zip: ['./<%= pkg.name %>*.zip']
+		},
+
+		/**
+		 * Desktop notification
+		 *
+		 * @see {@link https://github.com/dylang/grunt-notify}
+		 * @type {Object}
+		 */
+		notify_hooks: {
+			options: {
+				enabled: true,
+				max_jshint_notifications: 5, // maximum number of notifications from jshint output
+				title: "Project Name", // defaults to the name in package.json, or will use project directory's name
+				success: true, // whether successful grunt executions should be notified automatically
+				duration: 3 // the duration of notification in seconds, for `notify-send only
+			}
 		}
 	});
 
@@ -473,6 +485,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-rtlcss');
 	grunt.loadNpmTasks('grunt-text-replace');
 	grunt.loadNpmTasks('grunt-wp-i18n');
+	grunt.loadNpmTasks('grunt-notify');
+	grunt.loadNpmTasks('grunt-newer');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -480,6 +494,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+
+	grunt.task.run('notify_hooks');
 
 	// Register grunt default tasks.
 	grunt.registerTask('default', [
@@ -532,7 +548,7 @@ module.exports = function(grunt) {
 
 	// Run Lint.
 	grunt.registerTask('lint', [
-		'eslint'
+		'newer:eslint'
 	]);
 
 	/**
@@ -543,14 +559,14 @@ module.exports = function(grunt) {
 
 	// "Development" stage.
 	grunt.registerTask('styles:dev', [
-		'less:dev',
-		'rtlcss',
+		'newer:less:dev',
+		'newer:rtlcss',
 	]);
 
 	// "Build/Production" stage.
 	grunt.registerTask('styles', [
-		'less',
-		'rtlcss',
+		'newer:less',
+		'newer:rtlcss',
 	]);
 
 	/**
@@ -561,16 +577,16 @@ module.exports = function(grunt) {
 
 	// "Development" stage.
 	grunt.registerTask('scripts:dev', [
-		'eslint',
-		'qunit',
-		'uglify:dev'
+		'newer:eslint',
+		'newer:qunit',
+		'newer:uglify:dev'
 	]);
 
 	// "Build/Production" stage.
 	grunt.registerTask('scripts', [
-		'eslint',
-		'qunit',
-		'uglify:build'
+		'newer:eslint',
+		'newer:qunit',
+		'newer:uglify:build'
 	]);
 
 	/**
@@ -582,8 +598,8 @@ module.exports = function(grunt) {
 	// Check and compile WordPress files.
 	grunt.registerTask('wordpress', [
 		'phpunit',
-		'addtextdomain',
-		'checktextdomain',
+		'newer:addtextdomain',
+		'newer:checktextdomain',
 		'version',
 		'makepot'
 	]);

@@ -21,10 +21,6 @@
 		"type": "git",
 		"url": "https://github.com/ninecodes/social-manager.git"
 	}],
-	"dist": {
-		"url": "https://downloads.wordpress.org/plugin/ninecodes-social-manager.zip",
-		"type": "zip"
-	},
 	"require": {
 		"php": ">=5.3.0"
 	},

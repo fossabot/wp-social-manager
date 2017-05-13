@@ -2,9 +2,9 @@
 <ruleset name="WordPress-Plugin-SocialManager">
 	<description>Social Manager Plugin Coding Standard</description>
 
-	<rule ref="WordPress-Core">
+	<!-- <rule ref="WordPress-Core">
 		<exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact"/>
-	</rule>
+	</rule> -->
 
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
@@ -29,6 +29,10 @@
 	<exclude-pattern>*/dev-lib/*</exclude-pattern>
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/includes/bb-metabox/*</exclude-pattern>
+	<exclude-pattern>*/includes/bb-metabox-extend/*</exclude-pattern>
+	<exclude-pattern>*/includes/ogp/*</exclude-pattern>
+	<exclude-pattern>*/includes/wp-settings/*</exclude-pattern>
 	<exclude-pattern>index.php</exclude-pattern>
 	<exclude-pattern>/includes/class-requirements.php</exclude-pattern>
 </ruleset>

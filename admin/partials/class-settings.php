@@ -185,20 +185,11 @@ final class Settings {
 	protected function hooks() {
 
 		add_action( 'init', array( $this, 'frontend_setups' ) );
-
-		add_action( 'init', array( $this, 'fields_profile' ), 15 );
-		add_action( 'init', array( $this, 'fields_button_content' ), 15 );
-		add_action( 'init', array( $this, 'fields_button_image' ), 15 );
-		add_action( 'init', array( $this, 'fields_meta_site' ), 15 );
-		add_action( 'init', array( $this, 'fields_enqueue' ), 15 );
-		add_action( 'init', array( $this, 'fields_mode' ), 15 );
+		add_action( 'init', array( $this, 'fields_setups' ) );
 
 		add_action( 'admin_menu', array( $this, 'menu' ) );
 		add_action( 'admin_init', array( $this, 'setups' ) );
-		add_action( 'admin_init', array( $this, 'tabs' ), 15 );
-		add_action( 'admin_init', array( $this, 'sections' ), 20 );
-		add_action( 'admin_init', array( $this, 'fields' ), 25 );
-		add_action( 'admin_init', array( $this, 'init' ), 30 );
+		add_action( 'admin_init', array( $this, 'admin' ) );
 	}
 
 	/**
@@ -217,8 +208,8 @@ final class Settings {
 		$this->settings = new SettingsAPI\Settings( $this->plugin->option_slug );
 		$this->validate = new Validation();
 
-		new Fields( $this->screen );
-		new Helps( $this->screen );
+		$fields = new Fields( $this->screen );
+		$helps = new Helps( $this->screen );
 	}
 
 	/**
@@ -251,6 +242,21 @@ final class Settings {
 		add_action( "admin_print_styles-{$this->screen}", array( $this, 'print_setting_styles' ), 20, 1 );
 		add_action( "{$this->screen}_enqueue_scripts", array( $this, 'enqueue_scripts' ), 10 );
 		add_action( "{$this->screen}_enqueue_styles", array( $this, 'enqueue_styles' ), 10 );
+	}
+
+	/**
+	 * Render the admin component (Tabs, Sections, and Fields)
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function admin() {
+		$this->tabs();
+		$this->sections();
+		$this->fields();
+		$this->init();
 	}
 
 	/**
@@ -322,10 +328,12 @@ final class Settings {
 			switch ( $tab ) {
 
 				case 'account':
+
 					$sections[ $tab ] = array(
 						'profile' => array(
 							'title' => __( 'Profile', 'ninecodes-social-manager' ),
-							'description' => __( 'Add all social media profiles and pages for this website.', 'ninecodes-social-manager' ),
+							// translators: %s will be replaced with "Widget" and the link to the Widget admin page.
+							'description' => sprintf( __( 'Add all social media profiles and pages for this website. You can then show your social profile on a %s', 'ninecodes-social-manager' ), '<a href=' . admin_url( 'widgets.php' ) . ' target="_blank">Widget</a>' ),
 							'validate_callback' => array( $this->validate, 'setting_profile' ),
 						),
 					);
@@ -395,6 +403,24 @@ final class Settings {
 		}
 
 		return $sections;
+	}
+
+	/**
+	 * Setups fields configuration
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function fields_setups() {
+
+		$this->fields_profile();
+		$this->fields_button_content();
+		$this->fields_button_image();
+		$this->fields_meta_site();
+		$this->fields_enqueue();
+		$this->fields_mode();
 	}
 
 	/**
@@ -971,6 +997,8 @@ final class Settings {
 	 */
 	public function fields() {
 
+		$setting_fields = array();
+
 		foreach ( $this->setting_fields as $key => $value ) {
 
 			list( $tab, $section, $fields ) = $value;
@@ -1184,7 +1212,7 @@ final class Settings {
 	/**
 	 * Sort out the tabs for possible duplicate values in the Tabs and Sections
 	 *
-	 * NOTE This functionality should be merged to wp-settings.
+	 * TODO: This functionality should be merged to wp-settings.
 	 *
 	 * @since 1.2.0
 	 * @access protected
