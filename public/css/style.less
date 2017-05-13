@@ -8,7 +8,6 @@
 @color-youtube : #b31217;
 @color-instagram : #833ab4;
 @color-email : #777;
-
 [class^=social-manager-],
 [class^=social-manager_] {
 	svg {
@@ -20,15 +19,16 @@
 		display: inline-block;
 		text-decoration: none;
 		box-shadow: none !important;
-		border: 0 !important;
-		/** override TwentySixteen default styles **/
+		border: 0 !important; /** override TwentySixteen default styles **/
 	}
 }
+
 
 /**
  * Select styles which class started with "social-manager"
  * The "social-manager" is the default class which
  */
+
 .social-manager-button {
 	&--content {
 		margin-top: 1.2em;
@@ -42,16 +42,17 @@
 			margin-bottom: 0.8em;
 		}
 		&__item {
-			color: #fff;
-			background-color: #000;
 			margin-bottom: 1em;
 			margin-right: 0.4em;
+		}
+		&__item svg {
+			fill: inherit;
 		}
 	}
 	&__list--icon {
 		svg {
-			width: 1.46em;
-			height: 1.46em;
+			width: 1.4em;
+			height: 1.4em;
 		}
 		.social-manager-button__item {
 			padding: 0.52em;
@@ -81,132 +82,140 @@
 			margin-right: 0.4em;
 		}
 	}
-	&--plain {
+	&--mono,
+	&--color {
 		svg {
-			width: 1.8em;
-			height: 1.8em;
+			width: 1.52em;
+			height: 1.52em;
 		}
 		.social-manager-button__item {
 			padding: 0;
-			font-size: 0.8em;
-			margin-right: 10px;
+			margin-right: 16px;
 			background-color: transparent;
+			&:hover {
+				color: #777;
+			}
+			&:hover svg {
+				fill: #777;
+			}
 		}
+	}
+	&--color {
 		.site-facebook {
 			color: @color-facebook;
 			&:hover,
 			&:visited {
-				color: darken(@color-facebook, 5%);
+				color: lighten(@color-facebook, 10%);
 			}
 			svg {
 				fill: @color-facebook;
-				&:hover {
-					fill: darken(@color-facebook, 5%);
-				}
+			}
+			&:hover svg {
+				fill: lighten(@color-facebook, 10%);
 			}
 		}
 		.site-twitter {
 			color: @color-twitter;
 			&:hover,
 			&:visited {
-				color: darken(@color-twitter, 5%);
+				color: lighten(@color-twitter, 10%);
 			}
 			svg {
 				fill: @color-twitter;
-				&:hover {
-					fill: darken(@color-twitter, 5%);
-				}
+			}
+			&:hover svg {
+				fill: lighten(@color-twitter, 10%);
 			}
 		}
 		.site-googleplus {
 			color: @color-googleplus;
 			&:hover,
 			&:visited {
-				color: darken(@color-googleplus, 5%);
+				color: lighten(@color-googleplus, 10%);
 			}
 			svg {
 				fill: @color-googleplus;
-				&:hover {
-					fill: darken(@color-googleplus, 5%);
-				}
+			}
+			&:hover svg {
+				fill: lighten(@color-googleplus, 10%);
 			}
 		}
 		.site-pinterest {
 			color: @color-pinterest;
 			&:hover,
 			&:visited {
-				color: darken(@color-pinterest, 5%);
+				color: lighten(@color-pinterest, 10%);
 			}
 			svg {
 				fill: @color-pinterest;
-				&:hover {
-					fill: darken(@color-pinterest, 5%);
-				}
+			}
+			&:hover svg {
+				fill: lighten(@color-pinterest, 10%);
 			}
 		}
 		.site-linkedin {
 			color: @color-linkedin;
 			&:hover,
 			&:visited {
-				color: darken(@color-linkedin, 5%);
+				color: lighten(@color-linkedin, 10%);
 			}
 			svg {
 				fill: @color-linkedin;
-				&:hover {
-					fill: darken(@color-linkedin, 5%);
-				}
+			}
+			&:hover svg {
+				fill: lighten(@color-linkedin, 10%);
 			}
 		}
 		.site-tumblr {
 			color: @color-tumblr;
 			&:hover,
 			&:visited {
-				color: darken(@color-tumblr, 5%);
+				color: lighten(@color-tumblr, 10%);
 			}
 			svg {
 				fill: @color-tumblr;
-				&:hover {
-					fill: darken(@color-tumblr, 5%);
-				}
+			}
+			&:hover svg {
+				fill: lighten(@color-tumblr, 10%);
 			}
 		}
 		.site-reddit {
 			color: @color-reddit;
 			&:hover,
 			&:visited {
-				color: darken(@color-reddit, 5%);
+				color: lighten(@color-reddit, 10%);
 			}
 			svg {
 				fill: @color-reddit;
-				&:hover {
-					fill: darken(@color-reddit, 5%);
-				}
+			}
+			&:hover svg {
+				fill: lighten(@color-reddit, 10%);
 			}
 		}
 		.site-youtube {
 			color: @color-youtube;
 			&:hover,
 			&:visited {
-				color: darken(@color-youtube, 5%);
+				color: lighten(@color-youtube, 10%);
 			}
 			svg {
 				fill: @color-youtube;
-				&:hover {
-					fill: darken(@color-youtube, 5%);
-				}
+			}
+			&:hover svg {
+				fill: lighten(@color-youtube, 10%);
 			}
 		}
 		.site-email {
 			color: @color-email;
 			&:hover,
 			&:visited {
-				color: darken(@color-email, 5%);
+				color: lighten(@color-email, 10%);
 			}
 			svg {
 				fill: @color-email;
-				&:hover {
-					fill: darken(@color-email, 5%);
-				}
+			}
+			&:hover svg {
+				fill: lighten(@color-email, 10%);
 			}
 		}
 	}
@@ -216,6 +225,7 @@
 	&--skeumorphic {
 		.social-manager-button__item {
 			font-size: 0.753em;
+			color: #fff;
 			&:hover,
 			&:focus,
 			&:active,
@@ -300,44 +310,44 @@
 			border-style: solid !important;
 		}
 		.site-facebook {
-			box-shadow: 0 2px 0 darken(@color-facebook, 10%) !important;
+			box-shadow: 0 2px 0 darken(@color-facebook, 8%) !important;
 			border-color: lighten(@color-facebook, 10%) @color-facebook @color-facebook !important;
-			text-shadow: 0 -1px 1px darken(@color-facebook, 5%), 1px 0 1px darken(@color-facebook, 5%), 0 1px 1px darken(@color-facebook, 5%), -1px 0 1px darken(@color-facebook, 5%);
+			text-shadow: 0 -1px 1px darken(@color-facebook, 5%), 1px 0 1px darken(@color-facebook, 5%), 0 1px 1px darken(@color-facebook, 5%), -1px 0 1px darken(@color-facebook, 10%);
 		}
 		.site-twitter {
-			box-shadow: 0 2px 0 darken(@color-twitter, 10%) !important;
+			box-shadow: 0 2px 0 darken(@color-twitter, 8%) !important;
 			border-color: lighten(@color-twitter, 10%) @color-twitter @color-twitter !important;
-			text-shadow: 0 -1px 1px darken(@color-twitter, 5%), 1px 0 1px darken(@color-twitter, 5%), 0 1px 1px darken(@color-twitter, 5%), -1px 0 1px darken(@color-twitter, 5%);
+			text-shadow: 0 -1px 1px darken(@color-twitter, 5%), 1px 0 1px darken(@color-twitter, 5%), 0 1px 1px darken(@color-twitter, 5%), -1px 0 1px darken(@color-twitter, 10%);
 		}
 		.site-googleplus {
-			box-shadow: 0 2px 0 darken(@color-googleplus, 10%) !important;
+			box-shadow: 0 2px 0 darken(@color-googleplus, 8%) !important;
 			border-color: lighten(@color-googleplus, 10%) @color-googleplus @color-googleplus !important;
-			text-shadow: 0 -1px 1px darken(@color-googleplus, 5%), 1px 0 1px darken(@color-googleplus, 5%), 0 1px 1px darken(@color-googleplus, 5%), -1px 0 1px darken(@color-googleplus, 5%);
+			text-shadow: 0 -1px 1px darken(@color-googleplus, 5%), 1px 0 1px darken(@color-googleplus, 5%), 0 1px 1px darken(@color-googleplus, 5%), -1px 0 1px darken(@color-googleplus, 10%);
 		}
 		.site-pinterest {
-			box-shadow: 0 2px 0 darken(@color-pinterest, 10%) !important;
+			box-shadow: 0 2px 0 darken(@color-pinterest, 8%) !important;
 			border-color: lighten(@color-pinterest, 10%) @color-pinterest @color-pinterest !important;
-			text-shadow: 0 -1px 1px darken(@color-pinterest, 5%), 1px 0 1px darken(@color-pinterest, 5%), 0 1px 1px darken(@color-pinterest, 5%), -1px 0 1px darken(@color-pinterest, 5%);
+			text-shadow: 0 -1px 1px darken(@color-pinterest, 5%), 1px 0 1px darken(@color-pinterest, 5%), 0 1px 1px darken(@color-pinterest, 5%), -1px 0 1px darken(@color-pinterest, 10%);
 		}
 		.site-linkedin {
-			box-shadow: 0 2px 0 darken(@color-linkedin, 10%) !important;
+			box-shadow: 0 2px 0 darken(@color-linkedin, 8%) !important;
 			border-color: lighten(@color-linkedin, 10%) @color-linkedin @color-linkedin !important;
-			text-shadow: 0 -1px 1px darken(@color-linkedin, 5%), 1px 0 1px darken(@color-linkedin, 5%), 0 1px 1px darken(@color-linkedin, 5%), -1px 0 1px darken(@color-linkedin, 5%);
+			text-shadow: 0 -1px 1px darken(@color-linkedin, 5%), 1px 0 1px darken(@color-linkedin, 5%), 0 1px 1px darken(@color-linkedin, 5%), -1px 0 1px darken(@color-linkedin, 10%);
 		}
 		.site-reddit {
-			box-shadow: 0 2px 0 darken(@color-reddit, 10%) !important;
+			box-shadow: 0 2px 0 darken(@color-reddit, 8%) !important;
 			border-color: lighten(@color-reddit, 10%) @color-reddit @color-reddit !important;
-			text-shadow: 0 -1px 1px darken(@color-reddit, 5%), 1px 0 1px darken(@color-reddit, 5%), 0 1px 1px darken(@color-reddit, 5%), -1px 0 1px darken(@color-reddit, 5%);
+			text-shadow: 0 -1px 1px darken(@color-reddit, 5%), 1px 0 1px darken(@color-reddit, 5%), 0 1px 1px darken(@color-reddit, 5%), -1px 0 1px darken(@color-reddit, 10%);
 		}
 		.site-tumblr {
-			box-shadow: 0 2px 0 darken(@color-tumblr, 10%) !important;
+			box-shadow: 0 2px 0 darken(@color-tumblr, 8%) !important;
 			border-color: lighten(@color-tumblr, 10%) @color-tumblr @color-tumblr !important;
-			text-shadow: 0 -1px 1px darken(@color-tumblr, 5%), 1px 0 1px darken(@color-tumblr, 5%), 0 1px 1px darken(@color-tumblr, 5%), -1px 0 1px darken(@color-tumblr, 5%);
+			text-shadow: 0 -1px 1px darken(@color-tumblr, 5%), 1px 0 1px darken(@color-tumblr, 5%), 0 1px 1px darken(@color-tumblr, 5%), -1px 0 1px darken(@color-tumblr, 10%);
 		}
 		.site-email {
-			box-shadow: 0 2px 0 darken(@color-email, 10%) !important;
+			box-shadow: 0 2px 0 darken(@color-email, 8%) !important;
 			border-color: lighten(@color-email, 10%) @color-email @color-email !important;
-			text-shadow: 0 -1px 1px darken(@color-email, 5%), 1px 0 1px darken(@color-email, 5%), 0 1px 1px darken(@color-email, 5%), -1px 0 1px darken(@color-email, 5%);
+			text-shadow: 0 -1px 1px darken(@color-email, 5%), 1px 0 1px darken(@color-email, 5%), 0 1px 1px darken(@color-email, 5%), -1px 0 1px darken(@color-email, 10%);
 		}
 	}
 }
@@ -374,7 +384,7 @@
 		.social-manager-profiles {
 			&__item {
 				display: inline-block;
-				padding: 0.548em;
+				padding: 0.48em;
 				margin-right: 4px;
 			}
 		}
@@ -402,7 +412,6 @@
 			}
 		}
 	}
-
 	&--circle,
 	&--rounded,
 	&--square {
@@ -430,7 +439,6 @@
 			}
 		}
 	}
-
 	&--circle {
 		.social-manager-profiles {
 			&__item {
@@ -445,7 +453,6 @@
 			}
 		}
 	}
-
 	&--mono,
 	&--color {
 		.social-manager-profiles {
@@ -453,10 +460,10 @@
 				text-align: left;
 				padding: .5em 0;
 				&:hover {
-					color: #999;
+					color: #777;
 				}
 				&:hover svg {
-					fill: #999;
+					fill: #777;
 				}
 			}
 		}
