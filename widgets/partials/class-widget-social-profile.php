@@ -58,7 +58,7 @@ class Widget_Social_Profile extends Widget {
 			'description' => __( 'Display list of social media profile and page URLs connected to this website.', 'ninecodes-social-manager' ),
 		) );
 
-		$this->profiles = Options::social_profiles();
+		$this->profiles = $this->plugin->option()->social_profiles();
 		$this->widget_title = __( 'Follow Us', 'ninecodes-social-manager' );
 	}
 
@@ -164,7 +164,7 @@ class Widget_Social_Profile extends Widget {
 
 					$id = esc_attr( $this->get_field_id( 'view' ) );
 					$name = esc_attr( $this->get_field_name( 'view' ) );
-					$views = Options::button_views();
+					$views = $this->plugin->option()->button_views(); ?>
 
 				foreach ( $views as $key => $label ) :
 					$key = sanitize_key( $key );
@@ -278,11 +278,11 @@ class Widget_Social_Profile extends Widget {
 			}
 
 			$key = sanitize_key( $key );
-			$list = self::list_views($view, array(
+			$list = $this->list_views($view, array(
 				'site' => $key,
 				'label' => esc_html( $profiles['label'] ),
 				'url' => esc_url( trailingslashit( $profiles['url'] ) . $site_profiles[ $key ] ),
-				'icon' => Helpers::get_social_icons( $key ),
+				'icon' => $this->plugin->helper()->get_social_icons( $key ),
 			));
 
 			echo wp_kses($list, array(
@@ -321,13 +321,13 @@ class Widget_Social_Profile extends Widget {
 	 * @param array  $args Attributes of the list item such as the label, the icon, and the url.
 	 * @return string An HTML list element with the attributes to display selected list view.
 	 */
-	protected static function list_views( $view = '', array $args ) {
+	protected function list_views( $view = '', array $args ) {
 
 		if ( empty( $view ) ) {
 			return '';
 		}
 
-		$prefix = Helpers::get_attr_prefix();
+		$prefix = $this->plugin->helper()->get_attr_prefix();
 		$args = wp_parse_args($args, array(
 			'site' => '',
 			'label' => '',
@@ -336,9 +336,9 @@ class Widget_Social_Profile extends Widget {
 		));
 
 		$templates = array(
-			'icon' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'>{$args['icon']}</a>",
-			'text' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'>{$args['label']}</a>",
-			'icon_text' => "<a class='{$prefix}-profiles__item item-{$args['site']}' href='{$args['url']}' target='_blank'><span class='{$prefix}-profiles__item-icon'>{$args['icon']}</span><span class='{$prefix}-profiles__item-text'>{$args['label']}</span></a>",
+			'icon' => "<a class='{$prefix}-profiles__item site-{$args['site']}' href='{$args['url']}' target='_blank'>{$args['icon']}</a>",
+			'text' => "<a class='{$prefix}-profiles__item site-{$args['site']}' href='{$args['url']}' target='_blank'>{$args['label']}</a>",
+			'icon_text' => "<a class='{$prefix}-profiles__item site-{$args['site']}' href='{$args['url']}' target='_blank'><span class='{$prefix}-profiles__item-icon'>{$args['icon']}</span><span class='{$prefix}-profiles__item-text'>{$args['label']}</span></a>",
 		);
 
 		return isset( $templates[ $view ] ) ? $templates[ $view ] : '';
