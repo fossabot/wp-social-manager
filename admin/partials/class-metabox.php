@@ -153,15 +153,13 @@ final class Metabox {
 		add_action( 'admin_head-post-new.php', array( $this, 'admin_head_enqueues' ), 10 );
 
 		// Register our custom manager.
-		$butterbean->register_manager( $this->plugin->option_slug,
-			array(
-				'label' => __( 'Social Media', 'ninecodes-social-manager' ),
-				'post_type' => array_keys( $this->plugin->option()->post_types() ),
-				'context' => 'normal',
-				'priority' => 'low',
-				'capability' => 'publish_posts',
-			)
-		);
+		$butterbean->register_manager( $this->plugin->option_slug, array(
+			'label' => __( 'Social Media', 'ninecodes-social-manager' ),
+			'post_type' => array_keys( $this->plugin->option()->post_types() ),
+			'context' => 'normal',
+			'priority' => 'low',
+			'capability' => 'publish_posts',
+		) );
 	}
 
 	/**
@@ -181,59 +179,49 @@ final class Metabox {
 		$manager = $butterbean->get_manager( $this->plugin->option_slug ); // Get our custom manager object.
 
 		// Register a section.
-		$manager->register_section( 'button',
-			array(
-				'label' => __( 'Button', 'ninecodes-social-manager' ),
-				'icon'  => 'dashicons-thumbs-up',
-			)
-		);
+		$manager->register_section( 'button', array(
+			'label' => __( 'Button', 'ninecodes-social-manager' ),
+			'icon'  => 'dashicons-thumbs-up',
+		) );
 
 		if ( in_array( $post_type, $post_types['button_content'], true ) ) {
 
 			// Register a setting.
-			$manager->register_control( 'button_content',
-				array(
-					'type' => 'checkbox',
-					'section' => 'button',
-					'label' => __( 'Social Media Button on the Content', 'ninecodes-social-manager' ),
-					'description' => sprintf(
-						/* translators: %s - the post type label i.e. Post, Page, etc. */
-						__( 'Display the buttons that allow people to share, like, or save this %s in social media', 'ninecodes-social-manager' ),
-					$this->post_type ),
-				)
-			);
+			$manager->register_control( 'button_content', array(
+				'type' => 'checkbox',
+				'section' => 'button',
+				'label' => __( 'Social Media Button on the Content', 'ninecodes-social-manager' ),
+				'description' => sprintf(
+					/* translators: %s - the post type label i.e. Post, Page, etc. */
+					__( 'Display the buttons that allow people to share, like, or save this %s in social media', 'ninecodes-social-manager' ),
+				$this->post_type ),
+			) );
 
-			$manager->register_setting( 'button_content',
-				array(
-					'type' => 'serialize',
-					'default' => 1,
-					'sanitize_callback' => 'butterbean_validate_boolean',
-				)
-			);
+			$manager->register_setting( 'button_content', array(
+				'type' => 'serialize',
+				'default' => 1,
+				'sanitize_callback' => 'butterbean_validate_boolean',
+			) );
 		}
 
 		if ( in_array( $post_type, $post_types['button_image'], true ) ) {
 
 			// Register a setting.
-			$manager->register_control( 'button_image',
-				array(
-					'type' => 'checkbox',
-					'section' => 'button',
-					'label' => __( 'Social Media Button on the Image', 'ninecodes-social-manager' ),
-					'description' => sprintf(
-						/* translators: %s - the post type label i.e. Post, Page, etc. */
-						__( 'Display the social media buttons that allow people to share, like, or save images of this %s in social media', 'ninecodes-social-manager' ),
-					$this->post_type ),
-				)
-			);
+			$manager->register_control( 'button_image', array(
+				'type' => 'checkbox',
+				'section' => 'button',
+				'label' => __( 'Social Media Button on the Image', 'ninecodes-social-manager' ),
+				'description' => sprintf(
+					/* translators: %s - the post type label i.e. Post, Page, etc. */
+					__( 'Display the social media buttons that allow people to share, like, or save images of this %s in social media', 'ninecodes-social-manager' ),
+				$this->post_type ),
+			) );
 
-			$manager->register_setting( 'button_image',
-				array(
-					'type' => 'serialize',
-					'default' => 1,
-					'sanitize_callback' => 'butterbean_validate_boolean',
-				)
-			);
+			$manager->register_setting( 'button_image', array(
+				'type' => 'serialize',
+				'default' => 1,
+				'sanitize_callback' => 'butterbean_validate_boolean',
+			) );
 		}
 	}
 
@@ -256,80 +244,63 @@ final class Metabox {
 		// Get our custom manager object.
 		$manager = $butterbean->get_manager( $this->plugin->option_slug );
 
-		$manager->register_section( 'meta',
-			array(
-				'label' => __( 'Meta', 'ninecodes-social-manager' ),
-				'icon' => 'dashicons-editor-code',
-			)
-		);
+		$manager->register_section( 'meta', array(
+			'label' => __( 'Meta', 'ninecodes-social-manager' ),
+			'icon' => 'dashicons-editor-code',
+		) );
 
 		// The post title control.
-		$manager->register_control( 'post_title',
-			array(
-				'type' => 'text',
-				'section' => 'meta',
-				'label' => __( 'Title', 'ninecodes-social-manager' ),
-				'description' => sprintf(
-					/* translators: %s - the post type label i.e. Post, Page, etc. */
-					__( 'Set a customized title of this %s as it should appear within the social meta tag', 'ninecodes-social-manager' ),
-				$this->post_type ),
-				'attr' => array(
-					'class' => 'widefat',
-					'placeholder' => $this->post_title,
-				),
-			)
-		);
+		$manager->register_control( 'post_title', array(
+			'type' => 'text',
+			'section' => 'meta',
+			'label' => __( 'Title', 'ninecodes-social-manager' ),
+			/* translators: %s - the post type label i.e. Post, Page, etc. */
+			'description' => sprintf( __( 'Set a customized title of this %s as it should appear within the social meta tag', 'ninecodes-social-manager' ), $this->post_type ),
+			'attr' => array(
+				'class' => 'widefat',
+				'placeholder' => $this->post_title,
+			),
+		) );
 
-		$manager->register_setting( 'post_title',
-			array(
-				'type' => 'serialize',
-				'sanitize_callback' => 'sanitize_text_field',
-			)
-		);
+		$manager->register_setting( 'post_title', array(
+			'type' => 'serialize',
+			'sanitize_callback' => 'sanitize_text_field',
+		) );
 
 		// The post excerpt or description control.
-		$manager->register_control( 'post_excerpt',
-			array(
-				'type' => 'textarea',
-				'section' => 'meta',
-				'label' => __( 'Description', 'ninecodes-social-manager' ),
-				'description' => sprintf(
-					/* translators: %s - the post type label i.e. Post, Page, etc. */
-					__( 'Set a one to two customized description of this %s that should appear within the social meta tag', 'ninecodes-social-manager' ),
-				$this->post_type ),
-				'attr' => array(
-					'placeholder' => strip_shortcodes( $this->post_excerpt ),
-					'class' => 'widefat',
-				),
-			)
-		);
+		$manager->register_control( 'post_excerpt', array(
+			'type' => 'textarea',
+			'section' => 'meta',
+			'label' => __( 'Description', 'ninecodes-social-manager' ),
+			/* translators: %s - the post type label i.e. Post, Page, etc. */
+			'description' => sprintf( __( 'Set a one to two customized description of this %s that should appear within the social meta tag', 'ninecodes-social-manager' ), $this->post_type ),
+			'attr' => array(
+				'placeholder' => strip_shortcodes( $this->post_excerpt ),
+				'class' => 'widefat',
+			),
+		) );
 
-		$manager->register_setting( 'post_excerpt',
-			array(
-				'type' => 'serialize',
-				'sanitize_callback' => 'wp_kses',
-			)
-		);
+		$manager->register_setting( 'post_excerpt', array(
+			'type' => 'serialize',
+			'sanitize_callback' => 'wp_kses',
+		) );
 
 		// Image upload control.
-		$manager->register_control( 'post_thumbnail',
-			array(
-				'type' => 'image',
-				'section' => 'meta',
-				'label' => __( 'Image', 'ninecodes-social-manager' ),
-				'description' => sprintf(
-					/* translators: %s - the post type label i.e. Post, Page, etc. */
-					__( 'Set a custom image URL which should represent this within the social meta tag', 'ninecodes-social-manager' ),
-				$this->post_type ),
-				'size' => 'large',
-			)
-		);
-		$manager->register_setting( 'post_thumbnail',
-			array(
-				'type' => 'serialize',
-				'sanitize_callback' => array( $this, 'sanitize_absint' ),
-			)
-		);
+		$manager->register_control( 'post_thumbnail', array(
+			'type' => 'image',
+			'section' => 'meta',
+			'label' => __( 'Image', 'ninecodes-social-manager' ),
+			'description' => sprintf(
+				/* translators: %s - the post type label i.e. Post, Page, etc. */
+				__( 'Set a custom image URL which should represent this within the social meta tag', 'ninecodes-social-manager' ),
+			$this->post_type ),
+			'size' => 'large',
+		) );
+
+		$manager->register_setting( 'post_thumbnail', array(
+			'type' => 'serialize',
+			'sanitize_callback' => array( $this, 'sanitize_absint' ),
+		) );
 
 		$choices = array();
 		$sections = array();
@@ -362,48 +333,40 @@ final class Metabox {
 
 		if ( ! empty( $sections ) ) :
 
-			$manager->register_control( 'post_section',
-				array(
-					'type' => 'select-group',
-					'section' => 'meta',
-					'label' => __( 'Section', 'ninecodes-social-manager' ),
-					'description' => sprintf(
-						/* translators: %s - the post type label i.e. Post, Page, etc. */
-						__( 'The section of your website to which the %s belongs', 'ninecodes-social-manager' ),
-					$this->post_type ),
-					'choices' => $sections,
-				)
-			);
+			$manager->register_control( 'post_section', array(
+				'type' => 'select-group',
+				'section' => 'meta',
+				'label' => __( 'Section', 'ninecodes-social-manager' ),
+				'description' => sprintf(
+					/* translators: %s - the post type label i.e. Post, Page, etc. */
+					__( 'The section of your website to which the %s belongs', 'ninecodes-social-manager' ),
+				$this->post_type ),
+				'choices' => $sections,
+			) );
 
-			$manager->register_setting( 'post_section',
-				array(
-					'type' => 'serialize',
-					'sanitize_callback' => 'sanitize_key',
-				)
-			);
+			$manager->register_setting( 'post_section', array(
+				'type' => 'serialize',
+				'sanitize_callback' => 'sanitize_key',
+			) );
 		endif;
 
 		if ( 1 > count( $tags ) && empty( $tags ) ) :
 
-			$manager->register_control( 'post_tag',
-				array(
-					'type' => 'select',
-					'section' => 'meta',
-					'label' => __( 'Tags', 'ninecodes-social-manager' ),
-					'description' => sprintf(
-						/* translators: %s - the post type label i.e. Post, Page, etc. */
-						__( 'Select which Taxonomy to use as this %s meta tags. The tags are words associated with this article.', 'ninecodes-social-manager' ),
-					$this->post_type ),
-					'choices' => $tags,
-				)
-			);
+			$manager->register_control( 'post_tag', array(
+				'type' => 'select',
+				'section' => 'meta',
+				'label' => __( 'Tags', 'ninecodes-social-manager' ),
+				'description' => sprintf(
+					/* translators: %s - the post type label i.e. Post, Page, etc. */
+					__( 'Select which Taxonomy to use as this %s meta tags. The tags are words associated with this article.', 'ninecodes-social-manager' ),
+				$this->post_type ),
+				'choices' => $tags,
+			) );
 
-			$manager->register_setting( 'post_tag',
-				array(
-					'type' => 'serialize',
-					'sanitize_callback' => 'sanitize_key',
-				)
-			);
+			$manager->register_setting( 'post_tag', array(
+				'type' => 'serialize',
+				'sanitize_callback' => 'sanitize_key',
+			) );
 		endif;
 	}
 
