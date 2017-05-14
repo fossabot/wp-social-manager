@@ -137,7 +137,12 @@ module.exports = function (grunt) {
 			},
 			files: [{
 				'<%= dir.adminJS %>scripts.min.js': [
-					'<%= dir.adminJS %>*.js',
+					'<%= dir.adminJS %>admin-*.js',
+					'<%= dir.adminJS %>setting-*.js',
+					'!<%= dir.adminJS %>*.min.js',
+				],
+				'<%= dir.adminJS %>metabox.min.js': [
+					'<%= dir.adminJS %>metabox-*.js',
 					'!<%= dir.adminJS %>*.min.js',
 				],
 				'<%= dir.publicJS %>app.min.js': [
@@ -202,7 +207,10 @@ module.exports = function (grunt) {
 						'<%= dir.publicCSS %>*.less'
 					],
 					'<%= dir.adminCSS %>style.css': [
-						'<%= dir.adminCSS %>*.less'
+						'<%= dir.adminCSS %>admin-*.less'
+					],
+					'<%= dir.adminCSS %>metabox.css': [
+						'<%= dir.adminCSS %>metabox-*.less'
 					]
 				}]
 			},
