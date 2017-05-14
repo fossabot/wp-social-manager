@@ -82,7 +82,7 @@ final class Metabox {
 	 * @access protected
 	 * @var integer
 	 */
-	protected $post_thumbnail;
+	protected $post_featured_image;
 
 	/**
 	 * The post type singular name.
@@ -105,6 +105,10 @@ final class Metabox {
 	public function __construct( Plugin $plugin ) {
 
 		$this->plugin = $plugin;
+
+		$this->path_dir = plugin_dir_path( dirname( __FILE__ ) );
+		$this->path_url = plugin_dir_url( dirname( __FILE__ ) );
+
 		$this->setups();
 	}
 
@@ -123,12 +127,12 @@ final class Metabox {
 
 		if ( $this->is_active() ) {
 
-			// Register managers.
 			add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
-
-			// Register sections, settings, and controls.
 			add_action( 'butterbean_register', array( $this, 'register_section_button' ), -90, 2 );
 			add_action( 'butterbean_register', array( $this, 'register_section_meta' ), -90, 2 );
+			add_action( 'butterbean_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+			add_action( 'admin_footer', array( $this, 'print_meta_preview_template' ) );
 		}
 	}
 
@@ -418,9 +422,17 @@ final class Metabox {
 
 		$this->post_title = get_post_field( 'post_title', $this->post_id );
 		$this->post_content = get_post_field( 'post_content', $this->post_id );
-		$this->post_thumbnail = get_post_thumbnail_id( $this->post_id );
 
-		$this->post_excerpt = wp_trim_words( $this->post_content, 30, '...' );
+		$featured_image_id = get_post_thumbnail_id( $this->post_id );
+		$featured_image = wp_get_attachment_image_src( $featured_image_id, 'large' );
+		$this->post_featured_image = array(
+			'id' => $featured_image_id,
+			'src' => $featured_image[0],
+			'width' => $featured_image[1],
+			'height' => $featured_image[2],
+		);
+
+		$this->post_excerpt = wp_trim_words( strip_shortcodes( $this->post_content ), 30, '...' );
 	}
 
 	/**
@@ -491,6 +503,63 @@ final class Metabox {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Function to enqueue scripts and styles
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function enqueue_scripts() {
+		wp_enqueue_style( "{$this->plugin->plugin_slug}-metabox", "{$this->path_url}css/metabox.css" );
+		wp_enqueue_script( "{$this->plugin->plugin_slug}-metabox-scripts", "{$this->path_url}js/metabox.min.js", array(
+			'jquery',
+			'underscore',
+			'backbone',
+		), $this->plugin->version, true );
+		wp_add_inline_script( "{$this->plugin->plugin_slug}-metabox-scripts", "
+		var nineCodesSocialManager = {
+			post: {
+				id:\"{$this->post_id}\",
+				title:\"{$this->post_title}\",
+				excerpt:\"{$this->post_excerpt}\",
+				featuredImage:\"{$this->post_featured_image['src']}\"
+			}
+		}" );
+	}
+
+	/**
+	 * Function to render the HTML markup that previews the meta value
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function print_meta_preview_template() {
+		if ( $this->is_meta_tags_enabled() ) :
+		?>
+		<script type="text/html" id="tmpl-butterbean-control-meta-preview">
+		<div id="butterbean-control-meta-preview" class="butterbean-control butterbean-control-static">
+			<button type="button" id="button-display-meta-preview" class="button button-large button-preview-meta widefat"><span class="dashicons dashicons-visibility"></span> <?php esc_html_e( 'Display Preview', 'ninecodes-social-manager' ); ?></button>
+			<div class="meta-preview meta-preview--facebook">
+				<div class="meta-preview__image"><img src="{{ data.featuredImage }}"></div>
+				<div class="meta-preview-summary">
+					<div class="meta-preview-summary__title">{{ data.title }}</div>
+					<div class="meta-preview-summary__description">{{ data.excerpt }}</div>
+					<ul class="meta-preview-summary__footer">
+						<# if ( data.siteName ) { #><li class="meta-preview-summary__site-name>{{ data.siteName }}</li><# } #>
+						<# if ( data.authorName ) { #><li class="meta-preview-summary__author">{{ data.authorName }}</li><# } #>
+					</ul>
+				</div>
+			</div>
+		</div>
+		</script>
+	<?php
+		endif;
 	}
 
 	/**
