@@ -470,10 +470,10 @@ module.exports = function (grunt) {
 		notify_hooks: {
 			options: {
 				enabled: true,
-				max_jshint_notifications: 5, // maximum number of notifications from jshint output
-				title: "Project Name", // defaults to the name in package.json, or will use project directory's name
-				success: true, // whether successful grunt executions should be notified automatically
-				duration: 3 // the duration of notification in seconds, for `notify-send only
+				max_jshint_notifications: 5,
+				title: "Social Manager",
+				success: true,
+				duration: 3
 			}
 		}
 	});
