@@ -33,8 +33,8 @@ if ( ! function_exists( 'get_the_site_social_profile' ) ) {
 		if ( is_array( $site_profile ) && ! empty( $site_profile ) ) :
 
 			$profiles = Options::social_profiles();
-			$views    = Options::button_views();
-			$prefix   = Helpers::get_attr_prefix();
+			$views = Options::button_views();
+			$prefix = Helpers::get_attr_prefix();
 
 			$view = array_key_exists( $args['view'], $views ) ? $args['view'] : 'icon';
 
@@ -47,8 +47,8 @@ if ( ! function_exists( 'get_the_site_social_profile' ) ) {
 					continue;
 				}
 
-				$site  = sanitize_key( $key );
-				$url   = esc_url( trailingslashit( $profiles[ $site ]['url'] ) . $username );
+				$site = sanitize_key( $key );
+				$url = SocialManager\tmpl_profile_url( $profiles[ $site ]['url'], $username );
 				$label = esc_html( $profiles[ $site ]['label'] );
 
 				$icon = Helpers::get_social_icons( $site );
@@ -127,7 +127,7 @@ if ( ! function_exists( 'get_the_author_social_profile' ) ) {
 				}
 
 				$icon = $icons[ $site ];
-				$url = esc_url( trailingslashit( $profiles[ $site ]['url'] ) . $username );
+				$url = SocialManager\tmpl_profile_url( $profiles[ $site ]['url'], $username );
 
 				/* translators: 1. The author name. 2. The social media label. */
 				$title = sprintf( __( 'Follow %1$s on %2$s', 'ninecodes-social-manager' ), $author_name, $profiles[ $site ]['label'] );

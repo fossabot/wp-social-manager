@@ -97,55 +97,55 @@ final class Options {
 		$profiles = array(
 			'facebook' => array(
 				'label' => 'Facebook',
-				'url' => 'https://www.facebook.com/',
+				'url' => 'https://www.facebook.com/{{ data.profile }}',
 				// translators: %s is an example of a username input.
 				'description' => sprintf( __( 'Facebook profile or page (e.g. %s)', 'ninecodes-social-manager' ), '<code>zuck</code>' ),
 			),
 			'twitter' => array(
 				'label' => 'Twitter',
-				'url' => 'https://twitter.com/',
+				'url' => 'https://twitter.com/{{ data.profile }}',
 				// translators: %s is an example of a username input.
 				'description' => sprintf( __( 'Twitter profile without the %1$s (e.g. %2$s)', 'ninecodes-social-manager' ), '<code>@</code>', '<code>jack</code>' ),
 			),
 			'instagram' => array(
-				'label' => esc_html( 'Instagram' ),
-				'url' => esc_url( 'https://instagram.com/' ),
+				'label' => 'Instagram',
+				'url' => 'https://instagram.com/{{ data.profile }}',
 				// translators: %s is an example of a username input.
 				'description'  => sprintf( __( 'Instagram profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>victoriabeckham</code>' ),
 			),
 			'pinterest' => array(
 				'label' => 'Pinterest',
-				'url' => esc_url( 'https://pinterest.com/' ),
+				'url' => 'https://pinterest.com/{{ data.profile }}',
 				// translators: %s is an example of a username input.
 				'description'  => sprintf( __( 'Pinterest profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>ohjoy</code>' ),
 			),
 			'linkedin' => array(
 				'label' => 'LinkedIn',
-				'url' => esc_url( 'https://www.linkedin.com/in/' ),
+				'url' => 'https://www.linkedin.com/in/{{ data.profile }}',
 				// translators: %s is an example of a username input.
 				'description' => sprintf( __( 'LinkedIn profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>williamhgates</code>' ),
 			),
 			'googleplus' => array(
 				'label' => 'Google+',
-				'url' => 'https://plus.google.com/',
+				'url' => 'https://plus.google.com/{{ data.profile }}',
 				// translators: %s is an example of a username input.
 				'description' => sprintf( __( 'Google+ profile or page. Include the %1$s sign if necessary (e.g. %2$s)', 'ninecodes-social-manager' ), '<code>+</code>', '<code>+hishekids</code>' ),
 			),
 			'youtube' => array(
 				'label' => 'Youtube',
-				'url' => 'https://www.youtube.com/user/',
+				'url' => 'https://www.youtube.com/user/{{ data.profile }}',
 				// translators: %s is an example of a username input.
 				'description' => sprintf( __( 'Youtube channel (e.g. %s)', 'ninecodes-social-manager' ), '<code>BuzzFeedVideo</code>' ),
 			),
 			'reddit' => array(
 				'label' => 'Reddit',
-				'url' => 'https://www.reddit.com/user/',
+				'url' => 'https://www.reddit.com/user/{{ data.profile }}',
 				// translators: %s is an example of a username input.
 				'description' => sprintf( __( 'Reddit profile (e.g. %s)', 'ninecodes-social-manager' ), '<code>Unidan</code>' ),
 			),
 			'tumblr' => array(
 				'label' => 'Tumblr',
-				'url' => 'https://tumblr.com/',
+				'url' => 'https://{{ data.profile }}.tumblr.com/',
 				// translators: %s is an example of a username input.
 				'description' => sprintf( __( 'Tumblr blog (e.g. %s)', 'ninecodes-social-manager' ), '<code>crowloop</code>' ),
 			),
@@ -178,12 +178,12 @@ final class Options {
 			// Ensure the `$profile` input has required keys.
 			$profile = wp_parse_args( $profile, array(
 				'label' => esc_html_x( 'Example', 'Dummy text label for a social media profile, in case it is not supplied.', 'ninecodes-social-manager' ),
-				'url' => 'http://example.com/',
+				'url' => 'http://example.com/{{ data.profile }}',
 				'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, repudiandae.',
 			) );
 
 			$profile['label'] = sanitize_text_field( $profile['label'] );
-			$profile['url'] = trailingslashit( esc_url( $profile['url'] ) );
+			$profile['url'] = sanitize_profile_url( $profile['url'] );
 			$profile['description'] = wp_kses( $profile['description'], array(
 				'code' => true,
 				'strong' => true,

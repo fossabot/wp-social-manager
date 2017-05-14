@@ -162,7 +162,7 @@ final class Fields extends SettingsAPI\Fields {
 		$args['type'] = 'text'; // Revert the type back to 'text'.
 		$args['attr'] = array(
 			'class' => "field-text-profile code {$class}",
-			'data-url' => trailingslashit( $args['attr']['data-url'] ),
+			'data-url' => $args['attr']['data-url'],
 		);
 
 		$args  = $this->get_arguments( $args ); // Escapes all attributes.
@@ -290,40 +290,5 @@ final class Fields extends SettingsAPI\Fields {
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-	<?php }
-
-	/**
-	 * The function callback to render the button to include field.
-	 *
-	 * @since 2.0.0
-	 * @access public
-	 *
-	 * @param array $args Arguments (e.g. id, section, type, etc.) to render the new interface.
-	 * @return void
-	 */
-	public function field_button( array $args ) {
-
-		if ( ! isset( $args['text'] ) || empty( $args['text'] ) ) {
-			return;
-		}
-
-		$args['attr']['class'] = 'button';
-		$args = $this->get_arguments( $args ); // Escapes all attributes.
-
-		$section = esc_attr( $args['section'] );
-		$id = esc_attr( $args['id'] );
-		$text = esc_attr( $args['text'] );
-		$icon = esc_attr( $args['icon'] );
-
-		$is_dashicon = strpos( $icon, 'dashicons-' ) !== false; ?>
-
-		<a id="<?php echo esc_attr( $section . '_' . $id ); ?>" <?php echo $args['attr']; // WPCS: XSS ok.  ?>>
-			<?php if ( $icon && $is_dashicon ) : ?>
-			<span class="dashicons <?php echo esc_attr( $icon ); ?>"></span>
-			<?php else : ?>
-			<span class="<?php echo esc_attr( $icon ); ?>"></span>
-			<?php endif; ?>
-			<?php echo esc_html( $args['text'] ); ?>
-		</a>
 	<?php }
 }

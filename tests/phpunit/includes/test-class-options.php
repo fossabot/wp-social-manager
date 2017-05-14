@@ -55,8 +55,14 @@ class Test_Options extends WP_UnitTestCase {
 
 				$value['ello'] = array(
 					'label' => 'Ello',
-					'url' => 'https://ello.co', // No slash at the end or the URL.
+					'url' => 'https://ello.co/{{ data.profile }}', // No slash at the end or the URL.
 					'description' => 'Set your Ello username',
+				);
+
+				$value['digg'] = array(
+					'label' => 'Digg',
+					'url' => 'https://{{ data.profile }}.digg.com', // No slash at the end or the URL.
+					'description' => 'Set your Digg username',
 				);
 
 				// Bad example; array given with no value.
@@ -77,17 +83,22 @@ class Test_Options extends WP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'ello', $profiles_filtered );
 		$this->assertEquals( 'Ello', $profiles_filtered['ello']['label'] );
-		$this->assertEquals( 'https://ello.co/', $profiles_filtered['ello']['url'] );
+		$this->assertEquals( 'https://ello.co/{{data.profile}}', $profiles_filtered['ello']['url'] );
 		$this->assertEquals( 'Set your Ello username', $profiles_filtered['ello']['description'] );
+
+		$this->assertArrayHasKey( 'digg', $profiles_filtered );
+		$this->assertEquals( 'Digg', $profiles_filtered['digg']['label'] );
+		$this->assertEquals( 'https://{{data.profile}}.digg.com', $profiles_filtered['digg']['url'] );
+		$this->assertEquals( 'Set your Digg username', $profiles_filtered['digg']['description'] );
 
 		$this->assertArrayHasKey( 'myspace', $profiles_filtered );
 		$this->assertEquals( 'Example', $profiles_filtered['myspace']['label'] );
-		$this->assertEquals( 'http://example.com/', $profiles_filtered['myspace']['url'] );
+		$this->assertEquals( 'http://example.com/{{data.profile}}', $profiles_filtered['myspace']['url'] );
 		$this->assertEquals( 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, repudiandae.', $profiles_filtered['myspace']['description'] );
 
 		$this->assertArrayHasKey( 'friendster', $profiles_filtered );
 		$this->assertEquals( 'Friendster', $profiles_filtered['friendster']['label'] );
-		$this->assertEquals( 'http://friendster.com/', $profiles_filtered['friendster']['url'] );
+		$this->assertEquals( 'http://friendster.com/{{data.profile}}', $profiles_filtered['friendster']['url'] );
 		$this->assertEquals( 'Set your <strong>Friendster</strong> username', $profiles_filtered['friendster']['description'] );
 	}
 

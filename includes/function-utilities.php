@@ -122,6 +122,53 @@ function wp_parse_args_recursive( &$a, $b ) {
 }
 
 /**
+ * Function to sanitize URL template string
+ *
+ * @since 2.0.0
+ *
+ * @param string $url The URL string.
+ * @return string
+ */
+function sanitize_profile_url( $url = '' ) {
+
+	preg_match( '/(?P<profile>\{{\s?data.profile\s?}})/s', $url, $match );
+
+	if ( ! isset( $match['profile'] ) || empty( $match['profile'] ) ) {
+		return trailingslashit( esc_url( $url ) ) . '{{data.profile}}';
+	}
+
+	$pattern = preg_replace( '/(?P<profile>\{{\s?data.profile\s?}})/s', '%s', $url );
+	$url = sprintf( esc_url( $pattern ), '{{data.profile}}' );
+
+	return $url;
+}
+
+/**
+ * Function to return the profile URL template into proper URL
+ *
+ * @since 2.0.0
+ *
+ * @param string $tmpl_url The URL template in Mustache ({{ }}) for mat.
+ * @return void
+ */
+/**
+ * Function to return the profile URL template into proper URL
+ *
+ * @since 2.0.0
+ *
+ * @param string $tmpl_url The social media URL pattern.
+ * @param string $profile_id The social media profile id or username.
+ *
+ * @return string
+ */
+function tmpl_profile_url( $tmpl_url = '', $profile_id = '' ) {
+
+	$url = preg_replace( '/(?P<profile>\{{\s?data.profile\s?}})/s', '%s', $tmpl_url );
+
+	return sprintf( $url, $profile_id );
+}
+
+/**
  * Insert an array into another array before/after a certain key
  *
  * @since 1.2.0

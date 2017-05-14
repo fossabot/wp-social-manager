@@ -1,5 +1,5 @@
 /*eslint no-unused-vars: ["error", { "vars": "local", "varsIgnorePattern": "^preview" }]*/
-jQuery(function($) {
+jQuery(function ($) {
 
 	'use strict';
 
@@ -28,7 +28,7 @@ jQuery(function($) {
 		 *
 		 * @return {Void} This is executed on initialization, and does not return anything.
 		 */
-		initialize: function() {
+		initialize: function () {
 
 			this.wait = 150;
 			this.previewInit();
@@ -39,15 +39,30 @@ jQuery(function($) {
 		 *
 		 * @return {Void} Returns nothing.
 		 */
-		previewInit: function() {
+		previewInit: function () {
 
 			var self = this;
 
-			this.$el.each(function() {
+			this.$el.each(function () {
 				self.createPlaceholder(this);
 				self.render(this);
 			});
 		},
+
+		tmplString: _.memoize(function (string) {
+			var compiled,
+				options = {
+					evaluate: /<#([\s\S]+?)#>/g,
+					interpolate: /\{\{\{([\s\S]+?)\}\}\}/g,
+					escape: /\{\{([^\}]+?)\}\}(?!\})/g,
+					variable: 'data'
+				};
+
+			return function (data) {
+				compiled = compiled || _.template(string, null, options);
+				return compiled(data);
+			};
+		}),
 
 		/**
 		 * Function to update the preview content,
@@ -55,7 +70,7 @@ jQuery(function($) {
 		 *
 		 * @type {Void} Returns nothing.
 		 */
-		previewUpdate: _.throttle(function(event) {
+		previewUpdate: _.throttle(function (event) {
 			this.render(event.currentTarget);
 		}),
 
@@ -65,30 +80,21 @@ jQuery(function($) {
 		 * @param {Object} target The JavaScript element object.
 		 * @return {Void} Returns nothing.
 		 */
-		render: function(target) {
+		render: function (target) {
 
-			var attrID, isTumblr, inputValue, inputUrl = target.getAttribute('data-url');
+			var attrID = target.getAttribute('id'),
+				inputValue = this.getValue(target),
+				inputUrlTmpl = this.tmplString(target.getAttribute('data-url'));
 
-			if (inputUrl && '' !== inputUrl) {
+			if (inputUrlTmpl && _.isEmpty(inputUrlTmpl)) {
 
-				attrID = target.getAttribute('id');
-				isTumblr = attrID.indexOf( 'tumblr' );
-				inputValue = this.getValue(target);
+				$('#' + attrID + '-preview').html(function () {
 
-				$('#' + attrID + '-preview').html(function() {
+					var $preview = $(this).siblings().not('input');
 
-					var $this = $(this),
-						$siblings = $this.siblings().not('input');
+					$preview.toggleClass('hide-if-js', '' !== inputValue);
 
-					$siblings.toggleClass('hide-if-js', '' !== inputValue);
-
-
-					// Tumblr: the username is included after ://.
-					if ( isTumblr !== -1 ) {
-						return '' !== inputValue ? '<code>' + inputUrl.replace('://', '://' + inputValue + '.' ) + '</code>' : '';
-					}
-
-					return '' !== inputValue ? '<code>' + inputUrl + inputValue + '</code>' : '';
+					return '' !== inputValue ? '<code>' + inputUrlTmpl({ profile: inputValue }) + '</code>' : '';
 				});
 			}
 
@@ -101,7 +107,7 @@ jQuery(function($) {
 		 * @param {Object} target The JavaScript element object.
 		 * @return {Object} The JavaScript element object of the placeholder.
 		 */
-		createPlaceholder: function(target) {
+		createPlaceholder: function (target) {
 
 			var attrID = target.getAttribute('id');
 
@@ -114,7 +120,7 @@ jQuery(function($) {
 		 * @param {Object} target The JavaScript element object.
 		 * @return {String} The formatted input value.
 		 */
-		getValue: function(target) {
+		getValue: function (target) {
 
 			var value = target.value.replace(/\s+/g, '-'); // Replace a space with a dash.
 

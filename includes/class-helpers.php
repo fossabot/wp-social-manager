@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 }
 
 /**
- * The Helpers class that is used to assist in providing artbitrary functionalities.
+ * The Helpers class is used to assist in providing artbitrary functionalities.
  *
  * The Helpers class may be used across across both the public-facing side
  * of the site and the admin area without having to instantiate the class.
@@ -94,7 +94,7 @@ final class Helpers {
 		$prefix = self::$prefix; // Default prefix.
 		$custom = null;
 
-		$support = new Theme_Support();
+		$support = self::theme_support();
 		$support = $support->theme_support();
 
 		if ( isset( $support['attr_prefix'] ) ) { // Alias.
