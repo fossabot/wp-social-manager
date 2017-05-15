@@ -76,6 +76,20 @@ final class Admin_View {
 		if ( file_exists( $class_path ) ) {
 			require_once( $class_path );
 		}
+
+		add_action( 'plugins_loaded', array( $this, 'requires_metabox' ) );
+	}
+
+	/**
+	 * Load the required dependencies when plugins are already loaded.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function requires_metabox() {
+		require_once( $this->path_dir . 'partials/metabox/butterbean.php' );
 	}
 
 	/**
