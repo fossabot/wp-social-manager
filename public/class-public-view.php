@@ -150,8 +150,11 @@ final class Public_View {
 	 */
 	public function register_styles() {
 
-		wp_register_style( $this->plugin->plugin_slug, $this->path_url . 'css/style.css', array(), $this->plugin->version, 'all' );
-		wp_style_add_data( $this->plugin->plugin_slug, 'rtl', 'replace' );
+		$plugin_slug = $this->plugin->slug();
+		$plugin_version = $this->plugin->version;
+
+		wp_register_style( $plugin_slug, $this->path_url . 'css/style.css', array(), $plugin_version, 'all' );
+		wp_style_add_data( $plugin_slug, 'rtl', 'replace' );
 	}
 
 	/**
@@ -170,8 +173,11 @@ final class Public_View {
 	 */
 	public function register_scripts() {
 
-		wp_register_script( "{$this->plugin->plugin_slug}-app", "{$this->path_url}js/app.min.js", array( 'jquery', 'underscore', 'backbone' ), $this->plugin->version, true );
-		wp_register_script( $this->plugin->plugin_slug, "{$this->path_url}js/scripts.min.js", array( 'jquery' ), $this->plugin->version, true );
+		$plugin_slug = $this->plugin->slug();
+		$plugin_version = $this->plugin->version;
+
+		wp_register_script( "{$plugin_slug}-app", "{$this->path_url}js/app.min.js", array( 'jquery', 'underscore', 'backbone' ), $plugin_version, true );
+		wp_register_script( $plugin_slug, "{$this->path_url}js/scripts.min.js", array( 'jquery' ), $plugin_version, true );
 	}
 
 	/**
@@ -185,7 +191,7 @@ final class Public_View {
 	public function enqueue_styles() {
 
 		if ( $this->is_load_stylesheet() ) {
-			wp_enqueue_style( $this->plugin->plugin_slug );
+			wp_enqueue_style( $this->plugin->slug() );
 		}
 	}
 
@@ -204,9 +210,9 @@ final class Public_View {
 		}
 
 		if ( $this->is_json_mode() ) {
-			wp_enqueue_script( $this->plugin->plugin_slug . '-app' );
+			wp_enqueue_script( $this->plugin->slug() . '-app' );
 		} else {
-			wp_enqueue_script( $this->plugin->plugin_slug );
+			wp_enqueue_script( $this->plugin->slug() );
 		}
 	}
 

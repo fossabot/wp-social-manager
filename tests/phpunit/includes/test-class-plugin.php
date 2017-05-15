@@ -67,7 +67,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_plugin_get_slug() {
-		$this->assertEquals( self::PLUGIN_SLUG, $this->plugin->plugin_slug );
+		$this->assertEquals( self::PLUGIN_SLUG, $this->plugin->slug() );
 	}
 
 	/**

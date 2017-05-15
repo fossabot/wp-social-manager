@@ -163,7 +163,9 @@ class REST_Button extends WP_REST_Controller {
 			$args['id'] = absint( $post_id );
 		}
 
-		wp_localize_script( $this->plugin->plugin_slug . '-app', 'nineCodesSocialManagerAPI', $args );
+		$plugin_slug = $this->plugin->slug();
+
+		wp_localize_script( "{$plugin_slug}-app", 'nineCodesSocialManagerAPI', $args );
 	}
 
 	/**

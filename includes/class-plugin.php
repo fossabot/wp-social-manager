@@ -27,7 +27,7 @@ final class Plugin {
 	 * @access public
 	 * @var string
 	 */
-	public $plugin_slug = 'ninecodes-social-manager';
+	const SLUG = 'ninecodes-social-manager';
 
 	/**
 	 * The current version of the plugin.
@@ -69,7 +69,7 @@ final class Plugin {
 	 * @return string
 	 */
 	public function slug() {
-		return self::$plugin_slug;
+		return self::SLUG;
 	}
 
 	/**
@@ -171,7 +171,7 @@ final class Plugin {
 		 *
 		 * @link https://developer.wordpress.org/reference/hooks/prefixplugin_action_links_plugin_file/
 		 */
-		add_filter( 'plugin_action_links_' . plugin_basename( "{$this->path_dir}{$this->plugin_slug}.php" ), array( $this, 'plugin_action_links' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( $this->path_dir . self::SLUG . '.php' ), array( $this, 'plugin_action_links' ) );
 
 		add_action( 'init', array( $this->languages, 'load_plugin_textdomain' ) );
 	}
@@ -189,7 +189,7 @@ final class Plugin {
 	 */
 	protected function setups() {
 
-		$this->languages = new Languages( $this->plugin_slug );
+		$this->languages = new Languages( self::SLUG );
 		$this->option = new Options;
 		$this->helper = new Helpers;
 
@@ -216,19 +216,21 @@ final class Plugin {
 	 */
 	public function updates() {
 
+		$option_slug = $this->option->slug();
 		$updated_version = $this->version;
-		$installed_version = get_option( $this->option->slug() . '_version' );
-		$previous_version = get_option( $this->option->slug() . '_previous_version' );
 
-		update_option( $this->option->slug() . '_version', $updated_version ); // Update installed version.
+		$installed_version = get_option( "{$option_slug}_version" );
+		$previous_version = get_option( "{$option_slug}_previous_version" );
+
+		update_option( "{$option_slug}_version", $updated_version ); // Update installed version.
 
 		if ( ! $previous_version ) {
-			update_option( $this->option->slug() . '_previous_version', $updated_version );
+			update_option( "{$option_slug}_previous_version", $updated_version );
 			return;
 		}
 
 		if ( version_compare( $installed_version, $updated_version, '<' ) ) {
-			update_option( $this->option->slug() . '_previous_version', $installed_version );
+			update_option( "{$option_slug}_previous_version", $installed_version );
 		}
 	}
 
@@ -245,7 +247,7 @@ final class Plugin {
 
 		$markup = '<a href="' . esc_url( get_admin_url( null, 'options-general.php?page=%2$s' ) ) . '">%1$s</a>';
 		$settings = array(
-			'settings' => sprintf( $markup, __( 'Settings', 'ninecodes-social-manager' ), $this->plugin_slug ),
+			'settings' => sprintf( $markup, __( 'Settings', 'ninecodes-social-manager' ), self::SLUG ),
 		);
 
 		return array_merge( $settings, $links );

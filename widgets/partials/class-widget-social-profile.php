@@ -91,7 +91,7 @@ class Widget_Social_Profile extends Widget {
 		$script_enqueue = $this->plugin->option->get( 'enqueue' );
 
 		if ( isset( $script_enqueue['stylesheet'] ) && 'on' === $script_enqueue['stylesheet'] ) {
-			wp_enqueue_style( $this->plugin->plugin_slug );
+			wp_enqueue_style( $this->plugin->slug() );
 		}
 	}
 

@@ -59,7 +59,7 @@ class Test_Theme_Support extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_theme_supports_name() {
-		$this->assertEquals( $this->plugin->plugin_slug, $this->theme_support->get_feature_name() );
+		$this->assertEquals( $this->plugin->slug(), $this->theme_support->get_feature_name() );
 	}
 
 	/**

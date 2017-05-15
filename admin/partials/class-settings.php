@@ -222,11 +222,13 @@ final class Settings {
 	 */
 	public function menu() {
 
+		$plugin_slug = $this->plugin->slug();
+
 		$menu_title = __( 'Social Media', 'ninecodes-social-manager' );
 		$page_title = __( 'Social Media Settings', 'ninecodes-social-manager' );
 
-		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $this->plugin->plugin_slug, function() {
-			echo wp_kses( "<div class='wrap' id='{$this->plugin->plugin_slug}-settings'>", array(
+		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $plugin_slug, function() {
+			echo wp_kses( "<div class=\"wrap\" id=\"{$plugin_slug}-settings\">", array(
 				'div' => array(
 					'class' => array(),
 					'id' => array(),
@@ -1033,11 +1035,10 @@ final class Settings {
 	 */
 	public function enqueue_scripts( array $args ) {
 
-		wp_enqueue_script( "{$this->plugin->plugin_slug}-settings-scripts", "{$this->path_url}js/scripts.min.js", array(
-			'jquery',
-			'underscore',
-			'backbone',
-		), $this->plugin->version, true );
+		$plugin_slug = $this->plugin->slug();
+		$plugin_version = $this->plugin->version;
+
+		wp_enqueue_script( "{$plugin_slug}-settings-scripts", "{$this->path_url}js/scripts.min.js", array( 'jquery', 'underscore', 'backbone' ), $plugin_version, true );
 
 		foreach ( $args as $key => $file ) {
 
@@ -1047,9 +1048,7 @@ final class Settings {
 				continue;
 			}
 
-			wp_enqueue_script( "{$this->plugin->plugin_slug}-settings-{$file}", "{$this->path_url}js/{$file}.min.js", array(
-				"{$this->plugin->plugin_slug}-scripts",
-			), $this->plugin->version, true );
+			wp_enqueue_script( "{$plugin_slug}-settings-{$file}", "{$this->path_url}js/{$file}.min.js", array( "{$plugin_slug}-scripts" ), $plugin_version, true );
 		}
 	}
 
@@ -1064,17 +1063,20 @@ final class Settings {
 	 */
 	public function enqueue_styles( array $args ) {
 
-		wp_enqueue_style( "{$this->plugin->plugin_slug}-settings", "{$this->path_url}css/style.css", array(), $this->plugin->version );
+		$plugin_slug = $this->plugin->slug();
+		$plugin_version = $this->plugin->version;
+
+		wp_enqueue_style( "{$plugin_slug}-settings", "{$this->path_url}css/style.css", array(), $plugin_version );
 
 		foreach ( $args as $name => $file ) {
 
-			$file = is_string( $file ) && ! empty( $file ) ? "{$file}" : '';
+			$file = is_string( $file ) && ! empty( $file ) ? $file : '';
 
 			if ( empty( $file ) ) {
 				continue;
 			}
 
-			wp_style_add_data( "{$this->plugin->plugin_slug}-settings-{$file}", 'rtl', 'replace' );
+			wp_style_add_data( "{$plugin_slug}-settings-{$file}", 'rtl', 'replace' );
 		}
 	}
 

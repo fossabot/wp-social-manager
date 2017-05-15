@@ -73,7 +73,7 @@ abstract class Widget extends WP_Widget {
 		$this->path_dir = plugin_dir_path( __FILE__ );
 		$this->path_url = plugin_dir_url( __FILE__ );
 
-		parent::__construct( "{$this->plugin->plugin_slug}-{$options['id']}", $options['name'], array(
+		parent::__construct( $this->plugin->slug() . "-{$options['id']}", $options['name'], array(
 			'classname' => $options['id'],
 			'description' => $options['description'],
 			'customize_selective_refresh' => true,

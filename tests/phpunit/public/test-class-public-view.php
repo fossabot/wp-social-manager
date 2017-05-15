@@ -105,7 +105,7 @@ class Test_Public_View extends WP_UnitTestCase {
 	public function test_register_styles() {
 
 		$this->public->register_styles();
-		$this->assertTrue( wp_style_is( $this->plugin->plugin_slug, 'registered' ) );
+		$this->assertTrue( wp_style_is( $this->plugin->slug(), 'registered' ) );
 	}
 
 	/**
@@ -120,8 +120,8 @@ class Test_Public_View extends WP_UnitTestCase {
 
 		$this->public->register_scripts();
 
-		$this->assertTrue( wp_script_is( $this->plugin->plugin_slug . '-app', 'registered' ) );
-		$this->assertTrue( wp_script_is( $this->plugin->plugin_slug, 'registered' ) );
+		$this->assertTrue( wp_script_is( $this->plugin->slug() . '-app', 'registered' ) );
+		$this->assertTrue( wp_script_is( $this->plugin->slug(), 'registered' ) );
 	}
 
 	/**
@@ -134,7 +134,7 @@ class Test_Public_View extends WP_UnitTestCase {
 	 */
 	public function test_enqueue_styles() {
 
-		$this->assertFalse( wp_style_is( $this->plugin->plugin_slug, 'enqueued' ) );
+		$this->assertFalse( wp_style_is( $this->plugin->slug(), 'enqueued' ) );
 	}
 
 	/**

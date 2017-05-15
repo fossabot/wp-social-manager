@@ -514,14 +514,13 @@ final class Metabox {
 	 * @return void
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_style( "{$this->plugin->plugin_slug}-metabox", "{$this->path_url}css/metabox.css" );
-		wp_enqueue_script( "{$this->plugin->plugin_slug}-metabox-scripts", "{$this->path_url}js/metabox.min.js", array(
-			'jquery',
-			'underscore',
-			'backbone',
-		), $this->plugin->version, true );
-		wp_add_inline_script( "{$this->plugin->plugin_slug}-metabox-scripts", "
-		var nineCodesSocialManager = {
+
+		$plugin_slug = $this->plugin->slug();
+		$plugin_version = $this->plugin->version;
+
+		wp_enqueue_style( "{$plugin_slug}-metabox", $this->path_url . 'css/metabox.css' );
+		wp_enqueue_script( "{$plugin_slug}-metabox-scripts", $this->path_url . 'js/metabox.min.js', array( 'jquery', 'underscore', 'backbone' ), $plugin_version, true );
+		wp_add_inline_script( "{$plugin_slug}-metabox-scripts", "var nineCodesSocialManager = {
 			post: {
 				id:\"{$this->post_id}\",
 				title:\"{$this->post_title}\",

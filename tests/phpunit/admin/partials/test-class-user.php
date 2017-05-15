@@ -80,6 +80,6 @@ class Test_User extends WP_UnitTestCase {
 
 		$this->user->enqueue_scripts();
 
-		$this->assertTrue( wp_script_is( $this->plugin->plugin_slug . '-preview-profile' ) );
+		$this->assertTrue( wp_script_is( $this->plugin->slug() . '-preview-profile' ) );
 	}
 }

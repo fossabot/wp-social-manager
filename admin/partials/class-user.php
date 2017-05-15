@@ -166,7 +166,12 @@ final class User {
 	 * @return void
 	 */
 	public function enqueue_scripts() {
+
+		$plugin_slug = $this->plugin->slug();
+		$plugin_version = $this->plugin->version;
+
 		$file = 'preview-profile';
-		wp_enqueue_script( "{$this->plugin->plugin_slug}-{$file}", "{$this->path_url}js/{$file}.min.js", array( 'backbone' ), $this->plugin->version, true );
+
+		wp_enqueue_script( "{$plugin_slug}-{$file}", "{$this->path_url}js/{$file}.min.js", array( 'backbone' ), $plugin_version, true );
 	}
 }
