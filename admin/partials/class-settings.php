@@ -227,7 +227,7 @@ final class Settings {
 		$menu_title = __( 'Social Media', 'ninecodes-social-manager' );
 		$page_title = __( 'Social Media Settings', 'ninecodes-social-manager' );
 
-		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $plugin_slug, function() {
+		$this->screen = add_options_page( $page_title, $menu_title, 'manage_options', $plugin_slug, function() use ( $plugin_slug ) {
 			echo wp_kses( "<div class=\"wrap\" id=\"{$plugin_slug}-settings\">", array(
 				'div' => array(
 					'class' => array(),
@@ -1129,7 +1129,7 @@ final class Settings {
 	/**
 	 * The utility function to remove duplicate keys in the Tabs and Sections
 	 *
-	 * NOTE This functionality should be merged to wp-settings.
+	 * TODO: Move this function to the WP-Settings-API
 	 *
 	 * @since 1.2.0
 	 * @access public
@@ -1184,7 +1184,7 @@ final class Settings {
 	/**
 	 * Sort out the tabs for possible duplicate values in the Tabs and Sections
 	 *
-	 * TODO: This functionality should be merged to wp-settings.
+	 * TODO: Move this function to the WP-Settings-API
 	 *
 	 * @since 1.2.0
 	 * @access protected
@@ -1214,7 +1214,7 @@ final class Settings {
 	/**
 	 * The utility function to remove duplicate keys in the Tabs and Sections
 	 *
-	 * NOTE This functionality should be merged to wp-settings.
+	 * TODO: Move this function to the WP-Settings-API
 	 *
 	 * @since 1.2.0
 	 * @access protected
@@ -1245,6 +1245,8 @@ final class Settings {
 
 	/**
 	 * Enable the get_option() to return default value along with the saved value in the database
+	 *
+	 * TODO: Move this function to the WP-Settings-API
 	 *
 	 * @since 1.2.0
 	 * @access protected
