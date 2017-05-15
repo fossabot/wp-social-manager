@@ -215,7 +215,7 @@ class Test_Button extends WP_UnitTestCase {
 		/**
 		 * Test falsy value.
 		 *
-		 * @var string 
+		 * @var string
 		 */
 		$buttons_view7 = $this->button->render_view( 'icon', 'content', array(
 			'attr_prefix' => $prefix,

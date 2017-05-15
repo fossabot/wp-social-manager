@@ -40,7 +40,7 @@ final class Validation {
 		}
 
 		$output = array();
-		$profiles = Options::social_profiles();
+		$profiles = Options::list( 'social_profiles' );
 
 		foreach ( $input as $key => $username ) {
 
@@ -73,14 +73,14 @@ final class Validation {
 			'post_type' => array(),
 		) );
 
-		$inputs['view'] = $this->validate_selection( $inputs['view'], Options::button_views() );
-		$inputs['placement'] = $this->validate_selection( $inputs['placement'], Options::button_placements() );
-		$inputs['style'] = $this->validate_selection( $inputs['style'], Options::button_styles( 'content' ) );
+		$inputs['view'] = $this->validate_selection( $inputs['view'], Options::list( 'button_views' ) );
+		$inputs['placement'] = $this->validate_selection( $inputs['placement'], Options::list( 'button_placements' ) );
+		$inputs['style'] = $this->validate_selection( $inputs['style'], Options::list( 'button_styles', array( 'content' ) ) );
 
 		$inputs['heading'] = sanitize_text_field( $inputs['heading'] );
 
-		$inputs['include'] = $this->validate_include_sites( $inputs['include'], Options::button_sites( 'content' ) );
-		$inputs['post_type'] = $this->validate_multicheckbox( $inputs['post_type'], Options::post_types() );
+		$inputs['include'] = $this->validate_include_sites( $inputs['include'], Options::list( 'button_sites', array( 'content' ) ) );
+		$inputs['post_type'] = $this->validate_multicheckbox( $inputs['post_type'], Options::list( 'post_types' ) );
 
 		return $inputs;
 	}
@@ -104,7 +104,7 @@ final class Validation {
 		) );
 
 		$inputs['enable'] = $this->validate_checkbox( $inputs['enable'] );
-		$inputs['view'] = $this->validate_selection( $inputs['view'], Options::button_views() );
+		$inputs['view'] = $this->validate_selection( $inputs['view'], Options::list( 'button_views' ) );
 		$inputs['style'] = $this->validate_selection( $inputs['style'], Options::button_styles( 'image' ) );
 
 		$inputs['post_type'] = $this->validate_multicheckbox( $inputs['post_type'], Options::post_types() );

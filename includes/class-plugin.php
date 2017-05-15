@@ -58,7 +58,7 @@ final class Plugin {
 	function __construct() {
 
 		$this->option_slug = Options::slug();
-		$this->option_names = Options::names();
+		$this->option_names = Options::name();
 	}
 
 	/**

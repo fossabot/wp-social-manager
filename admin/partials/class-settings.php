@@ -485,7 +485,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_default( $this->plugin->option_names['profile'], $setting_fields );
+		$this->option_default( $this->plugin->option->name( 'profile' ), $setting_fields );
 
 		/**
 		 * Regiter the fields in Accounts > Profiles.
@@ -608,7 +608,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_default( $this->plugin->option_names['button_content'], $setting_fields );
+		$this->option_default( $this->plugin->option->name( 'button_content' ), $setting_fields );
 
 		/**
 		 * Register the fields in Buttons > Buttons Content.
@@ -725,7 +725,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_default( $this->plugin->option_names['button_image'], $setting_fields );
+		$this->option_default( $this->plugin->option->name( 'button_image' ), $setting_fields );
 
 		/**
 		 * Register the fields in "Buttons" > "Buttons Image".
@@ -827,7 +827,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_default( $this->plugin->option_names['meta_site'], $setting_fields );
+		$this->option_default( $this->plugin->option->name( 'meta_site' ), $setting_fields );
 
 		/**
 		 * Register the fields in "Meta" > "Meta Site".
@@ -896,7 +896,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_default( $this->plugin->option_names['enqueue'], $setting_fields );
+		$this->option_default( $this->plugin->option->name( 'enqueue' ), $setting_fields );
 
 		/**
 		 * Register the fields in Advanced > Enqueue.
@@ -932,7 +932,7 @@ final class Settings {
 				'label' => __( 'Button Mode', 'ninecodes-social-manager' ),
 				'description' => __( 'Select the mode to render the social media buttons.', 'ninecodes-social-manager' ),
 				'type' => 'radio',
-				'options' => $this->plugin->option->button_modes(),
+				'options' => $this->plugin->option->list( 'button_modes' ),
 				'default' => 'html',
 			);
 
@@ -942,7 +942,7 @@ final class Settings {
 			'label' => __( 'Link Mode', 'ninecodes-social-manager' ),
 			'description' => __( 'Select the link mode to append when the content or the image is shared.', 'ninecodes-social-manager' ),
 			'type' => 'radio',
-			'options' => $this->plugin->option->link_modes(),
+			'options' => $this->plugin->option->list( 'link_modes' ),
 			'default' => 'permalink',
 		);
 
@@ -970,7 +970,7 @@ final class Settings {
 		 *
 		 * @since 1.2.0
 		 */
-		$this->option_default( $this->plugin->option_names['mode'], $setting_fields );
+		$this->option_default( $this->plugin->option->name( 'mode' ), $setting_fields );
 
 		/**
 		 * Register the fields in Advanced > Enqueue.

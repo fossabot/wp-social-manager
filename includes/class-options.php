@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the Options class.
+ * The file that defines the Options class
  *
  * @package SocialManager
  * @subpackage Options
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 }
 
 /**
- * The Options class that registers the plugin options.
+ * Register and manage the plugin options
  *
  * The Options class may be used in the admin area such as in the settings to register
  * options and validate the options before being saved into the database, or in
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 final class Options {
 
 	/**
-	 * The unique ID that prefixes the database name added by the plugin.
+	 * The unique ID that prefixes the database name added by the plugin
 	 *
 	 * @since 2.0.0
 	 * @var string
@@ -32,18 +32,18 @@ final class Options {
 	const SLUG = 'ncsocman';
 
 	/**
-	 * Get the option slug.
+	 * Get the option slug
 	 *
 	 * @since 2.0.0
 	 * @access public
-	 * @return array
+	 * @return string
 	 */
 	public static function slug() {
 		return self::SLUG;
 	}
 
 	/**
-	 * Get the option names.
+	 * Get the option name
 	 *
 	 * @since 2.0.0
 	 * @access public
@@ -51,19 +51,9 @@ final class Options {
 	 * @param string $name The name of the option.
 	 * @return array|string
 	 */
-	public static function names( $name = '' ) {
-
+	public static function name( $name = '' ) {
 		$slug = self::SLUG;
-		$names = array(
-			'profile' => "{$slug}_profile",
-			'button_content' => "{$slug}_button_content",
-			'button_image' => "{$slug}_button_image",
-			'meta_site' => "{$slug}_meta_site",
-			'enqueue' => "{$slug}_enqueue",
-			'mode' => "{$slug}_mode",
-		);
-
-		return isset( $names[ $name ] ) ? $names[ $name ] : $names;
+		return "{$slug}_{$name}";
 	}
 
 	/**
@@ -76,14 +66,14 @@ final class Options {
 	 * @param string $key  The array key to retrieve from the option.
 	 * @return mixed The option value or null if option is not available.
 	 */
-	public static function get( $name = '', $key = '' ) {
+	public static function get( string $name = '', $key = '' ) {
 
 		if ( empty( $name ) ) {
 			return null;
 		}
 
-		$option_names = self::names();
-		$option = isset( $option_names[ $name ] ) ? get_option( $option_names[ $name ] ) : null;
+		$option_name = self::name( $name );
+		$option = get_option( $option_name, null );
 
 		if ( $name && $key ) {
 			return isset( $option[ $key ] ) ? $option[ $key ] : null;
@@ -93,35 +83,35 @@ final class Options {
 	}
 
 	/**
-	 * Get list of options available of the given name
+	 * Get options available of the given name
 	 *
 	 * @since 2.0.0
 	 * @access public
 	 *
-	 * @param string $option The list of option registered.
-	 * @param array  $args The list arguments to pass on the option.
+	 * @param string $method Method name to the option list registered.
+	 * @param array  $args List arguments to pass to the method.
 	 * @return mixed
 	 */
-	public static function list( $option = '', array $args = array() ) {
+	public static function list( $method = '', array $args = array() ) {
 
-		if ( is_callable( array( __CLASS__, $option ) ) ) {
-			return call_user_func_array( array( __CLASS__, $option ), $args );
+		if ( is_callable( array( __CLASS__, $method ) ) ) {
+			return call_user_func_array( array( __CLASS__, $method ), $args );
 		}
 
 		return array();
 	}
 
 	/**
-	 * Options: Social Profiles and Pages.
+	 * Options: Social Profiles.
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 - Remove dribbble, behance, github, codepen.
-	 * @access public
+	 * @access protected
 	 *
 	 * @param string $slug The social media slug (e.g. facebook, twitter, etc.).
 	 * @return mixed Return an array if the profiles with the specified "$slug" is present, otherwise return an empty string.
 	 */
-	public static function social_profiles( $slug = '' ) {
+	protected static function social_profiles( $slug = '' ) {
 
 		$slug = sanitize_key( $slug );
 		$profiles = array(
@@ -237,11 +227,11 @@ final class Options {
 	 * for this plugin such as the 'revision', 'nav_menu_log', etc.
 	 *
 	 * @since 1.0.0
-	 * @access public
+	 * @access protected
 	 *
 	 * @return array List of filtered Post Types.
 	 */
-	public static function post_types() {
+	protected static function post_types() {
 
 		$post_types = array();
 
@@ -271,11 +261,11 @@ final class Options {
 	 * Options: Button View.
 	 *
 	 * @since 1.0.0
-	 * @access public
+	 * @access protected
 	 *
 	 * @return array
 	 */
-	public static function button_views() {
+	protected static function button_views() {
 
 		$views = array(
 			'icon' => __( 'Icon Only', 'ninecodes-social-manager' ),
@@ -315,11 +305,11 @@ final class Options {
 	 * Options: Button Placements.
 	 *
 	 * @since 1.0.0
-	 * @access public
+	 * @access protected
 	 *
 	 * @return array
 	 */
-	public static function button_placements() {
+	protected static function button_placements() {
 
 		$placements = array(
 			'before' => __( 'Before the content', 'ninecodes-social-manager' ),
@@ -359,12 +349,12 @@ final class Options {
 	 * in the social buttons line-up.
 	 *
 	 * @since 1.0.0
-	 * @access public
+	 * @access protected
 	 *
 	 * @param string $for The buttons group to retrieve.
 	 * @return array       Selected list of buttons or all if not specified.
 	 */
-	public static function button_sites( $for = '' ) {
+	protected static function button_sites( $for = '' ) {
 
 		$button_sites['content'] = array(
 			'facebook' => array(
@@ -465,12 +455,12 @@ final class Options {
 	 * Get style options of button content.
 	 *
 	 * @since 2.0.0
-	 * @access public
+	 * @access protected
 	 *
 	 * @param string $for Which button style to retrieve.
 	 * @return array
 	 */
-	public static function button_styles( $for = '' ) {
+	protected static function button_styles( $for = '' ) {
 
 		$button_styles = array(
 			'content' => array(
@@ -508,11 +498,11 @@ final class Options {
 	 * Get list of button modes.
 	 *
 	 * @since 1.0.0
-	 * @access public
+	 * @access protected
 	 *
 	 * @return array An array of button modes; the labels and the keys
 	 */
-	public static function button_modes() {
+	protected static function button_modes() {
 
 		return array(
 			'html' => 'HTML (HyperText Markup Language)',
@@ -524,11 +514,11 @@ final class Options {
 	 * Get options of button modes.
 	 *
 	 * @since 1.0.0
-	 * @access public
+	 * @access protected
 	 *
 	 * @return array An array of button modes; the labels and the keys
 	 */
-	public static function link_modes() {
+	protected static function link_modes() {
 
 		return array(
 			'permalink' => 'Permalink',

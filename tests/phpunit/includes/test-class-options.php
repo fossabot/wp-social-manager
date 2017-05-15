@@ -30,9 +30,9 @@ class Test_Options extends WP_UnitTestCase {
 		 * If the social profiles is given a non-existent key name,
 		 * Should return empty.
 		 */
-		$this->assertEmpty( Options::social_profiles( 'xyz' ) );
+		$this->assertEmpty( Options::list( 'social_profiles', array( 'xyz' ) ) );
 
-		foreach ( Options::social_profiles() as $key => $arr ) {
+		foreach ( Options::list( 'social_profiles' ) as $key => $arr ) {
 			$this->assertArrayHasKey( 'label', $arr, 'The' . $key . ' profile must has a label' );
 			$this->assertArrayHasKey( 'url', $arr, 'The' . $key . ' profile must has a URL' );
 			$this->assertArrayHasKey( 'description', $arr, 'The' . $key . ' profile must has a description' );
@@ -79,7 +79,7 @@ class Test_Options extends WP_UnitTestCase {
 			return $value;
 		}, 10, 2 );
 
-		$profiles_filtered = Options::social_profiles();
+		$profiles_filtered = Options::list( 'social_profiles' );
 
 		$this->assertArrayHasKey( 'ello', $profiles_filtered );
 		$this->assertEquals( 'Ello', $profiles_filtered['ello']['label'] );
@@ -111,7 +111,7 @@ class Test_Options extends WP_UnitTestCase {
 	 */
 	public function test_post_types() {
 
-		$post_types = Options::post_types();
+		$post_types = Options::list( 'post_types' );
 
 		$this->assertArrayNotHasKey( 'attachment', $post_types );
 		$this->assertArrayNotHasKey( 'revision', $post_types );
@@ -128,7 +128,7 @@ class Test_Options extends WP_UnitTestCase {
 	 */
 	public function test_button_placements() {
 
-		$placements = Options::button_placements();
+		$placements = Options::list( 'button_placements' );
 
 		$this->assertArrayHasKey( 'before', $placements );
 		$this->assertArrayHasKey( 'after', $placements );
@@ -156,7 +156,7 @@ class Test_Options extends WP_UnitTestCase {
 			return $value;
 		}, 10, 2 );
 
-		$placements_filtered = Options::button_placements();
+		$placements_filtered = Options::list( 'button_placements' );
 
 		$this->assertEquals( array_merge( $placements, array(
 			'float' => 'Float',
@@ -181,7 +181,7 @@ class Test_Options extends WP_UnitTestCase {
 	 */
 	public function test_button_views() {
 
-		$views = Options::button_views();
+		$views = Options::list( 'button_views' );
 
 		$this->assertNotEmpty( $views );
 
@@ -205,11 +205,11 @@ class Test_Options extends WP_UnitTestCase {
 			return $value;
 		}, 10, 2);
 
-		$views_filtered = Options::button_views();
+		$views_filtered = Options::list( 'button_views' );
 
 		// Test a duplicate.
 		$this->assertArrayHasKey( 'icon', $views_filtered );
-		$this->assertEquals( $views_filtered, Options::button_views() );
+		$this->assertEquals( $views_filtered, Options::list( 'button_views' ) );
 
 		// Test a valid new addition.
 		$this->assertArrayHasKey( 'transparent', $views_filtered );
@@ -232,18 +232,18 @@ class Test_Options extends WP_UnitTestCase {
 		$strings = array( '', 'xyz' ) ;
 
 		foreach ( $strings as $str ) {
-			$sites = Options::button_sites( $str );
+			$sites = Options::list( 'button_sites', array( $str ) );
 
 			$this->assertArrayHasKey( 'content', $sites );
 			$this->assertArrayHasKey( 'image', $sites );
 		}
 
-		$rand = Options::button_sites( 'rand' ); // non-existent name.
+		$rand = Options::list( 'button_sites', array( 'rand' ) ); // non-existent name.
 
 		$this->assertArrayHasKey( 'content', $rand );
 		$this->assertArrayHasKey( 'image', $rand );
 
-		$content = Options::button_sites( 'content' ); // Button content keys.
+		$content = Options::list( 'button_sites', array( 'content' ) ); // Button content keys.
 
 		$this->assertEquals( 8, count( $content ) );
 		$this->assertArrayHasKey( 'facebook', $content );
@@ -255,7 +255,7 @@ class Test_Options extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'tumblr', $content );
 		$this->assertArrayHasKey( 'email', $content );
 
-		$image = Options::button_sites( 'image' ); // Button image keys.
+		$image = Options::list( 'button_sites', array( 'image' ) ); // Button image keys.
 
 		$this->assertEquals( 1, count( $image ) );
 		$this->assertArrayHasKey( 'pinterest', $image );
@@ -293,7 +293,7 @@ class Test_Options extends WP_UnitTestCase {
 			return $value;
 		}, 10, 2);
 
-		$button = Options::button_sites();
+		$button = Options::list( 'button_sites' );
 
 		$this->assertArrayNotHasKey( 'bad', $button );
 
@@ -309,7 +309,7 @@ class Test_Options extends WP_UnitTestCase {
 		$this->assertEquals( 'Pin It', $button['image']['pinterest']['label'] );
 		$this->assertEquals( 'https://www.pinterest.com/pin/create/bookmarklet/', $button['image']['pinterest']['endpoint'] );
 
-		$content = Options::button_sites( 'content' );
+		$content = Options::list( 'button_sites', array( 'content' ) );
 
 		$this->assertArrayNotHasKey( 'facebok', $content );
 		$this->assertArrayHasKey( 'twitter', $content );
@@ -317,7 +317,7 @@ class Test_Options extends WP_UnitTestCase {
 		$this->assertEquals( 'Tweet', $button['content']['twitter']['label'] );
 		$this->assertEquals( 'https://twitter.com/intent/tweet', $content['twitter']['endpoint'] );
 
-		$image = Options::button_sites( 'image' );
+		$image = Options::list( 'button_sites', array( 'image' ) );
 
 		$this->assertArrayNotHasKey( 'ello', $image );
 		$this->assertArrayHasKey( 'pinterest', $image );
@@ -355,19 +355,19 @@ class Test_Options extends WP_UnitTestCase {
 			return $value;
 		}, 10, 2);
 
-		$button = Options::button_sites();
+		$button = Options::list( 'button_sites' );
 
 		$this->assertArrayHasKey( 'twitter', $button['content'] ); // Since it does not have label and endpoint.
 		$this->assertEquals( '&lt;script&gt;Tweet&lt;/script&gt;', $button['content']['twitter']['label'] ); // The output must be sanitized.
 		$this->assertArrayHasKey( 'pinterest', $button['image'] );
 		$this->assertEquals( '&lt;script&gt;Pin It&lt;/script&gt;', $button['image']['pinterest']['label'] ); // The output must be sanitized.
 
-		$content = Options::button_sites( 'content' );
+		$content = Options::list( 'button_sites', array( 'content' ) );
 
 		$this->assertArrayHasKey( 'twitter', $content ); // Since it does not have label and endpoint.
 		$this->assertEquals( '&lt;script&gt;Tweet&lt;/script&gt;', $content['twitter']['label'] ); // The output must be sanitized.
 
-		$image = Options::button_sites( 'image' );
+		$image = Options::list( 'button_sites', array( 'image' ) );
 
 		$this->assertArrayHasKey( 'pinterest', $image );
 		$this->assertEquals( '&lt;script&gt;Pin It&lt;/script&gt;', $image['pinterest']['label'] ); // The output must be sanitized.
@@ -385,7 +385,7 @@ class Test_Options extends WP_UnitTestCase {
 	 */
 	public function test_button_modes() {
 
-		$modes = Options::button_modes();
+		$modes = Options::list( 'button_modes' );
 
 		$this->assertArrayHasKey( 'html', $modes );
 		$this->assertArrayHasKey( 'json', $modes );
@@ -400,7 +400,7 @@ class Test_Options extends WP_UnitTestCase {
 	 */
 	public function test_link_modes() {
 
-		$modes = Options::link_modes();
+		$modes = Options::list( 'link_modes' );
 
 		$this->assertArrayHasKey( 'permalink', $modes );
 		$this->assertArrayHasKey( 'shortlink', $modes );

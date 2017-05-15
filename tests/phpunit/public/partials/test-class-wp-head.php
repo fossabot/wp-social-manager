@@ -113,7 +113,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	 */
 	public function test_site_meta_tags_defaults() {
 
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option($this->plugin->option->name( 'meta_site' ), array(
 			'enable' => 'on',
 			'name' => '',
 			'description' => '',
@@ -166,7 +166,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 		 * The `site_meta_tags` method when the custom value is added
 		 * ============================================================
 		 */
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option( $this->plugin->option->name( 'meta_site' ), array(
 			'enable' => 'on',
 			'name' => 'Hello World',
 			'description' => 'Lorem ipsum dolor sit amet',
@@ -214,7 +214,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 		 * The `site_meta_tags` method when the site metas is disabled,
 		 * yet we have the meta tags added.
 		 */
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option( $this->plugin->option->name( 'meta_site' ), array(
 			'enable' => '',
 			'name' => 'Hello World',
 			'description' => 'Lorem ipsum dolor sit amet',
@@ -235,7 +235,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	public function test_site_meta_tags_in_single_post() {
 
 		// Enable the metas site with the meta values added.
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option( $this->plugin->option->name( 'meta_site' ), array(
 			'enable' => 'on',
 		 	'name' => 'Hello World',
 			'description' => 'Lorem ipsum dolor sit amet',
@@ -269,7 +269,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	 */
 	public function test_post_meta_tags() {
 
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option($this->plugin->option->name('meta_site'), array(
 			'enable' => 'on',
 		));
 
@@ -329,7 +329,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	 */
 	public function test_post_meta_tags_in_home() {
 
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option($this->plugin->option->name('meta_site'), array(
 			'enable' => 'on',
 		));
 		$this->go_to( get_home_url() );
@@ -355,7 +355,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	 */
 	public function test_post_meta_tags_with_excerpt() {
 
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option($this->plugin->option->name('meta_site'), array(
 			'enable' => 'on',
 		));
 
@@ -398,7 +398,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	 */
 	public function test_post_meta_tags_with_post_section() {
 
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option($this->plugin->option->name('meta_site'), array(
 			'enable' => 'on',
 		));
 
@@ -440,7 +440,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	 */
 	public function test_post_meta_tags_with_post_tags() {
 
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option($this->plugin->option->name('meta_site'), array(
 			'enable' => 'on',
 		));
 
@@ -492,7 +492,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	 */
 	public function test_post_meta_tags_disabled() {
 
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option($this->plugin->option->name('meta_site'), array(
 			'enable' => '',
 		));
 		$this->assertNull( $this->wp_head->post_meta_tags() );
@@ -508,7 +508,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	 */
 	public function test_post_meta_tags_filter_hook() {
 
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option($this->plugin->option->name('meta_site'), array(
 			'enable' => 'on',
 		));
 
@@ -554,7 +554,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	 */
 	public function test_post_meta_tags_filter_hook_open_graph() {
 
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option($this->plugin->option->name('meta_site'), array(
 			'enable' => 'on',
 		));
 
@@ -602,7 +602,7 @@ class Test_WP_Head extends WP_UnitTestCase {
 	 */
 	public function test_post_meta_tags_filter_hook_twitter_cards() {
 
-		update_option($this->plugin->option_names['meta_site'], array(
+		update_option($this->plugin->option->name('meta_site'), array(
 			'enable' => 'on',
 		));
 
