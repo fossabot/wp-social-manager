@@ -94,8 +94,8 @@ final class Options {
 	 */
 	public static function list( $method = '', array $args = array() ) {
 
-		if ( is_callable( array( __CLASS__, $method ) ) ) {
-			return call_user_func_array( array( __CLASS__, $method ), $args );
+		if ( is_callable( array( __CLASS__, "list_{$method}" ) ) ) {
+			return call_user_func_array( array( __CLASS__, "list_{$method}" ), $args );
 		}
 
 		return array();
@@ -111,7 +111,7 @@ final class Options {
 	 * @param string $slug The social media slug (e.g. facebook, twitter, etc.).
 	 * @return mixed Return an array if the profiles with the specified "$slug" is present, otherwise return an empty string.
 	 */
-	protected static function social_profiles( $slug = '' ) {
+	protected static function list_social_profiles( $slug = '' ) {
 
 		$slug = sanitize_key( $slug );
 		$profiles = array(
@@ -231,7 +231,7 @@ final class Options {
 	 *
 	 * @return array List of filtered Post Types.
 	 */
-	protected static function post_types() {
+	protected static function list_post_types() {
 
 		$post_types = array();
 
@@ -265,7 +265,7 @@ final class Options {
 	 *
 	 * @return array
 	 */
-	protected static function button_views() {
+	protected static function list_button_views() {
 
 		$views = array(
 			'icon' => __( 'Icon Only', 'ninecodes-social-manager' ),
@@ -309,7 +309,7 @@ final class Options {
 	 *
 	 * @return array
 	 */
-	protected static function button_placements() {
+	protected static function list_button_placements() {
 
 		$placements = array(
 			'before' => __( 'Before the content', 'ninecodes-social-manager' ),
@@ -354,7 +354,7 @@ final class Options {
 	 * @param string $for The buttons group to retrieve.
 	 * @return array       Selected list of buttons or all if not specified.
 	 */
-	protected static function button_sites( $for = '' ) {
+	protected static function list_button_sites( $for = '' ) {
 
 		$button_sites['content'] = array(
 			'facebook' => array(
@@ -460,7 +460,7 @@ final class Options {
 	 * @param string $for Which button style to retrieve.
 	 * @return array
 	 */
-	protected static function button_styles( $for = '' ) {
+	protected static function list_button_styles( $for = '' ) {
 
 		$button_styles = array(
 			'content' => array(
@@ -502,7 +502,7 @@ final class Options {
 	 *
 	 * @return array An array of button modes; the labels and the keys
 	 */
-	protected static function button_modes() {
+	protected static function list_button_modes() {
 
 		return array(
 			'html' => 'HTML (HyperText Markup Language)',
@@ -518,7 +518,7 @@ final class Options {
 	 *
 	 * @return array An array of button modes; the labels and the keys
 	 */
-	protected static function link_modes() {
+	protected static function list_link_modes() {
 
 		return array(
 			'permalink' => 'Permalink',
