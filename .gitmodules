@@ -3,7 +3,7 @@
 	url = https://tfirdaus@github.com/niallkennedy/open-graph-protocol-tools
 [submodule "includes/wp-settings"]
 	path = includes/wp-settings
-	url = https://tfirdaus@github.com/ninecodes/wp-settings
+	url = https://tfirdaus@github.com/ninecodes/wp-settings-api
 [submodule "dev-lib"]
 	path = dev-lib
 	url = https://tfirdaus@github.com/ninecodes/wp-dev-lib
