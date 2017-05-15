@@ -79,7 +79,7 @@ class Endpoint {
 		}
 
 		$includes = (array) $this->plugin->option->get( 'button_content', 'include' );
-		$sites = $this->plugin->option->button_sites( 'content' );
+		$sites = $this->plugin->option->list( 'button_sites', array( 'content' ) );
 
 		foreach ( $sites as $site => $label ) {  // Exclude site which is not enabled.
 
@@ -255,7 +255,7 @@ class Endpoint {
 		 * @var array
 		 */
 		$includes = (array) $this->plugin->option->get( 'button_image', 'include' );
-		$sites = $this->plugin->option->button_sites( 'image' );
+		$sites = $this->plugin->option->list( 'button_sites', array( 'image' ) );
 
 		foreach ( $sites as $site => $label ) { // Exclude site which is not enabled.
 

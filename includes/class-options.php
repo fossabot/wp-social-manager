@@ -67,7 +67,7 @@ final class Options {
 	}
 
 	/**
-	 * Get the options saved in the database `wp_options`.
+	 * Get the list of options stored in the database
 	 *
 	 * @since 2.0.0
 	 * @access public
@@ -93,16 +93,16 @@ final class Options {
 	}
 
 	/**
-	 * Get list of option of the given name
+	 * Get list of options available of the given name
 	 *
 	 * @since 2.0.0
 	 * @access public
 	 *
 	 * @param string $option The list of option registered.
-	 * @param string $args The list arguments to pass on the option.
+	 * @param array  $args The list arguments to pass on the option.
 	 * @return mixed
 	 */
-	public static function list( $option = '', $args = array() ) {
+	public static function list( $option = '', array $args = array() ) {
 
 		if ( is_callable( array( __CLASS__, $option ) ) ) {
 			return call_user_func_array( array( __CLASS__, $option ), $args );

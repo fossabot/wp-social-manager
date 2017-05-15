@@ -159,7 +159,7 @@ final class Metabox {
 		// Register our custom manager.
 		$butterbean->register_manager( $this->plugin->option_slug, array(
 			'label' => __( 'Social Media', 'ninecodes-social-manager' ),
-			'post_type' => array_keys( $this->plugin->option->post_types() ),
+			'post_type' => array_keys( $this->plugin->option->list( 'post_types' ) ),
 			'context' => 'normal',
 			'priority' => 'low',
 			'capability' => 'publish_posts',

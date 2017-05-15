@@ -436,7 +436,7 @@ final class Settings {
 
 		$setting_fields = array();
 
-		foreach ( $this->plugin->option->social_profiles() as $slug => $props ) {
+		foreach ( $this->plugin->option->list( 'social_profiles' ) as $slug => $props ) {
 
 			$props = wp_parse_args( $props, array(
 				'label' => '',
@@ -519,7 +519,7 @@ final class Settings {
 		 *
 		 * @var array
 		 */
-		$button_sites = $this->plugin->option->button_sites( 'content' );
+		$button_sites = $this->plugin->option->list( 'button_sites', array( 'content' ) );
 
 		$setting_fields = array(
 			'include' => array(
@@ -548,7 +548,7 @@ final class Settings {
 						'target' => array(),
 					),
 				) ),
-				'options' => $this->plugin->option->post_types(),
+				'options' => $this->plugin->option->list( 'post_types' ),
 				'default' => array(
 					'post' => 'on',
 				),
@@ -557,14 +557,14 @@ final class Settings {
 				'label' => __( 'Button View', 'ninecodes-social-manager' ),
 				'description' => __( 'Select the social media buttons appearance shown in the content.', 'ninecodes-social-manager' ),
 				'type' => 'select',
-				'options' => $this->plugin->option->button_views(),
+				'options' => $this->plugin->option->list( 'button_views' ),
 				'default' => 'icon',
 			),
 			'placement' => array(
 				'type' => 'select',
 				'label' => __( 'Button Placement', 'ninecodes-social-manager' ),
 				'description' => __( 'Select the location to show the social media buttons in the content.', 'ninecodes-social-manager' ),
-				'options' => $this->plugin->option->button_placements(),
+				'options' => $this->plugin->option->list( 'button_placements' ),
 				'default' => 'after',
 			),
 			'style' => array(
@@ -572,7 +572,7 @@ final class Settings {
 				'label' => __( 'Button Style', 'ninecodes-social-manager' ),
 				// translators: %s will be replaced with "<code>Share on:</code>".
 				'description' => sprintf( __( 'Change the style of the social media button of the content.', 'ninecodes-social-manager' ), '<code>Share on:</code>' ),
-				'options' => $this->plugin->option->button_styles( 'content' ),
+				'options' => $this->plugin->option->list( 'button_styles', array( 'content' ) ),
 				'default' => 'rounded',
 			),
 			'heading' => array(
@@ -642,7 +642,7 @@ final class Settings {
 		 *
 		 * @var array
 		 */
-		$button_sites = $this->plugin->option->button_sites( 'image' );
+		$button_sites = $this->plugin->option->list( 'button_sites', array( 'image' ) );
 
 		$setting_fields = array(
 			'enable' => array(
@@ -676,7 +676,7 @@ final class Settings {
 				// translators: %s will be replaced with a link pointing to https://codex.wordpress.org/Post_Types.
 				'description' => sprintf( __( 'List of %s that are allowed to show the social media buttons on the images of the content.', 'ninecodes-social-manager' ), '<a href="https://codex.wordpress.org/Post_Types" target="_blank">' . __( 'Post Types', 'ninecodes-social-manager' ) . '</a>' ),
 				'type' => 'multicheckbox',
-				'options' => $this->plugin->option->post_types(),
+				'options' => $this->plugin->option->list( 'post_types' ),
 				'default' => array(
 					'post' => 'on',
 				),
@@ -686,7 +686,7 @@ final class Settings {
 				'label' => __( 'Button View', 'ninecodes-social-manager' ),
 				'description' => __( 'Select the social media buttons appearance shown on the images of the content.', 'ninecodes-social-manager' ),
 				'type' => 'select',
-				'options' => $this->plugin->option->button_views(),
+				'options' => $this->plugin->option->list( 'button_views' ),
 				'default' => 'icon',
 				'class' => 'sharing-image-setting hide-if-js',
 			),
@@ -695,7 +695,7 @@ final class Settings {
 				'label' => __( 'Button Style', 'ninecodes-social-manager' ),
 				// translators: %s will be replaced with "<code>Share on:</code>".
 				'description' => sprintf( __( 'Change the style of the social media button shown on the image.', 'ninecodes-social-manager' ), '<code>Share on:</code>' ),
-				'options' => $this->plugin->option->button_styles( 'image' ),
+				'options' => $this->plugin->option->list( 'button_styles', array( 'image' ) ),
 				'default' => 'rounded',
 				'class' => 'sharing-image-setting hide-if-js',
 			),

@@ -58,7 +58,7 @@ class Widget_Social_Profile extends Widget {
 			'description' => __( 'Display list of social media profile and page URLs connected to this website.', 'ninecodes-social-manager' ),
 		) );
 
-		$this->profiles = $this->plugin->option->social_profiles();
+		$this->profiles = $this->plugin->option->list( 'social_profiles' );
 		$this->widget_title = __( 'Follow Us', 'ninecodes-social-manager' );
 	}
 
@@ -163,7 +163,7 @@ class Widget_Social_Profile extends Widget {
 				<?php
 					$id = esc_attr( $this->get_field_id( 'view' ) );
 					$name = esc_attr( $this->get_field_name( 'view' ) );
-					$views = $this->plugin->option->button_views(); ?>
+					$views = $this->plugin->option->list( 'button_views' ); ?>
 
 				<select name="<?php echo esc_attr( $name ); ?>" class="widefat">
 			<?php foreach ( $views as $key => $label ) :
@@ -181,7 +181,7 @@ class Widget_Social_Profile extends Widget {
 				<br />
 				<?php
 					$name = $this->get_field_name( 'style' );
-					$styles = $this->plugin->option->button_styles( 'widget_social_profile' ); ?>
+					$styles = $this->plugin->option->list( 'button_styles', array( 'widget_social_profile' ) ); ?>
 
 				<select name="<?php echo esc_attr( $name ); ?>" class="widefat">
 				<?php foreach ( $styles as $key => $label ) :
