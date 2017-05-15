@@ -381,8 +381,8 @@ module.exports = function (grunt) {
 					from: /Version: (.*)/g,
 					to: 'Version: <%= pkg.version %>'
 				}, {
-					from: /protected \$version = (.*)/g,
-					to: 'protected $version = \'<%= pkg.version %>\';'
+					from: /public \$version = (.*)/g,
+					to: 'public $version = \'<%= pkg.version %>\';'
 				}, {
 					from: /Requires at least: (.*)/g,
 					to: 'Requires at least: <%= pkg.wordpress.requires_at_least %>'
