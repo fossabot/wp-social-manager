@@ -1,6 +1,6 @@
 [submodule "dev-lib"]
 	path = dev-lib
-	url = https://tfirdaus@github.com/xwp/wp-dev-lib
+	url = https://tfirdaus@github.com/ninecodes/wp-dev-lib
 [submodule "includes/bb-metabox"]
 	path = includes/bb-metabox
 	url = https://tfirdaus@github.com/justintadlock/butterbean
