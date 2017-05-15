@@ -11,3 +11,6 @@
 [submodule "admin/partials/metabox"]
 	path = admin/partials/metabox
 	url = https://tfirdaus@github.com/ninecodes/wp-metabox-api
+[submodule "public/partials/ogp"]
+	path = public/partials/ogp
+	url = https://tfirdaus@github.com/ninecodes/open-graph-protocol-tools
