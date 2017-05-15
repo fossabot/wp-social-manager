@@ -172,6 +172,6 @@ final class User {
 
 		$file = 'preview-profile';
 
-		wp_enqueue_script( "{$plugin_slug}-{$file}", "{$this->path_url}js/{$file}.min.js", array( 'backbone' ), $plugin_version, true );
+		wp_enqueue_script( "{$plugin_slug}-{$file}", $this->path_url . 'js/{$file}.min.js', array( 'backbone' ), $plugin_version, true );
 	}
 }

@@ -1038,7 +1038,7 @@ final class Settings {
 		$plugin_slug = $this->plugin->slug();
 		$plugin_version = $this->plugin->version;
 
-		wp_enqueue_script( "{$plugin_slug}-settings-scripts", "{$this->path_url}js/scripts.min.js", array( 'jquery', 'underscore', 'backbone' ), $plugin_version, true );
+		wp_enqueue_script( "{$plugin_slug}-settings-scripts", $this->path_url . 'js/scripts.min.js', array( 'jquery', 'underscore', 'backbone' ), $plugin_version, true );
 
 		foreach ( $args as $key => $file ) {
 
@@ -1048,7 +1048,7 @@ final class Settings {
 				continue;
 			}
 
-			wp_enqueue_script( "{$plugin_slug}-settings-{$file}", "{$this->path_url}js/{$file}.min.js", array( "{$plugin_slug}-scripts" ), $plugin_version, true );
+			wp_enqueue_script( "{$plugin_slug}-settings-{$file}", $this->path_url . 'js/{$file}.min.js', array( "{$plugin_slug}-scripts" ), $plugin_version, true );
 		}
 	}
 
@@ -1066,7 +1066,7 @@ final class Settings {
 		$plugin_slug = $this->plugin->slug();
 		$plugin_version = $this->plugin->version;
 
-		wp_enqueue_style( "{$plugin_slug}-settings", "{$this->path_url}css/style.css", array(), $plugin_version );
+		wp_enqueue_style( "{$plugin_slug}-settings", $this->path_url . 'css/style.css', array(), $plugin_version );
 
 		foreach ( $args as $name => $file ) {
 

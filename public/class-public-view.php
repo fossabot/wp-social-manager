@@ -173,11 +173,11 @@ final class Public_View {
 	 */
 	public function register_scripts() {
 
-		$plugin_slug = $this->plugin->slug();
-		$plugin_version = $this->plugin->version;
+		$handle = $this->plugin->slug();
+		$version = $this->plugin->version;
 
-		wp_register_script( "{$plugin_slug}-app", "{$this->path_url}js/app.min.js", array( 'jquery', 'underscore', 'backbone' ), $plugin_version, true );
-		wp_register_script( $plugin_slug, "{$this->path_url}js/scripts.min.js", array( 'jquery' ), $plugin_version, true );
+		wp_register_script( "{$handle}-app", $this->path_url . 'js/app.min.js', array( 'jquery', 'underscore', 'backbone' ), $version, true );
+		wp_register_script( $handle, $this->path_url . 'js/scripts.min.js', array( 'jquery' ), $version, true );
 	}
 
 	/**
@@ -209,11 +209,13 @@ final class Public_View {
 			return;
 		}
 
+		$handle = $this->plugin->slug();
+
 		if ( $this->is_json_mode() ) {
-			wp_enqueue_script( $this->plugin->slug() . '-app' );
-		} else {
-			wp_enqueue_script( $this->plugin->slug() );
+			$handle = "{$handle}-app";
 		}
+
+		wp_enqueue_script( $handle );
 	}
 
 	/**
