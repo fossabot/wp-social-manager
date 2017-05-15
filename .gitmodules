@@ -1,9 +1,3 @@
-[submodule "dev-lib"]
-	path = dev-lib
-	url = https://tfirdaus@github.com/ninecodes/wp-dev-lib
-[submodule "includes/bb-metabox"]
-	path = includes/bb-metabox
-	url = https://tfirdaus@github.com/justintadlock/butterbean
 [submodule "includes/ogp"]
 	path = includes/ogp
 	url = https://tfirdaus@github.com/niallkennedy/open-graph-protocol-tools
@@ -13,3 +7,10 @@
 [submodule "includes/bb-metabox-extend"]
 	path = includes/bb-metabox-extend
 	url = https://tfirdaus@github.com/tfirdaus/bb-extend
+[submodule "dev-lib"]
+	path = dev-lib
+	url = https://tfirdaus@github.com/ninecodes/wp-dev-lib
+
+[submodule "admin/partials/metabox"]
+	path = admin/partials/metabox
+	url = https://tfirdaus@github.com/ninecodes/wp-metabox-api
