@@ -80,7 +80,7 @@ final class User {
 	 */
 	public function add_social_profiles( $user ) {
 
-		$meta = get_the_author_meta( $this->plugin->option_slug, $user->ID );
+		$meta = get_the_author_meta( $this->plugin->option->slug(), $user->ID );
 		$profiles = $this->plugin->option->list( 'social_profiles' );
 		?>
 
@@ -100,7 +100,7 @@ final class User {
 			<tr>
 				<th><label for="<?php echo esc_attr( "field-user-{$key}" ); ?>"><?php echo esc_html( $label ); ?></label></th>
 				<td>
-					<input type="text" name="<?php echo esc_attr( "{$this->plugin->option_slug}[{$key}]" ); ?>" id="<?php echo esc_attr( "field-user-{$key}" ); ?>" value="<?php echo esc_attr( $value ); ?>" class="regular-text account-profile-control code" data-url="<?php echo esc_attr( $props['url'] ); ?>">
+					<input type="text" name="<?php echo esc_attr( $this->plugin->option->slug() . '[{$key}]' ); ?>" id="<?php echo esc_attr( "field-user-{$key}" ); ?>" value="<?php echo esc_attr( $value ); ?>" class="regular-text account-profile-control code" data-url="<?php echo esc_attr( $props['url'] ); ?>">
 					<?php if ( isset( $data['description'] ) && ! empty( $data['description'] ) ) : ?>
 					<p class="description"><?php echo wp_kses_post( $data['description'] ); ?></p>
 					<?php endif; ?>
@@ -129,7 +129,7 @@ final class User {
 			wp_die( esc_html__( 'Bummer! you do not have the authority to save this inputs.', 'ninecodes-social-manager' ) );
 		}
 
-		$profiles = (array) $_POST[ $this->plugin->option_slug ];
+		$profiles = (array) $_POST[ $this->plugin->option->slug() ];
 
 		foreach ( $profiles as $key => $value ) {
 			$key = sanitize_key( $key );
@@ -137,7 +137,7 @@ final class User {
 		}
 
 		if ( current_user_can( 'edit_user', $user_id ) ) {
-			update_user_meta( $user_id, $this->plugin->option_slug, $profiles );
+			update_user_meta( $user_id, $this->plugin->option->slug(), $profiles );
 		}
 	}
 

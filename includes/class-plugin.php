@@ -48,19 +48,6 @@ final class Plugin {
 	protected $path_dir;
 
 	/**
-	 * Constructor.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	function __construct() {
-
-		$this->option_slug = Options::slug();
-	}
-
-	/**
 	 * Get the plugin slug.
 	 *
 	 * @since 2.0.0

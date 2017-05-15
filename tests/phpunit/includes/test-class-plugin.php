@@ -79,7 +79,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_plugin_get_opts() {
-		$this->assertEquals( self::OPTION_SLUG, $this->plugin->option_slug );
+		$this->assertEquals( self::OPTION_SLUG, $this->plugin->option->slug() );
 	}
 
 	/**
@@ -173,20 +173,20 @@ class Test_Plugin extends WP_UnitTestCase {
 	 */
 	public function test_updates_init() {
 
-		$version = get_option( $this->plugin->option_slug . '_version' );
+		$version = get_option( $this->plugin->option->slug() . '_version' );
 		$this->assertFalse( $version ); // The method have to be instantiated in the admin hence should False.
 
 		$this->plugin->updates();
 
-		$version = get_option( $this->plugin->option_slug . '_version' );
+		$version = get_option( $this->plugin->option->slug() . '_version' );
 		$this->assertEquals( $this->plugin->version, $version );
 
-		$prev_version = get_option( $this->plugin->option_slug . '_previous_version' );
+		$prev_version = get_option( $this->plugin->option->slug() . '_previous_version' );
 		$this->assertEquals( $this->plugin->version, $prev_version );
 
 		// Reset the option.
-		delete_option( $this->plugin->option_slug . '_version' );
-		delete_option( $this->plugin->option_slug . '_previous_version' );
+		delete_option( $this->plugin->option->slug() . '_version' );
+		delete_option( $this->plugin->option->slug() . '_previous_version' );
 	}
 
 	/**
@@ -200,22 +200,22 @@ class Test_Plugin extends WP_UnitTestCase {
 	public function test_updates_updated() {
 
 		// Current state.
-		add_option( $this->plugin->option_slug . '_version', '2.0.0' );
-		add_option( $this->plugin->option_slug . '_previous_version', '1.5.0' );
+		add_option( $this->plugin->option->slug() . '_version', '2.0.0' );
+		add_option( $this->plugin->option->slug() . '_previous_version', '1.5.0' );
 
 		// Plugin updated.
 		$this->plugin->version = '3.0.0';
 		$this->plugin->updates();
 
-		$version = get_option( $this->plugin->option_slug . '_version' );
+		$version = get_option( $this->plugin->option->slug() . '_version' );
 		$this->assertEquals( '3.0.0', $version );
 
-		$prev_version = get_option( $this->plugin->option_slug . '_previous_version' );
+		$prev_version = get_option( $this->plugin->option->slug() . '_previous_version' );
 		$this->assertEquals( '2.0.0', $prev_version );
 
 		// Reset the option.
-		delete_option( $this->plugin->option_slug . '_version' );
-		delete_option( $this->plugin->option_slug . '_previous_version' );
+		delete_option( $this->plugin->option->slug() . '_version' );
+		delete_option( $this->plugin->option->slug() . '_previous_version' );
 	}
 
 
@@ -230,22 +230,22 @@ class Test_Plugin extends WP_UnitTestCase {
 	public function test_updates_alpha_beta() {
 
 		// Current state.
-		add_option( $this->plugin->option_slug . '_version', '2.0.0-beta.2' );
-		add_option( $this->plugin->option_slug . '_previous_version', '2.0.0-alpha.1' );
+		add_option( $this->plugin->option->slug() . '_version', '2.0.0-beta.2' );
+		add_option( $this->plugin->option->slug() . '_previous_version', '2.0.0-alpha.1' );
 
 		// Plugin updated.
 		$this->plugin->version = '3.0.0-alpha.1';
 		$this->plugin->updates();
 
-		$version = get_option( $this->plugin->option_slug . '_version' );
+		$version = get_option( $this->plugin->option->slug() . '_version' );
 		$this->assertEquals( '3.0.0-alpha.1', $version );
 
-		$prev_version = get_option( $this->plugin->option_slug . '_previous_version' );
+		$prev_version = get_option( $this->plugin->option->slug() . '_previous_version' );
 		$this->assertEquals( '2.0.0-beta.2', $prev_version );
 
 		// Reset the option.
-		delete_option( $this->plugin->option_slug . '_version' );
-		delete_option( $this->plugin->option_slug . '_previous_version' );
+		delete_option( $this->plugin->option->slug() . '_version' );
+		delete_option( $this->plugin->option->slug() . '_previous_version' );
 	}
 
 	/**

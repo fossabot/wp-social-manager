@@ -215,7 +215,7 @@ class Test_Function_Template_Tags extends WP_UnitTestCase {
 			'role' => 'administrator',
 		) );
 
-		update_user_meta( $user_id, $this->plugin->option_slug, array(
+		update_user_meta( $user_id, $this->plugin->option->slug(), array(
 			'facebook' => 'zuck',
 		) );
 

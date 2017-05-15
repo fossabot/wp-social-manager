@@ -157,7 +157,7 @@ final class Metabox {
 		add_action( 'admin_head-post-new.php', array( $this, 'admin_head_enqueues' ), 10 );
 
 		// Register our custom manager.
-		$butterbean->register_manager( $this->plugin->option_slug, array(
+		$butterbean->register_manager( $this->plugin->option->slug(), array(
 			'label' => __( 'Social Media', 'ninecodes-social-manager' ),
 			'post_type' => array_keys( $this->plugin->option->list( 'post_types' ) ),
 			'context' => 'normal',
@@ -180,7 +180,7 @@ final class Metabox {
 
 		$post_types = $this->get_button_post_types(); // List of post types enabled.
 
-		$manager = $butterbean->get_manager( $this->plugin->option_slug ); // Get our custom manager object.
+		$manager = $butterbean->get_manager( $this->plugin->option->slug() ); // Get our custom manager object.
 
 		// Register a section.
 		$manager->register_section( 'button', array(
@@ -246,7 +246,7 @@ final class Metabox {
 		}
 
 		// Get our custom manager object.
-		$manager = $butterbean->get_manager( $this->plugin->option_slug );
+		$manager = $butterbean->get_manager( $this->plugin->option->slug() );
 
 		$manager->register_section( 'meta', array(
 			'label' => __( 'Meta', 'ninecodes-social-manager' ),

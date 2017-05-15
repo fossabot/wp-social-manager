@@ -205,7 +205,7 @@ final class Settings {
 	 */
 	public function setups() {
 
-		$this->settings = new SettingsAPI\Settings( $this->plugin->option_slug );
+		$this->settings = new SettingsAPI\Settings( $this->plugin->option->slug() );
 		$this->validate = new Validation();
 
 		$fields = new Fields( $this->screen );

@@ -504,7 +504,7 @@ class Meta {
 
 		$post = get_post( $post_id );
 		$name = $post ? get_the_author_meta( 'display_name', $post->post_author ) : '';
-		$profiles = $post ? get_the_author_meta( $this->plugin->option_slug, $post->post_author ) : array();
+		$profiles = $post ? get_the_author_meta( $this->plugin->option->slug(), $post->post_author ) : array();
 
 		return array(
 			'display_name' => $name,
@@ -715,7 +715,7 @@ class Meta {
 			return;
 		}
 
-		$post_meta = get_post_meta( $post_id, $this->plugin->option_slug, true );
+		$post_meta = get_post_meta( $post_id, $this->plugin->option->slug(), true );
 
 		/**
 		 * If the post_meta is empty it means the meta has not yet
