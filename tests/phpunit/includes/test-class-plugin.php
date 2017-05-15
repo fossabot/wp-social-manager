@@ -94,13 +94,13 @@ class Test_Plugin extends WP_UnitTestCase {
 	 */
 	public function test_plugin_get_option() {
 
-		$opt = $this->plugin->option()->get();
+		$opt = $this->plugin->option->get();
 		$this->assertNull( $opt );
 
-		$xyz = $this->plugin->option()->get( 'xyz' ); // non-existent name.
+		$xyz = $this->plugin->option->get( 'xyz' ); // non-existent name.
 		$this->assertNull( $xyz );
 
-		$int = $this->plugin->option()->get( 123 ); // integer name.
+		$int = $this->plugin->option->get( 123 ); // integer name.
 		$this->assertNull( $int );
 	}
 
@@ -114,7 +114,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 */
 	public function test_plugin_get_option_buttons_content() {
 
-		$buttons_content = $this->plugin->option()->get( 'button_content', 'include' );
+		$buttons_content = $this->plugin->option->get( 'button_content', 'include' );
 
 		// Count, in case we will add more in the future.
 		$this->assertEquals( 8, count( $buttons_content ) );
@@ -139,7 +139,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 */
 	public function test_plugin_get_option_buttons_image() {
 
-		$buttons_image = $this->plugin->option()->get( 'button_image', 'include' );
+		$buttons_image = $this->plugin->option->get( 'button_image', 'include' );
 
 		// Count, in case we will add more in the future.
 		$this->assertEquals( 1, count( $buttons_image ) );
@@ -258,7 +258,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 */
 	public function test_theme_support() {
 
-		$theme_support = $this->plugin->helper()->theme_support();
+		$theme_support = $this->plugin->helper->theme_support();
 		$this->assertInstanceOf( __NAMESPACE__ . '\\Theme_Support', $theme_support );
 	}
 }

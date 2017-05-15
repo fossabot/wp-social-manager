@@ -62,8 +62,8 @@ class Button_Content extends Button {
 	function __construct( Plugin $plugin ) {
 		parent::__construct( $plugin );
 
-		$this->view = $this->plugin->option()->get( 'button_content', 'view' );
-		$this->placement = $this->plugin->option()->get( 'button_content', 'placement' );
+		$this->view = $this->plugin->option->get( 'button_content', 'view' );
+		$this->placement = $this->plugin->option->get( 'button_content', 'placement' );
 
 		$this->hooks();
 	}
@@ -127,7 +127,7 @@ class Button_Content extends Button {
 
 		if ( $is_html || $is_json ) {
 
-			$style = $this->plugin->option()->get( 'button_content', 'style' );
+			$style = $this->plugin->option->get( 'button_content', 'style' );
 
 			$button .= "<div class=\"{$this->attr_prefix}-button {$this->attr_prefix}-button--content {$this->attr_prefix}-button--{$this->placement} {$this->attr_prefix}-button--{$style}\" id=\"{$this->attr_prefix}-button-{$post_id}\" data-social-manager=\"button-content\">";
 		}
@@ -169,7 +169,7 @@ class Button_Content extends Button {
 
 		if ( ! empty( $includes ) ) :
 
-			$heading = $this->plugin->option()->get( 'button_content', 'heading' );
+			$heading = $this->plugin->option->get( 'button_content', 'heading' );
 			$heading = esc_html( $heading );
 
 			if ( ! empty( $heading ) ) {
@@ -219,7 +219,7 @@ class Button_Content extends Button {
 
 		<script type="text/html" id="tmpl-button-content"><?php
 
-		$heading = $this->plugin->option()->get( 'button_content', 'heading' );
+		$heading = $this->plugin->option->get( 'button_content', 'heading' );
 		$heading = wp_kses( $heading, array() );
 
 		if ( ! empty( $heading ) ) {
@@ -233,7 +233,7 @@ class Button_Content extends Button {
 		} ?><div class="<?php echo esc_attr( $this->attr_prefix ); ?>-button__list <?php echo esc_attr( $this->attr_prefix ); ?>-button__list--<?php echo esc_attr( $this->view ); ?>"><?php
 
 		$prefix = $this->attr_prefix;
-		$includes = (array) $this->plugin->option()->get( 'button_content', 'include' );
+		$includes = (array) $this->plugin->option->get( 'button_content', 'include' );
 
 foreach ( $includes as $site => $value ) :
 
@@ -306,7 +306,7 @@ foreach ( $includes as $site => $value ) :
 		 *
 		 * @var bool
 		 */
-		$status = $this->plugin->helper()->get_button_content_status();
+		$status = $this->plugin->helper->get_button_content_status();
 
 		if ( ! $status ) {
 			return false;

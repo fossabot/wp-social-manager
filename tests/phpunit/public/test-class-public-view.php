@@ -329,17 +329,17 @@ class Test_Public_View extends WP_UnitTestCase {
 		 * Test if the button_mode in theme_support is set to `json`
 		 * Function should return 'true' for the mode has been switched to 'json'.
 		 */
-		add_theme_support( $this->plugin->helper()->theme_support()->get_feature_name(), array(
+		add_theme_support( $this->plugin->helper->theme_support()->get_feature_name(), array(
 			'button_mode' => 'json',
 		));
-		$this->plugin->helper()->theme_support()->theme_support(); // Init Theme_Support.
+		$this->plugin->helper->theme_support()->theme_support(); // Init Theme_Support.
 		$this->assertTrue( $this->public->is_json_mode() );
 
 		// Reset `button_mode` to `html`.
-		add_theme_support( $this->plugin->helper()->theme_support()->get_feature_name(), array(
+		add_theme_support( $this->plugin->helper->theme_support()->get_feature_name(), array(
 			'button_mode' => 'html',
 		));
-		$this->plugin->helper()->theme_support()->theme_support(); // Init Theme_Support.
+		$this->plugin->helper->theme_support()->theme_support(); // Init Theme_Support.
 		$this->assertFalse( $this->public->is_json_mode() );
 
 		// Test if the Mode setting is set to `json`.

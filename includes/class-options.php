@@ -24,28 +24,37 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 final class Options {
 
 	/**
-	 * The unique identifier or prefix for database names.
+	 * The unique ID that prefixes the database name added by the plugin.
+	 *
+	 * @since 2.0.0
+	 * @var string
+	 */
+	const SLUG = 'ncsocman';
+
+	/**
+	 * Get the option slug.
 	 *
 	 * @since 2.0.0
 	 * @access public
-	 * @var string
+	 * @return array
 	 */
-	public static $slug = 'ncsocman';
+	public static function slug() {
+		return self::SLUG;
+	}
 
 	/**
 	 * Get the option names.
 	 *
 	 * @since 2.0.0
 	 * @access public
-	 * @var string
 	 *
-	 * @return array
+	 * @param string $name The name of the option.
+	 * @return array|string
 	 */
-	public static function names() {
+	public static function names( $name = '' ) {
 
-		$slug = self::$slug;
-
-		return array(
+		$slug = self::SLUG;
+		$names = array(
 			'profile' => "{$slug}_profile",
 			'button_content' => "{$slug}_button_content",
 			'button_image' => "{$slug}_button_image",
@@ -53,6 +62,8 @@ final class Options {
 			'enqueue' => "{$slug}_enqueue",
 			'mode' => "{$slug}_mode",
 		);
+
+		return isset( $names[ $name ] ) ? $names[ $name ] : $names;
 	}
 
 	/**
@@ -79,6 +90,25 @@ final class Options {
 		}
 
 		return $option ? $option : null;
+	}
+
+	/**
+	 * Get list of option of the given name
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param string $option The list of option registered.
+	 * @param string $args The list arguments to pass on the option.
+	 * @return mixed
+	 */
+	public static function list( $option = '', $args = array() ) {
+
+		if ( is_callable( array( __CLASS__, $option ) ) ) {
+			return call_user_func_array( array( __CLASS__, $option ), $args );
+		}
+
+		return array();
 	}
 
 	/**

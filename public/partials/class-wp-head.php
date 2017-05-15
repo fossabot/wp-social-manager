@@ -334,7 +334,7 @@ final class WP_Head {
 
 		if ( ! empty( $meta ) ) {
 
-			$twitter = $this->plugin->option()->get( 'profile', 'twitter' );
+			$twitter = $this->plugin->option->get( 'profile', 'twitter' );
 
 			$site = $twitter ? sprintf( "<meta name=\"twitter:site\" content=\"@%s\">\n", esc_attr( $twitter ) ) : '';
 			$type = "<meta name=\"twitter:card\" content=\"summary\">\n";
@@ -507,7 +507,7 @@ final class WP_Head {
 		 *
 		 * @var string
 		 */
-		$username = $this->plugin->option()->get( 'profile', 'facebook' );
+		$username = $this->plugin->option->get( 'profile', 'facebook' );
 		$meta .= ($property_url && $username) ? sprintf( "<meta property=\"article:publisher\" content=\"%s\">\n", esc_attr( "{$property_url}{$username}" ) ) : '';
 
 		return $meta;
@@ -566,7 +566,7 @@ final class WP_Head {
 
 		if ( ! empty( $meta ) ) {
 
-			$twitter = $this->plugin->option()->get( 'profile', 'twitter' );
+			$twitter = $this->plugin->option->get( 'profile', 'twitter' );
 
 			$site = $twitter ? sprintf( "<meta name=\"twitter:site\" content=\"@%s\">\n", esc_attr( $twitter ) ) : '';
 			$type = "<meta name=\"twitter:card\" content=\"summary_large_image\">\n";

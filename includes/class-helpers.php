@@ -110,6 +110,26 @@ final class Helpers {
 	}
 
 	/**
+	 * Method to get the button
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return string Whether html or json.
+	 */
+	public static function get_button_mode() {
+
+		$button_mode = Options::get( 'mode', 'button_mode' );
+		$theme_support = self::is_theme_support( 'button_mode' );
+
+		if ( 'json' === $theme_support || 'json' === $button_mode ) {
+			return 'json';
+		}
+
+		return 'html';
+	}
+
+	/**
 	 * Get the options saved in the database `wp_options`.
 	 *
 	 * @since 2.0.0
@@ -246,25 +266,5 @@ final class Helpers {
 	 */
 	public static function in_amp() {
 		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
-	}
-
-	/**
-	 * Method to get the button
-	 *
-	 * @since 2.0.0
-	 * @access public
-	 *
-	 * @return string Whether html or json.
-	 */
-	public static function get_button_mode() {
-
-		$button_mode = Options::get( 'mode', 'button_mode' );
-		$theme_support = self::is_theme_support( 'button_mode' );
-
-		if ( 'json' === $theme_support || 'json' === $button_mode ) {
-			return 'json';
-		}
-
-		return 'html';
 	}
 }

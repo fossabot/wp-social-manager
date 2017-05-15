@@ -83,8 +83,8 @@ abstract class Button implements Button_Interface {
 		$this->meta = new Meta( $this->plugin );
 		$this->endpoint = new Endpoint( $this->plugin, $this->meta );
 
-		$this->attr_prefix = $this->plugin->helper()->get_attr_prefix();
-		$this->mode = $this->plugin->helper()->get_button_mode();
+		$this->attr_prefix = $this->plugin->helper->get_attr_prefix();
+		$this->mode = $this->plugin->helper->get_button_mode();
 
 		$this->render();
 	}
@@ -213,7 +213,7 @@ abstract class Button implements Button_Interface {
 	 */
 	public function get_icons( $site = '' ) {
 
-		$icons = $this->plugin->helper()->get_social_icons();
+		$icons = $this->plugin->helper->get_social_icons();
 
 		/**
 		 * Filter all icons displayed in the social media buttons.
@@ -250,7 +250,7 @@ abstract class Button implements Button_Interface {
 			return '';
 		}
 
-		$button = $this->plugin->option()->get( "button_{$context}", 'include' );
+		$button = $this->plugin->option->get( "button_{$context}", 'include' );
 		$default = Options::button_sites( $context );
 
 		if ( isset( $button[ $site ]['label'] ) && ! empty( $button[ $site ]['label'] ) ) {
@@ -269,7 +269,7 @@ abstract class Button implements Button_Interface {
 	 * @return boolean
 	 */
 	public function in_amp() {
-		return $this->plugin->helper()->in_amp();
+		return $this->plugin->helper->in_amp();
 	}
 
 	/**

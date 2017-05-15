@@ -30,15 +30,6 @@ final class Plugin {
 	public $plugin_slug = 'ninecodes-social-manager';
 
 	/**
-	 * The unique identifier or prefix for database names.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @var string
-	 */
-	public $option_slug;
-
-	/**
 	 * The current version of the plugin.
 	 *
 	 * @since 1.0.0
@@ -57,26 +48,29 @@ final class Plugin {
 	protected $path_dir;
 
 	/**
-	 * An array of option added by the plugin.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @var array
-	 */
-	public $option_names;
-
-	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 *
 	 * @return void
 	 */
 	function __construct() {
 
-		$this->option_slug = Options::$slug;
+		$this->option_slug = Options::slug();
 		$this->option_names = Options::names();
+	}
+
+	/**
+	 * Get the plugin slug.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return string
+	 */
+	public function slug() {
+		return self::$plugin_slug;
 	}
 
 	/**
@@ -197,9 +191,18 @@ final class Plugin {
 	protected function setups() {
 
 		$this->languages = new Languages( $this->plugin_slug );
+		$this->option = new Options;
+		$this->helper = new Helpers;
 
-		new Admin_View( $this );
-		new Public_View( $this );
+		$admin_view = new Admin_View( $this );
+		$public_view = new Public_View( $this );
+
+		/**
+		 * Register a new image size to serve in the og:image or twitter:image meta tags.
+		 *
+		 * @link https://blog.bufferapp.com/ideal-image-sizes-social-media-posts
+		 */
+		add_image_size( 'social-media', 600, 315, true );
 
 		add_action( 'admin_init', array( $this, 'updates' ) );
 	}
@@ -215,18 +218,18 @@ final class Plugin {
 	public function updates() {
 
 		$updated_version = $this->version;
-		$installed_version = get_option( $this->option_slug . '_version' );
-		$previous_version = get_option( $this->option_slug . '_previous_version' );
+		$installed_version = get_option( $this->option->slug() . '_version' );
+		$previous_version = get_option( $this->option->slug() . '_previous_version' );
 
-		update_option( $this->option_slug . '_version', $updated_version ); // Update installed version.
+		update_option( $this->option->slug() . '_version', $updated_version ); // Update installed version.
 
 		if ( ! $previous_version ) {
-			update_option( $this->option_slug . '_previous_version', $updated_version );
+			update_option( $this->option->slug() . '_previous_version', $updated_version );
 			return;
 		}
 
 		if ( version_compare( $installed_version, $updated_version, '<' ) ) {
-			update_option( $this->option_slug . '_previous_version', $installed_version );
+			update_option( $this->option->slug() . '_previous_version', $installed_version );
 		}
 	}
 
@@ -247,29 +250,5 @@ final class Plugin {
 		);
 
 		return array_merge( $settings, $links );
-	}
-
-	/**
-	 * Get the options saved in the database `wp_options`.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return mixed The option value or null if option is not available.
-	 */
-	public function option() {
-		return new Options;
-	}
-
-	/**
-	 * Serve the Helpers methods
-	 *
-	 * @since 2.0.0
-	 * @access public
-	 *
-	 * @return Helpers
-	 */
-	public function helper() {
-		return new Helpers;
 	}
 }

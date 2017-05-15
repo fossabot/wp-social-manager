@@ -46,7 +46,7 @@ class Button_Image extends Button {
 	function __construct( Plugin $plugin ) {
 		parent::__construct( $plugin );
 
-		$this->view = $this->plugin->option()->get( 'button_image', 'view' );
+		$this->view = $this->plugin->option->get( 'button_image', 'view' );
 
 		$this->hooks();
 	}
@@ -177,7 +177,7 @@ class Button_Image extends Button {
 
 			if ( $is_html ) {
 
-				$style = $this->plugin->option()->get( 'button_image', 'style' );
+				$style = $this->plugin->option->get( 'button_image', 'style' );
 
 				$wrap = $dom->createElement( 'span' );
 				$wrap->setAttribute( 'class', "{$this->attr_prefix}-button {$this->attr_prefix}-button--img {$this->attr_prefix}-button--{$style}" );
@@ -302,7 +302,7 @@ class Button_Image extends Button {
 	public function render_tmpl() {
 
 		if ( $this->is_active() && 'json' === $this->mode && wp_script_is( $this->plugin_slug . '-app', 'enqueued' ) ) :
-			$includes = (array) $this->plugin->option()->get( 'button_image', 'include' );
+			$includes = (array) $this->plugin->option->get( 'button_image', 'include' );
 
 			if ( ! empty( $includes ) ) : ?><script type="text/html" id="tmpl-buttons-image">
 <span class="<?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list <?php echo esc_attr( $this->attr_prefix ); ?>-buttons__list--<?php echo esc_attr( $this->view ); ?>" data-social-manager="buttons-image"><?php
@@ -380,7 +380,7 @@ endforeach; ?></span>
 		 *
 		 * @var bool
 		 */
-		$status = $this->plugin->helper()->get_button_image_status();
+		$status = $this->plugin->helper->get_button_image_status();
 
 		if ( ! $status ) {
 			return false;

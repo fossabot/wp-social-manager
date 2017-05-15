@@ -58,7 +58,7 @@ class Widget_Social_Profile extends Widget {
 			'description' => __( 'Display list of social media profile and page URLs connected to this website.', 'ninecodes-social-manager' ),
 		) );
 
-		$this->profiles = $this->plugin->option()->social_profiles();
+		$this->profiles = $this->plugin->option->social_profiles();
 		$this->widget_title = __( 'Follow Us', 'ninecodes-social-manager' );
 	}
 
@@ -88,7 +88,7 @@ class Widget_Social_Profile extends Widget {
 			return;
 		}
 
-		$script_enqueue = $this->plugin->option()->get( 'enqueue' );
+		$script_enqueue = $this->plugin->option->get( 'enqueue' );
 
 		if ( isset( $script_enqueue['stylesheet'] ) && 'on' === $script_enqueue['stylesheet'] ) {
 			wp_enqueue_style( $this->plugin->plugin_slug );
@@ -114,7 +114,7 @@ class Widget_Social_Profile extends Widget {
 		 *
 		 * @var array
 		 */
-		$site_profiles = $this->plugin->option()->get( 'profile' ); ?>
+		$site_profiles = $this->plugin->option->get( 'profile' ); ?>
 
 		<div class="<?php echo esc_attr( $this->id_base ); ?>">
 			<p>
@@ -163,7 +163,7 @@ class Widget_Social_Profile extends Widget {
 				<?php
 					$id = esc_attr( $this->get_field_id( 'view' ) );
 					$name = esc_attr( $this->get_field_name( 'view' ) );
-					$views = $this->plugin->option()->button_views(); ?>
+					$views = $this->plugin->option->button_views(); ?>
 
 				<select name="<?php echo esc_attr( $name ); ?>" class="widefat">
 			<?php foreach ( $views as $key => $label ) :
@@ -181,7 +181,7 @@ class Widget_Social_Profile extends Widget {
 				<br />
 				<?php
 					$name = $this->get_field_name( 'style' );
-					$styles = $this->plugin->option()->button_styles( 'widget_social_profile' ); ?>
+					$styles = $this->plugin->option->button_styles( 'widget_social_profile' ); ?>
 
 				<select name="<?php echo esc_attr( $name ); ?>" class="widefat">
 				<?php foreach ( $styles as $key => $label ) :
@@ -220,7 +220,7 @@ class Widget_Social_Profile extends Widget {
 		 *
 		 * @var array
 		 */
-		$site_profiles = (array) $this->plugin->option()->get( 'profile' );
+		$site_profiles = (array) $this->plugin->option->get( 'profile' );
 
 		foreach ( $site_profiles as $key => $value ) {
 			if ( empty( $value ) ) {
@@ -258,14 +258,14 @@ class Widget_Social_Profile extends Widget {
 		 *
 		 * @var array
 		 */
-		$site_profiles = (array) $this->plugin->option()->get( 'profile' );
+		$site_profiles = (array) $this->plugin->option->get( 'profile' );
 
 		if ( ! empty( $widget_title ) ) {
 			$widget_title = apply_filters( 'widget_title', $widget_title );
 			echo wp_kses_post( $args['before_title'] . $widget_title . $args['after_title'] );
 		}
 
-		$prefix = $this->plugin->helper()->get_attr_prefix();
+		$prefix = $this->plugin->helper->get_attr_prefix();
 		$view = isset( $instance['view'] ) ? $instance['view'] : 'icon';
 		$style = isset( $instance['style'] ) ? $instance['style'] : 'rounded';
 
@@ -303,7 +303,7 @@ class Widget_Social_Profile extends Widget {
 				'site' => $key,
 				'label' => esc_html( $profiles['label'] ),
 				'url' => tmpl_profile_url( $profiles['url'], $site_profiles[ $key ] ),
-				'icon' => $this->plugin->helper()->get_social_icons( $key ),
+				'icon' => $this->plugin->helper->get_social_icons( $key ),
 			));
 
 			echo wp_kses($list, array(
@@ -348,7 +348,7 @@ class Widget_Social_Profile extends Widget {
 			return '';
 		}
 
-		$prefix = $this->plugin->helper()->get_attr_prefix();
+		$prefix = $this->plugin->helper->get_attr_prefix();
 		$args = wp_parse_args($args, array(
 			'site' => '',
 			'label' => '',

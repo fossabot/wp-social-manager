@@ -81,7 +81,7 @@ final class User {
 	public function add_social_profiles( $user ) {
 
 		$meta = get_the_author_meta( $this->plugin->option_slug, $user->ID );
-		$profiles = $this->plugin->option()->social_profiles();
+		$profiles = $this->plugin->option->social_profiles();
 		?>
 
 		<h2><?php echo esc_html__( 'Social Profiles', 'ninecodes-social-manager' ); ?></h2>

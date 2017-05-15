@@ -225,7 +225,7 @@ final class Public_View {
 		 * Don't load the plugin stylesheet, if the theme already loads its own stylesheet
 		 * via the 'add_theme_support()' function.
 		 */
-		if ( true === (bool) $this->plugin->helper()->is_theme_support( 'stylesheet' ) ) {
+		if ( true === (bool) $this->plugin->helper->is_theme_support( 'stylesheet' ) ) {
 			return false;
 		}
 
@@ -233,7 +233,7 @@ final class Public_View {
 			return false;
 		}
 
-		return 'on' === $this->plugin->option()->get( 'enqueue', 'stylesheet' );
+		return 'on' === $this->plugin->option->get( 'enqueue', 'stylesheet' );
 	}
 
 	/**
@@ -265,7 +265,7 @@ final class Public_View {
 	 */
 	public function is_json_mode() {
 
-		$mode = $this->plugin->helper()->get_button_mode( 'button_mode' );
+		$mode = $this->plugin->helper->get_button_mode( 'button_mode' );
 
 		return 'json' === $mode;
 	}
@@ -289,8 +289,8 @@ final class Public_View {
 
 		if ( is_singular() ) {
 
-			$button_image = $this->plugin->helper()->get_button_image_status();
-			$button_content = $this->plugin->helper()->get_button_content_status();
+			$button_image = $this->plugin->helper->get_button_image_status();
+			$button_content = $this->plugin->helper->get_button_content_status();
 
 			$button_content_post_types = isset( $button_content['post_type'] ) ? $button_content['post_type'] : array();
 			$button_image_post_types = isset( $button_image['post_type'] ) ? $button_image['post_type'] : array();

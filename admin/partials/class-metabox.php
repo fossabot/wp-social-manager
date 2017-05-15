@@ -159,7 +159,7 @@ final class Metabox {
 		// Register our custom manager.
 		$butterbean->register_manager( $this->plugin->option_slug, array(
 			'label' => __( 'Social Media', 'ninecodes-social-manager' ),
-			'post_type' => array_keys( $this->plugin->option()->post_types() ),
+			'post_type' => array_keys( $this->plugin->option->post_types() ),
 			'context' => 'normal',
 			'priority' => 'low',
 			'capability' => 'publish_posts',
@@ -464,8 +464,8 @@ final class Metabox {
 	 */
 	public function get_button_post_types() {
 
-		$button_content = (array) $this->plugin->helper()->get_button_content_status();
-		$button_image = (array) $this->plugin->helper()->get_button_image_status();
+		$button_content = (array) $this->plugin->helper->get_button_content_status();
+		$button_image = (array) $this->plugin->helper->get_button_image_status();
 
 		return array(
 			'button_content' => isset( $button_content['post_type'] ) ? $button_content['post_type'] : array(),
@@ -482,7 +482,7 @@ final class Metabox {
 	 * @return boolean
 	 */
 	public function is_meta_tags_enabled() {
-		return $this->plugin->helper()->is_meta_tags_enabled();
+		return $this->plugin->helper->is_meta_tags_enabled();
 	}
 
 	/**
@@ -540,8 +540,7 @@ final class Metabox {
 	 * @return void
 	 */
 	public function print_meta_preview_template() {
-		if ( $this->is_meta_tags_enabled() ) :
-		?>
+		if ( $this->is_meta_tags_enabled() ) : ?>
 		<script type="text/html" id="tmpl-butterbean-control-meta-preview">
 		<div id="butterbean-control-meta-preview" class="butterbean-control butterbean-control-static">
 			<button type="button" id="button-display-meta-preview" class="button button-large button-preview-meta widefat"><span class="dashicons dashicons-visibility"></span> <?php esc_html_e( 'Display Preview', 'ninecodes-social-manager' ); ?></button>
