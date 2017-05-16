@@ -1,2 +1,4 @@
 WPCS_GIT_TREE=develop
 ASSETS_DIR=wp-assets
+DEV_LIB_SKIP=jshint,jscs
+CHECK_SCOPE=all

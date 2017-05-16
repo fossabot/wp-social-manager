@@ -1,6 +1,3 @@
-[submodule "includes/wp-settings"]
-	path = includes/wp-settings
-	url = https://tfirdaus@github.com/ninecodes/wp-settings-api
 [submodule "admin/partials/metabox"]
 	path = admin/partials/metabox
 	url = https://tfirdaus@github.com/ninecodes/wp-metabox-api
