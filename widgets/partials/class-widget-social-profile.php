@@ -302,7 +302,7 @@ class Widget_Social_Profile extends Widget {
 			$list = $this->list_views($view, array(
 				'site' => $key,
 				'label' => esc_html( $profiles['label'] ),
-				'url' => tmpl_profile_url( $profiles['url'], $site_profiles[ $key ] ),
+				'url' => translate_profile_url( $profiles['url'], $site_profiles[ $key ] ),
 				'icon' => $this->plugin->helper->get_social_icons( $key ),
 			));
 

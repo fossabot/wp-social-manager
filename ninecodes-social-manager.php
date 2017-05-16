@@ -70,6 +70,7 @@ require_once $path_dir . 'includes/class-helpers.php';
 require_once $path_dir . 'includes/class-languages.php';
 require_once $path_dir . 'includes/class-options.php';
 require_once $path_dir . 'includes/class-theme-support.php';
+require_once $path_dir . 'includes/function-core.php';
 require_once $path_dir . 'includes/function-utilities.php';
 
 /**

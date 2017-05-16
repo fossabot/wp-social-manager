@@ -48,7 +48,7 @@ if ( ! function_exists( 'get_the_site_social_profile' ) ) {
 				}
 
 				$site = sanitize_key( $key );
-				$url = SocialManager\tmpl_profile_url( $profiles[ $site ]['url'], $username );
+				$url = SocialManager\translate_profile_url( $profiles[ $site ]['url'], $username );
 				$label = esc_html( $profiles[ $site ]['label'] );
 
 				$icon = Helpers::get_social_icons( $site );
@@ -86,7 +86,7 @@ if ( ! function_exists( 'the_site_social_profile' ) ) {
 
 		$profiles = get_the_site_social_profile( $args );
 
-		echo SocialManager\kses_icon( $profiles ); // WPCS: XSS ok.
+		echo SocialManager\sanitize_icon( $profiles ); // WPCS: XSS ok.
 	}
 }
 
@@ -127,7 +127,7 @@ if ( ! function_exists( 'get_the_author_social_profile' ) ) {
 				}
 
 				$icon = $icons[ $site ];
-				$url = SocialManager\tmpl_profile_url( $profiles[ $site ]['url'], $username );
+				$url = SocialManager\translate_profile_url( $profiles[ $site ]['url'], $username );
 
 				/* translators: 1. The author name. 2. The social media label. */
 				$title = sprintf( __( 'Follow %1$s on %2$s', 'ninecodes-social-manager' ), $author_name, $profiles[ $site ]['label'] );
@@ -155,6 +155,6 @@ if ( ! function_exists( 'the_author_social_profile' ) ) {
 
 		$profiles = get_the_author_social_profile( $user_id );
 
-		echo SocialManager\kses_icon( $profiles ); // WPCS: XSS ok.
+		echo SocialManager\sanitize_icon( $profiles ); // WPCS: XSS ok.
 	}
 } // End if().

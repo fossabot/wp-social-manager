@@ -197,7 +197,7 @@ abstract class Button implements Button_Interface {
 			'icon_text' => "<a class=\"{$prefix}-button__item site-{$site}\" href=\"{$endpoint}\" target=\"_blank\" role=\"button\" rel=\"nofollow\"><span class=\"{$prefix}-button__item-icon\">{$icon}</span><span class=\"{$prefix}-button__item-text\">{$label}</span></a>",
 		);
 
-		$button_view = isset( $templates[ $view ] ) ? kses_icon( $templates[ $view ] ) : '';
+		$button_view = isset( $templates[ $view ] ) ? sanitize_icon( $templates[ $view ] ) : '';
 
 		return 'json' === $this->mode ? "<# if ( {$args['endpoint']} ) { #>" . $button_view . '<# } #>' : $button_view;
 	}
@@ -229,7 +229,7 @@ abstract class Button implements Button_Interface {
 			'attr_prefix' => $this->attr_prefix,
 		) );
 
-		$icons = isset( $icons[ $site ] ) ? kses_icon( $icons[ $site ] ) : array_map( __NAMESPACE__ . '\\kses_icon', $icons );
+		$icons = isset( $icons[ $site ] ) ? sanitize_icon( $icons[ $site ] ) : array_map( __NAMESPACE__ . '\\sanitize_icon', $icons );
 
 		return $icons;
 	}

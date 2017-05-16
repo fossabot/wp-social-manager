@@ -285,7 +285,7 @@ foreach ( $includes as $site => $value ) :
 			'attr_prefix' => $this->attr_prefix,
 		) );
 
-		$icons = isset( $icons[ $site ] ) ? kses_icon( $icons[ $site ] ) : array_map( __NAMESPACE__ . '\\kses_icon', $icons );
+		$icons = isset( $icons[ $site ] ) ? sanitize_icon( $icons[ $site ] ) : array_map( __NAMESPACE__ . '\\sanitize_icon', $icons );
 
 		return $icons;
 	}

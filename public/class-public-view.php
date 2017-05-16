@@ -97,6 +97,7 @@ final class Public_View {
 			require_once( $class_path );
 		}
 
+		require_once( $this->path_dir . 'partials/ogp/open-graph-protocol.php' );
 		require_once( $this->path_dir . 'partials/function-template-tags.php' );
 	}
 

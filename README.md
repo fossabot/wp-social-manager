@@ -141,7 +141,7 @@ None, at the moment. Please ask. :)
 ## Changelog ##
 
 ### [1.1.2] - 2017-02-05 ###
-* __Added__: `kses_icon` function to sanitize icon output.
+* __Added__: `sanitize_icon` function to sanitize icon output.
 * __Changed__: The plugin screenshot showing the Profiles screen in the Social Media Setting page.
 * __Changed__: Translator comments in a number translate-able strings with more than one type identifiers.
 * __Fixed__: Namespace for backward compatibility.
