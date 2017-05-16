@@ -77,6 +77,9 @@ final class Admin_View {
 			require_once( $class_path );
 		}
 
+		require_once $this->path_dir . 'partials/settings/class-settings.php';
+		require_once $this->path_dir . 'partials/settings/class-fields.php';
+
 		add_action( 'plugins_loaded', array( $this, 'requires_metabox' ) );
 	}
 

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use \NineCodes\WPSettings as SettingsAPI;
+use \NineCodes\WPSettingsAPI as SettingsAPI;
 
 /**
  * The Settings class is used to register the option menu, the option page,
@@ -169,9 +169,8 @@ final class Settings {
 	 * @return void
 	 */
 	protected function requires() {
-
-		require_once( $this->path_dir . 'partials/class-fields.php' );
-		require_once( $this->path_dir . 'partials/class-helps.php' );
+		require_once $this->path_dir . 'partials/class-fields.php';
+		require_once $this->path_dir . 'partials/class-helps.php';
 	}
 
 	/**
