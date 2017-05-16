@@ -21,12 +21,10 @@
 				<directory suffix=".php">./tests</directory>
 				<directory suffix=".php">./vendor</directory>
 				<directory suffix=".php">./build</directory>
-				<directory suffix=".php">./includes/bb-metabox</directory>
-				<directory suffix=".php">./includes/bb-metabox-extend</directory>
-				<directory suffix=".php">./includes/ogp</directory>
-				<directory suffix=".php">./includes/wp-settings</directory>
+				<directory suffix=".php">./admin/partials/metabox</directory>
+				<directory suffix=".php">./admin/partials/settings</directory>
+				<directory suffix=".php">./public/partials/ogp</directory>
 				<directory suffix=".php">./includes/class-requirements.php</directory>
-				<directory suffix=".php">./admin/partials/customize/</directory>
 			</exclude>
 		</whitelist>
 	</filter>

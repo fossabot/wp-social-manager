@@ -10,3 +10,6 @@
 [submodule "dev-lib"]
 	path = dev-lib
 	url = https://tfirdaus@github.com/ninecodes/wp-dev-lib
+[submodule "admin/partials/settings"]
+	path = admin/partials/settings
+	url = https://tfirdaus@github.com/ninecodes/wp-settings-api
