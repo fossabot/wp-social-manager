@@ -1,13 +1,6 @@
-[submodule "includes/ogp"]
-	path = includes/ogp
-	url = https://tfirdaus@github.com/niallkennedy/open-graph-protocol-tools
 [submodule "includes/wp-settings"]
 	path = includes/wp-settings
 	url = https://tfirdaus@github.com/ninecodes/wp-settings-api
-[submodule "dev-lib"]
-	path = dev-lib
-	url = https://tfirdaus@github.com/ninecodes/wp-dev-lib
-
 [submodule "admin/partials/metabox"]
 	path = admin/partials/metabox
 	url = https://tfirdaus@github.com/ninecodes/wp-metabox-api
