@@ -178,7 +178,7 @@ class Test_Validation extends WP_UnitTestCase {
 	 */
 	public function test_validate_include_sites_for_button_content() {
 
-		$options = Options::list( 'button_sites', array( 'content' ) );
+		$options = Options::get_list( 'button_sites', array( 'content' ) );
 		$sites = array();
 
 		foreach ( $options as $site => $data ) {

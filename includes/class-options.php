@@ -92,7 +92,7 @@ final class Options {
 	 * @param array  $args List arguments to pass to the method.
 	 * @return mixed
 	 */
-	public static function list( $method = '', array $args = array() ) {
+	public static function get_list( $method = '', array $args = array() ) {
 
 		if ( is_callable( array( __CLASS__, "list_{$method}" ) ) ) {
 			return call_user_func_array( array( __CLASS__, "list_{$method}" ), $args );

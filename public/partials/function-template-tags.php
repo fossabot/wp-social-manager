@@ -32,8 +32,8 @@ if ( ! function_exists( 'get_the_site_social_profile' ) ) {
 
 		if ( is_array( $site_profile ) && ! empty( $site_profile ) ) :
 
-			$profiles = Options::list( 'social_profiles' );
-			$views = Options::list( 'button_views' );
+			$profiles = Options::get_list( 'social_profiles' );
+			$views = Options::get_list( 'button_views' );
 			$prefix = Helpers::get_attr_prefix();
 
 			$view = array_key_exists( $args['view'], $views ) ? $args['view'] : 'icon';
@@ -115,7 +115,7 @@ if ( ! function_exists( 'get_the_author_social_profile' ) ) {
 
 			$author_name = get_the_author_meta( 'display_name', $user_id );
 
-			$profiles = Options::list( 'social_profiles' );
+			$profiles = Options::get_list( 'social_profiles' );
 			$icons    = Helpers::get_social_icons();
 			$prefix   = Helpers::get_attr_prefix();
 

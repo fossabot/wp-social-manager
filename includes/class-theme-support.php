@@ -176,7 +176,7 @@ final class Theme_Support {
 	protected function button_mode() {
 
 		$supports = (array) $this->supports;
-		$haystack = (array) Options::list( 'button_modes' );
+		$haystack = (array) Options::get_list( 'button_modes' );
 
 		$mode = key_exists( 'button_mode', $supports ) ? $this->supports['button_mode'] : '';
 

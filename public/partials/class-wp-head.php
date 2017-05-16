@@ -428,7 +428,7 @@ final class WP_Head {
 
 		if ( ! empty( $author ) ) {
 
-			$property = Options::list( 'social_profiles', array( 'facebook' ) );
+			$property = Options::get_list( 'social_profiles', array( 'facebook' ) );
 			$property_url = isset( $property['url'] ) ? trailingslashit( esc_url( $property['url'] ) ) : '';
 
 			if ( isset( $author['profiles']['facebook'] ) && ! empty( $author['profiles']['facebook'] ) ) {
@@ -497,7 +497,7 @@ final class WP_Head {
 
 		$meta = '';
 
-		$property = Options::list( 'social_profiles', array( 'facebook' ) );
+		$property = Options::get_list( 'social_profiles', array( 'facebook' ) );
 		$property_url = isset( $property['url'] ) ? trailingslashit( esc_url( $property['url'] ) ) : '';
 
 		/**
