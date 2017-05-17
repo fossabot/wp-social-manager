@@ -109,31 +109,31 @@ final class Metabox {
 		$this->path_dir = plugin_dir_path( dirname( __FILE__ ) );
 		$this->path_url = plugin_dir_url( dirname( __FILE__ ) );
 
-		$this->setups();
+		$this->hooks();
 	}
 
 	/**
-	 * Run the setups.
+	 * Run the hooks to register the metabox
 	 *
-	 * The setups may involve running some Classes, Functions, and sometimes WordPress Hooks
-	 * that are required to run or add functionalities in the plugin.
-	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @access public
 	 *
 	 * @return void
 	 */
-	public function setups() {
+	public function hooks() {
 
-		if ( $this->is_active() ) {
-
-			add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
-			add_action( 'butterbean_register', array( $this, 'register_section_button' ), -90, 2 );
-			add_action( 'butterbean_register', array( $this, 'register_section_meta' ), -90, 2 );
-			add_action( 'butterbean_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
-			add_action( 'admin_footer', array( $this, 'print_meta_preview_template' ) );
+		if ( ! $this->is_active() ) {
+			return;
 		}
+
+		add_action( 'butterbean_register', array( $this, 'register_manager' ), -90, 2 );
+		add_action( 'butterbean_register', array( $this, 'register_section' ), -90, 2 );
+		add_action( 'butterbean_register', array( $this, 'register_setting' ), -90, 2 );
+		add_action( 'butterbean_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+		add_action( 'admin_head-post.php', array( $this, 'admin_head_enqueues' ), 10 );
+		add_action( 'admin_head-post-new.php', array( $this, 'admin_head_enqueues' ), 10 );
+		add_action( 'admin_footer', array( $this, 'print_meta_preview_template' ) );
 	}
 
 	/**
@@ -148,15 +148,9 @@ final class Metabox {
 	 */
 	public function register_manager( $butterbean, $post_type ) {
 
-		// Load internal post and post type objects.
 		$this->post_data();
-		$this->post_type_label( $post_type );
+		$this->post_types( $post_type );
 
-		// Load internal styles or scripts.
-		add_action( 'admin_head-post.php', array( $this, 'admin_head_enqueues' ), 10 );
-		add_action( 'admin_head-post-new.php', array( $this, 'admin_head_enqueues' ), 10 );
-
-		// Register our custom manager.
 		$butterbean->register_manager( $this->plugin->option->slug(), array(
 			'label' => __( 'Social Media', 'ninecodes-social-manager' ),
 			'post_type' => array_keys( $this->plugin->option->get_list( 'post_types' ) ),
@@ -164,10 +158,23 @@ final class Metabox {
 			'priority' => 'low',
 			'capability' => 'publish_posts',
 		) );
+
+		/**
+		 * Fires after the metabox has been registered
+		 *
+		 * Allows developers to register custom sections, settings, and controls
+		 * to the Social Media metabox.
+		 *
+		 * @param Object $metabox The metabox Object.
+		 * @param string $post_type The name of the post where metabox is loaded.
+		 *
+		 * @since 1.0
+		 */
+		do_action( 'ninecodes_social_manager_metabox', $butterbean->get_manager( $this->plugin->option->slug() ), $post_type );
 	}
 
 	/**
-	 * Registers sections.
+	 * Register Metabox sections
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -176,111 +183,89 @@ final class Metabox {
 	 * @param string $post_type  The current Post Type slug.
 	 * @return void
 	 */
-	public function register_section_button( $butterbean, $post_type ) {
+	public function register_section( $butterbean, $post_type ) {
 
-		$post_types = $this->get_button_post_types(); // List of post types enabled.
+		$manager = $butterbean->get_manager( $this->plugin->option->slug() );
 
-		$manager = $butterbean->get_manager( $this->plugin->option->slug() ); // Get our custom manager object.
+		if ( $this->is_meta_tags_enabled() ) {
+			$manager->register_section( 'meta', array(
+				'label' => __( 'Meta', 'ninecodes-social-manager' ),
+				'icon' => 'dashicons-editor-code',
+			) );
+		}
 
-		// Register a section.
 		$manager->register_section( 'button', array(
 			'label' => __( 'Button', 'ninecodes-social-manager' ),
 			'icon'  => 'dashicons-thumbs-up',
 		) );
+	}
 
-		if ( in_array( $post_type, $post_types['button_content'], true ) ) {
+	/**
+	 * Register Metabox settings
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param object $butterbean Instance of the `ButterBean` object.
+	 * @param string $post_type  The current Post Type slug.
+	 * @return void
+	 */
+	public function register_setting( $butterbean, $post_type ) {
 
-			// Register a setting.
-			$manager->register_control( 'button_content', array(
-				'type' => 'checkbox',
-				'section' => 'button',
-				'label' => __( 'Social Media Button on the Content', 'ninecodes-social-manager' ),
-				'description' => sprintf(
-					/* translators: %s - the post type label i.e. Post, Page, etc. */
-					__( 'Display the buttons that allow people to share, like, or save this %s in social media', 'ninecodes-social-manager' ),
-				$this->post_type ),
-			) );
+		$manager = $butterbean->get_manager( $this->plugin->option->slug() );
+		$enable = $this->get_button_post_types(); // Get the list of post types where button image and content is enabled.
+
+		/**
+		 * Register the button content setting to the Button section
+		 */
+		if ( in_array( $post_type, $enable['button_content'], true ) ) {
 
 			$manager->register_setting( 'button_content', array(
 				'type' => 'serialize',
 				'default' => 1,
 				'sanitize_callback' => 'butterbean_validate_boolean',
 			) );
-		}
 
-		if ( in_array( $post_type, $post_types['button_image'], true ) ) {
-
-			// Register a setting.
-			$manager->register_control( 'button_image', array(
+			$manager->register_control( 'button_content', array(
 				'type' => 'checkbox',
 				'section' => 'button',
-				'label' => __( 'Social Media Button on the Image', 'ninecodes-social-manager' ),
-				'description' => sprintf(
-					/* translators: %s - the post type label i.e. Post, Page, etc. */
-					__( 'Display the social media buttons that allow people to share, like, or save images of this %s in social media', 'ninecodes-social-manager' ),
-				$this->post_type ),
+				'label' => __( 'Social Media Button on the Content', 'ninecodes-social-manager' ),
+				 // translators: %s - the post type label i.e. Post, Page, etc.
+				'description' => sprintf( __( 'Display the buttons that allow people to share, like, or save this %s in social media', 'ninecodes-social-manager' ), $this->post_type_label ),
 			) );
+		}
+
+		if ( in_array( $post_type, $enable['button_image'], true ) ) {
 
 			$manager->register_setting( 'button_image', array(
 				'type' => 'serialize',
 				'default' => 1,
 				'sanitize_callback' => 'butterbean_validate_boolean',
 			) );
+
+			$manager->register_control( 'button_image', array(
+				'type' => 'checkbox',
+				'section' => 'button',
+				'label' => __( 'Social Media Button on the Image', 'ninecodes-social-manager' ),
+				 // translators: %s - the post type label i.e. Post, Page, etc.
+				'description' => sprintf( __( 'Display the social media buttons that allow people to share, like, or save images of this %s in social media', 'ninecodes-social-manager' ), $this->post_type_label ),
+			) );
 		}
-	}
-
-	/**
-	 * Register the "Meta" section tab.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param object $butterbean Instance of the `ButterBean` object.
-	 * @param string $post_type  The current Post Type slug.
-	 * @return void
-	 */
-	public function register_section_meta( $butterbean, $post_type ) {
-
-		if ( ! $this->is_meta_tags_enabled() ) {
-			return;
-		}
-
-		// Get our custom manager object.
-		$manager = $butterbean->get_manager( $this->plugin->option->slug() );
-
-		$manager->register_section( 'meta', array(
-			'label' => __( 'Meta', 'ninecodes-social-manager' ),
-			'icon' => 'dashicons-editor-code',
-		) );
-
-		// The post title control.
-		$manager->register_control( 'post_title', array(
-			'type' => 'text',
-			'section' => 'meta',
-			'label' => __( 'Title', 'ninecodes-social-manager' ),
-			/* translators: %s - the post type label i.e. Post, Page, etc. */
-			'description' => sprintf( __( 'Set a customized title of this %s as it should appear within the social meta tag', 'ninecodes-social-manager' ), $this->post_type ),
-			'attr' => array(
-				'class' => 'widefat',
-				'placeholder' => $this->post_title,
-			),
-		) );
 
 		$manager->register_setting( 'post_title', array(
 			'type' => 'serialize',
 			'sanitize_callback' => 'sanitize_text_field',
 		) );
 
-		// The post excerpt or description control.
-		$manager->register_control( 'post_excerpt', array(
-			'type' => 'textarea',
+		$manager->register_control( 'post_title', array(
+			'type' => 'text',
 			'section' => 'meta',
-			'label' => __( 'Description', 'ninecodes-social-manager' ),
-			/* translators: %s - the post type label i.e. Post, Page, etc. */
-			'description' => sprintf( __( 'Set a one to two customized description of this %s that should appear within the social meta tag', 'ninecodes-social-manager' ), $this->post_type ),
+			'label' => __( 'Title', 'ninecodes-social-manager' ),
+			// translators: %s - the post type label i.e. Post, Page, etc.
+			'description' => sprintf( __( 'Set a customized title of this %s as it should appear within the social meta tag', 'ninecodes-social-manager' ), $this->post_type_label ),
 			'attr' => array(
-				'placeholder' => strip_shortcodes( $this->post_excerpt ),
 				'class' => 'widefat',
+				'placeholder' => $this->post_title,
 			),
 		) );
 
@@ -289,16 +274,16 @@ final class Metabox {
 			'sanitize_callback' => 'wp_kses',
 		) );
 
-		// Image upload control.
-		$manager->register_control( 'post_thumbnail', array(
-			'type' => 'image',
+		$manager->register_control( 'post_excerpt', array(
+			'type' => 'textarea',
 			'section' => 'meta',
-			'label' => __( 'Image', 'ninecodes-social-manager' ),
-			'description' => sprintf(
-				/* translators: %s - the post type label i.e. Post, Page, etc. */
-				__( 'Set a custom image URL which should represent this within the social meta tag', 'ninecodes-social-manager' ),
-			$this->post_type ),
-			'size' => 'large',
+			'label' => __( 'Description', 'ninecodes-social-manager' ),
+			// translators: %s - the post type label i.e. Post, Page, etc.
+			'description' => sprintf( __( 'Set a one to two customized description of this %s that should appear within the social meta tag', 'ninecodes-social-manager' ), $this->post_type_label ),
+			'attr' => array(
+				'placeholder' => strip_shortcodes( $this->post_excerpt ),
+				'class' => 'widefat',
+			),
 		) );
 
 		$manager->register_setting( 'post_thumbnail', array(
@@ -306,104 +291,15 @@ final class Metabox {
 			'sanitize_callback' => array( $this, 'sanitize_absint' ),
 		) );
 
-		$choices = array();
-		$sections = array();
-		$tags = array();
-
-		$taxonomies = get_object_taxonomies( $this->post_type, 'object' );
-
-		foreach ( $taxonomies as $slug => $tax ) {
-
-			if ( 'post_format' === $tax->name ) {
-				continue;
-			}
-
-			if ( $tax->hierarchical ) {
-
-				$terms = wp_get_post_terms( $this->post_id, $slug, array(
-					'fields' => 'all',
-				) );
-
-				if ( 0 !== count( $this->post_section_choices( $terms ) ) ) {
-					$sections[] = array(
-						'label' => $tax->label,
-						'choices' => $this->post_section_choices( $terms ),
-					);
-				}
-			} else {
-				$tags[ $tax->name ] = $tax->label;
-			}
-		}
-
-		if ( ! empty( $sections ) ) :
-
-			$manager->register_control( 'post_section', array(
-				'type' => 'select-group',
-				'section' => 'meta',
-				'label' => __( 'Section', 'ninecodes-social-manager' ),
-				'description' => sprintf(
-					/* translators: %s - the post type label i.e. Post, Page, etc. */
-					__( 'The section of your website to which the %s belongs', 'ninecodes-social-manager' ),
-				$this->post_type ),
-				'choices' => $sections,
-			) );
-
-			$manager->register_setting( 'post_section', array(
-				'type' => 'serialize',
-				'sanitize_callback' => 'sanitize_key',
-			) );
-		endif;
-
-		if ( 1 > count( $tags ) && empty( $tags ) ) :
-
-			$manager->register_control( 'post_tag', array(
-				'type' => 'select',
-				'section' => 'meta',
-				'label' => __( 'Tags', 'ninecodes-social-manager' ),
-				'description' => sprintf(
-					/* translators: %s - the post type label i.e. Post, Page, etc. */
-					__( 'Select which Taxonomy to use as this %s meta tags. The tags are words associated with this article.', 'ninecodes-social-manager' ),
-				$this->post_type ),
-				'choices' => $tags,
-			) );
-
-			$manager->register_setting( 'post_tag', array(
-				'type' => 'serialize',
-				'sanitize_callback' => 'sanitize_key',
-			) );
-		endif;
-	}
-
-	/**
-	 * Function to filter the post_section choices.
-	 *
-	 * @since 1.1.0
-	 * @access public
-	 *
-	 * @param array $terms The list of term.
-	 * @return array The post_section choice; the value and label.
-	 */
-	public function post_section_choices( $terms ) {
-
-		$choices = array();
-		foreach ( $terms as $key => $term ) {
-			$choices[ "{$term->taxonomy}-{$term->term_id}" ] = $term->name;
-		}
-
-		return $choices;
-	}
-
-	/**
-	 * Sanitize function for integers.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param integer $value The value to sanitize.
-	 * @return integer|null The sanitized value or empty string.
-	 */
-	public function sanitize_absint( $value ) {
-		return $value && is_numeric( $value ) ? absint( $value ) : null;
+		$manager->register_control( 'post_thumbnail', array(
+			'type' => 'image',
+			'section' => 'meta',
+			'label' => __( 'Image', 'ninecodes-social-manager' ),
+			// translators: %s - the post type label i.e. Post, Page, etc.
+			'description' => sprintf( __( 'Set a custom image URL which should represent this within the social meta tag', 'ninecodes-social-manager' ),
+			$this->post_type_label ),
+			'size' => 'large',
+		) );
 	}
 
 	/**
@@ -418,13 +314,14 @@ final class Metabox {
 	 */
 	protected function post_data() {
 
-		$this->post_id = isset( $_GET['post'] ) ? $this->sanitize_absint( $_GET['post'] ) : 0; // WPCS: CSRF ok.
+		$this->post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0; // WPCS: CSRF ok.
 
 		$this->post_title = get_post_field( 'post_title', $this->post_id );
 		$this->post_content = get_post_field( 'post_content', $this->post_id );
 
 		$featured_image_id = get_post_thumbnail_id( $this->post_id );
 		$featured_image = wp_get_attachment_image_src( $featured_image_id, 'large' );
+
 		$this->post_featured_image = array(
 			'id' => $featured_image_id,
 			'src' => $featured_image[0],
@@ -447,22 +344,21 @@ final class Metabox {
 	 * @param string $post_type The post type slug / name.
 	 * @return void
 	 */
-	protected function post_type_label( $post_type ) {
+	protected function post_types( $post_type ) {
 
 		$objects = get_post_type_object( $post_type );
-
-		$this->post_type = strtolower( $objects->labels->singular_name );
+		$this->post_type_label = strtolower( $objects->labels->singular_name );
 	}
 
 	/**
 	 * The function utility to get selected post types to display social media buttons.
 	 *
 	 * @since 1.2.0
-	 * @access public
+	 * @access protected
 	 *
 	 * @return array
 	 */
-	public function get_button_post_types() {
+	protected function get_button_post_types() {
 
 		$button_content = (array) $this->plugin->helper->get_button_content_status();
 		$button_image = (array) $this->plugin->helper->get_button_image_status();
@@ -477,11 +373,11 @@ final class Metabox {
 	 * The function utility to check if meta site is enabled
 	 *
 	 * @since 2.0.0
-	 * @access public
+	 * @access protected
 	 *
 	 * @return boolean
 	 */
-	public function is_meta_tags_enabled() {
+	protected function is_meta_tags_enabled() {
 		return $this->plugin->helper->is_meta_tags_enabled();
 	}
 
@@ -489,11 +385,11 @@ final class Metabox {
 	 * The function utility to check if the meta box should be rendered
 	 *
 	 * @since 2.0.0
-	 * @access public
+	 * @access protected
 	 *
 	 * @return boolean
 	 */
-	public function is_active() {
+	protected function is_active() {
 
 		$post_types = $this->get_button_post_types();
 		$post_types = array_merge( $post_types['button_content'], $post_types['button_image'] );
@@ -520,7 +416,7 @@ final class Metabox {
 
 		wp_enqueue_style( "{$plugin_slug}-metabox", $this->path_url . 'css/metabox.css' );
 		wp_enqueue_script( "{$plugin_slug}-metabox-scripts", $this->path_url . 'js/metabox.min.js', array( 'jquery', 'underscore', 'backbone' ), $plugin_version, true );
-		wp_add_inline_script( "{$plugin_slug}-metabox-scripts", "var nineCodesSocialManager = {
+		wp_add_inline_script( "{$plugin_slug}-metabox-scripts", "var nineCodesSocialManagerAPI = {
 			post: {
 				id:\"{$this->post_id}\",
 				title:\"{$this->post_title}\",

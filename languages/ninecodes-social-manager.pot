@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Social Media Manager 2.0.0-alpha.3\n"
 "Report-Msgid-Bugs-To: https://github.com/ninecodes/social-manager/issues\n"
-"POT-Creation-Date: 2017-05-14 13:55:08+00:00\n"
+"POT-Creation-Date: 2017-05-17 21:13:56+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -52,20 +52,20 @@ msgstr ""
 msgid "Overview"
 msgstr ""
 
-#: admin/partials/class-helps.php:98 admin/partials/class-settings.php:272
+#: admin/partials/class-helps.php:98 admin/partials/class-settings.php:275
 msgid "Accounts"
 msgstr ""
 
-#: admin/partials/class-helps.php:104 admin/partials/class-settings.php:273
+#: admin/partials/class-helps.php:104 admin/partials/class-settings.php:276
 msgid "Buttons"
 msgstr ""
 
-#: admin/partials/class-helps.php:110 admin/partials/class-metabox.php:252
-#: admin/partials/class-settings.php:274
+#: admin/partials/class-helps.php:110 admin/partials/class-metabox.php:192
+#: admin/partials/class-settings.php:277
 msgid "Meta"
 msgstr ""
 
-#: admin/partials/class-helps.php:116 admin/partials/class-settings.php:275
+#: admin/partials/class-helps.php:116 admin/partials/class-settings.php:278
 msgid "Advanced"
 msgstr ""
 
@@ -161,59 +161,59 @@ msgstr ""
 msgid "Twitter Cards"
 msgstr ""
 
-#: admin/partials/class-metabox.php:161 admin/partials/class-settings.php:225
+#: admin/partials/class-metabox.php:155 admin/partials/class-settings.php:228
 msgid "Social Media"
 msgstr ""
 
-#: admin/partials/class-metabox.php:187
+#: admin/partials/class-metabox.php:198
 msgid "Button"
 msgstr ""
 
-#: admin/partials/class-metabox.php:197
+#: admin/partials/class-metabox.php:232
 msgid "Social Media Button on the Content"
 msgstr ""
 
-#: admin/partials/class-metabox.php:200
+#: admin/partials/class-metabox.php:234
 #. translators: %s - the post type label i.e. Post, Page, etc.
 msgid ""
 "Display the buttons that allow people to share, like, or save this %s in "
 "social media"
 msgstr ""
 
-#: admin/partials/class-metabox.php:217
+#: admin/partials/class-metabox.php:249
 msgid "Social Media Button on the Image"
 msgstr ""
 
-#: admin/partials/class-metabox.php:220
+#: admin/partials/class-metabox.php:251
 #. translators: %s - the post type label i.e. Post, Page, etc.
 msgid ""
 "Display the social media buttons that allow people to share, like, or save "
 "images of this %s in social media"
 msgstr ""
 
-#: admin/partials/class-metabox.php:260
+#: admin/partials/class-metabox.php:263
 msgid "Title"
 msgstr ""
 
-#: admin/partials/class-metabox.php:262
+#: admin/partials/class-metabox.php:265
 #. translators: %s - the post type label i.e. Post, Page, etc.
 msgid ""
 "Set a customized title of this %s as it should appear within the social "
 "meta tag"
 msgstr ""
 
-#: admin/partials/class-metabox.php:278
+#: admin/partials/class-metabox.php:280
 msgid "Description"
 msgstr ""
 
-#: admin/partials/class-metabox.php:280
+#: admin/partials/class-metabox.php:282
 #. translators: %s - the post type label i.e. Post, Page, etc.
 msgid ""
 "Set a one to two customized description of this %s that should appear "
 "within the social meta tag"
 msgstr ""
 
-#: admin/partials/class-metabox.php:296 admin/partials/class-settings.php:349
+#: admin/partials/class-metabox.php:297 admin/partials/class-settings.php:352
 msgid "Image"
 msgstr ""
 
@@ -224,39 +224,19 @@ msgid ""
 "tag"
 msgstr ""
 
-#: admin/partials/class-metabox.php:343
-msgid "Section"
-msgstr ""
-
-#: admin/partials/class-metabox.php:346
-#. translators: %s - the post type label i.e. Post, Page, etc.
-msgid "The section of your website to which the %s belongs"
-msgstr ""
-
-#: admin/partials/class-metabox.php:362
-msgid "Tags"
-msgstr ""
-
-#: admin/partials/class-metabox.php:365
-#. translators: %s - the post type label i.e. Post, Page, etc.
-msgid ""
-"Select which Taxonomy to use as this %s meta tags. The tags are words "
-"associated with this article."
-msgstr ""
-
-#: admin/partials/class-metabox.php:547
+#: admin/partials/class-metabox.php:441
 msgid "Display Preview"
 msgstr ""
 
-#: admin/partials/class-settings.php:226
+#: admin/partials/class-settings.php:229
 msgid "Social Media Settings"
 msgstr ""
 
-#: admin/partials/class-settings.php:333
+#: admin/partials/class-settings.php:336
 msgid "Profile"
 msgstr ""
 
-#: admin/partials/class-settings.php:335
+#: admin/partials/class-settings.php:338
 #. translators: %s will be replaced with "Widget" and the link to the Widget
 #. admin page.
 msgid ""
@@ -264,91 +244,91 @@ msgid ""
 "your social profile on a %s"
 msgstr ""
 
-#: admin/partials/class-settings.php:344
+#: admin/partials/class-settings.php:347
 msgid "Content"
 msgstr ""
 
-#: admin/partials/class-settings.php:345
+#: admin/partials/class-settings.php:348
 msgid "Configure how social media buttons display on your content pages."
 msgstr ""
 
-#: admin/partials/class-settings.php:350
+#: admin/partials/class-settings.php:353
 msgid "Options to configure the social media buttons shown on the content images."
 msgstr ""
 
-#: admin/partials/class-settings.php:370
+#: admin/partials/class-settings.php:373
 msgid "Mode"
 msgstr ""
 
-#: admin/partials/class-settings.php:371
+#: admin/partials/class-settings.php:374
 msgid "Configure the modes that work best for your website."
 msgstr ""
 
-#: admin/partials/class-settings.php:526 admin/partials/class-settings.php:657
+#: admin/partials/class-settings.php:529 admin/partials/class-settings.php:660
 msgid "Button to include"
 msgstr ""
 
-#: admin/partials/class-settings.php:543 admin/partials/class-settings.php:674
+#: admin/partials/class-settings.php:546 admin/partials/class-settings.php:677
 msgid "Button Visibility"
 msgstr ""
 
-#: admin/partials/class-settings.php:545
+#: admin/partials/class-settings.php:548
 #. translators: %s will be replaced with "Post Types" pointing to
 #. https:codex.wordpress.org/Post_Types.
 msgid "Select the %s that are allowed to show the social media buttons."
 msgstr ""
 
-#: admin/partials/class-settings.php:545 admin/partials/class-settings.php:677
+#: admin/partials/class-settings.php:548 admin/partials/class-settings.php:680
 msgid "Post Types"
 msgstr ""
 
-#: admin/partials/class-settings.php:557 admin/partials/class-settings.php:686
+#: admin/partials/class-settings.php:560 admin/partials/class-settings.php:689
 msgid "Button View"
 msgstr ""
 
-#: admin/partials/class-settings.php:558
+#: admin/partials/class-settings.php:561
 msgid "Select the social media buttons appearance shown in the content."
 msgstr ""
 
-#: admin/partials/class-settings.php:565
+#: admin/partials/class-settings.php:568
 msgid "Button Placement"
 msgstr ""
 
-#: admin/partials/class-settings.php:566
+#: admin/partials/class-settings.php:569
 msgid "Select the location to show the social media buttons in the content."
 msgstr ""
 
-#: admin/partials/class-settings.php:572 admin/partials/class-settings.php:695
+#: admin/partials/class-settings.php:575 admin/partials/class-settings.php:698
 msgid "Button Style"
 msgstr ""
 
-#: admin/partials/class-settings.php:574
+#: admin/partials/class-settings.php:577
 #. translators: %s will be replaced with "<code>Share on:</code>".
 msgid "Change the style of the social media button of the content."
 msgstr ""
 
-#: admin/partials/class-settings.php:580
+#: admin/partials/class-settings.php:583
 msgid "Button Header"
 msgstr ""
 
-#: admin/partials/class-settings.php:582
+#: admin/partials/class-settings.php:585
 #. translators: %s will be replaced with "<code>Share on:</code>".
 msgid "Set the heading shown before the buttons (e.g. %s)."
 msgstr ""
 
-#: admin/partials/class-settings.php:583
+#: admin/partials/class-settings.php:586
 msgid "Share on:"
 msgstr ""
 
-#: admin/partials/class-settings.php:649
+#: admin/partials/class-settings.php:652
 msgid "Enable Button Image"
 msgstr ""
 
-#: admin/partials/class-settings.php:650
+#: admin/partials/class-settings.php:653
 msgid "Show the social media buttons on images in the content"
 msgstr ""
 
-#: admin/partials/class-settings.php:677
+#: admin/partials/class-settings.php:680
 #. translators: %s will be replaced with a link pointing to
 #. https:codex.wordpress.org/Post_Types.
 msgid ""
@@ -356,30 +336,30 @@ msgid ""
 "of the content."
 msgstr ""
 
-#: admin/partials/class-settings.php:687
+#: admin/partials/class-settings.php:690
 msgid ""
 "Select the social media buttons appearance shown on the images of the "
 "content."
 msgstr ""
 
-#: admin/partials/class-settings.php:697
+#: admin/partials/class-settings.php:700
 #. translators: %s will be replaced with "<code>Share on:</code>".
 msgid "Change the style of the social media button shown on the image."
 msgstr ""
 
-#: admin/partials/class-settings.php:759
+#: admin/partials/class-settings.php:762
 msgid "Generate Meta Tags"
 msgstr ""
 
-#: admin/partials/class-settings.php:760
+#: admin/partials/class-settings.php:763
 msgid "Generate social media meta tags on this website"
 msgstr ""
 
-#: admin/partials/class-settings.php:768 admin/partials/class-settings.php:769
+#: admin/partials/class-settings.php:771 admin/partials/class-settings.php:772
 msgid "Site Name"
 msgstr ""
 
-#: admin/partials/class-settings.php:771
+#: admin/partials/class-settings.php:774
 #. translators: the %s will be replaced with list of brand / site name
 #. examples.
 msgid ""
@@ -387,63 +367,63 @@ msgid ""
 "tags (e.g. %s)"
 msgstr ""
 
-#: admin/partials/class-settings.php:779 admin/partials/class-settings.php:780
+#: admin/partials/class-settings.php:782 admin/partials/class-settings.php:783
 msgid "Site Title"
 msgstr ""
 
-#: admin/partials/class-settings.php:781
+#: admin/partials/class-settings.php:784
 msgid ""
 "The title of this website as it should appear within the social media meta "
 "tags."
 msgstr ""
 
-#: admin/partials/class-settings.php:789
+#: admin/partials/class-settings.php:792
 msgid "Site Description"
 msgstr ""
 
-#: admin/partials/class-settings.php:790
+#: admin/partials/class-settings.php:793
 msgid ""
 "A one to two sentence describing this website that should appear within the "
 "social media meta tags."
 msgstr ""
 
-#: admin/partials/class-settings.php:801
+#: admin/partials/class-settings.php:804
 msgid "Site Image"
 msgstr ""
 
-#: admin/partials/class-settings.php:802
+#: admin/partials/class-settings.php:805
 msgid ""
 "An image URL which should represent this website within the social media "
 "meta tags (e.g. Open Graph, Twitter Cards, etc.)"
 msgstr ""
 
-#: admin/partials/class-settings.php:861 admin/partials/class-settings.php:868
+#: admin/partials/class-settings.php:864 admin/partials/class-settings.php:871
 msgid "Load Stylesheet"
 msgstr ""
 
-#: admin/partials/class-settings.php:863
+#: admin/partials/class-settings.php:866
 msgid ""
 "The Theme being used in this website has included the styles in its own "
 "stylesheet."
 msgstr ""
 
-#: admin/partials/class-settings.php:869
+#: admin/partials/class-settings.php:872
 msgid "Load the plugin stylesheet to apply essential styles."
 msgstr ""
 
-#: admin/partials/class-settings.php:932
+#: admin/partials/class-settings.php:935
 msgid "Button Mode"
 msgstr ""
 
-#: admin/partials/class-settings.php:933
+#: admin/partials/class-settings.php:936
 msgid "Select the mode to render the social media buttons."
 msgstr ""
 
-#: admin/partials/class-settings.php:942
+#: admin/partials/class-settings.php:945
 msgid "Link Mode"
 msgstr ""
 
-#: admin/partials/class-settings.php:943
+#: admin/partials/class-settings.php:946
 msgid "Select the link mode to append when the content or the image is shared."
 msgstr ""
 
@@ -459,107 +439,107 @@ msgstr ""
 msgid "Bummer! you do not have the authority to save this inputs."
 msgstr ""
 
-#: includes/class-options.php:102
+#: includes/class-options.php:122
 #. translators: %s is an example of a username input.
 msgid "Facebook profile or page (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:108
+#: includes/class-options.php:128
 #. translators: %s is an example of a username input.
 msgid "Twitter profile without the %1$s (e.g. %2$s)"
 msgstr ""
 
-#: includes/class-options.php:114
+#: includes/class-options.php:134
 #. translators: %s is an example of a username input.
 msgid "Instagram profile (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:120
+#: includes/class-options.php:140
 #. translators: %s is an example of a username input.
 msgid "Pinterest profile (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:126
+#: includes/class-options.php:146
 #. translators: %s is an example of a username input.
 msgid "LinkedIn profile (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:132
+#: includes/class-options.php:152
 #. translators: %s is an example of a username input.
 msgid "Google+ profile or page. Include the %1$s sign if necessary (e.g. %2$s)"
 msgstr ""
 
-#: includes/class-options.php:138
+#: includes/class-options.php:158
 #. translators: %s is an example of a username input.
 msgid "Youtube channel (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:144
+#: includes/class-options.php:164
 #. translators: %s is an example of a username input.
 msgid "Reddit profile (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:150
+#: includes/class-options.php:170
 #. translators: %s is an example of a username input.
 msgid "Tumblr blog (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:251
+#: includes/class-options.php:271
 msgid "Icon Only"
 msgstr ""
 
-#: includes/class-options.php:252
+#: includes/class-options.php:272
 msgid "Text Only"
 msgstr ""
 
-#: includes/class-options.php:253
+#: includes/class-options.php:273
 msgid "Icon and Text"
 msgstr ""
 
-#: includes/class-options.php:295
+#: includes/class-options.php:315
 msgid "Before the content"
 msgstr ""
 
-#: includes/class-options.php:296
+#: includes/class-options.php:316
 msgid "After the content"
 msgstr ""
 
-#: includes/class-options.php:447 includes/class-options.php:460
+#: includes/class-options.php:467 includes/class-options.php:480
 msgid "Mono"
 msgstr ""
 
-#: includes/class-options.php:448 includes/class-options.php:461
+#: includes/class-options.php:468 includes/class-options.php:481
 msgid "Color"
 msgstr ""
 
-#: includes/class-options.php:449 includes/class-options.php:456
-#: includes/class-options.php:462
+#: includes/class-options.php:469 includes/class-options.php:476
+#: includes/class-options.php:482
 msgid "Circle"
 msgstr ""
 
-#: includes/class-options.php:450 includes/class-options.php:455
-#: includes/class-options.php:463
+#: includes/class-options.php:470 includes/class-options.php:475
+#: includes/class-options.php:483
 msgid "Rounded"
 msgstr ""
 
-#: includes/class-options.php:451 includes/class-options.php:457
-#: includes/class-options.php:464
+#: includes/class-options.php:471 includes/class-options.php:477
+#: includes/class-options.php:484
 msgid "Square"
 msgstr ""
 
-#: includes/class-options.php:452
+#: includes/class-options.php:472
 msgid "Skeumorphic"
 msgstr ""
 
-#: includes/class-plugin.php:246
+#: includes/class-plugin.php:215
 msgid "Settings"
 msgstr ""
 
-#: public/partials/class-rest-button.php:211
+#: public/partials/class-rest-button.php:213
 msgid "Limit response to a particular social buttons set."
 msgstr ""
 
-#: public/partials/class-rest-button.php:264
+#: public/partials/class-rest-button.php:266
 msgid "Invalid buttons ID."
 msgstr ""
 
@@ -611,7 +591,7 @@ msgstr ""
 msgid "Lightweight, clean and optimized social media plugin for WordPress."
 msgstr ""
 
-#: includes/class-options.php:180
+#: includes/class-options.php:200
 msgctxt "Dummy text label for a social media profile, in case it is not supplied."
 msgid "Example"
 msgstr ""

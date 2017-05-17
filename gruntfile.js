@@ -35,10 +35,9 @@ module.exports = function (grunt) {
 			'*.php',
 			'**/*.php',
 			'!docs/**',
-			'!includes/ogp/**',
-			'!includes/bb-metabox/**',
-			'!includes/bb-metabox-extend/**',
-			'!includes/wp-settings/**',
+			'!public/partials/ogp/**',
+			'!admin/partials/metabox/**',
+			'!admin/partials/settings/**',
 			'!<%= pkg.name %>/**',
 			'!build/**',
 			'!node_modules/**',
@@ -326,10 +325,9 @@ module.exports = function (grunt) {
 						'node_modules/.*',
 						'build/.*',
 						'dev-lib/.*',
-						'includes/ogp/.*',
-						'includes/bb-metabox/.*',
-						'includes/bb-metabox-extend/.*',
-						'includes/includes/wp-settings/.*'
+						'public/partials/ogp/.*',
+						'admin/partials/metabox/.*',
+						'admin/partials/settings/.*'
 					],
 					processPot: function (pot) {
 
