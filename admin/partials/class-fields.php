@@ -14,14 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use \NineCodes\WPSettingsAPI as SettingsAPI;
+use \NineCodes\WP\Settings as WP;
 
 /**
  * The Fields class is used for registering the new setting field using PepperPlane.
  *
  * @since 1.0.0
  */
-final class Fields extends SettingsAPI\Fields {
+final class Fields extends WP\Fields {
 
 	/**
 	 * The admin screen base / ID

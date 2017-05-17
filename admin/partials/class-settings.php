@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin: Settings class
+ * Plugin Settings
  *
  * @package SocialManager
  * @subpackage Admin\Settings
@@ -12,11 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die; // Abort.
 }
 
-use \NineCodes\WPSettingsAPI as SettingsAPI;
+use \NineCodes\WP\Settings as WP;
 
 /**
- * The Settings class is used to register the option menu, the option page,
- * and the input fields that will allow users to configure the plugin.
+ * Settings Class
+ *
+ * The `Settings` class is used to register the option menu, the page,
+ * and the control fields to administer the plugin.
  *
  * @since 1.0.0
  */
@@ -98,11 +100,11 @@ final class Settings {
 	protected $document_title;
 
 	/**
-	 * WPSettings\Settings class instance
+	 * WP\Settings class instance
 	 *
 	 * @since 1.0.0
 	 * @access public
-	 * @var WPSettings\Settings
+	 * @var WP\Settings
 	 */
 	public $settings;
 
@@ -204,7 +206,7 @@ final class Settings {
 	 */
 	public function setups() {
 
-		$this->settings = new SettingsAPI\Settings( $this->plugin->option->slug() );
+		$this->settings = new WP\Settings( $this->plugin->option->slug() );
 		$this->validate = new Validation();
 
 		$fields = new Fields( $this->screen );
