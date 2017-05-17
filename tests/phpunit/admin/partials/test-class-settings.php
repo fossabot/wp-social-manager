@@ -66,7 +66,7 @@ class Test_Settings extends WP_UnitTestCase {
 	 */
 	public function test_setting_setups() {
 
-		$this->assertInstanceOf( '\NineCodes\WPSettingsAPI\Settings', $this->settings->settings );
+		$this->assertInstanceOf( '\NineCodes\WP\Settings\Settings', $this->settings->settings );
 		$this->assertInstanceOf( '\NineCodes\SocialManager\Validation', $this->settings->validate );
 	}
 
