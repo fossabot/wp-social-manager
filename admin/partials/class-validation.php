@@ -105,10 +105,10 @@ final class Validation {
 
 		$inputs['enable'] = $this->validate_checkbox( $inputs['enable'] );
 		$inputs['view'] = $this->validate_selection( $inputs['view'], Options::get_list( 'button_views' ) );
-		$inputs['style'] = $this->validate_selection( $inputs['style'], Options::button_styles( 'image' ) );
+		$inputs['style'] = $this->validate_selection( $inputs['style'], Options::get_list( 'button_styles', array( 'image' ) ) );
 
-		$inputs['post_type'] = $this->validate_multicheckbox( $inputs['post_type'], Options::post_types() );
-		$inputs['include'] = $this->validate_include_sites( $inputs['include'], Options::button_sites( 'image' ) );
+		$inputs['post_type'] = $this->validate_multicheckbox( $inputs['post_type'], Options::get_list( 'post_types' ) );
+		$inputs['include'] = $this->validate_include_sites( $inputs['include'], Options::get_list( 'button_sites', array( 'image' ) ) );
 
 		return $inputs;
 	}
@@ -170,8 +170,8 @@ final class Validation {
 	 */
 	public function setting_mode( $inputs ) {
 
-		$inputs['button_mode'] = $this->validate_selection( $inputs['button_mode'], Options::button_modes() );
-		$inputs['link_mode'] = $this->validate_selection( $inputs['link_mode'], Options::link_modes() );
+		$inputs['button_mode'] = $this->validate_selection( $inputs['button_mode'], Options::get_list( 'button_modes' ) );
+		$inputs['link_mode'] = $this->validate_selection( $inputs['link_mode'], Options::get_list( 'link_modes' ) );
 
 		return $inputs;
 	}
