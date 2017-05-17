@@ -66,7 +66,7 @@ final class Options {
 	 * @param string $key  The array key to retrieve from the option.
 	 * @return mixed The option value or null if option is not available.
 	 */
-	public static function get( string $name = '', $key = '' ) {
+	public static function get( $name = '', $key = '' ) {
 
 		if ( empty( $name ) ) {
 			return null;
