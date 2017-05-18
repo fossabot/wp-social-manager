@@ -80,8 +80,7 @@ abstract class Button implements Button_Interface {
 
 		$this->plugin = $plugin;
 
-		$this->meta = new Meta( $this->plugin );
-		$this->endpoint = new Endpoint( $this->plugin, $this->meta );
+		$this->endpoint = new Endpoint( $this->plugin );
 
 		$this->attr_prefix = $this->plugin->helper->get_attr_prefix();
 		$this->mode = $this->plugin->helper->get_button_mode();

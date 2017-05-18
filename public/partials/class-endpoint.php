@@ -48,12 +48,9 @@ class Endpoint {
 	 * @access public
 	 *
 	 * @param Plugin $plugin The Plugin class instance.
-	 * @param Meta   $meta The Meta class instance.
 	 */
-	function __construct( Plugin $plugin, Meta $meta ) {
-
+	function __construct( Plugin $plugin ) {
 		$this->plugin = $plugin;
-		$this->meta = $meta;
 	}
 
 	/**
@@ -385,10 +382,10 @@ class Endpoint {
 		$charset = get_bloginfo( 'charset' );
 
 		$post_id = absint( $post_id );
-		$post_title = $this->meta->get_post_title( $post_id );
-		$post_description = $this->meta->get_post_description( $post_id );
-		$post_image = $this->meta->get_post_image( $post_id );
-		$post_url = $this->meta->get_post_url( $post_id );
+		$post_title = $this->plugin->meta->get_post_title( $post_id );
+		$post_description = $this->plugin->meta->get_post_description( $post_id );
+		$post_image = $this->plugin->meta->get_post_image( $post_id );
+		$post_url = $this->plugin->meta->get_post_url( $post_id );
 
 		if ( 'shortlink' === $this->plugin->option->get( 'mode', 'link_mode' ) ) {
 			$post_url = wp_get_shortlink( $post_id );

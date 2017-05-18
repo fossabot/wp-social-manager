@@ -72,7 +72,7 @@ class REST_Button extends WP_REST_Controller {
 	 */
 	public function __construct( Plugin $plugin ) {
 
-		$this->endpoint = new Endpoint( $plugin, new Meta( $plugin ) );
+		$this->endpoint = new Endpoint( $plugin );
 
 		$this->plugin = $plugin;
 

@@ -139,6 +139,7 @@ final class Plugin {
 		add_filter( 'plugin_action_links_' . plugin_basename( $this->path_dir . self::SLUG . '.php' ), array( $this, 'plugin_action_links' ) );
 
 		add_action( 'init', array( $this->languages, 'load_plugin_textdomain' ) );
+		add_action( 'admin_init', array( $this, 'updates' ) );
 	}
 
 	/**
@@ -155,8 +156,10 @@ final class Plugin {
 	protected function setups() {
 
 		$this->languages = new Languages( self::SLUG );
+
 		$this->option = new Options;
 		$this->helper = new Helpers;
+		$this->meta = new Meta;
 
 		$admin_view = new Admin_View( $this );
 		$public_view = new Public_View( $this );
@@ -167,8 +170,6 @@ final class Plugin {
 		 * @link https://blog.bufferapp.com/ideal-image-sizes-social-media-posts
 		 */
 		add_image_size( 'social-media', 600, 315, true );
-
-		add_action( 'admin_init', array( $this, 'updates' ) );
 	}
 
 	/**

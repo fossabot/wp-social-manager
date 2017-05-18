@@ -62,10 +62,7 @@ final class WP_Head {
 	 */
 	function __construct( Plugin $plugin ) {
 
-		$this->meta = new Meta( $plugin );
-
 		$this->plugin = $plugin;
-
 		$this->hooks();
 	}
 
@@ -114,7 +111,7 @@ final class WP_Head {
 	 */
 	public function site_meta_tags() {
 
-		if ( is_singular() || is_attachment() || ! $this->meta->is_meta_enabled() ) {
+		if ( is_singular() || is_attachment() || ! Helpers::is_meta_tags_enabled() ) {
 			return;
 		}
 
@@ -128,11 +125,11 @@ final class WP_Head {
 		 * @var array
 		 */
 		$meta_tags = apply_filters( 'ninecodes_social_manager_site_meta_tags', array(
-			'site_name' => $this->meta->get_site_name(),
-			'site_title' => $this->meta->get_site_title(),
-			'site_description' => $this->meta->get_site_description(),
-			'site_url' => $this->meta->get_site_url(),
-			'site_image' => $this->meta->get_site_image(),
+			'site_name' => $this->plugin->meta->get_site_name(),
+			'site_title' => $this->plugin->meta->get_site_title(),
+			'site_description' => $this->plugin->meta->get_site_description(),
+			'site_url' => $this->plugin->meta->get_site_url(),
+			'site_image' => $this->plugin->meta->get_site_image(),
 		), null );
 
 		/**
@@ -156,81 +153,6 @@ final class WP_Head {
 		 * @var array
 		 */
 		$meta_tags_tc = $this->site_twitter_cards( apply_filters( 'ninecodes_social_manager_site_meta_tags', $meta_tags, 'twitter_cards' ) );
-
-		echo "\n<!-- START: Social Media Meta Tags (Social Media Manager by NineCodes) -->\n";
-		echo wp_kses( "{$meta_tags_og}{$meta_tags_tc}", array(
-			'meta' => array(
-				'property' => array(),
-				'content' => array(),
-				'name' => array(),
-			),
-		) );
-		echo "<!-- END: Social Media Meta Tags -->\n\n";
-	}
-
-	/**
-	 * Print the post meta tag elements in the 'head' tag.
-	 *
-	 * The "post" meta tag is generated in any a single post or page
-	 * of any Post Types.
-	 *
-	 * @since 1.0.0
-	 * @since 1.0.6 - Use $this->meta property to access the Meta class method.
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function post_meta_tags() {
-
-		if ( ! is_singular() || is_attachment() || ! $this->meta->is_meta_enabled() ) {
-			return;
-		}
-
-		$post_id = get_the_id();
-
-		/**
-		 * Filter social media meta tags in the single post.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $context The context is `null`. Filter will affect all meta tags.
-		 *
-		 * @var array
-		 */
-		$meta_tags = apply_filters( 'ninecodes_social_manager_post_meta_tags', array(
-			'site_name' => $this->meta->get_site_name(),
-			'post_title' => $this->meta->get_post_title( $post_id ),
-			'post_description' => $this->meta->get_post_description( $post_id ),
-			'post_url' => $this->meta->get_post_url( $post_id ),
-			'post_image' => $this->meta->get_post_image( $post_id ),
-			'post_author' => $this->meta->get_post_author( $post_id ),
-			'post_section' => $this->meta->get_post_section( $post_id ),
-			'post_tags' => $this->meta->get_post_tags( $post_id ),
-			'post_published_time' => get_post_time( 'c', true ),
-			'post_modified_time' => get_post_modified_time( 'c', true ),
-		), null );
-
-		/**
-		 * Filter Open Graph meta tags in the single post.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $context The context; which meta tags to filter.
-		 *
-		 * @var array
-		 */
-		$meta_tags_og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'open_graph' ) );
-
-		/**
-		 * Filter Twitter Cards meta tags in the single post.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $context The context; which meta tags to filter..
-		 *
-		 * @var array
-		 */
-		$meta_tags_tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'twitter_cards' ) );
 
 		echo "\n<!-- START: Social Media Meta Tags (Social Media Manager by NineCodes) -->\n";
 		echo wp_kses( "{$meta_tags_og}{$meta_tags_tc}", array(
@@ -277,7 +199,7 @@ final class WP_Head {
 		$ogp = new OpenGraphProtocol();
 
 		$ogp->setType( 'website' );
-		$ogp->setLocale( get_locale() );
+		$ogp->setLocale( $this->locale );
 		$ogp->setURL( $args['site_url'] );
 		$ogp->setSiteName( $args['site_name'] );
 		$ogp->setTitle( $args['site_title'] );
@@ -362,6 +284,79 @@ final class WP_Head {
 	}
 
 	/**
+	 * Print the post meta tag elements in the 'head' tag.
+	 *
+	 * The "post" meta tag is generated in any a single post or page
+	 * of any Post Types.
+	 *
+	 * @since 1.0.0
+	 * @since 1.0.6 - Use $this->meta property to access the Meta class method.
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function post_meta_tags() {
+
+		if ( ! is_singular() || is_attachment() || ! Helpers::is_meta_tags_enabled() ) {
+			return;
+		}
+
+		$post_id = get_the_id();
+
+		/**
+		 * Filter social media meta tags in the single post.
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param string $context The context is `null`. Filter will affect all meta tags.
+		 *
+		 * @var array
+		 */
+		$meta_tags = apply_filters( 'ninecodes_social_manager_post_meta_tags', array(
+			'site_name' => $this->plugin->meta->get_site_name(),
+			'post_title' => $this->plugin->meta->get_post_title( $post_id ),
+			'post_description' => $this->plugin->meta->get_post_description( $post_id ),
+			'post_url' => $this->plugin->meta->get_post_url( $post_id ),
+			'post_image' => $this->plugin->meta->get_post_image( $post_id ),
+			'post_author' => $this->plugin->meta->get_post_author( $post_id ),
+			'post_published_time' => get_post_time( 'c', true ),
+			'post_modified_time' => get_post_modified_time( 'c', true ),
+		), null );
+
+		/**
+		 * Filter Open Graph meta tags in the single post.
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param string $context The context; which meta tags to filter.
+		 *
+		 * @var array
+		 */
+		$meta_tags_og = $this->post_open_graph( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'open_graph' ) );
+
+		/**
+		 * Filter Twitter Cards meta tags in the single post.
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param string $context The context; which meta tags to filter..
+		 *
+		 * @var array
+		 */
+		$meta_tags_tc = $this->post_twitter_cards( apply_filters( 'ninecodes_social_manager_post_meta_tags', $meta_tags, 'twitter_cards' ) );
+
+		echo "\n<!-- START: Social Media Meta Tags (Social Media Manager by NineCodes) -->\n";
+		echo wp_kses( "{$meta_tags_og}{$meta_tags_tc}", array(
+			'meta' => array(
+				'property' => array(),
+				'content' => array(),
+				'name' => array(),
+			),
+		) );
+		echo "<!-- END: Social Media Meta Tags -->\n\n";
+	}
+
+	/**
 	 * Create the Open Graph meta tags for the "post".
 	 *
 	 * @since 1.0.0
@@ -389,8 +384,6 @@ final class WP_Head {
 			'post_title' => '',
 			'post_description' => '',
 			'post_url' => '',
-			'post_section' => '',
-			'post_tags' => array(),
 			'post_image' => array(),
 			'post_author' => array(),
 			'post_published_time' => '',
@@ -401,50 +394,47 @@ final class WP_Head {
 		$article = new OpenGraphProtocolArticle();
 
 		$ogp->setType( 'article' );
-		$ogp->setLocale( get_locale() );
+		$ogp->setLocale( $this->locale );
 		$ogp->setSiteName( $args['site_name'] );
 		$ogp->setTitle( $args['post_title'] );
 		$ogp->setURL( $args['post_url'] );
 		$ogp->setDescription( $args['post_description'] );
 
-		$article->setSection( $args['post_section'] );
-
-		foreach ( $args['post_tags'] as $key => $tag ) {
-			$article->addTag( $tag );
-		}
-
 		$article->setPublishedTime( $args['post_published_time'] );
 		$article->setModifiedTime( $args['post_modified_time'] );
 
 		/**
-		 * The author data.
+		 * Get the author data of the post
 		 *
 		 * @var array {
 		 *  @type string $profiles The the user social media profiles username (facebook, twitter, etc.).
 		 *  @type string $display_name The set display name.
 		 * }
 		 */
-		$author = (array) $args['post_author'];
+		$post_author = (array) $args['post_author'];
 
-		if ( ! empty( $author ) ) {
+		if ( $post_author ) {
 
-			$property = Options::get_list( 'social_profiles', array( 'facebook' ) );
-			$property_url = isset( $property['url'] ) ? trailingslashit( esc_url( $property['url'] ) ) : '';
+			$facebook = Options::get_list( 'social_profiles', array( 'facebook' ) );
+			$facebook_id = isset( $author['social_profiles']['facebook'] ) ? $author['social_profiles']['facebook'] : '';
+			$facebook_url = isset( $facebook['url'] ) && $facebook_id ? translate_profile_url( $facebook['url'], $facebook_id ) : '';
 
-			if ( isset( $author['profiles']['facebook'] ) && ! empty( $author['profiles']['facebook'] ) ) {
-				$article->addAuthor( "{$property_url}{$author['profiles']['facebook']}" );
-			} elseif ( isset( $author['display_name'] ) && ! empty( $author['display_name'] ) ) {
-				$meta .= sprintf( "<meta name=\"author\" content=\"%s\">\n", esc_attr( "{$author['display_name']}" ) );
+			if ( ! empty( $facebook_url ) ) {
+				$article->addAuthor( $facebook_url );
+			} elseif ( isset( $post_author['display_name'] ) && ! empty( $post_author['display_name'] ) ) {
+				$meta .= sprintf( "<meta name=\"author\" content=\"%s\">\n", esc_attr( "{$post_author['display_name']}" ) );
 			}
 		}
 
-		if ( ! empty( $args['post_image'] ) ) {
+		$post_image = $args['post_image'];
+
+		if ( $post_image ) {
 
 			$image = new OpenGraphProtocolImage();
 
-			$image->setURL( $args['post_image']['src'] );
-			$image->setWidth( $args['post_image']['width'] );
-			$image->setHeight( $args['post_image']['height'] );
+			$image->setURL( $post_image['src'] );
+			$image->setWidth( $post_image['width'] );
+			$image->setHeight( $post_image['height'] );
 
 			$ogp->addImage( $image );
 		}
@@ -497,8 +487,9 @@ final class WP_Head {
 
 		$meta = '';
 
-		$property = Options::get_list( 'social_profiles', array( 'facebook' ) );
-		$property_url = isset( $property['url'] ) ? trailingslashit( esc_url( $property['url'] ) ) : '';
+		$facebook = Options::get_list( 'social_profiles', array( 'facebook' ) );
+		$facebook_id = $this->plugin->option->get( 'profile', 'facebook' );
+		$facebook_url = isset( $facebook['url'] ) && $facebook_id ? translate_profile_url( $facebook['url'], $facebook_id ) : '';
 
 		/**
 		 * Facebook username of the website (not the user) added in the Settings page.
@@ -507,8 +498,8 @@ final class WP_Head {
 		 *
 		 * @var string
 		 */
-		$username = $this->plugin->option->get( 'profile', 'facebook' );
-		$meta .= ($property_url && $username) ? sprintf( "<meta property=\"article:publisher\" content=\"%s\">\n", esc_attr( "{$property_url}{$username}" ) ) : '';
+
+		$meta .= $facebook_url ? sprintf( "<meta property=\"article:publisher\" content=\"%s\">\n", esc_attr( $facebook_url ) ) : '';
 
 		return $meta;
 	}
@@ -573,10 +564,10 @@ final class WP_Head {
 			$meta = $site . $type . $meta;
 		}
 
-		$author = (array) $args['post_author'];
+		$post_author = (array) $args['post_author'];
 
-		if ( isset( $author['profiles']['twitter'] ) && ! empty( $author['profiles']['twitter'] ) ) {
-			$meta .= sprintf( "<meta name=\"twitter:creator\" content=\"@%s\">\n", esc_attr( "{$author['profiles']['twitter']}" ) );
+		if ( isset( $post_author['social_profiles']['twitter'] ) && ! empty( $post_author['social_profiles']['twitter'] ) ) {
+			$meta .= sprintf( "<meta name=\"twitter:creator\" content=\"@%s\">\n", esc_attr( "{$post_author['social_profiles']['twitter']}" ) );
 		}
 
 		return $meta;

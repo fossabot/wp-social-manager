@@ -41,8 +41,7 @@ class Test_Endpoint extends WP_UnitTestCase {
 		$this->plugin = ninecodes_social_manager();
 		$this->plugin->init();
 
-		$this->meta = new Meta( $this->plugin );
-		$this->endpoint = new Endpoint( $this->plugin, $this->meta );
+		$this->endpoint = new Endpoint( $this->plugin );
 	}
 
 	/**

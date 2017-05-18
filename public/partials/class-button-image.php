@@ -402,7 +402,7 @@ endforeach; ?></span>
 		 *
 		 * @var bool
 		 */
-		$post_meta = $this->meta->get_post_meta( get_the_id(), 'button_image' );
+		$post_meta = $this->plugin->meta->get_post_meta( get_the_id(), 'button_image' );
 
 		/**
 		 * If it is 'null' we assume that the meta post either not yet created or
