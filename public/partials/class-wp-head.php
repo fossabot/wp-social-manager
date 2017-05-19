@@ -319,8 +319,8 @@ final class WP_Head {
 			'post_url' => $this->plugin->meta->get_post_url( $post_id ),
 			'post_image' => $this->plugin->meta->get_post_image( $post_id ),
 			'post_author' => $this->plugin->meta->get_post_author( $post_id ),
-			'post_published_time' => get_post_time( 'c', true ),
-			'post_modified_time' => get_post_modified_time( 'c', true ),
+			'post_published_time' => $this->plugin->meta->get_post_time( $post_id ),
+			'post_modified_time' => $this->plugin->meta->get_post_modified_time( $post_id ),
 		), null );
 
 		/**
@@ -391,7 +391,7 @@ final class WP_Head {
 		) );
 
 		$ogp = new OpenGraphProtocol();
-		$article = new OpenGraphProtocolArticle();
+		$ogp_article = new OpenGraphProtocolArticle();
 
 		$ogp->setType( 'article' );
 		$ogp->setLocale( $this->locale );
@@ -400,8 +400,8 @@ final class WP_Head {
 		$ogp->setURL( $args['post_url'] );
 		$ogp->setDescription( $args['post_description'] );
 
-		$article->setPublishedTime( $args['post_published_time'] );
-		$article->setModifiedTime( $args['post_modified_time'] );
+		$ogp_article->setPublishedTime( $args['post_published_time'] );
+		$ogp_article->setModifiedTime( $args['post_modified_time'] );
 
 		/**
 		 * Get the author data of the post
@@ -420,7 +420,7 @@ final class WP_Head {
 			$facebook_url = isset( $facebook['url'] ) && $facebook_id ? translate_profile_url( $facebook['url'], $facebook_id ) : '';
 
 			if ( ! empty( $facebook_url ) ) {
-				$article->addAuthor( $facebook_url );
+				$ogp_article->addAuthor( $facebook_url );
 			} elseif ( isset( $post_author['display_name'] ) && ! empty( $post_author['display_name'] ) ) {
 				$meta .= sprintf( "<meta name=\"author\" content=\"%s\">\n", esc_attr( "{$post_author['display_name']}" ) );
 			}
@@ -451,7 +451,7 @@ final class WP_Head {
 		 *
 		 * @var string
 		 */
-		$og_article = $article->toHTML() ? $article->toHTML() . "\n" : '';
+		$og_article = $ogp_article->toHTML() ? $ogp_article->toHTML() . "\n" : '';
 
 		/**
 		 * Facebook proprietary Open Graph meta tag.
