@@ -68,7 +68,7 @@ final class Options {
 	 */
 	public static function get( $name = '', $key = '' ) {
 
-		if ( empty( $name ) ) {
+		if ( ! $name || ! $key ) {
 			return null;
 		}
 
