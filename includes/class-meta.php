@@ -540,4 +540,30 @@ final class Meta {
 			'social_profiles' => $social_profiles,
 		);
 	}
+
+	/**
+	 * The method to get the "post" published time
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param  integer $post_id The post ID.
+	 * @return string The post published time in UTC format.
+	 */
+	public function get_post_time( $post_id ) {
+		return get_post_time( 'c', true, $post_id );
+	}
+
+	/**
+	 * The method to get the "post" modified time.$_COOKIE
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param integer $post_id The post ID.
+	 * @return string The post modified time in UTC format.
+	 */
+	public function get_post_modified_time( $post_id ) {
+		return get_post_modified_time( 'c', true, $post_id );
+	}
 }
