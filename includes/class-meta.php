@@ -186,12 +186,13 @@ final class Meta {
 		 */
 		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), 'site_image', array() );
 
-		/*
-		 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
-		 * return the image immediately and don't proceed the codes that follow.
-		 */
 		if ( isset( $image_filter['src'] ) && ! empty( $image_filter['src'] ) ) {
-
+			/*
+			 * The Filter is the top priority
+			 *
+			 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
+			 * return the image immediately.
+			 */
 			return wp_parse_args( $image_filter, array(
 				'src' => '',
 				'width' => 0,
@@ -327,10 +328,10 @@ final class Meta {
 				return '';
 			}
 
-			if ( empty( $post->post_excerpt ) ) {
+			$post_description = $post->post_excerpt;
+
+			if ( empty( $post_description ) ) {
 				$post_description = wp_trim_words( $post->post_content, 30, '...' );
-			} else {
-				$post_description = $post->post_excerpt;
 			}
 		}
 
@@ -356,11 +357,12 @@ final class Meta {
 	 *
 	 * This method will try to retrieve image from a number of sources,
 	 * and return the image data based on the following priority order:
-	 * 1. Post Meta Image or 'ninecodes_social_manager_meta' Filter
-	 * 2. Post Featured Image
-	 * 3. Post Content First Image
-	 * 4. Site Meta Image
-	 * 5. Site Custom Logo (Customizer)
+	 * 1. Post Meta Filter ('ninecodes_social_manager_meta')
+	 * 2. Post Meta Image
+	 * 3. Post Featured Image
+	 * 4. Post Content First Image
+	 * 5. Site Meta Image
+	 * 6. Site Custom Logo (Customizer)
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -373,7 +375,7 @@ final class Meta {
 		$post_id = absint( $post_id );
 
 		/**
-		 * Filter the site image meta value.
+		 * Filter the site image meta value
 		 *
 		 * @since 1.2.0
 		 *
@@ -386,12 +388,13 @@ final class Meta {
 			'post_id' => $post_id,
 		) );
 
-		/*
-		 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
-		 * return the image immediately and don't proceed the codes that follow.
-		 */
 		if ( isset( $image_filter['src'] ) && ! empty( $image_filter['src'] ) ) {
-
+			/*
+			 * The Filter is the top priority
+			 *
+			 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
+			 * return the image immediately.
+			 */
 			return wp_parse_args( $image_filter, array(
 				'src' => '',
 				'width' => 0,
@@ -401,12 +404,24 @@ final class Meta {
 
 		$attachment_id = null;
 
+		// 2. Get Post Meta Image
 		if ( Helpers::is_meta_tags_enabled() ) {
-			$attachment_id = self::get_post_meta( $post_id, 'post_thumbnail' ); // Post Meta Image.
+			/**
+			 * The Post Meta Image ID
+			 *
+			 * @var integer
+			 */
+			$attachment_id = self::get_post_meta( $post_id, 'post_thumbnail' );
 		}
 
+		// 3. Get Post Featured Image
 		if ( ! $attachment_id ) {
-			$attachment_id = get_post_thumbnail_id( $post_id ); // Post Featured Image.
+			/**
+			 * The Featured Image ID
+			 *
+			 * @var integer
+			 */
+			$attachment_id = get_post_thumbnail_id( $post_id );
 		}
 
 		if ( $attachment_id ) {
@@ -420,9 +435,10 @@ final class Meta {
 			);
 		}
 
+		// 4. Get Post Content First Image
 		$post = get_post( $post_id );
 
-		if ( $post && ! empty( $post->post_content ) ) {
+		if ( ! empty( $post->post_content ) ) {
 
 			$content = $post->post_content;
 
@@ -432,28 +448,35 @@ final class Meta {
 			$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
 
 			$images = $dom->getElementsByTagName( 'img' );
+			$image_src = '';
 
 			if ( 0 !== $images->length ) {
+				$image_src = $images->item( 0 )->getAttribute( 'src' );
+			}
 
-				$src = $images->item( 0 )->getAttribute( 'src' );
+			if ( ! empty( $image_src ) ) {
 
-				if ( $src ) {
+				$image_width = $images->item( 0 )->getAttribute( 'width' );
+				$image_height = $images->item( 0 )->getAttribute( 'height' );
 
-					$width = $images->item( 0 )->getAttribute( 'width' );
-					$height = $images->item( 0 )->getAttribute( 'height' );
-
-					return array(
-						'src' => esc_url( $src ),
-						'width' => $width && substr( $width, -1 ) === '%' ? absint( $width ) : 0,
-						'height' => $height && substr( $height, -1 ) === '%' ? absint( $height ) : 0,
-					);
-				}
+				return array(
+					'src' => esc_url( $image_src ),
+					'width' => $image_width && substr( $image_width, -1 ) === '%' ? absint( $image_width ) : 0,
+					'height' => $image_height && substr( $image_height, -1 ) === '%' ? absint( $image_height ) : 0,
+				);
 			}
 
 			libxml_clear_errors();
 			libxml_use_internal_errors( $errors );
 		}
 
+		/**
+		 * ==========================================================================
+		 * If image in the post is not present, fallback to the image added sitewide
+		 * ==========================================================================
+		 */
+
+		// 5. Site Meta Image
 		if ( Helpers::is_meta_tags_enabled() ) {
 
 			$site_image = self::get_site_image(); // Site Meta Image.
@@ -463,7 +486,8 @@ final class Meta {
 			}
 		}
 
-		$site_logo = absint( get_theme_mod( 'custom_logo' ) ); // Site Custom Logo.
+		// 6. Get Site Custom Logo
+		$site_logo = absint( get_theme_mod( 'custom_logo' ) );
 
 		if ( $site_logo ) {
 
