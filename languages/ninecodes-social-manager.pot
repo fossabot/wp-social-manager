@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Social Media Manager 2.0.0-alpha.3\n"
 "Report-Msgid-Bugs-To: https://github.com/ninecodes/social-manager/issues\n"
-"POT-Creation-Date: 2017-05-17 21:13:56+00:00\n"
+"POT-Creation-Date: 2017-05-19 06:48:15+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -439,99 +439,99 @@ msgstr ""
 msgid "Bummer! you do not have the authority to save this inputs."
 msgstr ""
 
-#: includes/class-options.php:122
+#: includes/class-options.php:149
 #. translators: %s is an example of a username input.
 msgid "Facebook profile or page (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:128
+#: includes/class-options.php:155
 #. translators: %s is an example of a username input.
 msgid "Twitter profile without the %1$s (e.g. %2$s)"
 msgstr ""
 
-#: includes/class-options.php:134
+#: includes/class-options.php:161
 #. translators: %s is an example of a username input.
 msgid "Instagram profile (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:140
+#: includes/class-options.php:167
 #. translators: %s is an example of a username input.
 msgid "Pinterest profile (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:146
+#: includes/class-options.php:173
 #. translators: %s is an example of a username input.
 msgid "LinkedIn profile (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:152
+#: includes/class-options.php:179
 #. translators: %s is an example of a username input.
 msgid "Google+ profile or page. Include the %1$s sign if necessary (e.g. %2$s)"
 msgstr ""
 
-#: includes/class-options.php:158
+#: includes/class-options.php:185
 #. translators: %s is an example of a username input.
 msgid "Youtube channel (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:164
+#: includes/class-options.php:191
 #. translators: %s is an example of a username input.
 msgid "Reddit profile (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:170
+#: includes/class-options.php:197
 #. translators: %s is an example of a username input.
 msgid "Tumblr blog (e.g. %s)"
 msgstr ""
 
-#: includes/class-options.php:271
+#: includes/class-options.php:298
 msgid "Icon Only"
 msgstr ""
 
-#: includes/class-options.php:272
+#: includes/class-options.php:299
 msgid "Text Only"
 msgstr ""
 
-#: includes/class-options.php:273
+#: includes/class-options.php:300
 msgid "Icon and Text"
 msgstr ""
 
-#: includes/class-options.php:315
+#: includes/class-options.php:342
 msgid "Before the content"
 msgstr ""
 
-#: includes/class-options.php:316
+#: includes/class-options.php:343
 msgid "After the content"
 msgstr ""
 
-#: includes/class-options.php:467 includes/class-options.php:480
+#: includes/class-options.php:494 includes/class-options.php:507
 msgid "Mono"
 msgstr ""
 
-#: includes/class-options.php:468 includes/class-options.php:481
+#: includes/class-options.php:495 includes/class-options.php:508
 msgid "Color"
 msgstr ""
 
-#: includes/class-options.php:469 includes/class-options.php:476
-#: includes/class-options.php:482
+#: includes/class-options.php:496 includes/class-options.php:503
+#: includes/class-options.php:509
 msgid "Circle"
 msgstr ""
 
-#: includes/class-options.php:470 includes/class-options.php:475
-#: includes/class-options.php:483
+#: includes/class-options.php:497 includes/class-options.php:502
+#: includes/class-options.php:510
 msgid "Rounded"
 msgstr ""
 
-#: includes/class-options.php:471 includes/class-options.php:477
-#: includes/class-options.php:484
+#: includes/class-options.php:498 includes/class-options.php:504
+#: includes/class-options.php:511
 msgid "Square"
 msgstr ""
 
-#: includes/class-options.php:472
+#: includes/class-options.php:499
 msgid "Skeumorphic"
 msgstr ""
 
-#: includes/class-plugin.php:215
+#: includes/class-plugin.php:217
 msgid "Settings"
 msgstr ""
 
@@ -591,7 +591,7 @@ msgstr ""
 msgid "Lightweight, clean and optimized social media plugin for WordPress."
 msgstr ""
 
-#: includes/class-options.php:200
+#: includes/class-options.php:227
 msgctxt "Dummy text label for a social media profile, in case it is not supplied."
 msgid "Example"
 msgstr ""
