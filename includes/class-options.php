@@ -83,6 +83,33 @@ final class Options {
 	}
 
 	/**
+	 * Get the list of options stored in the database
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @param string $name The option name.
+	 * @param string $key The array key to update from the option.
+	 * @param string $value The value to add in the option.
+	 * @return void
+	 */
+	public static function update( $name = '', $key = '', $value = '' ) {
+
+		if ( ! $name || ! $key || ! $value ) {
+			return;
+		}
+
+		$option_name = self::name( $name );
+
+		$option_value = (array) get_option( $option_name, array() );
+		$option_value = array_merge( $option_value, array(
+			$key => $value,
+		) );
+
+		update_option( $option_name, $option_value );
+	}
+
+	/**
 	 * Get options available of the given name
 	 *
 	 * @since 2.0.0
