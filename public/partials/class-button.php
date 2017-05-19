@@ -292,15 +292,17 @@ abstract class Button implements Button_Interface {
 	 * @since 1.0.6
 	 * @access public
 	 *
-	 * @param DOMDocument $dom [description].
+	 * @param DOMDocument $dom The content wrapped in DOMDocument.
 	 * @return string
 	 */
 	public function to_html( DOMDocument $dom ) {
 
-		return preg_replace('/^<!DOCTYPE.+?>/', '', str_replace(
+		$dom_content = preg_replace('/^<!DOCTYPE.+?>/', '', str_replace(
 			array( '<html>', '</html>', '<body>', '</body>' ),
 			array( '', '', '', '' ),
 			$dom->saveHTML()
 		));
+
+		return preg_replace( "/\r|\n/", '', $dom_content );
 	}
 }

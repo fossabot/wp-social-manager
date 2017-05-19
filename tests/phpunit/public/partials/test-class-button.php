@@ -322,4 +322,29 @@ class Test_Button extends WP_UnitTestCase {
 		$this->assertEquals( '<img src="image/pinterest.png" />', $this->button->get_icons( 'pinterest' ) );
 		$this->assertEquals( '<img src="image/linkedin.png" />', $this->button->get_icons( 'linkedin' ) );
 	}
+
+	/**
+	 * Function to test the `to_html`.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function test_to_html() {
+
+		$dom = new \DOMDocument();
+		$errors = libxml_use_internal_errors( true );
+
+		$raw_content = '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit pariatur iusto, tempore saepe aspernatur commodi consectetur est error velit voluptatem cum fugit quasi dicta, molestiae sint reiciendis sunt, dolore possimus.</p>';
+
+		$dom->loadHTML( mb_convert_encoding( $raw_content, 'HTML-ENTITIES', 'UTF-8' ) );
+
+		$content = $this->button->to_html( $dom );
+
+		libxml_clear_errors();
+		libxml_use_internal_errors( $errors );
+
+		$this->assertEquals( $raw_content, $content );
+	}
 }
