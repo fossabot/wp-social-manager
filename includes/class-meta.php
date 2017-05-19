@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 use \DOMDocument;
 
 /**
- * The class to generate meta data.
+ * The class to get the site or post meta
  *
  * @since 1.0.0
  */
@@ -34,10 +34,10 @@ final class Meta {
 	 * @param  string $which Meta array key.
 	 * @return mixed
 	 */
-	public static function get_site_meta( $which ) {
+	public function get_site_meta( $which = '' ) {
 
 		if ( ! $which ) {
-			return;
+			return '';
 		}
 
 		return Options::get( 'meta_site', $which );
@@ -51,7 +51,7 @@ final class Meta {
 	 *
 	 * @return string The website name / brand
 	 */
-	public static function get_site_name() {
+	public function get_site_name() {
 
 		$site_name = self::get_site_meta( 'name' );
 
@@ -82,7 +82,7 @@ final class Meta {
 	 *
 	 * @return string The website title
 	 */
-	public static function get_site_title() {
+	public function get_site_title() {
 
 		$site_title = self::get_site_meta( 'title' );
 
@@ -113,7 +113,7 @@ final class Meta {
 	 *
 	 * @return string The website description
 	 */
-	public static function get_site_description() {
+	public function get_site_description() {
 
 		$site_description = self::get_site_meta( 'description' );
 
@@ -154,7 +154,7 @@ final class Meta {
 	 *
 	 * @return string The website url
 	 */
-	public static function get_site_url() {
+	public function get_site_url() {
 		return esc_url( get_site_url() );
 	}
 
@@ -172,38 +172,10 @@ final class Meta {
 	 *
 	 * @return array An array of image data (src, width, and height)
 	 */
-	public static function get_site_image() {
+	public function get_site_image() {
 
 		/**
-		 * An array of the `ninecodes_social_manager_meta` filter hook arguments.
-		 *
-		 * @var array
-		 */
-		$args = array();
-
-		if ( is_home() ) {
-			$args['home'] = array(
-				'paged' => get_query_var( 'paged', 1 ),
-			);
-		}
-
-		if ( is_archive() ) {
-
-			$object = get_queried_object();
-
-			$args['archive'] = array(
-				'paged' => get_query_var( 'paged', 1 ),
-				'taxonomy' => $object->taxonomy,
-				'term' => array(
-					'id' => $object->term_id,
-					'name' => $object->name,
-					'slug' => $object->slug,
-				),
-			);
-		}
-
-		/**
-		 * Filter the site URL meta value.
+		 * Filter the site image meta value.
 		 *
 		 * @since 1.2.0
 		 *
@@ -212,7 +184,7 @@ final class Meta {
 		 *
 		 * @var array
 		 */
-		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), 'site_image', $args );
+		$image_filter = apply_filters( 'ninecodes_social_manager_meta', array(), 'site_image', array() );
 
 		/*
 		 * If the image value from the 'ninecodes_social_manager_meta' filter is there,
@@ -233,6 +205,7 @@ final class Meta {
 			$avatar = get_avatar_url( $author->ID, array(
 				'size' => 180,
 			) );
+
 			return array(
 				'src' => $avatar,
 				'width' => 180,
@@ -265,7 +238,7 @@ final class Meta {
 	 * @param  string  $which The the meta array key.
 	 * @return string|array
 	 */
-	public static function get_post_meta( $post_id, $which ) {
+	public function get_post_meta( $post_id, $which ) {
 
 		if ( ! $post_id || ! $which ) {
 			return;
@@ -293,7 +266,7 @@ final class Meta {
 	 * @param integer $post_id The post ID.
 	 * @return string The "post" title
 	 */
-	public static function get_post_title( $post_id ) {
+	public function get_post_title( $post_id ) {
 
 		$post_id = absint( $post_id );
 		$post_title = '';
@@ -335,7 +308,7 @@ final class Meta {
 	 * @param integer $post_id The post ID.
 	 * @return string The "post" description
 	 */
-	public static function get_post_description( $post_id ) {
+	public function get_post_description( $post_id ) {
 
 		$post_id = absint( $post_id );
 		$post_description = '';
@@ -395,7 +368,7 @@ final class Meta {
 	 * @param integer $post_id The post ID.
 	 * @return array The image data consisting of the image source, width, and height
 	 */
-	public static function get_post_image( $post_id ) {
+	public function get_post_image( $post_id ) {
 
 		$post_id = absint( $post_id );
 
@@ -513,7 +486,7 @@ final class Meta {
 	 * @param integer $post_id The post ID.
 	 * @return string The "post" url / permalink
 	 */
-	public static function get_post_url( $post_id ) {
+	public function get_post_url( $post_id ) {
 
 		$post_url = get_permalink( absint( $post_id ) );
 
@@ -532,7 +505,7 @@ final class Meta {
 	 *     @type string $social_profiles List of social media profiles associated with the author.
 	 * }
 	 */
-	public static function get_post_author( $post_id ) {
+	public function get_post_author( $post_id ) {
 
 		$post = get_post( absint( $post_id ) );
 		$author_name = $post ? get_the_author_meta( 'display_name', $post->post_author ) : '';
