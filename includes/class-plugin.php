@@ -98,9 +98,10 @@ final class Plugin {
 	 */
 	public function uninstall() {
 
-		foreach ( $this->option_names as $key => $option_name ) {
-			delete_option( $option_name );
-		}
+		global $wpdb;
+
+		$option_slug = $this->option->slug();
+		$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->options WHERE option_name LIKE %s;", "{$option_slug}\_%" ) );
 	}
 
 	/**
