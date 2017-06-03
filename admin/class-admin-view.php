@@ -26,7 +26,7 @@ final class Admin_View {
 	 * The Plugin class instance.
 	 *
 	 * @since 1.0.0
-	 * @access protected
+	 * @access public
 	 * @var Plugin
 	 */
 	public $plugin;
@@ -35,16 +35,25 @@ final class Admin_View {
 	 * The plugin Admin directory path.
 	 *
 	 * @since 1.0.0
-	 * @access private
+	 * @access protected
 	 * @var string
 	 */
 	protected $path_dir;
 
 	/**
+	 * The plugin Module directory path.
+	 *
+	 * @since 2.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $path_module;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since 1.0.0
-	 * @access private
+	 * @access public
 	 *
 	 * @param Plugin $plugin The Plugin class instance.
 	 */
@@ -52,6 +61,7 @@ final class Admin_View {
 
 		$this->plugin = $plugin;
 		$this->path_dir = plugin_dir_path( __FILE__ );
+		$this->path_module = trailingslashit( plugin_dir_path( dirname( __FILE__ ) ) . 'modules' );
 
 		spl_autoload_register( array( $this, 'requires' ) );
 
@@ -77,22 +87,9 @@ final class Admin_View {
 			require_once( $class_path );
 		}
 
-		require_once $this->path_dir . 'partials/settings/class-settings.php';
-		require_once $this->path_dir . 'partials/settings/class-fields.php';
-
-		add_action( 'plugins_loaded', array( $this, 'requires_metabox' ) );
-	}
-
-	/**
-	 * Load the required dependencies when plugins are already loaded.
-	 *
-	 * @since 2.0.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function requires_metabox() {
-		require_once( $this->path_dir . 'partials/metabox/butterbean.php' );
+		require_once( $this->path_module . 'settings/class-settings.php' );
+		require_once( $this->path_module . 'settings/class-fields.php' );
+		require_once( $this->path_module . 'metabox/ninecodes-metabox.php' );
 	}
 
 	/**
@@ -109,11 +106,7 @@ final class Admin_View {
 	protected function setups() {
 
 		$settings = new Settings( $this->plugin );
+		$metabox = new Metabox( $this->plugin );
 		$user = new User( $this->plugin );
-
-		static $metabox;
-		if ( is_null( $metabox ) ) {
-			$metabox = new Metabox( $this->plugin );
-		}
 	}
 }

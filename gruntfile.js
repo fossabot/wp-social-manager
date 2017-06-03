@@ -20,10 +20,12 @@ module.exports = function (grunt) {
 		 */
 		dir: {
 			pluginPath: '/srv/www/wordpress-develop/public_html/src/wp-content/plugins/<%= pkg.name %>',
-			adminCSS: 'admin/css/',
-			adminJS: 'admin/js/',
-			publicCSS: 'public/css/',
-			publicJS: 'public/js/',
+			adminCSS: 'admin/assets/css/',
+			adminJS: 'admin/assets/js/',
+			publicCSS: 'public/assets/css/',
+			publicJS: 'public/assets/js/',
+			metaboxCSS: 'admin/partials/metabox/assets/css/',
+			metaboxJS: 'admin/partials/metabox/assets/js/'
 		},
 
 		/**
@@ -89,7 +91,7 @@ module.exports = function (grunt) {
 			styles: {
 				files: [
 					'<%= dir.publicCSS %>**/*.less',
-					'<%= dir.adminCSS %>**/*.less',
+					'<%= dir.adminCSS %>**/*.less'
 				],
 				tasks: ['styles:dev'],
 			},
@@ -206,10 +208,8 @@ module.exports = function (grunt) {
 						'<%= dir.publicCSS %>*.less'
 					],
 					'<%= dir.adminCSS %>style.css': [
-						'<%= dir.adminCSS %>admin-*.less'
-					],
-					'<%= dir.adminCSS %>metabox.css': [
-						'<%= dir.adminCSS %>metabox-*.less'
+						'<%= dir.adminCSS %>admin-*.less',
+						'<%= dir.adminCSS %>setting-*.less'
 					]
 				}]
 			},
@@ -320,8 +320,8 @@ module.exports = function (grunt) {
 					],
 					exclude: [
 						'.js',
-						'admin/js/.*',
-						'public/js/.*',
+						'admin/assets/js/.*',
+						'public/assets/js/.*',
 						'node_modules/.*',
 						'build/.*',
 						'dev-lib/.*',
@@ -426,7 +426,8 @@ module.exports = function (grunt) {
 					'!**/changelog.md',
 					'!**/readme.md',
 					'!**/README.md',
-					'!**/contributing.md'
+					'!**/contributing.md',
+					'!admin/partials/metabox/includes/assets/**'
 				],
 				dest: './build/',
 				expand: true,

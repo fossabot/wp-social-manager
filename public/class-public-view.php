@@ -51,6 +51,15 @@ final class Public_View {
 	protected $path_url;
 
 	/**
+	 * The plugin Module directory path.
+	 *
+	 * @since 2.0.0
+	 * @access protected
+	 * @var string
+	 */
+	protected $path_module;
+
+	/**
 	 * Constructor.
 	 *
 	 * Initialize the class, set its properties, load the dependencies,
@@ -62,7 +71,7 @@ final class Public_View {
 	 *
 	 * @param Plugin $plugin The Plugin class instance.
 	 */
-	function __construct( Plugin $plugin ) {
+	public function __construct( Plugin $plugin ) {
 
 		if ( is_admin() ) {
 			return;
@@ -72,6 +81,7 @@ final class Public_View {
 
 		$this->path_dir = plugin_dir_path( __FILE__ );
 		$this->path_url = plugin_dir_url( __FILE__ );
+		$this->path_module = trailingslashit( plugin_dir_path( dirname( __FILE__ ) ) . 'modules' );
 
 		spl_autoload_register( array( $this, 'requires' ) );
 
@@ -97,8 +107,8 @@ final class Public_View {
 			require_once( $class_path );
 		}
 
-		require_once( $this->path_dir . 'partials/ogp/open-graph-protocol.php' );
 		require_once( $this->path_dir . 'partials/function-template-tags.php' );
+		require_once( $this->path_module . 'ogp/open-graph-protocol.php' );
 	}
 
 	/**
@@ -154,7 +164,7 @@ final class Public_View {
 		$plugin_slug = $this->plugin->slug();
 		$plugin_version = $this->plugin->version;
 
-		wp_register_style( $plugin_slug, $this->path_url . 'css/style.css', array(), $plugin_version, 'all' );
+		wp_register_style( $plugin_slug, $this->path_url . 'assets/css/style.css', array(), $plugin_version, 'all' );
 		wp_style_add_data( $plugin_slug, 'rtl', 'replace' );
 	}
 
@@ -177,8 +187,8 @@ final class Public_View {
 		$handle = $this->plugin->slug();
 		$version = $this->plugin->version;
 
-		wp_register_script( "{$handle}-app", $this->path_url . 'js/app.min.js', array( 'jquery', 'underscore', 'backbone' ), $version, true );
-		wp_register_script( $handle, $this->path_url . 'js/scripts.min.js', array( 'jquery' ), $version, true );
+		wp_register_script( "{$handle}-app", $this->path_url . 'assets/js/app.min.js', array( 'jquery', 'underscore', 'backbone' ), $version, true );
+		wp_register_script( $handle, $this->path_url . 'assets/js/scripts.min.js', array( 'jquery' ), $version, true );
 	}
 
 	/**
