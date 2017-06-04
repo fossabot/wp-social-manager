@@ -26,9 +26,9 @@
 	<exclude-pattern>*/dev-lib/*</exclude-pattern>
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
-	<exclude-pattern>*/public/partials/ogp/*</exclude-pattern>
-	<exclude-pattern>*/admin/partials/metabox/*</exclude-pattern>
-	<exclude-pattern>*/admin/partials/settings/*</exclude-pattern>
+	<exclude-pattern>*/modules/ogp/*</exclude-pattern>
+	<exclude-pattern>*/modules/metabox/*</exclude-pattern>
+	<exclude-pattern>*/modules/settings/*</exclude-pattern>
 	<exclude-pattern>*index.php</exclude-pattern>
 	<exclude-pattern>*/includes/class-requirements.php</exclude-pattern>
 </ruleset>
