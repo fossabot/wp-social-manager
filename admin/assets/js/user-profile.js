@@ -1,11 +1,12 @@
 /*eslint no-unused-vars: ["error", { "vars": "local", "varsIgnorePattern": "^preview" }]*/
-jQuery(function ($) {
+jQuery(function($) {
 
 	'use strict';
 
 	/**
 	 * The Backbone View to preview the "Social Profile" URL.
 	 */
+
 	var ninecodes = window.ninecodes || {},
 		InputProfiles = {
 			View: {}
@@ -14,7 +15,7 @@ jQuery(function ($) {
 		previewProfiles;
 
 	InputProfiles.View = Backbone.View.extend({
-		el: '.field-text-profile'
+		el: '.account-profile-control'
 	});
 
 	PreviewProfiles = InputProfiles.View.extend({
@@ -27,9 +28,9 @@ jQuery(function ($) {
 		 * Initialize the View
 		 * On page load, render the preview if the value is set in the input.
 		 *
-		 * @return {Void} This is executed on initialization, and does not return anything.
+		 * @return {void}
 		 */
-		initialize: function () {
+		initialize: function() {
 
 			this.wait = 150;
 			this.previewInit();
@@ -38,13 +39,13 @@ jQuery(function ($) {
 		/**
 		 * Function to render preview on page load.
 		 *
-		 * @return {Void} Returns nothing.
+		 * @return {void}
 		 */
-		previewInit: function () {
+		previewInit: function() {
 
 			var self = this;
 
-			this.$el.each(function () {
+			this.$el.each(function() {
 				self.createPlaceholder(this);
 				self.render(this);
 			});
@@ -54,19 +55,19 @@ jQuery(function ($) {
 		 * Function to update the preview content,
 		 * when the user type in the input.
 		 *
-		 * @type {Void} Returns nothing.
+		 * @type {void}
 		 */
-		previewUpdate: _.throttle(function (event) {
+		previewUpdate: _.throttle(function(event) {
 			this.render(event.currentTarget);
 		}),
 
 		/**
 		 * Function to render the preview placeholder element.
 		 *
-		 * @param {Object} target The JavaScript element object.
-		 * @return {Void} Returns nothing.
+		 * @param {object} target The JavaScript element object.
+		 * @return {void}
 		 */
-		render: function (target) {
+		render: function(target) {
 
 			var attrID = target.getAttribute('id'),
 				inputValue = this.getValue(target),
@@ -90,20 +91,23 @@ jQuery(function ($) {
 		/**
 		 * Function to create the placeholder element.
 		 *
-		 * @param {Object} target The JavaScript element object.
-		 * @return {Object} The JavaScript element object of the placeholder.
+		 * @param {object} target The JavaScript element object.
+		 * @return {object} The JavaScript element object of the placeholder.
 		 */
-		createPlaceholder: function (target) {
-			return $(target).after('<p id=' + target.getAttribute('id') + '-preview></p>');
+		createPlaceholder: function(target) {
+
+			var attrID = target.getAttribute('id');
+
+			return $(target).after('<p id=' + attrID + '-preview></p>');
 		},
 
 		/**
 		 * Function to get the value of the input.
 		 *
-		 * @param {Object} target The JavaScript element object.
-		 * @return {String} The formatted input value.
+		 * @param {object} target The JavaScript element object.
+		 * @return {string} The input value.
 		 */
-		getValue: function (target) {
+		getValue: function(target) {
 
 			var value = target.value.replace(/\s+/g, '-'); // Replace a space with a dash.
 

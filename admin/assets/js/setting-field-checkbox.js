@@ -1,10 +1,8 @@
 /*eslint no-unused-vars: ["error", { "vars": "local", "varsIgnorePattern": "^checkbox" }]*/
 jQuery(function($) {
+
 	'use strict';
 
-	/**
-	 * The Backbone View to toggle controls visibiity.
-	 */
 	var Checkbox = {
 			View: {}
 		},
@@ -23,10 +21,11 @@ jQuery(function($) {
 
 		/**
 		 * Initialize the View.
+		 *
 		 * Get the target elements attached to the trigger ($el),
 		 * and set the elements visibiity on page load.
 		 *
-		 * @return {Void} This is executed on initialization, and does not return anything.
+		 * @return {void}
 		 */
 		initialize: function() {
 
@@ -38,7 +37,7 @@ jQuery(function($) {
 		 * The function that toggles the target elements
 		 * following the trigger value.
 		 *
-		 * @return {Void} Nothing
+		 * @return {void}
 		 */
 		checkControls: function() {
 

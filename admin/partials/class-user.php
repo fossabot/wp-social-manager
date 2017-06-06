@@ -135,7 +135,6 @@ final class User {
 			$key = sanitize_key( $key );
 			$profiles[ $key ] = sanitize_text_field( $value );
 		}
-
 		if ( current_user_can( 'edit_user', $user_id ) ) {
 			update_user_meta( $user_id, $this->plugin->option->slug(), $profiles );
 		}
@@ -170,8 +169,6 @@ final class User {
 		$plugin_slug = $this->plugin->slug();
 		$plugin_version = $this->plugin->version;
 
-		$file = 'preview-profile';
-
-		wp_enqueue_script( "{$plugin_slug}-{$file}", $this->path_url . 'js/{$file}.min.js', array( 'backbone' ), $plugin_version, true );
+		wp_enqueue_script( "{$plugin_slug}-user", $this->path_url . 'assets/js/user.min.js', array( 'backbone' ), $plugin_version, true );
 	}
 }

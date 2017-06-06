@@ -29,6 +29,7 @@
 	<exclude-pattern>*/modules/ogp/*</exclude-pattern>
 	<exclude-pattern>*/modules/metabox/*</exclude-pattern>
 	<exclude-pattern>*/modules/settings/*</exclude-pattern>
+	<exclude-pattern>*/admin/partials/metabox/tmpl/*</exclude-pattern>
 	<exclude-pattern>*index.php</exclude-pattern>
 	<exclude-pattern>*/includes/class-requirements.php</exclude-pattern>
 </ruleset>

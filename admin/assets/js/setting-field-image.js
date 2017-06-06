@@ -4,6 +4,7 @@ jQuery(function($) {
 	'use strict';
 
 	var wp = window.wp || {},
+
 		MediaUpload = {
 			View: {}
 		},

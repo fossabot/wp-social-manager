@@ -23,9 +23,7 @@ module.exports = function (grunt) {
 			adminCSS: 'admin/assets/css/',
 			adminJS: 'admin/assets/js/',
 			publicCSS: 'public/assets/css/',
-			publicJS: 'public/assets/js/',
-			metaboxCSS: 'admin/partials/metabox/assets/css/',
-			metaboxJS: 'admin/partials/metabox/assets/js/'
+			publicJS: 'public/assets/js/'
 		},
 
 		/**
@@ -37,9 +35,9 @@ module.exports = function (grunt) {
 			'*.php',
 			'**/*.php',
 			'!docs/**',
-			'!public/partials/ogp/**',
-			'!admin/partials/metabox/**',
-			'!admin/partials/settings/**',
+			'!modules/ogp/**',
+			'!modules/metabox/**',
+			'!modules/settings/**',
 			'!<%= pkg.name %>/**',
 			'!build/**',
 			'!node_modules/**',
@@ -138,8 +136,14 @@ module.exports = function (grunt) {
 			},
 			files: [{
 				'<%= dir.adminJS %>scripts.min.js': [
+					'<%= dir.adminJS %>app.js',
 					'<%= dir.adminJS %>admin-*.js',
 					'<%= dir.adminJS %>setting-*.js',
+					'!<%= dir.adminJS %>*.min.js',
+				],
+				'<%= dir.adminJS %>user.min.js': [
+					'<%= dir.adminJS %>app.js',
+					'<%= dir.adminJS %>user-*.js',
 					'!<%= dir.adminJS %>*.min.js',
 				],
 				'<%= dir.adminJS %>metabox.min.js': [
@@ -162,7 +166,7 @@ module.exports = function (grunt) {
 				},
 				files: '<%= uglify.files %>'
 			},
-			build: {
+			dist: {
 				files: '<%= uglify.files %>'
 			}
 		},
@@ -325,9 +329,9 @@ module.exports = function (grunt) {
 						'node_modules/.*',
 						'build/.*',
 						'dev-lib/.*',
-						'public/partials/ogp/.*',
-						'admin/partials/metabox/.*',
-						'admin/partials/settings/.*'
+						'modules/ogp/.*',
+						'modules/metabox/.*',
+						'modules/settings/.*'
 					],
 					processPot: function (pot) {
 
@@ -412,7 +416,7 @@ module.exports = function (grunt) {
 		 * @type {Object}
 		 */
 		copy: {
-			build: {
+			dist: {
 				src: [
 					'*.php',
 					'admin/**',
@@ -420,16 +424,23 @@ module.exports = function (grunt) {
 					'widgets/**',
 					'includes/**',
 					'languages/**',
+					'modules/**',
 					'readme.txt',
 					'!**/*.less',
 					'!**/*.map',
-					'!**/changelog.md',
-					'!**/readme.md',
-					'!**/README.md',
-					'!**/contributing.md',
-					'!admin/partials/metabox/includes/assets/**'
+					'!**/*.md',
+					'!**/*.json',
+					'!**/*.xml',
+					'!**/*.xml.dist',
+					'!**/gruntfile.js',
+					'!**/node_modules/**',
+					'!**/languages/**',
+					'!**/dist/**',
+					'!**/build/**',
+					'!**/dev-lib/**',
+					'!modules/metabox/assets/js/metabox-*.js',
 				],
-				dest: './build/',
+				dest: './dist/',
 				expand: true,
 				dot: false
 			}
@@ -442,13 +453,13 @@ module.exports = function (grunt) {
 		 * @type {Object}
 		 */
 		compress: {
-			build: {
+			dist: {
 				options: {
 					archive: '<%= pkg.name %>.<%= pkg.version %>.zip'
 				},
 				files: [{
 					expand: true,
-					cwd: './build/',
+					cwd: './dist/',
 					src: ['**'],
 
 					// When the .zip file is uncompressed (e.g. 'ninecodes-social-media').
@@ -464,7 +475,7 @@ module.exports = function (grunt) {
 		 * @type {Object}
 		 */
 		clean: {
-			build: ['./build/'],
+			dist: ['./dist/'],
 			zip: ['./<%= pkg.name %>*.zip']
 		},
 
@@ -504,6 +515,12 @@ module.exports = function (grunt) {
 
 	grunt.task.run('notify_hooks');
 
+	// Build
+	grunt.registerTask('build', [
+		'less:dev',
+		'uglify:dev'
+	]);
+
 	// Register grunt default tasks.
 	grunt.registerTask('default', [
 		'styles:dev',
@@ -519,21 +536,21 @@ module.exports = function (grunt) {
 	]);
 
 	// Build the plugin.
-	grunt.registerTask('build', [
-		'clean:build',
+	grunt.registerTask('dist', [
+		'clean:dist',
 		'clean:zip',
 		'styles',
 		'scripts',
 		'wordpress',
 		'version',
-		'copy:build'
+		'copy:dist'
 	]);
 
 	// Build and package the plugin into a .zip file.
-	grunt.registerTask('build:package', [
-		'build',
-		'compress:build',
-		'clean:build'
+	grunt.registerTask('dist:package', [
+		'dist',
+		'compress:dist',
+		'clean:dist'
 	]);
 
 	/**
@@ -603,8 +620,8 @@ module.exports = function (grunt) {
 	// Check and compile WordPress files.
 	grunt.registerTask('wordpress', [
 		'phpunit',
-		'newer:addtextdomain',
-		'newer:checktextdomain',
+		'addtextdomain',
+		'checktextdomain',
 		'version',
 		'makepot'
 	]);
