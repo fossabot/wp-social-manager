@@ -2,6 +2,7 @@
 # Social Media Manager
 
 ![Banner](wp-assets/banner-1544x500.png)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fninecodes%2Fwp-social-manager.svg?type=shield)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fninecodes%2Fwp-social-manager?ref=badge_shield)
 Lightweight, clean and optimized social media plugin for WordPress.
 
 **Contributors:** [ninecodes](https://profiles.wordpress.org/ninecodes), [tfirdaus](https://profiles.wordpress.org/tfirdaus), [hongkiat](https://profiles.wordpress.org/hongkiat)  
@@ -245,3 +246,7 @@ Read more at [Version 1.0.6 Release Note](https://github.com/ninecodes/social-ma
 * Initial release.
 
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fninecodes%2Fwp-social-manager.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fninecodes%2Fwp-social-manager?ref=badge_large)
